@@ -14,6 +14,8 @@ Every one of those facts carries a citation: a file and line in the maker's publ
 
 Where a plugin publishes no source, voltage ranges are not given, and the plugin's file says so. Those are the entries most worth a contribution, and the maker is the person best placed to make it.
 
+See [ABOUT.md](ABOUT.md) for what the project is, how the database was made, and how it is proposed to be maintained.
+
 ## Contributing
 
 The database is in `data/plugins/`, one YAML file per VCV plugin. Fix an entry, add a missing one, or fill in a range nobody could verify, and open a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for the format and the one rule about quoting that will otherwise bite you.
