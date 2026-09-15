@@ -1,0 +1,37 @@
+# Runs on every pull request, before anything is merged.
+#
+# The point is that a contributor hears about a mechanical failure within a minute, from the
+# machine, rather than from a maintainer days later — and that the boring failures never reach a
+# reviewer at all. What is left to judge is whether the claims are true.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+
+      # DOES IT PARSE, AND DOES IT MEAN WHAT IT SAYS. The round-trip is the guard against YAML's
+      # type coercion: a line reading `Off` loads as the boolean false, looks perfectly correct
+      # in review, and renders as a card saying "false". Dumping and reloading catches it.
+      - name: validate the database
+        run: python3 tools/validate.py
+
+      # IS THE GENERATED TABLE CURRENT. src/HelpText.cpp is committed so that a build needs
+      # nothing but the SDK, which means it can fall behind the data it came from. Regenerating
+      # and diffing is how a stale table becomes a failed check rather than yesterday's text
+      # quietly shipping.
+      - name: the generated table matches the database
+        run: |
+          python3 tools/build.py
+          git diff --exit-code src/HelpText.cpp \
+            || (echo "::error::src/HelpText.cpp is stale — run 'make helptext' and commit it" && exit 1)

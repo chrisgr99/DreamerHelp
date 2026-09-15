@@ -1,0 +1,383 @@
+'plugin': 'DigitalAtavism'
+'source': 'no published source; read from the installed 2.0.0 plugin.dylib, which carries full local symbols'
+'read': '2026-09-14'
+'verification': 'voltage ranges are not published for this plugin: no public source is available for verification. Corrections and citations are welcome from anyone with access to the source.'
+'modules':
+  'Blip':
+    'lines':
+      - 'An 8-bit blip voice: one oscillator crossfading between a pulse wave and a falling sawtooth, shaped by a hold-and-release envelope'
+      - 'Note — With nothing patched into TRIG the envelope is held wide open and the oscillator drones. It only shapes the sound once a trigger cable is in.'
+      - 'Note — The pitch, the hold time and the release time are read once, at the moment TRIG fires; moving those controls during a note has no effect until the next one.'
+      - 'Sets the pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it'
+      - 'Crossfades the oscillator from a pulse wave at its minimum to a falling sawtooth at its maximum'
+      - 'Sets the width of the pulse wave, from 1% to 99%; with BLND fully over to the sawtooth the pulse is out of the mix and this does nothing'
+      - 'Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms'
+      - 'Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms'
+      - 'Adds to the pitch set by FREQ at one volt per octave, read at the moment the trigger arrives'
+      - 'Adds to the crossfade set by BLND, a tenth of its travel per volt'
+      - 'Adds to the width set by PW, a tenth of its travel per volt'
+      - 'Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start'
+      - 'The envelope as a voltage from 0V to 10V, quantised to 127 steps'
+      - 'The voice, quantised to 127 steps and clipped at 5V either way'
+    'param':
+      '0': 3
+      '1': 4
+      '2': 5
+      '4': 6
+      '5': 7
+    'in':
+      '0': 8
+      '1': 9
+      '2': 10
+      '3': 11
+      '4': 12
+      '5': 13
+    'out':
+      '2': 14
+      '3': 15
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'trigger'
+      'out':
+        '2': 'cv'
+        '3': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'ignored'
+      'out':
+        '2':
+          'poly': false
+          'step': 'stepped'
+        '3':
+          'poly': false
+          'step': 'stepped'
+    'notes': 'No published source. Read from the installed 2.0.0 plugin.dylib, which is unstripped: every module''s constructor, process and Osc::process carry local symbols, so the figures here are read off the code rather than a manual. There is no manual, no README and no res/ documentation; the folder holds only the binary, a LICENSE and four fonts. Panel lettering came from the VCV library screenshot at https://library.vcvrack.com/screenshots/400/DigitalAtavism/Blip.png because the plugin ships no panel SVG at all — the panels are drawn at runtime by Blip::Widget::draw. Parameter 3 is configured by the count passed to config() but never given a configParam or a ParamWidget, so it has no name, no tooltip and no position, and cannot be clicked; outputs 0 and 1 are the same, leftovers of the shared layout with Coin. The oscillator runs at eight times the engine rate and the eight sub-samples are averaged. The trigger threshold is Rack''s usual rescale of 0.1 to 2.0 volts. The envelope has two timed stages, hold then release; the hold stage adds a punch term, which on this module is stored as zero, so the hold is flat.'
+  'Coin':
+    'lines':
+      - 'An 8-bit coin-pickup voice: a square wave that jumps to a second pitch part-way through the note, shaped by a hold-and-release envelope'
+      - 'Note — With nothing patched into the TRIG input the envelope is held wide open and the square wave drones. It only shapes the sound once a trigger cable is in.'
+      - 'Note — The starting pitch, the jump time, the hold, the release and the punch are read once, at the moment the trigger fires; the pitch jump itself is read when the jump happens.'
+      - 'Sets the starting pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it'
+      - 'Sets how far the pitch jumps when the note reaches the time set by TIME, from 24 semitones down to 24 semitones up'
+      - 'Sets how long after the trigger the pitch jumps, from 0ms to 400ms'
+      - 'Adds a burst of extra level at the start of the note which fades away across the hold stage; the knob starts at 100%, above the 60% maximum it is configured with'
+      - 'Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms'
+      - 'Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms'
+      - 'Adds to the starting pitch set by FREQ at one volt per octave, read at the moment the trigger arrives'
+      - 'Adds to the pitch jump set by FMOD at one volt per octave, read at the moment the jump happens'
+      - 'Doubles the time set by TIME per volt and halves it per volt below zero, up to a ceiling of 800ms, read at the moment the trigger arrives'
+      - 'Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start'
+      - 'A 1ms pulse at 10V at the moment the pitch jumps'
+      - 'The envelope as a voltage from 0V to 10V, quantised to 127 steps'
+      - 'The voice, quantised to 127 steps and clipped at 5V either way'
+    'param':
+      '0': 3
+      '1': 4
+      '2': 5
+      '3': 6
+      '4': 7
+      '5': 8
+    'in':
+      '0': 9
+      '1': 10
+      '2': 11
+      '3': 12
+      '4': 13
+      '5': 14
+    'out':
+      '1': 15
+      '2': 16
+      '3': 17
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'pitch'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'trigger'
+      'out':
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '5':
+          'poly': false
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'negative': 'ignored'
+          'why': 'Coin::process reads inputs[5].voltages[0] at offset 0x190 and rescales 0.1 to 2.0 onto 0 to 1 before the edge test'
+      'out':
+        '1':
+          'poly': false
+          'step': 'stepped'
+        '2':
+          'poly': false
+          'step': 'stepped'
+        '3':
+          'poly': false
+          'step': 'stepped'
+    'notes': 'No published source; read from the installed 2.0.0 plugin.dylib, which is unstripped. THE PUNCH KNOB''S DEFAULT IS OUTSIDE ITS OWN RANGE. Coin''s constructor at +0x9340 calls configParam for parameter 3 with a minimum of 0.3, a maximum of 0.6 and a default of 1.0; Rack does not clamp a default, so the knob comes up at 100% while its tooltip range reads 30% to 60%, and Initialise puts it back there. The punch term is used at +0xa278 as an extra envelope level of one plus twice the remaining hold fraction times the punch, so at the default it starts the note three times over full scale and the output clips for the first part of the hold. Output 0 is configured by the count passed to config() but has no configOutput and no PortWidget, so it cannot be clicked or patched; it is a leftover of the layout shared with Blip and Hit. The oscillator is a plain 50% square wave with no pulse-width or waveform control, oversampled eight times. The panel prints TRIG twice, on the pitch-change output near the top and on the note input at the bottom. Panel lettering came from https://library.vcvrack.com/screenshots/400/DigitalAtavism/Coin.png; the plugin ships no panel SVG.'
+  'DTrig':
+    'lines':
+      - 'Takes a trigger in and puts one out again after a delay, as a gate of its own length'
+      - 'Note — Retriggering during a delay can only lengthen it: a new delay is written in only when it is longer than the time left to run, and the gate length works the same.'
+      - 'Sets how long after the incoming trigger the output fires, from 1.5ms to 2 seconds'
+      - 'Sets how long the output gate stays high, from 1ms to 1000ms; the panel prints TIME while the maker''s tooltip calls it Gate time'
+      - 'Doubles the delay set by the DLAY knob per volt and halves it per volt below zero, up to a ceiling of 5 seconds'
+      - 'Doubles the gate length set by the TIME knob per volt and halves it per volt below zero, held between 1ms and 5 seconds'
+      - 'Starts the delay when it rises past 2V, and has to fall back below 0.1V before it will start another'
+      - 'Goes to 10V when the delay runs out and stays there for the gate length, then returns to 0V'
+    'param':
+      '0': 2
+      '1': 3
+    'in':
+      '0': 4
+      '1': 6
+      '2': 5
+    'out':
+      '0': 7
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'trigger'
+        '2': 'cv'
+      'out':
+        '0': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'ignored'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+      'out':
+        '0':
+          'poly': false
+          'step': 'stepped'
+    'notes': 'No published source; read from the installed 2.0.0 plugin.dylib, which is unstripped. The knob figures come from the constructor at +0xc294 and +0xc318: delay 0.0015 to 2 seconds with a default of 0.15, gate 0.001 to 1 second with a default of 0.001, both shown in ms by a display multiplier of 1000. So the gate knob comes up at its own minimum, a 1ms pulse. Each of the two CV jacks is a multiplier on its knob through exp2f, so a patched cable resting at 0V leaves the knob alone; the delay result is capped at 5 seconds and the gate at 5 seconds with a 1ms floor, both above what the knobs alone can reach. The write-back at +0xc880 and +0xc940 is a maximum rather than an assignment, which is why a retrigger cannot shorten a delay already in progress. The panel prints DLAY and TIME beside the jack-and-knob pairs and TRIG twice, once on the input and once on the output; the maker''s tooltips for the second pair are Gate time on the knob and Gate length on the jack. Panel lettering came from https://library.vcvrack.com/screenshots/400/DigitalAtavism/DTrig.png; the plugin ships no panel SVG.'
+  'Hit':
+    'lines':
+      - 'An 8-bit hit voice: one oscillator crossfading between a pulse wave, a falling sawtooth and pitched noise, with a pitch bend and a pair of filters'
+      - 'Note — LPF comes up at 0%, which closes the low-pass filter almost completely and leaves next to nothing at the output. Turn it up before expecting to hear anything.'
+      - 'Note — With nothing patched into TRIG the envelope is held wide open and the oscillator drones. It only shapes the sound once a trigger cable is in.'
+      - 'Note — The pitch, the bend, the hold, the release and both filter settings are read once, at the moment TRIG fires; moving those controls during a note has no effect until the next one.'
+      - 'Sets the pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it'
+      - 'Bends the pitch across the note, upwards as it is turned up and downwards as it is turned down; the amount follows the cube of the setting, so small settings do very little'
+      - 'Crossfades the oscillator from a pulse wave at its minimum, through a falling sawtooth and then pitched noise, and back to the pulse wave at its maximum'
+      - 'Sets the width of the pulse wave, from 1% to 99%'
+      - 'Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms'
+      - 'Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms'
+      - 'Opens the low-pass filter at the output; at 0% the filter is almost shut and very little gets through, and at 100% it is at its widest'
+      - 'Sets the corner of the high-pass filter at the output; at 0% the filter is out of the signal path altogether'
+      - 'Adds to the pitch set by FREQ at one volt per octave, read at the moment the trigger arrives'
+      - 'Adds to the bend set by SLIDE, a tenth of its travel per volt, read at the moment the trigger arrives'
+      - 'Adds to the crossfade set by BLND, three tenths of its travel per volt'
+      - 'Adds to the width set by PW, a tenth of its travel per volt'
+      - 'Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives'
+      - 'Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start'
+      - 'The envelope as a voltage from 0V to 10V, quantised to 127 steps'
+      - 'The voice, quantised to 127 steps and clipped at 5V either way'
+    'param':
+      '0': 4
+      '1': 5
+      '2': 6
+      '3': 7
+      '4': 8
+      '5': 9
+      '6': 11
+      '7': 10
+    'in':
+      '0': 12
+      '1': 13
+      '2': 14
+      '3': 15
+      '4': 16
+      '5': 17
+      '6': 18
+    'out':
+      '0': 19
+      '1': 20
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'trigger'
+      'out':
+        '0': 'cv'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'swings'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'ignored'
+      'out':
+        '0':
+          'poly': false
+          'step': 'stepped'
+        '1':
+          'poly': false
+          'step': 'stepped'
+    'notes': 'No published source; read from the installed 2.0.0 plugin.dylib, which is unstripped. THE LOW-PASS FILTER IS SHUT BY DEFAULT. The constructor at +0xdab8 configures parameter 7, the knob the panel prints LPF, from 0 to 1 with a default of 0. Hit::process +0xe6ec turns it into a filter coefficient of 0.1 times the cube of 0.9 times the knob plus 0.1, so a knob at 0 gives 0.0001 and a knob at 1 gives 0.1. The filter at +0xed70 is applied on every sub-sample with no bypass, so at the default the corner is far below the audio band and the module is effectively silent until LPF is raised. The HPF knob, parameter 6, is squared and scaled by 0.1 at +0xe71c and is genuinely out of the path at 0. Index order is not panel order for these two: parameter 7 (LPF) sits above parameter 6 (HPF) on the panel, at census positions 90,270 and 90,300, and they are tagged accordingly. Neither filter has a CV jack. The noise source is a fresh rand() value taken thirty-two times per oscillator cycle, so it is pitched rather than white. The pitch bend multiplies the oscillator period once per sample by one plus a hundredth of the cube of the setting, and the period is held between 8 and 400000 samples. Panel lettering came from https://library.vcvrack.com/screenshots/400/DigitalAtavism/Hit.png; the plugin ships no panel SVG.'
+  'UT-P':
+    'lines':
+      - 'A voltage-controlled switch that picks one channel out of a polyphonic cable and passes it on'
+      - 'Note — The choice is made among the channels of the cable in IN, so a mono cable gives the selector only one position and nothing to switch between.'
+      - 'Note — A UT-OX placed immediately to the right takes a second, separately chosen channel from the same polyphonic input, and further UT-OX modules can be chained on from there.'
+      - 'Note — With a polyphonic cable in CV, each of its channels makes its own choice and the result appears on the output channel of the same number.'
+      - 'The polyphonic signal to choose from; the number of channels on the cable is the number of positions the selector has'
+      - 'Chooses which channel of IN is passed, with the voltage range set on the menu spread evenly over the channels and the nearest one taken'
+      - '10V on the polyphonic channel currently chosen, and 0V on every other channel'
+      - 'A 1ms pulse at 10V on a channel, at the moment that channel becomes the chosen one'
+      - 'The chosen channel of IN, carried on the output channel of the same number with the rest at 0V'
+      - 'Menu — Voltage Range: 0V - 10V, 0V - 5V, 0V - 1V, -10V - 10V, -5V - 5V, -2.5V - 2.5V, -1V - 1V — sets the span of CV that is spread across the channels; a new module starts at 0V - 10V'
+    'in':
+      '0': 5
+      '1': 4
+    'out':
+      '0': 6
+      '1': 7
+      '2': 8
+    'family':
+      'in':
+        '0': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'stepped'
+        '1':
+          'poly': true
+      'out':
+        '0':
+          'poly': true
+          'step': 'stepped'
+        '1':
+          'poly': true
+          'step': 'stepped'
+        '2':
+          'poly': true
+    'notes': 'No published source; read from the installed 2.0.0 plugin.dylib, which is unstripped. The selector maths is at +0x10a9c: the CV is rescaled from the chosen voltage range onto 0 to 1, multiplied by the number of channels less one, has 0.5 added and is truncated, then clamped, so each channel occupies an equal slice of the range and the boundaries fall half way between. The voltage range is a module setting, not a per-jack one, and it is saved with the patch under the key voltageRange; the seven names are spelled exactly as listed, from DigitalAtavism::VoltageRange::GetName, and the limits come from the tables beside it: 0 to 10, 0 to 5, 0 to 1, -10 to 10, -5 to 5, -2.5 to 2.5 and -1 to 1. A new module comes up on the first of them, set by the constructor at +0x10350. The menu item itself is labelled Voltage Range: followed by the current choice, and opens a submenu. Two lights are declared in the call to config() and neither is given a LightWidget or ever written, so nothing on the panel shows them. IN and CV behave differently from each other: a polyphonic CV drives a per-channel switch, while a mono CV places the chosen value on the output channel matching the chosen position rather than on channel 1. No family is given to IN or OUT because they carry whatever is sent through them. Panel lettering came from https://library.vcvrack.com/screenshots/400/DigitalAtavism/UT-P.png; the plugin ships no panel SVG.'
+  'UT-OX':
+    'lines':
+      - 'An expander for UT-P, placed immediately to the right of it, taking its own separately chosen channel from the same polyphonic input'
+      - 'Note — It reads the polyphonic signal from the module on its left, which has to be a UT-P or another UT-OX in a chain running back to one. On its own the output stays at 0V.'
+      - 'Chooses which channel of the polyphonic signal in the UT-P is passed, with the voltage range set on the menu spread evenly over the channels and the nearest one taken'
+      - 'A 1ms pulse at 10V at the moment the chosen channel changes'
+      - 'The chosen channel of the polyphonic signal arriving from the left, as one mono voltage'
+      - 'Menu — Voltage Range: 0V - 10V, 0V - 5V, 0V - 1V, -10V - 10V, -5V - 5V, -2.5V - 2.5V, -1V - 1V — sets the span of CV that is spread across the channels; a new module starts at 0V - 10V'
+    'in':
+      '0': 2
+    'out':
+      '0': 3
+      '1': 4
+    'family':
+      'in':
+        '0': 'cv'
+      'out':
+        '0': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+      'out':
+        '0':
+          'poly': false
+          'step': 'stepped'
+        '1':
+          'poly': false
+    'notes': 'No published source; read from the installed 2.0.0 plugin.dylib, which is unstripped. UT_OX::process +0x124c4 checks that the left neighbour''s model is UT-P or UT-OX before reading its expander message, so a chain of them all work from the one polyphonic input; +0x1263c then passes the same message on to the right, but only when the module there is a UT-OX. WITH NO VALID NEIGHBOUR IT DOES NOT FALL SILENT IN THE OBVIOUS WAY. The fallback at +0x12560 builds a message of sixteen zero values, so the selector still moves across sixteen positions and the trigger output still fires as the CV is swept, while the signal output stays at 0V. Unlike UT-P this module is mono throughout: the CV jack is read at channel one only and both outputs are single-channel. The voltage range menu is the same one UT-P carries, from the shared UT_Base::BaseWidget, saved under the key voltageRange and starting at 0V - 10V. The panel has no IN jack and no GATE output. Panel lettering came from https://library.vcvrack.com/screenshots/400/DigitalAtavism/UT-OX.png; the plugin ships no panel SVG.'

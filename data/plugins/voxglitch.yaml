@@ -1,0 +1,3387 @@
+'plugin': 'voxglitch'
+'source': 'https://github.com/clone45/voxglitch'
+'read': '2026-09-14'
+'modules':
+  'vector_rotation':
+    'lines':
+      - 'Rotates an X/Y point in three dimensions and puts out the rotated X, Y and Z coordinates'
+      - 'Rotates the point around the X axis, from no rotation at the left to a full turn at the right'
+      - 'Rotates the point around the Y axis, from no rotation at the left to a full turn at the right'
+      - 'Rotates the point around the Z axis, from no rotation at the left to a full turn at the right'
+      - 'Adds to the rotation around the X axis, a full turn per 10V'
+      - 'Adds to the rotation around the Y axis, a full turn per 10V'
+      - 'Adds to the rotation around the Z axis, a full turn per 10V'
+      - 'The X coordinate of the point to rotate, read as -5V to 5V'
+      - 'The Y coordinate of the point to rotate, read as -5V to 5V'
+      - 'The X coordinate after rotation, -5V to 5V'
+      - 'The Y coordinate after rotation, -5V to 5V'
+      - 'The Z coordinate after rotation, -5V to 5V; the incoming point is taken as flat, so any depth here is made by the rotation'
+      - 'Note — with nothing patched into the X and Y inputs the point is at the origin, so all three outputs stay at 0V whatever the knobs are set to'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+      '3': 7
+      '4': 8
+    'out':
+      '0': 9
+      '1': 10
+      '2': 11
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'VectorRotation.hpp:60 reads this input with getVoltage() alone and scales it by 0.1 times two pi into the rotation angle'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'why': 'VectorRotation.hpp:61 reads this input with getVoltage() alone and scales it by 0.1 times two pi into the rotation angle'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'why': 'VectorRotation.hpp:62 reads this input with getVoltage() alone and scales it by 0.1 times two pi into the rotation angle'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'range': '±5V'
+          'why': 'VectorRotation.hpp:65 reads this input with getVoltage() alone and divides by 5 to reach the -1 to +1 coordinate range'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'range': '±5V'
+          'why': 'VectorRotation.hpp:66 reads this input with getVoltage() alone and divides by 5 to reach the -1 to +1 coordinate range'
+  'noteDetector':
+    'lines':
+      - 'Puts out a trigger or a gate when the voltage at CV IN matches a chosen note'
+      - 'Picks the note to match, through the twelve semitones from C to B'
+      - 'Picks the octave to match, from -1 to 8, with C4 at 0V; turned fully counter-clockwise it reads All, and the note matches in every octave'
+      - 'The voltage tested against the chosen note; with nothing patched here the output stays at 0V'
+      - 'In the clocked output modes, only a rising edge here can produce a trigger or gate'
+      - 'Carries 10V when the incoming voltage matches the chosen note, as a trigger or a gate'
+      - 'Menu — Output Mode — Trigger, Gate, Clocked Trigger or Clocked Gate'
+      - 'Menu — Trigger Length — how long the trigger pulse lasts, from 1ms to 200ms'
+      - 'Menu — Tolerance Level — how far the incoming voltage may stray from the note and be taken as a match, from Exact (0) to Very Coarse (0.5)'
+      - 'Menu — Notation — Sharp or Flat, setting how the readout names a black note'
+    'param':
+      '0': 1
+      '1': 2
+    'in':
+      '0': 3
+      '1': 4
+    'out':
+      '0': 5
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'trigger'
+      'out':
+        '0': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'NoteDetector.hpp:243 reads this input with getVoltage() alone and NoteDetector.hpp:237 compares it against noteToVoltage() for the selected note and octave'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'NoteDetector.hpp:258 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'hazumi':
+    'lines':
+      - 'Bouncing-ball sequencer: eight columns, each with a ball that travels up and down its column one row per clock and fires a trigger at the end of its travel'
+      - 'A rising edge moves every ball one row; it reads high above 2V and low below 0.1V'
+      - 'A rising edge returns every ball to the bottom of its column'
+      - 'A 10ms 10V trigger from that column, fired as its ball turns around'
+      - 'Note — drag in the grid to set how tall each column is, which sets how many clocks that column''s ball takes to come back round'
+      - 'Note — every column starts one row tall, and a column one row tall fires nothing, so no trigger is put out until the grid is drawn'
+      - 'Menu — Column Settings — All Columns and Column #1 through Column #8, each holding that column''s Trigger Location'
+      - 'Menu — Trigger Location — Bottom, Top or Both, choosing which end of the column fires that column''s trigger; reached through Column Settings'
+    'in':
+      '0': 1
+      '1': 2
+    'out':
+      '0': 3
+      '1': 3
+      '2': 3
+      '3': 3
+      '4': 3
+      '5': 3
+      '6': 3
+      '7': 3
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Hazumi.hpp:166 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Hazumi.hpp:160 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'looper':
+    'lines':
+      - 'Plays one loaded WAV file over and over, with a volume slider and a stereo pair of outputs'
+      - 'Sets the playback level, from silence to the full level of the file'
+      - 'A rising edge restarts the file from its beginning'
+      - 'The left channel of the file; a mono file is carried on both outputs'
+      - 'The right channel of the file; a mono file is carried on both outputs'
+      - 'Note — the outputs stay silent until a WAV file is loaded: right-click the panel and click the item under the Sample label, which reads [ EMPTY ] until then'
+      - 'Note — the waveform of the loaded file is drawn across the panel, and the file plays over and over on its own with no trigger patched'
+      - 'Menu — Output Range — rescales the audio into one of eight voltage ranges, from -10.0 to 10.0 down to 0.0 to 1.0, with -5.0 to 5.0 to start with'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Sample — the item under this label loads the WAV file, and prints the filename it holds'
+    'param':
+      '0': 1
+    'in':
+      '0': 2
+    'out':
+      '0': 3
+      '1': 4
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Looper.hpp:92 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'sampler16p':
+    'lines':
+      - 'Plays sixteen loaded WAV files, each fired by one channel of a polyphonic trigger input, and mixes them to one stereo pair'
+      - 'A polyphonic trigger input, one channel per sample: a rising edge on channel 1 plays the first sample, channel 2 the second, and so on through all sixteen'
+      - 'The left channel of all sixteen players added together'
+      - 'The right channel of all sixteen players added together'
+      - 'Note — nothing plays until WAV files are loaded from the right-click menu, either one at a time or sixteen at once from a folder'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Load individual samples — the sixteen numbered items under this label each open a file browser for that sample slot, and each prints the filename it holds'
+      - 'Menu — Load first 16 WAV files from a folder — opens a folder browser and puts that folder''s first sixteen WAV files into the sixteen slots in name order'
+    'in':
+      '0': 1
+    'out':
+      '0': 2
+      '1': 3
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'The module has no panel parameters at all: level, pan and sample choice are fixed, and every sample is fired through the one polyphonic TRIG input.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Sampler16P.hpp:91 calls setChannels(16) on this input and Sampler16P.hpp:96 reads every channel with getVoltage(i) into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+  'xy':
+    'lines':
+      - 'X/Y pad: drag in the grid to put out a pair of voltages, and the gesture is recorded and played back a step per clock'
+      - 'When on, playback returns to the start of the recorded gesture once the end is reached; when off, playback stops at the end'
+      - 'When on, dragging in the grid overwrites the recording from the playback point onward instead of starting a new one, and playback carries on when the mouse is released'
+      - 'A rising edge moves playback to the next recorded position; with nothing patched here the outputs follow the mouse directly'
+      - 'A rising edge returns playback to the first recorded position'
+      - 'The horizontal position, rising to the right'
+      - 'The vertical position, rising towards the top'
+      - 'Note — pressing in the grid starts a new recording and releasing starts playback of what was drawn'
+      - 'Menu — Output Range — the span of both outputs, from -10.0 to 10.0 down to 0.0 to 1.0, with 0.0 to 10.0 to start with; honoured only while CLK is unpatched, despite the menu offering it either way'
+      - 'Menu — Tablet Mode — moves the point by hovering over the grid, with no button held'
+      - 'Note — while a clock is patched the outputs run 0-10V whatever the Output Range setting says'
+    'param':
+      '0': 1
+      '1': 2
+    'in':
+      '0': 3
+      '1': 4
+    'out':
+      '0': 5
+      '1': 6
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+    'notes': 'Output Range is applied only on the unclocked path; with CLK patched the code writes 0-10V regardless of the menu setting.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'XY.hpp:154 reads CLK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'XY.hpp:147 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'bytebeat':
+    'lines':
+      - 'Plays one of nine bytebeat equations, an integer expression over a running time counter heard as audio'
+      - 'Picks which of the nine equations is heard'
+      - 'Adds to the equation choice, the nine equations spread over 0-10V'
+      - 'Sets how many samples pass before the time counter advances, from none up to 256, and a longer division lowers the pitch'
+      - 'Adds to the sample division that sets the pitch, its full range over 0-10V'
+      - 'Sets the value of that parameter in the equation, a whole number from 0 to 128'
+      - 'Attenuates the CV for that parameter, from nothing through to its full range'
+      - 'Adds to that parameter after its attenuator, 0-10V covering the full 0 to 128'
+      - 'The audio the equation makes, -5V to 5V'
+      - 'Note — the equation runs on the module''s own counter, so the output makes sound with nothing patched in'
+    'param':
+      '1': 1
+      '0': 3
+      '2': 5
+      '3': 5
+      '4': 5
+      '5': 6
+      '6': 6
+      '7': 6
+    'in':
+      '3': 2
+      '4': 4
+      '0': 7
+      '1': 7
+      '2': 7
+    'out':
+      '0': 8
+    'family':
+      'in':
+        '3': 'cv'
+        '4': 'cv'
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+      'out':
+        '0': 'audio'
+    'notes': 'Inputs 5 and 6 (T and SYNC CLOCK) and output 1 (DEBUG) are declared in the code but have no jack on the panel; the T input is read when connected, the sync clock input is not read at all.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'ByteBeat.hpp:144 scales this input by a tenth of the 128 maximum, multiplies by the attenuverter and ByteBeat.hpp:154 clamps the knob-plus-input total at 0; the result is stored in the uint32_t p1 at ByteBeat.hpp:28'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'ByteBeat.hpp:144 scales this input by a tenth of the 128 maximum, multiplies by the attenuverter and ByteBeat.hpp:154 clamps the knob-plus-input total at 0; the result is stored in the uint32_t p2 at ByteBeat.hpp:29'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'ByteBeat.hpp:144 scales this input by a tenth of the 128 maximum, multiplies by the attenuverter and ByteBeat.hpp:154 clamps the knob-plus-input total at 0; the result is stored in the uint32_t p3 at ByteBeat.hpp:30'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'why': 'ByteBeat.hpp:187 reads this input with getVoltage() alone, divides by 10, multiplies by the equation count and stores the sum in a uint32_t'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'ByteBeat.hpp:128 divides this input by 10 and ByteBeat.hpp:133 clamps that alone to 0..1 before scaling; the result is stored in the uint8_t clock_division at ByteBeat.hpp:43'
+  'drumrandomizer':
+    'lines':
+      - 'Passes a sixteen-channel polyphonic gate signal through, dropping gates step by step at a probability set per channel and per step'
+      - 'Picks which of the sixteen channels the PERCENTAGE knob edits'
+      - 'Picks which of the sixteen steps the PERCENTAGE knob edits, numbered 1 to 16'
+      - 'Sets the chance that the gate is passed at the chosen channel and step, from 0 to 100 percent; turning either of the other two knobs loads the stored value for the new place'
+      - 'The polyphonic gate signal to be thinned out, one channel per drum part'
+      - 'A rising edge advances the sequence one step, wrapping round after sixteen; clocks arriving within 1ms of a reset are ignored'
+      - 'A rising edge returns the sequence to its first step'
+      - 'The polyphonic gate signal with the dropped gates removed, sixteen channels; a channel that does not pass holds its last voltage until the next step'
+      - 'Note — every channel and every step starts at 100 percent, so gates pass through unchanged until a percentage is lowered'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+    'out':
+      '0': 7
+    'family':
+      'in':
+        '1': 'trigger'
+        '2': 'trigger'
+      'out': {}
+    'notes': 'The polyphonic gate input and output carry whatever gates are patched in, so neither is given a family beyond that; the code only copies the incoming voltage of channels that pass, so a blocked channel keeps whatever it last carried rather than going to 0V.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'DrumRandomizer.hpp:262 reads this input with getVoltage(channel) inside a loop over all sixteen channels and sets the same width on the output'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DrumRandomizer.hpp:129 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DrumRandomizer.hpp:226 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'glitchsequencer':
+    'lines':
+      - 'Gate sequencer driven by a cellular automaton: a drawn seed pattern runs Conway''s rules one generation per clock, and a cell coming to life fires the trigger groups that mark it'
+      - 'Sets how many clocks pass before the pattern is reloaded from the seed, 1 to 64'
+      - 'Selects that trigger group for editing, so clicking in the grid marks which cells fire it; pressing it again returns to play mode'
+      - 'A rising edge runs one generation of the automaton; it reads high above 2V and low below 0.1V'
+      - 'A rising edge reloads the pattern from the seed and restarts the count'
+      - 'A 10ms 10V trigger, fired whenever a cell marked for that group comes to life in the new generation'
+      - 'Note — the grid is drawn on by dragging across it: with no trigger group selected the drag edits the seed pattern, and with a group selected it marks which cells fire that group'
+      - 'Note — the module comes up with a seed pattern and trigger markings already in place, so it plays as soon as a clock is patched into STEP'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 2
+      '3': 2
+      '4': 2
+      '5': 2
+      '6': 2
+      '7': 2
+      '8': 2
+    'in':
+      '0': 3
+      '1': 4
+    'out':
+      '0': 5
+      '1': 5
+      '2': 5
+      '3': 5
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlitchSequencer.hpp:321 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlitchSequencer.hpp:308 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'onepoint':
+    'lines':
+      - 'CV sequencer that reads its sequences from a text file, one comma-separated line of voltages per sequence'
+      - 'A rising edge advances one step, wrapping to the start at the end of the sequence; clocks arriving within 1ms of a reset are ignored'
+      - 'A rising edge returns the sequence to its first step'
+      - 'Steps back one sequence in the file, wrapping round to the last one'
+      - 'Steps forward one sequence in the file, wrapping round to the first one'
+      - 'Jumps to the first sequence in the file'
+      - 'A rising edge steps back one sequence in the file'
+      - 'A rising edge steps forward one sequence in the file'
+      - 'A rising edge jumps to the first sequence in the file'
+      - 'Shifts which sequence plays without changing the chosen one, -5V to 5V covering twenty sequences either way and wrapping round the file'
+      - 'Attenuates the CV sequence selection, from nothing through to its full range'
+      - 'The voltage written at the current step of the sequence'
+      - 'A 10ms 10V trigger fired as the sequence wraps back to its first step'
+      - 'Note — nothing is put out until a text file is loaded with Load File in the right-click menu; each line of the file is one sequence, read as voltages'
+      - 'Menu — Load File — opens the text file the sequences are read from; the item under it prints the filename, or No file loaded'
+    'param':
+      '0': 3
+      '1': 4
+      '2': 5
+      '3': 10
+    'in':
+      '0': 1
+      '1': 2
+      '3': 6
+      '2': 7
+      '4': 8
+      '5': 9
+    'out':
+      '0': 11
+      '1': 12
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OnePoint.hpp:200 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OnePoint.hpp:171 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OnePoint.hpp:149 reads NEXT_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OnePoint.hpp:156 reads PREV_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OnePoint.hpp:164 reads ZERO_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': '±5V'
+          'why': 'OnePoint.hpp:182 reads this input with getVoltage() alone, multiplies by the attenuverter and rescales -5V..+5V onto -20..+20 sequences, truncated to an int'
+  'onezero':
+    'lines':
+      - 'Gate sequencer that reads its patterns from a text file, one line of ones and zeros per sequence'
+      - 'A rising edge advances one step, wrapping to the start at the end of the sequence; clocks arriving within 1ms of a reset are ignored'
+      - 'A rising edge returns the sequence to its first step'
+      - 'Steps back one sequence in the file, wrapping round to the last one'
+      - 'Steps forward one sequence in the file, wrapping round to the first one'
+      - 'Jumps to the first sequence in the file'
+      - 'A rising edge steps back one sequence in the file'
+      - 'A rising edge steps forward one sequence in the file'
+      - 'A rising edge jumps to the first sequence in the file'
+      - 'Shifts which sequence plays without changing the chosen one, -5V to 5V covering twenty sequences either way and wrapping round the file'
+      - 'Attenuates the CV sequence selection, from nothing through to its full range'
+      - 'A 10ms 10V trigger on every step written as a 1 in the sequence'
+      - 'A 10ms 10V trigger fired as the sequence wraps back to its first step'
+      - 'Note — nothing is put out until a text file is loaded with Load File in the right-click menu; each line of the file is one sequence, read as ones and zeros'
+      - 'Menu — Load File — opens the text file the sequences are read from; the item under it prints the filename, or No file loaded'
+    'param':
+      '0': 3
+      '1': 4
+      '2': 5
+      '3': 10
+    'in':
+      '0': 1
+      '1': 2
+      '3': 6
+      '2': 7
+      '4': 8
+      '5': 9
+    'out':
+      '0': 11
+      '1': 12
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneZero.hpp:182 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneZero.hpp:162 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneZero.hpp:141 reads NEXT_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneZero.hpp:148 reads PREV_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneZero.hpp:155 reads ZERO_SEQUENCE_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': '±5V'
+          'why': 'OneZero.hpp:171 reads this input with getVoltage() alone, multiplies by the attenuverter and rescales -5V..+5V onto -20..+20 sequences, truncated to an int'
+  'wavbank':
+    'lines':
+      - 'Sample player holding every WAV file in a chosen folder, with one of them selected by knob or CV'
+      - 'Picks which file in the folder plays, from the first to the last'
+      - 'Attenuates the WAV selection CV, from nothing through to its full range'
+      - 'When on, the file repeats from its start as it reaches its end'
+      - 'A rising edge restarts the chosen file; with nothing patched here the file plays over and over on its own'
+      - 'Adds to the file selection after its attenuator, 0-10V spanning the whole folder'
+      - 'Shifts the playback speed by a volt per octave, so 1V plays the file twice as fast and -1V half as fast and backwards below that'
+      - 'The left channel of the file being played'
+      - 'The right channel of the file being played'
+      - 'Nothing in the module writes this output; it stays at 0V, despite the panel printing END'
+      - 'Note — the outputs stay silent until a folder is chosen with Select Directory Containing WAV Files in the right-click menu; the module holds no files of its own'
+      - 'Menu — Trigger Mode — Trigger restarts the file on a rising edge at TRG, Gate plays it only while that input is above 5V'
+      - 'Menu — Select Directory Containing WAV Files — points the module at a folder; its WAV and MP3 files are loaded in name order'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Auto-Increment on Completion — nothing in the module reads this setting in the installed build, so turning it on changes nothing'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+    'out':
+      '0': 7
+      '1': 8
+      '2': 9
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'pitch'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'The END output and the Auto-Increment on Completion menu item are wired up in the widget but never written or read in the 2.41.1 processing code, so neither is described here.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'WavBank.hpp:189 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5); in the menu''s gate mode WavBank.hpp:201 instead tests it against 5V'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'why': 'WavBank.hpp:149 divides this input by 10, scales it by the sample count and the attenuverter, adds the knob and stores the total in an unsigned int at WavBank.hpp:149'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'WavBank.hpp:156 reads this input with getVoltage() alone and passes it to SamplePlayer::step, which raises 2 to that voltage at vgLib-2.0/SamplePlayer.hpp:142'
+  'repeater':
+    'lines':
+      - 'Stuttering sample player: a fast clock restarts one of five loaded samples from a chosen position, so the sample skips and repeats'
+      - 'Sets how many clock pulses pass between restarts, none up to ten'
+      - 'Attenuates the DIV CV, from nothing through to its full range'
+      - 'Sets where in the sample each restart begins, from its start to its end'
+      - 'Attenuates the POS CV, from nothing through to its full range'
+      - 'Picks which of the five loaded samples plays'
+      - 'Attenuates the WAV selection CV, from nothing through to its full range'
+      - 'Shifts the playback speed by a volt per octave, from -2V to 2V, and below the point where the speed reverses the sample plays backwards'
+      - 'When on, the jump to a new position or a new sample is faded rather than cut, which removes the click'
+      - 'A rising edge advances the stutter count, and a restart happens when the count passes the division; with nothing patched here nothing is restarted'
+      - 'Adds to the restart position after its attenuator, 0-10V covering the whole sample'
+      - 'Adds to the clock division after its attenuator, 0-10V covering none to ten'
+      - 'Adds to the sample selection after its attenuator, 0-10V spanning the five samples'
+      - 'Adds to the playback speed, a volt per octave'
+      - 'The sample being played, taken from its left channel'
+      - 'A 10ms 10V trigger each time the sample is restarted'
+      - 'Note — the output stays silent until a WAV file is loaded into at least one of the five slots under Samples in the right-click menu'
+      - 'Menu — Samples — the five numbered items under this label each load a WAV file into that slot, and each prints the filename it holds'
+      - 'Menu — Retrigger — restarts the sample from its beginning once it has played to its end'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '8': 8
+    'in':
+      '0': 9
+      '1': 10
+      '2': 11
+      '3': 12
+      '4': 13
+    'out':
+      '0': 14
+      '1': 15
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'pitch'
+      'out':
+        '0': 'audio'
+        '1': 'trigger'
+    'notes': 'Param index 7 is named UNUSED in the source and has no control on the panel.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Repeater.hpp:155 reads TRIG_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'Repeater.hpp:114 divides this input by 10 and Repeater.hpp:168 clamps the knob-plus-input total to 0..1, the same span a tenth of 0 to 10V covers'
+        '2':
+          'poly': false
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'Repeater.hpp:114 divides this input by 10 and scales it by 10, and Repeater.hpp:158 clamps the knob-plus-input total to 0..10'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'why': 'Repeater.hpp:129 stores the knob-plus-input total in an unsigned int before Repeater.hpp:130 clamps it to the sample count'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'Repeater.hpp:202 adds this input to the knob and passes the sum to SamplePlayer::step, which raises 2 to that voltage at vgLib-2.0/SamplePlayer.hpp:142'
+  'autobreak':
+    'lines':
+      - 'Breakbeat player: a loaded drum loop is split into sixteen slices and played in an order set by a voltage, in time with an incoming clock'
+      - 'Picks which of the five loaded loops plays'
+      - 'Attenuates the SAMPLE selection CV, from nothing through to its full range'
+      - 'The clock the loop follows, taken at sixteenth notes; the tempo is worked out from the time between two rising edges'
+      - 'A rising edge returns playback to the start of the loop'
+      - 'Picks which of the sixteen slices plays next, 0-10V across the loop; below about 0.6V the playback runs on undisturbed'
+      - 'Adds to the loop selection after its attenuator, 0-10V spanning the five loops'
+      - 'A rising edge jumps to the slice chosen by SEQ without waiting for the next clock, which is how a slice is repeated within a beat'
+      - 'Above 5V playback runs backwards through the loop'
+      - 'The left channel of the loop being played'
+      - 'The right channel of the loop being played'
+      - 'Note — the outputs stay silent until a loop is loaded into one of the five slots under Samples in the right-click menu'
+      - 'Note — a loaded loop is treated as eight beats long whatever its actual length, so a loop of another length plays at the wrong speed'
+      - 'Menu — Samples — the five numbered items under this label each load a WAV file into that slot, and each prints the filename it holds'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+    'param':
+      '0': 1
+      '1': 2
+    'in':
+      '0': 3
+      '1': 4
+      '2': 5
+      '3': 6
+      '4': 7
+      '5': 8
+    'out':
+      '0': 9
+      '1': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'trigger'
+        '5': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Autobreak.hpp:150 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Autobreak.hpp:173 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'why': 'Autobreak.hpp:217 divides this input by 10, multiplies by 16 and subtracts 1 into an int, then clamps that to -1..15'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'Autobreak.hpp:120 divides this input by 10 and scales it by the sample count and the attenuverter before adding the knob; Autobreak.hpp:129 stores the total in an unsigned int and Autobreak.hpp:130 clamps it afterwards'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Autobreak.hpp:162 reads RATCHET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 5V'
+          'why': 'Autobreak.hpp:204 tests this input against 5V with getVoltage() alone'
+    'notes': 'WAV is listed as subtracts, but the floor is an accident rather than a design. Autobreak.hpp:129 stores the knob-plus-CV total in an unsigned int and only clamps it at Autobreak.hpp:130, after the conversion. Converting a negative float to an unsigned int is undefined behaviour in C++; on the arm64 build it saturates at 0, which is why a negative CV pulls the selection down to the first sample and stops there rather than wrapping.'
+  'wavbankmc':
+    'lines':
+      - 'Sample player for a folder of WAV files, playing every channel of a multi-channel file at once through a polyphonic output'
+      - 'Restarts the chosen file from its start position'
+      - 'A rising edge restarts the chosen file from its start position; with nothing patched here the file plays without waiting'
+      - 'Attenuates the pitch CV, from nothing through to its full range'
+      - 'Shifts the playback speed by a volt per octave after the attenuator, read per channel from a polyphonic cable'
+      - 'Attenuates the volume CV, from nothing through to its full range'
+      - 'Sets the level, 10V for full level falling to silence at 0V, read per channel from a polyphonic cable'
+      - 'Steps forward one file in the folder; with a cable in the SAMPLE CV input this has no effect'
+      - 'A rising edge steps forward one file in the folder'
+      - 'Steps back one file in the folder; with a cable in the SAMPLE CV input this has no effect'
+      - 'A rising edge steps back one file in the folder'
+      - 'When on, playback returns to the start position as it passes the end position'
+      - 'Above 1V playback returns to the start position as it passes the end position'
+      - 'Picks which file in the folder plays, from the first to the last'
+      - 'Attenuates the SAMPLE selection CV, from nothing through to its full range'
+      - 'Adds to the file selection after its attenuator, 0-10V spanning the whole folder'
+      - 'Sets where playback begins, from the start of the file to its end'
+      - 'Attenuates the START CV, from nothing through to its full range'
+      - 'Adds to the start position after its attenuator, 0-10V covering the whole file'
+      - 'Sets where playback ends, from the start of the file to its end; a start later than the end swaps the two'
+      - 'Attenuates the END CV, from nothing through to its full range'
+      - 'Adds to the end position after its attenuator, 0-10V covering the whole file'
+      - 'Sets how long the fade in at the start of the played region lasts, from none to half the region'
+      - 'Attenuates the ATTACK CV, from nothing through to its full range'
+      - 'Adds to the attack time after its attenuator, 0-10V covering its full range'
+      - 'Sets how long the fade down lasts, from none to half the region; turned fully clockwise the level is held instead'
+      - 'Attenuates the DECAY CV, from nothing through to its full range'
+      - 'Adds to the decay time after its attenuator, 0-10V covering its full range'
+      - 'Splits the played region into 1 to 16 parts, and EOC fires at the end of each one'
+      - 'The first channel of the file being played, -5V to 5V'
+      - 'The second channel of the file being played; a single-channel file is carried on both of these outputs'
+      - 'Every channel of the file on its own polyphonic channel, -5V to 5V'
+      - 'A 1ms 10V trigger at the end of the played region, and at each division point set by DIVISION'
+      - 'Note — the outputs stay silent until a folder is chosen with Select Directory Containing WAV Files in the right-click menu; the module holds no files of its own'
+      - 'Menu — Select Directory Containing WAV Files — points the module at a folder of files to play'
+      - 'Menu — Sample Change Behavior — Restart begins a newly chosen file at the start position, Continual carries on from the position already reached'
+      - 'Menu — Envelope Mode — AD Envelope (decay after attack), Start/End (attack at start, decay at end), or Disabled'
+      - 'Menu — Smoothing — fades across a jump in playback rather than cutting it, which removes the click'
+    'param':
+      '5': 1
+      '14': 3
+      '15': 5
+      '3': 7
+      '4': 9
+      '2': 11
+      '0': 13
+      '1': 14
+      '6': 16
+      '7': 17
+      '8': 19
+      '9': 20
+      '10': 22
+      '11': 23
+      '12': 25
+      '13': 26
+      '16': 28
+    'in':
+      '0': 2
+      '3': 4
+      '2': 6
+      '4': 8
+      '5': 10
+      '10': 12
+      '1': 15
+      '6': 18
+      '7': 21
+      '8': 24
+      '9': 27
+    'out':
+      '0': 29
+      '1': 30
+      '2': 31
+      '3': 32
+    'family':
+      'in':
+        '0': 'trigger'
+        '3': 'pitch'
+        '2': 'cv'
+        '4': 'trigger'
+        '5': 'trigger'
+        '10': 'cv'
+        '1': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'trigger'
+    'notes': 'The Trigger Mode submenu is commented out in the 2.41.1 widget, so it is not in the menu and is not described.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'WavBankMC.hpp:415 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'WavBankMC.hpp:505 divides this input by 10 and scales it by the sample count and the attenuverter before adding the knob; WavBankMC.hpp:377 stores the total in an unsigned int and clamps it afterwards'
+        '2':
+          'poly': true
+          'step': 'continuous'
+          'why': 'WavBankMC.hpp:703 compares the channel against getChannels() and WavBankMC.hpp:705 reads that channel with getVoltage(channel), falling back to channel one; WavBankMC.hpp:713 uses the voltage as a value'
+        '3':
+          'poly': true
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'WavBankMC.hpp:752 compares the channel against getChannels() and WavBankMC.hpp:754 reads that channel; WavBankMC.hpp:761 raises 2 to the attenuated voltage'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'WavBankMC.hpp:425 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'WavBankMC.hpp:430 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'WavBankMC.hpp:172 divides this input by 10 and WavBankMC.hpp:174 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'WavBankMC.hpp:185 divides this input by 10 and WavBankMC.hpp:187 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers'
+        '8':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'WavBankMC.hpp:198 divides this input by 10 and WavBankMC.hpp:200 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers'
+        '9':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'WavBankMC.hpp:211 divides this input by 10 and WavBankMC.hpp:213 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers'
+        '10':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 1V'
+          'why': 'WavBankMC.hpp:642 tests this input against 1V with getVoltage() alone'
+  'AutobreakStudio':
+    'lines':
+      - 'Breakbeat player with six sixteen-step sequencers driving position, sample choice, volume, pan, reverse and ratcheting, and sixteen memory slots holding those sequences'
+      - 'Selects that memory slot, loading its six sequences; with COPY armed, pressing a slot copies the sequences of the current slot into it'
+      - 'Arms copying, so the next memory slot pressed receives a copy of the sequences in the current slot; pressing it again disarms'
+      - 'Erases all six sequences in the current memory slot'
+      - 'The clock the loop follows, taken at sixteenth notes; the tempo is worked out from the time between two rising edges, and no sound is made until two have arrived'
+      - 'A rising edge returns the sequencers and the playback position to the start and holds everything until the next clock'
+      - 'A rising edge jumps to the slice chosen by the position sequence without waiting for the next clock'
+      - 'Picks which of the sixteen memory slots is loaded, 0-10V across the sixteen; with a cable here the memory buttons are ignored'
+      - 'Replaces the position sequence, 0-10V choosing one of the sixteen slices of the loop, and below about 0.6V playback runs on undisturbed'
+      - 'Replaces the sample sequence, 0-10V spanning the eight loaded loops'
+      - 'Replaces the volume sequence, 0-10V for silence to full level'
+      - 'Replaces the pan sequence, 0V hard left through 5V centre to 10V hard right'
+      - 'Replaces the reverse sequence; above 5V playback runs backwards through the loop'
+      - 'Replaces the ratchet sequence, 0V for no ratcheting and higher voltages picking one of five faster repeat rates'
+      - 'The value the position sequence holds at the current step, 0-10V'
+      - 'The value the sample sequence holds at the current step, 0-10V'
+      - 'The value the volume sequence holds at the current step, 0-10V'
+      - 'The value the pan sequence holds at the current step, 0-10V'
+      - 'The value the reverse sequence holds at the current step, 0-10V'
+      - 'The value the ratchet sequence holds at the current step, 0-10V'
+      - 'The left channel of the loop being played, after volume and pan'
+      - 'The right channel of the loop being played, after volume and pan'
+      - 'The left channel of that loop, carrying sound only while the sample sequence has chosen it'
+      - 'The right channel of that loop, carrying sound only while the sample sequence has chosen it'
+      - 'Note — the tabs across the display choose which of the six sequences is drawn and edited: Position, Sample, Volume, Pan, Reverse and Ratchet'
+      - 'Note — the outputs stay silent until a loop is loaded into one of the eight slots under Samples in the right-click menu, and until two clock pulses have arrived at CLOCK'
+      - 'Menu — Samples — the eight numbered items under this label each load a WAV file into that slot, and each prints the filename it holds'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Load first 8 WAV files from a folder — opens a folder browser and puts that folder''s first eight WAV files into the eight slots in name order'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+      '16': 2
+      '17': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+      '3': 7
+      '4': 8
+      '5': 9
+      '6': 10
+      '7': 11
+      '8': 12
+      '9': 13
+    'out':
+      '18': 14
+      '19': 15
+      '20': 16
+      '21': 17
+      '22': 18
+      '23': 19
+      '0': 20
+      '1': 21
+      '2': 22
+      '3': 22
+      '4': 22
+      '5': 22
+      '6': 22
+      '7': 22
+      '8': 22
+      '9': 22
+      '10': 23
+      '11': 23
+      '12': 23
+      '13': 23
+      '14': 23
+      '15': 23
+      '16': 23
+      '17': 23
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+      'out':
+        '18': 'cv'
+        '19': 'cv'
+        '20': 'cv'
+        '21': 'cv'
+        '22': 'cv'
+        '23': 'cv'
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AutobreakStudio.hpp:511 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AutobreakStudio.hpp:476 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AutobreakStudio.hpp:619 reads RATCHET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'AutobreakStudio.hpp:425 divides this input by 10, multiplies by the memory count and truncates to an int, and AutobreakStudio.hpp:426 clamps that to 0..15'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'polarity': 'unipolar'
+          'why': 'AutobreakStudio.hpp:353 divides this input by 10 to override the position sequencer''s 0..1 value, and AutobreakStudio.hpp:690 multiplies that by 16 into an int'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'polarity': 'unipolar'
+          'why': 'AutobreakStudio.hpp:341 divides this input by 10 to override the sample sequencer''s 0..1 value, and AutobreakStudio.hpp:547 stores that times the sample count in an unsigned int'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': 'AutobreakStudio.hpp:317 divides this input by 10 to override the volume sequencer''s 0..1 value, used as a gain at AutobreakStudio.hpp:645'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': 'AutobreakStudio.hpp:329 divides this input by 10 to override the pan sequencer''s 0..1 value, which AutobreakStudio.hpp:649 doubles and offsets to -1..+1'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 5V'
+          'why': 'AutobreakStudio.hpp:365 divides this input by 10 and AutobreakStudio.hpp:664 tests the result against 0.5'
+        '9':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': 'AutobreakStudio.hpp:377 divides this input by 10 to override the ratchet sequencer''s 0..1 value'
+  'ghosts':
+    'lines':
+      - 'Granular sample player: short looping grains are spawned from one position in a loaded sample and pile up into a cloud'
+      - 'Sets how long each grain is, from a five hundredth of a second to half a second'
+      - 'Attenuates the LENGTH CV, from nothing through to its full range'
+      - 'Adds to the grain length after its attenuator, 0-10V covering its full range'
+      - 'Sets how many grains may sound at once, up to 120, with the oldest removed as the count is passed'
+      - 'Attenuates the QUOTA CV, from nothing through to its full range'
+      - 'Adds to the grain count after its attenuator, 0-10V covering none to 120'
+      - 'Sets how many grains are spawned each second, from 10 to 500'
+      - 'Attenuates the SPAWN CV, from nothing through to its full range'
+      - 'Adds to the spawn rate after its attenuator, 0-10V covering its full range'
+      - 'Sets where in the sample new grains begin, from its start to its end'
+      - 'Attenuates the playback position CV, from nothing through to its full range'
+      - 'Adds to the playback position after its attenuator, 0-10V covering the whole sample'
+      - 'Shifts the playback speed of every grain by a volt per octave, from -2V to 2V'
+      - 'Adds to the playback speed, a volt per octave'
+      - 'Silences every grain sounding at that moment, leaving new ones to spawn'
+      - 'A rising edge silences every grain sounding at that moment'
+      - 'Scatters the start position of each new grain over a range of about a thousand samples either way'
+      - 'Above 0V the start position of each new grain is scattered, and the switch is then ignored'
+      - 'Sets the output level, from silence through unity at the centre to twice the level'
+      - 'The left channel of the grain cloud'
+      - 'The right channel of the grain cloud'
+      - 'Note — the outputs stay silent until a WAV file is loaded: right-click the panel and click the item under the Sample label, which reads [ EMPTY ] until then'
+      - 'Menu — Sample — the item under this label loads the WAV file the grains are cut from, and prints the filename it holds'
+      - 'Menu — Remove Sample — empties the sample slot and silences every grain sounding at that moment'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 4
+      '3': 5
+      '4': 7
+      '5': 8
+      '6': 10
+      '7': 11
+      '8': 13
+      '10': 15
+      '12': 17
+      '11': 19
+    'in':
+      '2': 3
+      '3': 6
+      '4': 9
+      '5': 12
+      '6': 14
+      '0': 16
+      '1': 18
+    'out':
+      '0': 20
+      '1': 21
+    'family':
+      'in':
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'pitch'
+        '0': 'trigger'
+        '1': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Param 13 (MODES) and param 9 (a pitch attenuator) exist in the code but have no control on the panel and no menu item; the module always runs in mode 0, whose figures are the ones quoted here.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Ghosts.hpp:213 reads PURGE_TRIGGER_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 0V'
+          'why': 'Ghosts.hpp:205 tests this input against 0V with getVoltage() alone, and while a cable is in it the panel switch is not read'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'Ghosts.hpp:173 multiplies this input by the attenuverter, adds the knob and Ghosts.hpp:174 clamps the total to 0..10 volts'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'Ghosts.hpp:151 divides this input by 10 and scales it by the graveyard maximum and the attenuverter before adding the knob; Ghosts.hpp:236 stores the total in an int'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'Ghosts.hpp:169 multiplies this input by the attenuverter, adds the knob and Ghosts.hpp:170 clamps the total to 0..10 volts'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'Ghosts.hpp:151 divides this input by 10 and scales it by the sample length and the attenuverter before adding the knob; Ghosts.hpp:180 holds the total below the end of the sample'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'Ghosts.hpp:265 adds this input to the knob and raises 2 to the sum with approxExp2_taylor5'
+  'GrainEngineMK2':
+    'lines':
+      - 'Granular sample player: grains are cut from one of five loaded samples at a chosen position and spawned at a rate of their own or on an external clock'
+      - 'Sets how often a new grain is spawned, from a few a second at the left to one per sample at the right'
+      - 'Attenuates the RATE CV, from nothing through to its full range'
+      - 'Adds to the spawn rate after its attenuator, 0-10V covering its full range'
+      - 'Sets how long each grain is, up to 6400 samples'
+      - 'Attenuates the WINDOW CV, from nothing through to its full range'
+      - 'Adds to the grain length after its attenuator, 0-10V covering its full range'
+      - 'Sets how many grains may sound at once, up to 140'
+      - 'Attenuates the GRAINS CV, from nothing through to its full range'
+      - 'Adds to the grain count after its attenuator, 0-10V covering none to 140'
+      - 'Shifts the playback speed of every grain by a volt per octave, from -2V to 2V'
+      - 'Adds to the playback speed, a volt per octave'
+      - 'Picks which of the five loaded samples the grains are cut from'
+      - 'Attenuates the SAMPLE selection CV, from nothing through to its full range'
+      - 'Adds to the sample selection after its attenuator, 0-10V spanning the five samples'
+      - 'Sets where in the sample new grains begin, from its start to its end'
+      - 'Attenuates the POS CV, from nothing through to its full range'
+      - 'Adds to the grain position after its attenuator, 0-10V covering the whole sample'
+      - 'Scatters the start position of each new grain, up to three thousand samples either way at the right'
+      - 'Multiplies the jitter spread by the voltage here, so 0V removes the scatter and 1V gives what the knob is set to'
+      - 'A rising edge spawns one grain, and while a cable is patched here the internal spawn rate is not used'
+      - 'Places each new grain in the stereo field, 0V hard left through 5V centre to 10V hard right'
+      - 'Sets the output level, from silence through unity at 1 to twice the level at 2'
+      - 'The left channel of the grain cloud'
+      - 'The right channel of the grain cloud'
+      - 'Note — the outputs stay silent until a WAV file is loaded into one of the five slots under Samples in the right-click menu'
+      - 'Menu — Samples — the five numbered items under this label each load a WAV file into that slot, and each prints the filename it holds'
+    'param':
+      '10': 1
+      '11': 2
+      '0': 4
+      '1': 5
+      '8': 7
+      '9': 8
+      '4': 10
+      '12': 12
+      '13': 13
+      '2': 15
+      '3': 16
+      '7': 18
+      '6': 22
+    'in':
+      '7': 3
+      '1': 6
+      '6': 9
+      '3': 11
+      '8': 14
+      '2': 17
+      '0': 19
+      '4': 20
+      '5': 21
+    'out':
+      '0': 23
+      '1': 24
+    'family':
+      'in':
+        '7': 'cv'
+        '1': 'cv'
+        '6': 'cv'
+        '3': 'pitch'
+        '8': 'cv'
+        '2': 'cv'
+        '0': 'cv'
+        '4': 'trigger'
+        '5': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Param 5 (a pitch attenuator) is declared but never configured or drawn.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainEngineMK2.hpp:320 reads this input with getVoltage() alone and multiplies the jitter spread by it'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'range': '±10V'
+          'why': 'GrainEngineMK2.hpp:190 rescales this input from -10V..+10V onto the 1 to 6400 window range and clamps it there'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'GrainEngineMK2.hpp:306 divides this input by 10, multiplies by the attenuverter and adds the knob, and GrainEngineMK2.hpp:307 clamps the total to 0..1'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'GrainEngineMK2.hpp:344 adds this input to the knob and raises 2 to the sum with approxExp2_taylor5'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrainEngineMK2.hpp:351 reads SPAWN_TRIGGER_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'bipolar'
+          'why': 'GrainEngineMK2.hpp:341 divides this input by 10 straight into the -1 to +1 pan position'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainEngineMK2.hpp:203 divides this input by 10 and GrainEngineMK2.hpp:210 clamps that alone to 0..1 before scaling; GrainEngineMK2.hpp:296 stores the total in an unsigned int'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainEngineMK2.hpp:203 divides this input by 10 and GrainEngineMK2.hpp:210 clamps that alone to 0..1 before scaling into the spawn countdown at GrainEngineMK2.hpp:362'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'GrainEngineMK2.hpp:256 divides this input by 10 and scales it by the attenuverter and 4, and GrainEngineMK2.hpp:261 clamps the knob-plus-input total to 0..4 before storing it in an unsigned int'
+  'GrainEngineMK2Expander':
+    'lines':
+      - 'Recorder for Grain Engine MK2, placed immediately to the right of it, that captures incoming audio to a WAV file and hands it to one of that module''s five sample slots'
+      - 'Starts recording the incoming audio; pressing it while a recording is running stops that one instead'
+      - 'Stops the recording, saves it to disk and loads it into the chosen sample slot of Grain Engine MK2'
+      - 'Picks which of the five sample slots in Grain Engine MK2 receives the recording'
+      - 'A rising edge starts recording the incoming audio'
+      - 'A rising edge stops the recording, saves it and loads it into the chosen sample slot'
+      - 'The left channel of the audio to record'
+      - 'The right channel of the audio to record'
+      - 'Adds to the sample slot choice, a volt per slot'
+      - 'The left input passed through unchanged'
+      - 'The right input passed through unchanged'
+      - 'Note — recordings are written as WAV files in Rack''s user folder and are named after this module and the slot they were sent to'
+      - 'Note — nothing is recorded and nothing passes through unless Grain Engine MK2 is the module immediately to the left'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+      '3': 7
+      '4': 8
+    'out':
+      '0': 9
+      '1': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrainEngineMK2Expander.hpp:91 reads RECORD_START_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrainEngineMK2Expander.hpp:92 reads RECORD_STOP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainEngineMK2Expander.hpp:88 reads this input with getVoltage() alone and writes it straight into the recording buffer'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainEngineMK2Expander.hpp:89 reads this input with getVoltage() alone and writes it straight into the recording buffer'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrainEngineMK2Expander.hpp:118 stores this input''s voltage in an unsigned int, one slot per volt, then adds the knob and clamps to 0..4'
+  'grainfx':
+    'lines':
+      - 'Granular effect on incoming audio: the sound is written to a four second buffer and grains are cut from a position in it, moved by a built-in LFO or by CV'
+      - 'Sets how often a new grain is spawned, from one every 512 samples at the left to one per sample at the right'
+      - 'Attenuates the SPAWN RATE CV, from nothing through to its full range'
+      - 'Adds to the spawn rate after its attenuator, 0-10V covering its full range'
+      - 'A rising edge spawns one grain, and while a cable is patched here the spawn rate is not used'
+      - 'Sets how many grains may sound at once, up to 140'
+      - 'Attenuates the GRAINS CV, from nothing through to its full range'
+      - 'Adds to the grain count after its attenuator, 0-10V covering none to 140'
+      - 'Sets how long each grain is, from 1 to 6400 samples'
+      - 'Attenuates the WINDOW CV, from nothing through to its full range'
+      - 'Adds to the grain length after its attenuator, -10V to 10V covering the full 1 to 6400 samples'
+      - 'Sets how fast each grain reads through the buffer, -1.3 to 2 buffer samples per audio sample: 1 is the recorded speed, 0 holds one point, and below zero the grain is read backwards'
+      - 'Attenuates the PITCH CV, from nothing through to its full range'
+      - 'Shifts the reading speed of each grain after its attenuator'
+      - 'Scatters the position each new grain is cut from, up to three thousand samples either way at the right'
+      - 'Multiplies the jitter spread by the voltage here, so 0V removes the scatter and 1V gives what the knob is set to'
+      - 'Chooses how the PAN input is read: bipolar -5V to 5V, or unipolar 0-10V'
+      - 'Places each new grain in the stereo field, left to right over the range the switch selects'
+      - 'Stops new audio being written to the buffer, so the grains keep cutting the same four seconds'
+      - 'Any voltage other than 0V stops new audio being written to the buffer, and the switch is then ignored'
+      - 'The left channel of the audio written into the buffer'
+      - 'The right channel of the audio written into the buffer'
+      - 'Sets the output level, from silence through unity at the centre to twice the level'
+      - 'The left channel of the grain cloud'
+      - 'The right channel of the grain cloud'
+      - 'Sets where in the buffer grains are cut from, its start to its end, and while a cable is in the position input the LFO is not used'
+      - 'Attenuates the position CV, from nothing through to its full range'
+      - 'Sets where in the buffer grains are cut from, 0-10V across the four seconds, in place of the LFO'
+      - 'Picks the LFO shape, through the five drawn on the panel'
+      - 'Attenuates the LFO waveform CV, from nothing through to its full range'
+      - 'Adds to the LFO waveform choice after its attenuator, 0-10V spanning the five shapes'
+      - 'Sets the speed of the LFO that moves the grain position'
+      - 'Attenuates the LFO frequency CV, from nothing through to its full range'
+      - 'Adds to the LFO speed after its attenuator, 0-10V covering its full range'
+      - 'Sets how far the LFO moves the grain position, from a hundredth of the buffer to all of it'
+      - 'Attenuates the LFO amplitude CV, from nothing through to its full range'
+      - 'Adds to the LFO depth after its attenuator, 0-10V covering its full range'
+      - 'Chooses whether the LFO output runs 0-10V or is centred on 0V'
+      - 'The position the LFO has reached, in the range the polarity switch sets; it carries nothing while a cable is in the position input'
+      - 'Note — the buffer holds the last four seconds of incoming audio, and the lamp beside the outputs stays red until it has filled once'
+      - 'Note — the outputs are silent until audio is patched into the inputs; the module makes no sound of its own'
+    'param':
+      '13': 1
+      '14': 2
+      '10': 5
+      '11': 6
+      '0': 8
+      '1': 9
+      '4': 11
+      '5': 12
+      '7': 14
+      '8': 16
+      '9': 18
+      '6': 22
+      '2': 25
+      '3': 26
+      '19': 28
+      '20': 29
+      '15': 31
+      '16': 32
+      '17': 34
+      '18': 35
+      '21': 37
+    'in':
+      '11': 3
+      '4': 4
+      '8': 7
+      '1': 10
+      '3': 13
+      '0': 15
+      '6': 17
+      '7': 19
+      '9': 20
+      '10': 21
+      '2': 27
+      '14': 30
+      '12': 33
+      '13': 36
+    'out':
+      '0': 23
+      '1': 24
+      '2': 38
+    'family':
+      'in':
+        '11': 'cv'
+        '4': 'trigger'
+        '8': 'cv'
+        '1': 'cv'
+        '3': 'cv'
+        '0': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '9': 'audio'
+        '10': 'audio'
+        '2': 'cv'
+        '14': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'cv'
+    'notes': 'The PITCH CV is scaled as the voltage divided by ten minus five before the attenuator, so at 0V it shifts the reading speed a long way negative; that looks like a mistake in the code rather than a designed range, and the line avoids quoting a figure. Param 12 (SPAWN_THROTTLING_KNOB) is declared but has no control on the panel. Input 5 (CONTOUR) and param 12 have no jack or control on the panel and are not read. PAN''s range depends on the PAN switch: set to unipolar the code divides the voltage by 5 and subtracts 1, so 0 to 10V covers hard left to hard right; set to bipolar it divides by 10, so ±10V covers the same span. No range is written for that jack because it is not fixed.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainFx.hpp:219 reads this input with getVoltage() alone and multiplies the jitter spread by it'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'range': '±10V'
+          'why': 'GrainFx.hpp:128 rescales this input from -10V..+10V onto the 1 to 6400 window range and clamps it there'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'range': '±10V'
+          'why': 'GrainFx.hpp:128 rescales this input from -10V..+10V onto the 0 to 1 position range and clamps it there; while a cable is in it the internal LFO is not used (GrainFx.hpp:188)'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainFx.hpp:268 divides this input by 10 and subtracts 5 before the attenuverter and the knob'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrainFx.hpp:279 reads SPAWN_TRIGGER_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainFx.hpp:246 divides this input by 5 and subtracts 1 when the PAN switch is set to unipolar, and GrainFx.hpp:251 divides it by 10 when the switch is set to bipolar'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrainFx.hpp:258 assigns this input''s voltage to audio_buffer.frozen, a bool, so any voltage other than 0V sets it and audio_buffer.hpp:39 then stops pushing new audio into the buffer; unpatched, :262 takes the flag from the FREEZE switch instead, so no voltage is read'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling; the total is stored in the unsigned int max_grains at GrainFx.hpp:8'
+        '9':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainFx.hpp:169 reads this input with getVoltage() alone and pushes it straight into the audio buffer'
+        '10':
+          'poly': false
+          'step': 'continuous'
+          'why': 'GrainFx.hpp:169 reads this input with getVoltage() alone and pushes it straight into the audio buffer'
+        '11':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling into the spawn countdown at GrainFx.hpp:288'
+        '12':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling to the 500Hz maximum at GrainFx.hpp:160'
+        '13':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainFx.hpp:148 divides this input by 10 and GrainFx.hpp:152 clamps that alone to 0..1 before the attenuverter and the knob'
+        '14':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling; GrainFx.hpp:175 stores the result in the unsigned int selected_waveform'
+  'satanonaut':
+    'lines':
+      - 'Audio mangler: incoming sound is written to a short buffer and read back through one of fourteen glitching effects, among them bit-crushing bytebeat equations, delays, slice repeats and wave folding'
+      - 'Picks which of the fourteen effects the buffer is read through; with a cable in the EFFECT input this attenuates that voltage instead, 10V covering all fourteen'
+      - 'Sets how much of the buffer the effect works over, from 10 samples to a full second; with a cable in the BUFFER SIZE input this attenuates that voltage instead'
+      - 'Sets how much of the buffer output is written back into the buffer, none to all of it; with a cable in the FEEDBACK input this attenuates that voltage instead'
+      - 'Sets the first parameter of the chosen effect, 0 to 1, and what it changes depends on which effect is chosen; with a cable in the PARAM1 input this attenuates that voltage instead'
+      - 'Sets the second parameter of the chosen effect, 0 to 1, and what it changes depends on which effect is chosen; with a cable in the PARAM2 input this attenuates that voltage instead'
+      - 'Picks the effect, 0-10V across the fourteen, attenuated by the EFFECT knob'
+      - 'Sets the buffer length, 0-10V from 10 samples to a full second, attenuated by the BUFFER SIZE knob'
+      - 'Sets the feedback, 0-10V from none to all of it, attenuated by the FEEDBACK knob'
+      - 'Sets the first parameter of the chosen effect, 0-10V, attenuated by the PARAM1 knob'
+      - 'Sets the second parameter of the chosen effect, 0-10V, attenuated by the PARAM2 knob'
+      - 'The left channel of the audio to mangle'
+      - 'The right channel of the audio to mangle'
+      - 'The left channel of the mangled audio'
+      - 'The right channel of the mangled audio'
+      - 'Note — the name of the chosen effect is shown on the panel readout'
+      - 'Note — the outputs are silent until audio is patched into the inputs; the module makes no sound of its own'
+    'param':
+      '3': 1
+      '1': 2
+      '2': 3
+      '4': 4
+      '5': 5
+    'in':
+      '2': 6
+      '3': 7
+      '4': 8
+      '5': 9
+      '6': 10
+      '0': 11
+      '1': 12
+    'out':
+      '0': 13
+      '1': 14
+    'family':
+      'in':
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '0': 'audio'
+        '1': 'audio'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Params 0 (clock division), 6 (purge) and 7 (drive) exist in the code but have no control on the panel; drive stays at its default of 1, so the output is not scaled. The five CV jacks multiply their knob rather than adding to it (Satanonaut.hpp:92): at 0V the knob is ignored and the parameter reads zero, and the knob sets how far 10V can push it. With no cable the knob is used on its own.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Satanonaut.hpp:153 reads this input with getVoltage() alone and pushes it straight into the audio buffer'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Satanonaut.hpp:154 reads this input with getVoltage() alone and pushes it straight into the audio buffer'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'ignored'
+          'why': 'Satanonaut.hpp:122 divides this input by 10 and multiplies by the knob into an int, and Satanonaut.hpp:129 clamps that to 0..the effect count'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1; Satanonaut.hpp:145 stores the scaled buffer size in an int'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1'
+  'satanonaut_unearthed':
+    'lines':
+      - 'Blank panel carrying the Satanonaut artwork, with no controls and no jacks'
+      - 'Note — the module has no controls, no jacks and no processing of any kind; it puts the Satanonaut artwork in the rack and nothing else'
+  'samplerx8':
+    'lines':
+      - 'Eight stereo sample players in one module, each with its own trigger, start position, level, pan, on switch and pair of outputs, plus a stereo mix'
+      - 'Sets the level of that sample player, from silence to the full level of the file'
+      - 'Places that sample player in the stereo field, hard left through centre to hard right'
+      - 'Sets where in the file that player starts when triggered, 0-10V from the beginning to the end; it is read at the moment the trigger arrives'
+      - 'A rising edge plays that file from the start position; it reads high above 2V and low below 0.1V'
+      - 'When off, that player is silenced at its own outputs and taken out of the mix'
+      - 'The left channel of that sample player, after its level and pan'
+      - 'The right channel of that sample player, after its level and pan'
+      - 'The left channels of all eight players added together'
+      - 'The right channels of all eight players added together'
+      - 'Note — a player stays silent until a WAV file is loaded into it from the right-click menu, either one at a time or eight at once from a folder'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Load individual samples — the eight numbered items under this label each open a file browser for that player, and each prints the filename it holds'
+      - 'Menu — Load first 8 WAV files from a folder — opens a folder browser and puts that folder''s first eight WAV files into the eight players in name order'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 2
+      '9': 2
+      '10': 2
+      '11': 2
+      '12': 2
+      '13': 2
+      '14': 2
+      '15': 2
+      '16': 5
+      '17': 5
+      '18': 5
+      '19': 5
+      '20': 5
+      '21': 5
+      '22': 5
+      '23': 5
+    'in':
+      '0': 4
+      '1': 4
+      '2': 4
+      '3': 4
+      '4': 4
+      '5': 4
+      '6': 4
+      '7': 4
+      '8': 3
+      '9': 3
+      '10': 3
+      '11': 3
+      '12': 3
+      '13': 3
+      '14': 3
+      '15': 3
+    'out':
+      '0': 6
+      '1': 6
+      '2': 6
+      '3': 6
+      '4': 6
+      '5': 6
+      '6': 6
+      '7': 6
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+      '14': 7
+      '15': 7
+      '16': 8
+      '17': 9
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+        '14': 'cv'
+        '15': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'SamplerX8.hpp:107 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5)'
+        '8':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 1''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '9':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 2''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '10':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 3''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '11':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 4''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '12':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 5''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '13':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 6''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '14':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 7''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+        '15':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'SamplerX8.hpp:107 fires sample 8''s trigger, and :111 then rescales this jack from 0 to 10V onto the 0 to 1 start position handed to SamplePlayer.hpp:35, which multiplies it by the sample length; unpatched, :115 calls trigger() with its default start of 0.0, the same place 0V gives'
+  'maya':
+    'lines':
+      - 'Word player holding ten banks of spoken words, with the bank and the word chosen by knob or CV and a word spoken on each trigger'
+      - 'Picks the bank, through the ten: pronouns, verbs, descriptors, nouns, connectors, time, emotions, numbers, questions and a custom bank of your own files'
+      - 'Attenuates the BANK CV, from nothing through to its full range'
+      - 'Picks the word within the chosen bank, from its first to its last'
+      - 'Attenuates the WORD CV, from nothing through to its full range'
+      - 'A rising edge speaks the word chosen at that moment; nothing is spoken until a trigger arrives'
+      - 'Shifts the pitch of the spoken word, -5V to 5V for half an octave either way, read at the moment the trigger arrives'
+      - 'Adds to the bank choice after its attenuator, a volt per bank across the ten'
+      - 'Adds to the word choice after its attenuator, 0-10V across the words in the chosen bank'
+      - 'The left channel of the spoken word'
+      - 'The right channel of the spoken word'
+      - 'Note — the ten banks of words are shipped with the plugin, so a word is spoken as soon as a trigger arrives'
+      - 'Menu — Pitch CV Range — Bipolar: -5V to +5V, or Unipolar: 0V to 10V, setting how the PITCH input is read'
+      - 'Menu — Select Directory Containing Word Files — replaces the vocabulary with the WAV and MP3 files in a folder of your own'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Visit r1n.ai — opens that web page in a browser'
+    'param':
+      '2': 1
+      '3': 2
+      '0': 3
+      '1': 4
+    'in':
+      '0': 5
+      '3': 6
+      '2': 7
+      '1': 8
+    'out':
+      '0': 9
+      '1': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '3': 'cv'
+        '2': 'cv'
+        '1': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'The PITCH input covers half an octave either way rather than a volt per octave, so it is coloured cv rather than pitch. The bank of your own files is reached with Select Directory Containing Word Files, which replaces the whole vocabulary rather than adding an eleventh bank. PITCH is read once, at the instant the trigger fires (Maya.hpp:299), so moving it during a word does nothing. Its range is a menu choice: the bipolar setting takes ±5V and the unipolar setting takes 0 to 10V with 5V as centre, both covering plus or minus half an octave (Maya.hpp:301-311).'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Maya.hpp:296 reads TRIG_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'Maya.hpp:266 divides this input by 10 and multiplies by the attenuverter, and Maya.hpp:269 clamps the knob-plus-input total to 0..1 before Maya.hpp:280 turns it into a word index'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'Maya.hpp:256 multiplies this input by the attenuverter, one bank per volt, and banks.h:127 truncates the sum to an int and raises anything below zero to zero'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Maya.hpp:299 reads this input with getVoltage() alone at the moment of the trigger; Maya.hpp:304 or Maya.hpp:309 then maps it to plus or minus half an octave'
+  'tempest-vs1':
+    'lines':
+      - 'Panel drawn as the Tempest VS-1 hardware controller: its knobs, buttons and switch each have a jack, and incoming MIDI control changes move them'
+      - 'Sets the voltage at the M1 output, 0-10V; an incoming MIDI control change moves it as well'
+      - 'Sets the voltage at the M2 output, 0-10V; an incoming MIDI control change moves it as well'
+      - 'Sets the voltage at the M3 output, 0-10V; an incoming MIDI control change moves it as well'
+      - 'Sets the voltage at the M4 output, 0-10V; an incoming MIDI control change moves it as well'
+      - 'Sets the voltage at that SM output, 0-10V, and an incoming control change moves it as well'
+      - 'Sets the voltage at the Epic output, 0-10V'
+      - 'Sets the voltage at the Center output, 0-10V; an incoming MIDI control change moves it as well'
+      - 'Turning it right fires a trigger at the right encoder output and turning it left fires one at the left encoder output'
+      - 'Fires a 100ms trigger at the Mode output'
+      - 'Fires a 100ms trigger at the Preset output'
+      - 'Fires a 100ms trigger at the Clear output'
+      - 'Sets the A/B switch output to 0V at A and 10V at B; MIDI control change 25 moves it as well'
+      - 'Opens the MIDI driver and device menu for the port that drives this panel'
+      - 'The voltage the M1 knob is set to, 0-10V'
+      - 'The voltage the M2 knob is set to, 0-10V'
+      - 'The voltage the M3 knob is set to, 0-10V'
+      - 'The voltage the M4 knob is set to, 0-10V'
+      - 'The voltage that SM knob is set to, 0-10V'
+      - 'The voltage the Epic knob is set to, 0-10V'
+      - 'The voltage the Center knob is set to, 0-10V'
+      - 'A 10ms 10V trigger each time the encoder is turned one step to the left'
+      - 'A 10ms 10V trigger each time the encoder is turned one step to the right'
+      - 'A 100ms 10V trigger when the Mode button is pressed, or when control change 23 arrives'
+      - 'A 100ms 10V trigger when the Preset button is pressed, or when control change 22 arrives'
+      - 'A 100ms 10V trigger when the Clear button is pressed, or when control change 24 arrives'
+      - '0V while the switch is at A and 10V while it is at B'
+      - 'Note — no MIDI reaches the panel until a device is chosen: the MIDI button opens a menu of drivers and devices, and the panel''s own right-click menu holds nothing'
+      - 'Menu — MIDI Driver — on the menu the MIDI button opens, not the panel menu: picks which of Rack''s MIDI drivers the port uses'
+      - 'Menu — MIDI Device — on the menu the MIDI button opens, not the panel menu: picks the device to receive from, or (No device)'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+      '8': 6
+      '9': 7
+      '10': 8
+      '11': 9
+      '12': 10
+      '13': 11
+      '14': 12
+      '15': 13
+    'out':
+      '0': 14
+      '1': 15
+      '2': 16
+      '3': 17
+      '4': 18
+      '5': 18
+      '6': 18
+      '7': 18
+      '8': 19
+      '9': 20
+      '10': 21
+      '11': 22
+      '12': 23
+      '13': 24
+      '14': 25
+      '15': 26
+    'family':
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+        '15': 'trigger'
+    'notes': 'The MIDI mapping in the 2.41.1 code is written for a Launch Control XL MK2 for testing: control changes 13 to 19 move SM4, SM2, M4, SM3, SM1, M3 and Center in that order, and 29 and 30 move M1 and M2. The Epic knob has no control change of its own, and the comments in the code name different knobs from the ones the mapping table actually reaches. The panel''s own right-click menu is empty; the MIDI driver and device lists are opened by left-clicking the MIDI button.'
+  'digitalprogrammer':
+    'lines':
+      - 'Sixteen sliders held in twenty-four banks, each slider sent to its own output and to a polyphonic output'
+      - 'Selects that bank, so the sliders show and put out the values stored in it; with COPY, CLEAR or RNDM armed, pressing a bank copies into it, empties it or fills it with random values'
+      - 'Arms copying, so the next bank pressed receives a copy of the bank showing; pressing it again returns to plain bank selection'
+      - 'Arms clearing, so the next bank pressed is emptied; pressing it again returns to plain bank selection'
+      - 'Arms randomising, so the next bank pressed is filled with random slider values; pressing it again returns to plain bank selection'
+      - 'Steps back one bank, wrapping round to the last one'
+      - 'Steps forward one bank, wrapping round to the first one'
+      - 'Picks the bank directly, 0-10V across the twenty-four, and while a cable is patched here the bank buttons are overridden'
+      - 'A rising edge steps forward one bank'
+      - 'A rising edge steps back one bank'
+      - 'A rising edge returns to the first bank'
+      - 'A polyphonic input added to the sliders, channel by channel, before they reach the outputs'
+      - 'The value of that slider in the bank showing, in the voltage range chosen for it, plus anything on that channel of the poly add input'
+      - 'All sixteen slider values on one polyphonic cable, in the same order as the individual outputs'
+      - 'Note — drag a slider to set its value; a slider carries no label until one is typed into the Labels submenu of the right-click menu'
+      - 'Menu — Slider #1 through Slider #16 — each holds an Output Range submenu setting the span that slider covers, from -10.0 to 10.0 down to 0.0 to 1.0, with 0.0 to 10.0 to start with'
+      - 'Menu — Match Cable Colors — draws each slider in the colour of the cable patched to its output'
+      - 'Menu — Visualize Summed Voltages — draws what the polyphonic add input adds to each slider'
+      - 'Menu — Labels — opens sixteen text fields, one per slider, for a name of your own'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+      '16': 1
+      '17': 1
+      '18': 1
+      '19': 1
+      '20': 1
+      '21': 1
+      '22': 1
+      '23': 1
+      '24': 2
+      '25': 3
+      '26': 4
+      '27': 5
+      '28': 6
+    'in':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+      '4': 11
+    'out':
+      '0': 12
+      '1': 12
+      '2': 12
+      '3': 12
+      '4': 12
+      '5': 12
+      '6': 12
+      '7': 12
+      '8': 12
+      '9': 12
+      '10': 12
+      '11': 12
+      '12': 12
+      '13': 12
+      '14': 12
+      '15': 12
+      '16': 13
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+        '14': 'cv'
+        '15': 'cv'
+        '16': 'cv'
+    'notes': 'The source builds a per-slider Snap submenu, but the struct that holds it is never added to any menu and snap_settings is never read in processing, so Snap cannot be reached and is not described.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'why': 'DigitalProgrammer.hpp:346 divides this input by 10, multiplies by the bank count and stores it in an unsigned int'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalProgrammer.hpp:352 reads BANK_NEXT_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalProgrammer.hpp:359 reads BANK_PREV_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalProgrammer.hpp:365 reads BANK_RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '4':
+          'poly': true
+          'step': 'continuous'
+          'why': 'DigitalProgrammer.hpp:369 calls setChannels on this input for every slider and DigitalProgrammer.hpp:415 reads one channel per slider, adding it to that slider''s output voltage'
+  'digitalsequencer':
+    'lines':
+      - 'Six sequencers in one module, each drawing a voltage sequence and a gate sequence of up to 32 steps, with its own length, clock and pair of outputs'
+      - 'Selects that sequencer for editing, so the display draws its voltage and gate steps'
+      - 'Sets how many steps that sequencer plays before returning to its first, 1 to 32'
+      - 'A rising edge advances every sequencer that has no cable in its own step input'
+      - 'A rising edge returns every sequencer to its first step, and clock pulses are ignored for the following 1ms'
+      - 'A rising edge advances that sequencer alone, in place of the common STEP input'
+      - 'The voltage drawn at the current step of that sequencer, in the range chosen for it'
+      - 'A 10ms 10V trigger on every step marked in the gate sequence of that sequencer'
+      - 'Note — drag in the upper half of the display to draw voltages and in the lower half to set gates'
+      - 'Note — Quick Key Reference in the right-click menu lists the keys the display responds to, among them f to freeze the sequencers for editing and r to randomise the sequence under the pointer'
+      - 'Note — every step of every sequence starts at zero, so the voltage outputs stay at the bottom of their range and no gate is put out until the display is drawn on'
+      - 'Menu — Sequencer Settings — All Sequencers, and Sequencer #1 through Sequencer #6, each holding that sequencer''s Output Range, Snap and Sample & Hold'
+      - 'Menu — Snap — None, 8, 10, 12, 16, 24, 32 or 36, rounding drawn voltages to that many steps; reached through Sequencer Settings'
+      - 'Menu — Sample & Hold — Off or On, holding the voltage output between gates instead of changing it every step; reached through Sequencer Settings'
+      - 'Menu — Reset Mode — two choices printed Next clock input. and Instant, setting whether a reset takes effect on the next clock or at once'
+      - 'Menu — Output Range — the span of a sequencer''s voltage output, from -10.0 to 10.0 down to 0.0 to 1.0, with 0.0 to 10.0 to start with; reached through Sequencer Settings'
+      - 'Menu — Quick Key Reference — lists the keys the display responds to while the pointer is over the module'
+    'param':
+      '1': 2
+      '2': 2
+      '3': 2
+      '4': 2
+      '5': 2
+      '6': 2
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+    'in':
+      '1': 3
+      '2': 4
+      '3': 5
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+      '8': 5
+    'out':
+      '2': 6
+      '3': 6
+      '4': 6
+      '5': 6
+      '6': 6
+      '7': 6
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+    'family':
+      'in':
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+      'out':
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+    'notes': 'Input 0 (CLOCK), outputs 0 and 1 (CLOCK and END) and params 0, 7 and 14 are declared in the code but have no jack or control on the panel; the freeze toggle is reached by the f key rather than by a button.'
+    'props':
+      'in':
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:627 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:579 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencer.hpp:646 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5), and DigitalSequencer.hpp:641 falls back to the global STEP jack when nothing is patched here'
+          'normal': 'the STEP jack'
+  'digitalsequencerxp':
+    'lines':
+      - 'Sixteen sequencers in one module, each drawing a voltage sequence and a gate sequence of up to 32 steps, with all sixteen reaching the outside on polyphonic cables'
+      - 'Selects that sequencer for editing, so the display draws its voltage and gate steps'
+      - 'Advances the sequencers: a polyphonic cable steps each sequencer from its own channel, and a single channel steps all sixteen together'
+      - 'Sets the lengths, channel by channel, 0-10V for 1 to 32 steps; a sequencer with no channel of its own keeps the length it was given'
+      - 'A rising edge returns every sequencer to its first step, and clock pulses are ignored for the following 1ms'
+      - 'The voltage drawn at the current step of each sequencer, one channel per sequencer, in the range chosen for it'
+      - 'A 10ms 10V trigger on every step marked in the gate sequence, one channel per sequencer'
+      - 'Note — drag in the upper half of the display to draw voltages and in the lower half to set gates'
+      - 'Note — Quick Key Reference in the right-click menu lists the keys the display responds to: f to freeze for editing, g to send a gate while frozen, and r to randomise the sequence under the pointer'
+      - 'Note — every step of every sequence starts at zero, so the voltage output stays at the bottom of its range and no gate is put out until the display is drawn on'
+      - 'Note — holding shift and dragging on the display shifts the sequence under the pointer left or right'
+      - 'Menu — Sequencer Settings — All Sequencers, and Sequencer #1 through Sequencer #16, each holding that sequencer''s Output Range, Snap and Sample & Hold'
+      - 'Menu — Snap — None, 8, 10, 12, 16, 24, 32 or 36, rounding drawn voltages to that many steps; reached through Sequencer Settings'
+      - 'Menu — Sample & Hold — Off or On, holding the voltage output between gates instead of changing it every step; reached through Sequencer Settings'
+      - 'Menu — Reset Mode — two choices printed Next clock input. and Instant, setting whether a reset takes effect on the next clock or at once'
+      - 'Menu — Output Range — the span of a sequencer''s voltage output, from -10.0 to 10.0 down to 0.0 to 1.0, with 0.0 to 10.0 to start with; reached through Sequencer Settings'
+      - 'Menu — Quick Key Reference — lists the keys the display responds to while the pointer is over the module'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+    'in':
+      '0': 2
+      '1': 3
+      '2': 4
+    'out':
+      '0': 5
+      '1': 6
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'trigger'
+      'out':
+        '0': 'cv'
+        '1': 'trigger'
+    'notes': 'Input 3 (POLY_MOD_INPUT) and param 16 (the freeze toggle) are in the code but not on the panel; the input''s jack is commented out in the widget, and freezing is reached by the f key.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencerXP.hpp:696 takes getChannels() on this input and DigitalSequencerXP.hpp:703 reads each channel into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5); with one channel DigitalSequencerXP.hpp:710 steps every sequencer from it'
+        '1':
+          'poly': true
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'negative': 'ignored'
+          'why': 'DigitalSequencerXP.hpp:722 takes getChannels() on this input and DigitalSequencerXP.hpp:724 reads one channel per sequencer, mapping 0V..10V onto 1 to 32 steps and clamping there'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'DigitalSequencerXP.hpp:543 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'cue_research':
+    'lines':
+      - 'Sample player with 32 cue markers: markers are placed on the waveform and each fires its own trigger output as playback passes it'
+      - 'Selects that marker number, so a marker placed on the waveform belongs to it and fires its output; one at a time is lit'
+      - 'Starts playback from the position the playhead has reached'
+      - 'Stops playback, leaving the playhead where it is'
+      - 'Returns the playhead to the start of the sample'
+      - 'A rising edge starts playback'
+      - 'A rising edge stops playback'
+      - 'A rising edge returns the playhead to the start of the sample'
+      - 'The left channel of the sample, -5V to 5V'
+      - 'The right channel of the sample, -5V to 5V'
+      - 'A 10V trigger as the playhead passes a marker belonging to that number, 1ms long unless the menu says otherwise'
+      - 'Note — the outputs stay silent until a WAV file is loaded, with the item under the Sample label in the right-click menu'
+      - 'Note — double-click the large waveform to add a marker for the selected number, and double-click a marker to delete it'
+      - 'Note — drag the large waveform sideways to move the view along the sample, drag a marker to move it, and drag the playhead to move the playback position'
+      - 'Note — the scroll wheel over the large waveform zooms the view in and out around the pointer'
+      - 'Note — right-click the large waveform for Clear All Markers and Add Marker; right-click a marker for Delete Marker'
+      - 'Menu — Sample — the item under this label loads the WAV file, and prints the filename it holds'
+      - 'Menu — Trigger Length — how long every marker pulse lasts, from 1ms to 200ms'
+      - 'Menu — Place markers at divisions — spreads markers evenly through the sample, at 4, 8, 16 or 32 of them'
+      - 'Menu — Loop sample playback — returns to the start at the end of the sample instead of stopping'
+      - 'Menu — Lock Markers — stops markers being added, moved or deleted'
+      - 'Menu — Enable Vertical-Drag Zoom — makes a drag up or down on the large waveform zoom the view as the drag sideways moves it'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out'
+      - 'Menu — Clear All Markers — removes every marker'
+      - 'Menu — Lock Mouse Interaction — stops the waveform responding to the mouse at all'
+      - 'Menu — Clear markers on sample load — empties the markers whenever a new file is loaded'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+      '16': 1
+      '17': 1
+      '18': 1
+      '19': 1
+      '20': 1
+      '21': 1
+      '22': 1
+      '23': 1
+      '24': 1
+      '25': 1
+      '26': 1
+      '27': 1
+      '28': 1
+      '29': 1
+      '30': 1
+      '31': 1
+      '32': 2
+      '33': 3
+      '34': 4
+    'in':
+      '0': 5
+      '1': 6
+      '2': 7
+    'out':
+      '0': 8
+      '1': 9
+      '2': 10
+      '3': 10
+      '4': 10
+      '5': 10
+      '6': 10
+      '7': 10
+      '8': 10
+      '9': 10
+      '10': 10
+      '11': 10
+      '12': 10
+      '13': 10
+      '14': 10
+      '15': 10
+      '16': 10
+      '17': 10
+      '18': 10
+      '19': 10
+      '20': 10
+      '21': 10
+      '22': 10
+      '23': 10
+      '24': 10
+      '25': 10
+      '26': 10
+      '27': 10
+      '28': 10
+      '29': 10
+      '30': 10
+      '31': 10
+      '32': 10
+      '33': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+        '15': 'trigger'
+        '16': 'trigger'
+        '17': 'trigger'
+        '18': 'trigger'
+        '19': 'trigger'
+        '20': 'trigger'
+        '21': 'trigger'
+        '22': 'trigger'
+        '23': 'trigger'
+        '24': 'trigger'
+        '25': 'trigger'
+        '26': 'trigger'
+        '27': 'trigger'
+        '28': 'trigger'
+        '29': 'trigger'
+        '30': 'trigger'
+        '31': 'trigger'
+        '32': 'trigger'
+        '33': 'trigger'
+    'notes': 'The large waveform carries two right-click menus of its own, one over empty waveform and one over a marker; both are described in Note lines.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'CueResearch.hpp:342 reads START_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'CueResearch.hpp:343 reads STOP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'CueResearch.hpp:341 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+  'arpseq':
+    'lines':
+      - 'Arpeggiator and step sequencer in one: held polyphonic notes are arpeggiated on an incoming clock, while four drawn sequences add gate length, transposition and two modulation outputs'
+      - 'When on, the held notes keep playing after the gates are released, until new notes arrive'
+      - 'When on, the arpeggio runs whether or not gates are held'
+      - 'Sets the clock division of the arpeggio, from a division by eight through unity to a multiplication by eight'
+      - 'Attenuates and inverts the RATE CV, -1 to 1'
+      - 'Picks the order the held notes are played in: as played, forwards, backwards, pendulum or random, and the second five repeat each note twice'
+      - 'Attenuates and inverts the SHAPE CV, -1 to 1'
+      - 'Sets how many times round the sequence before that step''s value is applied, 1 to 16'
+      - 'The notes to arpeggiate, one per polyphonic channel, read as a volt per octave'
+      - 'The gates that say which notes are held, one per polyphonic channel'
+      - 'The clock the arpeggio runs on; the gate length is worked out from the time between two rising edges'
+      - 'A rising edge returns the arpeggio and all four sequences to their first step'
+      - 'Adds to the clock division after its attenuverter, the range chosen on the menu'
+      - 'Adds to the note order after its attenuverter, the range chosen on the menu'
+      - 'The note being played, as a volt per octave, with the transposition sequence added and quantized if the menu says so'
+      - 'A 10V gate whose length is set by the gate sequence, from nothing to the full step'
+      - 'The first modulation sequence, in the range and polarity set for it, with the slew set for it'
+      - 'The second modulation sequence, in the range and polarity set for it, with the slew set for it'
+      - 'A 10V trigger whenever a step passes its chance roll, on the sequence chosen in the menu'
+      - 'A 10V trigger whenever a cycle counter reaches zero, on the sequence chosen in the menu'
+      - 'Note — the display holds four pages, Gate, Transpose, Mod 1 and Mod 2, each with a row of drawn values, a percentage row setting the chance that the step is applied, and the row of cycle selectors'
+      - 'Note — nothing is played until polyphonic notes and gates are patched in and a clock is patched into CLOCK'
+      - 'Note — a drawn value row carries its own right-click menu, with Shift Left, Shift Right, Randomize, Reverse, Shuffle, Invert, Sort, Mirror, Reset to Default, Zero, Undo and Redo'
+      - 'Note — drag across a value row to draw it, double-click a step to return it to its default, and hold shift while dragging to move the whole row sideways'
+      - 'Menu — Probability Output Settings — holds Source, choosing which of the four sequences the PROB output follows, and Trigger Length'
+      - 'Menu — Cycle Output Settings — holds Source, choosing which of the four sequences the CYCLE output follows, and Trigger Length'
+      - 'Menu — Quantize Output Settings — holds Enable, turning quantizing of the pitch output on, and Scale and Root Note'
+      - 'Menu — Rate Attenuverter Response — -5V to +5V or -10V to +10V, setting the span the RATE CV is read over'
+      - 'Menu — Reset Cycles — on a cycle selector''s own right-click menu, not the panel menu: returns every cycle counter to the start'
+      - 'Menu — Legacy Reset Mode — accepts clock pulses immediately after a reset instead of ignoring them briefly'
+      - 'Menu — Shape Attenuverter Response — -5V to +5V or -10V to +10V, setting the span the SHAPE CV is read over'
+      - 'Menu — Smart Randomize — on a cycle selector''s own right-click menu, not the panel menu: fills the cycle selectors with values that fit the sequence'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 7
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+      '14': 7
+      '15': 7
+      '16': 7
+      '17': 7
+      '18': 7
+      '19': 7
+      '20': 7
+      '21': 7
+      '22': 7
+      '23': 7
+      '24': 7
+      '25': 7
+      '26': 7
+      '27': 7
+      '28': 7
+      '29': 7
+      '30': 7
+      '31': 7
+      '32': 7
+      '33': 7
+      '34': 7
+      '35': 7
+      '36': 7
+      '37': 7
+      '38': 7
+      '39': 7
+      '40': 7
+      '41': 7
+      '42': 7
+      '43': 7
+      '44': 7
+      '45': 7
+      '46': 7
+      '47': 7
+      '48': 7
+      '49': 7
+      '50': 7
+      '51': 7
+      '52': 7
+      '53': 7
+      '54': 7
+      '55': 7
+      '56': 7
+      '57': 7
+      '58': 7
+      '59': 7
+      '60': 7
+      '61': 7
+      '62': 7
+      '63': 7
+      '64': 7
+      '65': 7
+      '66': 7
+      '67': 7
+      '68': 7
+      '69': 7
+    'in':
+      '0': 8
+      '1': 9
+      '2': 10
+      '3': 11
+      '4': 12
+      '5': 13
+    'out':
+      '0': 14
+      '1': 15
+      '2': 16
+      '3': 17
+      '4': 18
+      '5': 19
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'cv'
+        '5': 'cv'
+      'out':
+        '0': 'pitch'
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'trigger'
+        '5': 'trigger'
+    'notes': 'Reset Cycles and Smart Randomize are on the cycle selector knob''s own menu, not the panel menu, and the drawn value rows carry a menu of their own. RATE and SHAPE divide their voltage by an attenuverter range that is a menu choice of 5 or 10 (ArpSeq.hpp:1046-1053), so the span a full attenuverter covers is ±5V or ±10V depending on that setting. No range is written for either jack because it is not fixed.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'ArpSeq.hpp:980 takes getChannels() on this input and ArpSeq.hpp:988 reads each channel as the note voltage the arpeggiator holds and puts out'
+        '1':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 0V'
+          'why': 'ArpSeq.hpp:946 takes getChannels() on this input and ArpSeq.hpp:961 tests each channel against 0V to decide which notes are held'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'ArpSeq.hpp:1232 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'ArpSeq.hpp:405 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'why': 'RateModel.hpp:17 divides this input by the attenuverter range, multiplies by the attenuverter and RateModel.hpp:22 truncates the total to a rate index clamped to -8..+7'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'why': 'ShapeModel.hpp:20 divides this input by the attenuverter range, multiplies by the attenuverter and ShapeModel.hpp:22 truncates the total to a playback mode clamped to 0..9'
+  'groovebox':
+    'lines':
+      - 'Eight-track sample-based drum machine: sixteen steps per track, a knob per step for any of sixteen parameters, and sixteen memory slots holding whole patterns'
+      - 'Turns that step of the selected track on or off'
+      - 'Sets the value of the chosen parameter at that step of the selected track, which is what a parameter lock is'
+      - 'Makes the step knobs set the level of the selected track, step by step'
+      - 'Makes the step knobs set the stereo position of the selected track, step by step'
+      - 'Makes the step knobs set the playback speed of the selected track, step by step'
+      - 'Makes the step knobs set how many times the sample repeats within that step of the selected track'
+      - 'Makes the step knobs set where in the sample playback begins at that step of the selected track'
+      - 'Makes the step knobs set where in the sample playback ends at that step of the selected track'
+      - 'Makes the step knobs set the chance that the step plays at all, from never to every time'
+      - 'Makes the step knobs set whether the sample repeats between its start and end points at that step'
+      - 'Makes the step knobs set whether the sample plays backwards at that step'
+      - 'Makes the step knobs set the fade in at the start of the sample at that step'
+      - 'Makes the step knobs set the fade away at the end of the sample at that step, up to 4 seconds'
+      - 'Makes the step knobs set how much of the track''s delay is heard at that step'
+      - 'Makes the step knobs set the delay time of the selected track at that step'
+      - 'Makes the step knobs set how much of the delay is fed back into itself at that step'
+      - 'Makes the step knobs set the filter frequency of the selected track at that step'
+      - 'Makes the step knobs set the filter resonance of the selected track at that step'
+      - 'Selects that memory slot, loading the sequences and parameter locks stored in it for all eight tracks'
+      - 'Marks the memory slot showing as the one to copy from'
+      - 'Writes the copied memory slot over the one showing'
+      - 'Sets the level of the stereo mix, from silence to eight times the summed tracks'
+      - 'Advances the sequence one step every eight rising edges, with the pulses in between used for ratcheting'
+      - 'A rising edge returns every track to its first step'
+      - 'Picks the memory slot, 0-10V across the sixteen'
+      - 'The left channel of all eight tracks mixed, after the master level'
+      - 'The right channel of all eight tracks mixed, after the master level'
+      - 'The left channel of that track alone, before the master level'
+      - 'The right channel of that track alone, before the master level'
+      - 'Note — no track makes a sound until a sample is loaded into it, either from the right-click menu or by double-clicking that track''s window in the display'
+      - 'Note — clicking a track window in the display chooses which track the step buttons and step knobs edit'
+      - 'Note — a track window carries its own right-click menu, headed Track Menu, with Load Sample, Clear Track Steps, Reset Track Parameters, Clear and Reset Both, and Unassign Sample'
+      - 'Note — a step knob carries its own right-click menu, with Randomize Knobs, Reset Knobs, Increase all knobs by 1 notch and Decrese all knobs by 1 notch'
+      - 'Note — a step button carries its own right-click menu, with Clear All Parameter Locks for this Step, Copy Step, Paste Step, Shift Steps Right, Shift Steps Left, Randomize Steps and Clear Steps'
+      - 'Note — double-clicking a step knob returns it to its default value, and holding shift while double-clicking returns every step knob of that parameter to it'
+      - 'Note — the module counts eight clock pulses per step, so a sequence advances at an eighth of the rate arriving at the clock input'
+      - 'Note — the step knob menu also holds Set all knobs'' values to this knob''s value, and two items shifting all sixteen knob values one step left or right'
+      - 'Menu — Load individual samples — the eight numbered items under this label each load a WAV file into that track, and each prints the filename it holds'
+      - 'Menu — Tracks — Track #1 through Track #8, each holding Sample Position Snap Division, Clear Track Data and Unassign Sample'
+      - 'Menu — All Tracks — holds Shift All Sequences, which moves every track''s sequence one step left or right'
+      - 'Menu — LCD Color Theme — Cool White, Soft Yellow, Legacy Red, Ice Blue or Data Green, setting the colour the display is drawn in'
+      - 'Menu — Initialize — clears everything the module holds, after a confirmation item inside the submenu'
+      - 'Menu — Load first 8 WAV files from a folder — opens a folder browser and puts that folder''s first eight WAV files into the eight tracks in name order'
+      - 'Menu — Export Kit — packs the eight loaded sample files into one archive, with a list naming the track each belongs to'
+      - 'Menu — Import Kit — unpacks an archive written by Export Kit into a folder you choose and loads its eight samples into the tracks'
+      - 'Menu — Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out; under the Audio Quality label'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+      '32': 2
+      '33': 2
+      '34': 2
+      '35': 2
+      '36': 2
+      '37': 2
+      '38': 2
+      '39': 2
+      '40': 2
+      '41': 2
+      '42': 2
+      '43': 2
+      '44': 2
+      '45': 2
+      '46': 2
+      '47': 2
+      '48': 3
+      '49': 4
+      '50': 5
+      '51': 6
+      '52': 7
+      '53': 8
+      '54': 9
+      '55': 10
+      '56': 11
+      '57': 12
+      '58': 13
+      '59': 14
+      '60': 15
+      '61': 16
+      '62': 17
+      '63': 18
+      '72': 19
+      '73': 19
+      '74': 19
+      '75': 19
+      '76': 19
+      '77': 19
+      '78': 19
+      '79': 19
+      '80': 19
+      '81': 19
+      '82': 19
+      '83': 19
+      '84': 19
+      '85': 19
+      '86': 19
+      '87': 19
+      '88': 20
+      '89': 21
+      '90': 22
+    'in':
+      '0': 23
+      '1': 24
+      '2': 25
+    'out':
+      '0': 26
+      '1': 27
+      '2': 28
+      '4': 28
+      '6': 28
+      '8': 28
+      '10': 28
+      '12': 28
+      '14': 28
+      '16': 28
+      '3': 29
+      '5': 29
+      '7': 29
+      '9': 29
+      '11': 29
+      '13': 29
+      '15': 29
+      '17': 29
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+    'notes': 'Params 16 to 31 (step select buttons) and 64 to 71 are declared in the code but have no control on the panel. Three of the module''s menus are not on the panel: the track windows, the step knobs and the step buttons each carry their own right-click menu, and those are described in Note lines.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrooveBox.hpp:1085 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GrooveBox.hpp:1028 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'why': 'GrooveBox.hpp:988 divides this input by 10, multiplies by the memory count and stores it in an unsigned int; the maker''s own port name calls it Memory CV Select Input (0-10v)'
+  'GrooveBoxExpander':
+    'lines':
+      - 'Mixer and gate expander for Groove Box, placed immediately to the left of it, adding mute, solo, level, pan and pitch per track and a trigger output per track'
+      - 'Silences that track of Groove Box'
+      - 'Leaves only the soloed tracks of Groove Box sounding'
+      - 'Sets the level of that track, from silence through unity at the centre to twice the level'
+      - 'Places that track in the stereo field, hard left through centre to hard right'
+      - 'Shifts the playback speed of that track, -1 to 1'
+      - 'Any voltage other than 0V mutes that track, alongside its mute button'
+      - 'A 10ms 10V trigger each time that track of Groove Box plays a step'
+      - 'Note — nothing is sent or received unless Groove Box is the module immediately to the right'
+      - 'Menu — Exclusive Solo — on a SOLO button''s own right-click menu, not the panel menu: solos that track and clears the solo on every other'
+      - 'Menu — Unsolo All — on a SOLO button''s own right-click menu, not the panel menu: clears the solo on every track'
+      - 'Menu — Unmute All — on a MUTE button''s own right-click menu, not the panel menu: clears the mute on every track'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 2
+      '9': 2
+      '10': 2
+      '11': 2
+      '12': 2
+      '13': 2
+      '14': 2
+      '15': 2
+      '16': 3
+      '17': 3
+      '18': 3
+      '19': 3
+      '20': 3
+      '21': 3
+      '22': 3
+      '23': 3
+      '24': 4
+      '25': 4
+      '26': 4
+      '27': 4
+      '28': 4
+      '29': 4
+      '30': 4
+      '31': 4
+      '32': 5
+      '33': 5
+      '34': 5
+      '35': 5
+      '36': 5
+      '37': 5
+      '38': 5
+      '39': 5
+    'in':
+      '0': 6
+      '1': 6
+      '2': 6
+      '3': 6
+      '4': 6
+      '5': 6
+      '6': 6
+      '7': 6
+    'out':
+      '0': 7
+      '1': 7
+      '2': 7
+      '3': 7
+      '4': 7
+      '5': 7
+      '6': 7
+      '7': 7
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+    'notes': 'Exclusive Solo and Unsolo All are on a SOLO button''s own menu and Unmute All on a MUTE button''s; the panel menu holds none of them.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 1 button, so it can mute that track but never unmute it'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 2 button, so it can mute that track but never unmute it'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 3 button, so it can mute that track but never unmute it'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 4 button, so it can mute that track but never unmute it'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 5 button, so it can mute that track but never unmute it'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 6 button, so it can mute that track but never unmute it'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 7 button, so it can mute that track but never unmute it'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'why': 'GrooveBoxExpander.hpp:137 rescales this jack 0 to 10V onto 0 to 1 and assigns the result to a bool, so any voltage other than 0V — negative or a fraction of a volt included — counts, which is why no range is recorded; :138 ORs it with the Mute Track 8 button, so it can mute that track but never unmute it'
+  'VXDrums':
+    'lines':
+      - 'VX Drums: six synthesised drum voices in six columns, struck over one polyphonic trigger cable, with four knobs each, four polyphonic CV inputs, a stereo mix and a dry output per voice'
+      - 'Sets the pitch of that column''s drum, or the tone centre of a noise-based voice; each model has its own range, and the tooltip gives the value in that model''s own units'
+      - 'Sets how long that column''s voice rings, in seconds, over a range belonging to the model loaded in that column'
+      - 'Sets the one control that means something different in every model: punch on a kick, snap on a snare, the burst spacing on a clap, metal on a hat; the tooltip names it in the model''s own word'
+      - 'Sets the level of that column''s voice, 0% to 120%, into both the stereo mix and that voice''s dry output'
+      - 'Sets how much harder an accented hit lands, by driving that voice''s circuit harder rather than only raising its level'
+      - 'Sets how far each strike may differ from the last: at 0 every hit plays as the knobs are set, and turned up each strike draws its own offsets for that voice''s TUNE, DECAY, SHAPE and LEVEL'
+      - 'Saturation on the stereo mix, applied after the voices are summed and ahead of VOLUME; the dry outputs do not pass through it'
+      - 'Sets the level of the stereo mix, after DRIVE'
+      - 'Strikes one voice per channel: 1 bass drum, 2 snare, 3 clap, 4 percussion, 5 closed hat, 6 open hat. An edge reaching 2V strikes, and that channel must fall to 0.1V before it strikes again'
+      - 'A voice struck while this is at 2V or above hits harder and brighter, by as much as the ACCENT knob sets; a mono cable accents every voice and a polyphonic one accents channel for channel with TRIG'
+      - 'Adds to the TUNE knobs, channels 1 to 6 for the six columns and channel 7 for ACCENT; 10V is a knob''s whole travel, and the total is clamped to the ends of the knob'
+      - 'Adds to the DECAY knobs, channels 1 to 6 for the six columns; 10V is a knob''s whole travel, and channel 7 does nothing since the master strip has no decay knob'
+      - 'Adds to the SHAPE knobs, channels 1 to 6 for the six columns and channel 7 for DRIVE; 10V is a knob''s whole travel, and the total is clamped to the ends of the knob'
+      - 'Adds to the LEVEL knobs, channels 1 to 6 for the six columns and channel 7 for VOLUME; 10V is a knob''s whole travel, and the total is clamped to the ends of the knob'
+      - 'The left side of the six voices summed, through DRIVE and VOLUME, with each voice at its fixed place across the stereo field'
+      - 'The right side of the six voices summed, through DRIVE and VOLUME, with each voice at its fixed place across the stereo field'
+      - 'That voice alone, with its LEVEL and any accent applied but not DRIVE or VOLUME; taking it here does not remove the voice from the stereo mix'
+      - 'Note — the KIT display at the top right names the set of six drum circuits loaded; click it to choose another, and the knobs keep their positions while each position takes on the new model''s range'
+      - 'Note — in the House kit a new module starts on, SHAPE is punch on the bass drum, snap on the snare, burst spacing on the clap, drive on the rimshot in the PERC column, and metal on both hats'
+      - 'Note — a strike in the closed hat column cuts off the open hat column; hat models fade out when cut off, and any other model placed there carries on'
+      - 'Note — a mono cable into TRIG fires the bass drum alone; build the polyphonic trigger cable with a merge, or take one from a VX Drum Sequencer''s TRIG output'
+      - 'Note — this is the top half of a two-panel drum machine: a VX Drum Sequencer placed below drives it through TRIG and ACC, and neither module has a clock of its own'
+      - 'Note — the light above a column flashes each time that voice is struck'
+      - 'Menu — Kit — loads a named set of six drum circuits, the seven factory kits first and any you have saved below them'
+      - 'Menu — Kit Customization — a model submenu per column, Bass drum model through Open hat model, each listing Kit default and then every model; below them Save kit as…, Update kit and Manage kits'
+      - 'Menu — Stereo panning — ticked, the clap goes a little left, the percussion a little right and the hats either side of centre; unticked, every voice is dead centre. The dry outputs are untouched'
+      - 'Menu — Reset knobs to model defaults — sets every column''s TUNE, DECAY and SHAPE to the defaults of the model that column is playing, leaving LEVEL and the master knobs alone'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 1
+      '5': 2
+      '6': 3
+      '7': 4
+      '8': 1
+      '9': 2
+      '10': 3
+      '11': 4
+      '12': 1
+      '13': 2
+      '14': 3
+      '15': 4
+      '16': 1
+      '17': 2
+      '18': 3
+      '19': 4
+      '20': 1
+      '21': 2
+      '22': 3
+      '23': 4
+      '24': 5
+      '25': 7
+      '26': 8
+      '27': 6
+    'in':
+      '0': 9
+      '1': 10
+      '2': 11
+      '3': 12
+      '4': 13
+      '5': 14
+    'out':
+      '0': 15
+      '1': 16
+      '2': 17
+      '3': 17
+      '4': 17
+      '5': 17
+      '6': 17
+      '7': 17
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'VXDrums.hpp:483 loops the jack''s getChannels and VXDrums.hpp:487 reads getVoltage(c) per channel into a Schmitt trigger with thresholds 0.1V and 2V'
+        '1':
+          'poly': true
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'normal': 'the same gate on every voice'
+          'why': 'VXDrums.hpp:490 reads the jack with getPolyVoltage(c) and compares it against constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)'
+        '2':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'VXDrums.hpp:289 reads the row''s jack with getPolyVoltage on the column''s channel, and VXDrums.hpp:311 adds it to the knob at a tenth of the knob''s range per volt, clamped to the knob''s ends'
+        '3':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'VXDrums.hpp:289 reads the row''s jack with getPolyVoltage on the column''s channel, and VXDrums.hpp:311 adds it to the knob at a tenth of the knob''s range per volt, clamped to the knob''s ends'
+        '4':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'VXDrums.hpp:289 reads the row''s jack with getPolyVoltage on the column''s channel, and VXDrums.hpp:311 adds it to the knob at a tenth of the knob''s range per volt, clamped to the knob''s ends'
+        '5':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'VXDrums.hpp:289 reads the row''s jack with getPolyVoltage on the column''s channel, and VXDrums.hpp:311 adds it to the knob at a tenth of the knob''s range per volt, clamped to the knob''s ends'
+    'notes': 'The knobs are drawn at runtime, so the panel SVG shows only their positions; the render in the maker''s own documentation (docs/modules/vx-drums/front-panel.png at commit 4588d09, the v2.47.0 release) was used for the panel lettering. The SHAPE row''s parameter names in the census — BD Punch, SD Snap, CP Spread, PERC Drive, CH Metal, OH Metal — are the names of the House kit''s models, and they change with the model loaded in each column; the panel prints SHAPE throughout. The KIT display is a custom widget with no parameter, so it cannot be clicked for help and is covered by a note.'
+  'VXDrumSequencer':
+    'lines':
+      - 'VX Drum Sequencer: a 16-step drum pattern sequencer with six voice lanes and an accent lane, sixteen pattern memories, and a polyphonic trigger output built to drive VX Drums'
+      - 'Chooses the memory that plays and that the grid edits; the lit button is the one playing, and while a cable is in MEM the buttons are locked and presses ignored'
+      - 'Cancels any hits waiting to fire and rewinds the pattern, so the next clock plays step 1, which is what a pulse at RST does'
+      - 'Writes a new beat into the memory playing now, each lane given a part that suits its instrument, a few ratchets sprinkled in and the memory''s length kept'
+      - 'Advances the pattern one step per rising edge, reading high at 2V and needing a fall to 0.1V before the next edge counts; there is no clock inside, so feed it sixteenths'
+      - 'A rising edge cancels hits waiting to fire and rewinds the pattern, so the next clock plays step 1; a clock arriving on the same sample plays step 1 at once'
+      - 'Picks the memory, 0V for memory 1 up to 10V for memory 16 in steps of 0.625V; while a cable is here the memory buttons are locked and the lit one follows this voltage'
+      - 'Carries one voice per channel, 1 bass drum, 2 snare, 3 clap, 4 percussion, 5 closed hat, 6 open hat; every hit is a 10V pulse, 1ms long to start with, and a muted lane''s channel stays silent'
+      - 'Carries a 10V pulse of the same length on every accented step, on the same sample as that step''s hits and again with each ratchet repeat; an accented step with no hits pulses here too'
+      - 'Note — nothing plays until a clock pulse arrives at CLK, and unplugging the clock leaves the pattern where it stopped'
+      - 'Note — click a pad in the grid to place or remove a hit, and drag across pads to paint them the way the first one went; the pads are one display widget, so none of them can be clicked for help'
+      - 'Note — shift-click a lit voice pad to step its ratchet through x2, x3, x4 and back to a single hit, splitting the step into that many evenly spaced hits at the same strength'
+      - 'Note — click a lamp in the row above the grid to set the memory''s length; pads past the length keep their hits and draw dimmed, and each memory has its own length'
+      - 'Note — click a lane label at the left of the grid to mute that lane; a muted lane neither sounds nor pulses at TRIG, and mutes are kept across a memory change'
+      - 'Note — the AC lane at the bottom of the grid makes every voice on that step hit harder through the kit, and makes no sound of its own'
+      - 'Note — two or more of these placed side by side and touching play one after another as one longer pattern; the leftmost takes the clock and reset, and every one of them carries the whole chain''s hits'
+      - 'Note — sound design belongs to VX Drums: a memory holds the seven lanes of hits with each hit''s ratchet and chance, and its length, and nothing else'
+      - 'Menu — Chain: head of N, or Chain: member M of N — shown only while this sequencer is part of a chain, and says which place in it this one holds; it changes nothing'
+      - 'Menu — Trigger length — the length of the pulses at TRIG and ACC: 1ms, 2ms, 5ms, 10ms, 20ms, 50ms, 100ms or 200ms, and every hit gets its own rising edge whichever is chosen'
+      - 'Menu — Randomize settings — ticks which of the seven lanes the RND button rewrites, with All and None at the bottom; an unticked lane keeps every hit it has'
+      - 'Menu — Chance mode — draws every lit pad as a bar whose height is its chance and lets you drag a pad up or down to set it, the top of the pad being 100% and the bottom 0%'
+      - 'Menu — Export pattern… — writes the memory playing now to a JSON file'
+      - 'Menu — Import pattern… — replaces the memory playing now with one read from a JSON file'
+      - 'Menu — Clear pattern — empties the memory playing now and puts its length back to 16'
+      - 'Menu — Ratchet ×2, Ratchet ×3, Ratchet ×4, Single, in a lit voice pad''s own right-click menu — splits that step into that many evenly spaced hits, or returns it to one'
+      - 'Menu — Chance, in a lit pad''s own right-click menu — the odds that the pad plays each time its step comes round: 100%, 75%, 50%, 25%, 10% or 0%'
+      - 'Menu — Copy, Paste, Clear, in a memory button''s own right-click menu — puts that memory on the system clipboard, writes the clipboard into it, or empties it and sets its length back to 16'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 1
+      '9': 1
+      '10': 1
+      '11': 1
+      '12': 1
+      '13': 1
+      '14': 1
+      '15': 1
+      '16': 2
+      '17': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+    'out':
+      '0': 7
+      '1': 8
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'VXDrumSequencer.hpp:359 reads the jack with getVoltage, channel one only, into a Schmitt trigger using constants::gate_low_trigger 0.1V and gate_high_trigger 2V'
+        '1':
+          'poly': false
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'VXDrumSequencer.hpp:346 reads the jack with getVoltage, channel one only, into a Schmitt trigger using constants::gate_low_trigger 0.1V and gate_high_trigger 2V'
+        '2':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'stepped'
+          'negative': 'ignored'
+          'why': 'VXDrumSequencer.hpp:299 reads the jack with getVoltage, channel one only, divides it by ten and multiplies by the sixteen memory slots'
+    'notes': 'Written against the v2.47.0 release commit 4588d09, which is the installed build. The maker''s master branch has since added a TWK input, a Rotate pattern menu item and a Load sample… item on VX Drums, and its manual documents all three; none of them is in the installed module, and the census confirms three inputs rather than four. The step grid, the length lamp row, the lane labels and the pads are one custom display widget with no ParamWidget per control, so none of them can be reached by a click for help; the gestures they carry are written as notes.'
+  'piano_roll':
+    'lines':
+      - 'Piano Roll: an eight-track note sequencer with a piano-roll editor, notes drawn on a pitch against time grid or captured as you play, and a pitch, gate and velocity output per track'
+      - 'Advances the pattern one sixteenth-note step per rising edge, reading high at 2V and low at 0.1V; there is no division here, so feed it sixteenths'
+      - 'A rising edge returns the pattern to its start and silences every voice'
+      - 'The pitch recorded into the active track, read as a volt per octave with 0V at C4; a monophonic cable here is used by every channel of the gate input'
+      - 'The gate that marks out the notes to record: a rising edge starts a note in the active track and the fall ends it, and its channel count sets how many notes can be recorded at once'
+      - 'The velocity recorded with each note, 0 to 10V, sampled once as that note''s gate rises; unpatched, recorded notes take the default velocity'
+      - 'The pitch of the notes sounding on that track, a volt per octave with 0V at C4, one channel per note sounding at once'
+      - 'Carries 10V while a note on that track sounds, one channel per note sounding at once; back-to-back notes get a short dip between them so an envelope retriggers'
+      - 'The velocity of the notes sounding on that track, 0 to 10V, channel for channel with the pitch and gate; the level holds after the gate falls, so an envelope in its release reads it'
+      - 'Note — a track''s channel count is the largest number of its notes that sound at once anywhere in the pattern, so a monophonic line gives one channel and a six-note chord six'
+      - 'Note — click an empty cell in the grid to paint a note, drag right while painting to set its length, drag a note''s body to move it and either end to resize it'
+      - 'Note — the grid, the piano keys, the ruler, the velocity lane and the control bar across the top are one display widget, so none of the controls in them can be clicked for help'
+      - 'Note — the control bar carries SNAP, the editing grid; a scale lock; the eight numbered track squares choosing which track is edited; LOCK, which freezes editing; and REC, which arms recording'
+      - 'Note — recording writes what arrives at the record inputs over the top of the active track, quantised to the sixteenth grid, and captures nothing until a running clock has told it how long a step is'
+      - 'Note — the amber marker in the ruler is where the pattern wraps; a note starting after it is drawn as an outline and never plays'
+      - 'Note — click a key in the column at the left to hear that pitch through the active track''s outputs, and drag up and down to slide it under one held gate; the pattern is not changed'
+      - 'Note — with the pointer over the grid, Delete removes the selection, Ctrl+C and Ctrl+V copy and paste, Esc deselects and Ctrl+Z undoes; the clipboard is shared between Piano Roll modules'
+      - 'Menu — Lock Editor — freezes editing so the pattern cannot be painted, moved, resized, deleted, pasted, imported or recorded into; the same switch as the LOCK button'
+      - 'Menu — Record armed — arms recording, the same switch as the REC button'
+      - 'Menu — Snap: 1/16, 1/8, 1/4, 1/2, Bar, Off — the grid that painting, moving, resizing and pasting land on'
+      - 'Menu — Loop length: 1 bar, 2 bars, 4 bars, 8 bars, 16 bars — where the pattern wraps, the same setting as the marker in the ruler'
+      - 'Menu — Quantize track, or Quantize selection, in the grid''s own right-click menu — moves note pitches to the nearest note of a chosen root and scale, leaving their timing alone'
+      - 'Menu — Shift left and Shift right, in the grid''s own right-click menu — rotate notes in time by a musical amount, wrapping around the loop'
+      - 'Menu — Select all on track, Delete selection, Delete all on track, in the grid''s own right-click menu — act on the active track, leaving the other seven alone'
+      - 'Menu — Import MIDI... and Export MIDI..., in the grid''s own right-click menu — read a standard MIDI file over the pattern, quantised to the sixteenth grid, or write the pattern out as one'
+    'in':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+    'out':
+      '0': 6
+      '8': 7
+      '16': 8
+      '1': 6
+      '9': 7
+      '17': 8
+      '2': 6
+      '10': 7
+      '18': 8
+      '3': 6
+      '11': 7
+      '19': 8
+      '4': 6
+      '12': 7
+      '20': 8
+      '5': 6
+      '13': 7
+      '21': 8
+      '6': 6
+      '14': 7
+      '22': 8
+      '7': 6
+      '15': 7
+      '23': 8
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'pitch'
+        '3': 'trigger'
+        '4': 'cv'
+      'out':
+        '0': 'pitch'
+        '8': 'trigger'
+        '16': 'cv'
+        '1': 'pitch'
+        '9': 'trigger'
+        '17': 'cv'
+        '2': 'pitch'
+        '10': 'trigger'
+        '18': 'cv'
+        '3': 'pitch'
+        '11': 'trigger'
+        '19': 'cv'
+        '4': 'pitch'
+        '12': 'trigger'
+        '20': 'cv'
+        '5': 'pitch'
+        '13': 'trigger'
+        '21': 'cv'
+        '6': 'pitch'
+        '14': 'trigger'
+        '22': 'cv'
+        '7': 'pitch'
+        '15': 'trigger'
+        '23': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'PianoRoll.hpp:642 reads the jack with getVoltage, channel one only, into a Schmitt trigger using constants::gate_low_trigger 0.1V and gate_high_trigger 2V'
+        '1':
+          'poly': false
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'PianoRoll.hpp:611 reads the jack with getVoltage, channel one only, into a Schmitt trigger using constants::gate_low_trigger 0.1V and gate_high_trigger 2V'
+        '2':
+          'poly': true
+          'range': '1V per octave'
+          'step': 'continuous'
+          'negative': 'swings'
+          'why': 'PianoRoll.hpp:564 reads it with getPolyVoltage per gate channel and turns it into a note number at twelve semitones per volt, 0V giving C4'
+        '3':
+          'poly': true
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'PianoRoll.hpp:535 takes its getChannels as the recording voice count and PianoRoll.hpp:560 reads getVoltage per channel into a Schmitt trigger at 0.1V and 2V'
+        '4':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'ignored'
+          'normal': 'the default velocity'
+          'why': 'PianoRoll.hpp:498 reads it with getPolyVoltage on the note''s channel at the instant its gate rises'
+    'notes': 'Written against the v2.47.0 release commit 4588d09, the installed build. The maker''s manual names the jacks CLK, RST, REC V/O, REC GT and REC VEL; the panel prints CLOCK, RESET, and a RECORD group of CV, GATE and VEL, and the panel is what is written here. The panel render in the maker''s documentation is stale — it shows two output jacks per track and no record velocity jack, where the installed panel has three per track and the velocity jack. There are no parameters at all: the snap and scale selectors, the eight track squares, LOCK, REC, the chase button, the loop marker, the velocity lane and every note in the grid are drawn inside one display widget, so none of them can be reached by a click for help; they are written as notes instead.'
+  'timeline':
+    'lines':
+      - 'Timeline: a 16-lane automation sequencer. Draw a control curve of nodes joined by straight or bent segments against bars and beats, and play all sixteen lanes out of one polyphonic cable'
+      - 'Sets the tempo every lane runs at, 20 to 300 BPM in half-BPM steps; there is no clock input, so this is where the module''s timing comes from'
+      - 'Turned on, playback wraps at the loop end, which is the drawn content rounded up to a whole bar, or four bars on an empty timeline, unless the amber handle in the ruler has been dragged'
+      - 'Turned on, the view follows the selected lane''s playhead and keeps it centred; panning or paging the scrollbar suspends it until you seek, the loop wraps, or the playhead comes back on screen'
+      - 'Starts and stops every lane at once; between flips of this switch the START and STOP inputs set each lane''s state on its own'
+      - 'Rewinds every lane to the beginning'
+      - 'Arms recording, lighting red while armed; a take runs whenever the transport is also playing, and arming while stopped does nothing until play starts'
+      - 'A trigger starts a lane playing; a monophonic cable starts every lane, and on a polyphonic cable channel 1 starts lane 1, channel 2 lane 2 and so on, leaving lanes past the channel count alone'
+      - 'A trigger stops a lane where it is; a monophonic cable stops every lane, and on a polyphonic cable channel 1 stops lane 1, channel 2 lane 2 and so on'
+      - 'A trigger rewinds a lane to the beginning; a monophonic cable rewinds every lane, and on a polyphonic cable channel 1 rewinds lane 1, channel 2 lane 2 and so on'
+      - 'The voltage written into a lane while a take runs: a monophonic cable records into the selected lane, and a polyphonic one records channel 1 into lane 1, channel 2 into lane 2 and so on'
+      - 'A clock taken from each lane''s playhead, one channel per lane, at the division the Clock division menu item sets'
+      - 'A trigger on each lane''s rewind and on each loop wrap, one channel per lane; this is the one to patch into a downstream sequencer''s reset'
+      - 'A trigger on each lane''s rewind only, one channel per lane; a loop wrap does not fire it'
+      - 'A trigger on each loop wrap only, one channel per lane'
+      - 'Carries 10V while that lane is playing and 0V while it is stopped, one channel per lane'
+      - 'The sixteen automation curves, -10V to 10V, one channel per lane; an empty lane carries 0V'
+      - 'Note — a lane with no nodes drawn in it carries 0V and does nothing; click in the editor to place the first node, then drag it into position'
+      - 'Note — the curve editor, the ruler, the loop handle and the sixteen lane tabs above it are one display widget, so none of the controls in them can be clicked for help'
+      - 'Note — in the editor, click empty space to add a node, drag a node to move it, right-click a node to delete it, and drag the diamond on a segment to bend it; right-click the diamond to straighten it'
+      - 'Note — the numbered tabs above the editor choose the lane shown; a tab with nodes in it reads brighter, and each carries a dot that is green while its lane runs and red while it is stopped'
+      - 'Note — a take starts on the first sample where the REC button is armed and a target lane is playing, ends when either stops, and writes only over the part of the lane the playhead passes'
+      - 'Note — a lane holds at most 8192 nodes; a take that reaches the limit stops adding them and a red LANE FULL notice appears beside the readout'
+      - 'Note — a curve holds its first node''s value before that node and its last node''s value after it, so a lane has a voltage everywhere'
+      - 'Menu — Lock Editor — freezes the editor against mouse edits and tints it red, clicks falling through to the panel; recording goes on working while it is locked'
+      - 'Menu — Snap: Off, 1 bar, 1/2, 1/4, 1/8, 1/16 — the grid that node placement and the loop handle land on. Recording ignores it'
+      - 'Menu — Clock division: 1/1 (bar), 1/2, 1/4, 1/8, 1/16, 1/32 — the division of each lane''s beat that the CLK output carries'
+      - 'Menu — Record rate: 1 bar, 1/2, 1/4, 1/8, 1/16, 1/32 — the grid a take samples the REC input on; a node is written only where the value changes'
+      - 'Menu — Clear lane, in the editor''s own right-click menu — removes every node from the selected lane'
+      - 'Menu — Straighten lane, in the editor''s own right-click menu — removes every bend from the selected lane, keeping its nodes'
+      - 'Menu — Fit view to content, in the editor''s own right-click menu — zooms the editor to show everything drawn in the selected lane'
+      - 'Menu — Reset zoom, in the editor''s own right-click menu — returns the editor to its default view'
+    'param':
+      '0': 1
+      '3': 2
+      '4': 3
+      '5': 4
+      '6': 5
+      '8': 6
+    'in':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+    'out':
+      '0': 16
+      '1': 11
+      '2': 12
+      '3': 13
+      '4': 14
+      '5': 15
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Timeline.hpp:279 takes the jack''s getChannels as a loop bound and Timeline.hpp:286 reads getVoltage(c) per channel into a Schmitt trigger with thresholds 0.1V and 1V'
+        '1':
+          'poly': true
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Timeline.hpp:289 takes the jack''s getChannels as a loop bound and Timeline.hpp:296 reads getVoltage(c) per channel into a Schmitt trigger with thresholds 0.1V and 1V'
+        '2':
+          'poly': true
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Timeline.hpp:299 takes the jack''s getChannels as a loop bound and Timeline.hpp:306 reads getVoltage(c) per channel into a Schmitt trigger with thresholds 0.1V and 1V'
+        '3':
+          'poly': true
+          'range': '±10V'
+          'step': 'continuous'
+          'negative': 'swings'
+          'normal': '0V, which is recorded'
+          'why': 'Timeline.hpp:336 takes the jack''s getChannels and Timeline.hpp:341 reads getVoltage(L) for lane L, or channel one for a mono cable'
+    'notes': 'Written against the v2.47.0 release commit 4588d09, the installed build. Three parameters have no widget on the panel and so carry no line and no tag: Snap and Clock division, which were knobs in an earlier version and are now reached only through the module menu, and Lane, which the lane tabs in the display set. The curve editor, the ruler, the loop handle and the lane tabs are one display widget with no ParamWidget per control, so their gestures are written as notes. The panel prints REC twice, on the record input jack and on the arm button.'

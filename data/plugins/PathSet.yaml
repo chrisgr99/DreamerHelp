@@ -1,0 +1,1620 @@
+'plugin': 'PathSet'
+'source': 'https://github.com/patheros/PathSetManuals'
+'read': '2026-09-13'
+'modules':
+  'ShiftyMod':
+    'lines':
+      - 'Shift register for gates with a controllable delay on each of its seven rows, turning one clock or trigger into seven varied gate patterns'
+      - 'Spreads the rows in time: at 0 all seven rows hit on the same beat, at 1 each row hits one beat later than the row above it, and at 2 two beats later'
+      - 'Sets the chance that a row keeps its current delay value rather than rolling a new one, 0 to 100%; at 100% the pattern of delays stops changing'
+      - 'Sets how many clock beats pass between hits entering the shift register, 0 to 15, and how often the chance of holding a delay value is rolled'
+      - 'Sets the speed of the internal clock, 10 to 5000 beats per minute; the internal clock runs only while nothing is patched to Clock'
+      - 'Advances the shift register one step on each rising edge, reading high above 2V and low below 0.1V; an internal clock runs when nothing is patched here'
+      - 'A rising edge puts a hit into the shift register; while this is patched the clock divider no longer makes hits of its own'
+      - 'Sets that row''s delay before the ramp is added, 0-10V spanning 16 beats and then scaled by that row''s knob; unpatched, the row uses an internal noise value'
+      - 'Scales that row''s delay voltage, from none of it to its full 16 beats, and scales the internal noise value when nothing is patched to that row''s delay input'
+      - 'Adds up to three extra hits to that row''s gate, at timings that change as the knob turns and that shift again with the delay value for the row'
+      - 'Suppresses hits on that row, sweeping through 693 patterns of 24 beats, from every hit passing to no hit passing'
+      - 'Carries 10V while the clock is high and that row has a hit that its mute pattern let through, and 0V otherwise'
+      - 'Menu — Add Expander (right 8HP) — places the Shifty expander beside this module, adding a CV input and an attenuverter for most of these knobs'
+      - 'Note — Bypassing this module routes the Clock input to all seven gate outputs'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '24': 4
+      '3': 8
+      '4': 8
+      '5': 8
+      '6': 8
+      '7': 8
+      '8': 8
+      '9': 8
+      '10': 9
+      '11': 9
+      '12': 9
+      '13': 9
+      '14': 9
+      '15': 9
+      '16': 9
+      '17': 10
+      '18': 10
+      '19': 10
+      '20': 10
+      '21': 10
+      '22': 10
+      '23': 10
+    'in':
+      '0': 5
+      '1': 6
+      '2': 7
+      '3': 7
+      '4': 7
+      '5': 7
+      '6': 7
+      '7': 7
+      '8': 7
+    'out':
+      '0': 11
+      '1': 11
+      '2': 11
+      '3': 11
+      '4': 11
+      '5': 11
+      '6': 11
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+    'notes': 'The clock divider parameter runs 0.6 to 15.6 and is floored, so the printed range on the tooltip is one step wider than the whole numbers it produces.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'normal': 'the module''s own internal clock'
+          'why': 'ShiftyMod.cpp:210 tests this input against 2V with getVoltage() alone, and ShiftyMod.cpp:203 runs the internal clock at the CLOCK RATE knob instead when nothing is patched'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'ShiftyMod.cpp:229 tests this input against 2V with getVoltage() alone; ShiftyMod.cpp:222 takes the hit from the clock divider instead when nothing is patched here'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'normal': 'a fresh random value on every hit'
+          'why': 'ShiftyMod.cpp:262 divides this input by 10 onto the 0 to 1 delay, ShiftyMod.cpp:264 falls back to the row''s own noise value when nothing is patched, and ShiftyMod.cpp:275 floors the result into a hit-queue index'
+  'ShiftyExpander':
+    'lines':
+      - 'Expander for Shifty, sitting immediately to the right of it, with a CV input and an attenuverter for the clock, ramp, sample and hold, echo and mute settings'
+      - 'Attenuates and inverts the clock rate CV; at full, 10V adds 5000 beats per minute to Shifty''s clock rate'
+      - 'Attenuates and inverts the clock divider CV; at full, 10V adds 16 beats to Shifty''s clock divider, rounded down to a whole number of beats'
+      - 'Attenuates and inverts the ramp CV; at full, 10V adds two beats per step to Shifty''s ramp'
+      - 'Attenuates and inverts the sample and hold CV; at full, 10V adds 100% to Shifty''s chance of holding a delay value'
+      - 'Attenuates and inverts the CV for that row''s echo setting on Shifty; at full attenuverter, 2.5V covers the whole range of the echo knob'
+      - 'Attenuates and inverts the CV for that row''s mute setting on Shifty; at full attenuverter, 2.5V covers the whole range of the mute knob'
+      - 'Raises or lowers the rate of Shifty''s internal clock, through its attenuverter'
+      - 'Raises or lowers Shifty''s clock divider, through its attenuverter'
+      - 'Raises or lowers Shifty''s ramp, through its attenuverter'
+      - 'Raises or lowers Shifty''s chance of holding a delay value, through its attenuverter'
+      - 'Raises or lowers the echo setting for that row on Shifty, through its attenuverter'
+      - 'Raises or lowers the mute setting for that row on Shifty, through its attenuverter'
+      - 'Note — These controls reach Shifty only when this module is placed immediately to the right of it'
+      - 'Note — Shifty''s own right-click menu has an Add Expander (right 8HP) item that places this module in the right position'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+      '8': 5
+      '9': 5
+      '10': 5
+      '11': 6
+      '12': 6
+      '13': 6
+      '14': 6
+      '15': 6
+      '16': 6
+      '17': 6
+    'in':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+      '4': 11
+      '5': 11
+      '6': 11
+      '7': 11
+      '8': 11
+      '9': 11
+      '10': 11
+      '11': 12
+      '12': 12
+      '13': 12
+      '14': 12
+      '15': 12
+      '16': 12
+      '17': 12
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+        '14': 'cv'
+        '15': 'cv'
+        '16': 'cv'
+        '17': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:58 divides this input by 10, multiplies by the attenuverter and by the 5000 bpm top of the clock rate, so 0 to 10V covers the whole range'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:59 divides this input by 10, multiplies by the attenuverter and by 16, and floors the result into a whole number of beats'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:61 divides this input by 10, multiplies by the attenuverter and by 2, the whole span of the ramp knob'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:62 divides this input by 10 and multiplies by the attenuverter, the whole span of the sample and hold knob'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '11':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '12':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '13':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '14':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '8':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '15':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '9':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '16':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+        '10':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:65 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s echo knob'
+        '17':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'ShiftyExpander.cpp:66 divides this input by 10, multiplies by the attenuverter and by 4, the whole span of that row''s mute knob'
+  'IceTray':
+    'lines':
+      - 'Speed shifter and six tape delays, called ice cubes, each keeping its last recording until it is recorded over'
+      - 'Sets the numerator of the record speed, a whole number from 1 to 11; the numerator divided by the denominator is the speed the input is recorded at'
+      - 'Attenuates and inverts the numerator CV before it is added to the numerator setting'
+      - 'Sets the denominator of the record speed, a whole number from 1 to 11; the numerator divided by the denominator is the speed the input is recorded at'
+      - 'Attenuates and inverts the voltage at the numerator CV input before it is added to the denominator setting, rather than the voltage at the denominator CV input'
+      - 'Sets the chance that a cube keeps its current solidity, 0 to 100%; at 100% solidity changes only when a cube is clicked'
+      - 'Attenuates and inverts the frozen track CV before it is added to the frozen percentage'
+      - 'Sets how many seconds are recorded into one cube before recording moves to another, 0.1 to 10 seconds; it is ignored while the record clock is patched'
+      - 'Sets whether playback restarts at the beginning of each cube, or carries on from the position at which the previous cube ended'
+      - 'Sets how many times one cube is played before another is chosen, 1 to 10; a voltage at the repeat count input multiplies that number'
+      - 'Sets the order the cubes play in: turned left they are skipped through in increasingly large random steps, turned right the order is shuffled but repeats the same way'
+      - 'Sets how much of the output is fed back into the recording cube, 0 to 100%; the fed-back signal is sped up and pitch shifted by the speed settings'
+      - 'Attenuates and inverts the feedback CV before it is added to the feedback percentage'
+      - 'Clicking changes that cube''s solidity: bright blue records and plays, dark blue only plays, and black is skipped over with its last recording kept'
+      - 'Left channel of the audio recorded into the cubes'
+      - 'Right channel of the audio recorded into the cubes'
+      - 'A trigger moves recording to another cube; while this is patched a cube records for up to 10 seconds rather than the time set by the record length knob'
+      - 'A trigger ends the cube being played early and moves playback to another cube'
+      - 'Raises or lowers the record speed numerator through its scalar; the denominator''s scalar reads this same voltage'
+      - 'Nothing in the module reads this input; the denominator''s scalar is applied to the voltage at the numerator CV input instead'
+      - 'Multiplies the repeat count set by the knob, using the size of the voltage and ignoring its sign'
+      - 'Scales the pattern setting, 10V giving the knob its full effect and 0V giving none of it, with negative voltage reversing which end of the range is used'
+      - 'Raises or lowers the frozen percentage through its scalar'
+      - 'Raises or lowers the feedback percentage through its scalar'
+      - 'Left channel of the cubes being played back'
+      - 'Right channel of the cubes being played back'
+      - 'Note — With nothing patched to the Record Clock input, recording stays on one cube and runs for the time set by the Record Length knob; a pulse there moves recording on to the next cube'
+      - 'Note — Bypassing this module passes the left and right inputs straight to the outputs'
+      - 'Menu — Clear Cubes — erases the recording in all six cubes; recordings are otherwise saved with the patch'
+      - 'Menu — On — under the Pitch Correction heading, holds the recorded pitch as the speed changes; Off (Saves CPU) lets the pitch follow the speed and costs less processing'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '8': 9
+      '9': 10
+      '10': 11
+      '11': 12
+      '12': 13
+      '13': 13
+      '14': 13
+      '15': 13
+      '16': 13
+      '17': 13
+    'in':
+      '0': 14
+      '9': 15
+      '1': 16
+      '2': 17
+      '3': 18
+      '4': 19
+      '5': 20
+      '6': 21
+      '7': 22
+      '8': 23
+    'out':
+      '0': 24
+      '1': 25
+    'family':
+      'in':
+        '0': 'audio'
+        '9': 'audio'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'The Denominator CV input is read nowhere in the 2.5.0 source: IceTray.cpp line 558 computes the denominator from SPEED_NUM_CV_INPUT, the same jack the numerator uses. Panel, tooltips and manual all present it as a working denominator CV.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'IceTray.cpp:566 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, into the left recording channel'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'IceTray.cpp:536 tests this input against 2V with getVoltage() alone; IceTray.cpp:532 also forces the buffer to its full length whenever a cable is present'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'IceTray.cpp:548 tests this input against 2V with getVoltage() alone'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'negative': 'subtracts'
+          'why': 'IceTray.cpp:555 multiplies this input by its attenuverter, adds the knob and rounds the total, and IceTray.cpp:557 raises anything below 1 to 1'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'normal': '1V'
+          'why': 'IceTray.cpp:852 reads this input with getNormalVoltage(1.0), takes its absolute value, multiplies by the knob and rounds the result'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'normal': '10V'
+          'why': 'IceTray.cpp:881 reads this input with getNormalVoltage(10.0), divides by 10 and multiplies by the knob'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'IceTray.cpp:936 divides this input by 10, multiplies by the attenuverter and adds the knob, whose own span is 0 to 1'
+        '8':
+          'poly': false
+          'step': 'continuous'
+          'range': '0 to 10V'
+          'why': 'IceTray.cpp:562 divides this input by 10, multiplies by the attenuverter and adds the knob, whose own span is 0 to 1'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'IceTray.cpp:566 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, into the right recording channel'
+  'AstroVibe':
+    'lines':
+      - 'Three orbiters, each a stereo oscillator or LFO whose waveform comes from a randomly generated planetary signature'
+      - 'Generates a new planetary signature for that orbiter, changing its waveform and, in the notes waveform, its sequence of between 2 and 22 notes'
+      - 'Sets the frequency of that orbiter: audible pitch in the audible mode, and rate in the LFO mode, where it runs a thousand times slower'
+      - 'Rotates that orbiter''s wave field, changing its timbre and its balance between left and right; the effect is stronger in the tones waveform'
+      - 'Switches that orbiter between the atomic engine, which is purer and quieter, and the black hole engine, which is buzzier and louder'
+      - 'Switches that orbiter between notes, a melodic sequence stepped by the clock, and tones, which sounds continuously and can be crunchier'
+      - 'Switches that orbiter between audible, where its output is added to the master outputs, and LFO, where it runs a thousand times slower'
+      - 'Sets the level of that orbiter''s outputs, and inverts them when turned left of centre'
+      - 'A rising edge generates a new planetary signature for that orbiter'
+      - 'Steps that orbiter to the next note of its sequence in the notes waveform, and does nothing in the tones waveform; unpatched, it takes the clock of the orbiter before it'
+      - 'Multiplies that orbiter''s frequency by two to the power of the voltage; unpatched, it takes the voltage given to the orbiter before it'
+      - 'Adds to that orbiter''s rotation, 10V covering the whole range of the rotation knob; unpatched, it takes the left output of the previous orbiter when that one is an LFO'
+      - 'Rotates that orbiter''s wave field further, 5V turning it one full revolution; unpatched, it takes the right output of the previous orbiter when that one is an LFO'
+      - 'Above 5V the engine switch for that orbiter is inverted, below 0V the switch acts as set, and between the two the engine flips back and forth in proportion to the voltage'
+      - 'Above 5V the waveform switch for that orbiter is inverted, below 0V the switch acts as set, and between the two the waveform flips back and forth in proportion to the voltage'
+      - 'Sums the left channel of every orbiter set to audible'
+      - 'Sums the right channel of every orbiter set to audible'
+      - 'Left channel of that orbiter alone, at its gain setting, in either the audible or the LFO mode'
+      - 'Right channel of that orbiter alone, at its gain setting, in either the audible or the LFO mode'
+      - 'Note — Bypassing this module leaves every output at 0V'
+      - 'Menu — On — under the Internal Routing heading, passes the clock, pitch, rotation and spin from one orbiter to the next; Off leaves each orbiter reading its own inputs alone'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 2
+      '4': 2
+      '5': 2
+      '6': 3
+      '7': 3
+      '8': 3
+      '9': 4
+      '10': 4
+      '11': 4
+      '12': 5
+      '13': 5
+      '14': 5
+      '15': 6
+      '16': 6
+      '17': 6
+      '18': 7
+      '19': 7
+      '20': 7
+    'in':
+      '0': 8
+      '1': 8
+      '2': 8
+      '3': 9
+      '4': 9
+      '5': 9
+      '6': 10
+      '7': 10
+      '8': 10
+      '9': 11
+      '10': 11
+      '11': 11
+      '12': 12
+      '13': 12
+      '14': 12
+      '15': 13
+      '16': 13
+      '17': 13
+      '18': 14
+      '19': 14
+      '20': 14
+    'out':
+      '0': 15
+      '1': 16
+      '2': 17
+      '3': 17
+      '4': 17
+      '5': 18
+      '6': 18
+      '7': 18
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'pitch'
+        '7': 'pitch'
+        '8': 'pitch'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+        '14': 'cv'
+        '15': 'cv'
+        '16': 'cv'
+        '17': 'cv'
+        '18': 'cv'
+        '19': 'cv'
+        '20': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+    'notes': 'The maker''s tooltip calls inputs 9 to 11 ''Size CV''; the manual calls the same jacks the ''Space Input''. The panel prints no lettering at all, only icons, so neither name is visible in the rack. The lines describe what the code does: the voltage is added to the warp knob and clamped. Rows 2 and 3 normal upwards while Internal Routing is on: their clock, V/oct, size and spin jacks each read the same jack on the row above when they have no cable of their own, so one cable at the top can drive all three rows.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:361 reads this input with getVoltageSum() and AstroVibe.cpp:363 tests the sum against 2V'
+        '3':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:435 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:443 tests it against 2V; AstroVibe.cpp:381 also takes the channel count from it'
+        '6':
+          'poly': true
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'AstroVibe.cpp:408 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:459 raises 2 to that voltage; AstroVibe.cpp:389 also takes the channel count from it'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'AstroVibe.cpp:417 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:460 divides it by 10, adds the knob and clamps the total to 0..1'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'AstroVibe.cpp:520 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:531 divides it by 5, adds the knob and multiplies the sum by two pi'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:472 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:487 compares it against a ramp that runs 0 to 5, so 0V never flips the engine and 5V always does'
+        '18':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:473 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:488 compares it against a ramp that runs 0 to 5, so 0V never flips the waveform and 5V always does'
+        '1':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:361 reads this input with getVoltageSum() and AstroVibe.cpp:363 tests the sum against 2V'
+        '4':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:435 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:443 tests it against 2V; AstroVibe.cpp:381 also takes the channel count from it'
+          'normal': 'the same jack on the row above'
+        '7':
+          'poly': true
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'AstroVibe.cpp:408 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:459 raises 2 to that voltage; AstroVibe.cpp:389 also takes the channel count from it'
+          'normal': 'the same jack on the row above'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'AstroVibe.cpp:417 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:460 divides it by 10, adds the knob and clamps the total to 0..1'
+          'normal': 'the same jack on the row above'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'AstroVibe.cpp:520 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:531 divides it by 5, adds the knob and multiplies the sum by two pi'
+          'normal': 'the same jack on the row above'
+        '16':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:472 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:487 compares it against a ramp that runs 0 to 5, so 0V never flips the engine and 5V always does'
+        '19':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:473 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:488 compares it against a ramp that runs 0 to 5, so 0V never flips the waveform and 5V always does'
+        '2':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:361 reads this input with getVoltageSum() and AstroVibe.cpp:363 tests the sum against 2V'
+        '5':
+          'poly': true
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'AstroVibe.cpp:435 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:443 tests it against 2V; AstroVibe.cpp:381 also takes the channel count from it'
+          'normal': 'the same jack on the row above'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'range': '1V per octave'
+          'why': 'AstroVibe.cpp:408 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:459 raises 2 to that voltage; AstroVibe.cpp:389 also takes the channel count from it'
+          'normal': 'the same jack on the row above'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'sumRange': '0 to 10V'
+          'negative': 'subtracts'
+          'why': 'AstroVibe.cpp:417 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:460 divides it by 10, adds the knob and clamps the total to 0..1'
+          'normal': 'the same jack on the row above'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'AstroVibe.cpp:520 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:531 divides it by 5, adds the knob and multiplies the sum by two pi'
+          'normal': 'the same jack on the row above'
+        '17':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:472 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:487 compares it against a ramp that runs 0 to 5, so 0V never flips the engine and 5V always does'
+        '20':
+          'poly': true
+          'step': 'continuous'
+          'range': '0 to 5V'
+          'why': 'AstroVibe.cpp:473 reads this input with getPolyVoltage(ei) and AstroVibe.cpp:488 compares it against a ramp that runs 0 to 5, so 0V never flips the waveform and 5V always does'
+  'GlassPane':
+    'notes': 'The Low Peformance Mode menu item is spelled that way in the 2.5.0 source (GlassPane.cpp line 1115); the line quotes it as printed so it can be matched on screen.'
+    'lines':
+      - 'Network sequencer of sixteen nodes, where the patch cables between nodes set which step follows which, allowing branches, loops and ratchets'
+      - 'Advances the sequencer one step on each rising edge'
+      - 'Returns the sequencer to the first node and returns every node to the mode last chosen by hand'
+      - 'Carries the gate of the step being played'
+      - 'Carries the CV value of the node being played'
+      - 'Triggers that node; patch it from the output of another node or from an external gate'
+      - 'A second trigger input into that node, doing what its X input does'
+      - 'Sets that node''s mode: blue steps through its outputs in turn, orange picks one of them at random, and purple plays its connected nodes in quick succession'
+      - 'A rising edge moves that node on to its next mode'
+      - 'Sets the voltage that node sends to the CV output while it is the active step; the knobs span -1V to 1V until the range is changed on the menu'
+      - 'First output of that node, reached before its other outputs in cycle mode and the likeliest of the three when the odds are weighted'
+      - 'Second output of that node, reached after output A in cycle mode and less likely than A when the odds are weighted'
+      - 'Third output of that node, reached after output B in cycle mode and the least likely of the three when the odds are weighted'
+      - 'Note — The sequence goes nowhere until a node''s A, B or C output is patched back into the X or Y input of another node on this panel; those cables are what set which step follows which'
+      - 'Note — A node with none of its outputs patched to another node sends the sequence back to the first node on its next trigger'
+      - 'Note — Bypassing this module leaves every output at 0V'
+      - 'Menu — Randomize — a submenu whose CVs item rolls a new value for every node''s knob and whose Modes item rolls a new mode for every node'
+      - 'Menu — Range — sets the voltage the CV knobs span, choosing among +/-10V down to +/-1V and 0V-10V down to 0V-1V, or Custom; changing it moves every node''s value at once'
+      - 'Menu — Cycle — chooses Evenly, which visits each output the same number of times, or Weighted, which returns to the CV value between outputs so A comes round more often than B and B than C'
+      - 'Menu — Odds — chooses Evenly, which gives the CV value and the three outputs equal chances in random mode, or Weighted, which makes the CV value six times as likely as C, A three times and B twice'
+      - 'Menu — Ratchet Speed — chooses Whole Notes, Half Notes, Triplets, Quarter Notes or Dynamic, setting how fast a ratchet step plays against the clock'
+      - 'Menu — Low Peformance Mode — chooses On, which makes each node look for a trigger only while the clock is high, or Off; the spelling of the item is the maker''s'
+      - 'Menu — +Pane Expander to Left (17HP) — places an eight-node expander on the left, and +Pane Expander to Right (17HP) places one on the right; several can be chained'
+    'param':
+      '0': 7
+      '1': 7
+      '2': 7
+      '3': 7
+      '4': 7
+      '5': 7
+      '6': 7
+      '7': 7
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+      '14': 7
+      '15': 7
+      '16': 9
+      '17': 9
+      '18': 9
+      '19': 9
+      '20': 9
+      '21': 9
+      '22': 9
+      '23': 9
+      '24': 9
+      '25': 9
+      '26': 9
+      '27': 9
+      '28': 9
+      '29': 9
+      '30': 9
+      '31': 9
+    'in':
+      '0': 1
+      '1': 2
+      '2': 5
+      '4': 5
+      '6': 5
+      '8': 5
+      '10': 5
+      '12': 5
+      '14': 5
+      '16': 5
+      '18': 5
+      '20': 5
+      '22': 5
+      '24': 5
+      '26': 5
+      '28': 5
+      '30': 5
+      '32': 5
+      '3': 6
+      '5': 6
+      '7': 6
+      '9': 6
+      '11': 6
+      '13': 6
+      '15': 6
+      '17': 6
+      '19': 6
+      '21': 6
+      '23': 6
+      '25': 6
+      '27': 6
+      '29': 6
+      '31': 6
+      '33': 6
+      '34': 8
+      '35': 8
+      '36': 8
+      '37': 8
+      '38': 8
+      '39': 8
+      '40': 8
+      '41': 8
+      '42': 8
+      '43': 8
+      '44': 8
+      '45': 8
+      '46': 8
+      '47': 8
+      '48': 8
+      '49': 8
+    'out':
+      '0': 3
+      '1': 4
+      '2': 10
+      '5': 10
+      '8': 10
+      '11': 10
+      '14': 10
+      '17': 10
+      '20': 10
+      '23': 10
+      '26': 10
+      '29': 10
+      '32': 10
+      '35': 10
+      '38': 10
+      '41': 10
+      '44': 10
+      '47': 10
+      '3': 11
+      '6': 11
+      '9': 11
+      '12': 11
+      '15': 11
+      '18': 11
+      '21': 11
+      '24': 11
+      '27': 11
+      '30': 11
+      '33': 11
+      '36': 11
+      '39': 11
+      '42': 11
+      '45': 11
+      '48': 11
+      '4': 12
+      '7': 12
+      '10': 12
+      '13': 12
+      '16': 12
+      '19': 12
+      '22': 12
+      '25': 12
+      '28': 12
+      '31': 12
+      '34': 12
+      '37': 12
+      '40': 12
+      '43': 12
+      '46': 12
+      '49': 12
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '4': 'trigger'
+        '6': 'trigger'
+        '8': 'trigger'
+        '10': 'trigger'
+        '12': 'trigger'
+        '14': 'trigger'
+        '16': 'trigger'
+        '18': 'trigger'
+        '20': 'trigger'
+        '22': 'trigger'
+        '24': 'trigger'
+        '26': 'trigger'
+        '28': 'trigger'
+        '30': 'trigger'
+        '32': 'trigger'
+        '3': 'trigger'
+        '5': 'trigger'
+        '7': 'trigger'
+        '9': 'trigger'
+        '11': 'trigger'
+        '13': 'trigger'
+        '15': 'trigger'
+        '17': 'trigger'
+        '19': 'trigger'
+        '21': 'trigger'
+        '23': 'trigger'
+        '25': 'trigger'
+        '27': 'trigger'
+        '29': 'trigger'
+        '31': 'trigger'
+        '33': 'trigger'
+        '34': 'trigger'
+        '35': 'trigger'
+        '36': 'trigger'
+        '37': 'trigger'
+        '38': 'trigger'
+        '39': 'trigger'
+        '40': 'trigger'
+        '41': 'trigger'
+        '42': 'trigger'
+        '43': 'trigger'
+        '44': 'trigger'
+        '45': 'trigger'
+        '46': 'trigger'
+        '47': 'trigger'
+        '48': 'trigger'
+        '49': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'trigger'
+        '5': 'trigger'
+        '8': 'trigger'
+        '11': 'trigger'
+        '14': 'trigger'
+        '17': 'trigger'
+        '20': 'trigger'
+        '23': 'trigger'
+        '26': 'trigger'
+        '29': 'trigger'
+        '32': 'trigger'
+        '35': 'trigger'
+        '38': 'trigger'
+        '41': 'trigger'
+        '44': 'trigger'
+        '47': 'trigger'
+        '3': 'trigger'
+        '6': 'trigger'
+        '9': 'trigger'
+        '12': 'trigger'
+        '15': 'trigger'
+        '18': 'trigger'
+        '21': 'trigger'
+        '24': 'trigger'
+        '27': 'trigger'
+        '30': 'trigger'
+        '33': 'trigger'
+        '36': 'trigger'
+        '39': 'trigger'
+        '42': 'trigger'
+        '45': 'trigger'
+        '48': 'trigger'
+        '4': 'trigger'
+        '7': 'trigger'
+        '10': 'trigger'
+        '13': 'trigger'
+        '16': 'trigger'
+        '19': 'trigger'
+        '22': 'trigger'
+        '25': 'trigger'
+        '28': 'trigger'
+        '31': 'trigger'
+        '34': 'trigger'
+        '37': 'trigger'
+        '40': 'trigger'
+        '43': 'trigger'
+        '46': 'trigger'
+        '49': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:876 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:886 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '9':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '10':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '11':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '12':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '13':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '14':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '15':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '16':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '17':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '18':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '19':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '20':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '21':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '22':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '23':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '24':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '25':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '26':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '27':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '28':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '29':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '30':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '31':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '32':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '33':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '34':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '35':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '36':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '37':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '38':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '39':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '40':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '41':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '42':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '43':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '44':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '45':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '46':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '47':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '48':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '49':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+  'PlusPane':
+    'lines':
+      - 'Eight-node expander for Glass Pane, placed immediately to the left or the right of it, adding its nodes to the same network; several can be chained'
+      - 'Triggers that node; patch it from the output of another node or from an external gate'
+      - 'A second trigger input into that node, doing what its X input does'
+      - 'Sets that node''s mode: blue steps through its outputs in turn, orange picks one of them at random, and purple plays its connected nodes in quick succession'
+      - 'A rising edge moves that node on to its next mode'
+      - 'Sets the voltage that node sends to the CV output while it is the active step; the knobs span -1V to 1V until the range is changed on the menu'
+      - 'First output of that node, reached before its other outputs in cycle mode and the likeliest of the three when the odds are weighted'
+      - 'Second output of that node, reached after output A in cycle mode and less likely than A when the odds are weighted'
+      - 'Third output of that node, reached after output B in cycle mode and the least likely of the three when the odds are weighted'
+      - 'Note — The clock, reset, gate output and CV output of Glass Pane drive these nodes too'
+      - 'Note — Each expander keeps its own range, cycle, odds and ratchet speed settings'
+      - 'Menu — Randomize — a submenu whose CVs item rolls a new value for every node''s knob and whose Modes item rolls a new mode for every node'
+      - 'Menu — Range — sets the voltage the CV knobs span, choosing among +/-10V down to +/-1V and 0V-10V down to 0V-1V, or Custom; changing it moves every node''s value at once'
+      - 'Menu — Cycle — chooses Evenly, which visits each output the same number of times, or Weighted, which returns to the CV value between outputs so A comes round more often than B and B than C'
+      - 'Menu — Odds — chooses Evenly, which gives the CV value and the three outputs equal chances in random mode, or Weighted, which makes the CV value six times as likely as C, A three times and B twice'
+      - 'Menu — Ratchet Speed — chooses Whole Notes, Half Notes, Triplets, Quarter Notes or Dynamic, setting how fast a ratchet step plays against the clock'
+    'param':
+      '0': 3
+      '1': 3
+      '2': 3
+      '3': 3
+      '4': 3
+      '5': 3
+      '6': 3
+      '7': 3
+      '8': 5
+      '9': 5
+      '10': 5
+      '11': 5
+      '12': 5
+      '13': 5
+      '14': 5
+      '15': 5
+    'in':
+      '0': 1
+      '2': 1
+      '4': 1
+      '6': 1
+      '8': 1
+      '10': 1
+      '12': 1
+      '14': 1
+      '1': 2
+      '3': 2
+      '5': 2
+      '7': 2
+      '9': 2
+      '11': 2
+      '13': 2
+      '15': 2
+      '16': 4
+      '17': 4
+      '18': 4
+      '19': 4
+      '20': 4
+      '21': 4
+      '22': 4
+      '23': 4
+    'out':
+      '0': 6
+      '3': 6
+      '6': 6
+      '9': 6
+      '12': 6
+      '15': 6
+      '18': 6
+      '21': 6
+      '1': 7
+      '4': 7
+      '7': 7
+      '10': 7
+      '13': 7
+      '16': 7
+      '19': 7
+      '22': 7
+      '2': 8
+      '5': 8
+      '8': 8
+      '11': 8
+      '14': 8
+      '17': 8
+      '20': 8
+      '23': 8
+    'family':
+      'in':
+        '0': 'trigger'
+        '2': 'trigger'
+        '4': 'trigger'
+        '6': 'trigger'
+        '8': 'trigger'
+        '10': 'trigger'
+        '12': 'trigger'
+        '14': 'trigger'
+        '1': 'trigger'
+        '3': 'trigger'
+        '5': 'trigger'
+        '7': 'trigger'
+        '9': 'trigger'
+        '11': 'trigger'
+        '13': 'trigger'
+        '15': 'trigger'
+        '16': 'trigger'
+        '17': 'trigger'
+        '18': 'trigger'
+        '19': 'trigger'
+        '20': 'trigger'
+        '21': 'trigger'
+        '22': 'trigger'
+        '23': 'trigger'
+      'out':
+        '0': 'trigger'
+        '3': 'trigger'
+        '6': 'trigger'
+        '9': 'trigger'
+        '12': 'trigger'
+        '15': 'trigger'
+        '18': 'trigger'
+        '21': 'trigger'
+        '1': 'trigger'
+        '4': 'trigger'
+        '7': 'trigger'
+        '10': 'trigger'
+        '13': 'trigger'
+        '16': 'trigger'
+        '19': 'trigger'
+        '22': 'trigger'
+        '2': 'trigger'
+        '5': 'trigger'
+        '8': 'trigger'
+        '11': 'trigger'
+        '14': 'trigger'
+        '17': 'trigger'
+        '20': 'trigger'
+        '23': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '2':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '3':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '4':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '5':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '6':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '7':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '8':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '9':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '10':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '11':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '12':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '13':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '14':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '15':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:261, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '16':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '17':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '18':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '19':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '20':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '21':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '22':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '23':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'GlassPane.cpp:250, shared with PlusPane, reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+  'Nudge':
+    'lines':
+      - 'Modulation source giving five CV values that hold steady until a nudge moves them to new ones'
+      - 'Sets how long each nudge takes to reach its new value, 0 to 10 seconds'
+      - 'Attenuates and inverts the slew CV before it is added to the slew time'
+      - 'Sets how far a value can move in one nudge, 0.01V to 5V'
+      - 'Attenuates and inverts the step CV before it is added to the step size'
+      - 'Sets the largest voltage the outputs reach, 0.01V to 10V'
+      - 'Attenuates and inverts the range CV before it is added to the range'
+      - 'Sets how likely a value is to move in the same direction as its last nudge; turned left of centre it favours the opposite direction'
+      - 'Attenuates and inverts the velocity CV before it is added to the velocity setting'
+      - 'Sets the span of the outputs: negative voltages only, bipolar, or positive voltages only'
+      - 'Moves all five values to new ones, each taking the slew time to arrive'
+      - 'Sets what the five CV inputs do: add to the outputs, or set each output''s chance of moving when nudged'
+      - 'Added to that output in offset mode; in chance mode it sets how likely that output is to move when nudged, 0V for never and 10V for always'
+      - 'Raises or lowers the slew time through its attenuverter'
+      - 'Raises or lowers the step size through its attenuverter'
+      - 'Raises or lowers the range through its attenuverter'
+      - 'Raises or lowers the velocity setting through its attenuverter, 5V covering its whole range at full attenuverter'
+      - 'A rising edge moves all five values to new ones'
+      - 'Carries that value, sliding to each new one over the slew time'
+      - 'Note — In chance mode an unpatched CV input leaves its output with a fixed chance of moving: 10% for the first, then 30%, 50%, 70% and 90%'
+      - 'Note — Bypassing this module routes each CV input to the CV output of the same number'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '8': 9
+      '9': 10
+      '10': 11
+    'in':
+      '0': 12
+      '1': 12
+      '2': 12
+      '3': 12
+      '4': 12
+      '5': 13
+      '6': 14
+      '7': 15
+      '8': 16
+      '9': 17
+    'out':
+      '0': 18
+      '1': 18
+      '2': 18
+      '3': 18
+      '4': 18
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'trigger'
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:198 divides this input by 10 into that line''s chance of moving when the input CV mode is Chance, or Nudge.cpp:245 clamps it to ±10V and adds it to the output when the mode is Offset'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:198 divides this input by 10 into that line''s chance of moving when the input CV mode is Chance, or Nudge.cpp:245 clamps it to ±10V and adds it to the output when the mode is Offset'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:198 divides this input by 10 into that line''s chance of moving when the input CV mode is Chance, or Nudge.cpp:245 clamps it to ±10V and adds it to the output when the mode is Offset'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:198 divides this input by 10 into that line''s chance of moving when the input CV mode is Chance, or Nudge.cpp:245 clamps it to ±10V and adds it to the output when the mode is Offset'
+        '4':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:198 divides this input by 10 into that line''s chance of moving when the input CV mode is Chance, or Nudge.cpp:245 clamps it to ±10V and adds it to the output when the mode is Offset'
+        '5':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:185 multiplies this input by its attenuverter and adds the SLEW knob, giving the seconds a nudge takes'
+        '6':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'Nudge.cpp:188 multiplies this input by its attenuverter and adds the STEP knob, and Nudge.cpp:189 raises the total to the minimum voltage when it falls below it'
+        '7':
+          'poly': false
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'why': 'Nudge.cpp:179 multiplies this input by its attenuverter and adds the RANGE knob, and Nudge.cpp:180 raises the total to the minimum voltage when it falls below it'
+        '8':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Nudge.cpp:186 divides this input by 5, multiplies by its attenuverter and adds the velocity knob'
+        '9':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'Nudge.cpp:174 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+    'notes': 'The five CV jacks do two different jobs and the right-click Input CV Mode chooses which. In Chance mode Nudge.cpp:198 divides the voltage by 10 into that line''s chance of moving on a nudge, and an unpatched jack reads a normal that differs per row: 1V, 3V, 5V, 7V and 9V from the top down, which is the 10, 30, 50, 70 and 90 per cent the comment names. In Offset mode the same jack is clamped to ±10V and added straight to that line''s output, and an unpatched jack reads 0V. No range or normal is written for those five jacks because neither is fixed.'
+  'OneShot':
+    'lines':
+      - 'One-shot sequencer of four values that interrupts the sequencer patched through it and plays a short sequence of its own'
+      - 'Sets one of the four values this sequencer plays; the knobs span -1V to 1V until the range is changed on the menu'
+      - 'Sets how many steps the sequence plays, 1 to 16; the first value always plays first and the fourth last, so short lengths skip values and long lengths repeat them'
+      - 'Sets whether the sequence starts from the same position each time it plays, or carries on from where it left off so that each play differs from the last'
+      - 'Sets how often a value is swapped for another at random, 0 to 100%, coming out differently each time the sequence plays'
+      - 'Sets how varied the order of the values is, 0 to 100%, in a pattern that repeats the same way each time the sequence cycles'
+      - 'Starts the sequence on the next clock; either the clock input or the gate input has to be running for it to play'
+      - 'A rising edge starts the sequence on the next clock'
+      - 'Steps this sequence; with nothing patched here the gate input steps it instead'
+      - 'Gate from the sequencer up the chain, passed to the gate output whenever this sequence is not playing'
+      - 'CV from the sequencer up the chain, passed to the CV output whenever this sequence is not playing'
+      - 'Carries 10V for the step after this sequence finishes'
+      - 'Carries the clock while this sequence is playing, and 0V at every other time'
+      - 'Carries the clock while this sequence is playing, and the gate input at every other time'
+      - 'Carries the value being played while this sequence is playing, and the CV input at every other time'
+      - 'Note — Nothing plays unless a clock is arriving at the clock input or a gate is arriving at the gate input; the sequence then starts on the next clock after the play button or the trigger'
+      - 'Note — Bypassing this module connects the gate input to the gate output and the CV input to the CV output'
+      - 'Menu — Range — sets the voltage the four knobs span, choosing among +/-10V down to +/-1V and 0V-10V down to 0V-1V, or Custom; changing it moves the output values without moving the knobs'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 2
+      '5': 3
+      '6': 4
+      '7': 5
+      '8': 6
+    'in':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+    'out':
+      '0': 11
+      '1': 12
+      '2': 13
+      '3': 14
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'why': 'OneShot.cpp:141 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V'
+        '1':
+          'poly': false
+          'step': 'stepped'
+          'range': 'high above 2V'
+          'normal': 'the GATE IN jack'
+          'why': 'OneShot.cpp:139 reads this input with getVoltage() alone into the module''s own Schmitt trigger, which util.hpp:46 raises it at 2V and drops it at 0.1V; OneShot.cpp:137 takes the GATE IN jack instead when nothing is patched here'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'normal': '0V'
+          'why': 'OneShot.cpp:262 copies this jack straight to GATE OUT while the module is idle; :137 falls back to it as the clock when CLOCK is unpatched, and util.hpp:45 schmittTrigger makes an edge of it at 2V, releasing at 0.1V'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'normal': '0V'
+          'why': 'OneShot.cpp:261 copies this jack straight to CV OUT while the module is idle; :257 overwrites CV OUT with range.map of the playing step''s fader while state is PLAYING, so this jack is ignored for the length of the sequence'

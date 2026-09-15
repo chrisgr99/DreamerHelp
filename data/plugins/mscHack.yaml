@@ -1,0 +1,4450 @@
+'plugin': 'mscHack'
+'source': 'https://github.com/baconpaul/mschack-VCV-Rack-Plugins'
+'read': '2026-09-13'
+'modules':
+  'Compressor1':
+    'lines':
+      - 'Stereo compressor with meters for input, gain reduction and output, and a side chain input that can drive the detector in place of the signal'
+      - 'Multiplies the input by 0 to 4 before the detector reads it, despite the tooltip calling it Fade In Speed'
+      - 'Multiplies the compressed signal by 0 to 8, and the result is clipped at 6V, despite the tooltip calling it Fade In Speed'
+      - 'Sets the level the signal has to pass before the gain is pulled down, 6V fully counter-clockwise falling to a hundredth of that fully clockwise, despite the tooltip calling it Fade In Speed'
+      - 'Sets how far the gain is pulled down past the threshold: 0 leaves it alone, 1 closes it completely, past 1 the gain passes through zero and the signal inverts, though its tooltip says Fade In Speed'
+      - 'Sets how long the gain takes to reach full reduction after the signal crosses the threshold, 0 to 500ms'
+      - 'Sets how long the gain takes to come back after the signal falls under the threshold, 0 to 2 seconds, despite the tooltip calling it Fade In Speed'
+      - 'Multiplies the side chain input by 0 to 1 before the detector reads it, despite the tooltip calling it Fade In Speed'
+      - 'The left channel in, summed across its polyphony channels'
+      - 'The right channel in, summed across its polyphony channels'
+      - 'A cable here makes the detector follow this signal instead of the left and right inputs, while the left and right carry the gain the detector calls for'
+      - 'The compressed left channel, clipped at 6V'
+      - 'The compressed right channel, clipped at 6V'
+      - 'Note — the Bypass switch passes the inputs straight to the outputs, skipping the input gain, the compressor and the output gain'
+      - 'Note — a new module passes the signal through unchanged: Ratio comes up at 0, which leaves the gain alone, and Threshold at 6V'
+      - 'Note — the side chain gain knob and the side chain input carry no lettering on the panel'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '7': 7
+    'in':
+      '0': 8
+      '1': 9
+      '2': 10
+    'out':
+      '0': 11
+      '1': 12
+    'family':
+      'in':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Parameter 6 is configured as the bypass but carries no widget; the Bypass switch on the panel is a custom button rather than a parameter, so parameter 6 is left untagged. Every parameter carries the tooltip name ''Fade In Speed'', which is a copy-and-paste slip in the maker''s source; the lines follow the panel lettering and the code instead.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'range': '±6V'
+          'step': 'continuous'
+          'why': 'Compressor.cpp:386 and 387 read it with getVoltageSum and divide by the 6V the module takes as full scale'
+        '1':
+          'poly': true
+          'range': '±6V'
+          'step': 'continuous'
+          'why': 'Compressor.cpp:386 and 387 read it with getVoltageSum and divide by the 6V the module takes as full scale'
+        '2':
+          'poly': false
+          'range': '±6V'
+          'step': 'continuous'
+          'why': 'Compressor.cpp:406 divides this voltage by the 6V the module takes as full scale, reading the first channel only'
+  'MasterClockx4':
+    'lines':
+      - 'Four clock channels driven by one tempo, each multiplying or dividing it, with a sync input per channel and a chain jack for handing the tempo to another of these'
+      - 'Sets the main tempo, 60 to 220 beats per minute'
+      - 'Multiplies or divides the main tempo for that channel, from divide by 32, through unity, to multiply by 32'
+      - 'A rising edge here restarts that channel''s clock on the next main beat'
+      - 'Takes the tempo and the run state from another MSC Clock, and while a cable is here the BPM knob is ignored'
+      - 'A 1ms 10V pulse at that channel''s rate, silent while that channel or the whole module is stopped'
+      - 'A 1ms 10V pulse each time that channel is resynchronised'
+      - 'Carries this module''s tempo and run state for another MSC Clock to follow'
+      - 'Nothing in the module applies this knob; a jitter value is computed from it and then never added to the clock'
+      - 'Note — the module clocks as soon as it is added, at the tempo the BPM knob is set to, and nothing has to be patched to it'
+      - 'Note — the STOP button on a channel silences that channel''s CLOCK jacks, and the global STOP button silences all four; the SYNC TRIGs jacks keep firing either way'
+      - 'Note — the x2 button on a channel doubles the division it is set to, and changes nothing while that channel multiplies the tempo rather than dividing it'
+      - 'Note — the global SYNC button restarts all four channels together on the next main beat'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 2
+      '3': 2
+      '4': 2
+      '5': 8
+    'in':
+      '0': 3
+      '1': 3
+      '2': 3
+      '3': 3
+      '4': 4
+    'out':
+      '0': 5
+      '1': 5
+      '2': 5
+      '3': 5
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+      '8': 5
+      '9': 5
+      '10': 5
+      '11': 5
+      '12': 5
+      '13': 5
+      '14': 5
+      '15': 5
+      '16': 6
+      '17': 6
+      '18': 6
+      '19': 6
+      '20': 6
+      '21': 6
+      '22': 6
+      '23': 6
+      '24': 6
+      '25': 6
+      '26': 6
+      '27': 6
+      '28': 6
+      '29': 6
+      '30': 6
+      '31': 6
+      '32': 7
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'cv'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+        '15': 'trigger'
+        '16': 'trigger'
+        '17': 'trigger'
+        '18': 'trigger'
+        '19': 'trigger'
+        '20': 'trigger'
+        '21': 'trigger'
+        '22': 'trigger'
+        '23': 'trigger'
+        '24': 'trigger'
+        '25': 'trigger'
+        '26': 'trigger'
+        '27': 'trigger'
+        '28': 'trigger'
+        '29': 'trigger'
+        '30': 'trigger'
+        '31': 'trigger'
+        '32': 'cv'
+    'notes': 'Parameter 5, Humanize, is left untagged: the line that would apply it to the beat counter is commented out in the source, so the knob does nothing. The STOP, GLOBAL, SYNC and x2 controls are custom buttons rather than parameters. The four CLOCK jacks of a channel carry the same pulse, as do its four SYNC TRIGs jacks. The chain input carries two different things by voltage: below 8V it is read as a whole number whose bits are the clock trigger, the sync and the stop state, and at 8V and above it is read as the tempo in beats per minute (MasterClockx4.cpp:606 to 620).'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'MasterClockx4.cpp:670 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'MasterClockx4.cpp:670 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'MasterClockx4.cpp:670 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'MasterClockx4.cpp:670 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '4':
+          'poly': false
+          'why': 'MasterClockx4.cpp:601 to 620 read this voltage with getVoltage, the first channel only'
+  'SEQ_Envelope_8':
+    'lines':
+      - 'Nine envelope generators sharing one drawable editor, each timed from the patched clock and each with its own trigger and hold input'
+      - 'Sets how far the points either side of a dragged point follow it, the pull falling to under two thirds at each step away; at zero only the dragged point moves'
+      - 'The clock every envelope is timed from, one edge to the next setting the length of a beat; with nothing patched here no channel produces an envelope'
+      - 'A rising edge here restarts every envelope at the start of its shape'
+      - 'A rising edge here retriggers all nine envelopes at once'
+      - 'Held above 2.5V this freezes that channel''s envelope at its current value'
+      - 'A rising edge here retriggers that channel''s envelope from the start of its shape'
+      - 'That channel''s envelope, over the range picked by the Out Range switch: 0-5V, -5V to 5V, 0-10V or -10V to 10V'
+      - 'Note — nothing comes out until a clock is patched to Beat; with that jack empty the whole module is skipped'
+      - 'Note — every channel comes up with its shape flat along the bottom, so draw one in the display, or step through the built-in shapes with the Presets arrows, before patching an output'
+      - 'Note — the Channel row picks which of the nine envelopes the display shows and edits'
+      - 'Note — with Draw off, dragging a point moves that one point, and the Rubber Band knob pulls its neighbours with it; with Draw on, dragging across the display sets every point the pointer crosses'
+      - 'Note — right-clicking a point in the display returns it to the middle of the range'
+      - 'Note — holding Control while dragging a point moves it in much finer steps'
+      - 'Note — Envelope Mode sets what the shape does at its end: Loop, Reverse Loop, Ping Pong, One Shot or Two Shot (Fwd-Rev)'
+      - 'Note — Time/Div sets how long one pass of the shape takes against the patched clock: 64th, 32nd, 16th, 8th, 4tr or 1 Bar'
+      - 'Note — Gate View holds each point as a level for its whole division instead of drawing a line from one point to the next'
+      - 'Note — Invert turns the shown channel''s shape upside down, Smooth rounds it off, and Rand replaces every point with a random one'
+      - 'Note — Copy, then a click on another Channel button, gives that channel this one''s shape, Time/Div, Envelope Mode, Out Range and Gate View setting'
+    'param':
+      '0': 1
+    'in':
+      '0': 3
+      '1': 2
+      '2': 4
+      '3': 5
+      '4': 5
+      '5': 5
+      '6': 5
+      '7': 5
+      '8': 5
+      '9': 5
+      '10': 5
+      '11': 5
+      '12': 6
+      '13': 6
+      '14': 6
+      '15': 6
+      '16': 6
+      '17': 6
+      '18': 6
+      '19': 6
+      '20': 6
+    'out':
+      '0': 7
+      '1': 7
+      '2': 7
+      '3': 7
+      '4': 7
+      '5': 7
+      '6': 7
+      '7': 7
+      '8': 7
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+        '15': 'trigger'
+        '16': 'trigger'
+        '17': 'trigger'
+        '18': 'trigger'
+        '19': 'trigger'
+        '20': 'trigger'
+      'out':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+    'notes': 'The channel selector, the envelope mode, the time division, the output range, Draw, Gate View, Invert, Smooth, Presets, Rand and Copy are custom widgets rather than parameters, so they carry no line.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:762 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:767 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:775 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '4':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '5':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '6':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '7':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '8':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '9':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '10':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '11':
+          'poly': false
+          'range': 'high above 2.5V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:793 holds that channel while this voltage is above 2.5V, reading the first channel only'
+        '12':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '13':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '14':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '15':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '16':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '17':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '18':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '19':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '20':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_Envelope_8.cpp:784 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'TriadSeq2':
+    'lines':
+      - 'Three keyboard sequencers, each with its own clock, sixteen steps, eight patterns and a three-octave keyboard for setting the note of each step'
+      - 'Sets how long the pitch takes to slide from the previous note to the new one on a step marked for glide, up to 500ms'
+      - 'A rising edge here advances that row one step; with nothing patched, the row follows the clock of the first row'
+      - 'Adds its voltage to that row''s pitch output, transposing the pattern'
+      - 'A rising edge here queues the next pattern for that row, which takes effect when the row reaches its first step'
+      - 'A rising edge here returns every row to the first step of its pattern'
+      - 'A rising edge here queues the next pattern on all three rows'
+      - 'Held above 0V this silences the trigger output of every row and freezes every pitch output at its last note'
+      - 'Held above 0V this silences that row''s trigger output and freezes its pitch output at its last note'
+      - 'A 50ms 10V pulse on each step the pattern marks with a note'
+      - 'The pitch of that row''s current step, a volt per octave, with the row''s octave setting and its V/Oct offset input added'
+      - 'Note — a row plays nothing until a clock is patched to its TRIG input, or to the TRIG input of the first row, which the other two follow when their own is empty'
+      - 'Note — a new module has all sixteen steps of every pattern set to the lowest note with a trigger on each, so clocking it gives a run of one repeated note'
+      - 'Note — clicking a key on a row''s keyboard sets the note of the step that row is showing'
+      - 'Note — while a row is paused, right-clicking a key sets the note of the step being shown and moves on to the next step, rolling into the next pattern at the end'
+      - 'Note — while a row is paused, holding Control and right-clicking a key sets that step to change pitch without firing the trigger output'
+      - 'Note — the upper row of marks above a step or pattern strip sets the last one in the run, and the lower row picks which one is shown'
+      - 'Menu — Ch 1: Reset Pattern to 1 — makes a trigger at Reset Clk return the first row to its first pattern as well as its first step'
+      - 'Menu — Ch 2: Reset Pattern to 1 — makes a trigger at Reset Clk return the second row to its first pattern as well as its first step'
+      - 'Menu — Ch 3: Reset Pattern to 1 — makes a trigger at Reset Clk return the third row to its first pattern as well as its first step'
+    'param':
+      '18': 1
+      '19': 1
+      '20': 1
+    'in':
+      '0': 2
+      '1': 2
+      '2': 2
+      '3': 3
+      '4': 3
+      '5': 3
+      '6': 4
+      '7': 4
+      '8': 4
+      '9': 5
+      '10': 6
+      '11': 7
+      '12': 8
+      '13': 8
+      '14': 8
+    'out':
+      '0': 9
+      '1': 9
+      '2': 9
+      '3': 10
+      '4': 10
+      '5': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'pitch'
+        '4': 'pitch'
+        '5': 'pitch'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'pitch'
+        '4': 'pitch'
+        '5': 'pitch'
+    'notes': 'Parameters 0 to 17 and 21 to 23 are declared in the source but never configured and carry no widget, so they are left untagged. The keyboards, step and pattern strips, pause, copy, octave select and the mute buttons are custom widgets rather than parameters. The pattern strip is built with nPATTERNS, which is 8 in Seq_Triad2.cpp; the first line said sixteen and was corrected. A keyboard with nothing in its own step clock jack runs from the first keyboard clock: Seq_Triad2.cpp:1047 falls back to keyboard one whenever that jack is patched.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1011 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1011 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1011 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': '1V per octave'
+          'step': 'continuous'
+          'why': 'Seq_Triad2.cpp:875 and 758 add this voltage to the note that keyboard plays, reading the first channel only'
+        '4':
+          'poly': false
+          'range': '1V per octave'
+          'step': 'continuous'
+          'why': 'Seq_Triad2.cpp:875 and 758 add this voltage to the note that keyboard plays, reading the first channel only'
+        '5':
+          'poly': false
+          'range': '1V per octave'
+          'step': 'continuous'
+          'why': 'Seq_Triad2.cpp:875 and 758 add this voltage to the note that keyboard plays, reading the first channel only'
+        '6':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1058 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '7':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1058 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '8':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1058 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '9':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1002 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '10':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1007 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '11':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:990 mutes while this voltage is above zero, reading the first channel only'
+        '12':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1020 mutes that keyboard while this voltage is above zero, reading the first channel only'
+        '13':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1020 mutes that keyboard while this voltage is above zero, reading the first channel only'
+        '14':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'Seq_Triad2.cpp:1020 mutes that keyboard while this voltage is above zero, reading the first channel only'
+  'ARP700':
+    'lines':
+      - 'Seven-note arpeggiator with sixteen patterns, three sub-steps per note, note lengths from a whole note down to a thirty-second, and glide and legato per note'
+      - 'The clock the arpeggio runs from; with nothing patched here the trigger output stays at 0V and the pattern does not advance'
+      - 'A rising edge here restarts the pattern at its first note'
+      - 'Adds its voltage to the pitch output, transposing the arpeggio'
+      - 'A rising edge here queues the next pattern, which takes effect at the start of the next pass'
+      - 'A 10V gate for as long as the current note lasts, dropped one tick early so consecutive notes do not run together'
+      - 'The pitch of the current note, a volt per octave, with the pattern''s octave setting and the V/OCT offset input added, and sliding over 200ms on a note marked for glide'
+      - 'Note — the module plays nothing until a clock is patched to Clk, at least one note on the keyboard is on, and at least one of that note''s three sub-steps is set to Note'
+      - 'Note — every sub-step of a new module is set to Off and no key is on, which is why a freshly added module is silent under a running clock'
+      - 'Note — clicking a key on the keyboard adds that note to the arpeggio and clicking it again removes it; seven notes can be on at once'
+      - 'Note — the upper row of marks above the Pattern strip sets the last pattern in the run, and the lower row picks which pattern is shown'
+    'in':
+      '0': 1
+      '3': 2
+      '1': 3
+      '2': 4
+    'out':
+      '0': 5
+      '1': 6
+    'family':
+      'in':
+        '0': 'trigger'
+        '3': 'trigger'
+        '1': 'pitch'
+        '2': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'pitch'
+    'notes': 'This module has no parameters at all: the keyboard, the pattern strip, the octave select, the on/off, note length, length modifier, glide, legato, pause and copy buttons and the mode strip are custom widgets.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'ARP700.cpp:905 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': '1V per octave'
+          'step': 'continuous'
+          'why': 'ARP700.cpp:634 and 652 add this voltage to the note the sequence plays, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'ARP700.cpp:901 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'ARP700.cpp:897 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'Seq_6ch_32step':
+    'lines':
+      - 'Six trigger sequencers of up to 32 steps, each with sixteen patterns and five level knobs a step can draw its CV from'
+      - 'Sets the voltage that row''s CV output takes on a step drawn at the lowest of the five levels'
+      - 'Sets the voltage that row''s CV output takes on a step drawn at the second of the five levels'
+      - 'Sets the voltage that row''s CV output takes on a step drawn at the middle of the five levels'
+      - 'Sets the voltage that row''s CV output takes on a step drawn at the fourth of the five levels'
+      - 'Sets the voltage that row''s CV output takes on a step drawn at the highest of the five levels'
+      - 'A rising edge here advances that row one step; with nothing patched, the row follows the clock of the first row'
+      - 'A rising edge here queues the next pattern for that row, which takes effect when the row reaches its first step'
+      - 'A rising edge here returns every row to its first step'
+      - 'A rising edge here queues the next pattern on all six rows'
+      - 'Held above 0V this silences every trigger output and freezes every CV output at its last value'
+      - 'A 1ms 10V pulse on each step the pattern marks'
+      - 'The level of the current step scaled to the full range set on the menu, or a bipolar version of it when the Bi-Dir switch for that row is on'
+      - 'A 1ms 10V pulse each time that row returns to its first step'
+      - 'Note — a row plays nothing until a clock is patched to its CLK input, or to the CLK input of the first row, which the other five follow when their own is empty'
+      - 'Note — every step of a new module is off, so clicking steps into the grid is what makes a row produce anything'
+      - 'Note — left-clicking a step in the grid raises it one level, cycling through the five levels and back to off, and right-clicking a step turns it off'
+      - 'Note — the row of marks above a row''s steps sets the last step in the run'
+      - 'Note — the upper row of marks above the Pat strip sets the last pattern in the run, and the lower row picks which pattern is shown'
+      - 'Menu — VRange (15, 10, 5): — sets the full scale of every CV output, and each click on the item steps it from 15V to 10V to 5V and round again; the setting in force is printed beside the item'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 2
+      '7': 2
+      '8': 2
+      '9': 2
+      '10': 2
+      '11': 2
+      '12': 3
+      '13': 3
+      '14': 3
+      '15': 3
+      '16': 3
+      '17': 3
+      '18': 4
+      '19': 4
+      '20': 4
+      '21': 4
+      '22': 4
+      '23': 4
+      '24': 5
+      '25': 5
+      '26': 5
+      '27': 5
+      '28': 5
+      '29': 5
+    'in':
+      '0': 8
+      '1': 9
+      '14': 10
+      '2': 6
+      '3': 6
+      '4': 6
+      '5': 6
+      '6': 6
+      '7': 6
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+    'out':
+      '0': 11
+      '1': 11
+      '2': 11
+      '3': 11
+      '4': 11
+      '5': 11
+      '6': 12
+      '7': 12
+      '8': 12
+      '9': 12
+      '10': 12
+      '11': 12
+      '12': 13
+      '13': 13
+      '14': 13
+      '15': 13
+      '16': 13
+      '17': 13
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '14': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'trigger'
+        '9': 'trigger'
+        '10': 'trigger'
+        '11': 'trigger'
+        '12': 'trigger'
+        '13': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'trigger'
+        '13': 'trigger'
+        '14': 'trigger'
+        '15': 'trigger'
+        '16': 'trigger'
+        '17': 'trigger'
+    'notes': 'The step grid, the pattern strip, pause, Cpy, Rand, CLR, Gate and Bi-Dir are custom widgets rather than parameters. The VRange menu item is a cycling item: each click steps 15V, 10V, 5V and the value in force is drawn as the item right text. A channel with nothing in its own clock jack runs from the first channel clock: SEQ_6x32x16.cpp:793 falls back to channel one whenever that jack is patched.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:775 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:778 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '4':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '5':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '6':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '7':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:782 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '8':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '9':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '10':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '11':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '12':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '13':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:816 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '14':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'SEQ_6x32x16.cpp:763 mutes while this voltage is above zero, reading the first channel only'
+  'Osc_3Ch_Widget':
+    'lines':
+      - 'Three synth voices in one module, each stacking up to seven detuned copies of one waveform through an envelope and a multimode filter into a stereo pair'
+      - 'Sets how long that voice takes to climb to full level after a trigger, from under 1ms to 2 seconds'
+      - 'Sets how long that voice holds at full level before it starts to fall, up to 4 seconds'
+      - 'Sets how long that voice takes to fall back to silence, up to 10 seconds'
+      - 'Sets how many copies of the waveform that voice stacks, 1 to 7'
+      - 'Spreads the stacked copies of that voice apart in pitch, all at the same pitch at zero'
+      - 'Spreads the stacked copies of that voice apart across the stereo pair, all centred at zero'
+      - 'Sets the cutoff of that voice''s filter'
+      - 'Sets the resonance of that voice''s filter'
+      - 'Picks the filter for that voice: off, low pass, high pass, band pass or notch'
+      - 'Sets the output level of that voice, full giving 6V'
+      - 'Sets the pitch of that voice, a volt per octave with 0V giving 32.7Hz, and voltages above 8V clamped'
+      - 'A rising edge here restarts that voice''s envelope from silence'
+      - 'Attenuates the filter cutoff knob of that voice, 10V leaving the knob where it is and 0V closing the filter; an empty jack reads 10V'
+      - 'Attenuates the filter resonance knob of that voice, 10V leaving the knob where it is; an empty jack reads 10V'
+      - 'Adds to the output level knob of that voice, 5V covering the whole of the knob''s range'
+      - 'The left side of that voice'
+      - 'The right side of that voice'
+      - 'Note — each voice plays one of five waveforms, chosen with its own button strip: sine, triangle, square, saw or noise'
+      - 'Note — a voice makes no sound until a rising edge reaches its TRIG input, which is what starts its envelope'
+      - 'Note — the output level knob of every voice comes up fully counter-clockwise, so a new module is silent even under a trigger'
+    'param':
+      '3': 1
+      '4': 1
+      '5': 1
+      '0': 2
+      '1': 2
+      '2': 2
+      '6': 3
+      '7': 3
+      '8': 3
+      '39': 4
+      '40': 4
+      '41': 4
+      '45': 5
+      '46': 5
+      '47': 5
+      '42': 6
+      '43': 6
+      '44': 6
+      '27': 7
+      '28': 7
+      '29': 7
+      '30': 8
+      '31': 8
+      '32': 8
+      '36': 9
+      '37': 9
+      '38': 9
+      '33': 10
+      '34': 10
+      '35': 10
+    'in':
+      '0': 11
+      '1': 11
+      '2': 11
+      '3': 12
+      '4': 12
+      '5': 12
+      '6': 13
+      '7': 13
+      '8': 13
+      '9': 14
+      '10': 14
+      '11': 14
+      '12': 15
+      '13': 15
+      '14': 15
+    'out':
+      '0': 16
+      '1': 17
+      '2': 16
+      '3': 17
+      '4': 16
+      '5': 17
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'pitch'
+        '2': 'pitch'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+        '9': 'cv'
+        '10': 'cv'
+        '11': 'cv'
+        '12': 'cv'
+        '13': 'cv'
+        '14': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+    'notes': 'Parameters 9 to 26 are configured as ''Not Used'' and carry no widget, so they are left untagged. The waveform button strip for each voice is a custom widget rather than a parameter. The three resonance jacks are never read: nothing in 3Ch_Osc.cpp mentions IN_REZ after the widgets and their tooltips are created, and the filter resonance comes from the knob alone.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': '0 to 8V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:873 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span'
+        '1':
+          'poly': false
+          'range': '0 to 8V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:873 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span'
+        '2':
+          'poly': false
+          'range': '0 to 8V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:873 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': '3Ch_Osc.cpp:918 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '4':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': '3Ch_Osc.cpp:918 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '5':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': '3Ch_Osc.cpp:918 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '6':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:890 divides this voltage by ten into the cutoff; unpatched it reads 10V'
+        '7':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:890 divides this voltage by ten into the cutoff; unpatched it reads 10V'
+        '8':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': '3Ch_Osc.cpp:890 divides this voltage by ten into the cutoff; unpatched it reads 10V'
+        '12':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': '3Ch_Osc.cpp:925 divides this voltage by five into a level that runs 0 to 1, reading the first channel only'
+        '13':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': '3Ch_Osc.cpp:925 divides this voltage by five into a level that runs 0 to 1, reading the first channel only'
+        '14':
+          'poly': false
+          'step': 'continuous'
+          'polarity': 'unipolar'
+          'why': '3Ch_Osc.cpp:925 divides this voltage by five into a level that runs 0 to 1, reading the first channel only'
+  'OSC_WaveMorph_3':
+    'lines':
+      - 'Oscillator crossfading between three waveforms you draw by hand, through a multimode filter and a level stage'
+      - 'Sets how far the points either side of a dragged point follow it, the pull falling to under two thirds at each step away; at zero only the dragged point moves'
+      - 'Sets the cutoff of the filter'
+      - 'Sets the resonance of the filter'
+      - 'Picks the filter: off, low pass, high pass, band pass or notch'
+      - 'Sets the output level'
+      - 'Sets the pitch, a volt per octave with 0V giving 32.7Hz and voltages above 8V clamped; an empty jack reads 4V'
+      - 'Crossfades between the three drawn waveforms, -5V for the first, 0V for the second and 5V for the third, despite the panel printing -10V, 0V and 10V'
+      - 'Attenuates the filter cutoff knob, 10V leaving the knob where it is and 0V closing the filter; an empty jack reads 10V'
+      - 'Attenuates the filter resonance knob, 10V leaving the knob where it is; an empty jack reads 10V'
+      - 'Attenuates the level knob, 10V leaving the knob where it is and 0V silencing the output; an empty jack reads 10V'
+      - 'While Solo is on, a rising edge here steps to the next of the three waveforms'
+      - 'The oscillator output'
+      - 'Note — a new module is silent twice over: all three waveforms come up flat, and the LEVEL knob comes up fully counter-clockwise'
+      - 'Note — draw a waveform in the display, or step through the built-in shapes with the Presets arrows, to give the oscillator something to play'
+      - 'Note — the Wave 1, 2 and 3 buttons pick which of the three waveforms the display shows and edits'
+      - 'Note — with Draw off, dragging a point moves that one point, and the Rubber Band knob pulls its neighbours with it; with Draw on, dragging across the display sets every point the pointer crosses'
+      - 'Note — right-clicking a point in the display returns it to the middle of the range'
+      - 'Note — holding Control while dragging a point moves it in much finer steps'
+      - 'Note — Solo plays the shown waveform alone, ignoring the Morph input'
+      - 'Note — Invert turns the shown waveform upside down and Rand replaces every point with a random one'
+      - 'Note — Copy, then a click on another Wave button, gives that waveform the shape of the one shown'
+    'param':
+      '0': 1
+      '2': 2
+      '3': 3
+      '4': 4
+      '1': 5
+    'in':
+      '0': 6
+      '1': 7
+      '2': 8
+      '3': 9
+      '4': 10
+      '5': 11
+    'out':
+      '0': 12
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'trigger'
+      'out':
+        '0': 'audio'
+    'notes': 'The panel prints -10V, 0V and 10V beside the Morph input, but the code divides that input by 5, so the first and third waveforms are reached at -5V and 5V. Draw, Solo, Invert, Presets, Rand and Copy are custom widgets rather than parameters.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': '0 to 8V'
+          'step': 'continuous'
+          'why': 'OSC_WaveMorph_3.cpp:641 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span; unpatched it reads 4V'
+        '1':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'OSC_WaveMorph_3.cpp:614 clamps this voltage divided by five to plus or minus 1, reading the first channel only'
+        '2':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'OSC_WaveMorph_3.cpp:651 divides this voltage by ten into the cutoff; unpatched it reads 10V'
+        '3':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'OSC_WaveMorph_3.cpp:551 divides this voltage by ten into the resonance; unpatched it reads 10V'
+        '4':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'OSC_WaveMorph_3.cpp:656 divides this voltage by ten into the level; unpatched it reads 10V'
+        '5':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'OSC_WaveMorph_3.cpp:624 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'PingPong_Widget':
+    'lines':
+      - 'Stereo delay of up to 4 seconds a side, with feedback in both directions, a multimode filter across the input and a switch that plays the buffer backwards'
+      - 'Sets the left delay time, up to 4 seconds; with a clock at SYNC CLK the time is quantised to a division of that clock''s period'
+      - 'Sets the right delay time, up to 4 seconds; with a clock at SYNC CLK the time is quantised to a division of that clock''s period'
+      - 'Sets how much of the left delayed signal is fed back into the left delay'
+      - 'Sets how much of the left delayed signal is fed into the right delay'
+      - 'Sets how much of the right delayed signal is fed into the left delay'
+      - 'Sets how much of the right delayed signal is fed back into the right delay'
+      - 'Sets the cutoff of the filter the input passes through, ahead of both the delay line and the dry path'
+      - 'Sets the resonance of the filter the input passes through'
+      - 'Picks the filter: off, low pass, high pass, band pass or notch'
+      - 'Crossfades between the filtered input and the delayed signal'
+      - 'The left input, summed across its polyphony channels, and the source for both delays when the right input is empty'
+      - 'The right input, summed across its polyphony channels'
+      - 'A clock here quantises both delay times to a division of its period, the division taken from each delay knob''s setting'
+      - 'A rising edge here switches the delay between playing its buffer forwards and backwards'
+      - 'The left output, the filtered input and the left delay mixed by MIX'
+      - 'The right output, the filtered input and the right delay mixed by MIX'
+      - 'Note — MIX and both Delay knobs come up fully counter-clockwise on a new module, so the input passes through with nothing added; raise MIX to hear the delay at all'
+    'param':
+      '0': 1
+      '1': 2
+      '3': 3
+      '2': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '9': 9
+      '8': 10
+    'in':
+      '0': 11
+      '1': 12
+      '2': 13
+      '3': 14
+    'out':
+      '0': 15
+      '1': 16
+    'family':
+      'in':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'trigger'
+        '3': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Parameter 10 is configured as ''Unused'' and carries no widget, so it is left untagged; the GNIP GNOP switch beside its input is a custom button rather than a parameter.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'PingPong.cpp:438 and 449 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'PingPong.cpp:438 and 449 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '2':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'PingPong.cpp:384 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'PingPong.cpp:373 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'StepDelay':
+    'lines':
+      - 'Four delay taps in series clocked from a beat input, each with a note length, level, pan and feedback of its own, and a multimode filter on the way into the delay line'
+      - 'Picks the filter: off, low pass, high pass, band pass or notch'
+      - 'Sets the cutoff of the filter the signal passes through on its way into the delay line'
+      - 'Sets the resonance of the filter the signal passes through on its way into the delay line'
+      - 'Sets the level of that tap in the delayed mix'
+      - 'Sets the position of that tap between the left and right outputs'
+      - 'Sets how much of that tap is fed back into the delay line'
+      - 'Sets the length of that tap as a note value, off, two bars, a bar, a half, a quarter, an eighth, a sixteenth or a thirty-second, counted on from where the tap before it landed'
+      - 'Crossfades between the unfiltered input and the sum of the four taps'
+      - 'The clock the note lengths are measured against, one edge to the next counting as a quarter note'
+      - 'The left input, and the source for both sides when the right input is empty'
+      - 'The right input'
+      - 'Adds to the filter cutoff knob, 5V covering the whole of the knob''s range and -5V closing the filter'
+      - 'The left output, the dry input and the delayed taps mixed by Mix'
+      - 'The right output, the dry input and the delayed taps mixed by Mix'
+      - 'Note — a tap set to Off is skipped, and the taps after it are measured from where the last sounding tap landed'
+      - 'Note — all four Delay knobs come up at Off, so a new module passes the input through unchanged until at least one tap is set to a note length'
+      - 'Note — the tap lengths are measured from the clock at Beat, and are recalculated on each edge of it; with that jack empty they are left at the length the module started with'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '19': 8
+      '3': 4
+      '4': 4
+      '5': 4
+      '6': 4
+      '7': 5
+      '8': 5
+      '9': 5
+      '10': 5
+      '11': 6
+      '12': 6
+      '13': 6
+      '14': 6
+      '15': 7
+      '16': 7
+      '17': 7
+      '18': 7
+    'in':
+      '0': 9
+      '2': 10
+      '3': 11
+      '4': 12
+    'out':
+      '0': 13
+      '1': 14
+    'family':
+      'in':
+        '0': 'trigger'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'notes': 'Input 1, Clock Reset, is declared in the source but never placed on the panel and never read, so it is left untagged. The Dotted and Triplet buttons under each tap are custom widgets rather than parameters.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'StepDelay.cpp:483 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'why': 'StepDelay.cpp:463 and 468 read this voltage with getVoltage, the first channel only'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'why': 'StepDelay.cpp:463 and 468 read this voltage with getVoltage, the first channel only'
+        '4':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'StepDelay.cpp:356 clamps this voltage divided by five to plus or minus 1, reading the first channel only'
+  'ASAF8':
+    'lines':
+      - 'Eight stereo fade gates, each raising and lowering its pair of channels on a gate, with its own fade-in and fade-out times'
+      - 'Sets how long that row takes to fade up once its gate goes high, 0.05 to 40 seconds'
+      - 'Sets how long that row takes to fade down once its gate goes low, 0.05 to 40 seconds'
+      - 'A gate of 0.01V or more fades that row up and dropping it below that fades the row down; with nothing patched the row follows its own fade button'
+      - 'The left input of that row, passed through the row''s fade'
+      - 'The right input of that row, passed through the row''s fade'
+      - 'The left input of that row after the fade, or the fade shape itself as 0-10V when that input is empty'
+      - 'The right input of that row after the fade, or the fade shape itself as 0-10V when that input is empty'
+      - 'Note — a row whose fade is reversed part way through picks up from where it had reached rather than jumping'
+      - 'Note — the button beside a row''s gate input fades the row up and down on its own, so the module can be used with nothing patched to the gate inputs'
+      - 'Note — a row with no audio patched into it puts the fade shape itself out as 0-10V, which makes it an envelope generator with no input'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 1
+      '4': 1
+      '5': 1
+      '6': 1
+      '7': 1
+      '8': 2
+      '9': 2
+      '10': 2
+      '11': 2
+      '12': 2
+      '13': 2
+      '14': 2
+      '15': 2
+    'in':
+      '0': 3
+      '1': 3
+      '2': 3
+      '3': 3
+      '4': 3
+      '5': 3
+      '6': 3
+      '7': 3
+      '8': 4
+      '9': 4
+      '10': 4
+      '11': 4
+      '12': 4
+      '13': 4
+      '14': 4
+      '15': 4
+      '16': 5
+      '17': 5
+      '18': 5
+      '19': 5
+      '20': 5
+      '21': 5
+      '22': 5
+      '23': 5
+    'out':
+      '0': 6
+      '1': 6
+      '2': 6
+      '3': 6
+      '4': 6
+      '5': 6
+      '6': 6
+      '7': 6
+      '8': 7
+      '9': 7
+      '10': 7
+      '11': 7
+      '12': 7
+      '13': 7
+      '14': 7
+      '15': 7
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '2': 'trigger'
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '6': 'trigger'
+        '7': 'trigger'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+        '18': 'audio'
+        '19': 'audio'
+        '20': 'audio'
+        '21': 'audio'
+        '22': 'audio'
+        '23': 'audio'
+    'notes': 'The outputs carry whatever is patched into the row, and the fade envelope itself when nothing is, so they are left without a family. The fade button on each row is a custom widget rather than a parameter. The gate input is read with two different normal voltages in the source: 0V when the row is down and 1V when it is up, so an empty jack neither starts nor ends a fade and the row is driven by its button alone.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '2':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '4':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '5':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '6':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '7':
+          'poly': false
+          'range': 'high above 0.01V'
+          'step': 'stepped'
+          'why': 'ASAF8.cpp:308 and 338 compare this voltage with 0.01V to open and close the fader, reading the first channel only'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '16':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '17':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '18':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '19':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '20':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '21':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '22':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '23':
+          'poly': true
+          'step': 'continuous'
+          'why': 'ASAF8.cpp:368 and 374 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+  'Dronez':
+    'lines':
+      - 'Three morphing oscillators whose waveforms, detuning and modulation shapes are all built from a 32-bit seed, filtered and reverberated into a stereo pair'
+      - 'Sets how fast the modulation shapes run, in nine steps from a hundredth of their built-in rate to eight times it'
+      - 'Sets the pitch of the drone, a volt per octave with 0V giving 32.7Hz and voltages above 8V clamped; an empty jack reads 3V'
+      - 'A rising edge here picks a new random seed, and the drone fades out and back in on the new one'
+      - 'The left side of the drone'
+      - 'The right side of the drone'
+      - 'Note — the seed is set with the grid of 32 buttons, each one a bit of the seed, and the Random button rolls a new one'
+      - 'Note — a new module picks a random seed for itself and sounds as soon as it is added; nothing has to be patched to it'
+    'param':
+      '0': 1
+    'in':
+      '0': 2
+      '1': 3
+    'out':
+      '0': 4
+      '1': 5
+    'family':
+      'in':
+        '0': 'pitch'
+        '1': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': '0 to 8V'
+          'step': 'continuous'
+          'why': 'Dronez.cpp:763 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span; unpatched it reads 3V'
+        '1':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Dronez.cpp:692 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'Alienz':
+    'lines':
+      - 'Two oscillators built from a 32-bit seed, one stepping through a bit pattern and one through a note sequence, each filtered by its own modulation shapes'
+      - 'Sets how fast the modulation shapes run, in nine steps from a hundredth of their built-in rate to eight times it'
+      - 'A cable here gates the module: the output is 0V whenever this input is at 0V, and the sound runs whenever it is above that'
+      - 'A rising edge here picks a new random seed, and the sound fades out and back in on the new one'
+      - 'The two oscillators mixed together'
+      - 'Note — the seed is set with the grid of 32 buttons, each one a bit of the seed, and the Random button rolls a new one'
+      - 'Note — a new module picks a random seed for itself and sounds as soon as it is added; nothing has to be patched to it'
+    'param':
+      '0': 1
+    'in':
+      '1': 2
+      '0': 3
+    'out':
+      '0': 4
+    'family':
+      'in':
+        '1': 'trigger'
+        '0': 'trigger'
+      'out':
+        '0': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Alienz.cpp:627 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '1':
+          'poly': false
+          'range': 'high above 0V'
+          'step': 'stepped'
+          'why': 'Alienz.cpp:659 tests this voltage for being above zero, reading the first channel only'
+  'Windz':
+    'lines':
+      - 'Three channels of noise built from a 32-bit seed, each with looping random shapes driving its level, filter cutoff and resonance, mixed to a stereo pair'
+      - 'Sets how fast the random shapes run, in nine steps from a hundredth of their built-in rate to eight times it'
+      - 'A rising edge here picks a new random seed, and the noise fades out and back in on the new one'
+      - 'The left side of the noise, the first and second channels summed'
+      - 'The right side of the noise, the first and third channels summed'
+      - 'Note — the seed is set with the grid of 32 buttons, each one a bit of the seed, and the Random button rolls a new one'
+      - 'Note — a new module picks a random seed for itself and sounds as soon as it is added; nothing has to be patched to it'
+    'param':
+      '0': 1
+    'in':
+      '0': 2
+    'out':
+      '0': 3
+      '1': 4
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Windz.cpp:572 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'Morze':
+    'lines':
+      - 'Turns typed text into morse code, played out as gates once a trigger starts it'
+      - 'Sets the rate of the code, fully clockwise giving a dot a third of the length it has fully counter-clockwise'
+      - 'A rising edge here starts the message from its first character; the message plays once and then stops until the next edge'
+      - '10V for the length of each dot and dash, 0V through the gaps between them'
+      - 'Note — the message is typed into the text field, and any character without a morse equivalent is skipped'
+      - 'Note — a new module holds the word mscHack in its text field; type over it to send something else'
+      - 'Note — the module produces nothing until a rising edge reaches its trigger input, and it plays the message once per edge'
+    'param':
+      '0': 1
+    'in':
+      '0': 2
+    'out':
+      '0': 3
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'trigger'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'Morze.cpp:448 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+  'Lorenz':
+    'lines':
+      - 'Lorenz attractor run at audio rate, with its three coordinates mixed into one output through a multimode filter, and a display of the path it traces'
+      - 'Sets how much of the X coordinate goes into the output, 0 to 10 times'
+      - 'Sets how much of the Y coordinate goes into the output, 0 to 10 times'
+      - 'Sets how much of the Z coordinate goes into the output, 0 to 10 times'
+      - 'Sets the cutoff of the filter on the output'
+      - 'Attenuates the voltage at the cutoff CV input before it is added to the cutoff knob'
+      - 'Sets the resonance of the filter on the output'
+      - 'Attenuates the voltage at the resonance CV input before it is added to the resonance knob'
+      - 'Sets one of the three constants of the attractor equations, 0.1 at the counter-clockwise end rising to 40.1 at the clockwise end'
+      - 'Attenuates the voltage at the CV input for that constant before it is added to its knob'
+      - 'Sets the step size of one of the three attractor equations, the divisor running from 50 at the counter-clockwise end to 550 at the clockwise end'
+      - 'Attenuates the voltage at the CV input for that step size before it is added to its knob'
+      - 'Adds to the knob for that attractor constant, 5V covering the whole of its range, scaled by the attenuator for that constant'
+      - 'Adds to the knob for that step size, 5V covering the whole of its range, scaled by the attenuator for that step size'
+      - 'Adds to the filter cutoff knob, 5V covering the whole of its range, scaled by the cutoff attenuator'
+      - 'Adds to the filter resonance knob, 5V covering the whole of its range, scaled by the resonance attenuator'
+      - 'The three coordinates summed and scaled, DC removed, filtered, and clipped at 10V'
+      - 'Note — the Lo, Band and Hi buttons pick which output the filter takes, and with none of them lit the filter is bypassed'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '8': 8
+      '9': 8
+      '10': 9
+      '11': 9
+      '12': 9
+      '13': 10
+      '14': 10
+      '15': 10
+      '16': 11
+      '17': 11
+      '18': 11
+    'in':
+      '0': 12
+      '1': 12
+      '2': 12
+      '3': 13
+      '4': 13
+      '5': 13
+      '6': 14
+      '7': 15
+    'out':
+      '0': 16
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+      'out':
+        '0': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '1':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '2':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '3':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '4':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '5':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '6':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+        '7':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Lorenz.cpp:414 clamps this voltage divided by five to plus or minus 1 before the attenuator, reading the first channel only'
+  'Maude221':
+    'lines':
+      - 'Clips, rectifies and combines two signals with one of five operations, then rectifies the result again and applies gain and a DC offset'
+      - 'Clips signal A to this voltage, 1V to 10V, before it is rectified'
+      - 'Clips signal B to this voltage, 1V to 10V, before it is rectified'
+      - 'Attenuates the CV added to the A clipping level'
+      - 'Attenuates the CV added to the B clipping level'
+      - 'Picks how A and B combine: their sum, their difference, the sine of A times the cosine of B, whichever of the two is smaller in size, or whichever is larger, though the panel prints Sin(A) + Cos(B)'
+      - 'Multiplies the combined signal by 0 to 2'
+      - 'Adds a fixed -5V to 5V to the output'
+      - 'The A signal, clipped at the A limit and then rectified by the A Rectify switch; with B unpatched the output carries A alone'
+      - 'The B signal, clipped at the B limit and then rectified by the B Rectify switch; with A unpatched the output carries B alone'
+      - 'Adds to the A clipping level, through its attenuator, and the result is held between -5V and 5V'
+      - 'Adds to the B clipping level, through its attenuator, and the result is held between -5V and 5V'
+      - 'The combined signal after the output rectifier, the gain and the DC offset, and 0V while neither input is patched'
+    'param':
+      '0': 1
+      '1': 2
+      '5': 3
+      '6': 4
+      '3': 5
+      '2': 6
+      '4': 7
+    'in':
+      '0': 8
+      '1': 9
+      '2': 10
+      '3': 11
+    'out':
+      '0': 12
+    'family':
+      'in':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'cv'
+        '3': 'cv'
+      'out':
+        '0': 'audio'
+    'notes': 'The panel prints the third combine position as Sin(A) + Cos(B), but the code multiplies the two rather than adding them. The three Rectify switches are custom widgets rather than parameters.'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Maude221.cpp:216 and 217 clamp this voltage to the limit set for that side, reading the first channel only'
+        '1':
+          'poly': false
+          'step': 'continuous'
+          'why': 'Maude221.cpp:216 and 217 clamp this voltage to the limit set for that side, reading the first channel only'
+        '2':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '±5V'
+          'why': 'Maude221.cpp:210 and 213 multiply this voltage by the CV amount knob and clamp the sum with the limit knob to plus or minus 5V'
+        '3':
+          'poly': false
+          'step': 'continuous'
+          'sumRange': '±5V'
+          'why': 'Maude221.cpp:210 and 213 multiply this voltage by the CV amount knob and clamp the sum with the limit knob to plus or minus 5V'
+  'SynthDrums':
+    'lines':
+      - 'Three drum voices, each one waveform with a falling pitch envelope and a falling amplitude envelope fired by a trigger'
+      - 'Sets the base frequency of that voice, 35Hz at the counter-clockwise end to 335Hz at the clockwise end, or the filter cutoff when that voice is set to noise'
+      - 'Sets how long the pitch takes to drop back to the base frequency after a trigger, up to 500ms'
+      - 'Sets how long that voice takes to fall to silence after a trigger, up to 500ms'
+      - 'A rising edge here fires that voice'
+      - 'Sets the level of that voice, 0-10V running from silence to full; with nothing patched the voice stays silent'
+      - 'Adds to the base frequency of that voice, 0-10V covering the whole 300Hz range of the freq knob'
+      - 'That voice, up to 6V'
+      - 'Note — each voice plays one of five waveforms, chosen with its own button strip: sine, triangle, square, saw or noise'
+      - 'Note — a voice is silent until its LVL input carries voltage: the level is taken from that jack alone and there is no level knob'
+      - 'Note — a voice fires on a rising edge at its TRIG input, so both LVL and TRIG have to be patched before anything is heard'
+    'param':
+      '0': 1
+      '1': 1
+      '2': 1
+      '3': 2
+      '4': 2
+      '5': 2
+      '6': 3
+      '7': 3
+      '8': 3
+    'in':
+      '3': 4
+      '4': 4
+      '5': 4
+      '0': 5
+      '1': 5
+      '2': 5
+      '6': 6
+      '7': 6
+      '8': 6
+    'out':
+      '0': 7
+      '1': 7
+      '2': 7
+    'family':
+      'in':
+        '3': 'trigger'
+        '4': 'trigger'
+        '5': 'trigger'
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '6': 'cv'
+        '7': 'cv'
+        '8': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+    'props':
+      'in':
+        '0':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:686 clamps this voltage divided by ten to 0 to 1 and multiplies the output by it, reading the first channel only'
+        '1':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:686 clamps this voltage divided by ten to 0 to 1 and multiplies the output by it, reading the first channel only'
+        '2':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:686 clamps this voltage divided by ten to 0 to 1 and multiplies the output by it, reading the first channel only'
+        '3':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SynthDrums.cpp:675 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '4':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SynthDrums.cpp:675 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '5':
+          'poly': false
+          'range': 'high above 1V'
+          'step': 'stepped'
+          'why': 'SynthDrums.cpp:675 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only'
+        '6':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:633 clamps this voltage divided by ten to 0 to 1 and adds it to the frequency knob, reading the first channel only'
+        '7':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:633 clamps this voltage divided by ten to 0 to 1 and adds it to the frequency knob, reading the first channel only'
+        '8':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'SynthDrums.cpp:633 clamps this voltage divided by ten to 0 to 1 and adds it to the frequency knob, reading the first channel only'
+    'notes': 'Each drum is silent until its level input is patched: SynthDrums.cpp:686 multiplies the output by that voltage divided by ten and there is no normalled value, so an unpatched level jack reads 0V.'
+  'Mix_4_0_4':
+    'lines':
+      - '4-channel stereo mixer with three-band EQ, pan and four aux sends on every channel, four aux returns and a stereo main output'
+      - 'Sets the level of the stereo main output, applied after every channel, group and aux return has been summed'
+      - 'The left side of the main mix'
+      - 'The right side of the main mix'
+      - 'The left input of that channel, and the source for both sides when the right input of that channel is empty'
+      - 'The right input of that channel, which makes the channel stereo rather than mono'
+      - 'Sets how much of that strip is sent to the AUX 1 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 2 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 3 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 4 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Cuts or boosts the high band of that strip, flat at noon'
+      - 'Cuts or boosts the mid band of that strip, flat at noon'
+      - 'Cuts or boosts the low band of that strip, flat at noon'
+      - 'Attenuates the level slider of that channel: 10V leaves the slider where it is, 0V silences the channel, and an empty jack reads 10V'
+      - 'Adds to the pan knob of that channel, minus 5V for hard left and plus 5V for hard right'
+      - 'Pans that strip between the left and right sides of the mix, centred at noon'
+      - 'Sets how much of that channel reaches the main mix, or the group it is routed to'
+      - 'The left return input of that aux, carrying the effect sent out on that aux bus back into the mix'
+      - 'The right return input of that aux, which makes the return stereo rather than mono'
+      - 'Sets the level of that aux send output, applied to the sum of every send knob feeding that bus'
+      - 'The left side of that aux send, for feeding an effect'
+      - 'The right side of that aux send, for feeding an effect'
+      - 'Sets how much of that aux return reaches the main mix'
+      - 'Note — every channel level slider comes up at the bottom, so a new mixer passes nothing; raise the slider of each channel you patch'
+      - 'Menu — Gain x1.5 — raises the top of every level slider from unity to one and a half times'
+      - 'Menu — Do Not Mute when SOLOing — keeps the aux returns audible while a channel is soloed'
+    'param':
+      '0': 1
+      '1': 16
+      '9': 15
+      '17': 10
+      '25': 11
+      '33': 12
+      '41': 6
+      '42': 7
+      '43': 8
+      '44': 9
+      '2': 16
+      '10': 15
+      '18': 10
+      '26': 11
+      '34': 12
+      '45': 6
+      '46': 7
+      '47': 8
+      '48': 9
+      '3': 16
+      '11': 15
+      '19': 10
+      '27': 11
+      '35': 12
+      '49': 6
+      '50': 7
+      '51': 8
+      '52': 9
+      '4': 16
+      '12': 15
+      '20': 10
+      '28': 11
+      '36': 12
+      '53': 6
+      '54': 7
+      '55': 8
+      '56': 9
+      '5': 22
+      '13': 15
+      '21': 10
+      '29': 11
+      '37': 12
+      '6': 22
+      '14': 15
+      '22': 10
+      '30': 11
+      '38': 12
+      '7': 22
+      '15': 15
+      '23': 10
+      '31': 11
+      '39': 12
+      '8': 22
+      '16': 15
+      '24': 10
+      '32': 11
+      '40': 12
+      '57': 19
+      '58': 19
+      '59': 19
+      '60': 19
+    'in':
+      '0': 4
+      '8': 5
+      '1': 4
+      '9': 5
+      '2': 4
+      '10': 5
+      '3': 4
+      '11': 5
+      '4': 17
+      '12': 18
+      '5': 17
+      '13': 18
+      '6': 17
+      '14': 18
+      '7': 17
+      '15': 18
+      '16': 13
+      '20': 14
+      '17': 13
+      '21': 14
+      '18': 13
+      '22': 14
+      '19': 13
+      '23': 14
+    'out':
+      '0': 2
+      '1': 3
+      '2': 20
+      '3': 20
+      '4': 20
+      '5': 20
+      '6': 21
+      '7': 21
+      '8': 21
+      '9': 21
+    'family':
+      'in':
+        '0': 'audio'
+        '8': 'audio'
+        '1': 'audio'
+        '9': 'audio'
+        '2': 'audio'
+        '10': 'audio'
+        '3': 'audio'
+        '11': 'audio'
+        '4': 'audio'
+        '12': 'audio'
+        '5': 'audio'
+        '13': 'audio'
+        '6': 'audio'
+        '14': 'audio'
+        '7': 'audio'
+        '15': 'audio'
+        '16': 'cv'
+        '20': 'cv'
+        '17': 'cv'
+        '21': 'cv'
+        '18': 'cv'
+        '22': 'cv'
+        '19': 'cv'
+        '23': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+    'notes': 'The MUTE, SOLO and pre-fader buttons are custom widgets rather than parameters, so they carry no line. The group strips and the crossfade of the larger mixers are absent here, and the four extra channel strips in the code are the aux returns. This mixer is built with nGROUPS set to 0, so the Pre-Mute menu item is compiled out and its right-click menu carries only Gain x1.5 and Do Not Mute when SOLOing.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '2':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '3':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '4':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '5':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '6':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '7':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '16':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '17':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '18':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '19':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '20':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '21':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '22':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '23':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+  'Mix_9_3_4':
+    'lines':
+      - '9-channel stereo mixer with three-band EQ, pan and four aux sends on every channel, 3 stereo groups fed by any channel, four aux returns, and an X/Y crossfade across the groups'
+      - 'Sets the level of the stereo main output, applied after every channel, group and aux return has been summed'
+      - 'The left side of the main mix'
+      - 'The right side of the main mix'
+      - 'The left input of that channel, and the source for both sides when the right input of that channel is empty'
+      - 'The right input of that channel, which makes the channel stereo rather than mono'
+      - 'Sets how much of that strip is sent to the AUX 1 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 2 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 3 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 4 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Cuts or boosts the high band of that strip, flat at noon'
+      - 'Cuts or boosts the mid band of that strip, flat at noon'
+      - 'Cuts or boosts the low band of that strip, flat at noon'
+      - 'Attenuates the level slider of that channel: 10V leaves the slider where it is, 0V silences the channel, and an empty jack reads 10V'
+      - 'Adds to the pan knob of that channel, minus 5V for hard left and plus 5V for hard right'
+      - 'Pans that strip between the left and right sides of the mix, centred at noon'
+      - 'Sets how much of that channel reaches the main mix, or the group it is routed to'
+      - 'The left return input of that aux, carrying the effect sent out on that aux bus back into the mix'
+      - 'The right return input of that aux, which makes the return stereo rather than mono'
+      - 'Sets the level of that aux send output, applied to the sum of every send knob feeding that bus'
+      - 'The left side of that aux send, for feeding an effect'
+      - 'The right side of that aux send, for feeding an effect'
+      - 'Sets how much of that aux return reaches the main mix'
+      - 'The left side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'The right side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'Sets how much of that group reaches the main mix'
+      - 'Moves the group crossfade left and right, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Moves the group crossfade up and down, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Note — every channel level slider comes up at the bottom, so a new mixer passes nothing; raise the slider of each channel you patch'
+      - 'Menu — Pre-Mute — takes the group outputs before the group mute rather than after it'
+      - 'Menu — Gain x1.5 — raises the top of every level slider from unity to one and a half times'
+      - 'Menu — Do Not Mute when SOLOing — keeps the aux returns audible while a channel is soloed'
+    'param':
+      '0': 1
+      '1': 16
+      '17': 15
+      '33': 10
+      '49': 11
+      '65': 12
+      '81': 6
+      '82': 7
+      '83': 8
+      '84': 9
+      '2': 16
+      '18': 15
+      '34': 10
+      '50': 11
+      '66': 12
+      '85': 6
+      '86': 7
+      '87': 8
+      '88': 9
+      '3': 16
+      '19': 15
+      '35': 10
+      '51': 11
+      '67': 12
+      '89': 6
+      '90': 7
+      '91': 8
+      '92': 9
+      '4': 16
+      '20': 15
+      '36': 10
+      '52': 11
+      '68': 12
+      '93': 6
+      '94': 7
+      '95': 8
+      '96': 9
+      '5': 16
+      '21': 15
+      '37': 10
+      '53': 11
+      '69': 12
+      '97': 6
+      '98': 7
+      '99': 8
+      '100': 9
+      '6': 16
+      '22': 15
+      '38': 10
+      '54': 11
+      '70': 12
+      '101': 6
+      '102': 7
+      '103': 8
+      '104': 9
+      '7': 16
+      '23': 15
+      '39': 10
+      '55': 11
+      '71': 12
+      '105': 6
+      '106': 7
+      '107': 8
+      '108': 9
+      '8': 16
+      '24': 15
+      '40': 10
+      '56': 11
+      '72': 12
+      '109': 6
+      '110': 7
+      '111': 8
+      '112': 9
+      '9': 16
+      '25': 15
+      '41': 10
+      '57': 11
+      '73': 12
+      '113': 6
+      '114': 7
+      '115': 8
+      '116': 9
+      '10': 25
+      '26': 15
+      '42': 10
+      '58': 11
+      '74': 12
+      '117': 6
+      '118': 7
+      '119': 8
+      '120': 9
+      '11': 25
+      '27': 15
+      '43': 10
+      '59': 11
+      '75': 12
+      '121': 6
+      '122': 7
+      '123': 8
+      '124': 9
+      '12': 25
+      '28': 15
+      '44': 10
+      '60': 11
+      '76': 12
+      '125': 6
+      '126': 7
+      '127': 8
+      '128': 9
+      '13': 22
+      '29': 15
+      '45': 10
+      '61': 11
+      '77': 12
+      '14': 22
+      '30': 15
+      '46': 10
+      '62': 11
+      '78': 12
+      '15': 22
+      '31': 15
+      '47': 10
+      '63': 11
+      '79': 12
+      '16': 22
+      '32': 15
+      '48': 10
+      '64': 11
+      '80': 12
+      '129': 19
+      '130': 19
+      '131': 19
+      '132': 19
+    'in':
+      '0': 4
+      '16': 5
+      '1': 4
+      '17': 5
+      '2': 4
+      '18': 5
+      '3': 4
+      '19': 5
+      '4': 4
+      '20': 5
+      '5': 4
+      '21': 5
+      '6': 4
+      '22': 5
+      '7': 4
+      '23': 5
+      '8': 4
+      '24': 5
+      '12': 17
+      '28': 18
+      '13': 17
+      '29': 18
+      '14': 17
+      '30': 18
+      '15': 17
+      '31': 18
+      '32': 13
+      '41': 14
+      '33': 13
+      '42': 14
+      '34': 13
+      '43': 14
+      '35': 13
+      '44': 14
+      '36': 13
+      '45': 14
+      '37': 13
+      '46': 14
+      '38': 13
+      '47': 14
+      '39': 13
+      '48': 14
+      '40': 13
+      '49': 14
+      '50': 26
+      '51': 27
+    'out':
+      '0': 2
+      '1': 3
+      '2': 23
+      '3': 23
+      '4': 23
+      '5': 24
+      '6': 24
+      '7': 24
+      '8': 20
+      '9': 20
+      '10': 20
+      '11': 20
+      '12': 21
+      '13': 21
+      '14': 21
+      '15': 21
+    'family':
+      'in':
+        '0': 'audio'
+        '16': 'audio'
+        '1': 'audio'
+        '17': 'audio'
+        '2': 'audio'
+        '18': 'audio'
+        '3': 'audio'
+        '19': 'audio'
+        '4': 'audio'
+        '20': 'audio'
+        '5': 'audio'
+        '21': 'audio'
+        '6': 'audio'
+        '22': 'audio'
+        '7': 'audio'
+        '23': 'audio'
+        '8': 'audio'
+        '24': 'audio'
+        '12': 'audio'
+        '28': 'audio'
+        '13': 'audio'
+        '29': 'audio'
+        '14': 'audio'
+        '30': 'audio'
+        '15': 'audio'
+        '31': 'audio'
+        '32': 'cv'
+        '41': 'cv'
+        '33': 'cv'
+        '42': 'cv'
+        '34': 'cv'
+        '43': 'cv'
+        '35': 'cv'
+        '44': 'cv'
+        '36': 'cv'
+        '45': 'cv'
+        '37': 'cv'
+        '46': 'cv'
+        '38': 'cv'
+        '47': 'cv'
+        '39': 'cv'
+        '48': 'cv'
+        '40': 'cv'
+        '49': 'cv'
+        '50': 'cv'
+        '51': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+    'notes': 'The group strips carry left and right input jacks in the code that the panel hides and the audio path never reads; they are left untagged. The MUTE, SOLO, pre-fader and group-route buttons are custom widgets rather than parameters, so they carry no line.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '2':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '3':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '4':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '5':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '6':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '7':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '16':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '17':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '18':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '19':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '20':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '21':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '22':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '23':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '24':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '25':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '26':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '27':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '28':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '29':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '30':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '31':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '32':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '33':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '34':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '35':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '36':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '37':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '38':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '39':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '40':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '41':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '42':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '43':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '44':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '45':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '46':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '47':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '48':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '49':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '50':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'
+        '51':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'
+  'Mix_16_4_4':
+    'lines':
+      - '16-channel stereo mixer with three-band EQ, pan and four aux sends on every channel, 4 stereo groups fed by any channel, four aux returns, and an X/Y crossfade across the groups'
+      - 'Sets the level of the stereo main output, applied after every channel, group and aux return has been summed'
+      - 'The left side of the main mix'
+      - 'The right side of the main mix'
+      - 'The left input of that channel, and the source for both sides when the right input of that channel is empty'
+      - 'The right input of that channel, which makes the channel stereo rather than mono'
+      - 'Sets how much of that strip is sent to the AUX 1 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 2 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 3 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 4 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Cuts or boosts the high band of that strip, flat at noon'
+      - 'Cuts or boosts the mid band of that strip, flat at noon'
+      - 'Cuts or boosts the low band of that strip, flat at noon'
+      - 'Attenuates the level slider of that channel: 10V leaves the slider where it is, 0V silences the channel, and an empty jack reads 10V'
+      - 'Adds to the pan knob of that channel, minus 5V for hard left and plus 5V for hard right'
+      - 'Pans that strip between the left and right sides of the mix, centred at noon'
+      - 'Sets how much of that channel reaches the main mix, or the group it is routed to'
+      - 'The left return input of that aux, carrying the effect sent out on that aux bus back into the mix'
+      - 'The right return input of that aux, which makes the return stereo rather than mono'
+      - 'Sets the level of that aux send output, applied to the sum of every send knob feeding that bus'
+      - 'The left side of that aux send, for feeding an effect'
+      - 'The right side of that aux send, for feeding an effect'
+      - 'Sets how much of that aux return reaches the main mix'
+      - 'The left side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'The right side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'Sets how much of that group reaches the main mix'
+      - 'Moves the group crossfade left and right, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Moves the group crossfade up and down, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Note — every channel level slider comes up at the bottom, so a new mixer passes nothing; raise the slider of each channel you patch'
+      - 'Menu — Pre-Mute — takes the group outputs before the group mute rather than after it'
+      - 'Menu — Gain x1.5 — raises the top of every level slider from unity to one and a half times'
+      - 'Menu — Do Not Mute when SOLOing — keeps the aux returns audible while a channel is soloed'
+    'param':
+      '0': 1
+      '1': 16
+      '25': 15
+      '49': 10
+      '73': 11
+      '97': 12
+      '121': 6
+      '122': 7
+      '123': 8
+      '124': 9
+      '2': 16
+      '26': 15
+      '50': 10
+      '74': 11
+      '98': 12
+      '125': 6
+      '126': 7
+      '127': 8
+      '128': 9
+      '3': 16
+      '27': 15
+      '51': 10
+      '75': 11
+      '99': 12
+      '129': 6
+      '130': 7
+      '131': 8
+      '132': 9
+      '4': 16
+      '28': 15
+      '52': 10
+      '76': 11
+      '100': 12
+      '133': 6
+      '134': 7
+      '135': 8
+      '136': 9
+      '5': 16
+      '29': 15
+      '53': 10
+      '77': 11
+      '101': 12
+      '137': 6
+      '138': 7
+      '139': 8
+      '140': 9
+      '6': 16
+      '30': 15
+      '54': 10
+      '78': 11
+      '102': 12
+      '141': 6
+      '142': 7
+      '143': 8
+      '144': 9
+      '7': 16
+      '31': 15
+      '55': 10
+      '79': 11
+      '103': 12
+      '145': 6
+      '146': 7
+      '147': 8
+      '148': 9
+      '8': 16
+      '32': 15
+      '56': 10
+      '80': 11
+      '104': 12
+      '149': 6
+      '150': 7
+      '151': 8
+      '152': 9
+      '9': 16
+      '33': 15
+      '57': 10
+      '81': 11
+      '105': 12
+      '153': 6
+      '154': 7
+      '155': 8
+      '156': 9
+      '10': 16
+      '34': 15
+      '58': 10
+      '82': 11
+      '106': 12
+      '157': 6
+      '158': 7
+      '159': 8
+      '160': 9
+      '11': 16
+      '35': 15
+      '59': 10
+      '83': 11
+      '107': 12
+      '161': 6
+      '162': 7
+      '163': 8
+      '164': 9
+      '12': 16
+      '36': 15
+      '60': 10
+      '84': 11
+      '108': 12
+      '165': 6
+      '166': 7
+      '167': 8
+      '168': 9
+      '13': 16
+      '37': 15
+      '61': 10
+      '85': 11
+      '109': 12
+      '169': 6
+      '170': 7
+      '171': 8
+      '172': 9
+      '14': 16
+      '38': 15
+      '62': 10
+      '86': 11
+      '110': 12
+      '173': 6
+      '174': 7
+      '175': 8
+      '176': 9
+      '15': 16
+      '39': 15
+      '63': 10
+      '87': 11
+      '111': 12
+      '177': 6
+      '178': 7
+      '179': 8
+      '180': 9
+      '16': 16
+      '40': 15
+      '64': 10
+      '88': 11
+      '112': 12
+      '181': 6
+      '182': 7
+      '183': 8
+      '184': 9
+      '17': 25
+      '41': 15
+      '65': 10
+      '89': 11
+      '113': 12
+      '185': 6
+      '186': 7
+      '187': 8
+      '188': 9
+      '18': 25
+      '42': 15
+      '66': 10
+      '90': 11
+      '114': 12
+      '189': 6
+      '190': 7
+      '191': 8
+      '192': 9
+      '19': 25
+      '43': 15
+      '67': 10
+      '91': 11
+      '115': 12
+      '193': 6
+      '194': 7
+      '195': 8
+      '196': 9
+      '20': 25
+      '44': 15
+      '68': 10
+      '92': 11
+      '116': 12
+      '197': 6
+      '198': 7
+      '199': 8
+      '200': 9
+      '21': 22
+      '45': 15
+      '69': 10
+      '93': 11
+      '117': 12
+      '22': 22
+      '46': 15
+      '70': 10
+      '94': 11
+      '118': 12
+      '23': 22
+      '47': 15
+      '71': 10
+      '95': 11
+      '119': 12
+      '24': 22
+      '48': 15
+      '72': 10
+      '96': 11
+      '120': 12
+      '201': 19
+      '202': 19
+      '203': 19
+      '204': 19
+    'in':
+      '0': 4
+      '24': 5
+      '1': 4
+      '25': 5
+      '2': 4
+      '26': 5
+      '3': 4
+      '27': 5
+      '4': 4
+      '28': 5
+      '5': 4
+      '29': 5
+      '6': 4
+      '30': 5
+      '7': 4
+      '31': 5
+      '8': 4
+      '32': 5
+      '9': 4
+      '33': 5
+      '10': 4
+      '34': 5
+      '11': 4
+      '35': 5
+      '12': 4
+      '36': 5
+      '13': 4
+      '37': 5
+      '14': 4
+      '38': 5
+      '15': 4
+      '39': 5
+      '20': 17
+      '44': 18
+      '21': 17
+      '45': 18
+      '22': 17
+      '46': 18
+      '23': 17
+      '47': 18
+      '48': 13
+      '64': 14
+      '49': 13
+      '65': 14
+      '50': 13
+      '66': 14
+      '51': 13
+      '67': 14
+      '52': 13
+      '68': 14
+      '53': 13
+      '69': 14
+      '54': 13
+      '70': 14
+      '55': 13
+      '71': 14
+      '56': 13
+      '72': 14
+      '57': 13
+      '73': 14
+      '58': 13
+      '74': 14
+      '59': 13
+      '75': 14
+      '60': 13
+      '76': 14
+      '61': 13
+      '77': 14
+      '62': 13
+      '78': 14
+      '63': 13
+      '79': 14
+      '80': 26
+      '81': 27
+    'out':
+      '0': 2
+      '1': 3
+      '2': 23
+      '3': 23
+      '4': 23
+      '5': 23
+      '6': 24
+      '7': 24
+      '8': 24
+      '9': 24
+      '10': 20
+      '11': 20
+      '12': 20
+      '13': 20
+      '14': 21
+      '15': 21
+      '16': 21
+      '17': 21
+    'family':
+      'in':
+        '0': 'audio'
+        '24': 'audio'
+        '1': 'audio'
+        '25': 'audio'
+        '2': 'audio'
+        '26': 'audio'
+        '3': 'audio'
+        '27': 'audio'
+        '4': 'audio'
+        '28': 'audio'
+        '5': 'audio'
+        '29': 'audio'
+        '6': 'audio'
+        '30': 'audio'
+        '7': 'audio'
+        '31': 'audio'
+        '8': 'audio'
+        '32': 'audio'
+        '9': 'audio'
+        '33': 'audio'
+        '10': 'audio'
+        '34': 'audio'
+        '11': 'audio'
+        '35': 'audio'
+        '12': 'audio'
+        '36': 'audio'
+        '13': 'audio'
+        '37': 'audio'
+        '14': 'audio'
+        '38': 'audio'
+        '15': 'audio'
+        '39': 'audio'
+        '20': 'audio'
+        '44': 'audio'
+        '21': 'audio'
+        '45': 'audio'
+        '22': 'audio'
+        '46': 'audio'
+        '23': 'audio'
+        '47': 'audio'
+        '48': 'cv'
+        '64': 'cv'
+        '49': 'cv'
+        '65': 'cv'
+        '50': 'cv'
+        '66': 'cv'
+        '51': 'cv'
+        '67': 'cv'
+        '52': 'cv'
+        '68': 'cv'
+        '53': 'cv'
+        '69': 'cv'
+        '54': 'cv'
+        '70': 'cv'
+        '55': 'cv'
+        '71': 'cv'
+        '56': 'cv'
+        '72': 'cv'
+        '57': 'cv'
+        '73': 'cv'
+        '58': 'cv'
+        '74': 'cv'
+        '59': 'cv'
+        '75': 'cv'
+        '60': 'cv'
+        '76': 'cv'
+        '61': 'cv'
+        '77': 'cv'
+        '62': 'cv'
+        '78': 'cv'
+        '63': 'cv'
+        '79': 'cv'
+        '80': 'cv'
+        '81': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+    'notes': 'The group strips carry left and right input jacks in the code that the panel hides and the audio path never reads; they are left untagged. The MUTE, SOLO, pre-fader and group-route buttons are custom widgets rather than parameters, so they carry no line.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '2':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '3':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '4':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '5':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '6':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '7':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '16':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '17':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '18':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '19':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '20':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '21':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '22':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '23':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '24':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '25':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '26':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '27':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '28':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '29':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '30':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '31':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '32':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '33':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '34':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '35':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '36':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '37':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '38':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '39':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '40':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '41':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '42':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '43':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '44':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '45':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '46':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '47':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '48':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '49':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '50':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '51':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '52':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '53':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '54':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '55':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '56':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '57':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '58':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '59':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '60':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '61':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '62':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '63':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '64':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '65':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '66':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '67':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '68':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '69':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '70':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '71':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '72':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '73':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '74':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '75':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '76':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '77':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '78':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '79':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '80':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'
+        '81':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'
+  'Mix_24_4_4':
+    'lines':
+      - '24-channel stereo mixer with three-band EQ, pan and four aux sends on every channel, 4 stereo groups fed by any channel, four aux returns, and an X/Y crossfade across the groups'
+      - 'Sets the level of the stereo main output, applied after every channel, group and aux return has been summed'
+      - 'The left side of the main mix'
+      - 'The right side of the main mix'
+      - 'The left input of that channel, and the source for both sides when the right input of that channel is empty'
+      - 'The right input of that channel, which makes the channel stereo rather than mono'
+      - 'Sets how much of that strip is sent to the AUX 1 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 2 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 3 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Sets how much of that strip is sent to the AUX 4 bus, taken after its level slider unless the pre-fader switch for that strip is on'
+      - 'Cuts or boosts the high band of that strip, flat at noon'
+      - 'Cuts or boosts the mid band of that strip, flat at noon'
+      - 'Cuts or boosts the low band of that strip, flat at noon'
+      - 'Attenuates the level slider of that channel: 10V leaves the slider where it is, 0V silences the channel, and an empty jack reads 10V'
+      - 'Adds to the pan knob of that channel, minus 5V for hard left and plus 5V for hard right'
+      - 'Pans that strip between the left and right sides of the mix, centred at noon'
+      - 'Sets how much of that channel reaches the main mix, or the group it is routed to'
+      - 'The left return input of that aux, carrying the effect sent out on that aux bus back into the mix'
+      - 'The right return input of that aux, which makes the return stereo rather than mono'
+      - 'Sets the level of that aux send output, applied to the sum of every send knob feeding that bus'
+      - 'The left side of that aux send, for feeding an effect'
+      - 'The right side of that aux send, for feeding an effect'
+      - 'Sets how much of that aux return reaches the main mix'
+      - 'The left side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'The right side of that group, taken after its EQ, pan, level slider and crossfade, and before its mute unless Pre-Mute is turned off on the menu'
+      - 'Sets how much of that group reaches the main mix'
+      - 'Moves the group crossfade left and right, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Moves the group crossfade up and down, 0-10V, and an empty jack reads 5V; the X and Y pair fade between the four group corners'
+      - 'Note — every channel level slider comes up at the bottom, so a new mixer passes nothing; raise the slider of each channel you patch'
+      - 'Menu — Pre-Mute — takes the group outputs before the group mute rather than after it'
+      - 'Menu — Gain x1.5 — raises the top of every level slider from unity to one and a half times'
+      - 'Menu — Do Not Mute when SOLOing — keeps the aux returns audible while a channel is soloed'
+    'param':
+      '0': 1
+      '1': 16
+      '33': 15
+      '65': 10
+      '97': 11
+      '129': 12
+      '161': 6
+      '162': 7
+      '163': 8
+      '164': 9
+      '2': 16
+      '34': 15
+      '66': 10
+      '98': 11
+      '130': 12
+      '165': 6
+      '166': 7
+      '167': 8
+      '168': 9
+      '3': 16
+      '35': 15
+      '67': 10
+      '99': 11
+      '131': 12
+      '169': 6
+      '170': 7
+      '171': 8
+      '172': 9
+      '4': 16
+      '36': 15
+      '68': 10
+      '100': 11
+      '132': 12
+      '173': 6
+      '174': 7
+      '175': 8
+      '176': 9
+      '5': 16
+      '37': 15
+      '69': 10
+      '101': 11
+      '133': 12
+      '177': 6
+      '178': 7
+      '179': 8
+      '180': 9
+      '6': 16
+      '38': 15
+      '70': 10
+      '102': 11
+      '134': 12
+      '181': 6
+      '182': 7
+      '183': 8
+      '184': 9
+      '7': 16
+      '39': 15
+      '71': 10
+      '103': 11
+      '135': 12
+      '185': 6
+      '186': 7
+      '187': 8
+      '188': 9
+      '8': 16
+      '40': 15
+      '72': 10
+      '104': 11
+      '136': 12
+      '189': 6
+      '190': 7
+      '191': 8
+      '192': 9
+      '9': 16
+      '41': 15
+      '73': 10
+      '105': 11
+      '137': 12
+      '193': 6
+      '194': 7
+      '195': 8
+      '196': 9
+      '10': 16
+      '42': 15
+      '74': 10
+      '106': 11
+      '138': 12
+      '197': 6
+      '198': 7
+      '199': 8
+      '200': 9
+      '11': 16
+      '43': 15
+      '75': 10
+      '107': 11
+      '139': 12
+      '201': 6
+      '202': 7
+      '203': 8
+      '204': 9
+      '12': 16
+      '44': 15
+      '76': 10
+      '108': 11
+      '140': 12
+      '205': 6
+      '206': 7
+      '207': 8
+      '208': 9
+      '13': 16
+      '45': 15
+      '77': 10
+      '109': 11
+      '141': 12
+      '209': 6
+      '210': 7
+      '211': 8
+      '212': 9
+      '14': 16
+      '46': 15
+      '78': 10
+      '110': 11
+      '142': 12
+      '213': 6
+      '214': 7
+      '215': 8
+      '216': 9
+      '15': 16
+      '47': 15
+      '79': 10
+      '111': 11
+      '143': 12
+      '217': 6
+      '218': 7
+      '219': 8
+      '220': 9
+      '16': 16
+      '48': 15
+      '80': 10
+      '112': 11
+      '144': 12
+      '221': 6
+      '222': 7
+      '223': 8
+      '224': 9
+      '17': 16
+      '49': 15
+      '81': 10
+      '113': 11
+      '145': 12
+      '225': 6
+      '226': 7
+      '227': 8
+      '228': 9
+      '18': 16
+      '50': 15
+      '82': 10
+      '114': 11
+      '146': 12
+      '229': 6
+      '230': 7
+      '231': 8
+      '232': 9
+      '19': 16
+      '51': 15
+      '83': 10
+      '115': 11
+      '147': 12
+      '233': 6
+      '234': 7
+      '235': 8
+      '236': 9
+      '20': 16
+      '52': 15
+      '84': 10
+      '116': 11
+      '148': 12
+      '237': 6
+      '238': 7
+      '239': 8
+      '240': 9
+      '21': 16
+      '53': 15
+      '85': 10
+      '117': 11
+      '149': 12
+      '241': 6
+      '242': 7
+      '243': 8
+      '244': 9
+      '22': 16
+      '54': 15
+      '86': 10
+      '118': 11
+      '150': 12
+      '245': 6
+      '246': 7
+      '247': 8
+      '248': 9
+      '23': 16
+      '55': 15
+      '87': 10
+      '119': 11
+      '151': 12
+      '249': 6
+      '250': 7
+      '251': 8
+      '252': 9
+      '24': 16
+      '56': 15
+      '88': 10
+      '120': 11
+      '152': 12
+      '253': 6
+      '254': 7
+      '255': 8
+      '256': 9
+      '25': 25
+      '57': 15
+      '89': 10
+      '121': 11
+      '153': 12
+      '257': 6
+      '258': 7
+      '259': 8
+      '260': 9
+      '26': 25
+      '58': 15
+      '90': 10
+      '122': 11
+      '154': 12
+      '261': 6
+      '262': 7
+      '263': 8
+      '264': 9
+      '27': 25
+      '59': 15
+      '91': 10
+      '123': 11
+      '155': 12
+      '265': 6
+      '266': 7
+      '267': 8
+      '268': 9
+      '28': 25
+      '60': 15
+      '92': 10
+      '124': 11
+      '156': 12
+      '269': 6
+      '270': 7
+      '271': 8
+      '272': 9
+      '29': 22
+      '61': 15
+      '93': 10
+      '125': 11
+      '157': 12
+      '30': 22
+      '62': 15
+      '94': 10
+      '126': 11
+      '158': 12
+      '31': 22
+      '63': 15
+      '95': 10
+      '127': 11
+      '159': 12
+      '32': 22
+      '64': 15
+      '96': 10
+      '128': 11
+      '160': 12
+      '273': 19
+      '274': 19
+      '275': 19
+      '276': 19
+    'in':
+      '0': 4
+      '32': 5
+      '1': 4
+      '33': 5
+      '2': 4
+      '34': 5
+      '3': 4
+      '35': 5
+      '4': 4
+      '36': 5
+      '5': 4
+      '37': 5
+      '6': 4
+      '38': 5
+      '7': 4
+      '39': 5
+      '8': 4
+      '40': 5
+      '9': 4
+      '41': 5
+      '10': 4
+      '42': 5
+      '11': 4
+      '43': 5
+      '12': 4
+      '44': 5
+      '13': 4
+      '45': 5
+      '14': 4
+      '46': 5
+      '15': 4
+      '47': 5
+      '16': 4
+      '48': 5
+      '17': 4
+      '49': 5
+      '18': 4
+      '50': 5
+      '19': 4
+      '51': 5
+      '20': 4
+      '52': 5
+      '21': 4
+      '53': 5
+      '22': 4
+      '54': 5
+      '23': 4
+      '55': 5
+      '28': 17
+      '60': 18
+      '29': 17
+      '61': 18
+      '30': 17
+      '62': 18
+      '31': 17
+      '63': 18
+      '64': 13
+      '88': 14
+      '65': 13
+      '89': 14
+      '66': 13
+      '90': 14
+      '67': 13
+      '91': 14
+      '68': 13
+      '92': 14
+      '69': 13
+      '93': 14
+      '70': 13
+      '94': 14
+      '71': 13
+      '95': 14
+      '72': 13
+      '96': 14
+      '73': 13
+      '97': 14
+      '74': 13
+      '98': 14
+      '75': 13
+      '99': 14
+      '76': 13
+      '100': 14
+      '77': 13
+      '101': 14
+      '78': 13
+      '102': 14
+      '79': 13
+      '103': 14
+      '80': 13
+      '104': 14
+      '81': 13
+      '105': 14
+      '82': 13
+      '106': 14
+      '83': 13
+      '107': 14
+      '84': 13
+      '108': 14
+      '85': 13
+      '109': 14
+      '86': 13
+      '110': 14
+      '87': 13
+      '111': 14
+      '112': 26
+      '113': 27
+    'out':
+      '0': 2
+      '1': 3
+      '2': 23
+      '3': 23
+      '4': 23
+      '5': 23
+      '6': 24
+      '7': 24
+      '8': 24
+      '9': 24
+      '10': 20
+      '11': 20
+      '12': 20
+      '13': 20
+      '14': 21
+      '15': 21
+      '16': 21
+      '17': 21
+    'family':
+      'in':
+        '0': 'audio'
+        '32': 'audio'
+        '1': 'audio'
+        '33': 'audio'
+        '2': 'audio'
+        '34': 'audio'
+        '3': 'audio'
+        '35': 'audio'
+        '4': 'audio'
+        '36': 'audio'
+        '5': 'audio'
+        '37': 'audio'
+        '6': 'audio'
+        '38': 'audio'
+        '7': 'audio'
+        '39': 'audio'
+        '8': 'audio'
+        '40': 'audio'
+        '9': 'audio'
+        '41': 'audio'
+        '10': 'audio'
+        '42': 'audio'
+        '11': 'audio'
+        '43': 'audio'
+        '12': 'audio'
+        '44': 'audio'
+        '13': 'audio'
+        '45': 'audio'
+        '14': 'audio'
+        '46': 'audio'
+        '15': 'audio'
+        '47': 'audio'
+        '16': 'audio'
+        '48': 'audio'
+        '17': 'audio'
+        '49': 'audio'
+        '18': 'audio'
+        '50': 'audio'
+        '19': 'audio'
+        '51': 'audio'
+        '20': 'audio'
+        '52': 'audio'
+        '21': 'audio'
+        '53': 'audio'
+        '22': 'audio'
+        '54': 'audio'
+        '23': 'audio'
+        '55': 'audio'
+        '28': 'audio'
+        '60': 'audio'
+        '29': 'audio'
+        '61': 'audio'
+        '30': 'audio'
+        '62': 'audio'
+        '31': 'audio'
+        '63': 'audio'
+        '64': 'cv'
+        '88': 'cv'
+        '65': 'cv'
+        '89': 'cv'
+        '66': 'cv'
+        '90': 'cv'
+        '67': 'cv'
+        '91': 'cv'
+        '68': 'cv'
+        '92': 'cv'
+        '69': 'cv'
+        '93': 'cv'
+        '70': 'cv'
+        '94': 'cv'
+        '71': 'cv'
+        '95': 'cv'
+        '72': 'cv'
+        '96': 'cv'
+        '73': 'cv'
+        '97': 'cv'
+        '74': 'cv'
+        '98': 'cv'
+        '75': 'cv'
+        '99': 'cv'
+        '76': 'cv'
+        '100': 'cv'
+        '77': 'cv'
+        '101': 'cv'
+        '78': 'cv'
+        '102': 'cv'
+        '79': 'cv'
+        '103': 'cv'
+        '80': 'cv'
+        '104': 'cv'
+        '81': 'cv'
+        '105': 'cv'
+        '82': 'cv'
+        '106': 'cv'
+        '83': 'cv'
+        '107': 'cv'
+        '84': 'cv'
+        '108': 'cv'
+        '85': 'cv'
+        '109': 'cv'
+        '86': 'cv'
+        '110': 'cv'
+        '87': 'cv'
+        '111': 'cv'
+        '112': 'cv'
+        '113': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'audio'
+        '4': 'audio'
+        '5': 'audio'
+        '6': 'audio'
+        '7': 'audio'
+        '8': 'audio'
+        '9': 'audio'
+        '10': 'audio'
+        '11': 'audio'
+        '12': 'audio'
+        '13': 'audio'
+        '14': 'audio'
+        '15': 'audio'
+        '16': 'audio'
+        '17': 'audio'
+    'notes': 'The group strips carry left and right input jacks in the code that the panel hides and the audio path never reads; they are left untagged. The MUTE, SOLO, pre-fader and group-route buttons are custom widgets rather than parameters, so they carry no line.'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '2':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '3':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '4':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '5':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '6':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '7':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '8':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '9':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '10':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '11':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '12':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '13':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '14':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '15':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '16':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '17':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '18':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '19':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '20':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '21':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '22':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '23':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '24':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '25':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '26':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '27':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '28':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '29':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '30':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '31':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '32':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '33':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '34':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '35':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '36':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '37':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '38':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '39':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '40':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '41':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '42':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '43':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '44':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '45':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '46':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '47':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '48':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '49':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '50':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '51':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '52':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '53':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '54':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '55':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '56':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '57':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '58':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '59':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '60':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '61':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '62':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '63':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1143 and 1153 read it with getVoltageSum, which adds every channel of a polyphonic cable'
+        '64':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '65':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '66':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '67':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '68':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '69':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '70':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '71':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '72':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '73':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '74':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '75':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '76':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '77':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '78':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '79':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '80':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '81':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '82':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '83':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '84':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '85':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '86':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '87':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1127 divides this voltage by ten into the channel level; unpatched it reads 10V'
+        '88':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '89':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '90':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '91':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '92':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '93':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '94':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '95':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '96':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '97':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '98':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '99':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '100':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '101':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '102':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '103':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '104':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '105':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '106':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '107':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '108':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '109':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '110':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '111':
+          'poly': false
+          'range': '±5V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1189 divides this voltage by five into a pan that runs -1 to 1; unpatched it reads 0V'
+        '112':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'
+        '113':
+          'poly': false
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'why': 'Mixer_x_x_x.hpp:1073 and 1074 clamp this voltage to 0 to 10V and divide it by ten; unpatched it reads 5V'

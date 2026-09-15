@@ -1,0 +1,666 @@
+'plugin': 'StochasticTelegraph'
+'source': 'https://github.com/mahlenmorris/VCVRack/blob/4677cfa/README.md'
+'read': '2026-09-14'
+'modules':
+  'BASICally':
+    'lines':
+      - 'Runs a program written in a BASIC-like language, reading nine input jacks, driving six output jacks and printing Tipsy text; the program is typed into the window on the panel'
+      - 'Pressing it starts the program under the two trigger styles of STYLE, and under the gate style the program runs for as long as the button is held down'
+      - 'Chooses when the program runs: always, start on a trigger and loop back to the top, start on a trigger and stop at the last line, or run while a gate is high'
+      - 'A trigger starts the program under the two trigger styles of STYLE; under the gate style the program runs while this is high and picks up where it stopped when it goes high again'
+      - 'Carries a voltage the program reads under its own printed name, IN1 through IN9; a polyphonic cable makes its channels readable as an array'
+      - 'Carries the value the program assigns to its own printed name, OUT1 through OUT6, clamped to -10V to 10V unless the menu unclamps that one'
+      - 'Note — nothing runs until a program is typed into the code window; while that window is empty the lit word on the panel reads Fix'
+      - 'Note — nineteen worked programs ship with the module, under Preset in its right-click menu'
+      - 'Note — the lit word on the panel reads Good when the program has compiled and Fix when it has not, and hovering over Fix describes the first error found'
+      - 'Note — right-clicking the code window gives Cut, Copy, Paste and Select all; the module''s own menu is on the panel around that window'
+      - 'Menu — Title above IN1-3 — a text field for a short name printed above the input jacks, which helps when several of these are in a patch'
+      - 'Menu — Screen Colors — picks the ink and paper of the code window from seven pairs'
+      - 'Menu — Font — picks the typeface of the code window, from VCV font (like Notes), four RobotoMono weights and three RobotoSlab weights'
+      - 'Menu — Highlight error line — marks the line the compiler stopped at; unset, no line is marked'
+      - 'Menu — Colorblind-friendly status light — changes the Good and Fix light from green and red to blue and orange, and the error mark to orange'
+      - 'Menu — Clamp OUTn values to (-10V, 10V) — a submenu holding OUT1 to OUT6, each of which either keeps that output inside -10V to 10V or lets it carry the true value of the variable'
+      - 'Menu — Syntax — a submenu of the statements of the language; choosing one inserts it into the code'
+      - 'Menu — Math — a submenu of the built-in functions, each with a one-line description; choosing one inserts a call to it into the code'
+      - 'Menu — Text — a submenu of the string variables and the print and debug functions; choosing one inserts it into the code'
+    'param':
+      '0': 1
+      '1': 2
+    'in':
+      '4': 3
+      '0': 4
+      '1': 4
+      '2': 4
+      '3': 4
+      '5': 4
+      '6': 4
+      '7': 4
+      '8': 4
+      '9': 4
+    'out':
+      '0': 5
+      '1': 5
+      '2': 5
+      '3': 5
+      '4': 5
+      '5': 5
+    'family':
+      'in':
+        '4': 'trigger'
+      'out': {}
+  'Distribute':
+    'lines':
+      - 'A random voltage generator whose probability curve, range and lean are all tunable, drawing a new value on a trigger or continuously'
+      - 'Sets the upper end of the range random values are drawn from, -10V to 10V; if it is set below the other limit the two are swapped'
+      - 'Shapes the probability curve, 0 to 4: at 0 every draw is the average of the two limits, 1 is a bell curve, 2 an even spread, 3 avoids the middle, and 4 draws only the two limits'
+      - 'Sets the lower end of the range random values are drawn from, -10V to 10V; if it is set above the other limit the two are swapped'
+      - 'Leans the probability curve towards the lower or the upper limit, -1 to 1, and has no effect unless the three-way switch is set to Both'
+      - 'Picks which part of the probability curve is drawn from: its left half, its whole width, or its right half'
+      - 'Latches; lit, a new random value is drawn every sample and the TRIG input is not read'
+      - 'A trigger draws a new random value, which OUT holds until the next trigger; a polyphonic cable triggers each channel separately'
+      - 'Carries the random value drawn at the last trigger, somewhere between the two limits'
+      - 'Note — a value is drawn only when a trigger arrives at TRIG or while CONT is lit; with neither, OUT holds 0V'
+      - 'Note — the module has no menu items of its own'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+    'in':
+      '0': 7
+    'out':
+      '0': 8
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'cv'
+  'Drifter':
+    'lines':
+      - 'A line made of points joined end to end, each of which takes a random walk on command; IN picks a horizontal position along the line and OUT carries the height of the line there'
+      - 'Sets the range of IN and OUT to -5V to 5V or to 0V to 10V'
+      - 'Picks the shape drawn between the points of the line: steps, straight lines, or smoothed curves; a change takes effect at once'
+      - 'Pressing it returns the line to its starting shape, which is chosen in the menu, and applies any change made to COUNT'
+      - 'Pressing it moves every point of the line once, within the limits set by TOTAL DRIFT, X DRIFT and ENDS'
+      - 'Sets the furthest a point can travel in two dimensions in one drift, 0V to 10V, with the TOTAL DRIFT input added to it; at zero the points are locked in place'
+      - 'Sets the number of segments the line is divided into, 1 to 32, taking effect at the next RESET'
+      - 'Picks what the two end points of the line do: hold their value, drift independently of each other, or the right end tracks the value of the left'
+      - 'Sets the furthest a point can travel horizontally in one drift, 0V to 10V, with the X DRIFT input added to it; at zero the points are locked horizontally'
+      - 'Pressing it moves every point of the line once, back towards the shape a RESET would give'
+      - 'Added to OUT after the attenuverter, -10V to 10V'
+      - 'Attenuates and inverts OUT before BIAS is added to it, -200% to 200%'
+      - 'A trigger returns the line to its starting shape and applies any change made to COUNT'
+      - 'A trigger moves every point of the line once, within the limits set by TOTAL DRIFT, X DRIFT and ENDS'
+      - 'Sets the horizontal position along the line that OUT is read from, and is drawn as a short mark along the bottom of the display'
+      - 'Added to the TOTAL DRIFT knob to give the furthest a point can travel in two dimensions in one drift'
+      - 'Added to the X DRIFT knob to give the furthest a point can travel horizontally in one drift'
+      - 'A trigger moves every point of the line once, back towards the shape a RESET would give'
+      - 'The height of the line at the horizontal position set by IN, after the attenuverter and BIAS'
+      - 'A short trigger each time IN crosses from one segment of the line into the next'
+      - 'Note — a new Drifter has every point of the line at zero, so OUT carries only what BIAS adds until DRIFT is pressed or a RESET shape other than the flat one is picked'
+      - 'Note — bypassed, OUT carries whatever arrives at IN'
+      - 'Menu — Save curve in rack — keeps the drifted shape in the patch file; unset, the line loads flat at zero'
+      - 'Menu — RESET shape: — the heading over what a RESET draws: Horizontal line at zero, Sine, Triangle, Rising Saw, Falling Saw or Square, the last five each with variants A, B, C and D'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '8': 9
+      '9': 10
+      '10': 11
+    'in':
+      '0': 12
+      '1': 13
+      '2': 14
+      '3': 15
+      '4': 16
+      '5': 17
+    'out':
+      '0': 18
+      '1': 19
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '5': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'trigger'
+  'Fermata':
+    'lines':
+      - 'A text note resizable from 3HP to 300HP by dragging either edge, scrolling as the cursor moves and holding a title as well as body text; narrowed to 8HP or less it shows the title as a vertical label'
+      - 'Note — a new one is empty; click in the window and type, and the text is kept in the patch file'
+      - 'Note — arrow keys move the cursor, Home and End reach the top and bottom of the text, and PgUp and PgDown move a screen at a time'
+      - 'Note — no more than the first 1000 screen lines of the text can be reached, so widening the module reaches more of it'
+      - 'Note — right-clicking the text window gives Cut, Copy, Paste and Select all; the module''s own menu is on the panel border around that window'
+      - 'Menu — Set Title — the heading over a text field for the title shown above the text, which becomes the whole of the display at narrow widths'
+      - 'Menu — Visible Lines — picks the font size by the number of lines shown at once, from 28 down to a single very large line'
+      - 'Menu — Font — picks the typeface, from VCV font (like Notes), four RobotoMono weights and three RobotoSlab weights'
+      - 'Menu — Screen Colors — picks the ink and paper of the window from seven pairs'
+    'param': {}
+    'in': {}
+    'out': {}
+    'family':
+      'in': {}
+      'out': {}
+  'Fuse':
+    'lines':
+      - 'Counts triggers, and blocks, opens or scales the signal travelling from IN to OUT once that count reaches LIMIT'
+      - 'Sets the number of TRIGGER events that blow the fuse, 1 to 1000'
+      - 'Picks what OUT does as the count climbs to LIMIT: BLOW CLOSED passes IN then drops to 0V, BLOW OPEN holds 0V then passes IN, NARROW attenuates IN to nothing, WIDEN grows IN from nothing'
+      - 'Pressing it sets the count of triggers back to zero'
+      - 'Pressing it adds one to the count of triggers'
+      - 'Sets the shortest time the gain applied to IN takes to travel the whole way from 0 to 1, 0 to 5 seconds; at zero the gain changes instantly, which can click on audio'
+      - 'Pressing it subtracts one from the count of triggers, and does nothing once the fuse has blown'
+      - 'A trigger sets the count of triggers back to zero'
+      - 'A trigger adds one to the count of triggers'
+      - 'The signal Fuse scales on its way to OUT; with no cable patched, a fixed voltage for it can be picked in the menu'
+      - 'A trigger subtracts one from the count of triggers, and does nothing once the fuse has blown'
+      - 'A single trigger at the moment the count reaches LIMIT'
+      - 'IN multiplied by the gain that STYLE, LIMIT and the current count of triggers give'
+      - 'Note — OUT stays at 0V whatever the count until a cable is patched to IN or a constant is picked for it in the menu'
+      - 'Note — hovering over the coloured fuse bar shows the count of TRIGGER events so far and how far that has reached towards LIMIT'
+      - 'Note — bypassed, OUT carries IN, and 0V when nothing is patched to IN even where the menu sets a constant'
+      - 'Menu — Unplugged value of IN — the heading over six constants, -10V, -5V, -1V, 1V, 5V and 10V, one of which stands in for IN when nothing is patched to it'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+    'in':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+    'out':
+      '0': 11
+      '1': 12
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'trigger'
+        '3': 'trigger'
+      'out':
+        '0': 'trigger'
+  'TTY':
+    'lines':
+      - 'A scrolling log window, printing a value from each of three CV inputs whenever it changes and text arriving over Tipsy at three more, resizable from 4HP to 300HP'
+      - 'Pressing it empties the log window'
+      - 'Sets the gap between reads of V1, V2 and V3, 1000ms fully counter-clockwise down to 0ms fully clockwise, where every sample is read; the TEXT inputs are read whatever this is set to'
+      - 'Latches; lit, nothing new is written to the log, and the arrow, Home, End and page keys move through the text more reliably'
+      - 'Read at the interval set by RATE, and the value is printed to the log whenever it differs from the previous read'
+      - 'Takes Tipsy text, and adds any message of MIME type text/plain to the log; a message of exactly two exclamation marks, CLEAR, two exclamation marks empties the window instead'
+      - 'Note — the TEXT inputs read Tipsy text and nothing else, and the only modules that send it are BASICally and Memory; the V inputs read ordinary voltages'
+      - 'Note — no more than the last 900 to 1000 screen lines are kept, so narrowing the module discards most of the log'
+      - 'Note — right-clicking the log window gives Cut, Copy, Paste and Select all; the module''s own menu is on the panel around that window'
+      - 'Menu — Preface lines with source port — puts the name of the jack a message came from in front of it, so 1.23456 is logged as V1> 1.23456'
+      - 'Menu — Preface lines with timestamp? — puts a time in front of each line: No, Time since patch started, or Local time'
+      - 'Menu — Keep recent output when patch is saved — stores the visible text in the patch file, so it returns when the patch is loaded'
+      - 'Menu — Visible Lines — picks the font size by the number of lines shown at once, from 28 down to a single very large line'
+      - 'Menu — Font — picks the typeface, from VCV font (like Notes), Veteran Typewriter (TTY-ish font), four RobotoMono weights and three RobotoSlab weights'
+      - 'Menu — Screen Colors — picks the ink and paper of the log window from eight pairs'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '2': 4
+      '5': 4
+      '1': 5
+      '3': 5
+      '4': 5
+    'out': {}
+    'family':
+      'in': {}
+      'out': {}
+  'Memory':
+    'lines':
+      - 'Holds the stereo audio that a Memory ensemble records into and plays back from; it is always the left-most module of the touching group, and by itself it neither records nor plays'
+      - 'Pressing it sets every sample in the buffer to 0V and leaves its length alone'
+      - 'Sets the length of the buffer in seconds, 1 to 1000, taking effect at the next press of RESET'
+      - 'Pressing it discards the buffer, builds a new one of LENGTH seconds at the current Rack sample rate, and fills it with 0V'
+      - 'A trigger sets every sample in the buffer to 0V and leaves its length alone'
+      - 'Takes a Tipsy text message naming a WAV or CSV file to load, relative to the load folder picked in the menu; a message of a hash and a number loads the file at that place in the folder instead'
+      - 'Takes a Tipsy text message naming a WAV or CSV file to write the buffer to, relative to the save folder picked in the menu; an existing file of that name is overwritten with no prompt'
+      - 'A trigger each time a file load finishes, whether it succeeded or failed'
+      - 'A trigger each time a file save finishes, whether it succeeded or failed'
+      - 'Tipsy text describing each load and save, including the length of a file read in, for a TEXT input on TTY'
+      - 'A steady voltage equal to the number of seconds in the buffer, so a buffer of 15 seconds gives 15V'
+      - 'Note — by itself it neither records nor plays: put a Brainwash or an Embellish to write into it, and a Ruminate or a Fixation to play it, touching it on the right'
+      - 'Note — dropping a WAV or CSV file from the desktop onto the panel loads it at once'
+      - 'Note — the buffer records at the Rack sample rate in force when the module was made or last RESET, so changing the Rack sample rate afterwards plays the audio back at the wrong speed'
+      - 'Note — the display above the LENGTH output shows the buffer length in seconds and hundredths, or in minutes and seconds once it passes 60 seconds'
+      - 'Note — a buffer of 1000 seconds at 48kHz holds 366Mb in memory, and the LENGTH knob reaches that'
+      - 'Note — anything other than Tipsy text arriving at LOAD or SAVE can crash Rack'
+      - 'Menu — Autoload most recent file when this module starts — reads the last file this module loaded when the patch opens or the module is duplicated'
+      - 'Menu — Reload most recent file now — loads the last file this module read straight away'
+      - 'Menu — Most Recently Used Directories — a submenu of the twenty folders most recently used by any module of this kind, one of which becomes the loading folder'
+      - 'Menu — Pick via Directory Selector... — picks the loading folder that names arriving at LOAD are relative to, and appears again under Saving Directory for the SAVE folder'
+      - 'Menu — Pick file from Loading directory — a submenu of the WAV and CSV files in the loading folder; choosing one loads it at once'
+      - 'Menu — Pick file via dialog... — opens the operating system''s file browser and loads the WAV or CSV file chosen'
+      - 'Menu — Save to WAV File... — writes the whole buffer to a WAV file named through a dialog'
+      - 'Menu — Save to CSV File... — writes the whole buffer to a CSV file of one left and one right value per line, named through a dialog'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+    'out':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '3': 'cv'
+  'MemoryCV':
+    'lines':
+      - 'Holds the two channels of control voltage a MemoryCV ensemble records into and plays from, sampled at 1000Hz; it is always the left-most module of the group, and alone it neither records nor plays'
+      - 'Pressing it sets every sample in the buffer to 0V and leaves its length alone'
+      - 'Sets the length of the buffer in seconds, 1 to 1000, taking effect at the next press of RESET'
+      - 'Pressing it discards the buffer, builds a new one of LENGTH seconds, and fills it with 0V'
+      - 'A trigger sets every sample in the buffer to 0V and leaves its length alone'
+      - 'Takes a Tipsy text message naming a WAV or CSV file to load, relative to the load folder picked in the menu; a message of a hash and a number loads the file at that place in the folder instead'
+      - 'Takes a Tipsy text message naming a WAV or CSV file to write the buffer to, relative to the save folder picked in the menu; an existing file of that name is overwritten with no prompt'
+      - 'A trigger each time a file load finishes, whether it succeeded or failed'
+      - 'A trigger each time a file save finishes, whether it succeeded or failed'
+      - 'Tipsy text describing each load and save, including the length of a file read in, for a TEXT input on TTY'
+      - 'A steady voltage equal to the number of seconds in the buffer, so a buffer of 15 seconds gives 15V'
+      - 'Note — by itself it neither records nor plays: put a Brainwash or an Embellish to write into it, and a Ruminate or a Fixation to play it, touching it on the right'
+      - 'Note — dropping a WAV or CSV file from the desktop onto the panel loads it at once'
+      - 'Note — the buffer is stored at 1000 samples a second whatever the Rack sample rate, and playback does not interpolate between samples, so recorded pitches stay as they were'
+      - 'Note — the display above the LENGTH output shows the buffer length in seconds and hundredths, or in minutes and seconds once it passes 60 seconds'
+      - 'Note — a CSV file loaded here is read as one line per millisecond, each line a left and a right value separated by a comma'
+      - 'Note — anything other than Tipsy text arriving at LOAD or SAVE can crash Rack'
+      - 'Menu — Autoload most recent file when this module starts — reads the last file this module loaded when the patch opens or the module is duplicated'
+      - 'Menu — Reload most recent file now — loads the last file this module read straight away'
+      - 'Menu — Most Recently Used Directories — a submenu of the twenty folders most recently used by any module of this kind, one of which becomes the loading folder'
+      - 'Menu — Pick via Directory Selector... — picks the loading folder that names arriving at LOAD are relative to, and appears again under Saving Directory for the SAVE folder'
+      - 'Menu — Pick file from Loading directory — a submenu of the WAV and CSV files in the loading folder; choosing one loads it at once'
+      - 'Menu — Pick file via dialog... — opens the operating system''s file browser and loads the WAV or CSV file chosen'
+      - 'Menu — Save to WAV File... — writes the whole buffer to a WAV file named through a dialog'
+      - 'Menu — Save to CSV File... — writes the whole buffer to a CSV file of one left and one right value per line, named through a dialog'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+    'out':
+      '0': 7
+      '1': 8
+      '2': 9
+      '3': 10
+    'family':
+      'in':
+        '0': 'trigger'
+      'out':
+        '0': 'trigger'
+        '1': 'trigger'
+        '3': 'cv'
+  'Ruminate':
+    'lines':
+      - 'A playback head that plays the whole of a Memory or MemoryCV buffer at any speed in either direction; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end'
+      - 'Sets the playback speed and direction, -10 to 10, added to the SPEED input; 1 plays at the speed it was recorded, 0.5 is an octave down at twice the length, and -1 plays backwards'
+      - 'Moves the playback head through the buffer by hand and springs back to centre when let go; playback stops while it is being moved'
+      - 'Latches; the head plays while it is lit'
+      - 'Sets the position the head takes the first time it plays after the patch loads, 0V to 10V across the buffer'
+      - 'A high gate plays and a low gate stops'
+      - 'Added to the SPEED knob to give the playback speed; with Use Speed as V/Oct set in the menu that sum is read as a pitch voltage'
+      - 'Each time this voltage changes the head jumps to that position in the buffer, 0V at the start and a shade under 10V at the end'
+      - 'Channel one is the position of the head as a phasor, 0V at the start of the buffer and 10V at the end; channel two is the position in seconds, which the menu can drop'
+      - 'The left channel of what is in the buffer under the playback head'
+      - 'The right channel of what is in the buffer under the playback head'
+      - 'Note — it plays nothing until a Memory or MemoryCV is the left-most module of the touching group it is in; the small light near the top edge is lit while it is attached'
+      - 'Note — the buffer is silent until something writes into it: an Embellish or a Brainwash in the same group, or a file loaded into the Memory'
+      - 'Note — the display below the CURRENT output shows the position in seconds and hundredths, or in minutes and seconds once the buffer passes 60 seconds'
+      - 'Note — Randomize on the module''s own menu sets the SPEED knob to a diatonic interval of whole-number ratios rather than to any value at all'
+      - 'Menu — Fade on Move — silences the outputs while ADJUST or SET is moving the head; unset, playback carries on through the move'
+      - 'Menu — Use Speed as V/Oct — reads the sum of the SPEED knob and input as a pitch voltage, so that a sum of 1 plays at the recorded speed'
+      - 'Menu — Default direction is reverse — starts the head playing from the top of the buffer downwards'
+      - 'Menu — Zero the outputs when not playing — drops L and R to 0V when the head stops; unset, they hold the value they stopped at'
+      - 'Menu — Have 2nd channel of seconds on CURRENT — adds or removes the second channel of that output, which carries the position in seconds'
+      - 'Menu — Behavior at ends — what the head does at the top or bottom of the buffer: Loop Around carries on from the other end, Bounce turns round and plays the other way, Stop halts it'
+    'param':
+      '1': 1
+      '2': 2
+      '3': 3
+      '4': 4
+    'in':
+      '0': 5
+      '1': 6
+      '2': 7
+    'out':
+      '0': 8
+      '1': 9
+      '2': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'audio'
+        '2': 'audio'
+  'Fixation':
+    'lines':
+      - 'A playback head that replays a short stretch of a Memory or MemoryCV buffer over and over from a set position; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end'
+      - 'Attenuates and inverts the POSITION input before it is added to the POSITION knob, -100% to 100%'
+      - 'Sets the position playback starts from, 0V to 10V across the buffer, with the attenuated POSITION input added to it'
+      - 'Latches; the head plays while it is lit, and the light goes out once a style has finished its repeats'
+      - 'Sets the playback speed and direction, -10 to 10, added to the SPEED input; 1 plays at the speed it was recorded, 0.5 is an octave down at twice the length, and -1 plays backwards'
+      - 'Sets how much of the buffer is played from POSITION, 1ms to 10 seconds, with the attenuated LENGTH input added to it'
+      - 'Attenuates and inverts the LENGTH input before it is added to the LENGTH knob, -100% to 100%'
+      - 'Sets how many repeats one CLOCK trigger plays, 1 to 128, in the style that repeats'
+      - 'Picks how playback starts: CLOCK restarts it until the next clock, it restarts itself every LENGTH, CLOCK starts COUNT repeats of LENGTH, or CLOCK is read as a gate and playback lasts while it is high'
+      - 'Picks the note length played from POSITION, a whole note down to a triplet thirty-second, against the tempo of triggers at LENGTH; it replaces the LENGTH knob when the menu interprets LENGTH as tempo'
+      - 'A trigger fades out whatever is playing, moves the head to POSITION and starts it again, in the three styles that read it'
+      - 'Multiplied by its attenuverter and added to the POSITION knob to give the position playback starts from'
+      - 'A high gate plays and a low gate stops'
+      - 'Added to the SPEED knob to give the playback speed; with Use Speed as V/Oct set in the menu that sum is read as a pitch voltage'
+      - 'Multiplied by its attenuverter and added to the LENGTH knob to give the length played; when the menu interprets LENGTH as tempo it takes clock triggers, whose tempo sets the note length'
+      - 'The left channel of what is in the buffer under the playback head'
+      - 'The right channel of what is in the buffer under the playback head'
+      - 'A short trigger each time the head starts playing from POSITION, which falls a little after the CLOCK trigger that asked for it because the previous sound is faded down first'
+      - 'Channel one is the position of the head as a phasor, 0V at the start of the buffer and 10V at the end; channel two is the position in seconds, which the menu can drop'
+      - 'Note — it plays nothing until a Memory or MemoryCV is the left-most module of the touching group it is in; the small light near the top edge is lit while it is attached'
+      - 'Note — the buffer is silent until something writes into it: an Embellish or a Brainwash in the same group, or a file loaded into the Memory'
+      - 'Note — the LENGTH knob and the note length knob stand at the same place on the panel and only one of them is drawn, the Interpret LENGTH as tempo and note length menu item deciding which'
+      - 'Note — Randomize on the module''s own menu sets the SPEED knob to a diatonic interval of whole-number ratios rather than to any value at all'
+      - 'Menu — Interpret LENGTH as tempo and note length — turns the LENGTH input into a clock whose tempo is measured and the LENGTH knob into a choice of note lengths, and takes the attenuverter away'
+      - 'Menu — Use Speed as V/Oct — reads the sum of the SPEED knob and input as a pitch voltage, so that a sum of 1 plays at the recorded speed'
+      - 'Menu — Default direction is reverse — starts the head playing from the top of the buffer downwards'
+      - 'Menu — Zero the outputs when not playing — drops L and R to 0V when the head stops; unset, they hold the value they stopped at'
+      - 'Menu — Have 2nd channel of seconds on CURRENT — adds or removes the second channel of that output, which carries the position in seconds'
+      - 'Menu — Behavior at ends — what the head does at the top or bottom of the buffer: Loop Around carries on from the other end, Bounce turns round and plays the other way, Stop halts it'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+      '8': 9
+    'in':
+      '0': 10
+      '1': 11
+      '2': 12
+      '3': 13
+      '4': 14
+    'out':
+      '0': 15
+      '1': 16
+      '2': 17
+      '3': 18
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+        '2': 'trigger'
+        '3': 'cv'
+        '4': 'cv'
+      'out':
+        '0': 'audio'
+        '1': 'audio'
+        '2': 'trigger'
+        '3': 'cv'
+  'Embellish':
+    'lines':
+      - 'A record and playback head, writing what arrives at IN while sending out what was already under it; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end'
+      - 'Unlit, the head wraps round to the other end of the buffer when it reaches an edge; lit, it turns round at the edge and carries on recording backwards'
+      - 'Moves the record head through the buffer by hand and springs back to centre when let go; recording stops while it is being moved'
+      - 'Latches; the head records while it is lit'
+      - 'Sets the position the head takes the first time it runs after the patch loads, 0V to 10V across the buffer'
+      - 'Lit, the head travels backwards through the buffer; the head runs at one fixed speed in either direction'
+      - 'A high gate records and a low gate stops'
+      - 'The left channel written into the buffer under the head; with no cable patched the head writes 0V and erases what was there'
+      - 'The right channel written into the buffer under the head; with no cable patched the head writes 0V and erases what was there'
+      - 'Each time this voltage changes the head jumps to that position in the buffer, 0V at the start and a shade under 10V at the end'
+      - 'Channel one is the position of the head as a phasor, 0V at the start of the buffer and 10V at the end; channel two is the position in seconds, which the menu can drop'
+      - 'The left channel of what is in the buffer under the head, for sending through effects or a mixer and back into the IN jacks'
+      - 'The right channel of what is in the buffer under the head, for sending through effects or a mixer and back into the IN jacks'
+      - 'Note — it records nothing until a Memory or MemoryCV is the left-most module of the touching group it is in; the small light near the top edge is lit while it is attached'
+      - 'Note — running with nothing patched to the IN jacks it writes 0V, erasing the part of the buffer it passes over'
+      - 'Note — the display below the CURRENT output shows the position in seconds and hundredths, or in minutes and seconds once the buffer passes 60 seconds'
+      - 'Menu — Zero the outputs when not playing — drops L and R to 0V when recording stops; unset, they hold the value they stopped at'
+      - 'Menu — Have 2nd channel of seconds on CURRENT — adds or removes the second channel of that output, which carries the position in seconds'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+    'in':
+      '0': 6
+      '1': 7
+      '2': 8
+      '3': 9
+    'out':
+      '0': 10
+      '1': 11
+      '2': 12
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'audio'
+        '2': 'audio'
+  'Brainwash':
+    'lines':
+      - 'Records its two inputs and, when the recording ends, replaces the whole contents of the Memory with it; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end'
+      - 'Latches; it records while lit, and clicking it dark hands the recording to the Memory as its entire new contents, changing the length of the Memory to match'
+      - 'Sets how many CLOCK intervals a clocked recording lasts, 0.001 to 32, and a fractional value stops part way through the last interval'
+      - 'Pressing it arms a recording to start at the next CLOCK trigger; pressing it again while armed disarms it'
+      - 'A high gate records, and when it falls low the recording becomes the entire new contents of the Memory'
+      - 'The left channel taken into the recording'
+      - 'The right channel taken into the recording'
+      - 'Once armed, the first trigger starts the recording, and further triggers count off the intervals until COUNT of them have passed'
+      - 'A trigger arms a recording, which starts at the next CLOCK trigger and lasts COUNT of them; an ARM and a CLOCK arriving together start it at once'
+      - 'Note — it records nothing until a Memory or MemoryCV is the left-most module of the touching group it is in; the small light near the top edge is lit while it is attached'
+      - 'Note — no more than 60 seconds can be recorded, and a longer recording leaves the Memory holding the last 60 seconds'
+      - 'Note — ending a recording on two of these at roughly the same moment in one group gives unpredictable results'
+      - 'Note — the module has no menu items of its own'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+    'in':
+      '0': 4
+      '1': 5
+      '2': 6
+      '3': 7
+      '4': 8
+    'out': {}
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'audio'
+        '2': 'audio'
+        '3': 'trigger'
+        '4': 'trigger'
+      'out': {}
+  'Depict':
+    'lines':
+      - 'Draws the contents of the buffer and the position of every Embellish, Ruminate and Fixation head in the group; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end'
+      - 'Note — it draws nothing until a Memory or MemoryCV is the left-most module of the touching group it is in'
+      - 'Note — the buffer is drawn from its start at the bottom of the screen to its end at the top, which are the 0V and 10V of the position voltages on the other modules'
+      - 'Note — the grey spine is the peak level of the left channel left of the white centre line and of the right channel to its right; the number in the corner is the voltage a full-width line has'
+      - 'Note — a Ruminate head is a line from the left edge, a Fixation head a short line touching neither edge, an Embellish head a line from the right edge, each in the colour of its own module''s light'
+      - 'Note — attached to a MemoryCV the screen draws the two CV curves rather than levels, and scales the two channels separately'
+      - 'Note — several of these in one group all draw the same thing'
+      - 'Note — the module has no menu items of its own'
+    'param': {}
+    'in': {}
+    'out': {}
+    'family':
+      'in': {}
+      'out': {}
+  'Venn':
+    'lines':
+      - 'Up to sixteen circles drawn on a surface with one point moving among them; each circle drives its own channel of five polyphonic outputs according to where the point falls inside it'
+      - 'Sets how DISTANCE climbs from 0V at a circle''s edge to 10V at its centre, -1 to 1: at -1 it rises steeply then slows, at 0 it rises in a straight line, at 1 it stays low until close to the centre'
+      - 'Attenuates and inverts the lower X input before it is added to the X position of the point, -100% to 100%'
+      - 'Attenuates and inverts the lower Y input before it is added to the Y position of the point, -100% to 100%'
+      - 'Set, WITHIN carries 10V while the point is outside a circle and 0V while it is inside'
+      - 'Set, the X output climbs as the point travels from the right of a circle to the left'
+      - 'Set, the Y output climbs as the point travels from the top of a circle to the bottom'
+      - 'Set, 5V is added to the X output, giving 0V to 10V in place of -5V to 5V'
+      - 'Set, 5V is added to the Y output, giving 0V to 10V in place of -5V to 5V'
+      - 'Sets the X position of the point; with no cable patched the last position clicked on the surface is kept'
+      - 'Sets the Y position of the point; with no cable patched the last position clicked on the surface is kept'
+      - 'Multiplied by its attenuverter and added to the X position of the point'
+      - 'Multiplied by its attenuverter and added to the Y position of the point'
+      - 'Polyphonic, one channel per circle: 0V while the point is outside that circle, climbing to 10V at its centre along the curve set by the shape knob'
+      - 'Polyphonic, one channel per circle: a 10V gate while the point is inside that circle, and 0V while it is outside'
+      - 'Polyphonic, one channel per circle: 0V while the point is outside that circle, and inside it the horizontal distance of the point from the centre divided by the radius and multiplied by 5'
+      - 'Polyphonic, one channel per circle: 0V while the point is outside that circle, and inside it the vertical distance of the point from the centre divided by the radius and multiplied by 5'
+      - 'The X coordinate of the point itself, -5V to 5V, or 0V to 10V if the menu sets that range; useful for recording a gesture'
+      - 'The Y coordinate of the point itself, -5V to 5V, or 0V to 10V if the menu sets that range; useful for recording a gesture'
+      - 'Polyphonic, one channel per circle, carrying the result of that circle''s MATH1 formula'
+      - 'Note — a new Venn holds no circles and every output stays at 0V; press F with the mouse pointer over the surface to make one, or load one of the two shipped presets'
+      - 'Note — the keys reach the circles only while the surface has been clicked, and clicking elsewhere in the patch turns them off; the keyboard diagram on the surface shows whether they are active'
+      - 'Note — F makes a circle where the mouse pointer is, W, A, S and D move the selected one, Q shrinks it and E enlarges it, and X deletes it'
+      - 'Note — C and Z step through the circles, and R solos the selected one so that every other circle reads zero in the outputs until R is typed again'
+      - 'Note — the two text fields hold the name and the MATH1 formula of the selected circle, and the lit word beside the formula reads Good when it has compiled or Fix when it has not'
+      - 'Note — hovering over the Fix word beside the MATH1 field describes the error found in the formula'
+      - 'Note — a MATH1 formula can use pointx and pointy, the circle''s own distance, within, x and y, the edge values leftx, rightx, topy and bottomy, note names such as c4, and functions such as scale'
+      - 'Note — a circle with an empty name shows its MATH1 formula on the surface instead, and a newline typed into a name breaks it across lines'
+      - 'Note — right-clicking either text field gives Cut, Copy, Paste and Select all; the module''s own menu is on the panel around them'
+      - 'Menu — Only Compute MATH1 for a circle when inside it — holds MATH1 at zero for a circle the point is outside, which costs less CPU'
+      - 'Menu — Point position X ranges from 0-10 instead of -5 - 5 — moves the X input and the X point output into that range, and there is a matching Y item'
+      - 'Menu — Point position Y ranges from 0-10 instead of -5 - 5 — moves the Y input and the Y point output into that range'
+      - 'Menu — Show Keyboard Commands — draws the full editing diagram on the surface; unset, a small mark takes its place, which shows whether the keys are active'
+      - 'Menu — MATH Cheat Sheet — a submenu listing the variables and functions a MATH1 formula can use'
+      - 'Menu — Randomize — replaces the circles with a new random set, each with a generated name and MATH1 formula'
+    'param':
+      '0': 1
+      '1': 2
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 6
+      '6': 7
+      '7': 8
+    'in':
+      '0': 9
+      '1': 10
+      '2': 11
+      '3': 12
+    'out':
+      '0': 13
+      '1': 14
+      '2': 15
+      '3': 16
+      '4': 17
+      '5': 18
+      '6': 19
+    'family':
+      'in':
+        '0': 'cv'
+        '1': 'cv'
+        '2': 'cv'
+        '3': 'cv'
+      'out':
+        '0': 'cv'
+        '1': 'trigger'
+        '2': 'cv'
+        '3': 'cv'
+        '4': 'cv'
+        '5': 'cv'
+        '6': 'cv'
+  'Chances':
+    'lines':
+      - 'A random voltage generator you give the exact values to: ten pairs of a value and a relative chance, drawn from in one of four ways, with an optional spread either side of each value'
+      - 'Sets how likely that pair''s value is against the others, a whole number from 0 to 100; at 0 the pair is left out of the draw altogether'
+      - 'Sets the voltage that pair may put out, -10V to 10V'
+      - 'Picks how the spread voltage is drawn: down for a bell-shaped draw that mostly stays near the chosen value, up for an even draw anywhere within the spread'
+      - 'Allows the output to land up to this many volts either side of the chosen value, 0V to 2V; at 0V only the values themselves come out'
+      - 'Sorts the ten pairs by value, smallest first, with the pairs whose count is 0 moved to the end; the stream of output values is not changed by it'
+      - 'Latches; lit, a new value is drawn every sample and no trigger is needed'
+      - 'Picks how a value is chosen: Sampling draws afresh every time, Shuffling deals the whole list before reshuffling it, No Repeats bars the value chosen last, and Input Selection reads the IN jack'
+      - 'A trigger draws a new value, which OUT holds until the next trigger; a polyphonic cable draws for each channel separately and sets how many channels OUT carries'
+      - 'Under the Input Selection style, the voltage choosing which value comes out, the menu''s range split into one slot per entry in the list; no other style reads this jack'
+      - 'Carries the value drawn at the last trigger, with any spread added'
+      - 'Note — every count knob starts at 0, which leaves every pair out of the draw, so the output stays at 0V until at least one count is turned up'
+      - 'Note — the display at the top draws the probability curve the count and value knobs make, and a blue outline showing what the spread would add'
+      - 'Note — the list the styles draw from holds each value repeated as many times as its count, so a value with a count of five appears five times'
+      - 'Menu — Input Selection Range: [-5V, 5V], [0V, 10V], [-10V, 10V] — the span of the IN jack that is divided across the list under the Input Selection style'
+      - 'Menu — Default number of OUT channels — how many channels OUT carries while TRIG has one channel or none, so one trigger can draw several values at once'
+    'param':
+      '0': 6
+      '1': 7
+      '2': 3
+      '3': 4
+      '4': 5
+      '5': 2
+      '6': 2
+      '7': 2
+      '8': 2
+      '9': 2
+      '10': 2
+      '11': 2
+      '12': 2
+      '13': 2
+      '14': 2
+      '15': 1
+      '16': 1
+      '17': 1
+      '18': 1
+      '19': 1
+      '20': 1
+      '21': 1
+      '22': 1
+      '23': 1
+      '24': 1
+    'in':
+      '0': 8
+      '1': 9
+    'out':
+      '0': 10
+    'family':
+      'in':
+        '0': 'trigger'
+        '1': 'cv'
+      'out':
+        '0': 'cv'
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'range': 'high above 2V'
+          'step': 'stepped'
+          'why': 'Chances.cpp:279 reads the jack per channel with getVoltage, rescales 0.1V to 2V onto 0 to 1 and feeds a SchmittTrigger'
+        '1':
+          'poly': true
+          'step': 'continuous'
+          'why': 'Chances.cpp:347 reads the jack per channel with getVoltage and rescales the menu''s range across the list; Chances.cpp:269 takes its channel count as the output''s under this style'
+    'notes': 'The IN jack carries no range field because its useful span is the one chosen on the Input Selection Range menu item, which is -5V to 5V, 0V to 10V or -10V to 10V. Chances.cpp:350 clamps a voltage outside the chosen range to the first or last entry of the list rather than ignoring it.'
