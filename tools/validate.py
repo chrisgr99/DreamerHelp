@@ -18,7 +18,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DATA = os.path.join(ROOT, 'data', 'plugins')
 PLUGINS = os.path.expanduser(
-    '~/Library/Application Support/Rack2/plugins-mac-arm64')
+    os.environ.get('RACK_PLUGINS', '~/Library/Application Support/Rack2/plugins-mac-arm64'))
+# Whether coverage can be checked at all here. See where this is used.
+HAVE_RACK = os.path.isdir(PLUGINS)
 
 # A word pointing at something the reader cannot see. The whole entry is heard one line at a time.
 LEANING = re.compile(
@@ -101,6 +103,12 @@ def check(path):
     # A file still being written says so, and is not nagged about the models it has not reached.
     partial = bool(doc.get('partial'))
     if partial:
+        pass
+    elif installed is None and not HAVE_RACK:
+        # NOTHING TO CHECK AGAINST, AND THAT IS NOT THE CONTRIBUTOR'S FAULT. Coverage is
+        # confirmed against the installed plugin's own manifest, which exists on a machine
+        # running Rack and not on the machine running CI. Reporting it as a problem there
+        # would fail every pull request for a reason nobody could fix.
         pass
     elif installed is None:
         problems.append('%s: %s is not installed, so coverage cannot be checked' % (name, plugin))
