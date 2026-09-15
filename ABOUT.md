@@ -44,7 +44,7 @@ A citation must say what the code **does**, not merely where it lives. `Foo.cpp:
 
 ## What is not covered, and why
 
-**Plugins that publish no source.** For those, voltage ranges are not given, and the file says so in a `verification` notice at the top. Forty-two files currently carry it. Those entries are the ones most worth a contribution, and the maker of the plugin is the person best placed to make it.
+**Plugins that publish no source.** For those, voltage ranges are not given, and the file says so in a `verification` notice at the top. About forty files carry it at present, and the number moves as coverage is contributed. Those entries are the ones most worth a contribution, and the maker of the plugin is the person best placed to make it.
 
 **Modules added to the library since the database was written.** A new plugin has no entry until someone writes one. The help says so plainly rather than guessing — a module with no entry gets a note saying there is none, not an invented description.
 
