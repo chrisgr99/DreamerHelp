@@ -80,10 +80,13 @@ struct HelpWidget : ModuleWidget {
 
 		// VCVLightLatch holds its own state, so the button IS the setting and Rack saves it with
 		// the patch — no separate flag to keep in step with what the panel shows.
+		// THE PANEL'S OWN WIDTH, not a millimetre figure. 7.62mm was the centre of the 3HP
+		// panel this began as, and stayed behind when it widened to 4HP — which is what put
+		// the buttons off to the left.
 		addParam(createLightParamCentered<VCVLightLatch<MediumSimpleLight<GreenLight>>>(
-			mm2px(Vec(7.62, 58.0)), module, Help::P_ON, Help::L_ON));
+			Vec(box.size.x * 0.5f, HELP_BTN_Y), module, Help::P_ON, Help::L_ON));
 		addParam(createLightParamCentered<VCVLightLatch<MediumSimpleLight<GreenLight>>>(
-			mm2px(Vec(7.62, 88.0)), module, Help::P_SPEAK, Help::L_SPEAK));
+			Vec(box.size.x * 0.5f, SPEAK_BTN_Y), module, Help::P_SPEAK, Help::L_SPEAK));
 	}
 
 	/** THE PANEL LETTERS ITSELF, because Rack draws panels with nanosvg and nanosvg ignores
