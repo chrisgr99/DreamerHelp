@@ -12,6 +12,36 @@ Files are named after the **plugin** slug, not the module's name on the panel. T
 
 Inside the file, a module is a key under `modules:` — its **module** slug, which is what that plugin's own `plugin.json` calls it. That is often not the name printed on the panel: Bidoo's reverb is on the panel as REI and in `plugin.json` as `REI`, but plenty of makers use an internal name for one and a display name for the other.
 
+## The one rule that will bite you
+
+**Quote every string value with single quotes. Always, even when it looks unnecessary.**
+
+```yaml
+lines:
+  - 'Off'          # correct
+  - Off            # WRONG — YAML reads this as the boolean false
+```
+
+YAML silently converts several bare words and numbers into other types. `Off`, `No` and `on` become booleans. `2.10` becomes the number 2.1 and loses its trailing zero. `012` becomes 12. `~` and `NULL` become nothing at all. Menu items in real modules are called things like "Off", so this is not hypothetical.
+
+A blanket quote-everything rule needs no judgement, which is why it is the rule rather than a list of exceptions. The checks will catch a lapse, but they will catch it after you have pushed.
+
+**Values that are genuinely not text stay bare.** `poly` is a real boolean and the line numbers in the tag maps are real integers, so they are written `true`, `false` and `3` — never `'true'` or `'3'`. The validator checks their types and will reject a quoted one. The rule is *quote every string*, not *quote everything*:
+
+```yaml
+'poly': true        # a boolean — bare
+'in': {'0': 3}      # an index and a line number — bare
+'range': '0 to 10V' # text — quoted
+```
+
+Long prose goes in a block scalar:
+
+```yaml
+notes: >-
+  The four CV jacks replace their knobs rather than adding to them, so a patched
+  cable resting at 0V silences the control while the knob shows its old position.
+```
+
 ## What a file looks like
 
 ```yaml
@@ -62,28 +92,6 @@ Inside the file, a module is a key under `modules:` — its **module** slug, whi
 **The tag maps are the part to be careful with.** They point a control's index at a line by position, so inserting a line in the middle shifts every line after it and silently re-points the maps. Add at the end, or fix the maps.
 
 A control with no widget on the panel gets no tag and no line — no click can ever reach it.
-
-## The one rule that will bite you
-
-**Quote every string value with single quotes. Always, even when it looks unnecessary.**
-
-```yaml
-lines:
-  - 'Off'          # correct
-  - Off            # WRONG — YAML reads this as the boolean false
-```
-
-YAML silently converts several bare words and numbers into other types. `Off`, `No` and `on` become booleans. `2.10` becomes the number 2.1 and loses its trailing zero. `012` becomes 12. `~` and `NULL` become nothing at all. Menu items in real modules are called things like "Off", so this is not hypothetical.
-
-A blanket quote-everything rule needs no judgement, which is why it is the rule rather than a list of exceptions. The checks will catch a lapse, but they will catch it after you have pushed.
-
-Long prose goes in a block scalar:
-
-```yaml
-notes: >-
-  The four CV jacks replace their knobs rather than adding to them, so a patched
-  cable resting at 0V silences the control while the knob shows its old position.
-```
 
 ## Every fact carries a citation
 
