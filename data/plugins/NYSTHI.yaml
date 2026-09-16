@@ -1,5 +1,5 @@
 'plugin': 'NYSTHI'
-'source': 'No maker manual. Read from the panels, the CHANGELOG.md shipped in the installed plugin (v2.4.23), the literal pool and the C++ symbol table of the installed plugin binary, the port map we hand-read, and the community manual at https://github.com/patman023/nysthimanual, which is almost entirely empty. NYSTHI ships no presets and no demo patches.'
+'source': 'No maker manual. Read from the panels, the CHANGELOG.md shipped in the installed plugin (v2.4.23), the installed build, the port map we hand-read, and the community manual at https://github.com/patman023/nysthimanual, which is almost entirely empty. NYSTHI ships no presets and no demo patches.'
 'read': '2026-09-13'
 'verification': 'voltage ranges are not published for this plugin: no public source is available for verification. Corrections and citations are welcome from anyone with access to the source.'
 'modules':
@@ -757,7 +757,7 @@
           'step': 'stepped'
         '7':
           'step': 'stepped'
-    'notes': 'LOGIC::process holds no state between samples beyond the lamps: each gate is recomputed from the two comparisons every block. The output level is one module-wide setting, 5V or 10V, read at 0x11998c, so no single range can be written for the outputs.'
+    'notes': 'LOGIC::process holds no state between samples beyond the lamps: each gate is recomputed from the two comparisons every block. The output level is one module-wide setting, 5V or 10V, so no single range can be written for the outputs.'
   '4DCBlock':
     'lines':
       - 'Four independent DC blocking high pass filters, for keeping direct current out of a signal. The filters follow the current sample rate, and one menu setting fixes the corner frequency of all four'
@@ -1091,7 +1091,7 @@
           'poly': false
         '20':
           'poly': false
-    'notes': 'The sixteen-channel writes are on the first column output, not on any input: at 0x5fc84 HyperShift::process sets that port''s channel count and fills one channel per column, so the leftmost column jack carries all sixteen columns on a polyphonic cable while also carrying column one on its own channel. All six inputs read channel one only.'
+    'notes': 'The sixteen-channel writes are on the first column output, not on any input: HyperShift sets that port''s channel count and fills one channel per column, so the leftmost column jack carries all sixteen columns on a polyphonic cable while also carrying column one on its own channel. All six inputs read channel one only.'
   'DX7Envelope':
     'lines':
       - 'An emulation of the four rate, four level envelope of a DX7 operator, with two VCAs for stereo audio built in. It runs polyphonically, one voice for each channel arriving at the gate input'
@@ -2783,7 +2783,7 @@
           'poly': true
         '2':
           'poly': true
-    'notes': 'EN is polyphonic throughout and takes its voice count from the gate input at 0xaf384; SlimEnv::subprocess is then called once per voice. The gate is compared against zero rather than against 1V, so any positive voltage starts the envelope.'
+    'notes': 'EN is polyphonic throughout and takes its voice count from the gate input; the envelope is then computed once per voice. The gate is compared against zero rather than against 1V, so any positive voltage starts the envelope.'
   'M1':
     'lines':
       - 'A 1HP stereo mixer with three channels, each with a VCA, a pan control and a mute, and a stereo chain input for joining several of them'
@@ -3176,7 +3176,7 @@
           'poly': false
         '1':
           'poly': false
-    'notes': 'Each side sums all the channels of its signal input and delays the sum, so the output is mono whatever goes in. The delay time is the knob times 0.4 seconds per volt at the time input; the code takes the absolute value at 0xad34c, so -5V and +5V give the same delay. With nothing patched there the knob covers 0 to 2 seconds, which is what 5V gives with a cable in.'
+    'notes': 'Each side sums all the channels of its signal input and delays the sum, so the output is mono whatever goes in. The delay time is the knob times 0.4 seconds per volt at the time input; the code takes the absolute value, so -5V and +5V give the same delay. With nothing patched there the knob covers 0 to 2 seconds, which is what 5V gives with a cable in.'
   'DualFeedbackEcho':
     'lines':
       - 'Two echoes in 2HP with feedback, differing in their delay range: ECHO1 runs from 0.05ms to 2000ms and ECHO2 from 0.01ms to 200ms'
@@ -4685,7 +4685,7 @@
           'poly': true
         '7':
           'poly': true
-    'notes': 'Port props pass: input 7, tagged to the line about a trigger switching the looping on and off, is never read anywhere in the class''s code in the installed binary (2.4.23). Input 8, the hold toggle, is read at 0x1cde3c. Worth checking on a running module before the line is trusted.'
+    'notes': 'Port props pass: input 7, tagged to the line about a trigger switching the looping on and off, is never read anywhere in the module. Input 8, the hold toggle, is read. Worth checking on a running module before the line is trusted.'
   'PolyAttackDecaySustainRelease':
     'lines':
       - 'Polyphonic ADSR envelope. The number of voices follows the channels arriving at the gate input, two insert VCAs multiply a signal by the envelope, and each stage has its own pulse output'
@@ -5183,7 +5183,7 @@
         '2':
           'poly': false
           'step': 'stepped'
-    'notes': 'BIGNUMBER::process turns any voltage that is not exactly zero into a one at 0x48fa4 before the Schmitt trigger sees it, so a negative voltage reads as high here just as a positive one does and no threshold can be quoted.'
+    'notes': 'BIGNUMBER turns any voltage that is not exactly zero into a one before the Schmitt trigger sees it, so a negative voltage reads as high here just as a positive one does and no threshold can be quoted.'
   'BIGBUTTON':
     'lines':
       - 'Two large buttons, each sending a pulse or holding a gate, and each passing a signal through while it is held. The menu sets each button to pulse or to gate'
@@ -5887,7 +5887,7 @@
           'poly': false
         '8':
           'poly': false
-    'notes': 'The first phase output doubles as a polyphonic bundle: at 0x1060fc the code sets eight channels on it and copies each of the other phase outputs into a channel, so one cable carries all eight phases.'
+    'notes': 'The first phase output doubles as a polyphonic bundle: the code sets eight channels on it and copies each of the other phase outputs into a channel, so one cable carries all eight phases.'
   'LFOMultiPhase2':
     'lines':
       - 'An LFO with six outputs at fixed phases 60 degrees apart and a seventh output whose phase is set by hand. Every output carries the same wave'
@@ -6009,7 +6009,7 @@
           'poly': false
         '6':
           'poly': false
-    'notes': 'The first phase output doubles as a polyphonic bundle: at 0x10b1f0 the code sets six channels on it and copies each of the other phase outputs into a channel, so one cable carries all six phases.'
+    'notes': 'The first phase output doubles as a polyphonic bundle: the code sets six channels on it and copies each of the other phase outputs into a channel, so one cable carries all six phases.'
   'VUMeterSlim':
     'lines':
       - 'A meter one slot wide showing the level of the signal patched into it'
@@ -7743,7 +7743,7 @@
           'poly': false
         '2':
           'poly': false
-    'notes': 'Two jacks take polyphony. A polyphonic cable into the left record input sets the recording width from its channel count (0x34d800), and the speed CV input is summed across all its channels (0x34dd44). The left output carries those recorded voices back as channels (0x34e280). The record trigger is read only while one of the two record inputs is patched (0x34d730). The selection start CV is taken as an absolute value at 0x34cb1c, so a negative voltage moves the start the same distance as its positive twin.'
+    'notes': 'Two jacks take polyphony. A polyphonic cable into the left record input sets the recording width from its channel count, and the speed CV input is summed across all its channels. The left output carries those recorded voices back as channels. The record trigger is read only while one of the two record inputs is patched. The selection start CV is taken as an absolute value, so a negative voltage moves the start the same distance as its positive twin.'
   'metaAARDVARK':
     'lines':
       - 'A clock, LFO, sample and hold and noise source in one, after the RVG cell in Warren Burt''s Aardvark IV. A simulated R-2R converter of 1 to 10 bits picks values out of 10V'
@@ -8416,7 +8416,7 @@
           'step': 'stepped'
         '25':
           'step': 'stepped'
-    'notes': 'Port props pass: the first channel''s TRIG input (2) and VCA IN (12) take polyphony only while the right-click menu''s Channel one is poly is on — OctoAD::process reads their further channels at 0x1b0e0 and 0x1b484, both behind that flag, and reads voltages[0] alone at 0x1b1a8 and 0x1b45c otherwise. The GLOBAL column''s VCA OUT jack (output 37), which line 22 records as unexplained, is written at 0x1b4f4 as the voltage at the GLOBAL VCA IN jack times the mean of the envelopes switched into the unity mix, times 0.1.'
+    'notes': 'Port props pass: the first channel''s TRIG input (2) and VCA IN (12) take polyphony only while the right-click menu''s Channel one is poly is on — the module reads their further channels only behind that flag, and reads voltages[0] alone otherwise. The GLOBAL column''s VCA OUT jack (output 37), which line 22 records as unexplained, is written as the voltage at the GLOBAL VCA IN jack times the mean of the envelopes switched into the unity mix, times 0.1.'
   'BZ-XPAND':
     'lines':
       - 'A right expander for BZ-MAPPER, going immediately to the right of it, which puts a CV input on the horizontal and vertical position of every node and control point of the Bezier curve'
@@ -9829,7 +9829,7 @@
           'poly': false
         '2':
           'poly': false
-    'notes': 'Nothing in this module reads a second channel: every input is taken as voltages[0] and every output is written as voltages[0], with no channel count set anywhere in confusedSimpler::process. The record inputs are read only when one of the two is patched (0x35ed20). The two selection CV inputs are taken as absolute values (0x35e494 and 0x35e550), so a negative voltage moves the point the same distance as its positive twin.'
+    'notes': 'Nothing in this module reads a second channel: every input is taken as voltages[0] and every output is written as voltages[0], with no channel count set anywhere in the module. The record inputs are read only when one of the two is patched. The two selection CV inputs are taken as absolute values, so a negative voltage moves the point the same distance as its positive twin.'
   'WORMHOLIZER':
     'lines':
       - 'A stereo delay effect built from a swarm of delay lines, each set to a different uncorrelated delay time'
@@ -10918,7 +10918,7 @@
           'poly': false
         '3':
           'poly': false
-    'notes': 'Port props pass: input 4 is clamped to 0.1 and 99 and input 5 to 1.2 and 99 (0xb4034 and 0xb4064). Neither clamp fits the range spellings this pass allows, so only `step` was written for them.'
+    'notes': 'Port props pass: input 4 is clamped to 0.1 and 99 and input 5 to 1.2 and 99. Neither clamp fits the range spellings this pass allows, so only `step` was written for them.'
   'QuadSimplerSlicerQuantizer':
     'lines':
       - 'Four independent quantizers that snap a voltage to a grid of equal slices, with 0V as the base of the grid. The number of slices is set as a figure on each row'
@@ -11108,7 +11108,7 @@
           'step': 'stepped'
         '3':
           'step': 'stepped'
-    'notes': 'Each section is not an OR of four thresholds: GateTrigMerger::process adds the four inputs of the section together at 0xc7508 and compares that one sum against 10V at 0xc75c4. Two inputs sitting at 5V therefore turn the output on, and a single input at 5V does not.'
+    'notes': 'Each section is not an OR of four thresholds: GateTrigMerger adds the four inputs of the section together and compares that one sum against 10V. Two inputs sitting at 5V therefore turn the output on, and a single input at 5V does not.'
   'Interleaver':
     'lines':
       - 'Translates between one polyphonic cable carrying interleaved left and right channels and a pair of cables, one per side. Each side runs to eight channels'
@@ -11387,7 +11387,7 @@
         '5':
           'poly': false
           'step': 'continuous'
-    'notes': 'THX::process takes the size of the voltage at inputs 1 to 5 and throws its sign away at 0x9ca10, so a negative voltage sets the same time or frequency as the matching positive one.'
+    'notes': 'THX takes the size of the voltage at inputs 1 to 5 and throws its sign away, so a negative voltage sets the same time or frequency as the matching positive one.'
   'BZ-MAPPER':
     'lines':
       - 'A function mapper. A curve drawn between movable nodes in the display maps every input voltage to an output voltage, and it works on polyphonic cables'
@@ -12926,7 +12926,7 @@
           'step': 'stepped'
         '6':
           'step': 'stepped'
-    'notes': 'Port props pass: a stage''s own trigger input (7 to 18) is taken as high at any voltage other than 0V — SQUONK::process at 0x253654 compares it against zero rather than against the 1V the other trigger inputs use — so no range shape fits it. The chain inputs (19 to 24) are copied straight to the matching outputs, so those outputs carry whatever is patched in and no range was written for them.'
+    'notes': 'Port props pass: a stage''s own trigger input (7 to 18) is taken as high at any voltage other than 0V — SQUONK compares it against zero rather than against the 1V the other trigger inputs use — so no range shape fits it. The chain inputs (19 to 24) are copied straight to the matching outputs, so those outputs carry whatever is patched in and no range was written for them.'
   'HotTuna':
     'lines':
       - 'A chromatic tuner that reads either a signal or a pitch voltage, showing the note on a needle display and putting the detected frequency out as a voltage'
@@ -13613,7 +13613,7 @@
         '13':
           'poly': false
           'step': 'stepped'
-    'notes': 'The hold, reverse and alternate inputs are not Schmitt triggers: PingableStereoDelay::process compares each against zero for inequality at 0x84240, 0x84764 and 0x84928, so any voltage at all, negative included, reads as high and the jack switches on the change rather than on a level.'
+    'notes': 'The hold, reverse and alternate inputs are not Schmitt triggers: PingableStereoDelay compares each against zero for inequality, so any voltage at all, negative included, reads as high and the jack switches on the change rather than on a level.'
   'PolySevenSeas2':
     'lines':
       - 'A polyphonic wavetable oscillator holding a cube of banks, waves and sample points, with morphing between them and a swarm mode that runs many detuned oscillators at once'
@@ -14753,7 +14753,7 @@
         '34':
           'poly': false
           'step': 'stepped'
-    'notes': 'Port props pass: each row''s GATE input and the SUM gate are compared against 10V, not against the usual 1V (VoltageSource::process at 0xbd9fc and 0xbda24), so a 5V gate leaves the row silent. No `range` field was written because the spellings the pass allows do not cover a 10V threshold.'
+    'notes': 'Port props pass: each row''s GATE input and the SUM gate are compared against 10V, not against the usual 1V, so a 5V gate leaves the row silent. No `range` field was written because the spellings the pass allows do not cover a 10V threshold.'
   'AutoFader':
     'lines':
       - 'Eight channels faded in and out together on a trigger, with the fade times set in seconds and a pulse at the end of each fade'
@@ -15767,7 +15767,7 @@
           'poly': true
         '38':
           'poly': false
-    'notes': 'Port props pass: the twelve row trigger inputs that the panel exposes are 12 to 23, read at 0x30f34c. A second set of twelve, inputs 30 to 41, is read at 0x30ead0 and has no widget position, so it can never be clicked. With no row selected, TheCage::process at 0x30f4ec indexes inputs and outputs at -1, which reads outside both arrays.'
+    'notes': 'Port props pass: the twelve row trigger inputs that the panel exposes are 12 to 23. A second set of twelve, inputs 30 to 41, is read as well and has no widget position, so it can never be clicked. With no row selected, TheCage indexes inputs and outputs at -1, which reads outside both arrays.'
   'QuadSimpler':
     'lines':
       - 'Four sample players with a mixer. Each slot loads a wav or aiff file, plays it at a speed and level you set, and the four are summed to a stereo pair'
@@ -16895,7 +16895,7 @@
         '56':
           'poly': false
           'step': 'stepped'
-    'notes': 'The polyphony is real and it is per channel: at 0xfd9ac each of the thirty-two signal inputs is added into its row''s bus one channel at a time, using its own channel count, and at 0xfdcf4 the matching signal output is given the width of the widest input on that row. The switch, scene and expander jacks are all read as channel one only. Four of them — the two step jacks and the two that pair with them — count any voltage other than 0V as high, negative voltages included, so no threshold is written for those.'
+    'notes': 'The polyphony is real and it is per channel: each of the thirty-two signal inputs is added into its row''s bus one channel at a time, using its own channel count, and the matching signal output is given the width of the widest input on that row. The switch, scene and expander jacks are all read as channel one only. Four of them — the two step jacks and the two that pair with them — count any voltage other than 0V as high, negative voltages included, so no threshold is written for those.'
   'PolyRecorder64':
     'lines':
       - 'A sixty-four track recorder. Four polyphonic inputs of sixteen channels each carry the tracks, and what arrives is written to a file'
@@ -16951,10 +16951,10 @@
       'out':
         '0':
           'poly': false
-          'why': 'plugin.dylib polyrecorder64::process contains no store into any output''s channels byte, so this jack stays at the single channel the engine gives it'
+          'why': 'polyrecorder64 never sets a channel count on any output, so this jack stays at the single channel the engine gives it'
         '1':
           'poly': false
-          'why': 'plugin.dylib polyrecorder64::process contains no store into any output''s channels byte, so this jack stays at the single channel the engine gives it'
+          'why': 'polyrecorder64 never sets a channel count on any output, so this jack stays at the single channel the engine gives it'
   'MusicalBox':
     'lines':
       - 'Eight sample players on one panel. Each row holds a bank of samples and plays one of them at a speed tracking one volt per octave, with its own level, pan and stereo outputs'
@@ -17648,7 +17648,7 @@
           'step': 'stepped'
         '23':
           'step': 'stepped'
-    'notes': 'Port props pass: the inputs tagged as the back-to-start and to-the-end pulses (40 to 55) are not read as pulses at all — musical_box::process at 0x16862c and 0x168740 multiplies each by 0.1, takes the size of the result, caps it at 1 and uses it as the playhead position, overriding the knob beside it. The lines for those two inputs should be checked.'
+    'notes': 'Port props pass: the inputs tagged as the back-to-start and to-the-end pulses (40 to 55) are not read as pulses at all — musical_box multiplies each by 0.1, takes the size of the result, caps it at 1 and uses it as the playhead position, overriding the knob beside it. The lines for those two inputs should be checked.'
   'SevenSeas':
     'lines':
       - 'Stereo wavetable oscillator with morphing between waves and a swarm mode that runs many oscillators at once'
@@ -18260,10 +18260,10 @@
       'out':
         '0':
           'poly': false
-          'why': 'plugin.dylib PolyRecorder::process contains no store into any output''s channels byte, so this jack stays at the single channel the engine gives it'
+          'why': 'PolyRecorder never sets a channel count on any output, so this jack stays at the single channel the engine gives it'
         '1':
           'poly': false
-          'why': 'plugin.dylib PolyRecorder::process contains no store into any output''s channels byte, so this jack stays at the single channel the engine gives it'
+          'why': 'PolyRecorder never sets a channel count on any output, so this jack stays at the single channel the engine gives it'
   'MusicalBox2':
     'lines':
       - 'Sixteen stereo sample players on one panel. Each row holds a bank of samples and plays one of them at a speed tracking one volt per octave, with its own level, pan and outputs'
@@ -19426,7 +19426,7 @@
           'poly': true
         '3':
           'poly': true
-    'notes': 'Port props pass: PolySevenSeas::process at 0x1d9b84 reads the inputs array at byte offset 1200, which is past the end of its thirteen ports. Worth checking against the maker.'
+    'notes': 'Port props pass: PolySevenSeas reads the inputs array past the end of its thirteen ports. Worth checking against the maker.'
   'JIRAJIRAECHO':
     'lines':
       - 'An echo modelled on the Binson Echorec, where the signal is written to a spinning magnetic disk and read back by six play heads at once'
@@ -19566,4 +19566,4 @@
         '21':
           'poly': false
           'step': 'stepped'
-    'notes': 'ECHOREC2::process reads input 18 at 0xedbcc as a second audio input beside input 0, each multiplied by the same input level knob at 0xedbf8, and normals either one to both sides when only one is patched. Nothing in process uses input 18 to change a level. Inputs 1 to 6 are on the panel but process reaches them, if at all, only through a computed port index that could not be resolved, so they are left out here.'
+    'notes': 'ECHOREC2 reads input 18 as a second audio input beside input 0, each multiplied by the same input level knob, and normals either one to both sides when only one is patched. Nothing in process uses input 18 to change a level. Inputs 1 to 6 are on the panel but process reaches them, if at all, only through a computed port index that could not be resolved, so they are left out here.'

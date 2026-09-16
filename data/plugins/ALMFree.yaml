@@ -61,9 +61,9 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      There is no published source for this plugin: plugin.json carries no sourceUrl and no manualUrl, so everything here was read out of the installed 2.2.2 plugin.dylib, which is unstripped and carries one Class::process per model.
+      There is no published source for this plugin: plugin.json carries no sourceUrl and no manualUrl.
 
-      The switch is a five-position rotary: configParam at 0x269c and 0x2714 gives -2 to +2 in the unit V with snapEnabled set at 0x26e4, and the panel prints -2, -I, a zero symbol, +I and +2 around it. process adds that number of volts, so the module is an octave shifter when it is fed a 1V-per-octave pitch, which is what it is for.
+      The switch is a five-position rotary: configParam gives -2 to +2 in the unit V with snapEnabled set, and the panel prints -2, -I, a zero symbol, +I and +2 around it. process adds that number of volts, so the module is an octave shifter when it is fed a 1V-per-octave pitch, which is what it is for.
 
       The normal runs from the first section to the second, not the other way: process reads input 1's channel count and falls back to input 0. The panel prints a down-pointing triangle beside both In jacks, which on the second one points at nothing.
 
@@ -118,13 +118,13 @@
     'notes': |-
       No family is set on these jacks. The module is a DC-coupled offset and attenuverter pair; what a jack carries is whatever you decide to put in it, so a colour would be a guess.
 
-      The mix is a menu item, not a knob. Param 4 is configured (0x11c3c, 0 to 1, default 0) but no ParamWidget is created for it, so it has no position in the census and cannot be clicked for help; OAx2Widget::appendContextMenu at 0x12568 builds it with createBoolMenuItem under the name assembled inline at 0x125dc, which is MIX MODE in capitals.
+      The mix is a menu item, not a knob. Param 4 is configured 0 to 1 with a default of 0 but no ParamWidget is created for it, so it has no position in the census and cannot be clicked for help; OAx2Widget::appendContextMenu builds it with createBoolMenuItem under the name MIX MODE, in capitals.
 
-      The mix is also conditional in a way the name does not suggest: 0x11f14-0x11f24 reads output 0's channel count and contributes -0.0 instead of the first channel's value when that output is patched. Plug anything into the first channel's output and the second channel stops receiving it.
+      The mix is also conditional in a way the name does not suggest: it reads output 0's channel count and contributes -0.0 instead of the first channel's value when that output is patched. Plug anything into the first channel's output and the second channel stops receiving it.
 
       The attenuverter reaches ±2, so the module amplifies as well as attenuates. Both attenuverters default to 0, which is the middle of their travel and passes nothing.
 
-      Four lights are driven from the two results at 0x11f78-0x11fb8 and 0x12008-0x12048, scaled by 0.1 so they reach full at 10V, with a separate lamp for each sign.
+      Four lights are driven from the two results, scaled by 0.1 so they reach full at 10V, with a separate lamp for each sign.
   'Tangle':
     'lines':
       - 'A copy of ALM''s Tangle Quartet: four voltage-controlled amplifiers with individual outputs and a mix that each channel drops out of when its own output is used'
@@ -224,15 +224,15 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      This is the plainest example in the plugin of a CV input that takes the knob over rather than adding to it. Tangle::process at 0x17f3c-0x17f50 computes gain = CV * knob / range when the Level CV jack is patched, and gain = knob when it is not. A patched cable resting at 0V silences the channel however far up the knob is, and the knob becomes an attenuator for the CV.
+      This is the plainest example in the plugin of a CV input that takes the knob over rather than adding to it. Tangle::process computes gain = CV * knob / range when the Level CV jack is patched, and gain = knob when it is not. A patched cable resting at 0V silences the channel however far up the knob is, and the knob becomes an attenuator for the CV.
 
       The four channels are written from the same shape of code and differ only in which port and which knob they use, so one line covers each role and the tags point all four at it.
 
-      The Mix jack is a normalled sum: 0x18048-0x18060 and 0x1807c-0x1808c read each channel output's channel count and drop that channel from the total when it is patched. The maker's own product page for the hardware describes the same behaviour.
+      The Mix jack is a normalled sum: each channel output's channel count is read and that channel drops out of the total when it is patched. The maker's own product page for the hardware describes the same behaviour.
 
-      The level knobs are configured 0 to 1 with a default of 1 and a display multiplier of 100 (0x17974-0x17998), so they are percentages and come up fully open. The lights are fed the gain value, not the audio.
+      The level knobs are configured 0 to 1 with a default of 1 and a display multiplier of 100, so they are percentages and come up fully open. The lights are fed the gain value, not the audio.
 
-      The menu name is the literal string "Voltage Range" at 0x188b0, with the two choices assembled inline at 0x188d0 and 0x188e4 as 10V and 5V. The getter at 0x18ba0 compares the stored range against 5 and the setter at 0x18c98 stores 10 for index 0 and 5 for index 1, so 10V is the first choice and the one a new module has (set at 0x17054).
+      The menu is named "Voltage Range", with the two choices 10V and 5V. The stored range is compared against 5, and 10 is stored for index 0 and 5 for index 1, so 10V is the first choice and the one a new module has.
   'MCO':
     'lines':
       - 'A copy of ALM''s MCO: a digital wavetable oscillator giving a sub square, a gated pulse and the main wave at the same time'
@@ -315,15 +315,15 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      Parameter 3, the Type control, exists but has no knob and no configParam. MCO::MCO calls configParam for indices 0, 1, 2 and 4 only (0x562c, 0x5690, 0x5700, 0x5770); index 3 keeps the empty default quantity that Module::config creates, which is why the census records it with no name and no position. combine_cv_and_pot_data never reads params[3] either — only the Type jack, divided by the voltage range and clamped to that default 0 to 1. So the Type jack has no knob behind it at all and is the only way to change that setting. It gets no tag, because no click can reach the parameter.
+      Parameter 3, the Type control, exists but has no knob and no configParam. MCO::MCO calls configParam for indices 0, 1, 2 and 4 only; index 3 keeps the empty default quantity that Module::config creates, which is why the census records it with no name and no position. combine_cv_and_pot_data never reads params[3] either — only the Type jack, divided by the voltage range and clamped to that default 0 to 1. So the Type jack has no knob behind it at all and is the only way to change that setting. It gets no tag, because no click can reach the parameter.
 
-      A second dead computation sits at 0x61cc-0x6268: the fine-tune parameter is combined with the Sync jack's voltage as though that jack were a CV, clamped, and stored at +0x178. Nothing reads +0x178. The Sync jack's real use is the level comparison in process at 0x5c64. The fine trim therefore has no CV input.
+      A second dead computation sits beside it: the fine-tune parameter is combined with the Sync jack's voltage as though that jack were a CV, clamped, and stored in a field nothing reads. The Sync jack's real use is the level comparison in process. The fine trim therefore has no CV input.
 
-      The frequency law is 165 * 2^coarse * fine. configParam at 0x5770 gives the coarse control -2.75 to 2.75 with a display base of 2 and a display multiplier of 165, and 0x5700 gives the fine control 1 to 2 with a default of 1.5. Both use MCO::FreqParamQuantity, whose getDisplayValueString reads a frequency the process code stores back into it, so the tooltips show hertz.
+      The frequency law is 165 * 2^coarse * fine. configParam gives the coarse control -2.75 to 2.75 with a display base of 2 and a display multiplier of 165, and the fine control 1 to 2 with a default of 1.5. Both use MCO::FreqParamQuantity, whose getDisplayValueString reads a frequency the process code stores back into it, so the tooltips show hertz.
 
-      Outputs are scaled by 7/32767 (the constant 0x396001C0 at 0x5cf4), so a full-scale sample leaves at 7V and the sub square is a hard ±7V.
+      Outputs are scaled by 7/32767, so a full-scale sample leaves at 7V and the sub square is a hard ±7V.
 
-      The pulse output is not a plain square. 0x5cb0-0x5ce8 divides the cycle into as many parts as the Type setting asks for, compares the position inside the current part against the pulse width, and outputs a flat 7V outside it and the wave itself inside it. With Type at one and the width at zero the jack sits at 7V.
+      The pulse output is not a plain square. The code divides the cycle into as many parts as the Type setting asks for, compares the position inside the current part against the pulse width, and outputs a flat 7V outside it and the wave itself inside it. With Type at one and the width at zero the jack sits at 7V.
 
       The maker's product page for the hardware describes "Voltage control of frequency, waveshape, pulse width and distribution" and "3 Outputs; wavetable, PWM'd wavetable & sub", which matches; it quotes no figures, so none were taken from it.
   'PipSlope':
@@ -395,15 +395,15 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      The code and ALM's own hardware page disagree about the output level. The page for the ALM028 says "Selectable 5v or 8v max envelope level output"; the menu here (built at 0x15130, name "Voltage Range", choices assembled inline at 0x151c8 and 0x151dc) offers 10V and 5V, and the setter stores 10 or 5 into the same member the output scaling reads. The Slope Out line carries that clause; a patch built around the hardware's 8V will be a third too loud here at the default setting.
+      The code and ALM's own hardware page disagree about the output level. The page for the ALM028 says "Selectable 5v or 8v max envelope level output"; the menu here, named "Voltage Range", offers 10V and 5V, and the setter stores 10 or 5 into the same member the output scaling reads. The Slope Out line carries that clause; a patch built around the hardware's 8V will be a third too loud here at the default setting.
 
-      The Loop control's bands come from MillisecondCallback at 0x14b2c-0x14c18, which reads the knob as a 0 to 4095 number and picks a mode: below 1001 one shot, 1001 and above a mode that halves the peak each repeat (slope_yield 0x149b4), 2001 and above a mode that runs four to ten repeats at shortening rates taken from a table (0x149e0 and 0x148cc), and 3401 and above a mode that retriggers itself every millisecond, which also lights a lamp at 0x14b48. ALM's page describes the hardware's three loop modes as "Decreasing amplitude, decreasing time, and regular loop", which is the same set.
+      The Loop control's bands come from MillisecondCallback, which reads the knob as a 0 to 4095 number and picks a mode: below 1001 one shot, 1001 and above a mode that halves the peak each repeat, 2001 and above a mode that runs four to ten repeats at shortening rates taken from a table, and 3401 and above a mode that retriggers itself every millisecond, which also lights a lamp. ALM's page describes the hardware's three loop modes as "Decreasing amplitude, decreasing time, and regular loop", which is the same set.
 
-      The Gate input really does sustain. ManageHardware records only its rising edge, but slope_yield reads the jack's level directly at 0x14918 and freezes the envelope while it is above 3V.
+      The Gate input really does sustain. ManageHardware records only its rising edge, but slope_yield reads the jack's level directly and freezes the envelope while it is above 3V.
 
-      The knobs are read as 12-bit numbers exactly as the hardware's firmware would see them: ManageHardware at 0x145dc scales each 0-to-1 parameter by 4095.5 and offsets the two time controls by 8191.5, and MillisecondCallback subtracts 8190 and clamps to 0..4094. The lamp at 0x14b4c is set to a brightness of 2, which Rack clamps to full.
+      The knobs are read as 12-bit numbers exactly as the hardware's firmware would see them: ManageHardware scales each 0-to-1 parameter by 4095.5 and offsets the two time controls by 8191.5, and MillisecondCallback subtracts 8190 and clamps to 0..4094. The lamp is set to a brightness of 2, which Rack clamps to full.
 
-      Every figure here was read out of the binary. Nothing was taken from the hardware manual PDF, which was not opened.
+      Nothing was taken from the hardware manual PDF, which was not opened.
   'MegaTang':
     'lines':
       - 'A copy of ALM''s MEGA-TANG: four channels with level, pan, mute and an effects send, summed into a stereo mix, with a stereo return and two optional expanders'
@@ -511,17 +511,17 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      The return is not mono-normalled. The panel prints (m) beside the left Return jack, which is ALM's mark for a jack that feeds both sides when used alone, and MFD in this same plugin does exactly that. MegaTang::process reads the two return jacks at 0xf9f8 and 0xf9fc with no channel-count test anywhere, so patching only the left return leaves the right side of the mix without it. The left return's own line carries a clause saying so.
+      The return is not mono-normalled. The panel prints (m) beside the left Return jack, which is ALM's mark for a jack that feeds both sides when used alone, and MFD in this same plugin does exactly that. MegaTang::process reads the two return jacks with no channel-count test anywhere, so patching only the left return leaves the right side of the mix without it. The left return's own line carries a clause saying so.
 
-      The mute does not reach the channel's own output. The gain used for output 0 at 0xf74c-0xf758 is the level alone; the mute is applied separately at 0xf798 on the path into the mix and the send. Anyone using the channel outputs as direct outs will find the mute buttons do nothing to them.
+      The mute does not reach the channel's own output. The gain used for output 0 is the level alone; the mute is applied separately on the path into the mix and the send. Anyone using the channel outputs as direct outs will find the mute buttons do nothing to them.
 
-      A channel leaves both the mix and the send as soon as its own output is patched: 0xf764, 0xf828, 0xf8e4 and 0xf99c read each output's channel count and skip that channel's contribution.
+      A channel leaves both the mix and the send as soon as its own output is patched: each output's channel count is read and that channel's contribution is skipped.
 
       The expanders attach on the right. MegaTang::process reads rightExpander.module at +0x110 and compares its model against modelMTEX1 and modelMTEX2; MTEX1::process and MTEX2::process read leftExpander.module at +0xe8 and compare against modelMegaTang.
 
-      A debug printf was left in. When the module on the right is an MT-EX1, 0xf6c8-0xf6d0 calls printf with the format string "tang: C1 From: %.2f To: %.2f\n" on every sample, and MTEX1::process does the same with "ex1: C1 From: %.2f To: %.2f\n" at 0xc784. Neither affects the audio.
+      A debug printf was left in. When the module on the right is an MT-EX1, printf is called with the format string "tang: C1 From: %.2f To: %.2f\n" on every sample, and MTEX1::process does the same with "ex1: C1 From: %.2f To: %.2f\n". Neither affects the audio.
 
-      Parameter ranges: sends 0 to 1 with a default of 0, pans 0 to 1 with a default of 0.5 and a display multiplier of 200, levels 0 to 1 with a default of 1, all as percentages (0xe964 onward). The mutes are latching buttons; the byte a MuteButton sets on mouse-down (0x110f0) only drives a second lamp and is not in the audio path.
+      Parameter ranges: sends 0 to 1 with a default of 0, pans 0 to 1 with a default of 0.5 and a display multiplier of 200, levels 0 to 1 with a default of 1, all as percentages. The mutes are latching buttons; the byte a MuteButton sets on mouse-down only drives a second lamp and is not in the audio path.
 
       The four channel outputs are numbered so that index 0 is the jack the panel labels 1, which is the bottom one of that column; the tags follow the index, not the panel order.
   'MTEX1':
@@ -588,15 +588,15 @@
     'notes': |-
       MTEX1::process returns immediately unless leftExpander.module (+0xe8) has modelMegaTang as its model, so the module is completely inert anywhere except directly to the right of a MEGA-TANG. It has no outputs, which is why the census lists none.
 
-      A debug printf was left in: 0xc784-0xc78c calls printf with the format "ex1: C1 From: %.2f To: %.2f\n" on every sample while the module is attached. MEGA-TANG prints its own line in the same condition. This is the most visible fault in the plugin and it is in the shipping binary.
+      A debug printf was left in: printf is called with the format "ex1: C1 From: %.2f To: %.2f\n" on every sample while the module is attached. MEGA-TANG prints its own line in the same condition. This is the most visible fault in the plugin and it is in the shipping build.
 
-      The Level knob applies only to the Line In. The In 5 and In 6 jacks are written into the mix message unscaled (0xc710, 0xc718), so they always arrive at full level; their knobs are sends only.
+      The Level knob applies only to the Line In. The In 5 and In 6 jacks are written into the mix message unscaled, so they always arrive at full level; their knobs are sends only.
 
-      The send taken from the Line In is taken before the Level knob, not after it (0xc744 multiplies the raw voltage by param 0), so lowering the Level does not lower that send.
+      The send taken from the Line In is taken before the Level knob, not after it (the raw voltage is multiplied by param 0), so lowering the Level does not lower that send.
 
       The Line In jack is named Variable in the maker's tooltip and Line In on the panel. The panel is the name used here.
 
-      All four knobs are configured 0 to 1 with a default of 0 and a display multiplier of 100 (0xc2cc onward).
+      All four knobs are configured 0 to 1 with a default of 0 and a display multiplier of 100.
   'MTEX2':
     'lines':
       - 'An expander for MEGA-TANG, sitting immediately to its right: a second effects send with its own four send levels and its own stereo return'
@@ -643,11 +643,11 @@
     'notes': |-
       MTEX2::process returns immediately unless leftExpander.module (+0xe8) has modelMegaTang as its model.
 
-      The four values it multiplies are the raw channel input voltages: MegaTang::process at 0xf654-0xf674 copies inputs 0 to 3 into the message before any level, pan or mute is applied. This second send is therefore pre-fade, unlike MEGA-TANG's own, which is taken after the level and the mute.
+      The four values it multiplies are the raw channel input voltages: MegaTang::process copies inputs 0 to 3 into the message before any level, pan or mute is applied. This second send is therefore pre-fade, unlike MEGA-TANG's own, which is taken after the level and the mute.
 
-      The sum is the only clamped output anywhere in the expander pair: 0xd358-0xd36c limits it to -10V and 10V.
+      The sum is the only clamped output anywhere in the expander pair: it is limited to -10V and 10V.
 
-      All four knobs are configured 0 to 1 with a default of 0 and a display multiplier of 100 (0xcee4 onward).
+      All four knobs are configured 0 to 1 with a default of 0 and a display multiplier of 100.
 
       No debug printf is reached through this expander; the printf pair belongs to MT-EX1 and to MEGA-TANG's MT-EX1 branch.
   'MFD':
@@ -731,13 +731,13 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      The crossfade really is equal power, and the curve can be named exactly: MFD::process loads the double pi/2 at 0xa340 and calls cos twice, multiplying the A side by cos(x * pi/2) and the B side by cos((1 - x) * pi/2), where x is the fader position clamped to 0 and 1. ALM's page for the hardware says "Approx equal power crossfading", which agrees.
+      The crossfade really is equal power, and the curve can be named exactly: MFD::process loads the double pi/2 and calls cos twice, multiplying the A side by cos(x * pi/2) and the B side by cos((1 - x) * pi/2), where x is the fader position clamped to 0 and 1. ALM's page for the hardware says "Approx equal power crossfading", which agrees.
 
-      Both stereo inputs are mono-normalled: the right jack of each pair falls back to its own left jack (0xa3b8-0xa3e8), and the panel marks each left jack (m). This is the behaviour MEGA-TANG's return jacks print the same mark for and do not have.
+      Both stereo inputs are mono-normalled: the right jack of each pair falls back to its own left jack, and the panel marks each left jack (m). This is the behaviour MEGA-TANG's return jacks print the same mark for and do not have.
 
-      The cue bus ignores the fader. 0xa2c8-0xa304 and 0xa3a0-0xa3f4 add the raw input voltages of whichever channels are cued, with no crossfade and no clamp.
+      The cue bus ignores the fader. The raw input voltages of whichever channels are cued are added, with no crossfade and no clamp.
 
-      The cue buttons are ALM BlueButtons with the momentary flag cleared in the constructor at 0xb554, so they hold their state rather than acting only while pressed. CueButton::onDragStart and onDragEnd (0xb778, 0xb7a4) set and clear a separate byte that drives a second lamp and is not read by the audio path. The lines avoid claiming either behaviour.
+      The cue buttons are ALM BlueButtons with the momentary flag cleared in the constructor, so they hold their state rather than acting only while pressed. CueButton::onDragStart and onDragEnd set and clear a separate byte that drives a second lamp and is not read by the audio path. The lines avoid claiming either behaviour.
 
       The X Fade CV is added to the knob and the total clamped, so negative voltage pulls the fader towards A and is not simply discarded, but it cannot pull it past A.
 
@@ -836,7 +836,7 @@
           'poly': false
           'step': 'continuous'
     'notes': |-
-      The cascade breaks per side, not per section. StereoSum::process reads output 0's channel count at 0x16670 and output 1's at 0x166b4, independently, so patching one of the upper outputs splits that side alone and leaves the other side of the stereo pair joined. Nothing on the panel shows this.
+      The cascade breaks per side, not per section. StereoSum::process reads output 0's channel count and output 1's independently, so patching one of the upper outputs splits that side alone and leaves the other side of the stereo pair joined. Nothing on the panel shows this.
 
       The module has no parameters at all, no lights and no context menu; process is 34 instructions of adds and two conditional selects.
 

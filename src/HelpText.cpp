@@ -12,7 +12,7 @@ Sources:
   4ms-XOXDrums               12 modules  https://github.com/4ms/XOXDrums/blob/main/doc/XOX%20Drums%20User%20Manual.md
   4msCompany                 50 modules  https://github.com/4ms/4ms-vcv/
   8Mode                       1 modules  https://github.com/8Mode/8Mode-VCV_Modules/blob/master/docs/SoftSN.md
-  AISynthesis                 1 modules  no published source; read from the installed 2.0.1 plugin.dylib
+  AISynthesis                 1 modules  no published source; read from the installed 2.0.1 build
   ALMFree                    10 modules  https://busycircuits.com/vcv/
   AS                         44 modules  https://github.com/AScustomWorks/AS/blob/V2/README.md
   ASK                         1 modules  https://github.com/pawal/ask-vcv-modules/blob/main/README.md
@@ -90,9 +90,9 @@ Sources:
   DanTModules                21 modules  https://miff-real.github.io/DanTModules-Manual/
   DanTSynth                   2 modules  https://github.com/Miff-Real/DanT.Synth/blob/main/docs/aocr.md
   DarkProcessIndustries      10 modules  https://darkprocessindustries.com/vcv-rack/
-  DigitalAtavism              6 modules  no published source; read from the installed 2.0.0 plugin.dylib, which carries full local symbols
+  DigitalAtavism              6 modules  no published source; read from the installed 2.0.0 build
   Dintree-Virtual             9 modules  https://github.com/hires/Dintree-Virtual/blob/ca9cc0f/README.md
-  DivergentWaves              1 modules  no published source and no manual; read from the installed 2.0.0 plugin.dylib and its res/Logic.svg
+  DivergentWaves              1 modules  no published source and no manual; read from the installed 2.0.0 build and its res/Logic.svg
   DogmanDevices               8 modules  https://github.com/lancemgiles/Dogman-Devices-Rack/blob/6c70bcc/README.md
   DreamerDemo                 1 modules  the plugin's own source, ~/ProgrammingProjects/DreamerDemo
   DreamerDevelopment          3 modules  the plugin's own source
@@ -134,13 +134,13 @@ Sources:
   HetrickCVGPL                2 modules  https://github.com/mhetrick/phasorbeatgen/blob/main/README.md
   HolonicSystems-Free         7 modules  https://holon.ist/vcv/
   Hora-Mixers                 3 modules  http://hora-music.wifeo.com/manuals.php
-  Hora-ModulationFree         1 modules  no published source; read from the installed 2.1.4 plugin.dylib, which carries full local symbols
-  Hora-PCMDrumFree            1 modules  no published source; read from the installed 2.1.3 plugin.dylib, which carries full local symbols
+  Hora-ModulationFree         1 modules  no published source; read from the installed 2.1.4 build
+  Hora-PCMDrumFree            1 modules  no published source
   Hora-ProcessorsFree         4 modules  https://library.vcvrack.com/Hora-ProcessorsFree
   Hora-VCO_VCF_VCA_Free       3 modules  no published source; read from the installed 2.2.5 build
   Hora-treasureFree           5 modules  http://hora-music.wifeo.com/manuals.php
   HoyerHoppes                 4 modules  https://github.com/jakulley/HoyerHoppes/blob/main/README.md
-  Hugelton                    3 modules  no published source; read from the installed 2.0.1 binary, which carries full C++ symbols
+  Hugelton                    3 modules  no published source; read from the installed 2.0.1 build
   Hutara                      2 modules  https://github.com/hutara/Hutara-modules
   IggyLabsModules             3 modules  https://github.com/isabelgk/IggyLabsModules/tree/master/doc
   ImpromptuModular           32 modules  https://marcboule.github.io/ImpromptuModular/
@@ -151,7 +151,7 @@ Sources:
   Interrobang                 1 modules  https://github.com/jimallman/interrobang-rack-modules/blob/4a148ff/README.md
   JPFree                      7 modules  https://github.com/patheros/JPManuals/blob/main/JPFree.pdf
   JW-Modules                 48 modules  https://github.com/jeremywen/JW-Modules
-  Jasmine-and-Olive-Trees     3 modules  no published source; read from the installed 2.0.2 binary, which carries full C++ symbols
+  Jasmine-and-Olive-Trees     3 modules  no published source; read from the installed 2.0.2 build
   JulioChaos                  3 modules  https://github.com/JulioArgudo/JulioChaos-modules
   KRTPluginA                 26 modules  https://github.com/jackokring/KRTPluginA/blob/master/README.md
   Kalliste                    2 modules  https://github.com/GabTiorbi/Kalliste
@@ -193,7 +193,7 @@ Sources:
   NLS                         4 modules  https://github.com/michelezaccagnini/NLS/blob/main/README.md
   NOI                         6 modules  https://github.com/LeNomDesFleurs/NOI-VCVRACK/blob/master/README.md
   NTRWabot                    1 modules  https://github.com/nevertrustrobots/NTRWabot#readme
-  NYSTHI                    149 modules  No maker manual. Read from the panels, the CHANGELOG.md shipped in the installed plugin (v2.4.23), the literal pool and the C++ symbol table of the installed plugin binary, the port map we hand-read, and the community manual at https://github.com/patman023/nysthimanual, which is almost entirely empty. NYSTHI ships no presets and no demo patches.
+  NYSTHI                    149 modules  No maker manual. Read from the panels, the CHANGELOG.md shipped in the installed plugin (v2.4.23), the installed build, the port map we hand-read, and the community manual at https://github.com/patman023/nysthimanual, which is almost entirely empty. NYSTHI ships no presets and no demo patches.
   NewtronAudio                1 modules  https://github.com/zebedeezac/NewtronAudio
   NoSuchDevice                3 modules  https://github.com/thorinside/NoSuchDevice
   NocturnalEncoder            2 modules  https://github.com/djpeterso23662/NocturnalEncoder#readme
@@ -215,7 +215,7 @@ Sources:
   OrangeLine                 12 modules  https://github.com/Stubs42/OrangeLine/blob/2.0/README.md
   OuroborosModules           13 modules  https://github.com/Doom2fan/OuroborosModules/wiki
   PS-PurrSoftware             3 modules  https://github.com/knchaffin/Meander/blob/master-V2/README.md
-  PatchAndTweak               5 modules  no published source; read from the installed 2.0.1 plugin.dylib and its res/ artwork
+  PatchAndTweak               5 modules  no published source; read from the installed 2.0.1 build and its res/ artwork
   PatchableDevices            6 modules  https://github.com/nullJaX/vcvrack-patchable-devices/blob/main/MANUAL.md
   PathSet-GlassShard          1 modules  https://github.com/patheros/PathSetManuals/blob/main/modules/GlassShard.md
   PathSet-Infinity            4 modules  https://github.com/patheros/PathSetManuals

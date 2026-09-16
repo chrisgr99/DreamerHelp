@@ -328,7 +328,7 @@
           'poly': false
           'range': '0 to 10V'
           'why': 'Copper.cpp:261 sets one voltage, the transparency times ten'
-    'notes': 'The polyphonic output is dead. Copper.cpp:267 writes `auto out = getOutput(POLY_OUT);`, which copies the port by value, and the setChannels and voltage writes that follow land on that copy. The shipped binary agrees: in CopperModule::process the port is loaded onto the stack at 0x3c2c0, the channel count is read back from the stack copy, and the seven voltage stores are gone altogether as dead code, with no write back to the module''s outputs. The red, green and blue outputs are only computed while one of R, G, B or poly is patched (Copper.cpp:251); since poly writes nothing, patching poly alone gives nothing anywhere.'
+    'notes': 'The polyphonic output is dead. Copper.cpp:267 writes `auto out = getOutput(POLY_OUT);`, which copies the port by value, and the setChannels and voltage writes that follow land on that copy. The seven voltage stores are dead code, with no write back to the module''s outputs. The red, green and blue outputs are only computed while one of R, G, B or poly is patched (Copper.cpp:251); since poly writes nothing, patching poly alone gives nothing anywhere.'
   'pachde-copper-mini':
     'lines':
       - 'A 2HP colour picker with knobs and control voltage for hue, saturation, lightness and transparency, four jacks carrying them as voltages, and a colour for a Null, Info or PanelTone beside it'
@@ -459,7 +459,7 @@
       - 'Menu — Rail Theme: None, Follow Rack UI theme, Follow Rack prefer dark panels, Light, Dark, High Contrast — recolours the rail drawing; only the light colouring is loaded by this build'
       - 'Menu — Shouting buttons — switches the button lettering between capitals and mixed case'
       - 'Menu — Calm jack shape: Plain, Spades, Hearts, Diamonds, Clubs, Splat — sets the shape drawn inside a patched jack while CALM is on'
-    'notes': 'The Rail Theme menu offers Light, Dark and High Contrast, and res/rails holds -light.vgt, -dark.vgt and -high.vgt, but rails.cpp:13-15 returns the light file from all three accessors, so load_rail_themes loads -light.vgt three times. The shipped binary carries only the string res/rails/-light.vgt, confirming the other two files are never read. This module has no parameters, inputs or outputs at all: every control on the panel is a plain widget, so nothing here can be tagged.'
+    'notes': 'The Rail Theme menu offers Light, Dark and High Contrast, and res/rails holds -light.vgt, -dark.vgt and -high.vgt, but rails.cpp:13-15 returns the light file from all three accessors, so load_rail_themes loads -light.vgt three times, and the other two files are never read. This module has no parameters, inputs or outputs at all: every control on the panel is a plain widget, so nothing here can be tagged.'
   'pachde-fancybox':
     'lines':
       - 'Draws the Rack background: a picture, a colour wash, a linear gradient, a radial gradient, a vignette and cases around groups of modules, each of them animated from control voltage'
@@ -978,7 +978,7 @@
           'negative': 'subtracts'
           'normal': 'the knob or colour picked for it'
           'why': 'Fancy.hpp:155 reads the jack with getVoltage and scales it by 0.1, and Fancy.cpp:249 and 268-282, 300-312, 333-348 add that to the setting and clamp the total to 0 to 1'
-    'notes': 'The saturation, lightness and transparency inputs of every colour row do nothing with their own voltage. Fancy::modulate_color (Fancy.cpp:204-219) checks all four jacks of a row for a cable but then calls scaled_voltage(input_id_first) four times, so the hue jack''s voltage is added to all four colour parts. The shipped binary agrees: in Fancy::modulate_color the voltage is loaded once from the port at input_id_first times 0x50 and the same register is added to hue, saturation, lightness and alpha. Parameters 23 to 32 (image fitting, grayscale, the image offsets and scale, the background switch, and the four case settings) have no widget on this panel and are driven from the ON•OFF button and the two dialogs, so they get no line and no tag. Parameters 25, 26 and 27, the image X offset, Y offset and scale, are configured with an empty name (Fancy.cpp:19-21), which is why the census shows them nameless.'
+    'notes': 'The saturation, lightness and transparency inputs of every colour row do nothing with their own voltage. Fancy::modulate_color (Fancy.cpp:204-219) checks all four jacks of a row for a cable but then calls scaled_voltage(input_id_first) four times, so the hue jack''s voltage is added to all four colour parts. Parameters 23 to 32 (image fitting, grayscale, the image offsets and scale, the background switch, and the four case settings) have no widget on this panel and are driven from the ON•OFF button and the two dialogs, so they get no line and no tag. Parameters 25, 26 and 27, the image X offset, Y offset and scale, are configured with an empty name (Fancy.cpp:19-21), which is why the census shows them nameless.'
   'pachde-mini-fancybox':
     'lines':
       - 'A 2HP version of FancyBox: the same six background layers with their options in dialogs, and no control voltage inputs'
