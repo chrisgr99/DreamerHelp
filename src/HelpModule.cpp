@@ -21,31 +21,30 @@ static WeakPtr<widget::Widget> gOverlay;
 
 
 struct Help : Module {
-	enum ParamId { P_ON, PARAMS_LEN };
-	enum LightId { L_ON, LIGHTS_LEN };
-
-	/** Read aloud as well as shown. Saved with the patch. */
-	bool speak = false;
+	// APPENDED, NEVER INSERTED. Rack saves a parameter by its number, so a new one in the middle
+	// would move every one after it and load somebody's saved patch wrong.
+	enum ParamId { P_ON, P_SPEAK, PARAMS_LEN };
+	enum LightId { L_ON, L_SPEAK, LIGHTS_LEN };
 
 	Help() {
 		config(PARAMS_LEN, 0, 0, LIGHTS_LEN);
 		configSwitch(P_ON, 0.f, 1.f, 1.f, "Help mode", {"Off", "On"});
+		// ON THE PANEL RATHER THAN THE MENU, because it is a thing to reach for while reading
+		// rather than a setting made once. It was a menu item to begin with, and Mac-only.
+		configSwitch(P_SPEAK, 0.f, 1.f, 0.f, "Speak help on click", {"Off", "On"});
 	}
 
 	void process(const ProcessArgs& args) override {
-		const bool on = params[P_ON].getValue() > 0.5f;
-		lights[L_ON].setBrightness(on ? 1.f : 0.f);
+		lights[L_ON].setBrightness(params[P_ON].getValue() > 0.5f ? 1.f : 0.f);
+		lights[L_SPEAK].setBrightness(params[P_SPEAK].getValue() > 0.5f ? 1.f : 0.f);
 	}
 
-	json_t* dataToJson() override {
-		json_t* rootJ = json_object();
-		json_object_set_new(rootJ, "speak", json_boolean(speak));
-		return rootJ;
-	}
-
+	/** Speech used to be a plain member saved here; it is a parameter now, which Rack saves
+	itself. A patch written by the older build still carries the old key, so it is read once and
+	turned into the parameter rather than being lost. */
 	void dataFromJson(json_t* rootJ) override {
 		if (json_t* j = json_object_get(rootJ, "speak"))
-			speak = json_is_true(j);
+			params[P_SPEAK].setValue(json_is_true(j) ? 1.f : 0.f);
 	}
 };
 
@@ -59,9 +58,13 @@ struct HelpWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(
 			Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<CKSS>(mm2px(Vec(7.62, 60.0)), module, Help::P_ON));
+		addParam(createParamCentered<CKSS>(mm2px(Vec(7.62, 56.0)), module, Help::P_ON));
 		addChild(createLightCentered<MediumLight<GreenLight>>(
-			mm2px(Vec(7.62, 72.0)), module, Help::L_ON));
+			mm2px(Vec(7.62, 66.0)), module, Help::L_ON));
+
+		addParam(createParamCentered<CKSS>(mm2px(Vec(7.62, 86.0)), module, Help::P_SPEAK));
+		addChild(createLightCentered<MediumLight<GreenLight>>(
+			mm2px(Vec(7.62, 96.0)), module, Help::L_SPEAK));
 	}
 
 	/** THE PANEL LETTERS ITSELF, because Rack draws panels with nanosvg and nanosvg ignores
@@ -93,7 +96,9 @@ struct HelpWidget : ModuleWidget {
 		for (int i = 0; i < 3; i++)
 			nvgText(args.vg, mid, mm2px(27.f + i * 5.f), lines[i], NULL);
 
-		nvgText(args.vg, mid, mm2px(53.f), "on", NULL);
+		nvgText(args.vg, mid, mm2px(49.f), "on", NULL);
+		nvgText(args.vg, mid, mm2px(76.f), "speak", NULL);
+		nvgText(args.vg, mid, mm2px(80.f), "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
 		nvgFillColor(args.vg, nvgRGB(0x5f, 0x9d, 0xd8));
@@ -111,7 +116,7 @@ struct HelpWidget : ModuleWidget {
 		if (!m)
 			return;
 		helpStep(m->params[Help::P_ON].getValue() > 0.5f);
-		helpSetSpeak(m->speak);
+		helpSetSpeak(m->params[Help::P_SPEAK].getValue() > 0.5f);
 	}
 
 	void onAdd(const AddEvent& e) override {
@@ -144,15 +149,7 @@ struct HelpWidget : ModuleWidget {
 		ModuleWidget::onRemove(e);
 	}
 
-	void appendContextMenu(Menu* menu) override {
-		Help* m = dynamic_cast<Help*>(module);
-		if (!m)
-			return;
-		menu->addChild(new MenuSeparator);
-#if defined ARCH_MAC
-		menu->addChild(createBoolPtrMenuItem("Read the help aloud", "", &m->speak));
-#endif
-	}
+	// The speech switch is on the panel now, so there is nothing left for a menu to carry.
 };
 
 

@@ -121,10 +121,16 @@ itself, which is what the demo system already does, with the same voice.
 ONE AT A TIME. Opening a second module while the first is still being read stops the first: two
 voices at once is worse than either.
 
-Mac only. `say` is what is here, and this is a personal tool on a Mac; elsewhere the panel is
-still there to be read with the eyes. */
-static const char* HELP_VOICE = "Karen (Premium)";
-static const int HELP_RATE = 198;
+THE SYSTEM VOICE, WHICHEVER IT IS. It named a particular premium voice for a while, which is
+the one this was built against — and on any machine without that voice installed `say` failed
+and the reader got silence with nothing to say why. Whatever somebody has chosen in their own
+settings is both more likely to be there and more likely to be what they want.
+
+The rate is the one thing still imposed. Help is read in short bursts by somebody who already
+knows what a knob is, and the default pace is slower than that reading wants. */
+static const int HELP_RATE_MAC = 198;      // words per minute; the macOS default is about 175
+static const int HELP_RATE_LINUX = 198;    // espeak counts the same way
+static const int HELP_RATE_WINDOWS = 2;    // SAPI counts -10..10 from a default of 0
 
 /** What a synthesiser needs, rather than what the panel shows.
 
@@ -216,6 +222,12 @@ static bool helpIsSpeaking() {
 static void helpSilence() {
 #if defined ARCH_MAC
 	std::system("/usr/bin/killall say >/dev/null 2>&1");
+#elif defined ARCH_LIN
+	std::system("killall espeak spd-say >/dev/null 2>&1");
+#elif defined ARCH_WIN
+	// NOT taskkill on powershell.exe, which would kill whatever else the user is running in
+	// one. Windows speech is left to finish its sentence; the next thing said still queues
+	// behind it rather than talking over it, which is the part that mattered.
 #endif
 }
 
@@ -224,19 +236,51 @@ static void helpSay(const std::string& text) {
 	// their eyes does not want a voice starting up because they touched a row.
 	if (!gHelpSpeak)
 		return;
-#if defined ARCH_MAC
+
+	// THROUGH A FILE ON EVERY PLATFORM, and that is not tidiness. The text is somebody else's
+	// module description: it contains quotes, apostrophes, brackets and dashes, and every one of
+	// the three shells below would read some of those as syntax. A file has no syntax. Nothing in
+	// the text can be escaped wrongly because nothing in it is ever parsed.
 	const std::string path = system::getTempDirectory() + "/dreamer-help-speech.txt";
-	std::ofstream file(path.c_str());
-	if (!file)
-		return;
-	file << helpSpeech(text);
-	file.close();
-	// THROUGH A FILE RATHER THAN THE COMMAND LINE, so nothing in the text has to be escaped and
-	// nothing in it can be read as a command. Detached, so the rack does not stop while it talks.
-	std::string command = "/usr/bin/killall say >/dev/null 2>&1; /usr/bin/say -v \"";
-	command += HELP_VOICE;
-	command += "\" -r " + std::to_string(HELP_RATE) + " -f \"" + path + "\" >/dev/null 2>&1 &";
+	{
+		std::ofstream file(path.c_str());
+		if (!file)
+			return;
+		file << helpSpeech(text);
+	}
+
+#if defined ARCH_MAC
+	// Detached, so the rack does not stop while it talks.
+	const std::string command = "/usr/bin/killall say >/dev/null 2>&1; /usr/bin/say -r "
+		+ std::to_string(HELP_RATE_MAC) + " -f \"" + path + "\" >/dev/null 2>&1 &";
 	std::system(command.c_str());
+
+#elif defined ARCH_LIN
+	// TWO SYNTHESISERS, EITHER OF WHICH MAY BE THE ONE INSTALLED. speech-dispatcher is what a
+	// desktop's own accessibility settings drive, so it is asked first and speaks in whatever
+	// voice the user has already chosen there; espeak is the fallback and is far more often
+	// present. If neither is installed the reader gets silence, which is what they had before.
+	const std::string command =
+		"( killall espeak spd-say >/dev/null 2>&1; "
+		"spd-say -r 20 -e -f \"" + path + "\" >/dev/null 2>&1 "
+		"|| espeak -s " + std::to_string(HELP_RATE_LINUX) + " -f \"" + path + "\" >/dev/null 2>&1 ) &";
+	std::system(command.c_str());
+
+#elif defined ARCH_WIN
+	// SAPI THROUGH POWERSHELL, reading the file rather than being handed the words. Windows has
+	// no `say`, and SAPI is what every Windows machine has had for twenty years — it speaks in
+	// whatever voice Narrator and the Speech settings are set to.
+	//
+	// UNTESTED. There is no Windows machine here. It is written to fail the way the others do:
+	// if PowerShell is absent or blocked, the process exits and the reader gets silence.
+	const std::string command =
+		"start /b powershell -NoProfile -WindowStyle Hidden -Command "
+		"\"Add-Type -AssemblyName System.Speech; "
+		"$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; "
+		"$s.Rate = " + std::to_string(HELP_RATE_WINDOWS) + "; "
+		"$s.Speak([IO.File]::ReadAllText('" + path + "'))\" >NUL 2>&1";
+	std::system(command.c_str());
+
 #else
 	(void) text;
 #endif
@@ -1117,9 +1161,14 @@ bool helpClickAt(math::Vec rackPos) {
 	app::ModuleWidget* hit = helpModuleAt(rackPos);
 	if (!hit) {
 		// Bare rack: nothing to say, and the note goes away rather than hanging over nothing.
+		//
+		// FALSE, NOT TRUE. Saying the click was handled made the overlay consume it, so an
+		// Option-press on empty rack was swallowed and Rack never saw the gesture it pans
+		// with. Putting the note away is a side effect of the click, not an answer to it, and
+		// a question asked of bare rack has no answer.
 		helpPopupHide();
 		helpSilence();
-		return true;
+		return false;
 	}
 	helpAnswer(hit, rackPos.minus(hit->box.pos));
 	return true;
