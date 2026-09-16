@@ -64,8 +64,8 @@ struct Help : Module {
 In pixels, which is what both the widgets and the lettering are placed in. Going through
 millimetres for one and not the other is what put the labels on top of the buttons: two ways of
 saying the same position agree only while the arithmetic is right. */
-static const float HELP_BTN_Y = 312.f;
-static const float SPEAK_BTN_Y = 354.f;
+static const float HELP_BTN_Y = 282.f;
+static const float SPEAK_BTN_Y = 324.f;
 static const float LABEL_UP = 18.f;
 
 
