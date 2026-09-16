@@ -59,6 +59,16 @@ struct Help : Module {
 };
 
 
+/** Where the two buttons sit, and how far above one its label goes.
+
+In pixels, which is what both the widgets and the lettering are placed in. Going through
+millimetres for one and not the other is what put the labels on top of the buttons: two ways of
+saying the same position agree only while the arithmetic is right. */
+static const float HELP_BTN_Y = 312.f;
+static const float SPEAK_BTN_Y = 354.f;
+static const float LABEL_UP = 18.f;
+
+
 struct HelpWidget : ModuleWidget {
 	HelpWidget(Help* module) {
 		setModule(module);
@@ -114,17 +124,18 @@ struct HelpWidget : ModuleWidget {
 		const char* said[] = {"option click", "the module", "title or any",
 			"control or", "port for help"};
 		for (int i = 0; i < 5; i++)
-			nvgText(args.vg, mid, mm2px(26.f + i * 4.2f), said[i], NULL);
+			nvgText(args.vg, mid, 78.f + i * 12.4f, said[i], NULL);
 
-		// THE BUTTONS SIT AT THE FOOT, each under its own label with room between the two. The
-		// labels were overwriting the buttons when both were crowded into the middle.
-		nvgText(args.vg, mid, mm2px(93.f), "help", NULL);
-		nvgText(args.vg, mid, mm2px(105.f), "speak", NULL);
-		nvgText(args.vg, mid, mm2px(109.f), "on click", NULL);
+		// EACH LABEL IS PLACED OFF ITS OWN BUTTON, not off the panel. A label positioned
+		// independently drifts away from the thing it names the moment either one moves, which
+		// is how these came to be sitting on top of their buttons.
+		nvgText(args.vg, mid, HELP_BTN_Y - LABEL_UP, "help", NULL);
+		nvgText(args.vg, mid, SPEAK_BTN_Y - LABEL_UP - 10.f, "speak", NULL);
+		nvgText(args.vg, mid, SPEAK_BTN_Y - LABEL_UP, "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
 		nvgFillColor(args.vg, nvgRGB(0x5f, 0x9d, 0xd8));
-		nvgText(args.vg, mid, mm2px(124.f), "Dreamer", NULL);
+		nvgText(args.vg, mid, 152.f, "Dreamer", NULL);
 
 		// THE GREEN BORDER THE OTHER PLUGIN'S PANELS WEAR, in the same colour and the same
 		// inset, so a rack holding both looks like one maker's work. Stroked last so nothing
