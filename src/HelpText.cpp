@@ -26345,18 +26345,15 @@ static const char* const L1065[] = {
 static const short I1065[] = {1,1,1,1,1,1,1,1,1,1,1,1};
 static const short O1065[] = {1,1,1,1,1,1,1,1,1};
 static const char* const L1066[] = {
-	"Answers questions about every other module in the rack. Hold Option and click any jack, knob, switch, button or module title, and a note appears beside it saying what that control does",
+	"Hold Option and click any jack, knob, switch, button or module title in the rack, and a note says what it does",
 	"Turns the gesture on and off. While it is lit, an Option-click opens a note; while it is dark, Option-click does what it would do without this module",
 	"Reads a note aloud as well as showing it. While it is lit, click any line of an open note and that line is spoken in the voice the system is set to",
-	"Note — a note closes when you click bare panel between a module's controls, or when you press Escape. Clicking another control replaces it with the answer for that one.",
-	"Note — the speak button goes dark whenever the help button does, because there is nothing to read once the gesture is off. Turning help back on leaves speech off until you ask for it.",
-	"Note — this module has no inputs or outputs and does nothing to the sound. One in the patch is enough: it answers for every module in the rack, not only for modules by this maker.",
-	"Note — Option-click is not this plugin's to take. Other plugins use it, and Rack pans the rack with Option-drag, which works as before because a drag is not a click.",
-	"Note — a jack's note says whether it takes a polyphonic cable, what voltage moves it over its full travel, whether it is read as a level or an edge, and what an unpatched jack reads.",
-	"Note — blanks are deliberate. An audio input has no voltage range to state, and a fact nobody could establish is left out rather than guessed at.",
-	"Note — a note taller than the window is clipped to it and scrolls. A bar down its right edge shows how much more there is; the wheel or two fingers moves the text.",
-	"Menu — Note text size: 80% to 250% — how big every note is drawn. The setting is kept for you rather than with the patch, so it holds in every patch you open.",
-	"Note — a module with no entry says so rather than inventing one. Corrections are welcome at github.com/chrisgr99/DreamerHelp, one file per plugin.",
+	"Note — click bare panel or press Escape to close a note; click another control to replace it.",
+	"Note — no inputs, no outputs, no effect on the sound. One in the patch answers for the whole rack.",
+	"Note — a jack's note gives polyphony, the voltage that moves it over its full travel, level or edge, and what an unpatched jack reads.",
+	"Note — a note taller than the window scrolls; the bar on its right shows how much more there is.",
+	"Note — a module with no entry says so. Corrections: github.com/chrisgr99/DreamerHelp",
+	"Menu — Note text size: 80% to 250% — kept for you, not with the patch.",
 };
 static const short P1066[] = {1,2};
 static const char* const L1067[] = {
@@ -105743,7 +105740,7 @@ const HelpEntry HELP[] = {
 	{"DreamerDevelopment", "Clarity", L1063, 16, NULL, 0, NULL, 0, P1063, 11, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "Darkener", L1064, 3, NULL, 0, NULL, 0, P1064, 1, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "TestGear", L1065, 4, I1065, 12, O1065, 9, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
-	{"DreamerHelp", "Help", L1066, 12, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
+	{"DreamerHelp", "Help", L1066, 9, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "fromMPX", L1067, 21, I1067, 2, O1067, 7, P1067, 3, FI1067, 2, FO1067, 7, NULL, 0, PO1067, 7},
 	{"DreamerMPX", "mpxArp", L1068, 18, I1068, 1, O1068, 1, P1068, 8, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "mpxChart", L1069, 22, I1069, 2, O1069, 4, P1069, 7, FI1069, 2, FO1069, 4, NULL, 0, PO1069, 4},
