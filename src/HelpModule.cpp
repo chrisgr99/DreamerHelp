@@ -28,6 +28,8 @@ struct Help : Module {
 
 	Help() {
 		config(PARAMS_LEN, 0, 0, LIGHTS_LEN);
+		// LATCHING BUTTONS RATHER THAN LEVERS. Both are things to reach for while reading, and a
+		// lit button says what is on from across the rack in a way a lever's position does not.
 		configSwitch(P_ON, 0.f, 1.f, 1.f, "Help mode", {"Off", "On"});
 		// ON THE PANEL RATHER THAN THE MENU, because it is a thing to reach for while reading
 		// rather than a setting made once. It was a menu item to begin with, and Mac-only.
@@ -35,7 +37,15 @@ struct Help : Module {
 	}
 
 	void process(const ProcessArgs& args) override {
-		lights[L_ON].setBrightness(params[P_ON].getValue() > 0.5f ? 1.f : 0.f);
+		const bool on = params[P_ON].getValue() > 0.5f;
+		// SPEECH CANNOT OUTLIVE HELP. There is nothing for it to read once the gesture is given
+		// back, and a lit button beside a dark one would be describing a state that cannot
+		// happen. Switching help off switches speech off with it; switching help back on leaves
+		// speech off, because turning a voice on is a decision somebody makes deliberately.
+		if (!on && params[P_SPEAK].getValue() > 0.5f)
+			params[P_SPEAK].setValue(0.f);
+
+		lights[L_ON].setBrightness(on ? 1.f : 0.f);
 		lights[L_SPEAK].setBrightness(params[P_SPEAK].getValue() > 0.5f ? 1.f : 0.f);
 	}
 
@@ -58,13 +68,12 @@ struct HelpWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(
 			Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-		addParam(createParamCentered<CKSS>(mm2px(Vec(7.62, 56.0)), module, Help::P_ON));
-		addChild(createLightCentered<MediumLight<GreenLight>>(
-			mm2px(Vec(7.62, 66.0)), module, Help::L_ON));
-
-		addParam(createParamCentered<CKSS>(mm2px(Vec(7.62, 86.0)), module, Help::P_SPEAK));
-		addChild(createLightCentered<MediumLight<GreenLight>>(
-			mm2px(Vec(7.62, 96.0)), module, Help::L_SPEAK));
+		// VCVLightLatch holds its own state, so the button IS the setting and Rack saves it with
+		// the patch — no separate flag to keep in step with what the panel shows.
+		addParam(createLightParamCentered<VCVLightLatch<MediumSimpleLight<GreenLight>>>(
+			mm2px(Vec(7.62, 58.0)), module, Help::P_ON, Help::L_ON));
+		addParam(createLightParamCentered<VCVLightLatch<MediumSimpleLight<GreenLight>>>(
+			mm2px(Vec(7.62, 88.0)), module, Help::P_SPEAK, Help::L_SPEAK));
 	}
 
 	/** THE PANEL LETTERS ITSELF, because Rack draws panels with nanosvg and nanosvg ignores
@@ -96,9 +105,9 @@ struct HelpWidget : ModuleWidget {
 		for (int i = 0; i < 3; i++)
 			nvgText(args.vg, mid, mm2px(27.f + i * 5.f), lines[i], NULL);
 
-		nvgText(args.vg, mid, mm2px(49.f), "on", NULL);
-		nvgText(args.vg, mid, mm2px(76.f), "speak", NULL);
-		nvgText(args.vg, mid, mm2px(80.f), "on click", NULL);
+		nvgText(args.vg, mid, mm2px(50.f), "on", NULL);
+		nvgText(args.vg, mid, mm2px(79.f), "speak", NULL);
+		nvgText(args.vg, mid, mm2px(83.f), "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
 		nvgFillColor(args.vg, nvgRGB(0x5f, 0x9d, 0xd8));
