@@ -1083,9 +1083,15 @@ static void helpAnswer(app::ModuleWidget* mw, math::Vec local) {
 		helpPopupShow(mw, where, what, "", true, what);
 		return;
 	}
-	// THE TITLE IS THE MODULE ITSELF: what the thing is, which is the first line of its
-	// entry, not a list of everything on it.
-	if (local.y < titleBand()) {
+	// THE PANEL IS THE MODULE ITSELF: what the thing is, which is the first line of its entry,
+	// not a list of everything on it.
+	//
+	// ANYWHERE ON IT, not only the title band. Bare panel used to close the note, on the grounds
+	// that somewhere harmless to click was worth more than one more thing to read. But a reader
+	// who wants to know what a module is aims at the module, and most of a module is not its
+	// title — so the obvious place to click was the one place that answered nothing. Closing is
+	// handled by letting the modifier go instead.
+	{
 		const std::string plugin = mw->model->plugin ? mw->model->plugin->slug : "";
 		const std::vector<std::string> lines = helpFor(plugin, mw->model->slug);
 		// THE MODULE'S OWN LINES, ALL OF THEM, and until now only the first was reachable.
@@ -1116,7 +1122,9 @@ static void helpAnswer(app::ModuleWidget* mw, math::Vec local) {
 			idea += "\n\n• " + poly;
 		if (!menu.empty())
 			idea += "\n\nRight-click the panel for:" + menu;
-		const math::Rect at(math::Vec(local.x, titleBand()), math::Vec(0.f, 0.f));
+		// Anchored where the click landed, so the note appears by the pointer rather than
+		// somewhere else on a panel that may be taller than the screen.
+		const math::Rect at(math::Vec(local.x, local.y), math::Vec(0.f, 0.f));
 		if (!idea.empty()) {
 			helpPopupShow(mw, at, mw->model->name, idea, false);
 			return;
@@ -1129,10 +1137,6 @@ static void helpAnswer(app::ModuleWidget* mw, math::Vec local) {
 		helpPopupShow(mw, at, mw->model->name, made, made.empty(), "", !made.empty());
 		return;
 	}
-	// ANYWHERE ELSE ON THE PANEL CLOSES IT. Bare panel has nothing of its own to say, and
-	// somewhere harmless to click is worth more than one more thing to read.
-	helpPopupHide();
-	helpSilence();
 }
 
 static app::ModuleWidget* helpModuleAt(math::Vec pos) {
@@ -1230,6 +1234,17 @@ void helpStep(bool enabled) {
 	if (!APP->scene || !APP->scene->rack)
 		return;
 	helpCatcherStep();
+
+	// LETTING THE MODIFIER GO PUTS THE NOTE AWAY. It used to be closed by clicking bare panel,
+	// and bare panel now answers for the module — so the gesture that opens a note is the one
+	// that holds it open. Hold Option and click about, and each answer replaces the last;
+	// release, and the rack is as it was.
+	//
+	// Watched here rather than from a key event because a modifier release is not delivered as
+	// one to a widget that is not focused, and nothing here takes focus.
+	if (gHelpOn && APP->window && !(APP->window->getMods() & GLFW_MOD_ALT))
+		helpDismissNote();
+
 	if (enabled == gHelpOn)
 		return;
 	gHelpOn = enabled;

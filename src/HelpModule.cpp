@@ -105,8 +105,12 @@ struct HelpWidget : ModuleWidget {
 		for (int i = 0; i < 3; i++)
 			nvgText(args.vg, mid, mm2px(27.f + i * 5.f), lines[i], NULL);
 
-		nvgText(args.vg, mid, mm2px(50.f), "on", NULL);
-		nvgText(args.vg, mid, mm2px(79.f), "speak", NULL);
+		// THE TWO BUTTONS ARE LABELLED WHITE AND CLOSE. The instructions above are context and
+		// can be quiet; a label saying what a button does is the one thing that has to be read
+		// at a glance, and grey lettering two centimetres from its button is neither.
+		nvgFillColor(args.vg, nvgRGB(0xff, 0xff, 0xff));
+		nvgText(args.vg, mid, mm2px(53.f), "help", NULL);
+		nvgText(args.vg, mid, mm2px(79.5f), "speak", NULL);
 		nvgText(args.vg, mid, mm2px(83.f), "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
