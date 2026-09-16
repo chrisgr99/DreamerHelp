@@ -13,16 +13,21 @@ SOURCES += $(wildcard src/*.cpp)
 DISTRIBUTABLES += res
 DISTRIBUTABLES += $(wildcard LICENSE*)
 
-# THE GENERATED TABLE IS A BUILD PRODUCT OF THE DATABASE, and make should know it. Anything
-# that edits a YAML file makes the table stale, and a stale table is invisible — the plugin
-# builds and runs and simply shows yesterday's text. Declaring the dependency means a build
-# after an edit regenerates without anyone remembering to.
-HELP_YAML := $(wildcard data/plugins/*.yaml)
-
-src/HelpText.cpp: $(HELP_YAML) tools/build.py
-	@echo "regenerating src/HelpText.cpp from $(words $(HELP_YAML)) plugin files"
-	@python3 tools/build.py
-
+# THE GENERATED TABLE IS COMMITTED, AND THE BUILD MUST NOT REGENERATE IT.
+#
+# It was a make dependency on the YAML at first, so that editing the data could not leave a
+# stale table behind. That is wrong for two reasons, and the second is the serious one.
+#
+# A fresh `git clone` gives every file the same timestamp, so make cannot tell which is newer
+# and regenerates on the first build — which failed in the VCV plugin toolchain container,
+# where there is no PyYAML.
+#
+# And it made building the plugin depend on Python at all. Anyone building from source needs
+# only the Rack SDK, and that has to include whoever builds it for the library.
+#
+# Staleness is caught where it belongs instead: .github/workflows/check.yml regenerates the
+# table and fails if that produces a diff, so a table that has fallen behind its data is a red
+# cross on a pull request rather than yesterday's text shipping quietly.
 .PHONY: helptext
 helptext:
 	@python3 tools/build.py
