@@ -26352,7 +26352,6 @@ static const char* const L1066[] = {
 	"Note — no inputs, no outputs, no effect on the sound. One in the patch answers for the whole rack.",
 	"Note — with the speak button lit, clicking a line of an open note reads it aloud in the system voice.",
 	"Note — a jack's note gives polyphony, the voltage that moves it over its full travel, level or edge, and what an unpatched jack reads.",
-	"Note — a note taller than the window scrolls; the bar on its right shows how much more there is.",
 	"Note — a module with no entry says so. Corrections: github.com/chrisgr99/DreamerHelp",
 	"Menu — Note text size: 80% to 250% — kept for you, not with the patch.",
 };
@@ -105741,7 +105740,7 @@ const HelpEntry HELP[] = {
 	{"DreamerDevelopment", "Clarity", L1063, 16, NULL, 0, NULL, 0, P1063, 11, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "Darkener", L1064, 3, NULL, 0, NULL, 0, P1064, 1, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "TestGear", L1065, 4, I1065, 12, O1065, 9, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
-	{"DreamerHelp", "Help", L1066, 10, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
+	{"DreamerHelp", "Help", L1066, 9, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "fromMPX", L1067, 21, I1067, 2, O1067, 7, P1067, 3, FI1067, 2, FO1067, 7, NULL, 0, PO1067, 7},
 	{"DreamerMPX", "mpxArp", L1068, 18, I1068, 1, O1068, 1, P1068, 8, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "mpxChart", L1069, 22, I1069, 2, O1069, 4, P1069, 7, FI1069, 2, FO1069, 4, NULL, 0, PO1069, 4},
