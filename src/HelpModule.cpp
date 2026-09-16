@@ -194,7 +194,30 @@ struct HelpWidget : ModuleWidget {
 		ModuleWidget::onRemove(e);
 	}
 
-	// The speech switch is on the panel now, so there is nothing left for a menu to carry.
+	/** HOW BIG THE NOTE IS DRAWN.
+
+	ASKED FOR FROM THE FORUM, by somebody who could not read the note comfortably at the size it
+	was designed. In the menu rather than on the panel: it is set once and then left alone, which
+	is the opposite of the two buttons, and a third button would say otherwise.
+
+	IN THE MENU RATHER THAN IN THE PATCH, in the sense that matters — the setting is written to
+	the user folder, so it holds across every patch and every session. Somebody who needs larger
+	text needs it in the patches other people wrote as well as their own.
+
+	Fixed steps rather than a slider. A slider wants a small target dragged accurately, which is
+	an odd thing to ask of somebody who has just told you the text is too small to read. */
+	void appendContextMenu(Menu* menu) override {
+		menu->addChild(new MenuSeparator);
+		menu->addChild(createSubmenuItem("Note text size", string::f("%.0f%%", helpScale() * 100.f),
+			[=](Menu* sub) {
+				static const float sizes[] = {0.8f, 1.f, 1.25f, 1.5f, 1.75f, 2.f, 2.5f};
+				for (float f : sizes) {
+					sub->addChild(createCheckMenuItem(string::f("%.0f%%", f * 100.f), "",
+						[=]() { return std::abs(helpScale() - f) < 0.01f; },
+						[=]() { helpSetScale(f); }));
+				}
+			}));
+	}
 };
 
 

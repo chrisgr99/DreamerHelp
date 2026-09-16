@@ -26354,6 +26354,8 @@ static const char* const L1066[] = {
 	"Note — Option-click is not this plugin's to take. Other plugins use it, and Rack pans the rack with Option-drag, which works as before because a drag is not a click.",
 	"Note — a jack's note says whether it takes a polyphonic cable, what voltage moves it over its full travel, whether it is read as a level or an edge, and what an unpatched jack reads.",
 	"Note — blanks are deliberate. An audio input has no voltage range to state, and a fact nobody could establish is left out rather than guessed at.",
+	"Note — a note taller than the window is clipped to it and scrolls. A bar down its right edge shows how much more there is; the wheel or two fingers moves the text.",
+	"Menu — Note text size: 80% to 250% — how big every note is drawn. The setting is kept for you rather than with the patch, so it holds in every patch you open.",
 	"Note — a module with no entry says so rather than inventing one. Corrections are welcome at github.com/chrisgr99/DreamerHelp, one file per plugin.",
 };
 static const short P1066[] = {1,2};
@@ -105741,7 +105743,7 @@ const HelpEntry HELP[] = {
 	{"DreamerDevelopment", "Clarity", L1063, 16, NULL, 0, NULL, 0, P1063, 11, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "Darkener", L1064, 3, NULL, 0, NULL, 0, P1064, 1, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerDevelopment", "TestGear", L1065, 4, I1065, 12, O1065, 9, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
-	{"DreamerHelp", "Help", L1066, 10, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
+	{"DreamerHelp", "Help", L1066, 12, NULL, 0, NULL, 0, P1066, 2, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "fromMPX", L1067, 21, I1067, 2, O1067, 7, P1067, 3, FI1067, 2, FO1067, 7, NULL, 0, PO1067, 7},
 	{"DreamerMPX", "mpxArp", L1068, 18, I1068, 1, O1068, 1, P1068, 8, NULL, 0, NULL, 0, NULL, 0, NULL, 0},
 	{"DreamerMPX", "mpxChart", L1069, 22, I1069, 2, O1069, 4, P1069, 7, FI1069, 2, FO1069, 4, NULL, 0, PO1069, 4},

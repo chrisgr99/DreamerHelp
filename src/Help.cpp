@@ -111,6 +111,75 @@ std::string helpForControl(const std::string& plugin, const std::string& model,
 static const float HELP_PAD = 8.f;
 static const float HELP_LEAD = 16.f;
 
+/** How much bigger the note is drawn than it was designed.
+
+ASKED FOR FROM THE FORUM, by somebody who could not read it comfortably. Every size in the note
+is multiplied by this — the title, the body, the two footnotes and the leading between lines —
+so the proportions hold and only the scale changes. The note's width goes with it, because
+enlarging the text inside a fixed column just makes the lines shorter and the note taller.
+
+One setting for the plugin rather than one per note: a reader who needs larger text needs it
+everywhere, and needing to set it again on each answer would be its own complaint. */
+static float gHelpScale = 1.f;
+
+/** How far it goes either way. Below the floor the note is unreadable to anyone; above the
+ceiling it is taller than the window before it has said anything. */
+const float HELP_SCALE_MIN = 0.8f;
+const float HELP_SCALE_MAX = 2.5f;
+
+/** Where the setting is kept.
+
+NOT IN THE PATCH. Somebody who needs larger text needs it in every patch they open, including
+the ones other people wrote; saving it with the patch would hand them their own setting back
+only in the files they had already fixed. So it goes beside Rack's own settings, in the user
+folder, and is read once on the first note of the session. */
+static std::string helpScalePath() {
+	return asset::user("DreamerHelp.json");
+}
+
+static void helpLoadScale();
+
+void helpSetScale(float scale) {
+	// LOADED BEFORE IT IS WRITTEN. The menu asks for the current size before any note has been
+	// shown, and without this the first thing a fresh session wrote to the file was the default
+	// it had never read — which threw away the setting it was being asked to change.
+	helpLoadScale();
+	gHelpScale = math::clamp(scale, HELP_SCALE_MIN, HELP_SCALE_MAX);
+
+	json_t* rootJ = json_object();
+	json_object_set_new(rootJ, "textScale", json_real(gHelpScale));
+	// Failure here is silent on purpose: an unwritable settings folder is not a reason to
+	// interrupt somebody reading a note, and the setting still holds for this session.
+	if (FILE* f = std::fopen(helpScalePath().c_str(), "w")) {
+		json_dumpf(rootJ, f, JSON_INDENT(2));
+		std::fclose(f);
+	}
+	json_decref(rootJ);
+}
+
+float helpScale() {
+	helpLoadScale();
+	return gHelpScale;
+}
+
+/** Read the saved size, once. */
+static void helpLoadScale() {
+	static bool loaded = false;
+	if (loaded)
+		return;
+	loaded = true;
+	FILE* f = std::fopen(helpScalePath().c_str(), "r");
+	if (!f)
+		return;
+	json_error_t err;
+	if (json_t* rootJ = json_loadf(f, 0, &err)) {
+		if (json_t* j = json_object_get(rootJ, "textScale"))
+			gHelpScale = math::clamp((float) json_number_value(j), HELP_SCALE_MIN, HELP_SCALE_MAX);
+		json_decref(rootJ);
+	}
+	std::fclose(f);
+}
+
 /** SAYING IT OUT LOUD, BECAUSE NOTHING ELSE CAN.
 
 Rack draws every pixel of its interface itself and publishes nothing to the accessibility API, so
@@ -361,12 +430,42 @@ struct HelpPopup : widget::OpaqueWidget {
 		return out;
 	}
 
-	/** Where the pointer is, in this widget's coordinates, or below everything when it is away. */
+	/** HOW FAR THE NOTE HAS BEEN SCROLLED, and how tall it would be if it could be.
+
+	ASKED FOR FROM THE FORUM: a module with two dozen menu lines made a note taller than the
+	window, and the end of it was drawn off the bottom of the screen where nothing could reach
+	it. The note is clamped to the window now and the text moves inside it.
+
+	Two coordinate systems follow from that, and mixing them is the way to get this wrong. The
+	CONTENT coordinates are what measure() lays out in and what paraTop and paraBottom hold;
+	the WIDGET coordinates are what an event arrives in. `scrollY` is the distance between
+	them, so a point on the panel is at `e.pos.y + scrollY` in the text. */
+	float scrollY = 0.f;
+	float contentH = 0.f;
+
+	/** How much of the text is out of sight. Zero for the ordinary short note, which is most
+	of them, and which then behaves exactly as it did before any of this. */
+	float overflow() const { return std::max(0.f, contentH - box.size.y); }
+
+	/** Where the pointer is, in CONTENT coordinates, or below everything when it is away. */
 	float hoverY = -1.f;
 
 	void onHover(const HoverEvent& e) override {
-		hoverY = e.pos.y;
+		hoverY = e.pos.y + scrollY;
 		widget::OpaqueWidget::onHover(e);
+	}
+
+	/** THE WHEEL MOVES THE TEXT, and only while there is text to move.
+
+	Unconsumed when there is nothing to scroll, so a wheel over a short note still reaches the
+	rack underneath and zooms it, which is what it does everywhere else in Rack. */
+	void onHoverScroll(const HoverScrollEvent& e) override {
+		if (overflow() <= 0.f) {
+			widget::OpaqueWidget::onHoverScroll(e);
+			return;
+		}
+		scrollY = math::clamp(scrollY - e.scrollDelta.y, 0.f, overflow());
+		e.consume(this);
 	}
 
 	void onLeave(const LeaveEvent& e) override {
@@ -449,9 +548,47 @@ struct HelpPopup : widget::OpaqueWidget {
 		// THE NAME OF THE THING, AND ONLY IT. Larger, bold and in capitals: the note's one
 		// heading, above a list whose own headings stay the size of the text they head. Caps get
 		// a little tracking, because letters set in caps at their natural spacing crowd.
-		nvgFontSize(vg, 15.f);
+		// THE TITLE IS MEASURED BEFORE IT IS DRAWN, and the size comes down until it fits.
+		//
+		// It was drawn at a fixed 15 with no measurement at all, so any long module name ran
+		// straight off the right edge of the note — reported from the forum against Vult's
+		// Overon. The body text has always wrapped; only the one line that names the thing did
+		// not, which is the line a reader looks at first.
+		//
+		// Shrinking rather than wrapping, down to a floor. A name is read as one object, and a
+		// name broken across two lines is read as two; at the floor the rest is clipped, which
+		// is honest about running out of room in a way a silent overflow is not.
+		const std::string caps = helpUpper(title);
+		const char* word = poly < 0 ? NULL : (poly ? "(POLY)" : "(MONO)");
+		const float avail = w - 2.f * HELP_PAD;
+
+		float titleSize = 15.f;
+		{
+			nvgTextLetterSpacing(vg, 0.6f);
+			for (;;) {
+				nvgFontSize(vg, titleSize * gHelpScale);
+				float need = nvgTextBounds(vg, 0.f, 0.f, caps.c_str(), NULL, NULL);
+				if (word)
+					need += 5.f + nvgTextBounds(vg, 0.f, 0.f, word, NULL, NULL);
+				if (need <= avail || titleSize <= 10.f)
+					break;
+				// A tenth at a time rather than one jump: the suffix and the tracking both move
+				// with the size, so the width is not a straight multiple of it.
+				titleSize -= 0.5f;
+			}
+			nvgTextLetterSpacing(vg, 0.f);
+		}
+
+		nvgFontSize(vg, titleSize * gHelpScale);
 		if (drawing) {
-			const std::string caps = helpUpper(title);
+			// AND CLIPPED AT THE FLOOR, so "it is clipped" is a fact rather than an intention.
+			// A name too long to fit even at ten point stops at the edge of the note instead of
+			// being drawn across the rack behind it.
+			// SAVED AND INTERSECTED, not set and reset. The whole note is drawn inside a scissor of
+			// its own now, and a plain nvgResetScissor here would throw that away — the title of
+			// a scrolled note would then be free to draw above the top of it.
+			nvgSave(args->vg);
+			nvgIntersectScissor(args->vg, HELP_PAD, y - 2.f, avail, titleSize * gHelpScale + 6.f);
 			nvgFillColor(args->vg, nvgRGB(0x7f, 0xb0, 0xe4));
 			nvgTextLetterSpacing(args->vg, 0.6f);
 			// Struck twice, a third of a pixel apart: no bold cut of this face ships with Rack,
@@ -463,19 +600,19 @@ struct HelpPopup : widget::OpaqueWidget {
 			// is read in the same glance as the name, and needs no shape to be learned. The
 			// colour stays, so it is still answerable without reading, and the word stays, so
 			// nothing rests on the colour.
-			if (poly >= 0) {
-				const char* word = poly ? "(POLY)" : "(MONO)";
+			if (word) {
 				nvgFillColor(args->vg, poly ? nvgRGB(0x5f, 0xc8, 0x8b)
 					: nvgRGB(0x87, 0x90, 0x9d));
 				nvgText(args->vg, after + 5.f, y, word, NULL);
 				nvgText(args->vg, after + 5.35f, y, word, NULL);
 			}
 			nvgTextLetterSpacing(args->vg, 0.f);
+			nvgRestore(args->vg);
 		}
-		y += 20.f;
+		y += (titleSize + 5.f) * gHelpScale;
 
-		nvgFontSize(vg, 12.f);
-		nvgTextLineHeight(vg, HELP_LEAD / 12.f);
+		nvgFontSize(vg, 12.f * gHelpScale);
+		nvgTextLineHeight(vg, HELP_LEAD / 12.f);   // a ratio, so it scales with the size
 		paraTop.clear();
 		paraBottom.clear();
 		const std::vector<std::string> paras = paragraphs();
@@ -497,7 +634,7 @@ struct HelpPopup : widget::OpaqueWidget {
 			const float tw = w - x - HELP_PAD;
 			float bounds[4];
 			nvgTextBoxBounds(vg, x, y, tw, body.c_str(), NULL, bounds);
-			const float h = std::max(bounds[3] - bounds[1], HELP_LEAD);
+			const float h = std::max(bounds[3] - bounds[1], HELP_LEAD * gHelpScale);
 			paraTop.push_back(y);
 			paraBottom.push_back(y + h);
 			if (drawing) {
@@ -521,39 +658,46 @@ struct HelpPopup : widget::OpaqueWidget {
 			}
 			y += h;
 			if (i + 1 < paras.size())
-				y += heading ? 3.f : 6.f;
+				y += (heading ? 3.f : 6.f) * gHelpScale;
 		}
 
 		// WHOSE WORDS THESE ARE. Only where they are not ours: an entry we wrote needs no
 		// attribution, and a note that says something on every reading says nothing.
 		if (fromMaker) {
-			y += 3.f;
-			nvgFontSize(vg, 10.f);
+			y += 3.f * gHelpScale;
+			nvgFontSize(vg, 10.f * gHelpScale);
 			if (drawing) {
 				nvgFillColor(args->vg, nvgRGB(0x7f, 0x86, 0x92));
 				nvgText(args->vg, HELP_PAD, y, "the maker's own description", NULL);
 			}
-			y += 13.f;
+			y += 13.f * gHelpScale;
 		}
 
 		// HOW THIS WAS WRITTEN, on every card. The rule against notes that say the same thing
 		// every time is a rule about *content*; this is a disclosure, and a disclosure that
 		// appears only sometimes is worse than useless. Small, dim and last, so it is there for
 		// anyone who looks and never competes with the module's own words.
-		y += 2.f;
-		nvgFontSize(vg, 9.f);
+		y += 2.f * gHelpScale;
+		nvgFontSize(vg, 9.f * gHelpScale);
 		if (drawing) {
 			nvgFillColor(args->vg, nvgRGB(0x60, 0x66, 0x70));
 			nvgText(args->vg, HELP_PAD, y, "written with the assistance of AI; may contain errors", NULL);
 		}
-		y += 11.f;
+		y += 11.f * gHelpScale;
 		return y + HELP_PAD;
 	}
 
 	void step() override {
 		widget::OpaqueWidget::step();
-		if (APP->window && APP->window->vg)
-			box.size.y = measure(APP->window->vg, false, NULL);
+		if (!APP->window || !APP->window->vg)
+			return;
+		contentH = measure(APP->window->vg, false, NULL);
+		// A NOTE NEVER TALLER THAN THE WINDOW. The margin leaves the rail and a little air at
+		// each end, and the floor keeps a very small window from producing a note with no room
+		// for a line of text in it.
+		const float room = std::max(120.f, APP->scene->box.size.y - 60.f);
+		box.size.y = std::min(contentH, room);
+		scrollY = math::clamp(scrollY, 0.f, overflow());
 	}
 
 	void draw(const DrawArgs& args) override {
@@ -564,8 +708,45 @@ struct HelpPopup : widget::OpaqueWidget {
 		nvgStrokeColor(args.vg, nvgRGBA(0x5f, 0x9d, 0xd8, 0xc0));
 		nvgStrokeWidth(args.vg, 1.f);
 		nvgStroke(args.vg);
+
+		// THE TEXT IS DRAWN INSIDE THE PANEL, always — not only when it overflows. One path
+		// through the code rather than two: a scissor the size of the note costs nothing when
+		// nothing is clipped by it, and a short note then cannot behave differently from a long
+		// one because it took a different branch.
+		nvgSave(args.vg);
+		nvgIntersectScissor(args.vg, 0.f, 1.f, box.size.x, box.size.y - 2.f);
+		nvgTranslate(args.vg, 0.f, -scrollY);
 		measure(args.vg, true, &args);
+		nvgRestore(args.vg);
+
+		if (overflow() > 0.f)
+			drawScrollbar(args);
+		// After the restore, so the button stays put while the text moves under it.
 		drawCopy(args);
+	}
+
+	/** HOW MUCH MORE THERE IS, AND WHERE YOU ARE IN IT.
+
+	Shown rather than left to be discovered. Without it a note clipped at the window bottom looks
+	like a note that ends there, and the reader has no reason to turn a wheel. It is an indicator
+	and not a handle: dragging it is not wired up, because the wheel and a trackpad both already
+	scroll and a two-pixel bar is a poor thing to have to hit. */
+	void drawScrollbar(const DrawArgs& args) {
+		const float track = box.size.y - 8.f;
+		const float frac = box.size.y / contentH;
+		const float thumb = std::max(18.f, track * frac);
+		const float at = 4.f + (track - thumb) * (scrollY / overflow());
+		const float x = box.size.x - 5.f;
+
+		nvgBeginPath(args.vg);
+		nvgRoundedRect(args.vg, x, 4.f, 2.f, track, 1.f);
+		nvgFillColor(args.vg, nvgRGBA(0x5f, 0x9d, 0xd8, 0x38));
+		nvgFill(args.vg);
+
+		nvgBeginPath(args.vg);
+		nvgRoundedRect(args.vg, x, at, 2.f, thumb, 1.f);
+		nvgFillColor(args.vg, nvgRGBA(0x9f, 0xc8, 0xf0, 0xc8));
+		nvgFill(args.vg);
 	}
 
 	/** TWO OVERLAPPING SHEETS, which is what a copy button looks like everywhere else. Drawn
@@ -619,8 +800,12 @@ struct HelpPopup : widget::OpaqueWidget {
 			// THE PARAGRAPH THAT WAS CLICKED, not the whole note. A module with eighteen menu
 			// options read from the top is not an answer to anything.
 			const std::vector<std::string> paras = paragraphs();
+			// IN THE TEXT'S COORDINATES, not the panel's — paraTop was recorded before the note
+			// was scrolled, so a click on a scrolled note lands on the paragraph it looks like
+			// it lands on rather than the one that used to be there.
+			const float at = e.pos.y + scrollY;
 			for (size_t i = 0; i < paras.size() && i < paraTop.size(); i++) {
-				if (e.pos.y >= paraTop[i] && e.pos.y < paraBottom[i]) {
+				if (at >= paraTop[i] && at < paraBottom[i]) {
 					helpSay(withTitle(i == 0, paras[i]));
 					return;
 				}
@@ -751,7 +936,14 @@ static void helpPopupShow(app::ModuleWidget* mw, math::Rect controlBox,
 		? "Nothing here describes this one yet."
 		: helpPlatformText(line);
 	gPopup->missing = line.empty();
-	gPopup->box.size.x = 290.f;
+	// THE NOTE WIDENS WITH ITS TEXT. Enlarging the lettering inside a fixed column would only
+	// make the lines shorter and the note taller, which is the opposite of easier to read; the
+	// measure of a comfortable column is how many characters are on a line, and that is what
+	// holds when both move together. Capped at the window, for a small screen at a large size.
+	gPopup->box.size.x = std::min(290.f * gHelpScale, APP->scene->box.size.x - 20.f);
+	// EVERY NOTE STARTS AT THE TOP. Carrying the last note's scroll into the next one would
+	// open an answer part-way through a sentence.
+	gPopup->scrollY = 0.f;
 	if (APP->window && APP->window->vg)
 		gPopup->box.size.y = gPopup->measure(APP->window->vg, false, NULL);
 	gPopup->show();
@@ -1204,7 +1396,9 @@ static void helpCatcherStep() {
 		return;
 	if (!helpPopupAlive()) {
 		gPopup = new HelpPopup;
-		gPopup->box.size = math::Vec(290.f, 40.f);
+		// The saved text size, read on the first note of the session and not again.
+		helpLoadScale();
+		gPopup->box.size = math::Vec(290.f * gHelpScale, 40.f);
 		gPopup->hide();
 		APP->scene->addChild(gPopup);
 	}

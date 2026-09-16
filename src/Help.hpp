@@ -171,6 +171,15 @@ Returns whether the click was taken. */
 bool helpClickAt(math::Vec rackPos);
 
 /** Puts the note away, for any ordinary click that is not a question. */
+/** How much bigger than designed the note is drawn, and the limits the menu offers.
+
+Kept in the user folder rather than in the patch: somebody who needs larger text needs it in
+every patch, including the ones other people wrote. */
+void helpSetScale(float scale);
+float helpScale();
+extern const float HELP_SCALE_MIN;
+extern const float HELP_SCALE_MAX;
+
 void helpDismissNote();
 
 /** Puts away anything on the screen and stops anything being read. Called when the last module
