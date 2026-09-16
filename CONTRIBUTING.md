@@ -2,6 +2,67 @@
 
 The database is `data/plugins/<PluginSlug>.yaml`, one file per VCV plugin, named after the plugin's slug in its `plugin.json`. Edit the file for the plugin you know about and open a pull request.
 
+## Finding the right file
+
+Files are named after the **plugin** slug, not the module's name on the panel. Three ways to find it:
+
+- **The folder name.** Rack unpacks each plugin into `Rack2/plugins-<platform>/<PluginSlug>/`, so the folder is the slug. On a Mac that is `~/Library/Application Support/Rack2/plugins-mac-arm64/`.
+- **The library page.** `library.vcvrack.com/<PluginSlug>` — the slug is in the address.
+- **Search this repository** for the module's name. Module slugs are the keys under `modules:`, and they usually resemble the name on the panel.
+
+Inside the file, a module is a key under `modules:` — its **module** slug, which is what that plugin's own `plugin.json` calls it. That is often not the name printed on the panel: Bidoo's reverb is on the panel as REI and in `plugin.json` as `REI`, but plenty of makers use an internal name for one and a display name for the other.
+
+## What a file looks like
+
+```yaml
+'plugin': 'Bidoo'                    # the plugin slug; matches the filename
+'source': 'https://github.com/…'     # where the entries were established from
+'read': '2026-09-13'                 # when, so drift is datable
+'modules':
+  'REI':                             # the module slug
+    'lines':
+      - 'Reverb with a freeze control and a pitch shifter in the tail'
+      - 'Sets how large the space sounds, from a small room to a hall'
+      - 'Note — nothing is heard until something is patched to IN L.'
+      - 'Menu — Oversampling: off, 2x, 4x — trades CPU for fewer artefacts.'
+
+    # WHICH LINE DESCRIBES WHICH CONTROL. The key is the control's index; the
+    # value is the position in `lines` above, counting from zero.
+    'param': {'0': 1}
+    'in':    {'0': 2}
+    'out':   {'0': 3}
+
+    # What each jack carries, for colouring: audio, cv, trigger or pitch.
+    # Leave a jack out where it carries whatever you patch — a mult, a router.
+    'family':
+      'in':  {'0': 'audio'}
+      'out': {'0': 'audio'}
+
+    # What each jack expects. Every field needs a `why`; see below.
+    'props':
+      'in':
+        '0':
+          'poly': true
+          'range': '0 to 10V'
+          'step': 'continuous'
+          'negative': 'subtracts'
+          'normal': 'the jack above it'
+          'sumRange': '0 to 1V'
+          'why': 'REI.cpp:84 adds this voltage to the knob and clamps the sum to 0 and 1'
+
+    # Anything that will not fit a field: mode-dependent behaviour, a maker's
+    # bug, why something was left blank.
+    'notes': 'The pitch shifter runs only while FREEZE is on.'
+```
+
+**Every one of those keys is optional except `lines`.** A module with no jacks needs no `in`, `out`, `family` or `props`.
+
+**The first line is what the module is.** The rest are one per control. A line beginning `Note — ` is about the module rather than a control; a line beginning `Menu — ` is one context menu item, named exactly as the menu prints it.
+
+**The tag maps are the part to be careful with.** They point a control's index at a line by position, so inserting a line in the middle shifts every line after it and silently re-points the maps. Add at the end, or fix the maps.
+
+A control with no widget on the panel gets no tag and no line — no click can ever reach it.
+
 ## The one rule that will bite you
 
 **Quote every string value with single quotes. Always, even when it looks unnecessary.**

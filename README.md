@@ -18,7 +18,9 @@ See [ABOUT.md](ABOUT.md) for what the project is, how the database was made, and
 
 ## Contributing
 
-The database is in `data/plugins/`, one YAML file per VCV plugin. Fix an entry, add a missing one, or fill in a range nobody could verify, and open a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for the format and the one rule about quoting that will otherwise bite you.
+The database is in `data/plugins/`, one YAML file per VCV plugin, named after the plugin's slug — the same name as its folder under `Rack2/plugins-<platform>/`. Inside, each module is keyed by its own slug. Fix an entry, add a missing one, or fill in a range nobody could verify, and open a pull request.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) has the whole file format with an annotated example, how to find the file for a module you are looking at, what counts as a citation — including a test you ran yourself — and the one rule about quoting that will otherwise bite you.
 
 Checks run automatically on every pull request: the file has to parse, match the schema, and carry a citation for every fact. Those failures come back to you within a minute, so nothing waits on a maintainer reading code.
 
