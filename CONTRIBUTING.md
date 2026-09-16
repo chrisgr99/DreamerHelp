@@ -26,7 +26,7 @@ notes: >-
 
 ## Every fact carries a citation
 
-Each port field has a `why` saying where the fact came from — a file and a line in the maker's published source, or the page of a manual that states it:
+Each port field has a `why` saying where the fact came from — a file and a line in the maker's published source, the page of a manual that states it, or the test you ran to find out (see below):
 
 ```yaml
 props:
@@ -41,6 +41,27 @@ props:
 A citation must say what the code **does**, not merely where it lives. `Foo.cpp:212` alone is not a citation — nobody reading it can tell whether you read the line or guessed from the shape of the file. Name the mechanism: what is read, what it is scaled or compared against, what it is added to.
 
 This is what makes a pull request reviewable. A claim that a jack takes ±5V cannot be checked by anyone; "line 212 clamps it to ±5V" can be checked in seconds, by a person or by a machine.
+
+## Observation is a valid source
+
+Not every fact can be cited to a file. Where a plugin publishes no source, the only way to establish what a jack does may be to patch something into it and watch what happens. That is a legitimate basis and the database accepts it.
+
+It is held to the same standard as a code citation, and for the same reason: **say what you did and what happened, so that somebody else can repeat it.**
+
+```yaml
+why: 'observed — a sixteen-channel cable into IN comes out of OUT with all sixteen channels'
+why: 'observed — a 1V trigger does not fire it; it fires at about 2V'
+why: 'observed — with nothing patched to IN the output sits at 5V, not 0V'
+```
+
+Begin it with `observed —` so a reader can tell at a glance which kind of evidence it is. That matters when somebody later finds the source: a fact resting on a test may need re-checking against the code, and a fact resting on a line of code does not.
+
+What is not acceptable is a claim with no method behind it. "I tested it" cannot be repeated by anyone. Neither can "this is how it behaves". The test is the citation.
+
+Two cautions worth knowing, because both have produced wrong entries before now:
+
+- **A module's behaviour can depend on a setting you are not looking at.** A jack that ignores negative voltage in one mode may carry it in another. Say which mode you tested in, or test them all.
+- **An absence is hard to observe.** "Nothing happens when I patch this" is evidence that nothing happened in the case you tried, which is not the same as the jack being dead. Where you are claiming a control does nothing at all, say what you varied while finding out.
 
 ## What `range` means
 

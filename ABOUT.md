@@ -34,7 +34,7 @@ For each jack, where the code settles it:
 
 ## The rule everything rests on
 
-**Every fact carries a citation.** A file and a line in the maker's published source, or the page of a manual that states it. A fact that cannot be pointed at does not go in.
+**Every fact carries a citation.** A file and a line in the maker's published source, the page of a manual that states it, or a description of the test that established it — say what was patched in and what came out. A fact that cannot be pointed at, or repeated, does not go in.
 
 This is not bookkeeping. It is what makes the database reviewable by anyone other than whoever wrote it. A claim that a jack takes ±5V cannot be checked by a stranger; "line 212 clamps it to ±5V" can be checked in under a minute, by a person or by a machine. Without that rule a contribution can only be accepted on trust, and a database accepted on trust degrades quietly.
 
