@@ -2,7 +2,26 @@
 
 Newest first.
 
-## 2.0.0 — unreleased
+## 2.0.1
+
+Still marked pre-release.
+
+### Fixed
+- Option-drag pans the rack again
+- Panel lettering, which was missing entirely
+- Long control and module names wrap to a second line instead of running off the edge
+- A note taller than the window is clamped to it and scrolls, with a scroll bar and a chevron at the foot
+
+### Added
+- Speak help on click, as a lit button on the panel: click a line of an open note to hear it
+- Speech uses the system voice. Windows and Linux are supported but untested; where no voice is available, nothing is said
+- Note text size, 80 to 250 percent, in the right-click menu. Kept for you, not with the patch
+- An entry for the Help module itself
+
+### Changed
+- Help on and off is a lit push button, on a four HP panel with a green border
+
+## 2.0.0
 
 The first release. Marked pre-release: the plugin works and the database is complete, but nothing here has been through anyone else's hands yet.
 
