@@ -106,24 +106,34 @@ struct HelpWidget : ModuleWidget {
 		//
 		// Three HP is about nine characters a line at this size, so the lines are short because
 		// they have to be, not for effect.
+		// WHITE, like the labels. It was grey while it read "option click anything" and was
+		// scenery; now that it says which three things answer, it is the instruction and wants
+		// reading. Four HP is about twelve characters a line at this size.
 		nvgFontSize(args.vg, 8.f);
-		nvgFillColor(args.vg, nvgRGB(0x7f, 0x86, 0x92));
-		const char* said[] = {"option", "click the", "module", "title or",
-			"any", "control", "or port", "for help"};
-		for (int i = 0; i < 8; i++)
-			nvgText(args.vg, mid, mm2px(22.f + i * 3.6f), said[i], NULL);
-
-		// THE TWO BUTTONS ARE LABELLED WHITE AND CLOSE. The instructions above are context and
-		// can be quiet; a label saying what a button does is the one thing that has to be read
-		// at a glance, and grey lettering two centimetres from its button is neither.
 		nvgFillColor(args.vg, nvgRGB(0xff, 0xff, 0xff));
-		nvgText(args.vg, mid, mm2px(57.f), "help", NULL);
-		nvgText(args.vg, mid, mm2px(83.f), "speak", NULL);
-		nvgText(args.vg, mid, mm2px(86.5f), "on click", NULL);
+		const char* said[] = {"option click", "the module", "title or any",
+			"control or", "port for help"};
+		for (int i = 0; i < 5; i++)
+			nvgText(args.vg, mid, mm2px(26.f + i * 4.2f), said[i], NULL);
+
+		// THE BUTTONS SIT AT THE FOOT, each under its own label with room between the two. The
+		// labels were overwriting the buttons when both were crowded into the middle.
+		nvgText(args.vg, mid, mm2px(93.f), "help", NULL);
+		nvgText(args.vg, mid, mm2px(105.f), "speak", NULL);
+		nvgText(args.vg, mid, mm2px(109.f), "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
 		nvgFillColor(args.vg, nvgRGB(0x5f, 0x9d, 0xd8));
-		nvgText(args.vg, mid, mm2px(118.f), "Dreamer", NULL);
+		nvgText(args.vg, mid, mm2px(124.f), "Dreamer", NULL);
+
+		// THE GREEN BORDER THE OTHER PLUGIN'S PANELS WEAR, in the same colour and the same
+		// inset, so a rack holding both looks like one maker's work. Stroked last so nothing
+		// drawn above can sit on top of it.
+		nvgBeginPath(args.vg);
+		nvgRoundedRect(args.vg, 3.f, 3.f, box.size.x - 6.f, box.size.y - 6.f, 6.f);
+		nvgStrokeColor(args.vg, nvgRGB(0x3d, 0xe0, 0x7a));
+		nvgStrokeWidth(args.vg, 1.2f);
+		nvgStroke(args.vg);
 	}
 
 	/** NOTHING IS INSTALLED WITHOUT A MODULE. The browser builds a preview widget whose module
