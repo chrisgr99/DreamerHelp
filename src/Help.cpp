@@ -822,8 +822,8 @@ struct HelpPopup : widget::OpaqueWidget {
 	/** THERE IS MORE BELOW THIS.
 
 	A note clipped at the window looks exactly like a note that ends there: the last line is a
-	whole line, nothing is cut in half, and there is no reason to reach for the wheel. The bar on
-	the right says so, but only to somebody already looking for it.
+	whole line, nothing is cut in half, and there is no reason to reach for the wheel. The scroll bar
+	says so, but only to somebody already looking for it.
 
 	So the bottom edge carries a chevron while there is anything under it, and loses it at the
 	end — which makes its absence the signal that you have read the lot. It is drawn over a short
@@ -861,7 +861,7 @@ struct HelpPopup : widget::OpaqueWidget {
 	Shown rather than left to be discovered. Without it a note clipped at the window bottom looks
 	like a note that ends there, and the reader has no reason to turn a wheel. It is an indicator
 	and not a handle: dragging it is not wired up, because the wheel and a trackpad both already
-	scroll and a two-pixel bar is a poor thing to have to hit. */
+	scroll and a scroll bar two pixels wide is a poor thing to have to hit. */
 	void drawScrollbar(const DrawArgs& args) {
 		const float track = box.size.y - 8.f;
 		const float frac = box.size.y / contentH;
