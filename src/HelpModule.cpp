@@ -99,19 +99,27 @@ struct HelpWidget : ModuleWidget {
 		nvgText(args.vg, mid, mm2px(13.f), "HELP", NULL);
 		nvgTextLetterSpacing(args.vg, 0.f);
 
+		// WHAT TO CLICK, SAID PROPERLY. It read "option click anything", which was short enough
+		// to fit and wrong: the panel between the controls answers nothing, and a reader who
+		// tried there and got silence would conclude the module was broken rather than that
+		// they had aimed at the one part with nothing to say.
+		//
+		// Three HP is about nine characters a line at this size, so the lines are short because
+		// they have to be, not for effect.
 		nvgFontSize(args.vg, 8.f);
 		nvgFillColor(args.vg, nvgRGB(0x7f, 0x86, 0x92));
-		const char* lines[] = {"option", "click", "anything"};
-		for (int i = 0; i < 3; i++)
-			nvgText(args.vg, mid, mm2px(27.f + i * 5.f), lines[i], NULL);
+		const char* said[] = {"option", "click the", "module", "title or",
+			"any", "control", "or port", "for help"};
+		for (int i = 0; i < 8; i++)
+			nvgText(args.vg, mid, mm2px(22.f + i * 3.6f), said[i], NULL);
 
 		// THE TWO BUTTONS ARE LABELLED WHITE AND CLOSE. The instructions above are context and
 		// can be quiet; a label saying what a button does is the one thing that has to be read
 		// at a glance, and grey lettering two centimetres from its button is neither.
 		nvgFillColor(args.vg, nvgRGB(0xff, 0xff, 0xff));
-		nvgText(args.vg, mid, mm2px(53.f), "help", NULL);
-		nvgText(args.vg, mid, mm2px(79.5f), "speak", NULL);
-		nvgText(args.vg, mid, mm2px(83.f), "on click", NULL);
+		nvgText(args.vg, mid, mm2px(57.f), "help", NULL);
+		nvgText(args.vg, mid, mm2px(83.f), "speak", NULL);
+		nvgText(args.vg, mid, mm2px(86.5f), "on click", NULL);
 
 		nvgFontSize(args.vg, 7.f);
 		nvgFillColor(args.vg, nvgRGB(0x5f, 0x9d, 0xd8));
