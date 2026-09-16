@@ -811,10 +811,49 @@ struct HelpPopup : widget::OpaqueWidget {
 		measure(args.vg, true, &args);
 		nvgRestore(args.vg);
 
-		if (overflow() > 0.f)
+		if (overflow() > 0.f) {
 			drawScrollbar(args);
+			drawMore(args);
+		}
 		// After the restore, so the button stays put while the text moves under it.
 		drawCopy(args);
+	}
+
+	/** THERE IS MORE BELOW THIS.
+
+	A note clipped at the window looks exactly like a note that ends there: the last line is a
+	whole line, nothing is cut in half, and there is no reason to reach for the wheel. The bar on
+	the right says so, but only to somebody already looking for it.
+
+	So the bottom edge carries a chevron while there is anything under it, and loses it at the
+	end — which makes its absence the signal that you have read the lot. It is drawn over a short
+	fade to the note's own ground, so the line it sits on darkens away rather than being covered
+	by a mark with text behind it. */
+	void drawMore(const DrawArgs& args) {
+		if (scrollY >= overflow() - 0.5f)
+			return;
+		const float h = 22.f;
+		const float top = box.size.y - h;
+
+		NVGpaint fade = nvgLinearGradient(args.vg, 0.f, top, 0.f, box.size.y,
+			nvgRGBA(0x16, 0x1a, 0x20, 0x00), nvgRGBA(0x16, 0x1a, 0x20, 0xf4));
+		nvgBeginPath(args.vg);
+		nvgRect(args.vg, 1.f, top, box.size.x - 2.f, h - 1.f);
+		nvgFillPaint(args.vg, fade);
+		nvgFill(args.vg);
+
+		// A chevron rather than a filled triangle: the same mark Rack's own scrolling menus use,
+		// and it reads at this size where a small solid arrow becomes a blob.
+		const float cx = box.size.x * 0.5f, cy = box.size.y - 7.f, r = 4.5f;
+		nvgBeginPath(args.vg);
+		nvgMoveTo(args.vg, cx - r, cy - r * 0.55f);
+		nvgLineTo(args.vg, cx, cy + r * 0.55f);
+		nvgLineTo(args.vg, cx + r, cy - r * 0.55f);
+		nvgStrokeColor(args.vg, nvgRGBA(0x9f, 0xc8, 0xf0, 0xe0));
+		nvgStrokeWidth(args.vg, 1.6f);
+		nvgLineCap(args.vg, NVG_ROUND);
+		nvgLineJoin(args.vg, NVG_ROUND);
+		nvgStroke(args.vg);
 	}
 
 	/** HOW MUCH MORE THERE IS, AND WHERE YOU ARE IN IT.
