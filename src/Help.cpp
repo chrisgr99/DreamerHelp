@@ -558,58 +558,150 @@ struct HelpPopup : widget::OpaqueWidget {
 		// Shrinking rather than wrapping, down to a floor. A name is read as one object, and a
 		// name broken across two lines is read as two; at the floor the rest is clipped, which
 		// is honest about running out of room in a way a silent overflow is not.
-		const std::string caps = helpUpper(title);
+		// THE NAME, WRAPPED — because a name is not always a name.
+		//
+		// A title here is whatever the maker called the control in configParam or configInput.
+		// Most are short: the median across every installed module is thirteen characters, and
+		// nine in ten fit one line. The rest are makers using the name field as a description —
+		// "Envelope CV (overrides internal envelope, gate and hold when connected)" is a real
+		// one, and the longest in the library runs to a hundred and sixty characters with line
+		// breaks in it.
+		//
+		// This was shrunk to fit at first, which answered the wrong question: a two-word name
+		// set six points smaller than the text under it is harder to read than the text it is
+		// heading, and the sentence-length ones were still clipped at the floor. So it wraps,
+		// at the size it was designed, to a second line — which is what the body has always
+		// done and what makes the note look like one thing rather than two.
 		const char* word = poly < 0 ? NULL : (poly ? "(POLY)" : "(MONO)");
 		const float avail = w - 2.f * HELP_PAD;
 
-		float titleSize = 15.f;
-		{
-			nvgTextLetterSpacing(vg, 0.6f);
-			for (;;) {
-				nvgFontSize(vg, titleSize * gHelpScale);
-				float need = nvgTextBounds(vg, 0.f, 0.f, caps.c_str(), NULL, NULL);
-				if (word)
-					need += 5.f + nvgTextBounds(vg, 0.f, 0.f, word, NULL, NULL);
-				if (need <= avail || titleSize <= 10.f)
-					break;
-				// A tenth at a time rather than one jump: the suffix and the tracking both move
-				// with the size, so the width is not a straight multiple of it.
-				titleSize -= 0.5f;
-			}
-			nvgTextLetterSpacing(vg, 0.f);
+		// A SENTENCE IS CUT DOWN TO ITS FIRST CLAUSE. Two lines will not hold a hundred and
+		// sixty characters at any size worth reading, and a heading that long is not a heading.
+		// The break is taken where the maker put one — a line break, then a parenthesis, then a
+		// full stop — so what is left is the part that names the thing, and the part that
+		// explains it is dropped rather than truncated mid-word. Only for the long ones: a name
+		// that fits is never cut, whatever punctuation is in it.
+		std::string name = title;
+		if (name.size() > 34) {
+			size_t cut = name.find('\n');
+			if (cut == std::string::npos) cut = name.find(" (");
+			if (cut == std::string::npos) cut = name.find(". ");
+			if (cut != std::string::npos && cut >= 6)
+				name = name.substr(0, cut);
 		}
+		const std::string caps = helpUpper(name);
 
+		// THE SUFFIX IS WRAPPED AS THOUGH IT WERE THE LAST WORD, so it follows the name onto
+		// whichever line the name ends on and never hangs off the edge on its own.
+		std::vector<std::string> tokens;
+		for (size_t at = 0; at < caps.size();) {
+			const size_t sp = caps.find_first_of(" \t\n", at);
+			const std::string t = caps.substr(at, sp == std::string::npos ? std::string::npos : sp - at);
+			if (!t.empty())
+				tokens.push_back(t);
+			if (sp == std::string::npos)
+				break;
+			at = sp + 1;
+		}
+		if (tokens.empty())
+			tokens.push_back("");
+		const size_t suffixAt = word ? tokens.size() : (size_t) -1;
+		if (word)
+			tokens.push_back(word);
+
+		// Greedy, and at most two lines. A third line of heading is a paragraph.
+		static const size_t MAX_LINES = 2;
+		float titleSize = 15.f;
+		std::vector<std::string> rows;
+		nvgTextLetterSpacing(vg, 0.6f);
+		for (;;) {
+			nvgFontSize(vg, titleSize * gHelpScale);
+			rows.clear();
+			std::string row;
+			bool tooWide = false;
+			for (size_t i = 0; i < tokens.size(); i++) {
+				const std::string tryRow = row.empty() ? tokens[i] : row + " " + tokens[i];
+				if (!row.empty() && nvgTextBounds(vg, 0.f, 0.f, tryRow.c_str(), NULL, NULL) > avail) {
+					rows.push_back(row);
+					row = tokens[i];
+					// A single word wider than the note cannot be helped by wrapping.
+					if (nvgTextBounds(vg, 0.f, 0.f, row.c_str(), NULL, NULL) > avail)
+						tooWide = true;
+				}
+				else {
+					row = tryRow;
+					if (rows.empty() && !row.empty()
+						&& nvgTextBounds(vg, 0.f, 0.f, row.c_str(), NULL, NULL) > avail)
+						tooWide = true;
+				}
+			}
+			rows.push_back(row);
+			if ((rows.size() <= MAX_LINES && !tooWide) || titleSize <= 11.f)
+				break;
+			// Half a point at a time: the tracking moves with the size, so the width is not a
+			// straight multiple of it.
+			titleSize -= 0.5f;
+		}
+		nvgTextLetterSpacing(vg, 0.f);
+		if (rows.size() > MAX_LINES)
+			rows.resize(MAX_LINES);
+
+		const float rowStep = (titleSize + 2.f) * gHelpScale;
 		nvgFontSize(vg, titleSize * gHelpScale);
 		if (drawing) {
-			// AND CLIPPED AT THE FLOOR, so "it is clipped" is a fact rather than an intention.
-			// A name too long to fit even at ten point stops at the edge of the note instead of
-			// being drawn across the rack behind it.
-			// SAVED AND INTERSECTED, not set and reset. The whole note is drawn inside a scissor of
-			// its own now, and a plain nvgResetScissor here would throw that away — the title of
-			// a scrolled note would then be free to draw above the top of it.
+			// CLIPPED AS A LAST RESORT, so "it is clipped" is a fact rather than an intention.
+			// A word too long to fit even at eleven point stops at the edge of the note instead
+			// of being drawn across the rack behind it.
+			//
+			// SAVED AND INTERSECTED, not set and reset. The whole note is drawn inside a scissor
+			// of its own now, and a plain nvgResetScissor here would throw that away — the title
+			// of a scrolled note would then be free to draw above the top of it.
 			nvgSave(args->vg);
-			nvgIntersectScissor(args->vg, HELP_PAD, y - 2.f, avail, titleSize * gHelpScale + 6.f);
-			nvgFillColor(args->vg, nvgRGB(0x7f, 0xb0, 0xe4));
+			nvgIntersectScissor(args->vg, HELP_PAD, y - 2.f, avail,
+				rowStep * rows.size() + 6.f);
 			nvgTextLetterSpacing(args->vg, 0.6f);
-			// Struck twice, a third of a pixel apart: no bold cut of this face ships with Rack,
-			// and the one bold face in the bundle is a different typeface.
-			nvgText(args->vg, HELP_PAD, y, caps.c_str(), NULL);
-			const float after = nvgText(args->vg, HELP_PAD + 0.35f, y, caps.c_str(), NULL);
-			// POLY OR MONO AS PART OF THE NAME, which is where somebody reading the title is
-			// already looking. It was a pill on the right for a while; a bracket after the name
-			// is read in the same glance as the name, and needs no shape to be learned. The
-			// colour stays, so it is still answerable without reading, and the word stays, so
-			// nothing rests on the colour.
-			if (word) {
-				nvgFillColor(args->vg, poly ? nvgRGB(0x5f, 0xc8, 0x8b)
-					: nvgRGB(0x87, 0x90, 0x9d));
-				nvgText(args->vg, after + 5.f, y, word, NULL);
-				nvgText(args->vg, after + 5.35f, y, word, NULL);
+			for (size_t r = 0; r < rows.size(); r++) {
+				const float ry = y + r * rowStep;
+				// WHERE THE SUFFIX FELL. Everything before it on its row is the name and is
+				// drawn in the name's colour; the suffix itself is coloured for what it says.
+				std::string head = rows[r];
+				bool tail = false;
+				if (word && r + 1 == rows.size() && suffixAt != (size_t) -1) {
+					const size_t cut = head.rfind(std::string(" ") + word);
+					if (cut != std::string::npos) {
+						head = head.substr(0, cut);
+						tail = true;
+					}
+					else if (head == word) {
+						head.clear();
+						tail = true;
+					}
+				}
+				float after = HELP_PAD;
+				if (!head.empty()) {
+					nvgFillColor(args->vg, nvgRGB(0x7f, 0xb0, 0xe4));
+					// Struck twice, a third of a pixel apart: no bold cut of this face ships
+					// with Rack, and the one bold face in the bundle is a different typeface.
+					nvgText(args->vg, HELP_PAD, ry, head.c_str(), NULL);
+					after = nvgText(args->vg, HELP_PAD + 0.35f, ry, head.c_str(), NULL);
+				}
+				// POLY OR MONO AS PART OF THE NAME, which is where somebody reading the title is
+				// already looking. It was a pill on the right for a while; a bracket after the
+				// name is read in the same glance as the name, and needs no shape to be learned.
+				// The colour stays, so it is still answerable without reading, and the word
+				// stays, so nothing rests on the colour.
+				if (tail) {
+					nvgFillColor(args->vg, poly ? nvgRGB(0x5f, 0xc8, 0x8b)
+						: nvgRGB(0x87, 0x90, 0x9d));
+					const float sx = head.empty() ? HELP_PAD : after + 5.f;
+					nvgText(args->vg, sx, ry, word, NULL);
+					nvgText(args->vg, sx + 0.35f, ry, word, NULL);
+				}
 			}
 			nvgTextLetterSpacing(args->vg, 0.f);
 			nvgRestore(args->vg);
 		}
-		y += (titleSize + 5.f) * gHelpScale;
+		y += rowStep * rows.size() + 5.f * gHelpScale;
 
 		nvgFontSize(vg, 12.f * gHelpScale);
 		nvgTextLineHeight(vg, HELP_LEAD / 12.f);   // a ratio, so it scales with the size
