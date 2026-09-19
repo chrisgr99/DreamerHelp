@@ -1,0 +1,15 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "L",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/L.cpp:114 and 127, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/L.cpp:129, rescaled from 0.1 to 2 into 0 to 1 and put through a dsp::SchmittTrigger per channel; a trigger at :132-134 sets the delay to the samples written since the previous one"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/L.cpp:147"},
+      "1": {"family": "audio", "poly": true, "why": "src/L.cpp:148, the buffer read one sample per sample"}
+    }
+  },
+  "comment": "The Pre knob is configured 0 to 16 and the Fine knob 0 to 1, and the two are added before two is raised to that power, so the pair set a shortening of 1 to 131072 samples (src/L.cpp:46-47 and 119-121). The pre-trigger output is a comparison rather than a pulse: it is high for as long as the head has run past the measured length less the shortening (src/L.cpp:142). The panel prints Pre, Fine, IN, TRIG, PRE and OUT."
+}

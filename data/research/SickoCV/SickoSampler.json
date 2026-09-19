@@ -1,0 +1,29 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoSampler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SickoSampler.cpp reads this jack per voice and compares it against 1V, as a rising edge in Trig mode and as a level in Gate mode"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SickoSampler.cpp reads this jack per voice and takes a rising edge at 1V to send playback to its release stage"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the master knob; with 'Polyphonic Master IN' ticked it reads getVoltage(c) per voice"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the tune knob"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "SickoSampler.cpp takes getChannels() from this jack as the voice count and raises 2 to getVoltage(c) for each voice's playback speed"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the attack time"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the decay time"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the sustain level"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoSampler.cpp adds getVoltage() times the trimpot to the release time"},
+      "9": {"family": "audio", "poly": false, "step": "continuous", "why": "SickoSampler.cpp reads this jack with getVoltage() into the record buffer; recording is monophonic"},
+      "10": {"family": "audio", "poly": false, "step": "continuous", "why": "SickoSampler.cpp reads this jack with getVoltage() into the record buffer's right channel"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoSampler.cpp takes a rising edge at 1V on this jack to toggle or start recording"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoSampler.cpp takes a rising edge at 1V on this jack to stop recording"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoSampler.cpp takes a rising edge at 1V on this jack to erase the sample"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "SickoSampler.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off; the LIM switch clamps to ±5V"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "SickoSampler.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off; the LIM switch clamps to ±5V"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoSampler.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoSampler.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"}
+    }
+  },
+  "comment": "The MON switch has three positions, Off, Rec Only and Always (SickoSampler.cpp:499), which is a three-way control rather than the two most of this plugin's switches use. Phase Scan is a panel switch here where sickoPlayer has it only on the menu, and it comes up on. The output range is ±5V only with the LIM switch on. The waveform display is a custom widget with no ParamWidget, so the items it carries — Reset Cursors, Copy Cue to Loop, Copy Loop to Cue and the save commands — cannot be reached by clicking it for help; the save commands and Presets also appear on the module's own menu, but Reset Cursors, Copy Cue to Loop and Copy Loop to Cue appear only on the display's menu."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "SickoCV",
+  "module": "Blender",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "Blender.cpp:159 getChannels() on this port becomes the loop bound, and :164 reads getVoltage(c)"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "Blender.cpp:200 getChannels() on this port becomes the loop bound for the right channel, and :205 reads getVoltage(c)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "Blender.cpp:168 getVoltage(c) inside the loop bounded by the IN1 L channel count"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "why": "Blender.cpp:209 getVoltage(c) inside the loop bounded by the IN1 R channel count"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "Blender.cpp:140 getVoltage() * 0.1 * the attenuverter with MOD range unipolar, :142 (getVoltage()+5) * 0.1 with it bipolar; blend clamped at :145-150"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "Blender.cpp:127 getVoltage() * 0.1 * the attenuverter with MOD2 range unipolar, :129 (getVoltage()+5) * 0.1 with it bipolar, clamped to ±1 at :134-137; the whole branch requires MOD to be connected (:124)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Blender.cpp:186 setVoltage(value, c) and :256 setChannels(chanL), or :107 setChannels(1) when Polyphonic OUTs is off"},
+      "1": {"family": "audio", "poly": true, "why": "Blender.cpp:227 setVoltage(value, c) and :257 setChannels(chanR), or :108 setChannels(1) when Polyphonic OUTs is off"}
+    }
+  },
+  "comment": "Two disagreements with the README. First, Blender.cpp:172 reads (input1 * (1 - mix)) + (input2 * mix) * vol, so the master volume multiplies only the IN2 term; the README says it is a master volume up to 200%. Second, the README says MOD2 modulates the MOD attenuverter, but at :140 and :142 the MOD2 result is simply added alongside the MOD result, and at :124 the entire modulation branch is skipped unless MOD itself is connected, so MOD2 alone does nothing. Blender.cpp:146-149 also replaces a negative blend with its absolute value, and the clamp at :148 is unreachable because the value has already been made positive. Left and right take their channel counts independently, from IN1 L and IN1 R."
+}

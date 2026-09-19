@@ -1,0 +1,33 @@
+{
+  "plugin": "mscHack",
+  "module": "ARP700",
+  "description": "Seven-note arpeggiator with sixteen patterns, three sub-steps per note, note lengths from a whole note down to a thirty-second, and glide and legato per note",
+  "inputs": [
+    {"ids": [0], "text": "The clock the arpeggio runs from; with nothing patched here the trigger output stays at 0V and the pattern does not advance"},
+    {"ids": [1], "text": "Adds its voltage to the pitch output, transposing the arpeggio"},
+    {"ids": [2], "text": "A rising edge here queues the next pattern, which takes effect at the start of the next pass"},
+    {"ids": [3], "text": "A rising edge here restarts the pattern at its first note"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate for as long as the current note lasts, dropped one tick early so consecutive notes do not run together"},
+    {"ids": [1], "text": "The pitch of the current note, a volt per octave, with the pattern's octave setting and the V/OCT offset input added, and sliding over 200ms on a note marked for glide"}
+  ],
+  "notes": [
+    "the module plays nothing until a clock is patched to Clk, at least one note on the keyboard is on, and at least one of that note's three sub-steps is set to Note",
+    "every sub-step of a new module is set to Off and no key is on, which is why a freshly added module is silent under a running clock",
+    "clicking a key on the keyboard adds that note to the arpeggio and clicking it again removes it; seven notes can be on at once",
+    "the upper row of marks above the Pattern strip sets the last pattern in the run, and the lower row picks which pattern is shown"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous"
+    }
+  }
+}

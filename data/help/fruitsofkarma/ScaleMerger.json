@@ -1,0 +1,79 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "ScaleMerger",
+  "description": "Probability quantiser holding two scales at once: the pitches both scales contain always sound, and the pitches only one of them has are let through by chance",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Flips that pitch in the first scale between full chance and none by writing 1 or 0 into its probability knob; the scale's name then reads CUSTOM"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Flips that pitch in the second scale between full chance and none by writing 1 or 0 into its probability knob; the scale's name then reads CUSTOM"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Flips that pitch in both scales at once: if either scale has it, both drop it, and if neither has it, both take it"},
+    {"ids": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Sets the chance of that pitch in the first scale, 0 for never and 1 for every trigger"},
+    {"ids": [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], "text": "Sets the chance of that pitch in the second scale, 0 for never and 1 for every trigger"},
+    {"ids": [60], "text": "Scales the chance of the pitches that only the first scale has, and leaves the pitches shared with the second scale alone; it is fully open when the module is added"},
+    {"ids": [61], "text": "Scales the chance of the pitches that only the second scale has, and leaves the pitches shared with the first scale alone; it is fully closed when the module is added"},
+    {"ids": [62], "text": "Chooses the first scale from a list of 43, chromatic at the bottom, and writes 1 or 0 into all twelve of that scale's probability knobs, losing whatever was set there"},
+    {"ids": [63], "text": "Chooses the second scale from a list of 43, chromatic at the bottom, and writes 1 or 0 into all twelve of that scale's probability knobs, losing whatever was set there"},
+    {"ids": [64], "text": "Rotates the first scale to a new root, C at the bottom through to B, and writes 1 or 0 into all twelve of that scale's probability knobs, losing whatever was set there"},
+    {"ids": [65], "text": "Rotates the second scale to a new root, C at the bottom through to B, and writes 1 or 0 into all twelve of that scale's probability knobs, losing whatever was set there"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps past the first SCALE knob's setting, the whole list of 43 across 10V, wrapping round the end; the size of the voltage is used and its sign is thrown away"},
+    {"ids": [1], "text": "Steps past the second SCALE knob's setting, the whole list of 43 across 10V, wrapping round the end; the size of the voltage is used and its sign is thrown away"},
+    {"ids": [2], "text": "The pitch to be quantised; it is read only at the moment a trigger arrives"},
+    {"ids": [3], "text": "On each rising edge a fresh random number is drawn for every one of the twelve pitches, and the voltage at IN is quantised against whichever pitches those draws allow"},
+    {"ids": [4], "text": "Adds to the first scale's unique-pitch chance, a whole unit per volt, and the total is held between 0 and 1"},
+    {"ids": [5], "text": "Adds to the second scale's unique-pitch chance, a whole unit per volt, and the total is held between 0 and 1"},
+    {"ids": [6], "text": "Steps past the first KEY knob's setting, all twelve keys across 10V, wrapping round the end; the size of the voltage is used and its sign is thrown away"},
+    {"ids": [7], "text": "Steps past the second KEY knob's setting, all twelve keys across 10V, wrapping round the end; the size of the voltage is used and its sign is thrown away"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "Adds to that pitch's chance in the first scale, a whole unit per volt, and the total is held between 0 and 1"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Adds to that pitch's chance in the second scale, a whole unit per volt, and the total is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantised pitch, held unchanged until the next trigger"}
+  ],
+  "notes": [
+    "Nothing comes out until both IN and TRIGGER are patched, and the output carries the smaller of their two channel counts.",
+    "When the random draw allows no pitch at all, the previous pitch is sent again.",
+    "The lamp by each first-scale knob shows that pitch’s chance there, the lamp by each second-scale knob its chance in that scale, and the row at the foot the greater of the two.",
+    "To move from one scale to the other, close both PROBABILITY knobs, which leaves only the pitches the two share, then set the new scale and open its own PROBABILITY knob.",
+    "Quantising works inside one octave and never rounds across the top of it, so a pitch near the octave is pulled down to the nearest allowed pitch below rather than to the one above."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "4": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "5": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "9": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "10": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "11": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "12": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "13": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "14": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "15": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "16": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "17": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "18": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "19": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "20": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "21": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "22": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "23": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "24": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "25": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "26": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "27": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "28": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "29": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "30": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "31": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Multi_Meter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Multi_Meter.cpp:129 reads this input with getVoltage, which is channel 1 only"},
+      "1": {"family": "audio", "poly": false, "why": "Multi_Meter.cpp:130 reads this input with getVoltage, which is channel 1 only"},
+      "2": {"family": "audio", "poly": true, "why": "Multi_Meter.cpp:136 loops to this input's getChannels and reads each channel with getPolyVoltage at :137"}
+    }
+  },
+  "comment": "Eighteen parameters are configured and only the two switches have widgets; the census paramPos holds those two. The sixteen REF LEVEL parameters at Multi_Meter.cpp:116 are read by the display, but the only code that would change them, inside Multi_MeterDisplay::onHoverScroll at :374-393, is commented out, so they are dead as shipped. AUDIO_IN_GAIN 0.1 at :90 puts 10V at full scale, and dsp2::clamp at :129, :130 and :137 holds each channel at that before metering. Channels above the cable's channel count are fed zero at :139-141. The highpass is switched on for all sixteen meters at :148."
+}

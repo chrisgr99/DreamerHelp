@@ -1,0 +1,63 @@
+{
+  "plugin": "SickoCV",
+  "module": "Clocker",
+  "description": "A clock generator with four dividers and multipliers, a time signature, and an audio metronome click",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo, 30.0 to 300.0 BPM"},
+    {"ids": [1], "text": "Sets the time signature the metronome counts in, from 2/4 up to 15/8"},
+    {"ids": [2], "text": "Switches the audio click on"},
+    {"ids": [3], "text": "Sets the level of the audio click, 0 to 200%"},
+    {"ids": [4], "text": "Sets how much of each main clock pulse is high, 0% to 100%"},
+    {"ids": [5], "text": "Starts and stops the clock"},
+    {"ids": [6], "text": "Restarts the clock and the metronome from the first beat of the bar"},
+    {"ids": [7, 8, 9, 10], "text": "Divides or multiplies the main clock for that row, from a 256th of it to 256 times it, with x1 in the centre"},
+    {"ids": [11, 12, 13, 14], "text": "Sets how much of that row's pulse is high, 0% to 100%, or the swing amount when 'Trig/Swing on Div' is ticked for that row"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "An external clock to follow instead of the BPM knob, counted off against the PPQN resolution set on the menu"},
+    {"ids": [1], "text": "A trigger here restarts the clock and the metronome from the first beat of the bar"},
+    {"ids": [2], "text": "A trigger here starts or stops the clock, as the RUN button does"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The main clock, at the tempo and pulse width set"},
+    {"ids": [1], "text": "A pulse when a reset happens, and on run or stop where 'Pulse to RST out' is ticked"},
+    {"ids": [2, 3, 4, 5], "text": "That row's divided or multiplied clock"},
+    {"ids": [6], "text": "A 1ms pulse on every beat while the clock is running"},
+    {"ids": [7], "text": "A 1ms pulse on every bar while the clock is running"},
+    {"ids": [8], "text": "The audio metronome click"}
+  ],
+  "notes": [
+    "the BPM display is coloured by where the tempo comes from: yellow for the BPM knob and blue for an external clock at the EXT jack.",
+    "the algorithm varies the length of individual clock pulses so that the number of beats in a minute comes out exact, so the pulses are not all the same length.",
+    "right-clicking a div/mult display picks the division or multiplication directly, without turning the knob."
+  ],
+  "menu": [
+    "Trig/Swing on Div #1 — makes that row send a 1ms trigger instead of a gate, and turns its PW knob into a swing control that delays the even pulses of a multiplication",
+    "Trig/Swing on Div #2 — makes that row send a 1ms trigger instead of a gate, and turns its PW knob into a swing control that delays the even pulses of a multiplication",
+    "Trig/Swing on Div #3 — makes that row send a 1ms trigger instead of a gate, and turns its PW knob into a swing control that delays the even pulses of a multiplication",
+    "Trig/Swing on Div #4 — makes that row send a 1ms trigger instead of a gate, and turns its PW knob into a swing control that delays the even pulses of a multiplication",
+    "Resolution — under the 'External Clock' heading, sets how many pulses per quarter note the EXT jack is sending: 1, 2, 4, 8, 12, 16 or 24",
+    "Reset Bar — under the 'On Run' and 'On Stop' headings, restarts the metronome from the first beat of the bar at that moment",
+    "Pulse to RST out — under the 'On Run' and 'On Stop' headings, sends a pulse from the RST output at that moment",
+    "Beat pulse also on Bar — copies every BAR pulse onto the BEAT output as well",
+    "Click Settings — a submenu choosing between the three built-in click pairs, Standard, Click1 and Click2, or Custom with a wav file loaded for the beat and another for the bar"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "continuous · one channel only"
+    }
+  }
+}

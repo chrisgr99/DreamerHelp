@@ -1,0 +1,29 @@
+{
+  "plugin": "dBiz",
+  "module": "TROSC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "TROSC.cpp:464 takes the channel count from this input and 488 reads it four channels at a time"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "TROSC.cpp:464 takes the channel count from this input and 488 reads it four channels at a time"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "TROSC.cpp:464 takes the channel count from this input and 488 reads it four channels at a time"},
+      "3": {"family": "trigger", "poly": true, "why": "TROSC.cpp:515 and 552 read it with getPolyVoltageSimd as the oscillator sync"},
+      "4": {"family": "trigger", "poly": true, "why": "TROSC.cpp:515 and 552 read it with getPolyVoltageSimd as the oscillator sync"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "why": "TROSC.cpp:509 to 583 read it with getPolyVoltageSimd and multiply it by the FM knob before it is added to the pitch"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "why": "TROSC.cpp:509 to 583 read it with getPolyVoltageSimd and multiply it by the FM knob before it is added to the pitch"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "why": "TROSC.cpp:509 to 583 read it with getPolyVoltageSimd and multiply it by the FM knob before it is added to the pitch"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "TROSC.cpp:521 and 595 clamp this voltage divided by ten to 0 to 1 as the wave mix, with getVoltage"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "TROSC.cpp:521 and 595 clamp this voltage divided by ten to 0 to 1 as the wave mix, with getVoltage"},
+      "12": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "TROSC.cpp:529 to 603 clamp this voltage divided by ten to plus or minus 1 as the level, with getVoltage"},
+      "13": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "TROSC.cpp:529 to 603 clamp this voltage divided by ten to plus or minus 1 as the level, with getVoltage"},
+      "14": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "TROSC.cpp:529 to 603 clamp this voltage divided by ten to plus or minus 1 as the level, with getVoltage"},
+      "15": {"family": "cv", "poly": true, "step": "continuous", "why": "TROSC.cpp:587 reads it with getPolyVoltageSimd, divides it by ten and multiplies it by the width knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"}
+    }
+  },
+  "comment": "Two jacks are not read in this build and so carry no line or tag: input 5, the third oscillator's sync jack, because that oscillator syncs from the first oscillator's sync input, and input 10, the second oscillator's wave mix CV, because the code reads the first oscillator's wave mix jack for it. The outputs are never given a channel count, so each carries one channel even when a polyphonic voltage is patched to a pitch input. Two jacks do not do what the panel says. The C sync input is never read: oscillator C is synced from the A sync input at TROSC.cpp:589. The B wave mix input is only tested for a cable, and the voltage used for B at TROSC.cpp:558 comes from the A wave mix input. The three pitch inputs are read channel by channel, but no output is ever given more than one channel, so only the first channel of a polyphonic cable is heard."
+}

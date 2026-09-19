@@ -1,0 +1,38 @@
+{
+  "plugin": "SIM",
+  "module": "Phi",
+  "description": "Phi: a play head that walks along the channels of a polyphonic cable and sends out the value it is over",
+  "inputs": [
+    {"ids": [0], "text": "The channels the play head reads; they are the buffer the expanders work on"},
+    {"ids": [1], "text": "Moves the play head; it needs this even when the next input is patched"},
+    {"ids": [2], "text": "Jumps the play head to the start of the next channel; with nothing arriving before the step ends, the head stops short of the next value"},
+    {"ids": [3], "text": "Returns the play head to its starting position"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Goes high as the play head enters a new step, for the fraction of the clock period set on the menu"},
+    {"ids": [1], "text": "The value under the play head, after every expander in the chain has had its turn"}
+  ],
+  "notes": [
+    "nothing moves without a clock: the play head only advances on the clock input, whether or not the next input is patched",
+    "the buffer here holds voltages, so InX adds and OutX cuts values rather than combining gates"
+  ],
+  "menu": [
+    "Use Phasor as input — reads the clock input as a rising ramp giving the position directly instead of as a clock",
+    "Connect Begin and End — joins the end of the buffer back to its beginning",
+    "Negative 'next' pulse steps in reverse direction — makes a negative pulse at the next input step backwards",
+    "Remember speed after reset — keeps the play head's speed across a reset, so it starts at once instead of after two clock pulses",
+    "Gate Length — a slider setting the length of the step trigger as a fraction of the step duration",
+    "Add Expander — places a ReX, ModX, InX or GaitX expander on the correct side of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads no channels.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the phasor or clock input.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

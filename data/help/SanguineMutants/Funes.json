@@ -1,0 +1,75 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Funes",
+  "description": "Polyphonic macro oscillator with twenty-four synthesis models, from filtered waveforms and six-operator FM through speech, granular clouds and physical models to analogue drums",
+  "params": [
+    {"ids": [0], "text": "Steps through the twenty-four models in three banks of eight — new, pitched, and noise and percussive — and the display spells the eight-letter code of the one in use"},
+    {"ids": [1], "text": "Sets the pitch; how far it reaches follows the frequency mode, which by default is the eight octaves from C0 to C8"},
+    {"ids": [2], "text": "Sets the harmonic content of the model in use, which in most of them is the spread of the spectrum"},
+    {"ids": [3], "text": "Sets the first timbre parameter of the model in use, which in most of them is the brightness of the tone"},
+    {"ids": [4], "text": "Sets the second timbre parameter of the model in use, which in most of them gives a sideways variation of the tone"},
+    {"ids": [5], "text": "Attenuverts the TIMBRE input; with nothing patched to TIMBRE but a cable at TRIG, any setting other than zero hands that modulation to the internal decaying envelope instead"},
+    {"ids": [6], "text": "Attenuverts the FM input; with nothing patched to FM but a cable at TRIG, any setting other than zero hands that modulation to the internal decaying envelope instead"},
+    {"ids": [7], "text": "Attenuverts the MORPH input; with nothing patched to MORPH but a cable at TRIG, any setting other than zero hands that modulation to the internal decaying envelope instead"},
+    {"ids": [8], "text": "Sets the response of the internal low-pass gate, from a filter that closes down with the level at the counter-clockwise end to a plain amplifier at the clockwise end"},
+    {"ids": [9], "text": "Sets the ringing time of the internal low-pass gate, and with it the decay of the internal envelope"},
+    {"ids": [10], "text": "Sets the root note that the FREQUENCY knob's octave steps are counted from; it is read only while the frequency mode is set to octaves"},
+    {"ids": [11], "text": "Sets what the FREQUENCY knob covers: an LFO range, the eight octaves from C0 to C8, whole octaves above a root note, or seven semitones either side of one fixed C"},
+    {"ids": [12], "text": "Attenuverts the HARMONICS input"},
+    {"ids": [13], "text": "Attenuverts the low-pass gate response input"},
+    {"ids": [14], "text": "Attenuverts the low-pass gate decay input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the model up or down from the one the knob picks, with each polyphonic channel taking its own offset; with a cable at TRIG the offset is read at each trigger and held until the next one"},
+    {"ids": [1], "text": "Adds to the TIMBRE knob through its attenuverter, 8V covering the whole knob range"},
+    {"ids": [2], "text": "Shifts the pitch through the FM attenuverter, six semitones per volt at full attenuverter"},
+    {"ids": [3], "text": "Adds to the MORPH knob through its attenuverter, 8V covering the whole knob range"},
+    {"ids": [4], "text": "Adds to the HARMONICS knob through its attenuverter, 5V covering the whole knob range"},
+    {"ids": [5], "text": "A rising edge past 0.9V starts the internal envelope, excites the percussive and physical models, holds the model offset, and strikes the low-pass gate when LEVEL is unpatched"},
+    {"ids": [6], "text": "Opens the internal low-pass gate, 8V giving full level, and accents the percussive and physical models; with nothing patched the trigger strikes the gate instead"},
+    {"ids": [7], "text": "Sets the pitch, one volt per octave, reaching three octaves below the root note and seven above it"},
+    {"ids": [8], "text": "Adds to the LPG. RSP. knob through its attenuverter, 5V covering the whole knob range; this jack reads one channel only, and that one voltage is applied to every polyphonic channel"},
+    {"ids": [9], "text": "Adds to the LPG. DCY. knob through its attenuverter, 5V covering the whole knob range; this jack reads one channel only, and that one voltage is applied to every polyphonic channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The model's main output, ±5V"},
+    {"ids": [1], "text": "A second signal from the same model, ±5V, which is a variant of the main output or a by-product of it and differs from model to model"}
+  ],
+  "notes": [
+    "the module is polyphonic: the channel count comes from whichever of TRIG and V/OCT carries more channels, and each channel runs its own voice.",
+    "the two low-pass gate jacks are monophonic, which is what their silver rings mean: only the first channel of a cable is read, and that voltage is applied to every channel the module is running.",
+    "with nothing patched to TRIG the model plays continuously and the low-pass gate stays open; patching TRIG turns the module into a struck voice with its own envelope.",
+    "five of the models read custom data that can be replaced from the Custom data menu: the three six-operator FM models, the wave terrain model and the wavetable model."
+  ],
+  "menu": [
+    "Synthesis model: New, Pitched, Noise/percussive — three submenus listing the twenty-four models in the order the MODEL knob steps through them",
+    "Frequency mode: LFO mode, C0 +/- 7 semitones, through C7 +/- 7 semitones, Octaves, C0 to C8 — sets what the FREQUENCY knob covers, the same setting the F. MODE knob carries",
+    "Options — the submenu holding the display, model input and processing settings",
+    "Display follows modulated Model — makes the display show the model the MODEL input has selected rather than the one the knob picked. It is on the Options submenu",
+    "Display channel — picks which polyphonic channel the model display reports. It is on the Options submenu",
+    "C0 model modulation (monophonic) — reads the MODEL input as note pitches from C0 to B1, picking the model outright rather than offsetting the knob. It is on the Options submenu",
+    "Low CPU (disable resampling) — runs the models at the engine sample rate instead of resampling, which costs less processing and adds aliasing. It is on the Options submenu",
+    "Custom data — the submenu for the data the six-operator FM, wave terrain and wavetable models read",
+    "Load... — reads a custom data file into the model in use; it appears only while one of the five models that take custom data is selected. It is on the Custom data submenu",
+    "Reset to factory default — puts the built-in data back into the model in use. It is on the Custom data submenu",
+    "Open editors in web browser... — opens the maker's web page for building custom data files. It is on the Custom data submenu"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "1": "±8V · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±8V.",
+      "2": "bipolar · continuous · polyphonic",
+      "3": "±8V · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±8V.",
+      "4": "±5V · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "5": "high above 0.9V · stepped · polyphonic",
+      "6": "0 to 8V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "7": "1V per octave · continuous · polyphonic",
+      "8": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 5V.",
+      "9": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 5V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

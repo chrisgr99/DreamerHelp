@@ -1,0 +1,29 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Sigma",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "sigma.cpp names this input polyphonic; the manual states sixteen voices and the channel count of this jack is what allocates them"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "why": "sigma.cpp:1146 getChannels sizes the voice count and :1171 reads each channel with getVoltage(ch) >= 1V; the rise latches that channel's pitch and velocity"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "sigma.cpp:1207 clamps getPolyVoltage(c)*0.1 to 0 to 1, latched at the gate's rise; :1211 it sets that voice's level and :1268 morphs it between the two spectra; unpatched every note is full"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "sigma.cpp declares the VCA input, which scales the output level"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "sigma.cpp declares the tilt CV, summed with the tilt knob"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "sigma.cpp names it a volt per octave cutoff CV, summed with the cutoff knob"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "why": "sigma.cpp:1122 lfoSyncTrig.process crosses 2V, not 1V, and :1123 zeroes that LFO's phase"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "sigma.cpp declares the resonance CV, summed with the resonance knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "sigma.cpp declares the left output; the voices are summed into it rather than carried separately"},
+      "1": {"family": "audio", "poly": false, "why": "sigma.cpp declares the right output; the voices are summed into it rather than carried separately"}
+    }
+  },
+  "comment": "Nine parameters are declared with no widget: the three oscillators' depth, delay and randomness, and the three velocity-response settings. All of them are reached from the menu rather than from the panel. The cutoff and resonance controls are not a filter over the output: they decide which partials enter the sum in the first place, which is why a partial removed by them cannot ring. The pitch of each partial follows the real string formula, the partial number times the fundamental times the square root of one plus the stretch times the partial number squared."
+}

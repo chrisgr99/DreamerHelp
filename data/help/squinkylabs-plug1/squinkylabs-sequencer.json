@@ -1,0 +1,65 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-sequencer",
+  "description": "Polyphonic piano-roll sequencer of unlimited length, edited by mouse, computer keyboard or MIDI keyboard while it plays, with unlimited undo, MIDI file import and export and an end-of-cycle trigger",
+  "params": [
+    {"ids": [0], "text": "Tells the sequencer how to read the clock input, from x1 for one pulse a quarter note up to x96; it should match the ratio on the clock module, and it changes playback only, never the editing grid"},
+    {"ids": [3], "text": "Lets the note display scroll along with playback"},
+    {"ids": [4], "text": "Starts and stops playback, changing colour while it runs; the Run input does the same job, and either can start or stop it"},
+    {"ids": [5], "text": "Sets how many voices play at once, up to 16; notes beyond that steal a voice, and a setting of 1 is what gives true monophonic legato"},
+    {"ids": [7], "text": "Turns on step recording, so that a note played at the CV and Gate inputs is written at the edit cursor and the cursor then moves on by a grid unit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that playback advances on, read according to the Clock rate setting"},
+    {"ids": [1], "text": "Returns playback to the start of the sequence"},
+    {"ids": [2], "text": "Starts and stops playback, for patching from the run output of a clock module"},
+    {"ids": [3], "text": "The gate side of step recording: a note is written while a gate is high, and the cursor moves on when every held note is released"},
+    {"ids": [4], "text": "The pitch side of step recording: it sets the pitch of the note written at the edit cursor"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the playing notes, a volt per octave, with as many channels as the polyphony setting"},
+    {"ids": [1], "text": "The gate for each playing voice; two touching notes of the same pitch are separated by dropping the gate for 1ms"},
+    {"ids": [2], "text": "A trigger each time playback reaches the end of the sequence and loops back"}
+  ],
+  "notes": [
+    "a new Seq++ holds no notes and has no clock of its own, so nothing plays until a clock is patched to the Clock input, Run is on, and notes are entered by mouse, computer keyboard or MIDI file",
+    "on the note grid, double-clicking empty space inserts a note one grid unit long and double-clicking a note deletes it",
+    "dragging the first third of a note moves its start time, the middle third moves its pitch, and the last third changes its length",
+    "the cursor keys and the backspace key reach this module only while the mouse is over the note grid, because Rack takes them otherwise",
+    "the keyboard drives nearly every edit command, and the commands are listed in the maker's manual rather than anywhere on the panel"
+  ],
+  "menu": [
+    "Hookup Clock — finds a Clocked or CLKD module in the patch and wires its clock, run and reset outputs to this one",
+    "Enable remote editing — makes this module the editor for the clip selected on a Seq4x4, so that clicking a pad there brings that clip in here",
+    "Load midi file — imports the first track that carries notes from a standard MIDI file",
+    "Save midi file — writes the sequence out as a type-0 standard MIDI file",
+    "Grid settings — on the note grid's own right-click menu, choosing the timing unit of the edit grid from Quarter notes, Eighth notes and Sixteenth notes",
+    "Articulation — on the note grid's own right-click menu, setting the length given to a note as it is inserted: 10%, 20%, 50%, 85%, 100% or legato",
+    "Snap to grid — on the note grid's own right-click menu, quantising the edit cursor and the start times of notes dragged with the mouse",
+    "Snap duration to grid — on the note grid's own right-click menu, quantising a note's length while it is dragged with the mouse; a length set from the keyboard is left alone",
+    "Audition — on the note grid's own right-click menu, playing a selected note through channel 1 while the sequencer is stopped, and on when the module is added",
+    "Loop subrange — on the note grid's own right-click menu, repeating the time range marked on the grid in place of the whole sequence",
+    "Insert note — on the note grid's own right-click menu; it reads Delete note instead while there is a note under the cursor, and does that",
+    "Set end point — on the note grid's own right-click menu, moving the end and loop point of the sequence to the grid line nearest the cursor",
+    "xform: Transpose — on the note grid's own right-click menu, opening a panel of transposition options for the selected notes",
+    "xform: Invert — on the note grid's own right-click menu, opening a panel of melodic inversion options for the selected notes",
+    "xform: Reverse Pitch — on the note grid's own right-click menu, reversing the order of the pitches in the selection",
+    "xform: Chop Notes — on the note grid's own right-click menu, cutting the selected notes into smaller ones, which is how arpeggios and polyrhythms are made",
+    "xform: Quantize Pitch — on the note grid's own right-click menu, forcing the selected pitches into a scale",
+    "xform: Make Triads — on the note grid's own right-click menu, building chords from each selected note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1.6V · stepped · one channel only",
+      "1": "high above 1.6V · stepped · one channel only",
+      "2": "high above 1.6V · stepped · one channel only",
+      "3": "high above 5V · stepped · polyphonic",
+      "4": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

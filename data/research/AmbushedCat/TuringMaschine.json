@@ -1,0 +1,19 @@
+{
+  "plugin": "AmbushedCat",
+  "module": "TuringMaschine",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "TuringMaschine.cpp:179 puts getVoltage through a dsp::SchmittTrigger at its default 0V and 1V thresholds; no getPolyVoltage and no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "TuringMaschine.cpp:159 puts getVoltage through a dsp::SchmittTrigger at its default 0V and 1V thresholds"},
+      "2": {"family": "cv", "poly": false, "normal": "0V, and read to no effect", "why": "TuringMaschine.cpp:202-205 adds getVoltage/10 to the local change, which was last used at :199 and is never read again"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V, so the knob alone", "why": "TuringMaschine.cpp:209-211 multiplies getVoltage by 1.6, adds the Length knob and clamps the total to 1 and 16"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V, leaving the knob alone", "why": "TuringMaschine.cpp:187-190 turns getVoltage into getVoltage/10 plus 0.5, clamps that to 0 and 1, adds the Bias knob and subtracts 0.5"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "TuringMaschine.cpp:218-220 divides the bit value by its maximum and multiplies by getPitchScale, which is 5 unless the menu says 3 or 1"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "TuringMaschine.cpp:225 and :233 write 10 or 0 to this output"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "TuringMaschine.cpp:241-242 writes 10 or 0 from a fresh random::u32 every sample"}
+    }
+  },
+  "comment": "The Change CV jack is dead. process() reads the Change knob into a local at :174, uses it inside the clock branch at :192-199, and only then adds the jack's voltage to that same local at :203, after which the local is never read again; the jack therefore has no effect on anything. The Length knob does not set the loop length, which is what its name and the maker's own module description imply: the shift register is always sixteen bits and always rotates all sixteen, and Length only chooses how many of the top bits are read out as a number and how many of the sixteen lamps are lit. In Poly Ryhtmic mode shift() returns before any mutation, so the Change knob, the Bias knob, the Bias CV and the write switch all do nothing in that mode. The panel carries no lettering on any control: the artwork is a PNG drawn over a blank SVG and prints only the module's name."
+}

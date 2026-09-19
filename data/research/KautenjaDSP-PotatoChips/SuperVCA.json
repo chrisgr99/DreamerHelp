@@ -1,0 +1,19 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "SuperVCA",
+  "facts": {
+    "inputs": {
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "10V", "why": "SuperVCA.cpp SuperVCA::getVolume multiplies the knob by the jack over 10, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the left side's AMP jack", "why": "SuperVCA.cpp SuperVCA::getVolume uses normalChain across the two lanes, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "SuperVCA.cpp SuperVCA::getInput reads it per channel through fromAC, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "4": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "normal": "the left input", "why": "SuperVCA.cpp SuperVCA::getInput uses normalChain across the two lanes, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "5": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "SuperVCA.cpp SuperVCA::getFrequency adds the jack to the knob through voct2freq, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "6": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "the left side's V/OCT jack", "why": "SuperVCA.cpp SuperVCA::getFrequency uses normalChain across the two lanes, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "SuperVCA.cpp processChannel writes toAC of the filtered sample, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "SuperVCA.cpp processChannel writes toAC of the filtered sample, commit 8d368a05, the last commit carrying version 2.0.0 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "Input 0 is declared in the code for the filter mode but never given a jack or read, so it cannot be reached on the panel. The level knobs are signed, so a negative setting inverts that side of the signal, and a negative voltage at the AMP jack inverts it as well."
+}

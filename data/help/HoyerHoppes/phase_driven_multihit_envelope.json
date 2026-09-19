@@ -1,0 +1,68 @@
+{
+  "plugin": "HoyerHoppes",
+  "module": "phase_driven_multihit_envelope",
+  "description": "A tempo-driven function generator: it takes a 0-10V phasor or a clock and cuts one to sixteen envelopes out of every cycle of it, with controls that bend where in the cycle those envelopes fall",
+  "params": [
+    {"ids": [0], "text": "Reads the rate input as a 0-10V phasor while it is lit, following a change of rate at once; unlit, that input is read as a clock and two pulses are needed before a cycle length is known"},
+    {"ids": [1], "text": "Sets the attack of each envelope as a percentage of one hit's share of the cycle, 1 to 100 percent"},
+    {"ids": [2], "text": "Sets how far into each hit the envelope holds its full level, as a percentage of one hit's share of the cycle, 0 to 100 percent; that level is always the envelope's maximum"},
+    {"ids": [3], "text": "Sets how far into each hit the envelope reaches zero, as a percentage of one hit's share of the cycle, 1 to 100 percent"},
+    {"ids": [4], "text": "Bends the attack segment, 0 to 2: below 1 it rises fast and then slows, at 1 it is a straight line, above 1 it starts slowly. The display draws the envelope as though this were at 1"},
+    {"ids": [5], "text": "Bends the decay segment, 0 to 2: below 1 it falls fast and then slows, at 1 it is a straight line, above 1 it starts slowly. The display draws the envelope as though this were at 1"},
+    {"ids": [6], "text": "Sets how many envelopes are cut from each cycle, 1 to 16, or one of the other counts chosen from the menu"},
+    {"ids": [7], "text": "Sets where in the cycle the phase turns round, 0 to 1: at 1 it rises across the whole cycle, at 0.5 it rises over the first half and falls over the second, at 0 it falls across the whole cycle"},
+    {"ids": [8], "text": "Bends the phase before the envelopes are cut from it, so some envelopes are dwelt on and others passed through quickly; 1 is no bending, below 1 logarithmic and above 1 exponential"},
+    {"ids": [9], "text": "Reduces each envelope's height in proportion to how far through the cycle the phase has reached, from no reduction at 0 percent to complete at 100 percent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the 0-10V phasor the envelopes are cut from, or a clock when the phase button is unlit"},
+    {"ids": [1], "text": "The signal multiplied by the envelope and sent to the vca output"},
+    {"ids": [2], "text": "Adds to the attack slider, 0-10V covering the whole of its travel"},
+    {"ids": [3], "text": "Adds to the sustain slider, 0-10V covering the whole of its travel"},
+    {"ids": [4], "text": "Adds to the decay slider, 0-10V covering the whole of its travel"},
+    {"ids": [6], "text": "Sets the number of hits in place of the knob while patched, 0-10V spread evenly over whichever counts the menu's hit count setting offers"},
+    {"ids": [7], "text": "Sets the turning point of the phase in place of the knob while patched, 0-10V giving 0 to 1"},
+    {"ids": [8], "text": "Sets the bending of the phase in place of the knob while patched, 0-10V giving 0 to 1, the lower half of the knob's own 0 to 2 travel"},
+    {"ids": [9], "text": "Scales how far the phase reduces the envelope's height, its 0-10V multiplied by the phase->env knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0-10V, smoothed by a one-pole filter so that a sudden edge is rounded"},
+    {"ids": [1], "text": "The vca input multiplied by the envelope"},
+    {"ids": [2], "text": "Carries 10V through the whole attack segment of each envelope and for 1ms after it, rather than the short trigger at the start of the attack that the manual describes"},
+    {"ids": [3], "text": "The phase after skew and spread, 0-10V, which is the grey shape drawn on the display"}
+  ],
+  "notes": [
+    "nothing comes out until a phasor or a clock is patched to rate: with that jack empty the phase stays at zero, the env output stays at 0V and the trig output stays high at 10V",
+    "the display is drawing only; no part of it responds to a click, and neither exp trimpot nor the phase->env knob is reflected in what it draws",
+    "the hit count and the rate input range chosen from the menu are not saved with the patch, so both return to their first setting when a patch is reloaded"
+  ],
+  "menu": [
+    "Hit Count — a heading over four settings for what the hits knob steps through",
+    "1-16 — the hits knob steps through every whole number from 1 to 16",
+    "1 and powers of two — the hits knob steps through 1, 2, 4, 8 and 16",
+    "evens — the hits knob steps through 2, 4, 6, 8, 10, 12 and 14, although its top position prints as 16",
+    "multiples of 3 — the hits knob steps through 3, 6, 9, 12 and 15",
+    "rate input range — a heading over the two readings of the rate input",
+    "unipolar (0-10v) — reads one cycle at the rate input as 0V rising to 10V",
+    "bipolar(-5-5v) — adds half a cycle to the rate input, so one cycle is -5V rising to 5V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "0 to 10V · stepped · one channel only\n\nunpatched it reads the hits knob; a negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads the skew knob; a negative voltage does nothing here.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads the spread knob; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "continuous · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

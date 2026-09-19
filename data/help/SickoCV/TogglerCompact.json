@@ -1,0 +1,44 @@
+{
+  "plugin": "SickoCV",
+  "module": "TogglerCompact",
+  "description": "A stereo gate that opens and closes on an attack-sustain-release envelope, driven by a gate or by alternating triggers, in 4HP",
+  "params": [
+    {"ids": [0], "text": "Chooses whether the TRG/GTE jack is read as a gate that holds the envelope open, or as triggers that alternately open and close it"},
+    {"ids": [1], "text": "Sets how long the envelope takes to rise, 1ms to 10 seconds; fully anticlockwise there is no rise at all and the level jumps straight to sustain"},
+    {"ids": [2], "text": "Sets the level the envelope holds at, 0 to 100%"},
+    {"ids": [3], "text": "Sets how long the envelope takes to fall, 1ms to 10 seconds; fully anticlockwise there is no fall at all and the level drops straight to zero"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Opens the envelope: held above 1V in Gate mode, or one trigger to open and the next to close in Toggle mode"},
+    {"ids": [1], "text": "A trigger here shuts the envelope and drops its level to zero at once, with no release; it is read only in Toggle mode"},
+    {"ids": [2], "text": "The left signal to be gated; with nothing patched the left output carries the bare envelope at up to 10V"},
+    {"ids": [3], "text": "The right signal to be gated; with nothing patched the right output carries the bare envelope at up to 10V"},
+    {"ids": [4], "text": "Lengthens the attack by one second per volt, added to the A knob and capped at 10 seconds; it is read only at the moment the envelope opens"},
+    {"ids": [5], "text": "Raises the sustain level by 100% per volt, added to the S knob and held between 0 and 100%"},
+    {"ids": [6], "text": "Lengthens the release by one second per volt, added to the R knob and capped at 10 seconds; it is read only at the moment the envelope closes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left signal at the envelope's level"},
+    {"ids": [1], "text": "The right signal at the envelope's level"},
+    {"ids": [2], "text": "10V for as long as the envelope is open, 0V otherwise"}
+  ],
+  "menu": [
+    "Initialize on Start — comes up closed when Rack loads a patch, instead of resuming whatever state it was saved in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · polyphonic\n\nunpatched it reads 10V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 10V.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 1V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "plugin": "VectorModular",
+  "module": "SoloMixer",
+  "description": "A three-channel mixer with two banks of solo settings and one attenuverter feeding two mix outputs",
+  "params": [
+    {"ids": [0], "text": "Each press turns solo on or off for the red channel in the bank now chosen; while any channel in that bank is soloed the others are silenced"},
+    {"ids": [1], "text": "Sets the level of the red channel: the gain is the knob position squared, from silence at the bottom of its travel to a gain of 1.5 at the top; the maker's page calls it logarithmic"},
+    {"ids": [2], "text": "Each press turns solo on or off for the green channel in the bank now chosen; while any channel in that bank is soloed the others are silenced"},
+    {"ids": [3], "text": "Sets the level of the green channel: the gain is the knob position squared, from silence at the bottom of its travel to a gain of 1.5 at the top; the maker's page calls it logarithmic"},
+    {"ids": [4], "text": "Each press turns solo on or off for the blue channel in the bank now chosen; while any channel in that bank is soloed the others are silenced"},
+    {"ids": [5], "text": "Sets the level of the blue channel: the gain is the knob position squared, from silence at the bottom of its travel to a gain of 1.5 at the top; the maker's page calls it logarithmic"},
+    {"ids": [6], "text": "Each press swaps between two banks of solo settings, each holding its own on-or-off state for all three channels; both banks are saved with the patch"},
+    {"ids": [7], "text": "Scales the sum of the three channels from -1.5 to 1.5, inverting below the centre; it comes up at the centre, where both mix outputs are silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The red channel's signal; with nothing patched the channel reads a steady 5V, which makes the module an offset source"},
+    {"ids": [1], "text": "The green channel's signal; with nothing patched the channel takes the red channel's voltage from before the red level control"},
+    {"ids": [2], "text": "The blue channel's signal; with nothing patched the channel takes the green channel's voltage from before the green level control"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The red channel after its level control, clamped to ±10V; the shaper meant to soften it turns back down above 5V, so 10V leaves as 2.5V and 15V as 0V"},
+    {"ids": [1], "text": "The green channel after its level control, clamped to ±10V; the shaper meant to soften it turns back down above 5V, so 10V leaves as 2.5V and 15V as 0V"},
+    {"ids": [2], "text": "The blue channel after its level control, clamped to ±10V; the shaper meant to soften it turns back down above 5V, so 10V leaves as 2.5V and 15V as 0V"},
+    {"ids": [3], "text": "The three channels summed and scaled by the attenuverter, so the mix inverts below its centre; the shaper turns back down above 10V, giving 5V at 20V, and the result is clamped to ±10V"},
+    {"ids": [4], "text": "The three channels summed and scaled by the size of the attenuverter setting with its sign thrown away, so this mix keeps the polarity it came in with wherever the knob is"}
+  ],
+  "notes": [
+    "every level control comes up at silence and the attenuverter at its centre, so nothing reaches any output on arrival. Raise a level; move the attenuverter too for the two mix outputs.",
+    "soloing silences the other channels at their own outputs too, not only in the mix. Solo is not a mix-bus function here.",
+    "the solo states and the choice of bank are written into the patch file; the four knobs are saved by Rack as ordinary parameters.",
+    "the lamp beside each output follows the size of that channel's voltage and is full at 5V. It is smoothed by a filter taking about a thousand samples to follow a change, so it drifts.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads the red channel before its level knob.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads the green channel before its level knob."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "±10V · continuous · one channel only"
+    }
+  }
+}

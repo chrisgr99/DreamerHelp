@@ -1,0 +1,60 @@
+{
+  "plugin": "Starling_Via",
+  "module": "ATSR",
+  "description": "A four-stage envelope — attack, transition, sustain, release — that crossfades between an attack level and a sustain level, with a shape control on each slope",
+  "params": [
+    {"ids": [0], "text": "Sets the attack time, the climb from rest to the attack level"},
+    {"ids": [1], "text": "Sets the transition time, the move from the attack level to the sustain level"},
+    {"ids": [2], "text": "Sets the release time, the fall from the sustain level back to rest"},
+    {"ids": [3], "text": "Sets the attack level the envelope climbs to, -5V to +5V; patching the attack voltage input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the sustain voltage input by -1 to +1 to set the sustain level; with nothing patched to that input it reads 5V, so the knob alone gives -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the transition time CV input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the release time CV input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through the curve of the attack slope: Expo, Linear, Sigmoid or Log"},
+    {"ids": [8], "text": "Steps through the curve of the transition slope: Expo, Linear, Sigmoid or Log"},
+    {"ids": [9], "text": "Steps through which stage the stage gate output is high during: Attack, Transition, Sustain or Release"},
+    {"ids": [10], "text": "Steps through what the attack time CV input reaches: Attack Time on its own, or All Slopes, where it scales every stage at a volt per octave"},
+    {"ids": [11], "text": "Turns sampling of the level inputs on or off: Enabled samples the attack and sustain voltages at each gate, Disabled lets them follow the cable"},
+    {"ids": [12], "text": "Steps through the curve of the release slope: Expo, Linear, Sigmoid or Log"},
+    {"ids": [13], "text": "Opens the gate by hand for as long as it is held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The level the envelope climbs to in its attack stage; patched here, it overrides the attack level knob"},
+    {"ids": [1], "text": "The level the envelope settles to in its sustain stage, multiplied by the sustain level knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Modulates the attack time, or every slope together when the A time CV destination button is set to All Slopes, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Modulates the transition time, through the transition time CV amount knob"},
+    {"ids": [4], "text": "Modulates the release time, through the release time CV amount knob"},
+    {"ids": [5], "text": "Holds the envelope in its sustain stage while it is high; the release starts when it falls"},
+    {"ids": [6], "text": "A rising edge here restarts the envelope from its attack stage without waiting for the gate to fall"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, running between the attack level and the sustain level"},
+    {"ids": [1], "text": "A 5V gate, high during whichever stage the SEG gate button has chosen"},
+    {"ids": [2], "text": "A gate meant to be patched back into the gate input to make the envelope cycle"},
+    {"ids": [3], "text": "A 5V gate that follows the input gate but delayed by the envelope's own timing"}
+  ],
+  "notes": [
+    "the attack voltage input is normalled to the attack level knob: with nothing patched the knob sets that voltage, and patching a cable takes the knob out of circuit entirely.",
+    "the sustain voltage input is normalled to 5V and the sustain level knob multiplies whatever arrives by -1 to +1. Unpatched it is a -5V to +5V source; patched it attenuverts the cable.",
+    "the envelope output runs between the attack level and the sustain level. Set both of those to 0V and nothing comes out of it however the envelope is triggered.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it.",
+    "this module has no right-click menu of its own beyond Rack's standard one."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

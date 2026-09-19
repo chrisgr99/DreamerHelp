@@ -1,0 +1,54 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorGen",
+  "description": "Phasor generator: a 0-10V ramp repeating over and over, free-running or locked to a clock, with pulses, jitter and an end-of-cycle trigger",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the ramp cycles; with a clock patched it becomes a multiply or divide of that clock instead"},
+    {"ids": [1], "text": "Attenuverts the frequency CV input, -1 to +1"},
+    {"ids": [2], "text": "Shifts the output forward or back within its cycle; the knob's range covers one whole cycle either way"},
+    {"ids": [3], "text": "Attenuverts the phase CV input, -1 to +1"},
+    {"ids": [4], "text": "Sets the width of the gates at the Pulses output, from 0% to 100% of a pulse, with 50% at centre"},
+    {"ids": [5], "text": "Attenuverts the pulse width CV input, -1 to +1"},
+    {"ids": [6], "text": "Sets how many pulses the Pulses output fires per cycle of the ramp, 1 to 64 in whole numbers"},
+    {"ids": [7], "text": "Attenuverts the pulses per cycle CV input, -1 to +1; 5V at full depth covers the whole 1 to 64 range"},
+    {"ids": [8], "text": "Sets how far a random value pushes the cycle rate about, 0 to 5; a fresh value is drawn at the end of every cycle"},
+    {"ids": [9], "text": "Attenuverts the jitter CV input, -1 to +1"},
+    {"ids": [10], "text": "Slow gives an LFO range; Fast lifts the whole frequency range into the audio band"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the cycle rate, scaled by its attenuverter"},
+    {"ids": [1], "text": "Modulates the phase offset"},
+    {"ids": [2], "text": "Modulates the pulse width"},
+    {"ids": [3], "text": "Modulates the number of pulses per cycle"},
+    {"ids": [4], "text": "Modulates the jitter depth"},
+    {"ids": [5], "text": "Adds to the cycle rate at a volt per octave, with no attenuverter on it"},
+    {"ids": [6], "text": "Patching a clock here locks the ramp to it, and the Frequency knob becomes a multiply or divide of that clock"},
+    {"ids": [7], "text": "A rising edge restarts the ramp at the beginning of its cycle"},
+    {"ids": [8], "text": "Holds the ramp at its current value for as long as this is at 1V or above"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The ramp itself, rising from 0V to 10V over each cycle"},
+    {"ids": [1], "text": "A 10V gate for each pulse in the cycle, at the width set by Pulse Width"},
+    {"ids": [2], "text": "The random value currently pushing the frequency about, -5V to 5V, redrawn at the end of each cycle"},
+    {"ids": [3], "text": "A 10V trigger on the sample where the ramp completes a cycle"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "0 to 5V · continuous · polyphonic",
+      "4": "0 to 5V · continuous · polyphonic",
+      "5": "1V per octave · continuous · polyphonic",
+      "6": "high above 1V · stepped · polyphonic",
+      "7": "high above 1V · stepped · polyphonic",
+      "8": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "±5V · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

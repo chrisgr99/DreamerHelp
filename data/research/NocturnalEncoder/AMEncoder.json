@@ -1,0 +1,15 @@
+{
+  "plugin": "NocturnalEncoder",
+  "module": "AMEncoder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "full carrier level", "why": "src/AMEncoder.cpp:68 divides this input's value by 10 and clamps it to 0 and 1, and does so only when the input is connected"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "full carrier level", "why": "src/AMEncoder.cpp:68 divides this input's value by 10 and clamps it to 0 and 1, and does so only when the input is connected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±9.99V", "why": "src/AMEncoder.cpp:56 builds the carrier as 9.99 times a sine times the carrier knob, and src/AMEncoder.cpp:69 writes that to this output on channel 1 alone"},
+      "1": {"family": "audio", "poly": false, "range": "±9.99V", "why": "src/AMEncoder.cpp:56 builds the carrier as 9.99 times a sine times the carrier knob, and src/AMEncoder.cpp:69 writes that to this output on channel 1 alone"}
+    }
+  },
+  "comment": "Read from src/AMEncoder.cpp at commit 7008233, version 2.0.0 and the head of the repository. The carrier frequency is the literal 8697.36Hz at src/AMEncoder.cpp:47; the pitch variable it is scaled by is set to 0 and never changed, so there is no pitch control of any kind. The maker's README calls the carrier approximately C9, which is 8372Hz; the source comment calls it around C9 to C sharp 9, which matches the figure. The warning lamps are inverted: src/AMEncoder.cpp:61 and 62 set their brightness from minus the input voltage divided by ten, clamped to 0 and 1, so they light for negative input and stay dark however far above 10V the input goes, while configLight at src/AMEncoder.cpp:31 and 32 names them warnings for signals above +10V and the README repeats that. Both output jacks are configured with the name OUT 1, at src/AMEncoder.cpp:35 and 36, so the second jack's hover text is wrong. processChannel at src/AMEncoder.cpp:65 scales the carrier only when the input is connected, so an unpatched channel emits the bare carrier."
+}

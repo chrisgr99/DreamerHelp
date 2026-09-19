@@ -1,0 +1,21 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "LFO1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "this LFO's own sine output", "why": "LFO1.cpp:405 takes the channel count from this jack and LFO1.cpp:500 reads getVoltage(c) per channel; LFO1.cpp:502 substitutes the last sine output when the jack is empty"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "LFO1.cpp:417 reads channel 0 only and adds it to the RNG knob; the port widget at LFO1.cpp:653 is the mono ThemedPJ301MPort"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "LFO1.cpp:463 divides the channel-0 voltage by 5 before adding it to the PWM knob; the port widget at LFO1.cpp:659 is the mono ThemedPJ301MPort"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "LFO1.cpp:470 divides the channel-0 voltage by 10 before adding it to the MOD knob and clamps the total to -1 to 1; the port widget at LFO1.cpp:665 is the mono ThemedPJ301MPort"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "LFO1.cpp:482 reads getPolyVoltage(c) through a Schmitt trigger set from the menu trigger-detect levels, 1V up and 0.1V down by default"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "LFO1.cpp:407 sets every output, sync included, to the channel count of the frequency input"},
+      "1": {"family": "cv", "poly": true, "why": "LFO1.cpp:407 sets every output, sync included, to the channel count of the frequency input"},
+      "2": {"family": "cv", "poly": true, "why": "LFO1.cpp:407 sets every output, sync included, to the channel count of the frequency input"},
+      "3": {"family": "cv", "poly": true, "why": "LFO1.cpp:407 sets every output, sync included, to the channel count of the frequency input"},
+      "4": {"family": "trigger", "poly": true, "why": "LFO1.cpp:407 sets every output, sync included, to the channel count of the frequency input"}
+    }
+  },
+  "comment": "The frequency jack is exponential, one volt per doubling, and is scaled by the trim knob before being added to the knob; the sum is floored at -8 (LFO1.cpp:501). It is called cv rather than pitch because it is a rate control, per the family ruling in STYLE.md. The RNG, PWM and MOD jacks are mono port widgets and only channel 0 is read, even though the module's other jacks are polyphonic."
+}

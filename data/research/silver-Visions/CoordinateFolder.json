@@ -1,0 +1,18 @@
+{
+  "plugin": "silver-Visions",
+  "module": "CoordinateFolder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "why": "CoordinateFolder.cpp:54-55 getPolyVoltage(0) and getPolyVoltage(1) on this jack when it is connected", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "1": {"family": "cv", "poly": false, "why": "CoordinateFolder.cpp:57 getVoltage(), reached only when the two-channel jack at index 0 is not connected", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "2": {"family": "cv", "poly": false, "why": "CoordinateFolder.cpp:58 getVoltage(), reached only when the two-channel jack at index 0 is not connected", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "3": {"family": "cv", "poly": false, "why": "CoordinateFolder.cpp:48 lerps the amount knob towards this jack's voltage plus one by the modulation knob, then takes the absolute value; read at voltages[0] with no channel loop", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the amount knob's own setting"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "CoordinateFolder.cpp:76 setChannels(2) on this output"},
+      "1": {"family": "cv", "poly": false, "why": "CoordinateFolder.cpp:72 setVoltage with no setChannels for this output"},
+      "2": {"family": "cv", "poly": false, "why": "CoordinateFolder.cpp:73 setVoltage with no setChannels for this output"}
+    }
+  },
+  "comment": "The square fold at CoordinateFolder.cpp:63-65 takes each coordinate modulo ten over the amount, and the radial fold at lines 67-71 takes the angle modulo two pi over the amount and rebuilds the point at the same distance from the origin. The modulation at line 48 is a crossfade between the knob and the jack voltage plus one, not a scaled addition, so a fully turned modulation knob discards the amount knob entirely. The result is passed through std::abs, so a negative amount gives the same fold as its positive."
+}

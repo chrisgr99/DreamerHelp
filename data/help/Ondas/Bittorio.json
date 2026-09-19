@@ -1,0 +1,48 @@
+{
+  "plugin": "Ondas",
+  "module": "Bittorio",
+  "description": "Runs an elementary cellular automaton over 16 cells and 16 generations, and reads four of those generations out as gates one cell at a time",
+  "params": [
+    {"ids": [0], "text": "Picks the cellular automaton rule, a whole number from 0 to 255"},
+    {"ids": [1], "text": "Picks a new rule at random and writes it into the rule knob; a further press is ignored for one second"},
+    {"ids": [2], "text": "Sets the 16 cells of the first generation as a whole number from 0 to 65535"},
+    {"ids": [3], "text": "Picks a new first generation at random and writes it into the seed knob; a further press is ignored for one second"},
+    {"ids": [4], "text": "Chooses which four consecutive generations feed the four outputs, 0 to 3"},
+    {"ids": [5], "text": "Holds the read position at the first cell for as long as the button is pressed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge moves the read position on by one cell, wrapping after sixteen"},
+    {"ids": [1], "text": "0 to 5V picks the rule from 0 to 255, overriding the rule knob while it is patched"},
+    {"ids": [2], "text": "A rising edge picks a new rule at random, no more than once a second"},
+    {"ids": [3], "text": "0 to 5V picks the first generation from 0 to 65535, overriding the seed knob while it is patched"},
+    {"ids": [4], "text": "A rising edge picks a new first generation at random, no more than once a second"},
+    {"ids": [5], "text": "0 to 3V picks which four generations feed the outputs, overriding the window knob while it is patched"},
+    {"ids": [6], "text": "A rising edge moves the read position back to the first cell"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries 5V while the cell under the read position is on in its own generation, and 0V while that cell is off"}
+  ],
+  "notes": [
+    "the grid is a drawing of the automaton with the read position and the chosen window marked on it; clicking it does nothing",
+    "changing the rule or the seed recomputes all sixteen generations from the first, and leaves the read position where it was",
+    "the window reaches only generations 0 to 6 of the sixteen the module computes; the rest never reach an output",
+    "the two random jacks share one edge detector in the source, so patching both makes each one steal the other's triggers"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only\n\nunpatched it reads the rule knob; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only\n\nunpatched it reads the seed knob; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "0 to 3V · stepped · one channel only\n\nunpatched it reads the window knob; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

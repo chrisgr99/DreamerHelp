@@ -1,0 +1,46 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "Chords",
+  "description": "Holds 100 chords of semitone notes from C0 to C8 and plays the selected one as polyphonic pitch and gate",
+  "params": [
+    {"ids": [0], "text": "Moves every note of the current chord one semitone up"},
+    {"ids": [1], "text": "Moves every note of the current chord one octave up"},
+    {"ids": [2], "text": "Moves every note of the current chord one semitone down"},
+    {"ids": [3], "text": "Moves every note of the current chord one octave down"},
+    {"ids": [4], "text": "Picks which of the 100 chords is played and edited"},
+    {"ids": [5], "text": "Copies the notes of the current chord"},
+    {"ids": [6], "text": "Writes the copied notes into the current chord"},
+    {"ids": [7], "text": "While on, the chord is picked by hand and a cable in the Chord input no longer moves the selection"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Selects the chord, 0.1V per chord over 0-10V rounded to the nearest one; while it is patched the chord cannot be picked by hand unless Edit is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The notes of the chord as 1V/octave pitch, one note per channel, with C4 at 0V"},
+    {"ids": [1], "text": "Carries 10V on the channel of every note that is on in the chord and 0V on the rest"},
+    {"ids": [2], "text": "A 10ms trigger on a note's channel when that note is switched on or when a chord change brings it in"}
+  ],
+  "notes": [
+    "every one of the 100 chords comes up with no notes switched on, so nothing plays until keys are clicked on in the note grid",
+    "clicking a key in the note grid switches that note of the current chord on or off, and hovering a key names the note"
+  ],
+  "menu": [
+    "Polyphonic Channels — sets how many channels the outputs carry, 1 to 16",
+    "Polyphony mode — lays the notes across the channels as Rotate, Reset or Reuse Note",
+    "Reorder — lays the notes of the current chord across the channels from lowest to highest",
+    "Auto Reorder — reorders the channels after every change, and the polyphony mode is then ignored",
+    "Auto Channels — gives the outputs only as many channels as there are notes switched on, and the Polyphonic Channels setting is then ignored",
+    "Insert Chord — pushes the chords after the current one along by one place and empties the current one; the hundredth chord is lost",
+    "Delete Chord — removes the current chord and pulls every later chord back one place"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 9.99V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "polyphonic",
+      "2": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

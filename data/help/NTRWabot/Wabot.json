@@ -1,0 +1,28 @@
+{
+  "plugin": "NTRWabot",
+  "module": "Wabot",
+  "description": "Opens an HTTP server on this machine through which an outside program can read and change the patch: list, add, move and delete modules, patch and unpatch cables, set any knob and read voltages",
+  "params": [
+    {"ids": [0], "text": "Starts the server on the first press; there is nothing on the panel that stops it again, and a second press does nothing while it is running"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the left channel of a signal to be measured; the voltage here is written into a buffer that the server's audio endpoints read, and it goes nowhere else"},
+    {"ids": [1], "text": "Takes the right channel of a signal to be measured; the voltage here is written into a buffer that the server's audio endpoints read, and it goes nowhere else"}
+  ],
+  "notes": [
+    "the module does nothing at all until the Start button is pressed, and on its own it only answers HTTP requests: something has to be at the other end of the connection for anything to happen",
+    "the maker's own client is an MCP server and a Claude skill, given out through the Patreon page named in the module's browser entry, and they are not part of this plugin",
+    "the orb at the top is red while the server is stopped and green while it is running; it is drawn by the module rather than being a lamp, so it cannot be clicked",
+    "the server accepts connections only from 127.0.0.1, this machine itself, so nothing on the network can reach the patch through it",
+    "the port is 7777 unless the environment variable NTR_WABOT_PORT is set to another number before Rack is started; the panel prints 7777 whatever the port actually is",
+    "setting the environment variable NTR_WABOT_TOKEN before Rack is started makes the server refuse any request that does not carry that same string in an X-Wabot-Token header",
+    "the two audio jacks are read whether or not anything is patched to them, and they change nothing in the patch: they exist so that the far end of the connection can measure a signal",
+    "the audio endpoints give a spectrum on a twelfth-of-an-octave grid from 20Hz up, and a loudness and stereo reading that needs a few seconds of signal before it will answer"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V."
+    }
+  }
+}

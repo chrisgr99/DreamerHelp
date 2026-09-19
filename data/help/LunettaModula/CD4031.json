@@ -1,0 +1,33 @@
+{
+  "plugin": "LunettaModula",
+  "module": "CD4031",
+  "description": "A 64-stage shift register: a level read in on one clock edge comes back out 64 clock edges later.",
+  "inputs": [
+    {"ids": [0], "text": "The level read into the register on each rising clock edge while MODE is low."},
+    {"ids": [1], "text": "A rising edge shifts the register one place along and reads in whichever data input MODE has selected."},
+    {"ids": [2], "text": "The level read into the register on each rising clock edge while MODE is high; patch Q here to make the register loop its contents round."},
+    {"ids": [3], "text": "Chooses which jack the register reads: the DATA jack while this is low, the RECIRCULATE jack while it is high."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clock input passed on one sample late, for clocking a second register from the same edge without a race."},
+    {"ids": [1], "text": "The level that was read into the register 64 clock edges ago."},
+    {"ids": [2], "text": "The inverse of Q: 10V when the level read in 64 clock edges ago was low."}
+  ],
+  "notes": [
+    "A logic input counts as high once it rises above 2V and does not count as low again until it falls below 0.1V; a logic output is 10V for high and 0V for low.",
+    "With nothing patched into MODE the register reads the DATA jack."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

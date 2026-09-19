@@ -1,0 +1,39 @@
+{
+  "plugin": "LifeFormModular",
+  "module": "BurstIntegrator",
+  "description": "Eight-input sequential switch for triggers, with a burst clock of its own that replaces the output for a moment on command",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the eight inputs are cycled through, 1 to 8"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Selects that input, making it the one the output carries"},
+    {"ids": [9], "text": "Sets how long the burst lasts, from 10ms counter-clockwise to 1 second clockwise"},
+    {"ids": [10], "text": "Attenuates and inverts the voltage at the MOD input, adding it to the LENGTH time"},
+    {"ids": [11], "text": "Picks the burst rate as a multiple of the RATE setting: two pulses for the thirty-second, about three for the forty-eighth, four for the sixty-fourth"},
+    {"ids": [12], "text": "Sets the speed the burst rate is multiplied up from, 0.25 to 64 pulses a second"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "One of the eight signals the switch chooses between"},
+    {"ids": [8], "text": "A trigger here moves the switch on to the next input"},
+    {"ids": [9], "text": "A trigger here returns the switch to the first input"},
+    {"ids": [11], "text": "A trigger here replaces the output with the burst clock for the time set by LENGTH"},
+    {"ids": [12], "text": "A voltage here shifts the LENGTH time, scaled by the MOD. attenuverter"},
+    {"ids": [13], "text": "A voltage here replaces the RATE knob, each volt doubling the speed"},
+    {"ids": [14], "text": "A trigger here restarts the burst clock from the start of a pulse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the chosen input, and the burst clock for the length of a burst"}
+  ],
+  "notes": [
+    "The switch has no clock of its own: it stays on the input it has reached until a trigger arrives at CLOCK."
+  ],
+  "expects": {
+    "inputs": {
+      "8": "stepped",
+      "9": "stepped",
+      "11": "stepped",
+      "14": "stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

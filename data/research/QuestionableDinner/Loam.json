@@ -1,0 +1,16 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Loam",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "why": "src/Loam.cpp:106 takes the channel count from getChannels() on this jack; line 161 reads getVoltage(i)"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Loam.cpp:124 reads getVoltage(i); lines 128-149 scale it by whichever attenuverters are set clockwise of centre"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the positive modulation jack", "why": "src/Loam.cpp:126-130 reads getNormalVoltage(modPositive, i), inverted when the mod relationship switch is down"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Loam.cpp:107 setChannels from the audio input; line 169 sets a voltage per channel"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Loam.cpp:108 setChannels from the audio input; line 170 sets a voltage per channel"}
+    }
+  },
+  "comment": "The audio input is the only jack the maker left unnamed, so it shows no tooltip; the panel letters it I. The panel prints CUT, RES, FBK, GAIN and a radiation symbol for the five main knobs, HP and LP for the two outputs, and plus and minus for the two modulation jacks. The five attenuverters use their sign to choose an input rather than to invert: src/Loam.cpp:131-150 multiplies by the positive jack only when the knob is above centre and by the negative jack only when it is below. The frequency modulation is applied in octaves, while resonance, feedback, gain and radioactivity modulation are divided by ten first. Bypassing the module passes the audio input to the lowpass output."
+}

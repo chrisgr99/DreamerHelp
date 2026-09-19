@@ -1,0 +1,44 @@
+{
+  "plugin": "NullSet",
+  "module": "RomanQuantizer",
+  "description": "Quantizes to a chord rather than a scale, stepping through a sequence of up to sixteen chords written as Roman numerals",
+  "params": [
+    {"ids": [0], "text": "Moves to the next chord, wrapping to the first after the last step"},
+    {"ids": [1], "text": "Sets how many chords are played before the sequence wraps, 1 to 16"},
+    {"ids": [2], "text": "Returns to the first chord"},
+    {"ids": [3], "text": "Chooses the key the Roman numerals are read in: the first setting shifts nothing and each step above it adds a semitone, up to eleven"},
+    {"ids": [4], "text": "Chooses which of the ten stored chord sequences is played, 1 to 10"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage to quantize, one note per polyphonic channel"},
+    {"ids": [1], "text": "Moves to the next chord on each rise past 2V"},
+    {"ids": [2], "text": "Returns to the first chord on each rise past 2V"},
+    {"ids": [3], "text": "Added to both outputs in volts before they are clamped to -10V and +10V, a volt an octave"},
+    {"ids": [4], "text": "Nothing in the module reads this jack; the sequence is chosen by the PTTERN knob alone"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The root note of the current chord as a pitch, one channel"},
+    {"ids": [1], "text": "The quantized notes, with as many channels as the input"}
+  ],
+  "notes": [
+    "each of the sixteen squares stands for one step of the sequence and shows its chord; the chords themselves are set from the panel menu, not by clicking a square",
+    "the quantizing is uniform rather than nearest-note: each octave of input is cut into equal bands, one per note of the chord, so a rising ramp gives an evenly timed arpeggio",
+    "a new module starts with I, IV, V and I in the first four steps of the first sequence; every other slot holds a major I"
+  ],
+  "menu": [
+    "Set Step 1 Chord — chooses the Roman numeral and then the quality of the chord in the first step, and there is one of these items for each of the sixteen steps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 2V · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 2V · one channel only\n\na negative voltage does nothing here.",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

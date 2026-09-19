@@ -1,0 +1,20 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoSampler2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SickoSampler2.cpp reads this jack per voice and compares it against 1V, as a rising edge in Trig mode and as a level in Gate mode"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoSampler2.cpp adds this jack's voltage to the VOL knob; with 'Polyphonic Master IN' ticked it reads getVoltage(c) per voice"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "SickoSampler2.cpp takes getChannels() from this jack as the voice count and raises 2 to getVoltage(c) for each voice's playback speed"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "SickoSampler2.cpp reads this jack with getVoltage() into the record buffer; recording is monophonic"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "why": "SickoSampler2.cpp reads this jack with getVoltage() into the record buffer's right channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SickoSampler2.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off"},
+      "1": {"family": "audio", "poly": true, "why": "SickoSampler2.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoSampler2.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoSampler2.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"}
+    }
+  },
+  "comment": "Param index 10 (RELEASEATNV_PARAM) is declared at SickoSampler2.cpp:55 but never given a widget, so it cannot be clicked and gets no line; there are no attenuverters on this version at all. There is also no tuning knob, no limiter switch and no separate record fade knob — the XFD knob covers the record fade as well. The Trig Type switch has two positions here where sickoSampler and sickoPlayer have three. The monitor is a lit button rather than a three-position switch. The waveform display is a custom widget with no ParamWidget, so the Copy Cue to Loop and Copy Loop to Cue items on its own menu cannot be reached by clicking it for help; Reset Cursors and the save commands also appear on the module's own menu."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "G",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/G.cpp:141 and 168-169, added to the cut knob in octaves before two is raised to that power"},
+      "1": {"family": "audio", "poly": true, "negative": "swings", "normal": "the audio input", "why": "src/G.cpp:143-146, isConnected chooses between this jack and IN, then the absolute value is taken"},
+      "2": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/G.cpp:130 and 142, maxPoly then getPolyVoltage"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/G.cpp:176, the corner in octaves relative to C4"},
+      "1": {"family": "cv", "poly": true, "why": "src/G.cpp:177, the rectified and filtered side-chain"},
+      "2": {"family": "audio", "poly": true, "why": "src/G.cpp:178"}
+    }
+  },
+  "comment": "The ratio knob is configured 8 as its minimum and -4 as its maximum (src/G.cpp:59), which puts heavy limiting at the counter-clockwise end; the value is used as two to the power minus it, so 8 is a 256 to 1 ratio, the default of 2 is 4 to 1, and -4 is a sixteenfold expansion. The threshold is two to a sixth of the knob's decibels times 5V (line 131), giving about 0.3V to 10V. The two envelope times are two to a third of the knob's dBs in seconds (lines 128-129). The filter after the compressor is the high pass output of a state variable pair (src/G.cpp:99-106). The make-up gain is computed once from the threshold and ratio and then blended in by the mix knob, so the mix knob at zero leaves the compressed signal unlifted. The panel prints ATK, DCY, THR, RTO, CUT, Q, MIX, ENV, FRQ, SCH, IN, FRQ, ENV and OUT."
+}

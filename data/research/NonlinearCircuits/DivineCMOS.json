@@ -1,0 +1,19 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "DivineCMOS",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "DivineCMOS.cpp:71 clockIn1.process reads this jack; NLCShared.hpp:32 returns true where the voltage rises to 1V, with no hysteresis, and DivineCMOS.cpp:75 toggles the four-stage ripple counter divBools1"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "DivineCMOS.cpp:80 clockIn2.process reads this jack; NLCShared.hpp:32 returns true where the voltage rises to 1V, with no hysteresis, and DivineCMOS.cpp:84 toggles the second ripple counter divBools2"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DivineCMOS.cpp:97 sets this output to 5V or 0V"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DivineCMOS.cpp:97 sets this output to 5V or 0V"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DivineCMOS.cpp:97 sets this output to 5V or 0V"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DivineCMOS.cpp:97 sets this output to 5V or 0V"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 20V", "why": "DivineCMOS.cpp:94-95 sum four knobs whose range at DivineCMOS.cpp:41-44 is 0 to 5"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 20V", "why": "DivineCMOS.cpp:109 slews that same sum"}
+    }
+  },
+  "comment": "The knob labelled /4 on the panel is the second parameter and the one labelled /8 the third; the maker swapped them in 2.3.2 and the installed build has the fix. Each divider is its own ripple counter and the outputs are the exclusive-OR of the matching stages (DivineCMOS.cpp:93), so with both inputs patched the divisions printed on the panel no longer describe what comes out."
+}

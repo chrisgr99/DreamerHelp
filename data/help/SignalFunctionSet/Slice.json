@@ -1,0 +1,67 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Slice",
+  "description": "A stereo stream cut onto a grid, with one slice in every so many replaced by an altered copy of itself, and the rest passing through untouched",
+  "params": [
+    {"ids": [0], "text": "Picks what happens to an altered slice: silence, a swap of the two sides, an earlier slice fetched back, the one before played backwards or slowed, a stutter, or all seven in turn"},
+    {"ids": [1], "text": "Sets how often the effect fires, from every slice to one in sixteen; it is the last slice of each group that fires, so the effect lands on the approach to the beat rather than on it"},
+    {"ids": [2], "text": "Sets how long each slice is, 10ms to 1 second, and it does nothing while a cable is in the clock jack"},
+    {"ids": [3], "text": "Crossfades the altered slice against the untouched one, silence to full"},
+    {"ids": [4], "text": "Sets how far back DELAY and SHUFFLE may fetch from, 1 to 32, counted in slices or, once a cable is in the bar jack, in bars"},
+    {"ids": [5], "text": "Sets the slice length against the clock interval: divided by 8, 4 or 2, equal to it at the centre, or multiplied by 2, 4 or 8"},
+    {"ids": [6], "text": "Picks the fade curve: Gaussian, which is the narrowest, Hann, or Log, which is the widest"},
+    {"ids": [8], "text": "Stops the write head and loops what is already in the buffer"},
+    {"ids": [9], "text": "Rolls a fresh set of choices on each press: which earlier slice SHUFFLE fetches, how far back DELAY reaches, which way PITCH goes, and where MIXED starts"},
+    {"ids": [10], "text": "Sets how much of each slice is fade, from a 5ms edge taper at one end of the travel to half the slice at the other, where the two fades meet and the slice becomes a grain envelope"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal being cut up"},
+    {"ids": [1], "text": "The right side of the signal being cut up; with nothing patched it carries the left side"},
+    {"ids": [2], "text": "Sets the slice length from the time between rises, times the clock rate switch, in place of the length knob"},
+    {"ids": [3], "text": "Changes REACH from counting slices to counting bars, so DELAY and SHUFFLE fetch from musically useful distances"},
+    {"ids": [4], "text": "A rise returns the slice grid and the pattern to their start"},
+    {"ids": [5], "text": "A high gate stops the write head and loops the buffer, which is what the freeze switch does by hand"},
+    {"ids": [6], "text": "A rise rolls a fresh set of choices for SHUFFLE, DELAY, PITCH and MIXED"},
+    {"ids": [7], "text": "Picks the effect, one volt per effect, added to the effect switch"},
+    {"ids": [8], "text": "Changes how often the effect fires, one volt per step, added to the ratio switch"},
+    {"ids": [9], "text": "Changes the crossfade, ±5V added to the depth knob"},
+    {"ids": [10], "text": "Changes the slice length, ±5V added to the length knob"},
+    {"ids": [11], "text": "Changes how far back the fetching effects reach, a tenth of a volt per slice or per bar, added to the reach knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the reworked stream"},
+    {"ids": [1], "text": "The right side of the reworked stream"},
+    {"ids": [2], "text": "A trigger at every slice boundary"},
+    {"ids": [3], "text": "A gate held high for as long as a slice is being altered"}
+  ],
+  "notes": [
+    "an untouched slice passes through sample for sample with no delay, which is why REVERSE and PITCH work on the slice before; REPEAT stays on the arriving one",
+    "every random choice comes from the slice number and one seed, so a pattern repeats exactly; RESEED changes the seed and gives a different pattern, equally fixed",
+    "the channel pairing parameter is declared without a panel switch, so the two sides always make the same choices and cannot be set to choose independently"
+  ],
+  "menu": [
+    "Buffer length — sets how many seconds of audio are held, and shows how much memory that takes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the left audio jack.",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "stepped · one channel only",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "11": "bipolar · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

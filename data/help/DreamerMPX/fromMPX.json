@@ -1,0 +1,39 @@
+{
+  "plugin": "DreamerMPX",
+  "module": "fromMPX",
+  "description": "Breaks an MPX note stream back out into seven ordinary signals, allocating the notes across a set number of voices",
+  "params": [
+    {"ids": [0], "text": "Sets how many voices the notes are shared between, 1 to 16, which is also the channel count of every output; left-click the readout for a list of its values, or roll the scroll wheel over it"},
+    {"ids": [1], "text": "Chooses what happens to a note that arrives with every voice busy: take the oldest, take the quietest, ignore it, glide within one voice, or play legato across two"},
+    {"ids": [2], "text": "Sets how long a glide takes, 0 to 2 seconds, and applies only in the two modes that reuse a sounding voice"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the note stream from an MPX output; it carries no voltage, so nothing else can be patched here usefully"},
+    {"ids": [1], "text": "Tells this module which voices are sounding, so a voice whose envelope has not finished is not taken for a new note"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a gate per voice for as long as that note lasts"},
+    {"ids": [1], "text": "Carries the pitch of each voice with any bend already added, so it can be patched straight to an oscillator"},
+    {"ids": [2], "text": "Carries the level each note was given, per voice"},
+    {"ids": [3], "text": "Carries the bend of each voice on its own, scaled by the bend range that travelled with the note"},
+    {"ids": [4], "text": "Carries pressure per voice, and stays where it was for a note whose source sent none"},
+    {"ids": [5], "text": "Carries timbre per voice, and stays where it was for a note whose source sent none"},
+    {"ids": [6], "text": "Carries the stereo placing of each voice"}
+  ],
+  "notes": [
+    "every output is polyphonic with one channel per voice, so the voice count sets the channel count on all seven at once",
+    "mpx IN takes a note stream from the mpx OUT of another DreamerMPX module and from nothing else; with nothing patched there every output stays where it was",
+    "this is the module that turns a note stream back into ordinary voltages, and toMPX is the one at the other end that turns voltages into a stream",
+    "only one MPX cable is read here; the first one that carries a stream is the one used",
+    "a cable between two MPX jacks turns pink once it has taken; a cable from an MPX jack to anything else keeps its ordinary colour and carries nothing",
+    "the input takes a cable from an MPX output; an ordinary voltage patched there is not a note stream and nothing comes out",
+    "the voice-count plate opens a list of 1 to 16 when it is clicked, and the scroll wheel steps it",
+    "an MPX cable carries a note stream rather than a voltage and goes to an MPX input; fromMPX turns a stream back into gates and pitch for the wider rack"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "stepped",
+      "1": "continuous"
+    }
+  }
+}

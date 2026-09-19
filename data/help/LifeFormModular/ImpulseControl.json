@@ -1,0 +1,39 @@
+{
+  "plugin": "LifeFormModular",
+  "module": "ImpulseControl",
+  "description": "Eight-step trigger sequencer with two rows, each row also giving a copy of its triggers thinned by chance",
+  "params": [
+    {"ids": [2], "text": "Sets how many steps play before the sequencer returns to the first, 1 to 8"},
+    {"ids": [3], "text": "Sets the chance that a step's trigger reaches the two thinned outputs, none counter-clockwise to every one clockwise, though the chance used is a tenth higher than the setting the panel's PROB. shows"},
+    {"ids": [4], "text": "Attenuates and inverts the voltage at the probability input, adding it to the chance for the TRIG1A output alone"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "Turns that step on or off for the TRIG1 output"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20], "text": "Turns that step on or off for the TRIG2 output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequencer by one step on each rising edge; the trigger outputs stay high for as long as this stays high"},
+    {"ids": [1, 2], "text": "A trigger here returns the sequencer to its first step"},
+    {"ids": [3], "text": "Shifts the chance for the TRIG1A output, scaled by the MOD. attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a 10V gate while the clock is high on a step turned on in the first row"},
+    {"ids": [1], "text": "Carries the first row's gate only on the steps that pass the chance set by PROB."},
+    {"ids": [3], "text": "Carries a 10V gate while the clock is high on a step turned on in the second row"},
+    {"ids": [4], "text": "Carries the second row's gate only on the steps that pass the chance set by PROB."}
+  ],
+  "notes": [
+    "The sequencer has no clock of its own: nothing advances and no trigger is sent until a clock reaches CLOCK."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

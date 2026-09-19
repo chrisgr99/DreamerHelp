@@ -1,0 +1,87 @@
+{
+  "plugin": "EternalEclipseModular",
+  "module": "CoronalAnnihilator",
+  "description": "A stereo voice in three stages: a dual oscillator blended against a stereo input, then a neural amp model loaded from a file, then a saturating 4-pole lowpass",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the CORE oscillator in semitones about C4"},
+    {"ids": [1], "text": "Chooses the CORE waveform: Sine, Triangle or Saw"},
+    {"ids": [2], "text": "Sets the pitch of the FLARE oscillator in semitones about C4"},
+    {"ids": [3], "text": "Detunes FLARE by up to a semitone either way"},
+    {"ids": [4], "text": "Makes FLARE follow the CORE pitch jack, so the two track together from one keyboard"},
+    {"ids": [5], "text": "Morphs the FLARE waveform from sine through triangle and saw to pulse"},
+    {"ids": [6], "text": "Wavefolds FLARE, adding harmonics as it is turned up"},
+    {"ids": [7], "text": "Warps the FLARE phase, skewing the wave without changing its pitch"},
+    {"ids": [8], "text": "Sets how hard CORE modulates the FLARE frequency"},
+    {"ids": [9], "text": "Chooses the frequency modulation: Linear, which goes through zero, or Exponential"},
+    {"ids": [10], "text": "Sets how FLARE is synchronised to CORE: Off, Soft or Hard"},
+    {"ids": [11], "text": "Balances CORE against FLARE, all CORE anticlockwise and all FLARE clockwise"},
+    {"ids": [12], "text": "Places CORE towards the left channel and FLARE towards the right as it is turned up"},
+    {"ids": [13], "text": "Blends the external stereo input against the oscillator pair, the input alone anticlockwise and the oscillators alone clockwise"},
+    {"ids": [14], "text": "Sets the level going into the neural model, from -30dB to 18dB"},
+    {"ids": [15], "text": "Blends the neural model's output against the signal that went in, with the dry arm delayed to match so no position combs"},
+    {"ids": [16], "text": "Bypasses the neural stage, passing the signal straight to the filter"},
+    {"ids": [17], "text": "Sets the corner of the lowpass, from 20Hz to the top of the audio band"},
+    {"ids": [18], "text": "Sets the resonance of the lowpass, up into self-oscillation at the top of its travel"},
+    {"ids": [19], "text": "Makes the filter corner follow the CORE pitch jack, from no tracking to full"},
+    {"ids": [20], "text": "Chooses the lowpass slope: 12dB per octave or 24dB per octave"},
+    {"ids": [21, 22, 23, 24, 25, 26, 27, 28], "text": "Attenuates and inverts the voltage at the jack beside it before it is added to the control it belongs to"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel in, which also feeds the right channel when the jack beside it is empty"},
+    {"ids": [1], "text": "The right channel in"},
+    {"ids": [2], "text": "Sets the CORE pitch, a volt to the octave, and the FLARE pitch too while TRACK is on"},
+    {"ids": [3], "text": "Sets the FLARE pitch, a volt to the octave"},
+    {"ids": [4], "text": "Moves the FLARE waveform morph, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [5], "text": "Moves the FLARE wavefolding, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [6], "text": "Moves the FLARE phase warp, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [7], "text": "Moves the frequency modulation depth, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [8], "text": "Moves the balance between CORE and FLARE, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [9], "text": "Moves the stereo placement of the two oscillators, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [10], "text": "Moves the filter corner a volt to the octave, scaled by the trimmer beside it"},
+    {"ids": [11], "text": "Moves the filter resonance, 10V sweeping its whole range, scaled by the trimmer beside it"},
+    {"ids": [12], "text": "Moves the blend between the external input and the oscillators, 10V sweeping the whole blend"},
+    {"ids": [13], "text": "Moves the level into the neural model, 10V covering the knob's whole 48dB range"},
+    {"ids": [14], "text": "Moves the neural wet and dry blend, 10V sweeping the whole blend"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel out; with the right output unpatched this jack carries the two channels summed to mono"},
+    {"ids": [1], "text": "The right channel out"}
+  ],
+  "notes": [
+    "no amp models are bundled: until you load a .nam file the neural stage passes the signal through unchanged",
+    "a model can be loaded from the LOAD button, from the display, from the right-click menu, or by dropping a .nam file onto the module",
+    "the neural path adds 32 samples of latency, plus a little more when the model's sample rate differs from the engine's",
+    "one neural network runs per channel, which makes this the heaviest module in most racks; the mono-network menu option halves that cost",
+    "inference runs in bursts of 32 samples, so Rack's peak meter flashes past 100% on clean audio; the average figure is the one that means anything"
+  ],
+  "menu": [
+    "Load model (.nam)… — opens a file chooser for the neural amp capture the module plays",
+    "Clear model — unloads the capture, after which the neural stage passes the signal through",
+    "Mono model (sum L+R through one network) — sums the two channels into one network instead of running one per channel, halving the cost",
+    "Normalize model loudness (-18 dB) — applies the loudness figure stored in the capture so models match in level",
+    "Fast neural activations (half CPU, reloads model) — swaps the exact activation functions for approximations and reloads the capture"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads the jack beside it.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "10": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "13": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "14": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

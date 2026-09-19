@@ -1,0 +1,15 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "PlasticWrap",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "src/PlasticWrap.cpp:85 reads it with getVoltageSum(), which adds every channel of a polyphonic cable into one value"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "the left input", "why": "src/PlasticWrap.cpp:86 uses R when isConnected() and the left input's getVoltageSum() otherwise"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "src/PlasticWrap.cpp:93 sets one voltage with no channel argument"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "src/PlasticWrap.cpp:94 sets one voltage with no channel argument"}
+    }
+  },
+  "comment": "Neither input is named in the source, so Rack shows no tooltip on them; the panel letters them L and R. A fault in src/PlasticWrap.cpp:89: the right channel's dry portion is taken from l, the already-clipped left channel, rather than from r. With the Mix knob at its default far right nothing of it is heard, but at any lower setting the left channel bleeds into the right output. The lamp ladder is a display, not a control."
+}

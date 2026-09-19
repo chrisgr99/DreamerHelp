@@ -1,0 +1,19 @@
+{
+  "plugin": "dbRackModules",
+  "module": "JWS",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "WS.cpp:46 takes the channel count from this input and WS.cpp:57 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "normal": "the In1 jack", "why": "WS.cpp:46 takes the smaller of the two input channel counts when this jack is connected and WS.cpp:60 reads it four channels at a time; WS.cpp:58 copies the first signal when it is empty"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "WS.cpp:63 reads it four channels at a time, scales it by the A CV knob, adds the A knob and clamps the total to 0..5"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "WS.cpp:64 reads it four channels at a time, scales it by the B CV knob, adds the B knob and clamps the total to 0..5"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "WS.cpp:65 reads it four channels at a time, scales it by the C CV knob, adds the C knob and clamps the total to 0..5"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "WS.cpp:66 reads it four channels at a time, scales it by the D CV knob, adds the D knob and clamps the total to 0..5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "WS.cpp:89 sets this output's channel count"},
+      "1": {"family": "audio", "poly": true, "why": "WS.cpp:90 sets this output's channel count"}
+    }
+  },
+  "comment": "Each input is scaled to a tenth and shifted by half a volt before the equations, WS.cpp:57-61, then put twice through sin and cos terms, WS.cpp:73-81. The channel count is the smaller of the two inputs when both are patched, WS.cpp:46, so a monophonic cable in In2 makes the whole module monophonic. This is a port of the Sin WS module by Nozoid."
+}

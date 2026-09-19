@@ -1,0 +1,24 @@
+{
+  "plugin": "Coalescent",
+  "module": "Finches",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Finches.cpp:364-367 knob + inputVoltage(RATE_INPUT), clamp(-12, 4.25), exp2"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Finches.cpp:184 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Finches.cpp:187 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Finches.cpp:175-177 getVoltage()*ENV_DEPTH 0.11f, clamp(-0.55, 0.55)"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Finches.cpp:338 seedInputTrigger.process(v, 0.1f, 1.f)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Finches.cpp:344 resetTrigger.process(v, 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Finches.cpp:211 clamp(lowMass, 0, 1)*10.f"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Finches.cpp:212 clamp(highMass, 0, 1)*10.f"},
+      "2": {"family": "pitch", "poly": false, "range": "±2V", "why": "src/Finches.cpp:213 clamp(lowTrait, -1, 1)*TRAIT_VOLTS 2.f"},
+      "3": {"family": "pitch", "poly": false, "range": "±2V", "why": "src/Finches.cpp:214 clamp(highTrait, -1, 1)*TRAIT_VOLTS 2.f"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Finches.cpp:215 clamp(spread/0.5, 0, 1)*10.f"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Finches.cpp:122 GATE_LEVEL 10.f, :123 GATE_TIME 1e-3f; :384"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Finches.cpp:122-123, :385"}
+    }
+  },
+  "comment": "Every jack is read with getVoltage(), so the module is monophonic. The maker's port names call PITCH L and PITCH R \"1 V/oct\" but the code scales the trait position at 2V per trait unit (TRAIT_VOLTS = 2.f), which is a voltage per arbitrary trait unit rather than a pitch standard; the manual's output table says 2V per trait unit and is the one that matches the code. The manual gives the NICHE default as about 0.50 where configParam sets 0.48. SPLIT and MERGE use prominence, separation, basin mass, persistence and separate enter and leave thresholds, so a flat-topped hill does not chatter between states."
+}

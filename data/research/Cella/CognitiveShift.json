@@ -1,0 +1,29 @@
+{
+  "plugin": "Cella",
+  "module": "CognitiveShift",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "0V", "why": "CognitiveShift.cpp:215 reads this input with getVoltage(), which is channel 1 alone, and compares it against the threshold; CognitiveShift.cpp:202 treats an unconnected jack as low"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "0V", "why": "CognitiveShift.cpp:215 reads this input with getVoltage() and compares it against the threshold; CognitiveShift.cpp:304 only applies the logic operation while a cable is in it"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "0V", "why": "CognitiveShift.cpp:215 reads this input with getVoltage() and compares it against the threshold; CognitiveShift.cpp:202 treats an unconnected jack as low"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "CognitiveShift.cpp:272 reads this input with getVoltage() and passes it to a Schmitt trigger at Rack's default 1V threshold"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "CognitiveShift.cpp:247 reads this input with getVoltage() and passes it to a Schmitt trigger at Rack's default 1V threshold"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "sumRange": "1 to 9V", "normal": "0V", "why": "CognitiveShift.cpp:279 reads this input with getVoltage(), multiplies it by the attenuverter and adds the knob; CognitiveShift.cpp:280 clamps the total to 1 and 9"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:367 writes channel 1 alone; CognitiveShift.cpp:360 scales a four-bit value onto 0V to 10V before the attenuverter"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:368 writes channel 1 alone; CognitiveShift.cpp:360 scales a four-bit value onto 0V to 10V before the attenuverter"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:369 writes channel 1 alone; CognitiveShift.cpp:360 scales a four-bit value onto 0V to 10V before the attenuverter"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "CognitiveShift.cpp:354 writes channel 1 alone, at the 10V held in CognitiveShift.cpp:11"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "why": "CognitiveShift.cpp:391 writes channel 1 alone; CognitiveShift.cpp:383 scales an eight-bit value onto -5V to 5V, or onto 0V to 10V on the unipolar setting"}
+    }
+  },
+  "comment": "Read from src/CognitiveShift.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1, alongside docs/Cella_Manual.md written for 2.11.0. The manual's account matches the code. Two things it does not spell out. The EDIT button does not merely enable manual entry: CognitiveShift.cpp:269 skips the clock test entirely while it is on, so a running clock is ignored until it is switched off again. And the DAC attenuverters run -1 to 1 rather than 0 to 1 (CognitiveShift.cpp:110 to 113), so a converter output can be inverted. The self-patch handling at CognitiveShift.cpp:203 to 211 reads the source module's previous bit state when that source was clocked on the same frame, which is the timing compensation the manual describes."
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "Fundamental",
+  "module": "SEQ3",
+  "description": "Eight-step sequencer with three rows of control voltage and a row of triggers",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, read out in beats per minute"},
+    {"ids": [1], "text": "Starts and stops playback; while stopped, clocks are ignored and the step position stays put"},
+    {"ids": [2], "text": "Sends the step position back to step 1"},
+    {"ids": [3], "text": "Sets how many of the eight steps play before the pattern returns to step 1"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "Sets the voltage the CV 1 output carries on that step"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19], "text": "Sets the voltage the CV 2 output carries on that step"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27], "text": "Sets the voltage the CV 3 output carries on that step"},
+    {"ids": [28, 29, 30, 31, 32, 33, 34, 35], "text": "Turns the trigger for that step on or off, which the TRIG output plays"},
+    {"ids": [36], "text": "Scales the TEMPO input from 0% to 100%; at 100% each volt doubles the tempo"},
+    {"ids": [37], "text": "Scales the STEPS input from 0% to 100%"},
+    {"ids": [38], "text": "Advances the sequencer by one step each time it is pressed, as long as the sequencer is running"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the tempo by an amount set by the TEMPO attenuverter"},
+    {"ids": [1], "text": "A clock patched here advances the sequencer and the internal clock is ignored"},
+    {"ids": [2], "text": "A trigger sends the step position back to step 1"},
+    {"ids": [3], "text": "Moves the number of steps by an amount set by the STEPS attenuverter"},
+    {"ids": [4], "text": "A trigger starts or stops playback"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse when the sequencer reaches a step whose trigger is turned on"},
+    {"ids": [1], "text": "The voltage set by the CV 1 knob of the current step"},
+    {"ids": [2], "text": "The voltage set by the CV 2 knob of the current step"},
+    {"ids": [3], "text": "The voltage set by the CV 3 knob of the current step"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "10V while the sequencer is on that step, and 0V otherwise"},
+    {"ids": [12], "text": "The number of steps as a voltage, one volt for each step past the first, for driving a second sequencer whose own STEPS knob is set to 1"},
+    {"ids": [13], "text": "The clock the sequencer is running on, whether that is the internal clock or a patched one"},
+    {"ids": [14], "text": "A 1ms pulse each time playback starts or stops"},
+    {"ids": [15], "text": "A 1ms pulse when the pattern returns to step 1"}
+  ],
+  "menu": [
+    "Clock passthrough — sends the incoming clock gate to the TRIG output on enabled steps, rather than a 1ms pulse; on the internal clock it gives a gate half the clock period long",
+    "Rotate left — moves all three rows of voltages and the row of triggers one step to the left, with step 1 wrapping round to the end",
+    "Rotate right — moves all three rows of voltages and the row of triggers one step to the right, with the last step wrapping round to step 1"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped"
+    }
+  }
+}

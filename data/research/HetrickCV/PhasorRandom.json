@@ -1,0 +1,20 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorRandom",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorRandom.cpp:105 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorRandom.cpp:111 floors the knob plus this CV to a whole step count"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "why": "PhasorRandom.cpp:108 clamps the knob plus this CV to 0 to 5V"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorRandom.cpp:114 floors the knob plus this CV to a whole mode number"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorRandom.cpp:116 tests each channel against 1V"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorRandom.cpp:121 tests each channel against 1V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorRandom.cpp:92 and 133 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor times HCV_PHZ_UPSCALE; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"poly": true, "range": "0 to 10V", "why": "PhasorRandom.cpp:134 writes the stepped phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "2": {"poly": true, "range": "0 to 10V", "why": "PhasorRandom.cpp:135 writes the randomised phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorRandom.cpp:136 writes the random gate per channel; HCVPhasorEffects.cpp:144 makes it HCV_PHZ_GATESCALE or 0V, HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"}
+    }
+  }
+}

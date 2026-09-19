@@ -1,0 +1,16 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Duck",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Duck.hh:39 adds it to the AMOUNT knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Duck.hh:74 adds it to the TIME knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Duck.hh:42 takes a rising edge from that voltage being greater than 0.5"},
+      "3": {"family": "audio", "poly": false, "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Duck.hh:54 reads it as a value"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Duck.hh:58 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "src/modules/Duck.hh:40 sets a makeup gain that runs from 0.5 at the bottom of AMOUNT to 1 at the top, and :52 sets the ducking gain to (1 - amount) + (1 - envelope * amount). With the knob down the two cancel to unity; with it up the resting gain is 1 and the gain at the peak of the envelope is 0. In between the resting gain rises above unity: at the middle of the knob it is 1.125. The recovery time is 50 + control * 1950 milliseconds at :75, matching the manual's 50ms to 2s."
+}

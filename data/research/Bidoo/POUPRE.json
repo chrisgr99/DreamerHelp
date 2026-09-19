@@ -1,0 +1,18 @@
+{
+  "plugin": "Bidoo",
+  "module": "POUPRE",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "POUPRE.cpp:241 takes the voice count from this input and 252 reads a channel of it per voice"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "POUPRE.cpp:246 reads a channel of this input per voice and rescales 0 to 10V to the start position"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "POUPRE.cpp:247 reads a channel of this input per voice and rescales 0 to 10V to the played length"},
+      "4": {"family": "cv", "poly": true, "step": "stepped", "why": "POUPRE.cpp:249 reads a channel of this input per voice and tests it for being other than zero"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "POUPRE.cpp:248 reads a channel of this input per voice and rescales 0 to 10V to the playback speed"}
+    },
+    "outputs": {
+      "0": {"family": "audio"}
+    }
+  },
+  "comment": "The previous entry said the sample is not resampled and plays at the wrong pitch when it was recorded at another rate. The loader in 2.1.1 (waves::getMonoWav in src/dep/waves.cpp) runs a SampleRateConverter whenever the file's rate differs from the engine's, so that claim was dropped. The gate input is tested for a cable but the voltage read for it comes from the speed input: POUPRE.cpp:250 reads SPEED_INPUT inside the branch guarded by GATE_INPUT.isConnected."
+}

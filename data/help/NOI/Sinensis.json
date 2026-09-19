@@ -1,0 +1,42 @@
+{
+  "plugin": "NOI",
+  "module": "Sinensis",
+  "description": "A bank of six parallel band-pass filters whose frequencies are set by one control and spaced apart by a ratio, mixed down to a single output",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency of the first band, over 54 semitones either side of C4 at 261.63Hz"},
+    {"ids": [1], "text": "Sets the resonance shared by every band, over 1 to 40; the bands ring on their own at high settings"},
+    {"ids": [2], "text": "Sets how many of the six bands are used, over 1 to 6; between whole numbers the newest band fades in rather than switching on"},
+    {"ids": [3], "text": "Multiplies each band's frequency by this amount over the band below it, over 0 to 2; at 1 every band lands on one frequency"},
+    {"ids": [4], "text": "Scales the ratio CV before it is added to the ratio, up to 1 of ratio per volt in either direction"},
+    {"ids": [5], "text": "Scales the frequency CV before it is added, up to 200Hz per volt in either direction, though the maker's tooltip prints it as a percentage"},
+    {"ids": [6], "text": "Scales the Q CV before it is added to the resonance, up to 2 of Q per volt in either direction"},
+    {"ids": [7], "text": "Scales the band-count CV before it is added, up to 2 bands per volt in either direction"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal fed into all six band-pass filters"},
+    {"ids": [1], "text": "Shifts the frequency of the bands through its attenuverter, added in hertz rather than tracking 1V per octave"},
+    {"ids": [2], "text": "Adds to the resonance through its attenuverter; the total is floored at 0.1"},
+    {"ids": [3], "text": "Adds to the number of bands through its attenuverter; the total is clamped to 1 and 6"},
+    {"ids": [4], "text": "Adds to the ratio through its attenuverter; the total is clamped to 0 and 2"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The six bands summed and divided by the number in use, clamped to ±5V"}
+  ],
+  "notes": [
+    "Any band whose frequency lands above 15kHz or below 30Hz is folded back into that span, so a large ratio wraps the upper bands rather than losing them.",
+    "The filter coefficients are recalculated one sample in four, so fast modulation of the frequency, Q, band or ratio inputs arrives in steps.",
+    "Every CV attenuverter starts at 0, so none of the four CV inputs does anything until its attenuverter is turned up."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

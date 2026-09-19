@@ -1,0 +1,14 @@
+{
+  "plugin": "gwrthiant",
+  "module": "clwyd",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the value knob", "why": "clwyd.cpp:70-72 overwrites the knob with getVoltage() when the jack is connected; line 79 then scales it by 6553.6 into an int with no clamp"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the shift knob", "why": "clwyd.cpp:75-77 overwrites the knob with getVoltage() when the jack is connected; line 81 scales it by 1.6 into an int with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "clwyd.cpp:126-127 calls setChannels(16) then writeVoltages() with an array built from 10.f * (bool) tests at lines 85-105"}
+    }
+  },
+  "comment": "Source read at commit c13145d. The shift is applied as x << ((s + i) % 16) at clwyd.cpp:86-104. For a negative shift that expression asks for a negative shift count, which C++ leaves undefined; built with clang on arm64 the affected channels read 0 rather than wrapping round, so the rotation is not symmetric about zero. clwyd.cpp:80 holds a commented-out shift_f * 16.f, the scaling the maker replaced with 1.6. The value input is not clamped, so voltages above 10V and below 0V reach the int conversion and set bits the knob cannot."
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "forsitan",
+  "module": "draen",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/draen.cpp:76 and the process block, the voltage is added to a -5..5 parameter whose display base is 2 from middle C; the menu can switch it to 100Hz per volt"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/draen.cpp:151-153, getVoltage() times 0.1 is added to the 0..1 level knob and clamped, so 0-10V covers the whole travel"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/draen.cpp:111-116, selectEngine() adds getVoltage() times 0.1 times 36 to the engine knob, rounds and clamps, so 0-10V walks the whole roster of 37 engines"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/draen.cpp, the engine output through a soft limiter, nominally ±5V"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/draen.cpp, the engine output through a soft limiter, nominally ±5V"}
+    }
+  },
+  "comment": "Both banks hold thirty-seven engines (src/draen.cpp:73). Only one sounds at a time; switching fades the current one down and the next up over the menu's fade time, and switching banks does the same. The frequency parameter is -5 to +5 with a display base of 2 from middle C, so the knob covers roughly 8Hz to 8000Hz. The maker names dronecaster, a norns instrument, as the source of the first bank, and the module is a C++ reimplementation of its SuperCollider graphs. The name is Old English for bee, the root of the word drone. The panel prints draen, engine, eng cv, hz, amp, cv, cv, L and R, with a display showing the engine name."
+}

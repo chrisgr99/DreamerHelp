@@ -1,0 +1,15 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "Math",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "src/Math.cpp:72 getChannels bounds the loop"},
+      "9": {"poly": true, "why": "src/Math.cpp:77 getVoltage(c) inside the channel loop"},
+      "18": {"poly": true, "why": "src/Math.cpp:95 getChannels bounds the loop"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/Math.cpp:73 setChannels from the A input"}
+    }
+  },
+  "comment": "No port here is named in configInput or configOutput, so Rack's tooltips are blank on all 24 inputs and 15 outputs. Every cell is guarded by isConnected on both inputs and on its own output, so an unpatched output jack means the arithmetic is skipped and the jack keeps its last written value rather than falling to zero. There are no parameters at all. Nothing is clamped: a division by zero writes an infinity, and std::log of a negative voltage writes a not-a-number, either of which propagates into anything patched downstream. The B input is read with getVoltage(c) rather than getPolyVoltage(c), so it is not spread across channels. No family is given to any jack, because these carry whatever is patched into them."
+}

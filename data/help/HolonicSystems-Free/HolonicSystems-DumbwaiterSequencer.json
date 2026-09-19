@@ -1,0 +1,46 @@
+{
+  "plugin": "HolonicSystems-Free",
+  "module": "HolonicSystems-DumbwaiterSequencer",
+  "description": "Eight-step sequencer and addressable switch: a clock, or a voltage, picks one of eight inputs and sends it on to the CV output",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Scales what this step passes to the CV output, from nothing through to full level"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Off, or a 1ms 10V pulse on the first or the second trigger output each time the sequencer reaches this step"},
+    {"ids": [16], "text": "Attenuates the CV output, from nothing through to full level"},
+    {"ids": [17], "text": "Sets which of the eight steps the sequence starts from"},
+    {"ids": [18], "text": "Attenuates the start input, narrowing how far 0-10V shifts the starting step"},
+    {"ids": [19], "text": "Sets how many steps the sequence runs before it returns to the start, one to eight"},
+    {"ids": [20], "text": "Attenuates the length input, narrowing how far 0-10V lengthens the sequence"},
+    {"ids": [21], "text": "Attenuates the address input, narrowing how far across the steps 0-10V reaches"},
+    {"ids": [22], "text": "Picks how the sequencer moves: forward, backward, pendulum, or a random step on each clock"},
+    {"ids": [23], "text": "Nothing in the module reads this control; the mode input is added to the mode knob at full level"},
+    {"ids": [24], "text": "Sequencer holds the selected step's voltage until the sequencer moves on; switch passes the selected input continuously, so a changing input is heard between steps"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The voltage this step passes to the CV output; with nothing patched the step passes a fixed 10V"},
+    {"ids": [8], "text": "A rising edge moves the sequencer on one step, in the direction the mode knob sets"},
+    {"ids": [9], "text": "A rising edge jumps the sequencer to the step the start knob sets"},
+    {"ids": [10], "text": "Selects a step directly, 0-10V spanning the steps from the start knob over the set length; with a cable in the clock input it is read only on a clock edge"},
+    {"ids": [11], "text": "Shifts the starting step, 0-10V spanning all eight steps, added to the start knob and wrapping round"},
+    {"ids": [12], "text": "Adds to the length knob, 0-10V spanning eight steps and wrapping round at eight"},
+    {"ids": [13], "text": "Adds to the mode knob, 0-10V spanning the four ways of moving and wrapping round at the end"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The selected step's voltage, scaled by that step's own attenuator and by the output attenuator"},
+    {"ids": [1], "text": "A 1ms 10V pulse each time the sequencer reaches a step whose switch is set to 1"},
+    {"ids": [2], "text": "A 1ms 10V pulse each time the sequencer reaches a step whose switch is set to 2"}
+  ],
+  "notes": [
+    "In sequencer mode the CV output stays at 0V until the step changes, so a clock, an address voltage or a reset is needed before anything comes out",
+    "In switch mode the selected step's voltage is passed continuously from the moment the module is placed, with no clock needed"
+  ],
+  "expects": {
+    "inputs": {
+      "8": "stepped",
+      "9": "stepped"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

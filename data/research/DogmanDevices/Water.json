@@ -1,0 +1,16 @@
+{
+  "plugin": "DogmanDevices",
+  "module": "Water",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Water.cpp:138 reads the jack with getVoltage and multiplies it by half the chorus depth knob"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Water.cpp:171 and 204 read the jack and scale it by the trimmer before an exponential rate"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Water.cpp:227 reads the jack, multiplies it by a tenth and by the trimmer, and adds it to the depth"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "normal": "0V", "why": "Water.cpp:87 and 218 read the jack on channel one only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Water.cpp:257-261 writes one channel, the loop running once"}
+    }
+  },
+  "comment": "Three things in this module do not match what the panel and the README promise. The chorus depth trimmer is configured and drawn but appears in no expression outside the widget, so it is dead (Water.cpp:41, 285). The three chorus LFOs are meant to be 120 and 240 degrees apart, but the offsets are written as std::sin(2*M_PI*(p - 120)) and (p - 240) at Water.cpp:187-193, and subtracting a whole number of cycles from a normalised phase leaves the three sines identical. The internal chorus feedback is multiplied by a variable passed into the delay function by value and never written back (Water.cpp:86-137), so it stays at zero. The module also declares a second output for testing the tremolo LFO which has no jack on the panel."
+}

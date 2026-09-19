@@ -1,0 +1,16 @@
+{
+  "plugin": "forsitan",
+  "module": "viginti",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/viginti.cpp:82 and the process block, the channel count follows the audio or pitch jack and each channel has its own filter state"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/viginti.cpp:83 and the process block, the voltage is added to the cutoff in octaves per channel"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/viginti.cpp:84, the voltage times the fm attenuverter is added to the cutoff in octaves"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/viginti.cpp:169-172, getVoltage() times 0.1 is added per channel to the 0..1 resonance knob, so 0-10V covers the whole travel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/viginti.cpp:86, one channel out per channel in, with no stated clamp"}
+    }
+  },
+  "comment": "The model is the published state-space system of the circuit from Danish, Bilbao and Ducceschi's DAFx20in21 paper, section 3.1, with the component values from Stinchcombe's 2006 study of the MS10 and MS20 filters and the diode nonlinearity solved through the Lambert W function. The resonance knob is exponential in Q from 0.5 to 50 over its first 85 per cent and covers the self-oscillating stretch over the rest. Self-oscillation is started by a deliberate noise floor of about 8 microvolts at the circuit's input, because the ideal model at rest would sit at zero forever. The output is inverted, as the circuit is. configBypass passes the audio input to the output. This is the low-pass section only; the MS-20's highpass is a different circuit and is not modelled. The panel prints viginti, cutoff, res, fm, drive, level, res, v/oct, fm, in and out."
+}

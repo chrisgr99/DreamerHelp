@@ -1,0 +1,13 @@
+{
+  "plugin": "Cella",
+  "module": "Spectrum",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "0V", "why": "Spectrum.cpp:244 reads this input with getVoltage on the channel the Polyphonic voice menu selects"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "Left", "why": "Spectrum.cpp:245 reads this input with getVoltage on the channel the Polyphonic voice menu selects; Spectrum.cpp:243 falls back to the left input when it is unconnected"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Spectrum.cpp:210 reads this input with getVoltage() and passes it to a Schmitt trigger at Rack's default 1V threshold"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Spectrum.cpp:227 reads this input with getVoltage() and passes it to a Schmitt trigger at Rack's default 1V threshold"}
+    }
+  },
+  "comment": "Read from src/Spectrum.cpp and src/spectrum at commit fb01326, the commit whose plugin.json carries the installed 2.11.1. This is the module the installed 2.11.1 differs from the 2.11.0 manual over: that release made the panel resizable, which the manual does not mention. The Channel mode parameter has no widget of its own (Spectrum.cpp:136 against the widget's addParam calls), so no click can reach it; it is set from the menu instead. The floor runs -140 to -40 dBFS and the speed is a power of two between the shortest and longest history the module holds (Spectrum.cpp:27 to 29 and SpectrumTypes.hpp:98). The display's hover readout, zoom and pan are handled by the display widget, which is not a parameter, so none of them can be clicked for help."
+}

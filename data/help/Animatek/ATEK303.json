@@ -1,0 +1,65 @@
+{
+  "plugin": "Animatek",
+  "module": "ATEK303",
+  "description": "Monophonic acid voice after the TB-303: oscillator, resonant lowpass filter, decay envelope, accent, slide and output stage, with a CV jack and attenuverter for each main control",
+  "params": [
+    {"ids": [0], "text": "Sets the reference tuning of the oscillator, 400Hz to 480Hz, separately from the pitch input"},
+    {"ids": [1], "text": "Sets the filter cutoff, about 314Hz to 2394Hz, on an exponential scale"},
+    {"ids": [2], "text": "Sets the filter resonance, 0% to 100%"},
+    {"ids": [3], "text": "Sets how far the decay envelope sweeps the filter, 0% to 100%, on a curve that puts most of the movement in the upper part of the travel until the taper is made linear on the menu"},
+    {"ids": [4], "text": "Sets the envelope decay on a logarithmic scale, 200ms to 2.5 seconds in the circuit model or about 460ms to 4.6 seconds in the Open303 model; an accented note uses the shortest time of that range"},
+    {"ids": [5], "text": "Sets how strongly an accented note is emphasised, 0% to 100%"},
+    {"ids": [6], "text": "Picks the oscillator waveform, sawtooth or square"},
+    {"ids": [7, 8, 9, 10, 11, 12], "text": "Sets how much of the jack below it reaches the control above it: centre for none, clockwise for positive and anticlockwise for inverted, with ±5V covering the whole control at full depth"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch at a volt per octave, 0V giving C4; it is continuous unless the menu quantises it to semitones"},
+    {"ids": [1], "text": "Starts and ends notes, going high at 1V and staying high until it falls below 0.1V"},
+    {"ids": [2], "text": "Marks the note beginning as accented while it is at 1V or above, which changes loudness, filter movement and the accent envelope; the red lamp follows it"},
+    {"ids": [3], "text": "Requests a legato transition into the next note, on the same 1V and 0.1V thresholds as the gate; a gate falling while this is high keeps the voice alive for the next note, and the blue lamp follows it"},
+    {"ids": [4, 5, 6, 7, 8, 9], "text": "A voltage modulating the control above it, at the depth and polarity its attenuverter sets"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voice output at a fixed full level, with no level control on the panel; it is clamped at ±12V, and accent and saturation can make it far hotter than an unaccented note"}
+  ],
+  "notes": [
+    "an ATEK303 SEQ placed immediately to the left sends pitch, gate, accent and slide without cables; a cable in any of those four jacks replaces that one signal only.",
+    "each modulation jack starts with its attenuverter at the centre, so patching a cable does nothing until the small knob beside it is turned."
+  ],
+  "menu": [
+    "Sound model: Circuit (ATEK), Open303 original — picks a whole group of oscillator, filter, decay, saturation and slide settings at once; Custom shows when they match neither",
+    "Motor — under Fine tuning, picks the oscillator, either Open303's wavetables or the model taken from the schematic",
+    "Pulse width (TM5) — under Fine tuning, the width of the square wave, 44% through 56%",
+    "Square droop — under Fine tuning, how far the square wave tilts across each cycle, from none to 60Hz",
+    "Saw: reset corner — under Fine tuning, how hard the sawtooth's reset is, 1 microsecond sharp through 20 microseconds round",
+    "Saw droop — under Fine tuning, how far the sawtooth tilts, 0.7Hz through 15Hz",
+    "Motor — under Fine tuning, picks the filter, either Open303's or a diode ladder model",
+    "Linear resonance (VR4 linear pot) — under Fine tuning, makes the resonance knob follow the circuit's linear law rather than Open303's curve",
+    "Drive — under Fine tuning, how hard the signal hits the filter, 0dB, 6dB or 12dB",
+    "Decay range — under Fine tuning, what the decay knob covers, Open303's 460ms to 4.6 seconds or the circuit's 200ms to 2.5 seconds",
+    "Accent accumulation (C72 network) — under Fine tuning, lets closely spaced accents build on each other and carry into the notes that follow",
+    "Accent stages — under Fine tuning, which accent envelopes are used: the fast 100ms one, the slow 450ms one, or both as the circuit has them",
+    "Log Env Mod taper (VR5 audio pot) — under Fine tuning, gives the envelope amount knob an audio taper; turning it off makes the knob and its CV linear",
+    "Slide in semitones/s (as the circuit) — under Fine tuning, glides in pitch rather than in frequency, which keeps the rate even across the range",
+    "Slide τ — under Fine tuning, the time constant of the glide, 60ms, 120ms or 220ms",
+    "Quantize pitch to semitones — under Fine tuning, rounds the incoming pitch to chromatic semitones",
+    "Limit to the 303 range (C1–C4) — under Fine tuning, clamps the note range to the original three octaves; without quantisation a fractional semitone can carry slightly past those bounds",
+    "Auto-legato (slide without SLIDE input) — under Fine tuning, starts a glide when the pitch changes under a held gate; off by default, so a moving CV does not glide by accident",
+    "OTA saturation (BA662A, before the VCA) — under Fine tuning, None, Soft or Hard saturation ahead of the amplifier",
+    "Output saturation (mixer + LA4140) — under Fine tuning, None, Soft or Hard saturation in the final output path",
+    "Analogue drift (R-2R DAC + posistor) — under Fine tuning, how much the tuning and cutoff wander: None, Subtle, Marked or Heavy, the menu giving the cents and per cent for each",
+    "Unit (DAC error pattern) — under Fine tuning, picks one of four repeatable note-by-note tuning error patterns, which does not change from note to note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads the attached sequencer, or 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the attached sequencer.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the attached sequencer.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads the attached sequencer.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±12V · continuous · one channel only"
+    }
+  }
+}

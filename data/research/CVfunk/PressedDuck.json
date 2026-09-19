@@ -1,0 +1,50 @@
+{
+  "plugin": "CVfunk",
+  "module": "PressedDuck",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "normal": "the R jack of that strip", "why": "PressedDuck.cpp:737 reads each channel of that strip's jack with getPolyVoltage; PressedDuck.cpp:739 copies whichever of the pair is patched to both sides when only one is"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the L jack of that strip", "why": "PressedDuck.cpp:737 reads each channel of that strip's jack with getPolyVoltage; PressedDuck.cpp:739 copies whichever of the pair is patched to both sides when only one is"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "audio"},
+      "9": {"family": "audio"},
+      "10": {"family": "audio"},
+      "11": {"family": "audio"},
+      "12": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "PressedDuck.cpp:782 reads it with getPolyVoltage, divides by 10 and clamps to 0 to 2; PressedDuck.cpp:789 spreads a polyphonic cable's channels across the strips to the right"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "cv"},
+      "17": {"family": "cv"},
+      "18": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "PressedDuck.cpp:838 reads it with getVoltage, so only channel 1, divides by 10 and clamps to 0 to 2"},
+      "19": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "PressedDuck.cpp:818 reads it with getPolyVoltage, divides by 5 and adds it to that strip's pan knob, spreading a polyphonic cable across the strips to the right"},
+      "20": {"family": "cv"},
+      "21": {"family": "cv"},
+      "22": {"family": "cv"},
+      "23": {"family": "cv"},
+      "24": {"family": "cv"},
+      "25": {"family": "audio", "poly": false, "step": "continuous", "why": "PressedDuck.cpp:752 reads the sidechain pair with getVoltage, so only channel 1, and PressedDuck.cpp:838 takes their level for the duck detector"},
+      "26": {"family": "audio", "poly": false, "step": "continuous", "why": "PressedDuck.cpp:752 reads the sidechain pair with getVoltage, so only channel 1, and PressedDuck.cpp:838 takes their level for the duck detector"},
+      "27": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "PressedDuck.cpp:956 reads it with getVoltage, so only channel 1, divides by 5 and clamps to 0 to 1 before the attenuverter"},
+      "28": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 1V", "why": "PressedDuck.cpp:865 reads it with getVoltage, so only channel 1; PressedDuck.cpp:867 clamps the knob-plus-input total to 0 to 1"},
+      "29": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 11V", "why": "PressedDuck.cpp:1053 reads it with getVoltage, so only channel 1; the knob-plus-input total is cubed and clamped to 0 to 11"},
+      "30": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 2V", "why": "PressedDuck.cpp:1012 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter; PressedDuck.cpp:1014 clamps the total to 0 to 2"},
+      "31": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "PressedDuck.cpp:690 reads it with getPolyVoltage and treats anything above 0V as muted; PressedDuck.cpp:657 instead flips the mute on each rise when Mute CVs function as Toggle is on"},
+      "32": {"family": "trigger"},
+      "33": {"family": "trigger"},
+      "34": {"family": "trigger"},
+      "35": {"family": "trigger"},
+      "36": {"family": "trigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "PressedDuck.cpp:1032 writes one channel with setVoltage from the saturated mix scaled by 6.9 and the master volume"},
+      "1": {"family": "audio", "poly": false, "why": "PressedDuck.cpp:1032 writes one channel with setVoltage from the saturated mix scaled by 6.9 and the master volume"}
+    }
+  },
+  "comment": "The mix is summed, high-pass filtered, clamped to 46V of headroom, divided by 35 and put through an antiderivative-antialiased polynomial tanh before being scaled by 6.9 and the master volume (PressedDuck.cpp:1002). The compression divides the summed peak by the number of strips that actually carry a signal (PressedDuck.cpp:860), so PRESS behaves differently as strips are patched and unpatched. Shift-clicking a mute button solos that strip (PressedDuck.cpp:665)."
+}

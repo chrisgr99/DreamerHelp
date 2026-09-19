@@ -1,0 +1,64 @@
+{
+  "plugin": "bikeshed",
+  "module": "EntropyPool",
+  "description": "A bank of 240 random values between zero and one, stepped through by a clock, with the start, the length and the filtering of the run all under CV control",
+  "params": [
+    {"ids": [0], "text": "Steps the current index on by one each press, as a trigger at the clk input does; nothing happens while run is off"},
+    {"ids": [1], "text": "Toggles running; with it off the clock is ignored and the eos, trg, gate and cv outputs all stay at 0V"},
+    {"ids": [2], "text": "Sets the current index back to the start of the range, or to the end of it when the length is negative"},
+    {"ids": [3], "text": "Draws a new random seed and fills every value in the bank from it, replacing what was there"},
+    {"ids": [4], "text": "Scales the cv output: clockwise of centre a value of one reaches 10V at full travel, and counter-clockwise the output is centred on 0V instead, reaching -5V to 5V at full travel; at centre it is 0V"},
+    {"ids": [5], "text": "Sets the index the run starts from, 0 to 239, snapped to whole indices"},
+    {"ids": [6], "text": "Scales the start index input, inverting it below the centre; 10V at full travel moves the start by the whole bank"},
+    {"ids": [7], "text": "Sets how far the run reaches from the start index; clockwise of centre it runs forwards and counter-clockwise it runs backwards, and either way it wraps around the end of the bank"},
+    {"ids": [8], "text": "Scales the length input, inverting it below the centre; 10V at full travel changes the length by the whole bank"},
+    {"ids": [9], "text": "Filters the values: clockwise of centre sets a rising minimum and counter-clockwise a falling maximum, and a value outside what is left is read as zero"},
+    {"ids": [10], "text": "Scales the filter input, inverting it below the centre; 10V at full travel covers the knob's whole range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here steps the current index on by one, backwards when the length is negative; nothing happens while run is off"},
+    {"ids": [1], "text": "Each trigger here toggles running on or off"},
+    {"ids": [2], "text": "A trigger here sets the current index back to the start of the range, or to the end of it when the length is negative"},
+    {"ids": [3], "text": "A trigger here draws a new random seed and fills every value in the bank from it"},
+    {"ids": [4], "text": "Moves the start index, through the trimpot for it; 10V at full travel moves it by the whole bank"},
+    {"ids": [5], "text": "Changes how far the run reaches, through the trimpot for it; 10V at full travel changes it by the whole bank"},
+    {"ids": [6], "text": "Moves the filter threshold, through the trimpot for it; 10V at full travel covers the knob's whole range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger 1ms long each time the index wraps back to the start of the range"},
+    {"ids": [1], "text": "A 10V trigger 1ms long each time the index moves to a value above zero; a muted value, or one the filter excludes, gives no trigger"},
+    {"ids": [2], "text": "A 10V gate starting on each step, lasting the value at that index times the length of the previous clock cycle, so zero gives no gate and one holds the gate until the next step"},
+    {"ids": [3], "text": "The value at the current index as a voltage, scaled by the small knob, and 0V while run is off"}
+  ],
+  "notes": [
+    "the bank is filled with random values the moment the module is added, so a clock makes it play straight away; rnd refills it with a fresh seed",
+    "the squares are the values: drag one up or down to change it, click it to mute it, double-click to put it back, and right-click it for a box to type an exact number",
+    "the squares are drawn as one display rather than as separate controls, so no click on one of them can reach help for it",
+    "the brackets mark the range being played and the dot marks the current index; a grey square is muted or out of range, and an outlined one is excluded by the filter",
+    "the first clock after a patch loads makes no gate, because the gate length is measured from the previous clock cycle",
+    "to load somebody else's GitHub activity, put their username and an at sign before the token",
+    "the token typed into the GitHub box is not saved with the patch, but the values it loaded are, so a saved patch can be shared without giving the token away"
+  ],
+  "menu": [
+    "Values... — opens a box holding every value as a comma-separated list, which can be edited or pasted over",
+    "Seed... — opens a box holding the seed the current values were generated from, which can be edited to generate a different set",
+    "Use GitHub activity... — opens a box for a GitHub token, loads that account's contribution history and uses it, normalised, as the values"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "one channel only"
+    }
+  }
+}

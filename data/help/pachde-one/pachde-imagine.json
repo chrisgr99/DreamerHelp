@@ -1,0 +1,70 @@
+{
+  "plugin": "pachde-one",
+  "module": "pachde-imagine",
+  "description": "Reads an image with a moving read head and turns the colour under it into voltages, gates and triggers",
+  "params": [
+    {"ids": [0], "text": "Limits how fast the v output can move; at 0% it is not limited at all, and higher settings slow it down"},
+    {"ids": [1], "text": "Switches between Unipolar, where the v output runs 0-10V and x and y are measured from the top left corner of the image, and Bipolar, where x and y are measured from the centre"},
+    {"ids": [2], "text": "Starts and stops the read head"},
+    {"ids": [3], "text": "Chooses how the read head moves over the image: Scanline, Bounce, Vinyl, Wander, X/Y Pad, Tabalar or Ralabat; the chosen one is named in the lit display in the middle of the panel"},
+    {"ids": [4], "text": "Sets how fast the read head moves, 0 to 100, before the multiplier is applied"},
+    {"ids": [5], "text": "Multiplies the speed setting by a whole number from x1 to x10"},
+    {"ids": [6], "text": "Chooses which part of the colour under the read head feeds the v, g and t outputs: Lightness, Luminance, Saturation, Hue, Minimum, Maximum, Average, Red, Green, Blue or Alpha"},
+    {"ids": [7], "text": "Sets how far the last six readings of the chosen colour part have to spread before a trigger fires, 0 to 1 against readings that run 0-10V, so a low setting fires often"},
+    {"ids": [8], "text": "Sets the shortest time between one trigger and the next, 0 to 1000ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here switches the read head between playing and paused"},
+    {"ids": [1], "text": "A trigger here puts the read head back at its saved start position"},
+    {"ids": [2], "text": "Sets the horizontal position of the read head, 0-10V across the width of the image; the read head follows the cables only while this jack and the one beside it are both patched"},
+    {"ids": [3], "text": "Sets the vertical position of the read head, 0-10V down the height of the image; with both position jacks patched the path, speed and multiplier settings are not used"},
+    {"ids": [4], "text": "Sets the speed knob from a cable, 0-10V covering its 0 to 100 range; the voltage is written into the knob, so the knob moves, and the jack is not read while both position jacks are patched"},
+    {"ids": [5], "text": "Adds to the minimum trigger time, 50ms per volt on top of the knob setting"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The horizontal position of the read head, 0-10V across the width of the image, or measured from the middle of the image with the polarity switch on Bipolar"},
+    {"ids": [1], "text": "The vertical position of the read head, 0-10V down the height of the image, or measured from the middle of the image and rising upwards with the polarity switch on Bipolar"},
+    {"ids": [2], "text": "The chosen part of the colour under the read head, 0-10V, limited in speed by the slew knob; with the polarity switch on Bipolar it is that same voltage less 0.5V, not the -5V to +5V the manual states"},
+    {"ids": [3], "text": "Flips between 0V and 10V each time a trigger fires, once six readings have been taken"},
+    {"ids": [4], "text": "A 10V pulse each time the spread of the last six readings passes the g/t setting and the minimum time has gone by"},
+    {"ids": [5], "text": "The red part of the colour under the read head, 0-10V"},
+    {"ids": [6], "text": "The green part of the colour under the read head, 0-10V"},
+    {"ids": [7], "text": "The blue part of the colour under the read head, 0-10V"}
+  ],
+  "notes": [
+    "the module reads nothing until an image is loaded: click the picture button to open one, or drag an image file onto the image area",
+    "shift-click the picture button to reload the file, and Cmd+Shift-click on Mac or Ctrl+Shift-click elsewhere to close it",
+    "click the image to put the read head where you clicked, and drag to scrub, whichever path is chosen",
+    "with the path set to X/Y Pad and no image loaded, the module is a plain XY pad, and the x and y outputs follow the polarity switch",
+    "the v, g, t, R, G and B outputs are worked out only while at least one of those six has a cable in it; with none patched, the read head moves but no colour is computed",
+    "the small round button beside the r jack returns the read head to its start position, and shift-clicking it makes the present position the new start; no click on it reaches this help",
+    "the picture button opening the image file is not a parameter either, so no click on it reaches this help",
+    "every knob is also a click control: click to step the value up, Cmd-click on Mac or Ctrl-click elsewhere to step down, and hold Shift for ten times the step",
+    "with the colour part set to Alpha, an image with no transparency gives a steady maximum voltage"
+  ],
+  "menu": [
+    "Labels — shows or hides the lettering printed beside the knobs and jacks",
+    "Gold medallion — shows or hides the gold #d mark",
+    "Bright image in a dark room — the image is not dimmed when the Rack room brightness is turned down"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the speed knob; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscA1",
+  "description": "An additive oscillator of up to 256 partials with a comb filter over its spectrum, free of aliasing at any pitch",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -14 to 4 as a power of two around middle C, which is about 0.016Hz to 4186Hz"},
+    {"ids": [1], "text": "Sets the frequency above which partials are left out, as a power of two around middle C, up to about 20000Hz"},
+    {"ids": [2], "text": "Sets how quickly the partials fall away towards the top, 0.1 to 3"},
+    {"ids": [3], "text": "Tilts the sound between odd and even partials, -1 to 1; at 0 both are heard, at -1 the odd ones alone and at 1 the even ones alone"},
+    {"ids": [4], "text": "Sets which partial the sound starts from, 0 to 128, so the fundamental and the partials below it are left out"},
+    {"ids": [5], "text": "Stretches the spacing of the partials, -1.25 to 1.25; away from 0 they stop being whole multiples and the sound turns metallic"},
+    {"ids": [6], "text": "Attenuates the voltage at the Decay jack before it is added to the Decay knob, 0 to 100 per cent"},
+    {"ids": [7], "text": "Attenuates the voltage at the Odd/Even jack before it is added to the Odd/Even knob, 0 to 100 per cent"},
+    {"ids": [8], "text": "Attenuates the voltage at the Stretch jack before it is added to the Stretch knob, 0 to 100 per cent"},
+    {"ids": [9], "text": "Sets the level of the whole sound, 0 to 1"},
+    {"ids": [10], "text": "Attenuates the voltage at the Amp jack before it is added to the Amp knob, 0 to 100 per cent"},
+    {"ids": [11], "text": "Slides the comb along the spectrum, 0 to one whole turn"},
+    {"ids": [12], "text": "Sets how many peaks the comb has across the partials, 1 to 100"},
+    {"ids": [13], "text": "Sets how deep the comb cuts into the spectrum, 0 to 1; at 0 the comb is off"},
+    {"ids": [14], "text": "Sets how many partials are added, 1 to 256"},
+    {"ids": [15], "text": "Attenuates the voltage at the Comb Phs jack before it is added to the Comb Phs knob, 0 to 100 per cent"},
+    {"ids": [16], "text": "Attenuates the voltage at the Comb Freq jack before it is added to the Comb Freq knob, 0 to 100 per cent"},
+    {"ids": [17], "text": "Attenuates the voltage at the Comb Amt jack before it is added to the Comb Amp knob, 0 to 100 per cent"},
+    {"ids": [18], "text": "Bends the comb so that its peaks are no longer evenly spaced, 0.2 to 1"},
+    {"ids": [19], "text": "Attenuates the voltage at the Comb Warp jack before it is added to the Comb Warp knob, 0 to 100 per cent"},
+    {"ids": [20], "text": "Sharpens the peaks of the comb, 0.1 to 4; at 1 they are plain, higher settings narrow them and lower ones broaden them"},
+    {"ids": [21], "text": "Attenuates the voltage at the Comb Peek Input jack before it is added to the Comb Peek knob, 0 to 100 per cent"},
+    {"ids": [22], "text": "Sets how far the FM jack moves the frequency, 0 to 300 per cent"},
+    {"ids": [23], "text": "While on, the FM jack is added to the frequency in hertz rather than to the pitch in octaves, which gives through-zero frequency modulation"},
+    {"ids": [24], "text": "Sets the level of the fundamental on its own, 0 to 1, whatever the partials above it are doing"},
+    {"ids": [25], "text": "Puts the phase of every partial back to the start"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [2], "text": "Modulates that fall-off, one per volt scaled by the Decay CV knob"},
+    {"ids": [3], "text": "Modulates that tilt, a tenth per volt scaled by the Odd/Even CV knob"},
+    {"ids": [4], "text": "Modulates that stretching, a tenth per volt scaled by the Stretch CV knob"},
+    {"ids": [5], "text": "Sets that first partial by cable, 12.8 partials per volt, and moves the knob while it is patched"},
+    {"ids": [6], "text": "Modulates the level, scaled by the Amp CV knob"},
+    {"ids": [7], "text": "Sets that number by cable, 25.6 partials per volt, and moves the knob while it is patched"},
+    {"ids": [8], "text": "Modulates the comb depth, a tenth per volt scaled by the Comb Amp CV knob"},
+    {"ids": [9], "text": "Modulates that sharpening, half a step per volt scaled by the Comb Peek CV knob"},
+    {"ids": [10], "text": "Modulates that spacing, ten per volt scaled by the Comb Freq CV knob"},
+    {"ids": [11], "text": "Modulates that bending, a tenth per volt scaled by the Comb Warp CV knob"},
+    {"ids": [12], "text": "Modulates that sliding, one per volt scaled by the Comb Phs CV knob"},
+    {"ids": [13], "text": "Modulates the frequency through the FM Amt knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave, -5V to 5V at full level"}
+  ],
+  "notes": [
+    "the comb controls shape the strengths of the partials rather than filtering the sound afterwards, so the comb is free of the ringing a real filter would add"
+  ],
+  "menu": [
+    "buffer size — sets how many samples the background thread works on at a time; a larger buffer glitches less and delays more",
+    "use thread — works the partials out on a background thread, which keeps them off the audio thread at the cost of some delay"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 3V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1V.",
+      "4": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1.25V.",
+      "5": "0 to 10V · stepped · one channel only\n\nunpatched it reads the First Partial knob; a negative voltage does nothing here.",
+      "6": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "0 to 10V · stepped · one channel only\n\nunpatched it reads the Num Partials knob; a negative voltage does nothing here.",
+      "8": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "9": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 4V.",
+      "10": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 1 to 100V.",
+      "11": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "12": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "13": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

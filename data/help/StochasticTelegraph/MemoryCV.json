@@ -1,0 +1,48 @@
+{
+  "plugin": "StochasticTelegraph",
+  "module": "MemoryCV",
+  "description": "Holds the two channels of control voltage a MemoryCV ensemble records into and plays from, sampled at 1000Hz; it is always the left-most module of the group, and alone it neither records nor plays",
+  "params": [
+    {"ids": [0], "text": "Pressing it sets every sample in the buffer to 0V and leaves its length alone"},
+    {"ids": [1], "text": "Sets the length of the buffer in seconds, 1 to 1000, taking effect at the next press of RESET"},
+    {"ids": [2], "text": "Pressing it discards the buffer, builds a new one of LENGTH seconds, and fills it with 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger sets every sample in the buffer to 0V and leaves its length alone"},
+    {"ids": [1], "text": "Takes a Tipsy text message naming a WAV or CSV file to load, relative to the load folder picked in the menu; a message of a hash and a number loads the file at that place in the folder instead"},
+    {"ids": [2], "text": "Takes a Tipsy text message naming a WAV or CSV file to write the buffer to, relative to the save folder picked in the menu; an existing file of that name is overwritten with no prompt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A trigger each time a file load finishes, whether it succeeded or failed"},
+    {"ids": [1], "text": "A trigger each time a file save finishes, whether it succeeded or failed"},
+    {"ids": [2], "text": "Tipsy text describing each load and save, including the length of a file read in, for a TEXT input on TTY"},
+    {"ids": [3], "text": "A steady voltage equal to the number of seconds in the buffer, so a buffer of 15 seconds gives 15V"}
+  ],
+  "notes": [
+    "by itself it neither records nor plays: put a Brainwash or an Embellish to write into it, and a Ruminate or a Fixation to play it, touching it on the right",
+    "dropping a WAV or CSV file from the desktop onto the panel loads it at once",
+    "the buffer is stored at 1000 samples a second whatever the Rack sample rate, and playback does not interpolate between samples, so recorded pitches stay as they were",
+    "the display above the LENGTH output shows the buffer length in seconds and hundredths, or in minutes and seconds once it passes 60 seconds",
+    "a CSV file loaded here is read as one line per millisecond, each line a left and a right value separated by a comma",
+    "anything other than Tipsy text arriving at LOAD or SAVE can crash Rack"
+  ],
+  "menu": [
+    "Autoload most recent file when this module starts — reads the last file this module loaded when the patch opens or the module is duplicated",
+    "Reload most recent file now — loads the last file this module read straight away",
+    "Most Recently Used Directories — a submenu of the twenty folders most recently used by any module of this kind, one of which becomes the loading folder",
+    "Pick via Directory Selector... — picks the loading folder that names arriving at LOAD are relative to, and appears again under Saving Directory for the SAVE folder",
+    "Pick file from Loading directory — a submenu of the WAV and CSV files in the loading folder; choosing one loads it at once",
+    "Pick file via dialog... — opens the operating system's file browser and loads the WAV or CSV file chosen",
+    "Save to WAV File... — writes the whole buffer to a WAV file named through a dialog",
+    "Save to CSV File... — writes the whole buffer to a CSV file of one left and one right value per line, named through a dialog"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

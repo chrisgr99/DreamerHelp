@@ -1,0 +1,20 @@
+{
+  "plugin": "SequelSequencers",
+  "module": "Bend",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "normal": "0V", "why": "Bend.cpp:53 tests the jack with isConnected and reads it with getPolyVoltageSimd for every group of four channels"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "normal": "0V", "why": "Bend.cpp:56 takes the channel count with getChannels and line 92 adds getPolyVoltageSimd to the frequency knob as an exponent of two"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bend.cpp:76-78 divides getPolyVoltageSimd by five, multiplies by the BM knob, adds it to the bend knob and clamps the total to 0.02 and 0.98"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bend.cpp:113 multiplies getPolyVoltageSimd by middle C's frequency and the FM knob and adds it to the frequency, and line 99 uses it as an exponent instead in LFO mode"},
+      "4": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bend.cpp:73-74 divides getPolyVoltageSimd by five, multiplies by the AM knob, adds it to the amplitude knob and clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Bend.cpp:124 writes five times the oscillator's square output and line 131 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "Bend.cpp:120 writes five times the oscillator's sine output and line 133 sets the channel count"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "Bend.cpp:122 writes five times the oscillator's triangle output and line 132 sets the channel count"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "why": "Bend.cpp:126 writes five times the oscillator's noise output and line 134 sets the channel count"}
+    }
+  },
+  "comment": "In LFO mode the oscillator is switched to unipolar (Bend.cpp:88) and the wave tables are offset by one before being scaled by five, so the square, sine and triangle outputs run 0V to 10V rather than -5V to 5V. The noise output is not affected. The census spells the frequency modulation input \"Fequency modulation\", which is the maker's own typo in the tooltip (Bend.cpp:84). The glide calculator treats anything below 0.02 on the slider as no glide at all (BendGlideCalculator.cpp:14-17)."
+}

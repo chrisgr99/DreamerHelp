@@ -1,0 +1,47 @@
+{
+  "plugin": "Venom",
+  "module": "AD_ASR",
+  "description": "Envelope generator making an AD envelope from a trigger and an ASR envelope from a gate, with stage gate outputs, looping modes and wide voltage control of stage times",
+  "params": [
+    {"ids": [0], "text": "Sets the range of both time knobs: slow 0.044 to 181 seconds, medium 0.0028 to 11.3 seconds, fast 0.00024 to 1.0 seconds, or glacial 0.707 seconds to 48.27 minutes"},
+    {"ids": [1], "text": "Picks the retrigger and looping behaviour: retrigger from the current level, retrigger from 0, a loop started and stopped by TRIG, or an AD envelope that loops while GATE is high"},
+    {"ids": [2], "text": "Makes the GATE button a toggle, one press taking the gate high and the next taking it low, in place of a gate that lasts while the button is held"},
+    {"ids": [3], "text": "Fires an AD envelope by hand, held high for as long as the button is pressed"},
+    {"ids": [4], "text": "Raises the gate by hand for an ASR envelope, held high for as long as the button is pressed"},
+    {"ids": [5, 6], "text": "Sets the curve of that stage, concave counter-clockwise, linear at noon and convex clockwise, with no change to the stage time"},
+    {"ids": [7, 8], "text": "Sets the base length of that stage, within the range picked by SPD"},
+    {"ids": [9, 10], "text": "Attenuates and inverts the CV input for that stage time, and at -100% a pitch voltage fed to both CV inputs makes a looping envelope track a volt per octave"},
+    {"ids": [11], "text": "Chooses what the RISE output carries: a gate while rising, a 1ms trigger on entering the rise, or a 1ms trigger on leaving it"},
+    {"ids": [12], "text": "Chooses what the FALL output carries: a gate while falling, a trigger on entering the fall, a trigger on leaving it, or an end-of-cycle trigger at 0V"},
+    {"ids": [13], "text": "Chooses what the SUS output carries: a gate while sustaining, a 1ms trigger on entering the sustain, or a 1ms trigger on leaving it"},
+    {"ids": [14], "text": "Sets the range of the ENV output: 0-10V, inverted from 10V down to 0V, or bipolar from -5V to 5V"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Every positive volt here doubles the length of that stage and every negative volt halves it, after the attenuverter for that stage"},
+    {"ids": [2], "text": "A rising edge starts an AD envelope; it reads high above 2V and low below 0.2V"},
+    {"ids": [3], "text": "A high gate starts an ASR envelope, which holds 10V while the gate stays high; it reads high above 2V and low below 0.2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a 10V gate while the envelope is rising, or a 1ms trigger at the start or end of the rise"},
+    {"ids": [1], "text": "Carries a 10V gate while the envelope is falling, or a 1ms trigger at the start or end of the fall, or when it reaches 0V"},
+    {"ids": [2], "text": "Carries a 10V gate while the envelope holds at 10V, or a 1ms trigger at the start or end of that sustain"},
+    {"ids": [3], "text": "The envelope itself, 0-10V unless the ENV mode button inverts it or shifts it to bipolar"}
+  ],
+  "notes": [
+    "patching a stage gate output back into TRIG or GATE blocks retriggering during that stage, and patching the RISE gate into GATE makes an ASR attack always climb to full"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

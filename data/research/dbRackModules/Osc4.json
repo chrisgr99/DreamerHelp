@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc4",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Osc4.cpp:131 takes the channel count from this input and Osc4.cpp:134 adds it to the Freq knob"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc4.cpp:138 and Osc4.cpp:140 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Osc4.cpp:126 reads it with getVoltage() and no channel loop, scales it by a tenth and the Wave CV knob and adds the Wave knob"},
+      "3": {"family": "trigger", "poly": true, "normal": "0V", "why": "Osc4.cpp:147 reads it four channels at a time with getPolyVoltageSimd and hands it to the oscillator as the sync signal"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Osc4.cpp:156 sets this output's channel count from the V/Oct jack; Osc4.cpp:154 writes five times the wave"}
+    }
+  },
+  "comment": "The wave knob is mapped through a segment curve before it is used, Osc4.cpp:129, which is where the maker's figures of 0.3 for the saw and 0.6 for the square come from. The frequency is held to half the sample rate. Sixteen times oversampling is fixed on, not a menu setting."
+}

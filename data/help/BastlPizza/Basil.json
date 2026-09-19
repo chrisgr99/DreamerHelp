@@ -1,0 +1,57 @@
+{
+  "plugin": "BastlPizza",
+  "module": "Basil",
+  "description": "A stereo delay with diffusion, filtering and extra taps in the feedback path, after Bastl's Basil module",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time, longest counter-clockwise and shortest clockwise, and is what the DELAY knob does while the delay mode is Time"},
+    {"ids": [1], "text": "Sets the difference between the left and right delay times: identical fully counter-clockwise, and fully clockwise the left grows longer while the right grows shorter"},
+    {"ids": [2], "text": "Trims the delay time by a small amount, which tunes the module to a note when the feedback is high enough to ring, and is what the DELAY knob does while the delay mode is Fine"},
+    {"ids": [3], "text": "Steps the DELAY knob to the next delay mode on each press, through Time, Stereo and Fine"},
+    {"ids": [4], "text": "Crossfades the outputs between the dry input and the delayed signal"},
+    {"ids": [5], "text": "Sets how much of the output is fed back in: clockwise the left and right channels each feed back into themselves, counter-clockwise they cross over so the repeats bounce between the two"},
+    {"ids": [6], "text": "Halves the sample rate of the delay line on each press, which doubles the delay times and drops the tail an octave; a two-second hold reaches the longer range instead, and the same hold leaves it"},
+    {"ids": [7], "text": "Locks the delay buffer into a loop of the set length on each press, cutting the input off so the buffer repeats unchanged; a hold past two seconds also turns the anti-aliasing filter off"},
+    {"ids": [8], "text": "Steps the SPACE knob to the next space mode on each press, through Blur, Filter and Taps; a long press starts choosing what the CTRL knob is assigned to"},
+    {"ids": [9], "text": "Sets the amount of diffusion: counter-clockwise it happens before the feedback path and adds a gentle low-pass, clockwise it happens inside the feedback path and rings more"},
+    {"ids": [10], "text": "Sets the filter in the feedback path, low-pass counter-clockwise and high-pass clockwise, which darkens or brightens each repeat; this is what the SPACE knob does while the space mode is Filter"},
+    {"ids": [11], "text": "Mixes in extra taps at delay times shorter than the main one: odd and even divisions counter-clockwise, even divisions alone clockwise; this is what the SPACE knob does while the space mode is Taps"},
+    {"ids": [12], "text": "Sets whichever one parameter the control destination names, and adds to the voltage at the CTRL input when a cable is patched there"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to whichever space amount the SPACE knob is set to at the moment, -5V to 5V covering the full travel of that knob"},
+    {"ids": [1], "text": "Sets the delay time from the interval between two pulses arriving here, measured on each rising edge past 0.2V and smoothed towards the new time"},
+    {"ids": [2], "text": "Adds to the CTRL knob, -5V to 5V covering the full range of whatever the control destination names"},
+    {"ids": [3], "text": "The left input to the delay; every channel of a polyphonic cable is summed into it"},
+    {"ids": [4], "text": "The right input to the delay; every channel of a polyphonic cable is summed into it, and with nothing patched here the left input feeds both sides"},
+    {"ids": [5], "text": "Scales the delay time, doubling it for each volt"},
+    {"ids": [6], "text": "Adds to the FEEDBACK knob, -5V to 5V covering the full range of that knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output, the dry and delayed signals mixed by the DRY WET knob and reaching 5V either way"},
+    {"ids": [1], "text": "The right output, the dry and delayed signals mixed by the DRY WET knob and reaching 5V either way"}
+  ],
+  "notes": [
+    "the module works on blocks of 32 samples, so the controls and the CV inputs are read once every 32 samples rather than every sample"
+  ],
+  "menu": [
+    "Hyperspace mode — lifts the limits the module normally puts on the delay time and the feedback",
+    "Anti-aliasing — filters the delay line when it runs at a reduced sample rate; turning it off is what the long press of the FREEZE button also does",
+    "Control Destination — sets which one parameter the CTRL knob and the CTRL input act on, chosen from a list of thirteen covering delay time, feedback, the space amounts and the speed division",
+    "Character: Normal, Half, Quarter, Eighth — sets the sample rate the delay line runs at, the same division the SPEED button steps through"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "unipolar · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic\n\nunpatched it reads the left input.",
+      "5": "bipolar · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

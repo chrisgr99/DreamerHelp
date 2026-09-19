@@ -1,0 +1,26 @@
+{
+  "plugin": "ZZC",
+  "module": "Clock",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the BPM knob alone", "why": "Clock.cpp:362-365 getVoltage(), no getChannels loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "the RUN button alone", "why": "Clock.cpp:173-188, getVoltage() > 1.0f and a SchmittTrigger"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "the RST button alone", "why": "Clock.cpp:190-195 externalResetTrigger.process(getVoltage())"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "no external clock", "why": "Clock.cpp:112 detectMode switches the module to external-clock mode as soon as a cable is here; :206 clockTracker.process counts this jack's rises past 1V (shared.hpp:79-98) and sets the BPM from the period once three have passed; :236 oscillator.adjustPhase pulls the internal phase onto each rise"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "normal": "the clock's own phase", "why": "Clock.cpp:443 getVoltage() / 10.0f, 478"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the swing knob alone", "why": "Clock.cpp:207 clamp(getVoltage() / 5.0f, -1, 1)"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the swing knob alone", "why": "Clock.cpp:216 clamp(getVoltage() / 5.0f, -1, 1)"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:460-465 setVoltage"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:480 phase * 10.0f"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:467"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:468"},
+      "4": {"family": "cv", "poly": false, "why": "Clock.cpp:482 bpm / 60.0f"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:483 fminf(..., 10.0f)"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:469-473"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Clock.cpp:474"}
+    }
+  },
+  "comment": "The V/BPS and V/OCT words at the top left are not a label: they are the two frames of the switch above that jack (res/switches/ZZC-VBPSVOCT-Switch_0.svg and _1.svg), and clicking them flips the mode. The module comes up in V/OCT. Neither swing knob carries a printed name; each is joined by a drawn line to the double- or quadruple-time jack it governs."
+}

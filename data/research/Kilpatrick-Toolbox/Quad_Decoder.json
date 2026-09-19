@@ -1,0 +1,19 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Quad_Decoder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:284 reads this input with getVoltage, which is channel 1 only"},
+      "1": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:286 reads this input with getVoltage, which is channel 1 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:295 writes this output with setVoltage and setChannels is never called on it"},
+      "1": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:296 writes this output with setVoltage and setChannels is never called on it"},
+      "2": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:297 writes this output with setVoltage and setChannels is never called on it"},
+      "3": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:298 writes this output with setVoltage and setChannels is never called on it"},
+      "4": {"family": "audio", "poly": false, "why": "Quad_Decoder.cpp:299 writes this output with setVoltage and setChannels is never called on it"},
+      "5": {"family": "audio", "poly": true, "why": "Quad_Decoder.cpp:150 sets this output to five channels and Quad_Decoder.cpp:300 writes five voltages to it with writeVoltages"}
+    }
+  },
+  "comment": "Two of the four parameters, MODE and SUB_CUTOFF, have no ParamWidget and are set only from the menu; the census paramPos holds just the two knobs. The output gain chain is AUDIO_IN_GAIN 0.1 at :66, AUDIO_OUT_GAIN 10 at :67 and outLevel as the knob doubled at :161, so the knob at its default of 1.0 with the balance at 0.5 gives unity, the knob at halfway gives -6dB and full clockwise gives +6dB. The block length is AUDIO_BUFLEN 64 at :62. Quad_Decoder.cpp:255 writes the logic steering coefficient to the SUB output inside the QS_LOGIC_DECODE branch, which looks like leftover debugging; it is overwritten every sample at :299 and has no audible effect. The Bypass choice sets the sub filter corner to 20000Hz at :386 rather than switching the filter out. A fourth decoding mode, SQ Logic Decode, is present in the source but commented out of both the mode list and the menu."
+}

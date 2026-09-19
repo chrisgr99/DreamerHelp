@@ -1,0 +1,16 @@
+{
+  "plugin": "TinyTricks",
+  "module": "TTSAW",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "sumRange": "±3.5V", "why": "simple-oscillators.cpp:67 nChan from getChannels(); :75 getPolyVoltage(c) added as octaves; simple-oscillators.cpp:81 clamp(pitch, -3.5f, 3.5f)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "±3.5V", "why": "simple-oscillators.cpp:79 getPolyVoltage(c)/5.f added to the pitch in octaves; simple-oscillators.cpp:81 clamp(pitch, -3.5f, 3.5f)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "simple-oscillators.cpp:93 getPolyVoltage(c)/100.f added to the knob, then :95 clamp(theta, 0.0001f, 0.1f)"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "simple-oscillators.cpp:108 getVoltage() into dsp::SchmittTrigger, whose default thresholds are 0V low and 1V high (Rack dsp/digital.hpp:107)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "oscillator.cpp:38-55 every waveform is scaled by 5.f; setChannels at simple-oscillators.cpp:68"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "simple-oscillators.cpp:135 setVoltage(isEOC() ? 10.f : 0.f, c)"}
+    }
+  }
+}

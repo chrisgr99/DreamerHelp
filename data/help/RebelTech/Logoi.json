@@ -1,0 +1,42 @@
+{
+  "plugin": "RebelTech",
+  "module": "Logoi",
+  "description": "A clock divider on one side, a clock counter or clock delay on the other, and a fourth output that combines the two",
+  "params": [
+    {"ids": [0], "text": "Sets the division: 1, then every even number up to 64"},
+    {"ids": [1], "text": "In the counting setting, sets how many clocks pass between pulses, 1 to 32; in the delay setting, sets the delay, 0 to 1000ms; in the off setting it does nothing"},
+    {"ids": [2], "text": "Sets how much of the division CV reaches the division knob, none at the far left and the whole of its travel at the far right"},
+    {"ids": [3], "text": "Sets how much of the count-or-delay CV reaches that knob, none at the far left and the whole of its travel at the far right"},
+    {"ids": [4], "text": "Chooses what the right-hand side does: count clocks, delay them, or nothing, and in the off setting the division, count and combined outputs are all held at 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the division knob, 10V covering the whole of its travel at full attenuation"},
+    {"ids": [1], "text": "Adds to the count-or-delay knob, 10V covering the whole of its travel at full attenuation"},
+    {"ids": [2], "text": "A rising edge past 1V restarts the divider, the counter and the delay together"},
+    {"ids": [3], "text": "Advances the divider, the counter and the delay on each rising edge past 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A square wave at the divided rate, flipping between 0V and 10V each time the division count comes round; set to 1 it repeats the clock instead of halving it"},
+    {"ids": [1], "text": "In the counting setting, 10V for one clock each time the count comes round; in the delay setting, the clock pulse repeated after the set delay"},
+    {"ids": [2], "text": "In the counting setting, a pulse once the counter has counted that many of the divider's changes; in the delay setting, the clock with pulses landing on a divider change pushed late, giving a swing"},
+    {"ids": [3], "text": "Carries 10V for as long as the clock input is above its threshold and 0V below it"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched; the module has no clock of its own",
+    "the delay is worked out in blocks of 64 samples rather than one sample at a time, so the delayed edge lands to the nearest block"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only"
+    }
+  }
+}

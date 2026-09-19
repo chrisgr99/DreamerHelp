@@ -1,0 +1,27 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "Echo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "step": "continuous", "why": "echo_vcv.cpp:450 sums every channel of this input as the left audio", "poly": true},
+      "1": {"family": "audio", "step": "continuous", "normal": "the left audio input", "why": "echo_vcv.cpp:451 sums every channel of this input as the right audio, and lines 453 to 470 take the right channel from the left input when nothing is patched here", "poly": true},
+      "2": {"family": "cv", "step": "continuous", "why": "echo_vcv.cpp:1017 reads this input per channel and raises two to the power of the knob plus the attenuated voltage, so at the attenuverter at 100% each volt doubles the delay", "poly": true},
+      "3": {"family": "cv", "step": "continuous", "negative": "subtracts", "sumRange": "±10V", "why": "echo_vcv.cpp:2300 reads this input per channel at half a knob unit per 5V and clamps the total between 0 and 1", "poly": true},
+      "4": {"family": "cv", "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "echo_vcv.cpp:1168 reads this input at one knob unit per 5V and clamps the total between -1 and +1", "poly": true},
+      "5": {"family": "cv", "step": "continuous", "sumRange": "±5V", "negative": "subtracts", "why": "echo_vcv.cpp:2253 reads this input per channel; sapphire_vcvrack.hpp:1094 adds the attenuated voltage over five, times the control's span, to the knob and clamps the total to that span, so ±5V at the attenuverter at 100% covers the whole control, the total held between 0 and 2", "poly": true},
+      "6": {"family": "cv", "step": "continuous", "negative": "subtracts", "sumRange": "±5V", "why": "echo_vcv.cpp:1092 reads this input per channel at one knob unit per 5V and clamps the total between 0 and 1", "poly": true},
+      "7": {"family": "audio", "step": "continuous", "why": "echo_vcv.cpp:1135 reads this input as the left return into the tap", "poly": true},
+      "8": {"family": "audio", "step": "continuous", "normal": "the left return input", "why": "echo_vcv.cpp:1135 reads this input as the right return, taking the left return when nothing is patched here", "poly": true},
+      "9": {"family": "trigger", "step": "stepped", "range": "high above 1V", "normal": "the REV button", "why": "sapphire_vcvrack.hpp:2006 sums every channel of this input into the reverse toggle group, which falls back to the button when nothing is patched; sapphire_vcvrack.hpp:738 reads it high at 1V and low below 0.1V", "poly": true},
+      "10": {"family": "trigger", "step": "stepped", "range": "high above 1V", "normal": "the FREEZE button", "why": "sapphire_vcvrack.hpp:2006 sums every channel of this input into the freeze toggle group, which falls back to the button when nothing is patched; sapphire_vcvrack.hpp:738 reads it high at 1V and low below 0.1V", "poly": true},
+      "11": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "sapphire_vcvrack.hpp:1799 sums every channel of this input into the clear trigger group; sapphire_vcvrack.hpp:738 reads it high at 1V and low below 0.1V", "poly": true},
+      "12": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "echo_vcv.cpp:1025 reads this input per channel into a GateTriggerReceiver that measures the tempo; sapphire_vcvrack.hpp:738 reads it high at 1V and low below 0.1V", "poly": true}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv"}
+    }
+  },
+  "comment": "The two gate-or-trigger port modes are named in the source as \"Reverse/flip input port mode\" and \"Freeze input port mode\", built from the toggle group's menuName plus \" input port mode\"; both appear on the panel menu and on their own input port's menu."
+}

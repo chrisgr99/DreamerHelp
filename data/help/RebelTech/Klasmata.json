@@ -1,0 +1,38 @@
+{
+  "plugin": "RebelTech",
+  "module": "Klasmata",
+  "description": "A Euclidean sequencer: it spreads a chosen number of filled steps as evenly as it can over a chosen length, and walks through them on a clock",
+  "params": [
+    {"ids": [0], "text": "Rotates the pattern around its length, moving where the filled steps fall without changing how many there are"},
+    {"ids": [1], "text": "Sets how many steps the sequence runs before it comes round again, 1 to 32"},
+    {"ids": [2], "text": "Sets what the output does: repeat the voltage at the clock input on a filled step, put out nothing, or flip a 10V gate over every time the pattern changes between filled and empty"},
+    {"ids": [3], "text": "Sets how many of the steps are filled, from one of them to all of them, spread as evenly over the length as the two numbers allow"},
+    {"ids": [4], "text": "Sets how much of the length CV reaches the length, none at the far left and its full 31 steps at the far right"},
+    {"ids": [5], "text": "Sets how much of the fill CV reaches the fill, none at the far left and the whole of the fill knob's travel at the far right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 2V sends the sequence back to the step the rotation knob picks"},
+    {"ids": [1], "text": "Shifts the length, 10V covering all 31 steps at full attenuation, added to the length knob and held between 1 and 32"},
+    {"ids": [2], "text": "Adds to the fill knob, 10V covering the whole of its travel at full attenuation, and the total is held between one filled step and all of them"},
+    {"ids": [3], "text": "Advances the sequence on each rising edge past 2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the sequence, shaped by the mode switch"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched; the module has no clock of its own",
+    "in the repeating setting the output copies the voltage present at the clock input rather than putting out a fixed 10V, so a 5V clock gives a 5V sequence",
+    "on the hardware the mode switch doubles as a reset; in this version it does not"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

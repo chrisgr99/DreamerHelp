@@ -1,0 +1,19 @@
+{
+  "plugin": "forsitan",
+  "module": "interea",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/interea.cpp:80-81, the voltage is added to the frequency parameter, which is itself in volts"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/interea.cpp:101-103, param + getVoltage()/10*4, then clamped to 0..3"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/interea.cpp:105-107, param + getVoltage()/10*4, then clamped to 0..3"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/interea.cpp:95-98, param + getVoltage()/10*4, then clamped to 0..3"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/interea.cpp:129, the root pitch plus the chord interval in twelfths of a volt"},
+      "1": {"family": "pitch"},
+      "2": {"family": "pitch"},
+      "3": {"family": "pitch"}
+    }
+  },
+  "comment": "The three selector knobs are configured 0 to 4 but the result is clamped to 0..3, so the top quarter of each knob's travel is the same setting as the quarter below it. Their CV jacks add four steps per ten volts on top of the knob. The harmonize button is a latch the module toggles itself; with it on, the quality is read from a twelve-entry table indexed by the incoming pitch's semitone (src/interea.cpp:89-94) and both the quality knob and its jack are ignored. configBypass copies the root pitch input to all four outputs. The panel prints V/O, harmon, spread, drop 3, drop 2, close, voicing, third, second, first, root, inversion, halfdim, dom 7, min 7, maj 7, quality, and root, 3rd, 5th and 7th over the outputs."
+}

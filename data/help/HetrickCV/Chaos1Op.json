@@ -1,0 +1,44 @@
+{
+  "plugin": "HetrickCV",
+  "module": "Chaos1Op",
+  "description": "Chaotic signal generator running seven one-parameter maps, at audio rate, as modulation, or stepped from an external clock",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new value is generated; these maps are not periodic, so this is a rate rather than a pitch"},
+    {"ids": [1], "text": "Attenuverter for the Sample Rate CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the single parameter that drives the selected map; low settings can give periodic motion on maps such as Logistic, high settings give noise"},
+    {"ids": [3], "text": "Attenuverter for the Chaos CV input, -1 to +1"},
+    {"ids": [4], "text": "Selects the map: Crackle, Broken Crackle, Ikeda, Logistic, Standard, Tent or Thomas"},
+    {"ids": [5], "text": "Attenuverter for the Mode CV input, -1 to +1"},
+    {"ids": [6], "text": "Fast runs the generator across its full rate range; Slow divides that rate by 100 for modulation speeds"},
+    {"ids": [7], "text": "Stepped jumps to each new value; Slewed interpolates linearly between values, which doubles as a low-pass filter at audio rates"},
+    {"ids": [8], "text": "DC passes the output as generated; AC strips any DC offset out of it"},
+    {"ids": [9], "text": "Inserts fresh random values into the map, restarting it when it has settled or gone silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here generates one new value, replacing the internal rate clock"},
+    {"ids": [1], "text": "A rising edge here restarts the map with fresh random values"},
+    {"ids": [2], "text": "Modulates the generation rate, scaled by the Sample Rate attenuverter"},
+    {"ids": [3], "text": "Modulates the chaos parameter, scaled by the Chaos attenuverter"},
+    {"ids": [4], "text": "Modulates the map selection, scaled by the Mode attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The map's first dimension, -5V to 5V"},
+    {"ids": [1], "text": "The map's second dimension, -5V to 5V; on the one-dimensional maps such as Logistic this carries the negation of Out X"}
+  ],
+  "notes": [
+    "the generation rate is set as a fraction of the patch's own sample rate, so changing the patch's sample rate changes the speed and the sound of what comes out."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · polyphonic",
+      "1": "±5V · polyphonic"
+    }
+  }
+}

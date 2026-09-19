@@ -1,0 +1,47 @@
+{
+  "plugin": "JulioChaos",
+  "module": "JulioLorentz84",
+  "description": "A chaotic oscillator that steps the Lorenz 84 climate equations forward one sample at a time and puts their three coordinates out as three voltages, deterministic but never repeating",
+  "params": [
+    {"ids": [0], "text": "Sets how far the system is stepped forward on each sample, which works like a pitch control; fully counter-clockwise the system stops moving and the outputs go quiet"},
+    {"ids": [1], "text": "Sets the constant b of the equations, from 2.6 to 5, and its effect on the sound is not predictable"},
+    {"ids": [2], "text": "Sets the constant F of the equations, from 7.4 to 10, and its effect on the sound is not predictable"},
+    {"ids": [3], "text": "Sets the constant G of the equations, from 1.3 fully counter-clockwise down to 0.7 fully clockwise, and its effect on the sound is not predictable"},
+    {"ids": [4], "text": "Attenuates and inverts the voltage at the RATE input before it is added to the RATE knob, and at dead centre that input is ignored"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the P1 input before it is added to the P1 knob, and at dead centre that input is ignored"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the P2 input before it is added to the P2 knob, and at dead centre that input is ignored"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the P3 input before it is added to the P3 knob, and at dead centre that input is ignored"},
+    {"ids": [8], "text": "Switches between two speed ranges: unlit the system is stepped six times a sample and RATE reaches 800 steps a second, lit it is stepped once and RATE reaches 100"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the step size away from the RATE knob, through the attenuverter above it; the total is held between stopped and the top of whichever range the HF/LF button is in"},
+    {"ids": [1], "text": "Shifts the constant b away from the P1 knob, through the attenuverter above it; the total is held between 2.6 and 5"},
+    {"ids": [2], "text": "Shifts the constant F away from the P2 knob, through the attenuverter above it; the total is held between 7.4 and 10"},
+    {"ids": [3], "text": "Shifts the constant G away from the P3 knob, through the attenuverter above it; the total is held between 0.7 and 1.3"},
+    {"ids": [4], "text": "Puts the system back to its starting point on each rising edge past 2V, falling ready again below 0.1V; because the system is deterministic that makes it a sync input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the z coordinate of the equations, direct voltage removed, despite the panel printing X; the three outputs are wired across"},
+    {"ids": [1], "text": "Carries the x coordinate of the equations, direct voltage removed, despite the panel printing Y; the three outputs are wired across"},
+    {"ids": [2], "text": "Carries the y coordinate of the equations, direct voltage removed, despite the panel printing Z; the three outputs are wired across"}
+  ],
+  "notes": [
+    "with RATE fully counter-clockwise nothing moves and all three outputs stay at 0V; turn RATE up for any sound at all",
+    "each of the four CV inputs is read through the attenuverter above it, and every attenuverter starts at dead centre, so a cable alone changes nothing until that small knob is turned",
+    "if the system runs away and any coordinate passes 12, the module puts itself back to its starting point without being asked, which is heard as a click"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only"
+    }
+  }
+}

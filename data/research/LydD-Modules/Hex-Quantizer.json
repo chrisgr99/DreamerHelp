@@ -1,0 +1,26 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Hex-Quantizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "Tonnet.cpp:318 asks this input for its channel count and Tonnet.cpp:325 reads every one of them by index"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Tonnet.cpp:367 reads this input with getVoltage(0), which is channel 1 alone, and adds it to the knob in volts"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Tonnet.cpp:371 reads this input with getVoltage(0), which is channel 1 alone"},
+      "3": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Tonnet.cpp:371 reads this input with getVoltage(0), which is channel 1 alone"},
+      "4": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Tonnet.cpp:371 reads this input with getVoltage(0), which is channel 1 alone"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Tonnet.cpp:371 reads this input with getVoltage(0), which is channel 1 alone"},
+      "6": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 7V", "negative": "subtracts", "sumRange": "0 to 7V", "normal": "0V", "why": "Tonnet.cpp:290 reads this input with getVoltage(0), takes its floor and adds it to the knob; Tonnet.cpp:291 clamps the total to 0 and 7"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Tonnet.cpp:373 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Tonnet.cpp:373 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Tonnet.cpp:373 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Tonnet.cpp:373 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Tonnet.cpp:378 writes channel 1 alone and multiplies an 8 millisecond pulse by 10V"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Tonnet.cpp:378 writes channel 1 alone and multiplies an 8 millisecond pulse by 10V"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Tonnet.cpp:378 writes channel 1 alone and multiplies an 8 millisecond pulse by 10V"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Tonnet.cpp:378 writes channel 1 alone and multiplies an 8 millisecond pulse by 10V"}
+    }
+  },
+  "comment": "Read from src/Tonnet.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. With no note enabled the nearest-note search finds nothing and leaves its result at zero (Tonnet.cpp:55 in basic mode, Tonnet.cpp:88 in page mode), so every output reads C. In Page mode the Transpose knob is repurposed as the page selector (Tonnet.cpp:404) and the transposition is frozen at the value held when the mode was switched (Tonnet.cpp:277), which the panel does not say; the hover text changes to read the page number. The hexagon layout offsets five of the twelve notes down an octave and one up, from the table at Tonnet.cpp:18. The Poly In jack merges its notes into whatever the buttons have on, and the merged set is written into the current bank. The module has no right-click menu of its own, so no panel-colour choice. There is no polyphony anywhere except the Poly In jack: no setChannels call exists in the file."
+}

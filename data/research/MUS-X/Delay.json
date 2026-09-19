@@ -1,0 +1,17 @@
+{
+  "plugin": "MUS-X",
+  "module": "Delay",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Delay.cpp:187 reads this input with getVoltageSum, which adds every channel together, multiplies it by 0.1, adds the knob and clamps the total to 0 and 1"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "subtracts", "normal": "0V", "why": "Delay.cpp:202 reads this input with getVoltageSum, which adds every channel together, and multiplies it by 0.3 before adding the knob"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "0V", "why": "Delay.cpp:192 reads this input with getVoltageSum, which adds every channel of a polyphonic cable into one signal"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "Left / Mono", "why": "Delay.cpp:193 reads this input with getVoltageSum and falls back to the left input when it is unconnected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:324 writes channel 1 alone and the module never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:330 writes channel 1 alone and the module never calls setChannels"}
+    }
+  },
+  "comment": "Read from src/Delay.cpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1. The delay time is not a fixed span: Delay.cpp:49 and 50 work the minimum and maximum out from the bucket count, as one and a hundred times the count divided by 256 in milliseconds, so at the default 4096 buckets the knob runs about 16ms to 1600ms and at 256 buckets about 1ms to 100ms. The README says the feedback goes well beyond 100%; the knob is configured 0 to 3 and the figure is then multiplied by 0.7 (Delay.cpp:94 and 202), so unity is reached near 0.48 of the travel. The dry and wet gains are worked out as a constant-power pair either side of the centre (Delay.cpp:324), so both are at full level with Mix in the middle. The module has no context menu of its own."
+}

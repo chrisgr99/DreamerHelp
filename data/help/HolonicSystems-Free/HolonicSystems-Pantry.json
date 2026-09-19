@@ -1,0 +1,49 @@
+{
+  "plugin": "HolonicSystems-Free",
+  "module": "HolonicSystems-Pantry",
+  "description": "Two independent 32-step recorders, each capturing a CV and a gate on every clock and looping them back, polyphonic to sixteen channels",
+  "params": [
+    {"ids": [0, 1], "text": "Records the CV and gate inputs of that side for one full loop length, then stops on its own"},
+    {"ids": [2, 3], "text": "Records the CV and gate inputs of that side over the existing loop for as long as it is held down"},
+    {"ids": [4, 5], "text": "Erases the CV and gate of all 32 steps of that side, on every polyphonic channel, the moment it is pressed rather than on a clock"},
+    {"ids": [6, 7], "text": "Sets the loop length of that side in steps, a reading of 0 giving one step and 31 the longest the knob reaches"},
+    {"ids": [8, 9], "text": "Moves the play and record position of that side through the 32-step buffer, 0 to 31 steps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances both recorders by one step on a rising edge; recording and the outputs move only on this edge"},
+    {"ids": [1], "text": "A rising edge sets both recorders back to their first step"},
+    {"ids": [2, 3], "text": "A rising edge records the CV and gate inputs of that side for one full loop length, then stops on its own"},
+    {"ids": [4, 5], "text": "Records the CV and gate inputs of that side over the existing loop while this gate is high, reading high at 1V and low again at 0.5V"},
+    {"ids": [6, 7], "text": "A rising edge erases the CV and gate of all 32 steps of that side, on every polyphonic channel"},
+    {"ids": [8, 9], "text": "Moves the play and record position of that side on by one step per volt, added to the shift knob"},
+    {"ids": [10, 11], "text": "Lengthens the loop of that side by one step per volt, added to the length knob, with 32 steps the limit"},
+    {"ids": [12, 13], "text": "The CV recorded into that side; its channel count, or the gate input's, sets how many polyphonic channels are recorded and played back"},
+    {"ids": [14, 15], "text": "The gate recorded into that side, stored as whatever voltage is present when the clock arrives"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The recorded CV of that side at the current step, renewed on each clock"},
+    {"ids": [2, 3], "text": "The recorded gate of that side at the current step, renewed on each clock"}
+  ],
+  "notes": [
+    "Both recorders move only on a rising edge at the clock input, so with nothing patched there the outputs never change, and nothing is recorded however the record buttons are used",
+    "A side plays back as many polyphonic channels as are patched to its cv and gate inputs at that moment, so unpatching them leaves its outputs carrying nothing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "14": "stepped",
+      "15": "stepped"
+    },
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

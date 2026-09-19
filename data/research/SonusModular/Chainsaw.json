@@ -1,0 +1,20 @@
+{
+  "plugin": "SonusModular",
+  "module": "Chainsaw",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:89 reads this input with getVoltage and adds it to the knob; chainsaw.cpp:90 clamps the sum to -4 to 4 octaves"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:108 and :111 read this input with getVoltage and divide it by 5 before adding it to that oscillator's shape knob; the two halves of the mix are each clamped to 0 to 1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:94 reads this input with getVoltage and divides it by 5 before adding it to that oscillator's tune knob, with no clamp"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:108 and :111 read this input with getVoltage and divide it by 5 before adding it to that oscillator's shape knob; the two halves of the mix are each clamped to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:94 reads this input with getVoltage and divides it by 5 before adding it to that oscillator's tune knob, with no clamp"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:108 and :111 read this input with getVoltage and divide it by 5 before adding it to that oscillator's shape knob; the two halves of the mix are each clamped to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "chainsaw.cpp:94 reads this input with getVoltage and divides it by 5 before adding it to that oscillator's tune knob, with no clamp"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "why": "chainsaw.cpp:124 tests this input for anything other than exactly 0V, as a level rather than an edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "chainsaw.cpp:122 writes this output with setVoltage and no channel index, as the sum of three oscillators times five thirds"}
+    }
+  },
+  "comment": "Each oscillator's frequency is C4 times two to the power of the shared pitch plus its own CV over 5 plus its own tune knob (chainsaw.cpp:94), so the tune knob is an octave either way and the tune CV an octave per 5V. The shape mix is built at chainsaw.cpp:108 to :114: turning the knob negative brings in the phase to the fourth power, turning it positive brings in the ninth root, and the middle is the plain ramp. Align is a level, not an edge: it holds the phases together for as long as it is on (chainsaw.cpp:124 to :128)."
+}

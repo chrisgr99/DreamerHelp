@@ -1,0 +1,37 @@
+{
+  "plugin": "CVfunk",
+  "module": "Strings",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Strings.cpp:483 reads it with getVoltage, so only channel 1, and adds it to the chord knob as one step per volt; Strings.cpp:502 reads the same jack as a volt per octave when CHORD input in V/oct is on"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Strings.cpp:473 reads it with getVoltage, so only channel 1, and adds it to the row knob as one step per volt"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Strings.cpp:464 reads it with getVoltage, so only channel 1, adds it to the capo knob and takes the whole number of semitones"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "Strings.cpp:629 reads it with getVoltage, so only channel 1, and exclusive-ors anything above 0.05V with the first bank button"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "Strings.cpp:630 reads it with getVoltage, so only channel 1, and exclusive-ors anything above 0.05V with the second bank button"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V", "why": "Strings.cpp:674 reads it with getVoltage, so only channel 1, scales it to a tenth of a semitone per volt and Strings.cpp:675 takes its absolute value"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V", "why": "Strings.cpp:463 reads it with getVoltage, so only channel 1, scales it to a fifth of a semitone per volt and takes its absolute value"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Strings.cpp:692 sets six channels on this output when it is the only string output patched; Strings.cpp:696 writes one channel instead when any of the other five is patched"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Strings.cpp:696 writes one channel with setVoltage"},
+      "2": {"family": "pitch"},
+      "3": {"family": "pitch"},
+      "4": {"family": "pitch"},
+      "5": {"family": "pitch"},
+      "6": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Strings.cpp:702 sets six channels on this output when it is the only mute output patched; Strings.cpp:706 writes one channel instead when any of the other five is patched"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Strings.cpp:706 writes one channel with setVoltage, 10V or 0V"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Strings.cpp:606 writes one channel with setVoltage, the chord root plus the capo"},
+      "13": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Strings.cpp:906 writes one channel with setVoltage, 10V for a one-millisecond pulse"}
+    }
+  },
+  "comment": "Both bend inputs are passed through an absolute value (Strings.cpp:463, Strings.cpp:675), so a negative voltage bends the pitch up just as a positive one does. A string the current fingering mutes is not silenced at the pitch output: it carries the chord's root a semitone below (Strings.cpp:686), and the mute gate is what marks it. The first string output and the first mute output become six-channel polyphonic cables only while none of their five companions is patched (Strings.cpp:661)."
+}

@@ -1,0 +1,20 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Chirp",
+  "unplaced": [
+    "The ends of the sweep; V/O1 and V/O2 are 1V/octave inputs added to them",
+    "Starts one sweep; LOOP repeats them"
+  ],
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Chirp.cpp:35 channels() reads getChannels() here; :68 adds clamp(getPolyVoltage(c),-5,5) as volts per octave"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Chirp.cpp:75 adds clamp(getPolyVoltage(c),-5,5) as volts per octave"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Chirp.cpp:59 clamp(getPolyVoltage(c)/10,0,1)"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Chirp.cpp:86 getPolyVoltage(c) into a bogaudio Trigger, thresholds 1V and 0.1V in rack_overrides.hpp:13"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "Chirp.cpp:112-113 setChannels(_channels) then a per-channel 5V end-of-cycle pulse"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "Chirp.cpp:96 and 110-111 write the chirp times 5V per channel after setChannels(_channels), attenuated by the internal amplitude ramp"}
+    }
+  }
+}

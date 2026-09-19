@@ -1,0 +1,56 @@
+{
+  "plugin": "NOI",
+  "module": "Pruners",
+  "description": "A ring buffer written continuously and read by four heads, each with its own output and all of them summed to a mix, with controls for buffer length, read position, speed and the ratio between heads",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the four heads are summed into the mix output, over 1 to 4; all four head outputs sound whatever this is set to"},
+    {"ids": [1], "text": "Scales the head CV before it is added, up to 1 head per volt in either direction"},
+    {"ids": [2], "text": "Sets the length of the ring buffer the heads sweep, from a fraction of a millisecond to 3.9 seconds"},
+    {"ids": [3], "text": "Scales the size CV before it is added, up to 1.4 seconds per volt in either direction"},
+    {"ids": [4], "text": "Sets the speed of each head against the one before it, over -4 to 4; at 0 all four heads run at one speed, and either extreme makes each head five times faster or slower than the last"},
+    {"ids": [5], "text": "Scales the ratio CV before it is added, up to 2 of ratio per volt in either direction"},
+    {"ids": [6], "text": "Sets the speed of the first head, over -4 to 4, where 1 is the rate the buffer is written at, 0 leaves the head in place and negative values read backwards"},
+    {"ids": [7], "text": "Scales the speed CV before it is added, up to 2 of speed per volt in either direction"},
+    {"ids": [8], "text": "Sets how much of the mix is written back into the ring buffer, over 0 to 1; at its very top the buffer stops taking new input and freezes"},
+    {"ids": [9], "text": "Scales the feedback CV before it is added, up to 2 of feedback per volt in either direction"},
+    {"ids": [10], "text": "Offsets where in the ring buffer the heads read, over a whole buffer length in either direction; the offset is smoothed, so moving it glides rather than jumps"},
+    {"ids": [11], "text": "Scales the position CV before it is added, up to half a buffer per volt in either direction"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the head count through its attenuverter; the total is clamped to 1 and 4"},
+    {"ids": [1], "text": "Adds to the buffer length through its attenuverter; the total is clamped to 0.0001 and 3.9 seconds"},
+    {"ids": [2], "text": "Adds to the ratio through its attenuverter; the total is clamped to -4 and 4"},
+    {"ids": [3], "text": "Adds to the read speed through its attenuverter; the total is clamped to -4 and 4"},
+    {"ids": [4], "text": "Adds to the feedback through its attenuverter; the total is clamped to 0 and 1, and reaching 1 freezes the buffer"},
+    {"ids": [5], "text": "Adds to the read offset through its attenuverter; the total is clamped to a whole buffer length in either direction"},
+    {"ids": [6], "text": "The signal written into the ring buffer, summed with the feedback and passed through a 20Hz high-pass before it is stored"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "What the first head is reading from the ring buffer, running at the speed the speed control sets; its level is corrected for how fast it runs"},
+    {"ids": [1, 2, 3], "text": "What that head is reading from the ring buffer, running at the speed of the head before it scaled by the ratio control; its level is corrected for how fast it runs"},
+    {"ids": [4], "text": "The heads the head count takes in, summed and divided by that count"}
+  ],
+  "notes": [
+    "Every CV input has its own attenuverter and all six start at 0, so no CV input does anything until its attenuverter is turned up.",
+    "The ring buffer is eight seconds long whatever the size control says; the size control chooses how much of it the heads sweep.",
+    "The lamp lights while the feedback has reached its maximum and the buffer is frozen."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    }
+  }
+}

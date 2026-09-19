@@ -1,0 +1,34 @@
+{
+  "plugin": "modular80",
+  "module": "Logistiker",
+  "description": "A chaotic CV generator running the logistic map, r times x times one minus x, one step per clock, with x sent out as a voltage.",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock, 0.25Hz at the bottom of the travel to 64Hz at the top; nothing reads it while a cable is in EXT CLOCK, and the tooltip prints the exponent rather than the rate."},
+    {"ids": [1], "text": "Sets the r term of the equation, 0 to 8; the default 3.56995 is where the map turns chaotic."},
+    {"ids": [2], "text": "Sets the value x is put back to by a reset, 0 to 0.5."},
+    {"ids": [3], "text": "Puts x back to the value set by the X0 knob, taking effect at the next clock step rather than at once."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One rising edge advances the map a step, and a cable here takes the place of the internal clock."},
+    {"ids": [1], "text": "A rising edge puts x back to the value set by the X0 knob, at the next clock step."},
+    {"ids": [2], "text": "Adds to the R knob, one unit of r per volt, the two together held between 0 and 8."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current value of x, 0V to 10V."}
+  ],
+  "notes": [
+    "The module computes nothing at all while the output jack is unpatched.",
+    "The internal clock runs on its own, so the map steps along with no clock cable patched.",
+    "x is held between 0.00001 and 1, which keeps the map from settling on zero for good when r is low."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 8V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 8V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

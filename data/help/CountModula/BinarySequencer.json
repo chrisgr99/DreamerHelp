@@ -1,0 +1,45 @@
+{
+  "plugin": "CountModula",
+  "module": "BinarySequencer",
+  "description": "Sequencer built on a binary counter, mixing the counter's bits together in whatever proportions the knobs set to make a repeating control voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "How much that bit of the counter adds to the output voltage, from -10 to +10, so a bit can pull the voltage down as well as push it up"},
+    {"ids": [6], "text": "Sets the largest voltage the mix can reach, 2V, 5V or 10V, divided equally across the six division knobs"},
+    {"ids": [7], "text": "Rate of the internal clock, doubling per volt of knob travel from 0.125Hz at one end to 128Hz at the other"},
+    {"ids": [8], "text": "Slews the output voltage so that it glides between steps rather than jumping"},
+    {"ids": [9], "text": "Shapes the glide, linear at one end and logarithmic at the other"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A clock patched here advances the counter and replaces the internal clock"},
+    {"ids": [1], "text": "A rising edge sets the counter back to zero; with nothing patched here the counter is instead reset by the rising edge of the RUN input"},
+    {"ids": [2], "text": "A high gate lets the sequencer run and a low gate stops it, holding the output at 0V; with nothing patched the sequencer runs"},
+    {"ids": [3], "text": "A voltage sampled at each rising clock edge, used in place of the SCALE switch as the total the division knobs share, each knob at full reaching a sixth of it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The mixed division knobs as a voltage, after the LAG and SHAPE controls have worked on it"},
+    {"ids": [1], "text": "The mixed output voltage with its sign flipped"},
+    {"ids": [2], "text": "Carries the internal clock, or the signal at the EXT. CLOCK input when one is patched"},
+    {"ids": [3], "text": "A 1ms trigger for every clock pulse"}
+  ],
+  "menu": [
+    "Initialize Division Mix Only — puts the six division knobs back to their default positions and leaves the rest of the module as it is",
+    "Randomize Division Mix Only — sets the six division knobs to random positions and leaves the rest of the module as it is",
+    "Add CV expander — places a Sequencer CV Expander to the right of this module",
+    "Add output expander — places a Sequencer Output Expander to the right of this module",
+    "Add trigger expander — places a Sequencer Trigger Expander to the right of this module",
+    "Add random melody expander — places a Gated Comparator Random Melody expander to the right of this module",
+    "Add logic expander — places a Gated Comparator Gate Logic expander to the right of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

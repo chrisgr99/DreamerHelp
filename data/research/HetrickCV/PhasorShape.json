@@ -1,0 +1,14 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorShape",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorShape.cpp:92 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorShape.cpp:86 clamps the knob plus this CV to plus or minus 5V"},
+      "2": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorShape.cpp:88 multiplies this voltage by modeDepth, the Shape Mode CV Depth attenuverter times 9/5 (:79), adds it to the mode knob, and :89 truncates the sum to an int clamped to 0 to 9"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorShape.cpp:81 and 96 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the shaped phasor times HCV_PHZ_UPSCALE; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"}
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "LADR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "LADR.cpp:106 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "LADR.cpp:117 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "LADR.cpp:74 getChannels() here sets the loop bound; LADR.cpp:127 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "LADR.cpp:133 setVoltage(..., ii) per channel, LADR.cpp:137 setChannels(channels)"}
+    }
+  },
+  "comment": "Feedback amount is ladder.cpp:217, fb = 6.0f * Resonance. Output compensation is LADR.cpp:90, gainNormalization = 1 + 2 * log(1 + 0.45 * reso), applied at :133 along with a fixed factor of 3. Unlike SVF-1 and SKF there is no compensation tied to the GAIN knob."
+}

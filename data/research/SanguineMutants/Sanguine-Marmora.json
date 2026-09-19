@@ -1,0 +1,29 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Marmora",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:516 divides this input by 5, adds the knob and clamps the total to 0..1"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:555 divides this input by 5, adds the knob and clamps the total to 0..1"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.7V", "why": "marmora.cpp:314 tests this input against 1.7V with getVoltage() alone"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "why": "marmora.cpp:514 divides this input by 5, adds the knob and multiplies the sum by 60 into the clock rate"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:518 divides this input by 5, adds the knob and clamps the total to 0..1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:484 divides this input by 5, adds the knob and clamps the total to 0..1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:556 divides this input by 5, adds the knob and clamps the total to 0..1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "marmora.cpp:554 divides this input by 5, adds the knob and clamps the total to 0..1; marmora.cpp:592 reads the same jack as a sampled voltage while a scale is being taught"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.7V", "why": "marmora.cpp:318 tests this input against 1.7V with getVoltage() alone"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "marmora.cpp:342 passes this input to a Rack SchmittTrigger, whose default high threshold is 1V"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "marmora.cpp:343 passes this input to a Rack SchmittTrigger, whose default high threshold is 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "marmora.cpp:355 writes the gate multiplied by 10"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "marmora.cpp:356 writes 10V while the master ramp is in its first half"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "marmora.cpp:357 writes the gate multiplied by 10"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "why": "marmora.cpp:280 writes the fourth voltage of each block, which the Marbles code produces across -5V to 5V"},
+      "4": {"family": "cv", "poly": false, "why": "marmora.cpp:359 writes the first of the three X voltages, whose range follows the X range button"},
+      "5": {"family": "cv", "poly": false, "why": "marmora.cpp:360 writes the second of the three X voltages, whose range follows the X range button"},
+      "6": {"family": "cv", "poly": false, "why": "marmora.cpp:361 writes the third of the three X voltages, whose range follows the X range button"}
+    }
+  },
+  "comment": "The DSP is Émilie Gillet's Marbles, vendored unchanged at eurorack/marbles; src/marmora.cpp is the Rack wrapper. Every jack is read with getVoltage() and written with setVoltage(), so the module is monophonic. The two clock inputs read high at 1.7V, marmora.cpp:314 and marmora.cpp:318, while the two reset inputs go through Rack SchmittTriggers at marmora.cpp:342 and marmora.cpp:343, whose default high threshold is 1V; neither figure is in the manual. The X spread input does three jobs: it offsets the spread knob at marmora.cpp:554, it supplies the sampled voltage in external processing mode at marmora.cpp:548, and it supplies the note being taught while a scale is being edited at marmora.cpp:592. The manual's control diagram numbers the X external clock input as 10 in one place and 12 in another; the panel has one such jack."
+}

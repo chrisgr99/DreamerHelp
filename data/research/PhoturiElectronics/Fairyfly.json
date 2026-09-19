@@ -1,0 +1,21 @@
+{
+  "plugin": "PhoturiElectronics",
+  "module": "Fairyfly",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Fairyfly.cpp:51-53 adds this jack's plain getVoltage to the knob and clamps the total to 0 and 10 before the exponential that sets both the hop rate and the output level"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "Fairyfly.cpp:74-92 gives position 0 the value 0.1, and line 120 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 7.5V", "why": "Fairyfly.cpp:74-92 gives position 1 the value 0.15, and line 121 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Fairyfly.cpp:74-92 gives position 2 the value 0.2, and line 122 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 12.5V", "why": "Fairyfly.cpp:74-92 gives position 3 the value 0.25, and line 123 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 15V", "why": "Fairyfly.cpp:74-92 gives position 4 the value 0.3, and line 124 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 17.5V", "why": "Fairyfly.cpp:74-92 gives position 5 the value 0.35, and line 125 multiplies it by 50 and by the brightness factor, which is at most 1"},
+      "6": {"family": "cv", "poly": false, "why": "Fairyfly.cpp:134 writes the size figure times a counter of 1 to 6 with a plain setVoltage; no clamp bounds it"},
+      "7": {"family": "cv", "poly": false, "why": "Fairyfly.cpp:135 writes the size figure times the brightness factor with a plain setVoltage; no clamp bounds it"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "Rate law: brightness is exp(-pitch) where pitch is the knob plus the Clock voltage clamped to 0 and 10, and the hop interval is 2 raised to eight times brightness, divided by ten (Fairyfly.cpp:51-66). That gives 25.6 seconds at 0 and 0.1 seconds at the top, and the same brightness factor scales the six outputs, so the module is loud and slow at one end and fast and nearly silent at the other. The 25.6 and the six output voltages are computed from the constants at those lines rather than being stored as literals. SIZE OUT and WINGS OUT divide by fireflyPosition (line 132), which is zero one hop in six, so both jacks carry an infinity while the walk is at the first output unless the size knob is at its lowest step; with the counter behind SIZE OUT also negative the product is undefined. The counter at line 69 is taken modulo six after a signed subtraction, so it can go negative, and the switch that turns it into 1 to 6 leaves it at 0 when it does. The maker's own summary calls the module a clock divider; the Clock jack sets a rate and no edge in it is read at all. None of the three knobs is labelled on the panel."
+}

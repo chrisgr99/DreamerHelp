@@ -1,0 +1,55 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "ASEQ",
+  "description": "Sixteen step sequencer built to be re-rolled: one button scatters the whole sequence, another varies which steps play, a third changes a few of the voltages",
+  "params": [
+    {"ids": [0], "text": "Rolls a whole new sequence: Dens sets how many steps play, and each step has the chance set by Hold of keeping its voltage"},
+    {"ids": [1], "text": "Sets how many steps the sequence runs through, 2 to 16"},
+    {"ids": [2], "text": "Sets how many of the steps play after a dice roll, 2 to 16"},
+    {"ids": [3], "text": "Sets how far a new random voltage can reach from the middle of the range, 0.1V to 10V"},
+    {"ids": [4], "text": "The chance that a step keeps its voltage through a dice roll, 0 to 100%"},
+    {"ids": [5], "text": "Switches some playing steps to resting and some resting steps to playing, as many of each as Add and Rm ask for"},
+    {"ids": [6], "text": "Sets how many resting steps a variation switches to playing, 0 to 6"},
+    {"ids": [7], "text": "Sets how many playing steps a variation switches to resting, 0 to 6"},
+    {"ids": [8], "text": "Gives new random voltages to a few playing steps, as many as the No knob sets"},
+    {"ids": [9], "text": "Sets how many steps a modulation gives new voltages to, 0 to 16"},
+    {"ids": [10], "text": "Returns to the first step and brings back the last stored sequence, dropping every variation and modulation"},
+    {"ids": [11], "text": "Moves on to the next step"},
+    {"ids": [12], "text": "Stores the sequence as it stands now, so a reset comes back to it"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28], "text": "Sets the voltage its step puts out, within the range picked in the menu; clicking the knob switches that step between playing and resting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on to the next step"},
+    {"ids": [1], "text": "A rising edge returns to the first step and brings back the last stored sequence, dropping every variation and modulation"},
+    {"ids": [2], "text": "A rising edge rolls a whole new sequence, as the Dice button does"},
+    {"ids": [3], "text": "A rising edge gives new random voltages to a few playing steps, as the Mod button does"},
+    {"ids": [4], "text": "A rising edge varies which steps play, as the Var button does"},
+    {"ids": [5], "text": "A rising edge stores the sequence as it stands now, so a reset comes back to it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Passes the clock through while the step the sequence has reached is playing, and stays at 0V on a resting step"},
+    {"ids": [1], "text": "The voltage of the step the sequence has reached"}
+  ],
+  "notes": [
+    "the sequence comes up with every step resting and every voltage at zero: click a knob to switch its step to playing, or press Dice to roll a whole sequence"
+  ],
+  "menu": [
+    "Range — sets the span of the step knobs; the symmetric choices run -10V to 10V down to -1V to 1V, where it starts, and the positive ones 0V to 1V up to 0V to 10V",
+    "Quantize — rounds the output to the nearest semitone",
+    "Hold CV on Rest — holds the last voltage through resting steps in place of reading them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "one channel only"
+    }
+  }
+}

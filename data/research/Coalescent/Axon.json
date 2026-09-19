@@ -1,0 +1,19 @@
+{
+  "plugin": "Coalescent",
+  "module": "Axon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/neuron/Axon.cpp:319 pitchKnob + getPolyVoltageSimd(); :243 getChannels() sets the voice count"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/neuron/Axon.cpp:283 getPolyVoltageSimd()*att*0.1 added to the knob"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/neuron/Axon.cpp:278 clamp(knob+getPolyVoltageSimd()*att*0.1, 0.01, 0.30)"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/neuron/Axon.cpp:306 trigIn4.process(getPolyVoltageSimd(), 0.1f, 1.f); :244 getChannels() sets the voice count"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/neuron/Axon.cpp:299 syncIn4.process(getPolyVoltageSimd(), 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/neuron/Axon.cpp:381 5.f*fastTanh(highpass); :245 setChannels()"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "src/neuron/Axon.cpp:378 trigger(1e-3f) and :409 10V; :246 setChannels()"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "src/neuron/Axon.cpp:406 clamp(w*2.5, -5, 5); :247 setChannels()"}
+    }
+  },
+  "comment": "The voice count is taken from V/OCT and TRIG only (Axon.cpp:243). A polyphonic cable into a CV or SYNC jack alone does not add voices, though its channels are read once the count is set from elsewhere. Voices above the current count keep their state frozen rather than being reset."
+}

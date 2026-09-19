@@ -1,0 +1,18 @@
+{
+  "plugin": "Coalescent",
+  "module": "GENDYN",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/GENDYN.cpp:431 getVoltage()*att*0.1 added to the knob, clamp(0,1); docs/gendyn.md CV table"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/GENDYN.cpp:437 getVoltage()*att*0.1 added to the SCALE DUR knob, clamp(0,1); docs/gendyn.md CV table"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/GENDYN.cpp:443 getVoltage()*att*0.1 added to the B AMP knob, clamp(0,1); docs/gendyn.md CV table"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/GENDYN.cpp:449 getVoltage()*att*0.1 added to the B DUR knob, clamp(0,1); docs/gendyn.md CV table"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/GENDYN.cpp:517 setVoltage(dcBlock.highpass()*5.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/GENDYN.cpp:520-521 and :588 cycleTrigger.trigger(1e-3f), 10V"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/GENDYN.cpp:383 clamp(log2(sr/period/FREQ_C4),-5,5)"}
+    }
+  },
+  "comment": "All nine CV-fed parameters are read with getVoltage(), not getPolyVoltage(), so the module is monophonic despite the plugin's other modules being polyphonic. The manual's CV table states the four CV inputs are ±5V; the code applies no clamp to the jack itself, scaling volts by 0.1 through the attenuverter and clamping only the knob-plus-CV sum to the parameter's 0 to 1, so ±10V reaches the full range. The manual writes the fourth CV input as B DUR CV where the panel prints B WID; the maker's own port name is \"Duration barrier CV\" and the knob above it is \"Frequency barrier width\" — they are the same control, described from the duration side and the frequency side."
+}

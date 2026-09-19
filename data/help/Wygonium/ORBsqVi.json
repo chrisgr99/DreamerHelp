@@ -1,0 +1,70 @@
+{
+  "plugin": "Wygonium",
+  "module": "ORBsqVi",
+  "description": "Algorithmic CV sequencer: it walks a circular orbit through a field of two-dimensional noise, samples that orbit at a chosen number of points, and plays those points as steps whenever it is clocked",
+  "params": [
+    {"ids": [0], "text": "Sets which steps are taken off the main output and sent to the filtered one, 1 to 16 of them; the middle of its travel takes none and the two sides pick opposite sets of steps"},
+    {"ids": [1], "text": "Sets how many points the orbit is sampled at, 2 to 16; it does not shorten the sequence but samples the same circle more or less finely, so a change alters every step"},
+    {"ids": [2], "text": "Sets where in the noise field the orbit is centred, 1 to 10; moving it gives an entirely different sequence, and the module recalculates every step when it changes"},
+    {"ids": [3], "text": "Sets how wide the orbit is, 1 to 10, doubling the radius for every 1 it adds: at the bottom every step is nearly the same value, at the top they cover the field"},
+    {"ids": [4], "text": "Sets how far each step slides away from its noise value as the orbit creeps round, forward above the centre and backwards below; centred, nothing drifts"},
+    {"ids": [5], "text": "Sets the voltage the noise range is spread over, 0 to 5; it comes up at 0, which silences all three CV outputs until it is raised"},
+    {"ids": [6], "text": "Multiplies the rate at which the orbit creeps round, 1 to 10"},
+    {"ids": [7], "text": "Rotates the Euclidean filter pattern around the sequence; it is held below the step count, and it does nothing while the filter style is on ALG"},
+    {"ids": [8], "text": "Chooses how the drift is spread across the steps, printing Sphere, Hemisphere and Flat; on Flat every step moves together, and the other two add a sine offset that grows across the sequence"},
+    {"ids": [9], "text": "Chooses the range the outputs are mapped into, printing -5V to +5V, 0V to +10V and 0V to +5V"},
+    {"ids": [10], "text": "Chooses how the filter picks steps, printing Euclidean for an evenly spread pattern and Noise Algo for a pick made from each step's own value"},
+    {"ids": [11], "text": "Turns the sign of every step's noise value over, and the lamp is lit while that is on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger moves the sequence on one step and it wraps round to the first after the last; it fires above 2V and rearms below 0.01V"},
+    {"ids": [1], "text": "A trigger sends the sequence back to its first step; it fires above 2V and rearms below 0.01V"},
+    {"ids": [2], "text": "Takes the BASE slider over while a cable is in it: 1V to 10V sets the value directly, the slider is dragged to match and cannot be moved by hand"},
+    {"ids": [3], "text": "Takes the RANGE slider over while a cable is in it: 1V to 10V sets the value directly, the slider is dragged to match and cannot be moved by hand"},
+    {"ids": [4], "text": "Takes the DRIFT slider over while a cable is in it: 0 to 10V is spread across the whole travel, so 5V is the centre, and the slider is dragged to match"},
+    {"ids": [5], "text": "Takes the AMP slider over while a cable is in it: 0 to 10V spans the whole travel, and the slider is dragged to match"},
+    {"ids": [7], "text": "Takes the FILTER slider over while a cable is in it: 0 to 10V is spread across the whole travel, so 5V is the centre, and the slider is dragged to match"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Holds the voltage of the last step that the filter left alone, until the next such step"},
+    {"ids": [1], "text": "A 1ms 10V pulse on each step that the filter leaves alone"},
+    {"ids": [2], "text": "Holds the voltage of the last step the filter took, until the next such step"},
+    {"ids": [3], "text": "A 1ms 10V pulse on each step that the filter takes"},
+    {"ids": [4], "text": "Holds the voltage of the sequence's first step, refreshed each time the sequence comes round to it"},
+    {"ids": [5], "text": "A 1ms 10V pulse each time the sequence comes round to its first step"}
+  ],
+  "notes": [
+    "AMP comes up at 0 and every step's voltage is multiplied by it, so a newly placed module puts out 0V on all three CV jacks until AMP is raised",
+    "the module has no clock of its own: nothing moves until a trigger arrives at TRIG IN",
+    "INVERT comes up on. The button rests at a value the module reads as a press on its first sample, so a newly placed module has the lamp lit and every step's sign turned over; one press clears it",
+    "a cable in any of the five CV jacks takes that slider over: the voltage is written into the parameter, so the slider moves on its own and ignores the mouse until the cable comes out",
+    "a step whose voltage would pass ±5V is folded back rather than clipped, so turning AMP up past the point where the noise reaches the rails bends the shape instead of flattening it",
+    "the steps are only recalculated when BASE, RANGE or STEPS change, and that is the costly part of the module; driving BASE or RANGE from an LFO makes it work far harder",
+    "the screen draws the whole sequence as a row of steps with the current one marked, showing the voltages after drift and AMP, so it moves as the orbit creeps even between triggers"
+  ],
+  "menu": [
+    "Drift Main Steps — lets the drift move the steps the filter leaves alone; it is on",
+    "Drift Filtered Steps — lets the drift move the steps the filter takes; it is on",
+    "Drift Drone — lets the drift move the drone step; it is on",
+    "Reset also resets Drift — makes a trigger at RESET IN put the orbit's creep back to where it started as well as the step counter; it is off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "±5V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "±5V · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

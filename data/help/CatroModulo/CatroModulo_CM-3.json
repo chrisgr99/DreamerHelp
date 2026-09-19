@@ -1,0 +1,76 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-3",
+  "description": "Eight dials whose values can be stored in eight slots and played back, either by choosing a slot by hand or by stepping through the slots in one of sixteen patterns",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Stores all eight direct values into that slot when pressed, replacing what was there"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the direct value for that output between -1 and +1, and with a cable in its input attenuates that voltage instead"},
+    {"ids": [16], "text": "Chooses one of sixteen step orders for the sequencer, named on the pattern display, the sixteenth of them picking a slot at random on every step"},
+    {"ids": [17], "text": "Crosses each output between its direct dial value and its stored one: centre gives the direct value, the clockwise end the stored value, the counter-clockwise end the two multiplied"},
+    {"ids": [18], "text": "Sets how many steps the sequencer runs before returning to the first, 1 to 16, shown on the length display"},
+    {"ids": [19], "text": "Fills all eight slots with fresh random values when pressed, losing whatever was stored; the dials themselves are left where they are"},
+    {"ids": [20], "text": "Blends between neighbouring slots as the select knob is turned instead of snapping to one; it changes nothing while the sequencer is running"},
+    {"ids": [21], "text": "Chooses which of the eight stored slots feeds the outputs, and with the scan switch on it blends between neighbouring slots instead of snapping to one; it is read only while the sequencer is off"},
+    {"ids": [23], "text": "Turns the step sequencer on and off; with it off the select knob chooses the slot and the pattern display reads OFF"},
+    {"ids": [24], "text": "Sends the sequencer back to its first step and restarts the internal clock when pressed"},
+    {"ids": [25], "text": "Advances the sequencer one step when pressed"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Stores all eight direct values into that slot on a rising edge; any voltage away from zero counts as high"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Multiplies that dial by a tenth of this voltage, so 10V gives the dial's own setting and a patched cable at 0V holds that direct value at zero"},
+    {"ids": [16], "text": "Multiplies the pattern knob by a tenth of this voltage, so 10V gives the knob's own pattern and a patched cable at 0V forces the first one"},
+    {"ids": [17], "text": "Advances the sequencer one step on a rising edge; any voltage away from zero counts as high, and this jack is ignored while a tempo is patched to the bpm input"},
+    {"ids": [18], "text": "Adds to the morph slider, 10V moving it a full step from direct to stored"},
+    {"ids": [19], "text": "Sends the sequencer back to its first step and restarts the internal clock on a rising edge; any voltage away from zero counts as high"},
+    {"ids": [20], "text": "Multiplies the length knob by a tenth of this voltage, so 10V gives the knob's own length and a patched cable at 0V forces a length of one"},
+    {"ids": [21], "text": "Multiplies the select knob by a tenth of this voltage, so 10V gives the knob's own slot and a patched cable at 0V forces the first slot"},
+    {"ids": [22], "text": "Runs the sequencer from a tempo instead of the step jack, one step per beat, 1V for every 60 bpm, where the maker's manual says 1V for every 50 bpm"},
+    {"ids": [23], "text": "Fills all eight slots with fresh random values on a rising edge, losing whatever was stored"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The direct value of that dial crossed with the stored one by the morph slider, scaled to ±10V"}
+  ],
+  "notes": [
+    "the eight slots start empty and the eight dials start at zero, so every output reads 0V until a dial is turned; a slot is filled only by its record button or a trigger at its jack",
+    "two of the sixteen patterns put a rest between steps, and on a rest all eight outputs drop to 0V",
+    "the small white dot beside each dial shows the value coming out of the chosen slot and the yellow ring shows which slot that is; both are drawn by the module and neither can be clicked for help"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only",
+      "1": "high above 0V · stepped · one channel only",
+      "2": "high above 0V · stepped · one channel only",
+      "3": "high above 0V · stepped · one channel only",
+      "4": "high above 0V · stepped · one channel only",
+      "5": "high above 0V · stepped · one channel only",
+      "6": "high above 0V · stepped · one channel only",
+      "7": "high above 0V · stepped · one channel only",
+      "8": "0 to 10V · continuous · one channel only",
+      "9": "0 to 10V · continuous · one channel only",
+      "10": "0 to 10V · continuous · one channel only",
+      "11": "0 to 10V · continuous · one channel only",
+      "12": "0 to 10V · continuous · one channel only",
+      "13": "0 to 10V · continuous · one channel only",
+      "14": "0 to 10V · continuous · one channel only",
+      "15": "0 to 10V · continuous · one channel only",
+      "16": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "17": "high above 0V · stepped · one channel only",
+      "18": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "19": "high above 0V · stepped · one channel only",
+      "20": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "21": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "22": "unipolar · continuous · one channel only\n\na negative voltage does nothing here.",
+      "23": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only",
+      "7": "one channel only"
+    }
+  }
+}

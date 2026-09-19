@@ -1,0 +1,40 @@
+{
+  "plugin": "aridacity",
+  "module": "Clip",
+  "description": "A hard clipper with an outer limit the signal cannot pass and an inner limit it is either pushed outside of or pulled to silence inside",
+  "params": [
+    {"ids": [0], "text": "Chooses what the inner limit does to a signal inside it: Pull sets that signal to 0V, and Push moves it out to the upper edge when it is positive and to the lower edge when it is negative"},
+    {"ids": [1], "text": "Switches the outer limit on and off; with it off the signal leaves at whatever level the gain and the inner limit give it, which can be larger than the signal that came in"},
+    {"ids": [2], "text": "Multiplies the signal before either limit is applied, from silence at the counter-clockwise end to twice at the clockwise end"},
+    {"ids": [3], "text": "Sets how far the inner limit reaches either side of its centre, 0V at the counter-clockwise end to 10V at the clockwise end"},
+    {"ids": [4], "text": "Sets how far the outer limit reaches either side of its centre, 0V at the counter-clockwise end to 10V at the clockwise end, with 5V at the middle of its travel"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be clipped; the number of channels on the cable here sets the number of channels at the output"},
+    {"ids": [1], "text": "Adds to the gain knob, 0.1 of a multiplication per volt, so 10V here doubles what the knob gives"},
+    {"ids": [2], "text": "Widens the inner limit by 0.5V per volt, added to whatever the push knob gives"},
+    {"ids": [3], "text": "Moves the centre of the inner limit away from 0V, one volt of movement per volt"},
+    {"ids": [4], "text": "Widens the outer limit by 0.5V per volt, added to whatever the limit knob gives"},
+    {"ids": [5], "text": "Moves the centre of the outer limit away from 0V, one volt of movement per volt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clipped signal, carrying as many channels as the cable at the input"}
+  ],
+  "notes": [
+    "each limit is measured either side of its own centre, so a position input moves the whole window rather than one edge, and a wide offset inner limit can push a signal well away from 0V.",
+    "the inner limit is applied first and the outer limit second, so the outer limit catches anything the inner one pushed out."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

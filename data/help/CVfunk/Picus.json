@@ -1,0 +1,47 @@
+{
+  "plugin": "CVfunk",
+  "module": "Picus",
+  "description": "A trigger burst sequencer: seven stages run one after another, each lasting a whole number of clock beats and packing a whole number of evenly spaced triggers into them",
+  "params": [
+    {"ids": [0, 4, 8, 12, 16, 20, 24], "text": "Takes one off that stage's beat count on each press, down to none, at which the stage stays silent while keeping its length"},
+    {"ids": [1, 5, 9, 13, 17, 21, 25], "text": "Adds one to that stage's beat count on each press, up to 99, which is how many triggers are packed into the stage"},
+    {"ids": [2, 6, 10, 14, 18, 22, 26], "text": "Takes one off that stage's cycle count on each press, down to none, at which the stage is skipped altogether"},
+    {"ids": [3, 7, 11, 15, 19, 23, 27], "text": "Adds one to that stage's cycle count on each press, up to 99, which is how many clock beats the stage lasts"},
+    {"ids": [28, 29, 30, 31, 32, 33, 34, 35, 36, 37], "text": "Steps that pattern position through don, ka and off on each press, which is where the trigger at that position is sent"},
+    {"ids": [38, 39, 40, 41, 42, 43, 44], "text": "Jumps the sequence to that stage on the next clock beat"},
+    {"ids": [45], "text": "Sets the length of the pattern, 1 to 10 steps, rounded up"},
+    {"ids": [46], "text": "Attenuverts the pattern length CV before it is added to the pattern knob"},
+    {"ids": [47], "text": "Sets whether the sequence runs: OFF holds every output low, ON runs it round and round, and ONE-SHOT stops it at the end of the seventh stage"},
+    {"ids": [48], "text": "Returns the sequence to the first stage and the pattern to its first step on each press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the sequence by one beat; it also reads the three chaining levels another CV funk clock sends, at 10.42V, 10.69V and 10.86V"},
+    {"ids": [1], "text": "A rise returns the sequence to the first stage and the pattern to its first step"},
+    {"ids": [2], "text": "Changes the pattern length, added to the pattern knob through its attenuverter, the total rounded up and clamped to 1 to 10"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V trigger every time the pattern step reached is set to don"},
+    {"ids": [1], "text": "A 1ms 10V trigger every time the pattern step reached is set to ka"},
+    {"ids": [2], "text": "A 1ms 10V trigger at the end of the whole sequence, or at the end of each stage on the menu setting"}
+  ],
+  "notes": [
+    "nothing runs until a clock is patched and the play switch is away from OFF; the stage lengths are measured in clock beats, so the module has no tempo of its own",
+    "a stage with no cycles is skipped entirely, and a stage with cycles but no beats holds its length in silence; the first stage cannot be skipped, its cycle count being held at one or more"
+  ],
+  "menu": [
+    "END outputs pulse at — chooses whether the END output fires once at the end of the whole sequence or at the end of every stage, the choice shown beside the item as sequence end or stage end",
+    "Pattern resets — chooses whether the pattern returns to its first step at the end of every stage or only on a reset, shown beside the item as at stage end or only upon reset"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 1 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

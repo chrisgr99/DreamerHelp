@@ -1,0 +1,18 @@
+{
+  "plugin": "eightfold",
+  "module": "SDFormation",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "why": "src/SDFormation.cpp:80 scales it by the attenuverter and by the knob's span over ten, adds it to the SPREAD knob and clamps the total to that knob's range"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "why": "src/SDFormation.cpp:80 scales it by the attenuverter and by the knob's span over ten, adds it to the TILT knob and clamps the total to that knob's range"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "src/SDFormation.cpp:101 rescales the voltage from 0.1V and 2V into 0 and 1 and feeds trigIn, a dsp::SchmittTrigger at its default 0 and 1 thresholds, so a rising edge past 2V rolls a new random value; :100 reads it only while a cable is in"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "why": "src/SDFormation.cpp:80 scales it by the attenuverter and by the knob's span over ten, adds it to the RANDOM knob and clamps the total to that knob's range"},
+      "4": {"poly": false, "step": "continuous", "why": "src/SDFormation.cpp:90 reads it with getVoltage() and no channel index, multiplies it by the gain knob and adds the offset knob"}
+    },
+    "outputs": {
+      "0": {"poly": true, "step": "continuous", "why": "src/SDFormation.cpp:140 calls setChannels(8) and the loops above write one voltage per channel"},
+      "1": {"poly": true, "step": "continuous", "why": "src/SDFormation.cpp:141 calls setChannels(8) and the loops above write the same eight voltages at index 7 minus the voice number"}
+    }
+  },
+  "comment": "No family is written for INPUT, OUT or REV: the module fans out whatever voltage it is given and gives it no meaning of its own. getCombinedValue at src/SDFormation.cpp:77 is what makes 10V cover a knob's whole span — the CV is multiplied by the attenuverter and by (max - min) / 10 before being added, then the total is clamped to the knob's own range. The centred setting uses a per-voice tilt factor built from tiltMin 0.255 (src/SDFormation.cpp:35) rather than the straight-line factor the up and down settings use. The eight random numbers are uniform 0 to 1 and are stored in the patch (src/SDFormation.cpp:144)."
+}

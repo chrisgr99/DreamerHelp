@@ -1,0 +1,61 @@
+{
+  "plugin": "CVfunk",
+  "module": "Strings",
+  "description": "A guitar chord source: twenty-eight chords laid out in four rows of seven, each played as six string pitches with a mute gate per string, plus a capo, a whammy bar and a per-string pitch bend",
+  "params": [
+    {"ids": [0], "text": "Picks which of the seven chords in the current row is played, 1 to 7"},
+    {"ids": [1], "text": "Picks which of the four rows of chords is used, 1 to 4"},
+    {"ids": [2], "text": "Switches the first of the two alternative fingering banks on each press, which changes every chord's voicing"},
+    {"ids": [3], "text": "Switches the second of the two alternative fingering banks on each press, which changes every chord's voicing"},
+    {"ids": [4], "text": "Transposes every string in semitones, -12 to 12, the way a capo does"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], "text": "Plays that chord on each press, setting both the row and the chord within it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Picks the chord within the current row, one step per volt, added to the chord knob; the menu can read it as a volt per octave instead"},
+    {"ids": [1], "text": "Picks the row, one step per volt, added to the row knob"},
+    {"ids": [2], "text": "Transposes every string in semitones, one semitone per volt, added to the capo knob and taken as a whole number"},
+    {"ids": [3], "text": "A voltage above 0.05V flips the first fingering bank from whatever its button has it at, rather than replacing it"},
+    {"ids": [4], "text": "A voltage above 0.05V flips the second fingering bank from whatever its button has it at, rather than replacing it"},
+    {"ids": [5, 6, 7, 8, 9, 10], "text": "Bends that string sharp, a tenth of a semitone per volt, taken as an absolute value so a negative voltage bends sharp as well"},
+    {"ids": [11], "text": "Bends every string sharp at once, a fifth of a semitone per volt, taken as an absolute value so a negative voltage bends sharp as well"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "That string's pitch as a volt per octave, with the capo, the whammy bar and that string's bend added; a muted string carries the chord's root a semitone below instead"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "Carries 10V while that string is muted in the current fingering and 0V while it sounds, which the menu can turn the other way round"},
+    {"ids": [12], "text": "The root of the current chord as a volt per octave, with the capo added"},
+    {"ids": [13], "text": "A 1ms 10V trigger whenever the chord changes"}
+  ],
+  "notes": [
+    "a cable in the first string output alone makes it a six-channel polyphonic cable; patching any of the other five turns them all back to one channel, and the mute outputs behave the same",
+    "the two chord bank buttons work together, so the four combinations of them give four fingerings of each chord; the panel display names the fingering each combination gives",
+    "the strings a chord does not use are not silent: they carry the chord's root a semitone below, so the mute output is what says which strings to play"
+  ],
+  "menu": [
+    "Classical Chord Set — swaps the whole grid of twenty-eight chords for a second set",
+    "CHORD input in V/oct — reads the chord input as a volt per octave, picking the chord from a note rather than one step per volt",
+    "Invert Mute Gate Outputs — makes each mute output carry 10V while its string sounds and 0V while it is muted"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "unipolar · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "11": "unipolar · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous",
+      "5": "1V per octave · continuous",
+      "6": "0 to 10V · polyphonic",
+      "7": "0 to 10V · one channel only",
+      "12": "1V per octave · continuous · one channel only",
+      "13": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-sequencer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "Seq.h:275 reads channel one of this input, and SeqClock.h:112 puts it into a GateTrigger, whose thresholds are 0.8V and 1.6V (sqsrc/util/Constants.h:6 and :11)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "Seq.h:278 reads channel one of this input, and SeqClock.h:89 puts it into a GateTrigger, whose thresholds are 0.8V and 1.6V (sqsrc/util/Constants.h:6 and :11)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "Seq.h:243 reads channel one of this input into a GateTrigger, whose thresholds are 0.8V and 1.6V (sqsrc/util/Constants.h:6 and :11)"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 5V", "step": "stepped", "why": "StepRecordInput.h:63 reads this input up to its channel count and takes each channel as high above 5V"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "StepRecordInput.h:71 stores this jack's matching channel, unrounded, as the pitch of the note; :64 the channel count and the moment come from the GATE jack crossing 5V, and MidiEditor.cpp:285 writes that voltage straight to the cursor pitch in 1V/octave units"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Seq.h:293 sets the channel count of this output from the voice count, and :193 writes a pitch per voice"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Seq.h:294 sets the channel count of this output from the voice count, and :181 writes 10V or 0V per voice"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Seq.h:167-169 writes 10V or 0V to channel one of this output"}
+    }
+  },
+  "comment": "Params 1, 2, 6 and 8 hold the tempo, an unused run and stop setting, the audition setting and the remote-edit flag, and have no control on the panel. The Gate and CV inputs are read only while step record is on (Seq.h:260-262)."
+}

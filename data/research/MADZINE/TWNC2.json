@@ -1,0 +1,26 @@
+{
+  "plugin": "MADZINE",
+  "module": "TWNC2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/TWNC2.cpp:334, clamp(getVoltage()/10, 0, 1)"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/TWNC2.cpp:335, clamp(getVoltage()/10, 0, 1)"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TWNC2.cpp:361-369, pow(2, freqParam + getVoltage()) clamped to 24Hz..500Hz"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC2.cpp:351-359, kickFmAmount += getVoltage()/10*20, clamp(0, 20)"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC2.cpp:341-349, kickPunchAmount += getVoltage()/10, clamp(0, 1)"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/TWNC2.cpp:379, clamp(getVoltage()/10, 0, 1)"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC2.cpp:384-392, snareNoiseMix += getVoltage()/10, clamp(0, 1)"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/TWNC2.cpp:425, clamp(getVoltage()/10, 0, 1)"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC2.cpp:434-441, hatsDecay += getVoltage()/10, clamp(0, 1)"},
+      "9": {"family": "audio", "poly": false, "range": "±10V", "why": "src/TWNC2.cpp:466, a single getVoltage() multiplied by the sidechain"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/TWNC2.cpp:424, the voice quantised to a 1024-step grid, with no clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio", "poly": false, "why": "src/TWNC2.cpp:470-476, the sum soft-limited above 5V rather than clamped"},
+      "4": {"family": "audio"}
+    }
+  },
+  "comment": "The maker's own one-line description in plugin.json calls this a 'Three-track Euclidean drum machine with drum synthesis', and the README repeats it, but there is no sequencer, no clock jack and no Euclidean code in the module: the three voices are played entirely from envelopes patched into the ENV jacks (src/TWNC2.cpp:334, 379, 425). Input 8 is the only port the maker never named, so its tooltip is blank; it is the hats decay CV, read at src/TWNC2.cpp:434 and placed under the DECAY label of the hats row. The kick is multiplied by its accent voltage as well as by its envelope (src/TWNC2.cpp:376), so with nothing at the accent jack the kick is silent however hard the envelope is driven. The duck law is 1 - accent/10 * duck * 3 with no floor, applied to the snare and the external input in full and to the hats between 0.8 and 1.0 (src/TWNC2.cpp:337, 409, 459). The hats noise is run through the snare's own band-pass filter object rather than one of its own (src/TWNC2.cpp:447). The panel prints BD, VOL, ENV, ACCNT in brackets, TUNE, FM, PUNCH, CV three times, SN, VOL, ENV, N.BPF, TUNE, N.MIX twice, HH, VOL, ENV, TONE, DECAY twice, EXT, then BD, SN, HH, DUCK in brackets, L and R. Lettering is drawn in code at src/TWNC2.cpp:495-593."
+}

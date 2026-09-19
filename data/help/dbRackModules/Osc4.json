@@ -1,0 +1,37 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc4",
+  "description": "A classic oscillator whose wave moves smoothly from triangle through saw to square, with the aliasing suppressed",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -4 to 4 as a power of two around middle C, which is about 16Hz to 4186Hz"},
+    {"ids": [1], "text": "Scales the voltage at the FM jack, 0 to 300 per cent"},
+    {"ids": [2], "text": "While on, the FM jack is added to the frequency in hertz rather than to the pitch in octaves, which gives through-zero frequency modulation"},
+    {"ids": [3], "text": "Sets the wave, 0 to 1: a triangle at 0, a saw at 0.3, a square at 0.6, and from 0.6 upward a square whose width narrows"},
+    {"ids": [4], "text": "Attenuates the voltage at the Wave CV jack before it is added to the Wave knob, 0 to 100 per cent"},
+    {"ids": [5], "text": "While on, a sync signal nudges the phase rather than forcing it back to the start, which is softer"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "Modulates the frequency through the FM knob; with Lin off it is added to the pitch in octaves, and with Lin on it is added to the frequency itself, which lets it pass through zero"},
+    {"ids": [2], "text": "Modulates the wave, a tenth per volt scaled by the Wave CV knob"},
+    {"ids": [3], "text": "Forces the phase back to the start of the cycle when the voltage here rises, one channel per voice"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave, -5V to 5V, with its constant offset removed"}
+  ],
+  "notes": [
+    "the wave is worked out sixteen times over per sample and filtered, which keeps the square and saw settings from aliasing",
+    "the Wave CV jack is read on one channel only, so every voice gets the same wave shape"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

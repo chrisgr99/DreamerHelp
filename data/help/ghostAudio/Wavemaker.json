@@ -1,0 +1,47 @@
+{
+  "plugin": "ghostAudio",
+  "module": "Wavemaker",
+  "description": "An oscillator giving sine, triangle, sawtooth and pulse from one phase at the same time, with a white noise source beside them, and frequency, amplitude and pulse width modulation inputs",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency, five octaves either side of C4 at 261.63Hz"},
+    {"ids": [1], "text": "Sets the duty cycle of the SQR output, an even square at the centre and a narrowing pulse towards either end; the other four outputs take no notice of it"},
+    {"ids": [2], "text": "Attenuates and inverts the pulse width modulation voltage before it shifts the duty cycle of the SQR output, and at the centre that voltage changes nothing"},
+    {"ids": [3], "text": "Scales the frequency modulation voltage, 5V moving the frequency by 261.63Hz at the clockwise end; turned counter-clockwise past the centre it inverts the modulation"},
+    {"ids": [4], "text": "Sets how far the amplitude modulation voltage controls the level, from no effect at the counter-clockwise end to the voltage setting the level outright at the clockwise end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Transposes the oscillator at one volt per octave, added to the FREQ knob"},
+    {"ids": [1], "text": "Shifts the duty cycle of the SQR output, 10V moving it by half the full width at the clockwise end of its attenuverter, and the result is held between 1% and 99%"},
+    {"ids": [2], "text": "Modulates the frequency, scaled by the FM knob; the shift is added to the frequency rather than multiplied by it, so a large enough negative voltage runs the oscillator backwards"},
+    {"ids": [3], "text": "Resets the oscillator's phase to zero on each rising edge past 1V, which is hard sync, and the SYNC lamp flashes for 0.15 seconds each time"},
+    {"ids": [4], "text": "Sets the level of the SIN, TRI, SAW and SQR outputs, scaled by the AM knob, with 10V full and 0V silent at the clockwise end of that knob; the NOIS output is left alone"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A sine wave at ±5V"},
+    {"ids": [1], "text": "A triangle wave at ±5V, its two corners rounded by polyBLAMP so they do not alias"},
+    {"ids": [2], "text": "A sawtooth wave at ±5V, its step smoothed by polyBLEP so it does not alias"},
+    {"ids": [3], "text": "A pulse wave at ±5V whose duty cycle comes from the PW knob and the pulse width modulation input, with both its edges smoothed by polyBLEP"},
+    {"ids": [4], "text": "White noise at ±5V, a fresh random value every sample, unrelated to the oscillator's frequency and phase and untouched by the amplitude modulation"}
+  ],
+  "notes": [
+    "the four oscillator waveforms come from a single phase, so they are always at the same frequency and all restart together at a sync pulse",
+    "a waveform is worked out only while something is patched into its output, so outputs left empty cost no processing",
+    "the FM lamp brightens with the frequency modulation voltage multiplied by the depth set on the FM knob, and stays dark while the FM jack is empty"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads full level, the modulation switched off."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only"
+    }
+  }
+}

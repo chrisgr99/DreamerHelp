@@ -1,0 +1,72 @@
+{
+  "plugin": "AlliewayAudio_Freebies",
+  "module": "chilly_cheese",
+  "description": "A digital copy of Mannequins' Cold Mac: a crossfader, an OR and AND pair, a rectifier, an envelope follower, a wavefolder, an integrator and a mixer, tied together by normalling and one big knob",
+  "params": [
+    {"ids": [0], "text": "Feeds the FADE, OR2, AND2 and SLOPE inputs while nothing is patched to them, as 0 to 1 for FADE and as -5V to 5V for the other three, and sets the level of the CHEESE mixer"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the MACRO knob, 10V covering its whole travel for the FADE normalling, and adds volt for volt to the -5V to 5V that knob sends to OR2, AND2 and SLOPE; both totals are clamped"},
+    {"ids": [1], "text": "Sets the crossfade, -5V putting the LEFT input on the LEFT output and 5V putting it on the RIGHT output; with nothing patched the MACRO knob does this over its own travel"},
+    {"ids": [2], "text": "LEFT input — one end of the crossfade, and one of the six signals in the CHEESE mixer; with nothing patched it reads -5V"},
+    {"ids": [3], "text": "Adds volt for volt to both the LEFT and RIGHT outputs after the crossfade, before those outputs are clamped to -5V and 5V"},
+    {"ids": [4], "text": "RIGHT input — the other end of the crossfade, and one of the six signals in the CHEESE mixer; with nothing patched it reads 5V"},
+    {"ids": [5], "text": "The second signal into the OR comparison; with nothing patched the MACRO knob supplies it as -5V to 5V"},
+    {"ids": [6], "text": "The first signal into the OR comparison, which also feeds the AND1 input and the CHEESE mixer; with nothing patched it reads 0V"},
+    {"ids": [7], "text": "The second signal into the AND comparison; with nothing patched the MACRO knob supplies it as -5V to 5V"},
+    {"ids": [8], "text": "The first signal into the AND comparison, and one of the six signals in the CHEESE mixer; with nothing patched the OR1 input supplies it"},
+    {"ids": [9], "text": "SLOPE input — rectified for the SLOPE output and followed for the FOLLOW output, and it also feeds CREASE and the CHEESE mixer; the MACRO knob supplies it unpatched"},
+    {"ids": [10], "text": "CREASE input — folded for the CREASE output and integrated for the LOCATION output, and one of the six in the CHEESE mixer; the SLOPE input supplies it unpatched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "LEFT output — the crossfade, carrying the LEFT input with FADE at -5V and the RIGHT input with FADE at 5V, plus OFFSET, clamped to -5V and 5V"},
+    {"ids": [1], "text": "RIGHT output — the other side of the crossfade, carrying the RIGHT input with FADE at -5V and the LEFT input with FADE at 5V, plus OFFSET, clamped to -5V and 5V"},
+    {"ids": [2], "text": "Whichever of OR1 and OR2 is the higher voltage at that moment, clamped to -5V and 5V"},
+    {"ids": [3], "text": "Whichever of AND1 and AND2 is the lower voltage at that moment, clamped to -5V and 5V"},
+    {"ids": [4], "text": "SLOPE output — the SLOPE input rectified, so a negative voltage comes out positive, reading 0V to 5V"},
+    {"ids": [5], "text": "The rectified SLOPE input through a one-pole lowpass at 5Hz and multiplied by 1.5, an envelope follower reading 0V to 10V"},
+    {"ids": [6], "text": "CREASE output — the CREASE input folded: 5V is taken off a positive voltage and added to a negative one, so 0V comes out as -5V and 5V comes out as 0V"},
+    {"ids": [7], "text": "The CREASE input added up over time, an integrator that climbs while CREASE is positive and falls while it is negative, and stops at -5V and 5V"},
+    {"ids": [8], "text": "The LEFT, RIGHT, OR1, AND1, SLOPE and CREASE inputs mixed with the DC taken out of each, scaled by the MACRO knob and soft clipped, approaching 10V"}
+  ],
+  "notes": [
+    "every jack is normalled from another one, so the module puts out voltage with nothing patched at all: turning MACRO alone moves the OR, AND, SLOPE, FOLLOW, CREASE and LOCATION outputs.",
+    "the CHEESE mixer takes the inputs and not the outputs: LEFT and RIGHT before the crossfade, OR1 and AND1 rather than the OR and AND results, and SLOPE and CREASE before rectifying and folding.",
+    "the LOCATION integrator adds the CREASE voltage once per sample without allowing for the sample rate, so it travels twice as fast at 96kHz as at 48kHz.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "menu": [
+    "Default Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 25000 each sample, and is the setting a new module takes",
+    "Glacial Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 300000 each sample, the slowest of the six",
+    "Sluggish Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 115200 each sample",
+    "Slowish Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 50000 each sample",
+    "Quickish Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 12500 each sample",
+    "Snappy Location Speed — makes the LOCATION integrator add the CREASE voltage divided by 6250 each sample, the fastest of the six"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the MACRO knob; the knob and this input are summed and the total held to ±5V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads -5V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads the MACRO knob as -5V to 5V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads the MACRO knob as -5V to 5V.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads the OR1 input.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads the MACRO knob as -5V to 5V.",
+      "10": "±5V · continuous · one channel only\n\nunpatched it reads the SLOPE input."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · one channel only",
+      "3": "±5V · one channel only",
+      "4": "0 to 5V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "±5V · one channel only",
+      "7": "±5V · one channel only",
+      "8": "±10V · continuous · one channel only"
+    }
+  }
+}

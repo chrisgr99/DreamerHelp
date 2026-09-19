@@ -1,0 +1,78 @@
+{
+  "plugin": "Sparkette",
+  "module": "RAM40964",
+  "description": "A 64 by 64 grid of memory four planes deep, written and read at addresses given as voltages and shown on a lamp display, with the same memory offered to an expander placed immediately to its left",
+  "params": [
+    {"ids": [0], "text": "Adds to the X part of every address, 0 to 63 columns, and sets the whole X address on its own while nothing is patched to the X jacks"},
+    {"ids": [1], "text": "Adds to the Y part of every address, 0 to 63 rows, and sets the whole Y address on its own while nothing is patched to the Y jacks"},
+    {"ids": [2], "text": "Scales what is written into plane 0, 0 to 1, and sets the value written there on its own while nothing is patched to that plane's input, 0V to 10V"},
+    {"ids": [3], "text": "Scales what is written into plane 1, 0 to 1, and sets the value written there on its own while nothing is patched to that plane's input, 0V to 10V"},
+    {"ids": [4], "text": "Scales what is written into plane 2, 0 to 1, and sets the value written there on its own while nothing is patched to that plane's input, 0V to 10V"},
+    {"ids": [5], "text": "Scales what is written into plane 3, 0 to 1, and sets the value written there on its own while nothing is patched to that plane's input, 0V to 10V"},
+    {"ids": [6], "text": "Sets where the extra channels of a polyphonic write land when only one address is given: +0 puts them all in the same cell, +1 steps one cell along, +64 steps one row down"},
+    {"ids": [7], "text": "Chooses whether the row of channel lamps reports the cells being read or the cells being written"},
+    {"ids": [8], "text": "Chooses what the display shows: P3 shows plane 3 alone in green and red, RGB shows planes 0, 1 and 2 as red, green and blue, HSV shows those same three as hue, saturation and value"},
+    {"ids": [9], "text": "Scales the brightness of the whole display, 0 to 100 per cent, without changing anything stored"},
+    {"ids": [10], "text": "Chooses whether a write happens only while the write jack is above 0.5V, or on every sample whatever that jack reads"},
+    {"ids": [11], "text": "Sends the phasor input to the write address as well as the read address, which happens only while both write address jacks are empty; the lamp lights while it is happening"},
+    {"ids": [12], "text": "Sets every cell of all four planes to 0V, and springs back when released"},
+    {"ids": [13], "text": "Sets what may write to plane 0: Read-only lets nothing write, Write via DMA lets only an expander write, Read/write lets this module's own jacks write as well"},
+    {"ids": [14], "text": "Sets what may write to plane 1: Read-only lets nothing write, Write via DMA lets only an expander write, Read/write lets this module's own jacks write as well"},
+    {"ids": [15], "text": "Sets what may write to plane 2: Read-only lets nothing write, Write via DMA lets only an expander write, Read/write lets this module's own jacks write as well"},
+    {"ids": [16], "text": "Sets what may write to plane 3: Read-only lets nothing write, Write via DMA lets only an expander write, Read/write lets this module's own jacks write as well"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the X part of the read address, 0V to 10V across the 64 columns, added to the X knob; every channel patched here reads its own cell"},
+    {"ids": [1], "text": "Sets the Y part of the read address, 0V to 10V down the 64 rows, added to the Y knob; every channel patched here reads its own cell"},
+    {"ids": [2], "text": "Sets every cell of all four planes to 0V on each rising edge above 1V"},
+    {"ids": [3], "text": "Writes on each channel reading above 0.5V, and how many channels are patched here sets how many cells may be written at once"},
+    {"ids": [4], "text": "The voltage written into plane 0, multiplied by that plane's trimpot; its channels are written to the write addresses in turn"},
+    {"ids": [5], "text": "The voltage written into plane 1, multiplied by that plane's trimpot; its channels are written to the write addresses in turn"},
+    {"ids": [6], "text": "The voltage written into plane 2, multiplied by that plane's trimpot; its channels are written to the write addresses in turn"},
+    {"ids": [7], "text": "The voltage written into plane 3, multiplied by that plane's trimpot; its channels are written to the write addresses in turn"},
+    {"ids": [8], "text": "Sets the X part of the write address, 0V to 10V across the 64 columns, added to the X knob"},
+    {"ids": [9], "text": "Sets the Y part of the write address, 0V to 10V down the 64 rows, added to the Y knob"},
+    {"ids": [10], "text": "Reads a 0V to 10V ramp as a position through all 4096 cells, row by row, and breaks it into the X and Y phasor outputs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The value stored in plane 0 at the read address, one channel for each address being read"},
+    {"ids": [1], "text": "The value stored in plane 1 at the read address, one channel for each address being read"},
+    {"ids": [2], "text": "The value stored in plane 2 at the read address, one channel for each address being read"},
+    {"ids": [3], "text": "The value stored in plane 3 at the read address, one channel for each address being read"},
+    {"ids": [4], "text": "The X part of the position the phasor input has reached, 0V to 10V across the 64 columns"},
+    {"ids": [5], "text": "The Y part of the position the phasor input has reached, 0V to 10V down the 64 rows"}
+  ],
+  "notes": [
+    "the memory comes up empty and the display stays dark until something is written; a write needs an address, a value from a data jack or a plane trimpot, and a plane switched to Read/write",
+    "with the read address jacks empty and the write address jacks patched, the read address follows the write address, so what was written can be read straight back",
+    "this module offers its four planes to an expander as four memory channels, reached by an Accessor or DMA-FX placed immediately to its left",
+    "a write also needs the write jack above 0.5V, or the write switch set to write always"
+  ],
+  "menu": [
+    "Fade lights — lets each lamp of the display slide towards its new colour instead of jumping to it, at the cost of redrawing the whole grid every 128 samples",
+    "Save memory contents — writes all four planes into the patch file, so what is stored comes back when the patch is loaded"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · polyphonic\n\nunpatched it reads the X knob alone; a negative voltage subtracts from the knob.",
+      "1": "0 to 10V · stepped · polyphonic\n\nunpatched it reads the Y knob alone; a negative voltage subtracts from the knob.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 0.5V · stepped · polyphonic\n\nunpatched it reads no write unless the write switch says always; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads ten times the plane trimpot.",
+      "5": "0 to 10V · continuous · polyphonic\n\nunpatched it reads ten times the plane trimpot.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads ten times the plane trimpot.",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads ten times the plane trimpot.",
+      "8": "0 to 10V · stepped · polyphonic\n\nunpatched it reads the read address; a negative voltage subtracts from the knob.",
+      "9": "0 to 10V · stepped · polyphonic\n\nunpatched it reads the read address; a negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

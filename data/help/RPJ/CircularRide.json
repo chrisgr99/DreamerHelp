@@ -1,0 +1,53 @@
+{
+  "plugin": "RPJ",
+  "module": "CircularRide",
+  "description": "A stereo delay with three delay lines, 2 seconds of delay each, a shared feedback path and filters in that path.",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time of the left line, 0 to 2 seconds, starting at 250ms."},
+    {"ids": [1], "text": "Sets the delay time of the centre line, 0 to 2 seconds, starting at 250ms; the LCRDelay algorithm is the one that reads it."},
+    {"ids": [2], "text": "Sets the delay time of the right line, 0 to 2 seconds, starting at 250ms."},
+    {"ids": [3], "text": "Sets how much of the delayed signal is returned to the delay lines, 0 to 100%, starting at 50%."},
+    {"ids": [4], "text": "Sets the right delay time as a proportion of the left one, 0 to 100%, starting at 50%."},
+    {"ids": [5], "text": "Sets the level of the unprocessed input in the output, -60dB to 12dB, starting at -3dB."},
+    {"ids": [6], "text": "Sets the level of the delayed signal in the output, -60dB to 12dB, starting at -3dB."},
+    {"ids": [7, 9], "text": "Steps through the four delay algorithms: Normal, a plain stereo delay; PingPong, which crosses the channels; LCRDelay, a left, centre and right delay with feedback on the centre only; and TapDelay."},
+    {"ids": [10], "text": "Chooses where the right delay time comes from: Left+Ratio takes it from the left time scaled by the ratio, Left+Right takes each side from its own knob."},
+    {"ids": [11], "text": "Sets the corner frequency of the low pass filter in the feedback path, 20Hz to 20480Hz, starting at 452Hz."},
+    {"ids": [12], "text": "Sets the corner frequency of the high pass filter in the feedback path, 20Hz to 20480Hz, starting at 452Hz."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left input to the delay."},
+    {"ids": [1], "text": "The right input to the delay."},
+    {"ids": [2], "text": "Measures the time between one trigger above 2V and the next, and sets all three delay times to that interval."},
+    {"ids": [3, 4, 5], "text": "Scales the delay time its knob sets; 10V gives the whole of it and lower voltages shorten it in proportion."},
+    {"ids": [6], "text": "Scales the ratio the knob sets; 10V gives the whole of it and lower voltages reduce it in proportion."},
+    {"ids": [7], "text": "Scales the feedback the knob sets; 10V gives the whole of it and lower voltages reduce it in proportion."},
+    {"ids": [8], "text": "Nothing in the module reads this jack; the feedback percentage it is written into is overwritten by the Feedback knob on the next line of the code."},
+    {"ids": [9], "text": "Scales the corner frequency of the feedback low pass; 10V gives the frequency its knob sets, lower voltages a lower one."},
+    {"ids": [10], "text": "Scales the wet level the knob sets; 10V gives the whole of it and lower voltages reduce it in proportion."},
+    {"ids": [11], "text": "Scales the corner frequency of the feedback high pass; 10V gives the frequency its knob sets, lower voltages a lower one."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output of the delay."},
+    {"ids": [1], "text": "The right output of the delay."}
+  ],
+  "notes": [
+    "TapDelay adds three more taps to each channel, at a quarter, a half and three quarters of the delay time.",
+    "while a cable is in the sync jack the three delay time knobs and their CV inputs are ignored, and all three delay times follow the interval between triggers."
+  ],
+  "menu": [
+    "Enable Low Pass Filter — switches the low pass filter in the feedback path in and out; it starts switched on.",
+    "Enable High Pass Filter — switches the high pass filter in the feedback path in and out; it starts switched on."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "high above 2V · stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

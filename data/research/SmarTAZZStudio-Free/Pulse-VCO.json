@@ -1,0 +1,17 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Pulse-VCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Pulse-VCO.cpp: getChannels() on this jack sets the output channel count and the loop bound, and freq = pitch_param * pow(2.f, getVoltage(idx)) per channel, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Pulse-VCO.cpp: freq_mod = getVoltage() with no channel argument, used as freq + freq * freq_mod * attn * 0.5f and then held to 10Hz to 20000Hz, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Pulse-VCO.cpp: phase_mod = getVoltage() with no channel argument, used as phase_param + phase_mod * attn * 0.1f, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Pulse-VCO.cpp: volume_mod = getVoltage() with no channel argument, used as volume_param + volume_mod * attn * 0.1f with no clamp, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Pulse-VCO.cpp: pulsewidth_mod = getVoltage() with no channel argument, used as 0.01f * pulsewidth_param + pulsewidth_mod * attn * 0.1f, which is read only in the band-unlimited branch of STS_My_Pulse, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "Pulse-VCO.cpp: setChannels then setVoltage(volume_out * STS_My_Pulse(...), idx), the pulse returning 5.0f or -5.0f and the table being scaled to a 5V peak, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "STS_My_Pulse reads pulse_width only in its band-unlimited branch; the band-limited branch returns a table built from sin(j * x) / j over odd j, which is a fixed 50 per cent square, so the Pulse knob and the PW-In jack are inert whenever Band is set to Limited. The pulse-width attenuator runs 0 to 1, unlike the other three attenuators which run -1 to 1. The pitch knob is linear in Hz."
+}

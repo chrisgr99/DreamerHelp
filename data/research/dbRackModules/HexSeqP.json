@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "HexSeqP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "HexSeqP.cpp:221 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "HexSeqP.cpp:191 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "2": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "the Pat knob", "why": "HexSeqP.cpp:198-200 read sixteen channels of this input as triggers with Pattern Poly Select on; HexSeqP.cpp:208 otherwise reads it with getVoltage() and clamps this jack times 1.6 to 0..15.9"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "HexSeqP.cpp:241 sets this output to sixteen channels; HexSeqP.cpp:233 writes 10V or 0V per row"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "HexSeqP.cpp:242 sets this output to sixteen channels; HexSeqP.cpp:234 writes 10V or 0V per row"},
+      "2": {"family": "trigger", "poly": true, "why": "HexSeqP.cpp:243 sets this output to sixteen channels; HexSeqP.cpp:235 passes the clock through per row"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "HexSeqP.cpp:244 sets this output to sixteen channels; HexSeqP.cpp:238 writes 10V or 0V per row"}
+    }
+  },
+  "comment": "The sixteen row fields are custom text widgets rather than parameters, so no click on them reaches this help. Placing a HexSeq, a CountModula GateSequencer16 or an Impromptu-style Euclid immediately to the left lets the module copy patterns out of it, HexSeqP.cpp:113-155, through key commands on the fields. The Clk output is a sample behind the clock, because the voltage it passes is the one read on the sample before, HexSeqP.cpp:235-236. The installed plugin.json marks the module deprecated."
+}

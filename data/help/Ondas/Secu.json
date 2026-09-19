@@ -1,0 +1,42 @@
+{
+  "plugin": "Ondas",
+  "module": "Secu",
+  "description": "An eight-step gate sequencer with five rows, passing its own clock signal through on the steps that are switched on, and able to jump to a random step",
+  "params": [
+    {"ids": [0], "text": "Sets every gate at random; held down, it re-rolls them four times a second"},
+    {"ids": [1], "text": "Sets the chance that any one gate comes out on when the gates are randomised, 0 to 1"},
+    {"ids": [2], "text": "Sets the chance, 0 to 1, that a clock pulse jumps to a random step instead of moving on to the next one"},
+    {"ids": [3], "text": "Sets how many steps the sequence runs before it wraps, 1 to 8"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43], "text": "Switches the gate on or off for its own row at its own step"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge moves the sequence back to the first step"},
+    {"ids": [1], "text": "A rising edge moves the sequence on one step, and this jack's voltage is what the outputs pass on"},
+    {"ids": [2], "text": "Added to the probability knob one unit per volt, with the total clamped to 0 and 1, so 1V on its own already makes every pulse jump"},
+    {"ids": [3], "text": "A rising edge sets every gate at random, using the sparseness knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4], "text": "Carries whatever voltage is at the trigger jack while its own row's gate is on at the current step, and 0V while that gate is off"}
+  ],
+  "notes": [
+    "the outputs copy the clock signal rather than making gates of their own, so their width and voltage are whatever clocks the trigger jack",
+    "nothing moves until a clock reaches the trigger jack",
+    "the randomise button and the randomise jack overwrite the gate buttons, so a pattern set by hand is lost",
+    "the step lamps are refreshed only on a clock pulse, so they stay as they were while the clock is stopped"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    }
+  }
+}

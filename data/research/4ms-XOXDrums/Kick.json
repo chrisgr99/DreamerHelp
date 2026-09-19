@@ -1,0 +1,18 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Kick",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:46 takes a rising edge from that voltage being greater than 0.5"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:41 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:42 adds it to the P. DEPTH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:109 adds it to the P. DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:103 adds it to the AMP DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Kick.hh:43 adds it to the SATURATION knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Kick.hh:85 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "The sine sounds at twice the code's frequency variable. src/modules/Kick.hh:58 sets frequency to 10 + control * 40, :59 sets modulatedFrequency to frequency plus the envelope term, and :60 advances the phase by (frequency + modulatedFrequency) * rSampleRate, which is (2 * frequency + envelope term) per second, with :62 taking sin(2 * M_PIF * phase) and M_PIF equal to pi. The resting pitch is therefore 20Hz to 100Hz where the tooltip and the manual say 10Hz to 40Hz, while the envelope's 500Hz lift is not doubled. Pitch decay is 5 + control * 30 at :110, so 5ms to 35ms against the manual's 30ms top; amp decay is 5 + control * 300 at :104. The saturation multiplier is 1 + control times 2, 10 or 100 at :68-77, so the switch positions cap it at 3, 11 and 101 rather than at the 2x, 10x and 100x their names give."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "BlushAudio",
+  "module": "TrackAndField",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "white noise made inside the module", "why": "TrackAndField.cpp:44 reads getVoltage() with no channel, and lines 57 and 62 branch on isConnected to substitute random::normal() scaled by 5 over the square root of 2"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "TrackAndField.cpp:45 reads getVoltage() with no channel; line 57 passes it to dsp::SchmittTrigger::process, whose default thresholds are 0 and 1, and line 74 compares it against the threshold variable, which is 0"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "white noise made inside the module", "why": "TrackAndField.cpp:46 reads getVoltage() with no channel, and lines 99 and 104 branch on isConnected to substitute the same noise value"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "TrackAndField.cpp:47 reads getVoltage() with no channel; line 99 passes it to dsp::SchmittTrigger::process with its default thresholds of 0 and 1, and line 116 compares it against the threshold variable, which is 0"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "TrackAndField.cpp:58, 63, 68, 75, 81 and 88 each write one value with setVoltage, and setChannels is never called"},
+      "1": {"family": "cv", "poly": false, "why": "TrackAndField.cpp:100, 105, 110, 117, 123 and 130 each write one value with setVoltage, and setChannels is never called"}
+    }
+  },
+  "comment": "Read from the maker's source at commit e5f0e3d, the only commit carrying version 2.2.0. Two faults here are visible to a reader and are written into the lines. First, TrackAndField.cpp:39-40 calls configOutput(TF_OUTPUTA, \"Output A\") and then configOutput(TF_OUTPUTA, \"Output B\"): the first output is configured twice and the second is never configured at all. The second call overwrites the first, so hovering the upper output jack in Rack reads Output B, and the lower jack has no name and falls back to Rack's generic Output 2. The census carries exactly this, Output B on index 0 and an empty string on index 1. Second, TrackAndField.hpp declares schmittTriggerA, schmittTriggerB, white, the four cached input voltages, threshold and modeA/modeB at file scope rather than as members of the module, so every instance of the module in the patch shares them. The cached voltages and the mode integers are written at the top of each process() call and read within the same call, so those do no harm; the two Schmitt triggers hold state between calls and do, and a second copy of the module will corrupt the first one's edge detection. The noise is random::normal() scaled by 5 divided by the square root of 2, computed once per process() call at lines 52-53 and shared by both units. The panel prints SAMPLE, TRIGGER and OUTPUT, and marks the switch positions S AND H above and T AND H below; the two switch frames are res/NKK_2, a lever pointing up, at value 0, and res/NKK_0, a lever pointing down, at value 1, so up is sample and hold and matches the label above it. The status lamp brightness is set to the raw held voltage, so it is a crude level indicator rather than an on and off light. Every configured parameter and input is read in process()."
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "ChortlingHamsterModules",
+  "module": "Pop",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Pop.cpp:41 stores inputs[VOLTAGE_INPUT].getVoltage(), a single-channel read, with no clamp or scaling anywhere in process()"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "src/Pop.cpp:40 rescales this jack's voltage from 0.1V and 2V into 0 and 1 and feeds st.process, a dsp::SchmittTrigger at its default 0 and 1 thresholds (Rack-SDK include/dsp/digital.hpp:107), so the firing point is 2V"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "why": "src/Pop.cpp:44 writes the stored voltage to channel 0 only; it changes only on a trigger"}
+    }
+  },
+  "comment": "Read from the repository at commit ed72dd1, the tip of the default branch and the last of the four commits carrying version 2.0.0 in plugin.json (the version first appears at f0d7750).\n\nThe module declares configBypass(VOLTAGE_INPUT, VOLTAGE_OUTPUT) at src/Pop.cpp:35, so bypass is a straight pass-through rather than silence.\n\nThe README calls the trigger jack TRIG; the panel prints TRIG IN, and the panel is what a reader is looking at."
+}

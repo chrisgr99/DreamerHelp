@@ -1,0 +1,85 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Chime",
+  "description": "Eight tuned bars, each with a rotating tube beneath it: a note blooms as its tube swings through centre, and the eight rotations drift against each other so the pattern never quite repeats",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the tubes turn, 0.02Hz to 2Hz; at the bottom a note blooms about once every twenty-five seconds"},
+    {"ids": [1], "text": "Sets how far apart the eight rotation rates are, from all eight together to fully scattered; in Ripple mode it becomes the amount of coupling between neighbours instead"},
+    {"ids": [2], "text": "Sets how freely each rate wanders from the rate it was given, rather than holding a fixed period"},
+    {"ids": [3], "text": "Sets how the eight rates relate: Ramp raises them smoothly across the row, Stepped gives discrete related values, Random scatters them, Ripple makes a crossing excite its neighbours"},
+    {"ids": [4], "text": "Blends the excitation from bowing, where a note is driven continuously, to striking, where it fires at each crossing of centre"},
+    {"ids": [5], "text": "Sets how long a note rings and how long a bloom lasts, 0.3 to 8 seconds"},
+    {"ids": [6], "text": "Sets the root of the key, twelve semitones"},
+    {"ids": [7], "text": "Picks the scale the note degrees are read from"},
+    {"ids": [33], "text": "Bends the rotation curve from exponential through linear to logarithmic, which sets how long a tube lingers at the extremes against how quickly it passes centre"},
+    {"ids": [34], "text": "Transposes the whole set, -3 to 3 octaves"},
+    {"ids": [35, 36, 37, 38, 39, 40, 41, 42], "text": "Sets how wide that note's arc is, 10 to 100 per cent; a narrower arc crosses centre more often, so the note strikes more often"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the rotation rate, ±5V added to the rate knob"},
+    {"ids": [1], "text": "Changes how far apart the rates are, ±5V added to the spread knob"},
+    {"ids": [2], "text": "Changes how far the rates wander, ±5V added to the drift knob"},
+    {"ids": [3], "text": "Sets the root, a volt per octave snapped to semitones, added to the root knob"},
+    {"ids": [4], "text": "Picks the scale, one volt per scale, added to the scale knob"},
+    {"ids": [6], "text": "Locks the rotations to an outside clock; the rate knob then picks how many clock pulses make one rotation, from 32 down to 1"},
+    {"ids": [15], "text": "Blends the excitation from bowing to striking, 0-10V, added to the excite knob"},
+    {"ids": [16], "text": "Transposes the whole set, one volt per octave, added to the octave knob"},
+    {"ids": [17], "text": "Picks how the rates relate, 0-10V across the four modes, added to the relate knob"},
+    {"ids": [18], "text": "Bends the rotation curve, ±5V added to the curve knob"},
+    {"ids": [19], "text": "Changes the ring and bloom time, one second per volt added to the decay knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "That note's tube rotation itself as a ±5V control voltage, which is the signal blooming the note"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "That note's sound on its own jack"},
+    {"ids": [16], "text": "The left side of the eight notes mixed"},
+    {"ids": [17], "text": "The right side of the eight notes mixed"},
+    {"ids": [18], "text": "What each of the eight notes is currently tuned to, one polyphonic channel per note"},
+    {"ids": [19], "text": "Carries 10V on a channel while that note blooms, one polyphonic channel per note"}
+  ],
+  "notes": [
+    "every rotation crosses centre twice, once going and once coming back, so a struck note fires twice per rotation rather than once",
+    "the notes have no envelope of their own: they swell and fade because the tube is moving, so DECAY and the rotation rate together are what shape them",
+    "a note takes its pitch as it begins and holds it until it ends, so moving the root, the scale or a degree during a drone is heard on the next bloom rather than as a glide",
+    "each note's scale degree and its weight are set on the display, and so is the reseed control; none of them can be reached by clicking for help"
+  ],
+  "menu": [
+    "Reseed random rates — draws a fresh set of rotation rates, which is what Random mode uses"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "6": "stepped · one channel only",
+      "15": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "16": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "17": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "18": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "19": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V",
+      "2": "±5V",
+      "3": "±5V",
+      "4": "±5V",
+      "5": "±5V",
+      "6": "±5V",
+      "7": "±5V",
+      "8": "continuous · one channel only",
+      "9": "continuous",
+      "10": "continuous",
+      "11": "continuous",
+      "12": "continuous",
+      "13": "continuous",
+      "14": "continuous",
+      "15": "continuous",
+      "16": "continuous · one channel only",
+      "17": "continuous",
+      "18": "1V per octave · continuous · polyphonic",
+      "19": "0 to 10V · polyphonic"
+    }
+  }
+}

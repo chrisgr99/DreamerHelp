@@ -1,0 +1,72 @@
+{
+  "plugin": "forsitan",
+  "module": "guttur",
+  "description": "A chaotic drone: a forced, damped Duffing oscillator coupled to two banks of twenty-four resonant bandpass filters, whose summed output is the force fed back into the oscillator",
+  "params": [
+    {"ids": [0], "text": "Sets the forcing amount, 0 to 10; past about 2.5 the forcing sine entrains the chaos and the module locks into a static tone, so the lively range is roughly a half to two and a half"},
+    {"ids": [1], "text": "Sets the frequency coefficient of the forcing sine: slow surging drones at the bottom of its travel, growls and tones at the top"},
+    {"ids": [2], "text": "Sets the damping: high chokes the chaos, low lets it ring"},
+    {"ids": [3], "text": "Sets the internal time step, 0 to 10, which scales how fast the whole system runs and multiplies with tone to give the forcing frequency"},
+    {"ids": [4], "text": "Low-passes the chaotic state before it reaches the filters, 0 to 5; higher is darker and rounder, and it has no CV jack"},
+    {"ids": [5, 6, 7, 8], "text": "Attenuates and inverts the voltage at the jack beside it before it is added to the knob above"},
+    {"ids": [9], "text": "Chooses which of twenty factory frequency sets the first filter bank uses; switching glides every filter to the new set"},
+    {"ids": [10], "text": "Chooses which of twenty factory frequency sets the second filter bank uses; switching glides every filter to the new set"},
+    {"ids": [11], "text": "Multiplies the frequency of all forty-eight filters together, a twentieth to twice"},
+    {"ids": [12], "text": "Sets the resonance of all forty-eight filters, 2.5 to 800"},
+    {"ids": [13], "text": "Scatters the filters away from their preset frequencies and Q at random, none at the bottom of its travel; the pattern is seeded per instance and saved with the patch"},
+    {"ids": [14], "text": "Sets the level of the first filter bank, 0 to 2"},
+    {"ids": [15], "text": "Sets the level of the second filter bank, 0 to 2"},
+    {"ids": [16], "text": "Drives the filter sum, 0 to 3.5; it is inside the feedback loop, so it changes how the system behaves rather than only how loud it is"},
+    {"ids": [17], "text": "Chooses how the chaotic state is distorted: hard clip, soft clip, atan folding, an atan approximation, a tanh approximation, or an exact atan; it shapes the feedback rather than adding fuzz on the end"},
+    {"ids": [18], "text": "Switches the two filter banks out, leaving the raw Duffing oscillator: bounded chaos with hard resets"},
+    {"ids": [19], "text": "Zeroes the chaotic state and lights it again with a short parameter kick, which reads as a percussive hit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the drive knob through the attenuverter beside it"},
+    {"ids": [1], "text": "Added to the tone knob through the attenuverter beside it"},
+    {"ids": [2], "text": "Added to the damp knob through the attenuverter beside it"},
+    {"ids": [3], "text": "Added to the rate knob through the attenuverter beside it"},
+    {"ids": [4], "text": "Sweeps the first bank across all twenty sets, 0V to 10V"},
+    {"ids": [5], "text": "Sweeps the second bank across all twenty sets, 0V to 10V"},
+    {"ids": [6], "text": "Multiplies the filter frequencies, one volt per octave"},
+    {"ids": [7], "text": "Added to the q knob"},
+    {"ids": [8], "text": "Added to the first bank's gain knob"},
+    {"ids": [9], "text": "Added to the second bank's gain knob"},
+    {"ids": [10], "text": "A signal that replaces the internal forcing sine as soon as it is patched: drums come back as chaotic resonance and voices as metal"},
+    {"ids": [11], "text": "A rising edge zeroes the chaotic state and lights it again"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filter banks summed, DC blocked, about ±5V and hard limited at ±10V"},
+    {"ids": [1], "text": "The chaotic state itself after the distortion, clamped and DC blocked, as a free modulation source"}
+  ],
+  "notes": [
+    "this plays itself. At power-on and at every reset the chaos is lit by a short parameter kick, so the module always wakes up making sound.",
+    "if it sounds dead, turn the two bank gains up. Below roughly a total of 1.5 between them the Duffing settles onto a fixed point and the module becomes a static drone.",
+    "turning tone or rate right down takes the forcing below audio rate and the system breathes instead, surging into screaming resonance and collapsing back.",
+    "below about 10Hz of forcing the collapses become long silences. That is a setting, not a fault."
+  ],
+  "menu": [
+    "Distortion oversampling — 1x, 2x, 4x, 8x or 16x, which anti-aliases the distortion stage",
+    "Bank glide — how long a bank, pitch or resonance change takes to slide: 20 ms, 100 ms, 500 ms or 2 s"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "1V per octave · continuous · one channel only",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "±10V · continuous · one channel only\n\nunpatched it reads the internal forcing sine.",
+      "11": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "one channel only"
+    }
+  }
+}

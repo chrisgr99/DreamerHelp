@@ -1,0 +1,18 @@
+{
+  "plugin": "HarmonicAnomalies",
+  "module": "HexExCV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 104 and 145, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 105 and 146, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 106 and 147, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "HexNut.cpp lines 108 and 124, scaled by 0.1, added to a knob that runs 0 to 1, then clamped to a radius of at least one tile"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 110 and 151, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 111 and 152, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "HexNut.cpp lines 112 and 153, the voltage is scaled by 0.1 and added to a knob that runs -1 to 1"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "HexNut.cpp lines 114 and 125, scaled by 0.1, added to a knob that runs 0 to 1, then clamped to a radius of at least one tile"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "HexNut.cpp lines 116 and 136, scaled by 0.1, added to a knob that runs 0 to 1, then clamped to 0 to 1 in Hex.hpp line 139"}
+    }
+  },
+  "comment": "Read from the repository at commit 9f2eacb, whose plugin.json carries the installed 2.0.2. The expander's own process function is empty: it holds nine jacks and nothing else, and the base module reaches across and reads them at HexNut.cpp lines 100 to 118. That means it works only when it is the module immediately to the right of a HexNut or a HexaGrain, and it is that module that must be in the patch. Every jack is read with getVoltage, one channel only, and scaled by a tenth before being added to the corresponding knob. The sums for the six vector jacks are not clamped afterwards, so a large voltage can drive a head faster than the knob alone can; the two SIZE sums are clamped to a whole number of tiles between one and the grid radius, and the BLEND sum to between none and full overwrite. The jacks carry no printed names on the panel, only the WRITE, READ and BLEND group headings, so the order within a group comes from the maker's README and from the widget code."
+}

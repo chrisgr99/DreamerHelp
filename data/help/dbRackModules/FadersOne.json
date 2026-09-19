@@ -1,0 +1,53 @@
+{
+  "plugin": "dbRackModules",
+  "module": "FadersOne",
+  "description": "One bank of sixteen faders held in a hundred slots, with a second output that reads a slot picked by voltage without disturbing the one being played",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage on its channel of the output, over the span chosen in the menu"},
+    {"ids": [16], "text": "Attenuates the voltage at the Mod CV jack before it is added to the faders, 0 to 1"},
+    {"ids": [17], "text": "Picks which of the hundred slots is played and edited"},
+    {"ids": [18], "text": "While on, the slot is picked by hand and a cable in the preset jack no longer moves the selection"},
+    {"ids": [19], "text": "Copies every fader of the slot being edited"},
+    {"ids": [20], "text": "Writes the copied faders into the slot being edited"},
+    {"ids": [21], "text": "Sets how long the faders take to reach their new values after a slot change, 0 to 10"},
+    {"ids": [22], "text": "Pushes the slots after the one being edited along by one place and empties it; the hundredth slot is lost"},
+    {"ids": [23], "text": "Removes the slot being edited and pulls every later slot back one place"},
+    {"ids": [24], "text": "While on, the voltages at the Program jack are written into the faders"},
+    {"ids": [25], "text": "While on, the number of channels at the Program jack also sets how many faders reach the output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the faders, one channel per fader, scaled by the Mod CV Amount knob"},
+    {"ids": [1], "text": "Picks the slot by voltage, 0.1V per slot over 0-10V; while LOCK is on this jack is passed over"},
+    {"ids": [2], "text": "Writes the faders from a cable, one channel per fader, while the module is enabled"},
+    {"ids": [3], "text": "Switches the writing on by cable: a monophonic cable above 1V switches all sixteen on, and a polyphonic one switches each fader on by its own channel"},
+    {"ids": [4], "text": "Picks the slot read by the Pattern CV output, 0.1V per slot over 0-10V, without moving the slot being played"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The faders of the slot being played, as one polyphonic cable with as many channels as the menu is set to"},
+    {"ids": [1], "text": "The faders of the slot picked by the Pattern Adr jack, as one polyphonic cable; nothing on the panel moves as this sweeps through the slots"}
+  ],
+  "notes": [
+    "click anywhere on a fader to send it straight to the mouse, rather than dragging it from where it stands",
+    "the Program jack and the Enable switch are how a run of slots is recorded: enable the writing, sweep the address and the values are written into each slot as it passes"
+  ],
+  "menu": [
+    "Polyphonic Channels — sets how many faders reach the output, 1 to 16",
+    "Range — sets the span of every fader: -10/10V, -5/5V, -3/3V, -2/2V, -1/1V, 0/10V, 0/5V, 0/3V, 0/2V or 0/1V",
+    "Snap Size — rounds the output to a step: None, Semi, 0.1, Pat 32, 0.5, Pat 16, 1 or Pat 8, where Pat X means ten volts divided by X, for addressing patterns elsewhere",
+    "Randomize — fills the faders at random within the span",
+    "Use Adr for Prog — writes the values from the Program jack into the slot picked by the Pattern Adr jack in place of the slot being played, for recording fast through the bank"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "0 to 9.99V · stepped · one channel only\n\nunpatched it reads the Preset Selection knob; a negative voltage does nothing here.",
+      "2": "continuous · polyphonic\n\nunpatched it reads the faders.",
+      "3": "high above 1V · stepped · polyphonic\n\nunpatched it reads the Enable button.",
+      "4": "0 to 9.99V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

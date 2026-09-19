@@ -1,0 +1,47 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "AutoScale4",
+  "description": "Four signals stretched and shifted to fill a voltage window set by two knobs, working the scaling out from the signal as it arrives",
+  "params": [
+    {"ids": [0], "text": "Sets the bottom of the window the output is made to fill, -10V fully counter-clockwise to +10V fully clockwise, and -5V unless you move it"},
+    {"ids": [1], "text": "Sets the top of the window the output is made to fill, -10V fully counter-clockwise to +10V fully clockwise, and +5V unless you move it"},
+    {"ids": [2], "text": "Mirrors the Max knob onto the Min knob while it is on, so setting Min to -3V puts Max at +3V"},
+    {"ids": [3], "text": "Throws away the scaling worked out so far, so it is rebuilt from what arrives next, and turns the menu lock back off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge throws away the scaling worked out so far and turns the menu lock back off; it reads high above 1V and low below 0.1V"},
+    {"ids": [1, 2, 3, 4], "text": "One of the four signals to be scaled; a light beside it brightens whenever that signal is outside the window and then fades"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries that input stretched and shifted to fill the window, clamped to it at the ends"}
+  ],
+  "notes": [
+    "the scaling is learnt from the signal, so the first moments after a reset are the range it has seen so far, not the range it will end up with",
+    "pulling a cable out of an input throws away that section's scaling on its own, so it starts again when you patch something back",
+    "setting Min above Max turns the window inside out and the output is flipped within it, which a small red light beside Min shows",
+    "this module has no clipping range on its menu, because the Min and Max knobs already bound every output"
+  ],
+  "menu": [
+    "Update Scale/offset-values: Disabled (locked), Enabled — locked, the scaling stops being revised and anything beyond the window is clamped instead; a reset unlocks it again",
+    "Scale/offset-usage: Individual (per section), Common (all sections) — chooses whether each section works out its own scaling or all four share one",
+    "Set min/max-range — sets the two knobs to a named pair, from -1 to +1 up to unipolar 0 to +10, each also offered with the ends swapped for inversion",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "polyphonic\n\nunpatched it reads 0V.",
+      "2": "polyphonic\n\nunpatched it reads 0V.",
+      "3": "polyphonic\n\nunpatched it reads 0V.",
+      "4": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

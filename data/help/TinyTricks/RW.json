@@ -1,0 +1,55 @@
+{
+  "plugin": "TinyTricks",
+  "module": "RW",
+  "description": "A random voltage generator with a drawn probability curve: nine knobs weight how often the output lands at nine points spread across -5V to +5V.",
+  "params": [
+    {"ids": [0], "text": "The probability weight at -5V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [1], "text": "The probability weight at -3.75V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [2], "text": "The probability weight at -2.5V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [3], "text": "The probability weight at -1.25V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [4], "text": "The probability weight at 0V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [5], "text": "The probability weight at +1.25V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [6], "text": "The probability weight at +2.5V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [7], "text": "The probability weight at +3.75V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter."},
+    {"ids": [8], "text": "The probability weight at +5V, 0 to 10; the nine weights are read against each other, so only their relative sizes matter. Constant distribution on the menu leaves this knob unused."},
+    {"ids": [9], "text": "Sets the rate of the internal clock in octaves around C4's 261.63Hz, -10 at the left through to +10 at the right."},
+    {"ids": [10], "text": "Sets how long the output takes to travel from the old value to the new one, an instant jump at the left through to 1 second at the right."},
+    {"ids": [11], "text": "LIN travels between values at a steady rate; EXP follows a curve that starts slowly and finishes fast."}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8], "text": "Adds its voltage to that knob's weight, and the total is held between 0 and 10."},
+    {"ids": [9], "text": "While this is patched the internal clock is switched off and a new value is drawn on each rising edge here."},
+    {"ids": [10], "text": "Adds twice its voltage to RATE, and the total is held inside the knob's own range."},
+    {"ids": [11], "text": "Adds a tenth of its voltage to SMOOTH, and the total is held inside the knob's own range."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The generated voltage, -5V to +5V, travelling towards each new value at the rate SMOOTH sets."}
+  ],
+  "notes": [
+    "A newly placed module has RATE at its far right, which draws a new value several times per sample, so the output is noise until RATE is turned down or a clock is patched to TRIG.",
+    "With SMOOTH at 0 the output steps straight to each new value, which makes the module a sample and hold on its own random source.",
+    "The drawing between the knob rows is the current probability curve across the output range; it shows the weights and cannot be clicked or dragged."
+  ],
+  "menu": [
+    "Constant distribution (instead of linear) — gives every voltage inside one of the eight intervals the same chance, instead of sloping from one knob's weight to the next."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "continuous · one channel only",
+      "11": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · one channel only"
+    }
+  }
+}

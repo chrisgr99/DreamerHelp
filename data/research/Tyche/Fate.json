@@ -1,0 +1,16 @@
+{
+  "plugin": "Tyche",
+  "module": "Fate",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "Fate.cpp:100-105 getBias returns the jack rescaled from -5V and +5V to -1 and +1 whenever it is connected, and the knob is not read at all in that case; read at voltages[0] with no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Fate.cpp:68 inSchmitt.process(getInput(IN_INPUT).getVoltage(), 0.1f, 1.f), so the jack counts as high past 1V and is armed again below 0.1V; read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Fate.cpp:60 resetTrigger.process(getInput(RESET_INPUT).getVoltage()) with rack's default SchmittTrigger thresholds, so a rising edge is detected past 1V and the jack is armed again below 0V; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Fate.cpp:86-96 setVoltage with no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "why": "Fate.cpp:86-96 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The decision at Fate.cpp:71-73 is holdState = noiseVal >= bias ? A : B, with bias rescaled from the knob's 0 to 100 onto -1 to +1 and noiseVal the OpenSimplex value over the same -1 to +1. A knob at 0% therefore puts bias at -1 and every gate goes to A, and a knob at 100% sends every gate to B. The maker's README says the knob \"sets the likelihood of routing triggers to Output A\", which is the opposite; the panel prints only BIAS, so nothing on the module contradicts the code. The phase the noise is read at advances with real time (line 58), not with the incoming gates, so two Fates set alike do not follow the same run unless they are reset together."
+}

@@ -1,0 +1,47 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "Delta4",
+  "description": "Four signals measured against a voltage captured earlier, in 2HP, reporting how far each has moved since",
+  "params": [
+    {"ids": [0], "text": "Captures the present input voltages as the new references, for one cycle per press in trigger mode or for as long as it is held in gate mode"},
+    {"ids": [1], "text": "Switches the reset control between red for a trigger, which captures once however long the signal stays high, and green for a gate, which keeps capturing while it is high"},
+    {"ids": [2], "text": "Chooses which references are used: Ind gives every section its own, A-only measures all four against the A section's references"},
+    {"ids": [3], "text": "Steps the outputs through Sg for the plain difference, In for the difference multiplied by -1, and Ab for the difference without its sign"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge, or a high gate in gate mode, captures the present input voltages as the new references"},
+    {"ids": [1, 2, 3, 4], "text": "One of the four signals being measured"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries how far that input has moved from its reference, in the form the output mode sets"}
+  ],
+  "notes": [
+    "the captured references are saved with the patch and are not disturbed by unplugging an input, so a reference taken from one module can be used to measure another",
+    "in gate mode, while the reset is held every output reads 0V, since the references are being taken again on every cycle",
+    "in A-only mode the A output itself reads 0V, because A is being measured against its own reference; this is how the module strips a moving DC offset off B, C and D"
+  ],
+  "menu": [
+    "Update A-D reference values — sets the stored references of all four sections to a named voltage",
+    "Update A reference values, Update B reference values, Update C reference values, Update D reference values — sets that one section's stored references to a named voltage",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "polyphonic\n\nunpatched it reads 0V.",
+      "2": "polyphonic\n\nunpatched it reads 0V.",
+      "3": "polyphonic\n\nunpatched it reads 0V.",
+      "4": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

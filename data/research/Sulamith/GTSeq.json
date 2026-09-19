@@ -1,0 +1,14 @@
+{
+  "plugin": "Sulamith",
+  "module": "GTSeq",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "GTSeq.cpp GTSeq::process: clockTrig.process(getVoltage()), a Rack SchmittTrigger at its default 0.1V and 1V thresholds, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"poly": true, "step": "continuous", "why": "GTSeq.cpp GTSeq::process: isPolyphonic() and getChannels() on this jack choose the copying branch and getVoltage(ct) reads up to six channels into the knobs; the same jack is read as getVoltage() with no channel argument for resetTrig, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "GTSeq.cpp GTSeq::process: setVoltage(gateGenerator.process(sample_time) ? 10.0f : 0.0f), the generator having been triggered for the step's knob value in seconds, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "gateGenerator.process(sample_time) is called twice per sample, once for the gtbool test and once in the output line, and Rack's PulseGenerator subtracts deltaTime on every call that finds time remaining, so a gate lasts half its configured duration: the knobs read 0.1 to 10 seconds and deliver 0.05 to 5. clockTrig.process is likewise called twice: the result is stored in gtCLK first, so the later call inside the poly-copy condition always returns false and only the button can copy. The reset jack's meaning depends on the cable, so it has no family."
+}

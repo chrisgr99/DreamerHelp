@@ -1,0 +1,18 @@
+{
+  "plugin": "mscHack",
+  "module": "OSC_WaveMorph_3",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "0 to 8V", "step": "continuous", "why": "OSC_WaveMorph_3.cpp:641 clamps this voltage to 0 to 8V and raises two to it, so it tracks one volt per octave over that span; unpatched it reads 4V"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "why": "OSC_WaveMorph_3.cpp:614 clamps this voltage divided by five to plus or minus 1, reading the first channel only"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "OSC_WaveMorph_3.cpp:651 divides this voltage by ten into the cutoff; unpatched it reads 10V"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "OSC_WaveMorph_3.cpp:551 divides this voltage by ten into the resonance; unpatched it reads 10V"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "OSC_WaveMorph_3.cpp:656 divides this voltage by ten into the level; unpatched it reads 10V"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "OSC_WaveMorph_3.cpp:624 passes it to a SchmittTrigger, which fires above 1V, reading the first channel only"}
+    },
+    "outputs": {
+      "0": {"family": "audio"}
+    }
+  },
+  "comment": "The panel prints -10V, 0V and 10V beside the Morph input, but the code divides that input by 5, so the first and third waveforms are reached at -5V and 5V. Draw, Solo, Invert, Presets, Rand and Copy are custom widgets rather than parameters."
+}

@@ -1,0 +1,34 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc3",
+  "description": "Reads up to sixteen points as a wave, giving the straight lines between them and the bare steps, with the aliasing suppressed",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -4 to 4 as a power of two around middle C, which is about 16Hz to 4186Hz"},
+    {"ids": [1], "text": "Scales the voltage at the FM jack, 0 to 300 per cent"},
+    {"ids": [2], "text": "While on, the FM jack is added to the frequency in hertz rather than to the pitch in octaves, which gives through-zero frequency modulation"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "The points the wave is drawn through, one point per channel, up to sixteen; two points at least are read whatever is patched"},
+    {"ids": [2], "text": "Modulates the frequency through the FM knob; with Lin off it is added to the pitch in octaves, and with Lin on it is added to the frequency itself, which lets it pass through zero"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The straight lines from each point to the next, with its constant offset removed"},
+    {"ids": [1], "text": "The bare points held one after another, a stepped wave with its constant offset removed"}
+  ],
+  "notes": [
+    "nothing is heard until points are patched into Pts; with that jack empty both outputs are written at 0V",
+    "the wave is worked out sixteen times over per sample and averaged, which keeps the steps from aliasing at high pitches"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads a flat wave.",
+      "2": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

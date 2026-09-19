@@ -1,0 +1,20 @@
+{
+  "plugin": "vanTies",
+  "module": "Sjang",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "why": "Sjang.cpp:80 takes the channel count from this jack and line 91 adds getPolyVoltage(c) to the pitch knob as an exponent of two", "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "1": {"family": "cv", "poly": true, "why": "Sjang.cpp:101-102 adds 0.1 times the attenuverter times getPolyVoltage(c) to the time randomness knob", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "2": {"family": "cv", "poly": true, "why": "Sjang.cpp:103-104 adds 0.1 times the attenuverter times getPolyVoltage(c) to the amplitude randomness knob", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "3": {"family": "cv", "poly": true, "why": "Sjang.cpp:105 adds 0.1 times getPolyVoltage(c) to the destruct pitch knob, with no attenuator", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "4": {"family": "cv", "poly": true, "why": "Sjang.cpp:106 adds 0.1 times getPolyVoltage(c) to the destruct shape knob, with no attenuator", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "5": {"family": "trigger", "poly": true, "why": "Sjang.cpp:111-113 resetTrigger[c].process(5 times the button plus getPolyVoltage(c), 0.1f, 2.f), so a rising edge is detected past 2V and armed again below 0.1V", "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V"},
+      "6": {"family": "trigger", "poly": true, "why": "Sjang.cpp:114-116 randomizeTrigger[c].process(5 times the button plus getPolyVoltage(c), 0.1f, 2.f), so a rising edge is detected past 2V and armed again below 0.1V", "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Sjang.cpp:81 setChannels from the V/oct jack's channel count"},
+      "1": {"family": "audio", "poly": true, "why": "Sjang.cpp:82 setChannels from the V/oct jack's channel count, and line 118 only computes it while it isConnected()"}
+    }
+  },
+  "comment": "The two randomness knobs are mapped exponentially at Sjang.cpp:107-108, (100 to the power of the knob, minus one, over 99), so the bottom of their travel is very fine. The second output uses oscillators 16 to 31 (line 118 and line 140) and is skipped entirely while it is unpatched, which saves processor time; the maker names the two outputs left and right in configOutput while the panel prints 'wave 1' and 'wave 2'. The right-hand destruct knob is DESTRUCT_A_PARAM, named 'destruct amp' in the tooltip, while the panel prints 'destruct shape' and the matching input is named 'destruct shape'. The reset and randomize buttons are added to their jacks before the Schmitt trigger, so pressing a button and patching its jack both work through the same detector."
+}

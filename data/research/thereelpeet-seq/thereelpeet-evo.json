@@ -1,0 +1,15 @@
+{
+  "plugin": "thereelpeet-seq",
+  "module": "thereelpeet-evo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/TheReelPeetEvo.cpp process(): clockTrig.process(inputs[CLOCK_INPUT].getVoltage()) with Rack's default SchmittTrigger thresholds, one voltage read per frame"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "no pull applied", "why": "src/TheReelPeetEvo.cpp applyLink(): returns value unchanged unless isConnected(), else clamp(value + 0.2f * (getVoltage() - value), 0.f, 5.f)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "0 to 5V", "why": "src/TheReelPeetEvo.cpp process() ends with setVoltage(outCV); every pitch is clamped to 0.f to 5.f in applyHomeGravity, applyLink and clampToSafeRange"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TheReelPeetEvo.cpp process() ramps envLevel between 0.f and 10.f and ends with setVoltage(envLevel), with no channel count set"}
+    }
+  },
+  "comment": "The installed build's tooltip for the Model button reads \"Cycle mutation engine (Gaussian/Markov/Interval/AI)\", but the AI engine was taken out before this release and NUM_ENGINES is 3: the button cycles three choices and the panel lists three. The README is correct and the tooltip is stale. The twenty-four note toggles are real ParamWidgets, so each can be clicked for help, but the panel prints no note names on them; the note each one stands for comes from the maker's own parameter names, which are laid out as a piano keyboard on its side with C at the bottom. The four Recall lamps, four Drift lamps, four phrase lamps, the Run lamp and the three engine lamps are lights rather than controls, so they carry no line of their own and are covered by the module's Note lines. The number of passes a phrase plays before the next takes over is fixed at four in the source and is not adjustable."
+}

@@ -1,0 +1,78 @@
+{
+  "plugin": "DanTModules",
+  "module": "Kapow",
+  "description": "A polyphonic voice that rebuilds an analysed sample from up to 256 sine waves and a noise residual, so pitch and speed can be set apart from each other",
+  "params": [
+    {"ids": [0], "text": "Sets the base pitch of the voice, -5 to +5V; a double-click snaps it to the pitch the analyser found in the sample"},
+    {"ids": [1], "text": "Tunes the pitch by -100 to +100 cents; a double-click snaps it to the cents offset the analyser found"},
+    {"ids": [2], "text": "Sets the playback speed on an exponential scale, -10x to +10x, with no change to the pitch"},
+    {"ids": [3], "text": "Squeezes the volume envelope towards the start or the end of the sample, -100% to +100%"},
+    {"ids": [4], "text": "Sets the depth of the fade applied over the last fifth of the sound, 0% to 100%"},
+    {"ids": [5], "text": "Curves the fade out from logarithmic through linear to exponential"},
+    {"ids": [6], "text": "Sets where in the sample the transient strength applies; a double-click snaps it to the strongest transient the analyser found"},
+    {"ids": [7], "text": "Boosts the attack at the transient position at positive values and softens it at negative ones"},
+    {"ids": [8], "text": "Sets where the sustain loop falls in the sample; a double-click snaps it to the most stable tonal frame the analyser found"},
+    {"ids": [9], "text": "Sets how many sine waves rebuild the sound, a power of two from 2 to 256; fewer partials give a lo-fi tone and cost much less CPU"},
+    {"ids": [10], "text": "Sets the level of the residual noise; at 0% the tilt filter is skipped altogether"},
+    {"ids": [11], "text": "Balances the residual noise between low and high frequencies"},
+    {"ids": [12], "text": "Plays the analysis frames backwards"},
+    {"ids": [13], "text": "A click plays the sample once through; holding the button runs the sound into its sustain loop"},
+    {"ids": [14], "text": "Resets whichever parameters and voices are ticked in the Reset Behaviour menu"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Raises the pitch by one octave per volt"},
+    {"ids": [1], "text": "A trigger plays the sample once through; a gate held high runs the sound into the sustain loop around the gate hold position"},
+    {"ids": [2], "text": "Modulates the playback speed"},
+    {"ids": [3], "text": "Modulates the envelope warp"},
+    {"ids": [4], "text": "Modulates the depth of the fade out"},
+    {"ids": [5], "text": "Modulates the curve of the fade out"},
+    {"ids": [6], "text": "Modulates the transient position"},
+    {"ids": [7], "text": "Modulates the transient strength"},
+    {"ids": [8], "text": "Modulates the gate hold position"},
+    {"ids": [9], "text": "Modulates the number of sine waves"},
+    {"ids": [10], "text": "Modulates the level of the residual noise"},
+    {"ids": [11], "text": "Modulates the tilt of the residual noise"},
+    {"ids": [12], "text": "Modulates the playback direction, so an LFO here runs the sound forwards and backwards"},
+    {"ids": [13], "text": "A trigger resets whichever parameters and voices are ticked in the Reset Behaviour menu"},
+    {"ids": [14], "text": "A trigger on a channel loads the memory bank of that number, and a trigger for a bank with nothing stored does nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The resynthesised voice, -5 to +5V and hard-clipped at 10 volts either way"},
+    {"ids": [1], "text": "A 1ms 10V trigger when playback reaches the end of the sample, or the start of it when playing backwards"}
+  ],
+  "notes": [
+    "the voice plays analysis data rather than an audio file; drop a .wav, .mp3, .flac or .kapow file onto the module, or use Select Audio File... in the Audio File Processing menu"
+  ],
+  "menu": [
+    "Polyphony Enabled allows up to 16 voices, counted from the channels on the pitch and trigger inputs",
+    "Retriggers Enabled lets a new trigger cut the sounding voice short, and without it triggers are ignored until playback finishes",
+    "Memory Banks stores the analysis data and the knob positions in one of 16 slots, and loads a slot back with a 10ms crossfade",
+    "Audio File Processing analyses an audio file, loads or saves a .kapow file, and sets whether leading silence is trimmed and at what threshold",
+    "Embed Kapow data in patch saves the analysis data inside the patch rather than pointing at a file on disk",
+    "Reset Behaviour picks which knobs a reset returns to their defaults",
+    "Open Presets folder... opens the folder of .kapow analysis files that ship with the plugin"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only",
+      "7": "one channel only",
+      "8": "one channel only",
+      "9": "one channel only",
+      "10": "one channel only",
+      "11": "one channel only",
+      "12": "stepped · one channel only",
+      "13": "stepped · one channel only",
+      "14": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "stepped · polyphonic"
+    }
+  }
+}

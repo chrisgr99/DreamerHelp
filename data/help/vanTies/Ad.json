@@ -1,0 +1,68 @@
+{
+  "plugin": "vanTies",
+  "module": "Ad",
+  "description": "An additive oscillator that sums up to 128 sine partials, with controls for how many there are, how far apart they are spaced, how they are weighted and which of them are sieved out",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the fundamental, 0 giving C0 at 16.35Hz and each whole step up an octave, over a range of seven octaves"},
+    {"ids": [1], "text": "Sets the spacing of the partials in units of the fundamental: at 1 the spectrum is harmonic, below 1 it is squeezed, above 1 stretched, and at 0 every partial lands on one frequency"},
+    {"ids": [2], "text": "Sets how many partials are summed, one at the far left and doubling with each step to 128 at the far right"},
+    {"ids": [3], "text": "Left of centre it tilts the weight of the spectrum towards the low partials; right of centre the weights go flat and the lowest partial climbs instead"},
+    {"ids": [4], "text": "Sieves partials out: turned up from the middle it removes the proper multiples of 2, then 3, then 5, leaving the primes; turned down it removes the primes from the top, leaving the octaves"},
+    {"ids": [5], "text": "Sets how long the amplitude CV takes to travel from one partial to the next, up to 8 seconds; fully clockwise it freezes the buffer, and with nothing in the amp jack it tunes a comb filter"},
+    {"ids": [6], "text": "Sets the depth of the linear through-zero frequency modulation from the fm jack, none at the far left"},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, on the stretch CV"},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, on the number of partials CV"},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, on the tilt CV"},
+    {"ids": [10], "text": "An attenuverter, -1 to +1, on the sieve CV"},
+    {"ids": [11], "text": "Restarts every partial's phase together and draws fresh delays for the random buffer order"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of the fundamental at a volt per octave, added to the pitch knob; the number of channels here sets the polyphony of the whole module"},
+    {"ids": [1], "text": "Modulates the frequency linearly and through zero, scaled by the fm knob; it does not reach the root output"},
+    {"ids": [2], "text": "Adds to the stretch knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [3], "text": "Adds to the number of partials knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [4], "text": "Adds to the tilt knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [5], "text": "Adds to the sieve knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [6], "text": "The CV recorded into the eight-second buffer that sets the partial amplitudes, 10V meaning full; patching this switches the amplitude section on and the comb filter off"},
+    {"ids": [7], "text": "Adds to the amp delay knob, a volt covering a tenth of its travel"},
+    {"ids": [8], "text": "Steps the buffer on each reading above 2.5V, which turns the amp delay knob into a clock divider rather than a time"},
+    {"ids": [9], "text": "A reading above 2.5V restarts every partial's phase together, so this can be used for oscillator sync"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The summed partials for the left channel, up to 5V either way"},
+    {"ids": [1], "text": "The summed partials for the right channel, up to 5V either way; with nothing patched here both sums carry the same signal"},
+    {"ids": [2], "text": "The fundamental on its own as a sine wave, raised an octave for each octave the lowest partial has climbed; no frequency modulation reaches it"}
+  ],
+  "notes": [
+    "the amplitude section does nothing until a cable is in the amp jack; with none there the amp delay knob tunes a comb filter instead",
+    "the number of partials, the tilt, the sieve and the whole amplitude section are worked out once every 64 samples, so they cannot be modulated at audio rate; pitch, fm and stretch can",
+    "the module resets and falls silent while all three of its outputs are unpatched",
+    "the spectrogram along the top runs left to right from 0Hz to half the sample rate, with amplitude on a logarithmic scale; the left channel is drawn yellow and the right red"
+  ],
+  "menu": [
+    "Quantize pitch knob: Continuous, Semitones, Octaves — snaps the pitch knob only, leaving the V/oct input unquantised",
+    "Quantize stretch: Continuous, Consonants, Harmonics — snaps the stretch after the knob and its CV are added; Consonants snaps to pure intervals, Harmonics to whole numbers",
+    "Stereo mode: Mono, Soft-panned, Hard-panned — spreads the partials across the two sum outputs, and it only takes effect while the right output is patched",
+    "CV buffer order: Low→high, High→low, Random — sets the order the amplitude CV travels through the partials",
+    "Empty buffer on reset — clears the amplitude buffer on a reset instead of leaving what is already in it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads nothing recorded.",
+      "7": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "high above 2.5V · stepped · polyphonic\n\nunpatched it reads unclocked, the delay read as a time; a negative voltage does nothing here.",
+      "9": "high above 2.5V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    }
+  }
+}

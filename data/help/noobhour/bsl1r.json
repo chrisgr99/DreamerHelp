@@ -1,0 +1,40 @@
+{
+  "plugin": "noobhour",
+  "module": "bsl1r",
+  "description": "One column passing a HIGH signal or a LOW signal under a gate, with a probability on the choice and an attenuverter and an offset on each of the two signals",
+  "params": [
+    {"ids": [0], "text": "Adds a fixed voltage to the HIGH signal, -5V to 5V. With nothing patched into the HIGH input this knob alone sets the HIGH voltage"},
+    {"ids": [4], "text": "Attenuverts the HIGH input, -1 to 1, before the HIGH offset knob is added to it"},
+    {"ids": [8], "text": "Adds a fixed voltage to the LOW signal, -5V to 5V. With nothing patched into the LOW input this knob alone sets the LOW voltage"},
+    {"ids": [12], "text": "Attenuverts the LOW input, -1 to 1, before the LOW offset knob is added to it"},
+    {"ids": [16], "text": "Chooses gate, where HIGH is passed while the gate is above 1V; latch, where each gate trigger sets the output to HIGH or to LOW; or toggle, where each gate trigger flips between them"},
+    {"ids": [20], "text": "Sets the probability of the choice coming out HIGH, 0 at the counter-clockwise end and 1 at the clockwise end; in toggle mode it is the probability of flipping at a trigger"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal passed while HIGH is chosen; the number of channels here sets the number of channels at the output while HIGH is chosen"},
+    {"ids": [4], "text": "The signal passed while LOW is chosen; the number of channels here sets the number of channels at the output while LOW is chosen"},
+    {"ids": [8], "text": "The gate. Above 1V in gate mode the HIGH signal is passed, and in latch and toggle mode each rise above 2V is a trigger"},
+    {"ids": [12], "text": "Adds to the p knob, 0.1 of probability per volt, and the sum is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The chosen signal, clamped to -10V to 10V"}
+  ],
+  "notes": [
+    "with nothing patched into the HIGH and LOW inputs both read 0V, so the module puts out its two offset knobs alone, switched by the gate.",
+    "the module comes up in gate mode with the p knob at 1, which passes the HIGH signal whenever the gate is above 1V and the LOW signal otherwise.",
+    "a gate is counted as a trigger when it rises above 2V and is released below 0.1V, while the level test in gate mode passes HIGH whenever the gate is above 1V.",
+    "there are two lamps: the upper one lights green while the HIGH signal is being passed and the lower one lights green while the LOW signal is being passed.",
+    "neither input nor the output was given a name in the code, so hovering one of them shows no description of what it carries."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "4": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±10V · polyphonic"
+    }
+  }
+}

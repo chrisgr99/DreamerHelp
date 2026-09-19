@@ -1,0 +1,17 @@
+{
+  "plugin": "Sparkette",
+  "module": "HSV2RGB",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the hue offset trimpot", "why": "src/HSV2RGB.cpp lines 71-76 with applyScaleOffset in src/Utility.cpp line 6, offset + scale*(V/10), then fmod to 0-1"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the saturation offset trimpot", "why": "src/HSV2RGB.cpp:78 applyScaleOffset (src/Utility.cpp:6) makes the saturation the Saturation Offset trimpot plus the Saturation CV Scale trimpot times this channel's voltage over ten; :80 uses the offset trimpot alone when the jack is unpatched"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the value offset trimpot", "why": "src/HSV2RGB.cpp:82 applyScaleOffset (src/Utility.cpp:6) makes the value the Value Offset trimpot plus the Value CV Scale trimpot times this channel's voltage over ten; :84 uses the offset trimpot alone when the jack is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/HSV2RGB.cpp lines 86-91, hsvToRgb then each channel multiplied by 10"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/HSV2RGB.cpp lines 86-91, hsvToRgb then each channel multiplied by 10"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/HSV2RGB.cpp lines 86-91, hsvToRgb then each channel multiplied by 10"}
+    }
+  },
+  "comment": "src/HSV2RGB.cpp at commit b90cd69, with applyScaleOffset and hsvToRgb in src/Utility.cpp. All three outputs take as many channels as the widest input patched, and at least one. Only the hue is wrapped back into range; saturation and value are handed to hsvToRgb unclamped, so a scale and offset that push them past 1 produce voltages above 10V and below 0V at the outputs. The panel prints HSV over the three input jacks and RGB under the three output jacks and names none of the six trimpots."
+}

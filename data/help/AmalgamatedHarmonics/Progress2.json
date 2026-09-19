@@ -1,0 +1,65 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Progress2",
+  "description": "Eight-step chord sequencer keyed to a scale, holding 32 parts, sending the chord of the current step out as one polyphonic cable",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock, -2 to 6 in octaves, from 15 to 3840 beats per minute"},
+    {"ids": [1], "text": "Starts and stops the sequence, one press each way, and the lamp is lit while it runs"},
+    {"ids": [2], "text": "Sets the sequence back to step 1"},
+    {"ids": [3], "text": "Sets how many steps the sequence runs before repeating, 1 to 8"},
+    {"ids": [4], "text": "Sets the key the chords are drawn from, C to B"},
+    {"ids": [5], "text": "Sets the mode the chords are drawn from, Ionian through Locrian"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13], "text": "Switches that step's gate on and off; its lamp is red while the gate is on, green while the sequence reaches that step with the gate on, and dim yellow while it reaches the step with the gate off"},
+    {"ids": [14], "text": "Chooses which of the 32 stored parts is played and edited, 0 to 31"},
+    {"ids": [15], "text": "Copies the part chosen by SOURCE into the part now selected, overwriting what was there"},
+    {"ids": [16], "text": "Chooses which stored part the COPY button copies from, 0 to 31"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage here sets the key, in place of the ROOT knob; 0V to 10V spread across the twelve keys, or read as a 1V/octave pitch if the menu says so"},
+    {"ids": [1], "text": "A voltage here sets the mode, in place of the MODE knob; 0V to 10V spread across the seven modes"},
+    {"ids": [2], "text": "A voltage here is added to the CLOCK knob, one octave of tempo per volt"},
+    {"ids": [3], "text": "A rising edge advances the sequence by one step and takes the place of the internal clock"},
+    {"ids": [4], "text": "A trigger sets the sequence back to step 1"},
+    {"ids": [5], "text": "A voltage here is added to the STEPS knob at one step per volt, and the sum is clamped to 1 to 8"},
+    {"ids": [6], "text": "A voltage here chooses the part, in place of the PART knob; 0V to 10V spread across the 32 parts"},
+    {"ids": [7], "text": "A voltage here selects the step directly and the clock is ignored: the voltage is rounded to a whole number and wrapped round the number of steps in use"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the sequence is on any step whose gate is switched on"},
+    {"ids": [1], "text": "The chord of the current step as six polyphonic channels of 1V/octave pitch"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "That step's own gate, at 10V while the sequence is on the step and its gate is switched on"}
+  ],
+  "notes": [
+    "each step is a row of five fields on the display: the chord, its root note, its degree in the mode, the inversion and the octave. Click a field to open its list and pick from it."
+  ],
+  "menu": [
+    "Chord Selection — what the step editor offers: All Chords, Chords from Mode, or Chords from Mode (coerce), which forces a chord that is outside the mode into it",
+    "Gate Mode — what the gate outputs carry: Trigger at each step, Retrigger which drops low briefly, or Continuous held for the whole step",
+    "Repeat Notes — the octave of the notes repeated to fill six channels from a three- or four-note chord: Lower, Repeat, Upper or Random",
+    "Root Volt Scaling — how the ROOT input is read: V/Oct takes it as a 1V/octave pitch, Fourths and Fifths as the twelve keys spread across 0V to 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only\n\nunpatched it reads the ROOT knob's setting.",
+      "1": "0 to 10V · stepped · one channel only\n\nunpatched it reads the MODE knob's setting.",
+      "2": "bipolar · continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 1 to 8V.",
+      "6": "0 to 10V · stepped · one channel only\n\nunpatched it reads the PART knob's setting; a negative voltage does nothing here.",
+      "7": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

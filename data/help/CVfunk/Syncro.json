@@ -1,0 +1,87 @@
+{
+  "plugin": "CVfunk",
+  "module": "Syncro",
+  "description": "A clock generator with eight ratio channels: each channel runs at the master tempo multiplied by one number and divided by another, with an upright and an inverted gate on every one",
+  "params": [
+    {"ids": [0], "text": "Sets the internal tempo, 0 to 480 BPM"},
+    {"ids": [1], "text": "Attenuverts the clock CV before it is added to the tempo knob"},
+    {"ids": [2], "text": "Shifts every other beat of the master clock earlier or later, -99 to 99 per cent, which swings the whole set of channels together"},
+    {"ids": [3], "text": "Attenuverts the swing CV before it is added to the swing knob"},
+    {"ids": [4], "text": "Sets how much is added to the multiplier of any channel whose fill is on, 0 to 8"},
+    {"ids": [5], "text": "Attenuverts the fill CV before it is added to the fill knob"},
+    {"ids": [6], "text": "Sets how much of each cycle the upright gates are high, from a sliver to nearly all of it"},
+    {"ids": [7], "text": "Attenuverts the gate width CV before it is added to the width knob"},
+    {"ids": [8], "text": "Rotates the eight ratio settings round the eight channels, -1 to 1 for a whole turn in either direction"},
+    {"ids": [9], "text": "Attenuverts the rotate CV before it is added to the rotate knob"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17], "text": "Sets how many times faster than the master tempo that channel runs, 0 to 128; at 0 the channel stops and its upright output stays low"},
+    {"ids": [18, 19, 20, 21, 22, 23, 24, 25], "text": "Sets how many times slower than the master tempo that channel runs, 1 to 256"},
+    {"ids": [26, 27, 28, 29, 30, 31, 32, 33], "text": "Adds the fill amount to that channel's multiplier while it is held"},
+    {"ids": [34], "text": "Starts the clock on each press and stops it on the next; the lamp beside it is lit while it runs"},
+    {"ids": [35], "text": "Returns every channel's phase to the start on each press and drops all the gates"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the tempo, added to the tempo knob at 10 BPM per volt through its attenuverter; the menu can read it as a volt per octave or as one volt per ten BPM instead"},
+    {"ids": [1], "text": "Changes the swing, added to the swing knob at ten per cent per volt through its attenuverter, the total clamped to -99 to 99 per cent"},
+    {"ids": [2], "text": "Changes the fill amount, added to the fill knob through its attenuverter and rounded to a whole number"},
+    {"ids": [3], "text": "Changes the gate width, scaled by a tenth and added to the width knob through its attenuverter"},
+    {"ids": [4], "text": "Rotates the ratio settings round the channels, scaled by a tenth and added to the rotate knob through its attenuverter"},
+    {"ids": [5], "text": "Sets the tempo from the time between two rises, in place of the tempo knob"},
+    {"ids": [6], "text": "A rise starts the clock, and the next stops it"},
+    {"ids": [7], "text": "A rise returns every channel's phase to the start and drops all the gates"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Any voltage above 0.1V adds the fill amount to that channel's multiplier, which is what holding its button does"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The master clock at the tempo shown on the display, a 10V gate whose width is set by the width control"},
+    {"ids": [1], "text": "The master clock inverted, 10V while the upright gate is low"},
+    {"ids": [2, 4, 6, 8, 10, 12, 14, 16], "text": "That channel's clock, a 10V gate at the master tempo times its multiplier over its divisor; in phasor mode it carries a 0-10V ramp over the cycle instead"},
+    {"ids": [3, 5, 7, 9, 11, 13, 15, 17], "text": "That channel's clock inverted, 10V while its upright gate is low; in phasor mode it carries the same ramp shifted by the width setting"}
+  ],
+  "notes": [
+    "the clock does not run until it is started, by the ON/OFF button or a rise at the ON/OFF jack; the lamp beside the button says which state it is in"
+  ],
+  "menu": [
+    "Phasor Mode — replaces every gate with a 0-10V ramp over each cycle, the inverted output carrying the same ramp shifted by the gate width",
+    "Clock CV as V/oct — reads the clock CV as a volt per octave against the tempo knob, ignoring the attenuverter, so one volt doubles the tempo",
+    "Clock CV is 1V/10BPM — reads the clock CV as ten BPM per volt added to the tempo knob, ignoring the attenuverter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±99V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "high above 0.1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Poppy-fields",
+  "description": "Sequencer that steps along the orbit of one point in a Mandelbrot-style fractal, turning the real and imaginary parts of each iteration into two CVs, with the map drawn on the screen",
+  "params": [
+    {"ids": [0], "text": "The real part of the value the fractal starts iterating from; the knob travels to 1.8 either way but the value is clamped at 1.5, so the last of the travel does nothing"},
+    {"ids": [1], "text": "The imaginary part of the value the fractal starts iterating from; the knob travels to 1.8 either way but the value is clamped at 1.5, so the last of the travel does nothing"},
+    {"ids": [2], "text": "The real part of the constant added at every iteration, which is the point on the map the sequence is taken from, -2 to 2"},
+    {"ids": [3], "text": "The imaginary part of the constant added at every iteration, which is the point on the map the sequence is taken from, -2 to 2"},
+    {"ids": [4], "text": "Sets the exponent the fractal is raised to at every iteration, 1.75 to 5"},
+    {"ids": [5], "text": "Sets how many steps the sequence runs before it wraps round, 1 to 64"},
+    {"ids": [6], "text": "Sets the step the sequence starts from, 0 to 64"},
+    {"ids": [7], "text": "Sets how many steps behind the current one the two shift register outputs are read from, 1 to 4"},
+    {"ids": [8], "text": "Sets the span of the X CV output: 0 to 2V, -2V to 2V, or -5V to 5V"},
+    {"ids": [9], "text": "Sets the span of the Y CV output: 0 to 2V, -2V to 2V, or -5V to 5V"},
+    {"ids": [10], "text": "Moves the whole drawn map left and right, -1.8 to 1.8, and with it the window the Soil knobs are clamped to"},
+    {"ids": [11], "text": "Moves the whole drawn map up and down, -1.8 to 1.8, and with it the window the Soil knobs are clamped to"},
+    {"ids": [12], "text": "Narrows the drawn map around its centre, 1 to 15; the window shrinks with the square of the setting, and the CV outputs are multiplied by one plus the base-ten logarithm of it"},
+    {"ids": [13], "text": "Slews the X CV output, from none at fully counter-clockwise to about one clock interval at fully clockwise"},
+    {"ids": [14], "text": "Slews the Y CV output, from none at fully counter-clockwise to about one clock interval at fully clockwise"},
+    {"ids": [15], "text": "Steps through six fractals — Mandelbrot, Burning Ship, Beetlebrot, Bird, Daisybrot and Unicron; the hover text names the one in use and marks the last two as costly to draw"},
+    {"ids": [16], "text": "Swaps the Soil and Mutagens values over, which gives the Julia set of the chosen fractal"},
+    {"ids": [17], "text": "Negates the X and Y CV outputs and both shift register outputs"},
+    {"ids": [18], "text": "Steps the Aux output through its four modes — Sum, Magnitude, Centroid and Beginning of Cycle"},
+    {"ids": [19], "text": "Negates the imaginary parts of Soil and Mutagens before the fractal is iterated, which flips the map top to bottom"},
+    {"ids": [20], "text": "Advances the sequence by one step each time it is pressed, on both axes at once"},
+    {"ids": [21], "text": "Returns both axes to the step set by Start; a cable in Reset In replaces this button"},
+    {"ids": [22], "text": "Flips the sequence between running forwards and backwards; a cable in Reverse In replaces this button"},
+    {"ids": [23], "text": "Steps the drawing through four styles — Blind Lines, which draws nothing and costs the least, MonoChrome, Flower and BuddhaBrot"},
+    {"ids": [24], "text": "Copies the point set by the Soil knobs into the Move knobs, centring the map on it, and zeroes the Soil knobs so the sequence stays where it was"},
+    {"ids": [25], "text": "Copies the Move knob positions into the Mutagens knobs"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise past 1V advances the sequence by one step; this clock drives the X axis, and the Y axis as well when Yi-Clock has no cable"},
+    {"ids": [1], "text": "Each rise past 1V advances the Y axis alone, so the two axes can run at different rates; with no cable the Y axis follows Clock In"},
+    {"ids": [2], "text": "A rise past 1V returns both axes to the step set by Start"},
+    {"ids": [3], "text": "Each rise past 1V flips the sequence between running forwards and backwards"},
+    {"ids": [4], "text": "Replaces the length knob, 0V giving 1 step and 5V giving 64; the voltage is cut to whole volts first, so only six lengths can be reached"},
+    {"ids": [5], "text": "Replaces the Start knob, 0V giving step 0 and 5V step 64; the voltage is cut to whole volts first, so only six starting points can be reached"},
+    {"ids": [6], "text": "Replaces the Smooth knob for the X axis and runs the other way round from it: 0V gives the most slew and 5V none"},
+    {"ids": [7], "text": "Replaces the Smooth knob for the Y axis and runs the other way round from it: 0V gives the most slew and 5V none"},
+    {"ids": [8], "text": "Added to the outer Mutagens knob, 5V moving it by 1; the total is clamped to 1.5 either way"},
+    {"ids": [9], "text": "Added to the inner Mutagens knob, 5V moving it by 1; the total is clamped to 1.5 either way"},
+    {"ids": [10], "text": "Added to the outer Soil knob, 5V moving it by 1; the total is clamped to the edges of the drawn map"},
+    {"ids": [11], "text": "Inverted before it is added to the inner Soil knob, so a positive voltage moves the point the opposite way from the knob; the total is clamped to the edges of the drawn map"},
+    {"ids": [12], "text": "The absolute value of the voltage is added to the Petals knob, so a negative voltage raises the exponent as much as the same positive one does, and the total can pass the knob's own maximum of 5"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The real part of the step being played, scaled to the X Range switch and slewed by Smooth"},
+    {"ids": [1], "text": "The imaginary part of the step being played, scaled to the Y Range switch and slewed by Smooth"},
+    {"ids": [2], "text": "The real part of the step a set number of places behind the one being played, scaled to the X Range switch, with no slew applied"},
+    {"ids": [3], "text": "The imaginary part of the step a set number of places behind the one being played, scaled to the Y Range switch, with no slew applied"},
+    {"ids": [4], "text": "5V for as long as the clock driving the X axis is above 1V, and 0V otherwise"},
+    {"ids": [5], "text": "5V for as long as the clock driving the Y axis is above 1V, and 0V otherwise"},
+    {"ids": [6], "text": "Carries whichever Aux mode is chosen: the sum of the two CV outputs, their magnitude, the average value of the whole sequence, or a 10V pulse 0.8 seconds long at the start of each cycle"}
+  ],
+  "notes": [
+    "the screen draws the fractal itself, with a pale blue square at the point the Soil knobs set, a green square at the step being played, and a line joining the steps of the sequence in order",
+    "every output is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Soil as Polar — reads the outer Soil knob as a radius and the inner one as an angle, instead of as two coordinates"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads Clock In.",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 5V · stepped · one channel only\n\nunpatched it reads the length knob; a negative voltage does nothing here.",
+      "5": "0 to 5V · stepped · one channel only\n\nunpatched it reads the Start knob; a negative voltage does nothing here.",
+      "6": "0 to 5V · continuous · one channel only\n\nunpatched it reads the X Smooth knob; a negative voltage does nothing here.",
+      "7": "0 to 5V · continuous · one channel only\n\nunpatched it reads the Y Smooth knob; a negative voltage does nothing here.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "0 to 5V · stepped · one channel only",
+      "5": "0 to 5V · stepped · one channel only",
+      "6": "one channel only"
+    }
+  }
+}

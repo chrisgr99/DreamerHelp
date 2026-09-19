@@ -1,0 +1,15 @@
+{
+  "plugin": "ExpertSleepers-Encoders",
+  "module": "ExpertSleepers-Encoders-Calibrator",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "why": "Calibrator.cpp:135 reads getVoltage() with no channel into the input correction, and lines 155, 174, 194 and 214 sample the same jack during calibration"},
+      "1": {"poly": false, "step": "continuous", "negative": "swings", "why": "Calibrator.cpp:139 reads getVoltage() with no channel into the output correction at line 140"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "Calibrator.cpp:137 writes the corrected input voltage with setVoltage() and no channel"},
+      "1": {"poly": false, "why": "Calibrator.cpp:141 writes the pre-compensated voltage with setVoltage() and no channel; lines 183, 193, 204 and 213 overwrite it with 0.0f or 3.0f while output calibration runs"}
+    }
+  },
+  "comment": "Source read at commit 95496e8, HEAD of the maker's repository; its plugin.json is byte-for-byte the installed 2.1.0 manifest. Each calibration point is the median of 20000 samples (kNumSamples, Calibrator.cpp:6 and 240-244), and the output calibration allows half a second of settling between driving 3V and measuring it (line 205). The defaults are in0V 0, in3V 3, out0V 0, out3V 3, which make both corrections the identity — hence the note that an uncalibrated module passes signals through. Initialise resets those four values (onReset, lines 52-58) but leaves the state machine where it is. The two lamps are driven from the button parameters themselves except while a confirmation is outstanding, when they are toggled at ten times a second. No family is given for any of the four jacks: what they carry is whatever is being calibrated. The panel prints From Device, To VCV, From VCV and To Device beside the jacks, and Calibrate Input and Calibrate Output beside the buttons."
+}

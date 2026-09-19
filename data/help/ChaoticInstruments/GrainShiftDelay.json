@@ -1,0 +1,46 @@
+{
+  "plugin": "ChaoticInstruments",
+  "module": "GrainShiftDelay",
+  "description": "A granular texturiser feeding a clock-synced crossfade delay, with a single-sideband frequency shifter in the feedback path",
+  "params": [
+    {"ids": [0], "text": "Sets how thickly the grains are launched and how far each is thrown from where it belongs: one every half window and no throw counter-clockwise, one every eighth and a 180ms throw clockwise"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the SCATTER input before it is added to the SCATTER knob"},
+    {"ids": [2], "text": "Picks the delay length as a note value of the beat, in nine steps from two whole notes at the counter-clockwise end down to a hundred-and-twenty-eighth note at the clockwise end"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at the TIME input before it is added to the TIME knob"},
+    {"ids": [5], "text": "Shifts the delayed signal in frequency, marked minus 12 to plus 12 semitones but applied as a flat shift in hertz, the ends of the travel reaching the Max shift figure on the menu"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the SHIFT input before it is added to the SHIFT knob"},
+    {"ids": [7], "text": "Sets how much of the delay output goes back into it, none at the counter-clockwise end and 0.98 at the clockwise end"},
+    {"ids": [8], "text": "Attenuates and inverts the voltage at the FEEDBACK input before it is added to the FEEDBACK knob"},
+    {"ids": [9], "text": "Crossfades the dry input against the granulated and delayed signal on an equal-power curve"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio input into the granulator"},
+    {"ids": [1], "text": "A clock here sets the beat the delay's note value is measured against, taken from rising edges above 1V; with nothing patched the delay runs at the Base time on the menu instead"},
+    {"ids": [2], "text": "Moves the grain density and throw, scaled by its attenuverter, with 5V covering the whole of the SCATTER knob's travel"},
+    {"ids": [3], "text": "Moves the delay's note value, scaled by its attenuverter, with 5V covering the whole of the TIME knob's travel"},
+    {"ids": [4], "text": "Moves the frequency shift, scaled by its attenuverter, with 5V moving it 12 semitones at the attenuverter's clockwise end"},
+    {"ids": [5], "text": "Moves the feedback amount, scaled by its attenuverter, with 5V covering the whole of the FEEDBACK knob's travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The granulated and delayed signal mixed with the dry input, five times the internal signal level and clipped at 10V"}
+  ],
+  "menu": [
+    "Grain size — sets how long each grain is, in milliseconds; the module starts at 50ms",
+    "Base time — sets the delay time used while no clock is patched to CLK; the module starts at 0.5 seconds",
+    "Crossfade — sets how long the delay takes to fade from its old length into a new one; the module starts at 20ms",
+    "Max shift — sets the frequency shift, in hertz, that the ends of the SHIFT knob's travel reach; the module starts at 1000Hz"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

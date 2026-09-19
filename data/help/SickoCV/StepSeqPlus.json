@@ -1,0 +1,60 @@
+{
+  "plugin": "SickoCV",
+  "module": "StepSeqPlus",
+  "description": "A sixteen-step voltage sequencer with thirty-two stored programs, clocked or addressed by voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage that step sends, over the range chosen under Knobs Range"},
+    {"ids": [16], "text": "Sets how many steps the sequence runs through, 1 to 16"},
+    {"ids": [17], "text": "Chooses whether the jack below it advances the sequence on each trigger or addresses a step directly by voltage"},
+    {"ids": [18], "text": "Sets which step a reset jumps to, 1 to 16"},
+    {"ids": [19], "text": "Starts and stops the sequencer"},
+    {"ids": [20], "text": "Selects one of the thirty-two programs, 0 to 31; the choice only takes effect when SET is pressed, unless AUTO is on"},
+    {"ids": [21], "text": "Reloads the selected program, discarding any edits made since it was stored"},
+    {"ids": [22], "text": "Double-click to store the current sequence and its settings into the selected program"},
+    {"ids": [23], "text": "Applies the pending program or scale change, and applies any note edits made to a pending program"},
+    {"ids": [24], "text": "Applies a program change the moment it is made, instead of waiting for the SET button"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence on each trigger, or addresses a step with 0-10V spread across the set length, depending on the switch above it"},
+    {"ids": [1], "text": "Held above 1V, each clock steps backwards instead of forwards; it is read in clock mode only"},
+    {"ids": [2], "text": "Runs the sequencer for as long as it is held high, or toggles it on a trigger with Run Input set to Trig"},
+    {"ids": [3], "text": "A trigger here jumps to the step the RST knob sets; it is read in clock mode only"},
+    {"ids": [4], "text": "Lengthens the sequence, 0-10V covering all sixteen steps, added to the STEPS knob"},
+    {"ids": [5], "text": "Selects the program by voltage, or steps to the next stored one on each trigger with Prog Input type set to Trig"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the step the sequence is on"}
+  ],
+  "notes": [
+    "a program is only saved by double-clicking STOR; editing the steps and moving on loses the changes."
+  ],
+  "menu": [
+    "Randomize Steps — sets all sixteen step knobs to random values",
+    "Knobs Range: 0/1v, 0/2v, 0/3v, 0/5v, 0/10v, -1/+1v, -2/+2v, -3/+3v, -5/+5v, -10/+10v — sets the voltage span the step knobs cover",
+    "Run Input: Gate, Trig — chooses whether the RUN jack runs the sequencer while held high or toggles it on each trigger",
+    "Reverse Input Voltage: Positive, Negative — chooses whether REV runs the sequence backwards above 1V or below -1V",
+    "Reset on Run — resets the step when the sequencer goes from stopped to running",
+    "Don't advance — makes the first clock after a reset hold on the reset step rather than moving off it",
+    "Prog Input type: CV, Trig — chooses whether the PROG jack reads a voltage or steps to the next stored program on each trigger",
+    "Scan Last Prog — reads every program again and reports the highest one that holds anything",
+    "Copy Sequence — puts the current sequence and its settings on a clipboard",
+    "Paste Sequence — takes a sequence off that clipboard; it is shown as a plain label when the clipboard is empty",
+    "DISK operations — a submenu with Load preset and Save preset, which read and write all thirty-two programs and the module's settings as one file",
+    "Erase ALL progs — clears every stored program, behind an 'Are you Sure?' submenu whose only item is ERASE!",
+    "Initialize on Start — returns to the first step when Rack loads a patch, instead of resuming where the sequence stopped",
+    "Tips — a submenu that only prints reminders about storing programs with a double-click"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · one channel only"
+    }
+  }
+}

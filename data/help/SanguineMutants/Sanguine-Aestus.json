@@ -1,0 +1,65 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Aestus",
+  "description": "Function generator running as a one-shot envelope, a free-running LFO or an audio oscillator, with the wave adjustable in curvature, rise-to-fall balance and harmonic content",
+  "params": [
+    {"ids": [0], "text": "Advances the generator mode on each press: cyclic after a one-shot AD envelope, a one-shot AR envelope after cyclic, then AD again; with the Sheep model chosen the press changes wave bank instead"},
+    {"ids": [1], "text": "Advances the frequency range on each press: high after medium, low after high, then medium again"},
+    {"ids": [2], "text": "Chooses between the tidal modulator and the Sheep wavetable synthesizer; the display beside it shows T or S, or P while the peacocks plotter is on"},
+    {"ids": [3], "text": "Sets the rate, four octaves either side of centre; while clock sync is on it sets the ratio between the clock and the output instead"},
+    {"ids": [4], "text": "Attenuverts the FM input, 5V shifting the pitch by an octave at full clockwise; with nothing patched to FM that input reads 0.1V, so the knob works as a fine frequency control"},
+    {"ids": [5], "text": "Sets the curvature of the rising and falling segments; with the Sheep model chosen it sets the X coordinate in the wave map"},
+    {"ids": [6], "text": "Sets the split between rise and fall: fully counter-clockwise the rise is instant, fully clockwise the fall is; with the Sheep model it sets the Y coordinate in the wave map"},
+    {"ids": [7], "text": "Low-pass filters the wave counter-clockwise of noon and wavefolds it clockwise of noon"},
+    {"ids": [8], "text": "Locks the generator to the CLOCK input while it is on; with the tidal modulator model a cable patched to CLOCK turns the lock on without this button"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the SHAPE knob, 5V covering the whole knob range"},
+    {"ids": [1], "text": "Adds to the SLOPE knob, 5V covering the whole knob range"},
+    {"ids": [2], "text": "Adds to the SMOOTH knob, 5V covering the whole knob range"},
+    {"ids": [3], "text": "A voltage of 0.7V or more starts the envelope in AD or AR mode, and resets the phase in cyclic mode"},
+    {"ids": [4], "text": "A voltage of 0.7V or more stops the wave where it is until the voltage falls again"},
+    {"ids": [5], "text": "Sets the rate, one volt per octave"},
+    {"ids": [6], "text": "Shifts the rate through the FM attenuverter; with nothing patched it reads a constant 0.1V"},
+    {"ids": [7], "text": "Scales the UNI and BI outputs like a VCA, 8V giving full level and higher voltages clipped; with nothing patched it reads 8V"},
+    {"ids": [8], "text": "Locks the generator to this signal whenever a cable is patched here with the tidal modulator model chosen, reading high at 0.7V; with the Sheep model and clock sync off, pulses here step the wave bank"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V once the rising segment has finished and returns to 0V when the cycle restarts or a new trigger arrives; with the Sheep model chosen it carries a one-bit version of the wave"},
+    {"ids": [1], "text": "Carries 5V once the falling segment has finished; with the Sheep model chosen it carries a square sub-oscillator an octave down"},
+    {"ids": [2], "text": "The wave as a unipolar signal, 0-8V"},
+    {"ids": [3], "text": "The wave as a bipolar signal, -5V to 5V, with a positive and a negative bump in each cycle rather than a shifted copy of the unipolar wave"}
+  ],
+  "notes": [
+    "the module is monophonic: every jack reads or writes a single channel.",
+    "the peacocks plotter, switched on from the right-click menu, disables every control and drives the UNI and BI outputs with the X and Y of a drawing, for a scope in X-Y mode."
+  ],
+  "menu": [
+    "Model: Tidal Modulator, Sheep - Wavetable synthesizer — chooses the model the module runs",
+    "Mode: AD Envelope, Cyclic, AR Envelope — sets what the generator does, and appears only with the tidal modulator model",
+    "Wave table: Additive harmonics, PWMish, Nodi WMAP — picks the bank of waves the Sheep model scans, and appears only with that model",
+    "Range: High, Medium, Low — sets the frequency range",
+    "Compatibility options — the submenu holding the settings that restore how older versions of the module behaved",
+    "Frequency knob center is C4 — subtracts a volt from the pitch so a centred FREQUENCY knob gives C4; switching it off restores the older tuning. It is on the Compatibility options submenu",
+    "Peacocks easter egg — switches the plotter on and off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "1": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "2": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "3": "high above 0.7V · stepped · one channel only",
+      "4": "high above 0.7V · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0.1V.",
+      "7": "0 to 8V · continuous · one channel only\n\nunpatched it reads 8V; a negative voltage does nothing here.",
+      "8": "high above 0.7V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · one channel only",
+      "2": "0 to 8V · one channel only",
+      "3": "±5V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "vitamin",
+  "module": "Pan",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "normal": "0V", "why": "src/Pan.cpp process(): loops c < inputs[IN_INPUT].getChannels() in blocks of 4 and sets both outputs' channel counts from it"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "src/Pan.cpp process(): cv = clamp((float_4::load(inputs[CV_INPUT].getVoltages(c)) + knobCv + 5.0f) / 10.0f * M_PI/2, 0.0, M_PI/2)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Pan.cpp process(): outputs[LEFT_OUTPUT].setChannels(channels) from the in jack's channel count"},
+      "1": {"family": "audio", "poly": true, "why": "src/Pan.cpp process(): outputs[RIGHT_OUTPUT].setChannels(channels) from the in jack's channel count"}
+    }
+  },
+  "comment": "The knob is ±5V and the CV is summed with it before a single clamp, so the pair behaves as one control clamped to ±5V rather than as a knob with an attenuated CV. The README says the CV input is polyphonic, which it is, but it is read against the in jack's channel count: a mono CV cable leaves every channel past the first following the knob alone."
+}

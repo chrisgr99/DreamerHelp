@@ -1,0 +1,31 @@
+{
+  "plugin": "SillySounds",
+  "module": "Kyle",
+  "description": "An envelope follower: it tracks how far a signal swings and gives out both that envelope and its mirror image, for ducking one sound under another",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the envelope falls, 0 to 10, the figure being the volts per second taken off the envelope while the input is below it"},
+    {"ids": [1], "text": "Bends the fall, -10 to +10; the rate is multiplied by e raised to this number times the seconds since the last peak, so a positive setting accelerates the fall and a negative one flattens it out"},
+    {"ids": [2], "text": "Scales the envelope, 0 passing it through unchanged and 1 multiplying it by ten, with the result limited to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal followed; its sign is discarded before use, so the envelope climbs to the size of the largest swing in either direction"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0V to 10V"},
+    {"ids": [1], "text": "The envelope taken away from 10V, so it drops as the input grows; patch it to a VCA to duck one signal under another"}
+  ],
+  "notes": [
+    "decay arrives at 0, and at 0 the envelope never falls: it climbs to the largest swing so far and holds there. Turn decay up before expecting an envelope shape.",
+    "once the input has been within 0.01V of zero for one second, out is forced to 0V and inv to 10V, whatever the envelope had reached.",
+    "both outputs take their channel count from the input jack, so with nothing patched they carry no channels at all."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "AddSynth",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "normal": "silence", "why": "AddSynth.cpp:227 reads sixteen channels of this input, each halved, as the strength of that partial"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "normal": "silence", "why": "AddSynth.cpp:230 reads sixteen channels of this input, each halved, as the strength of that partial"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "AddSynth.cpp:212 reads this input with getVoltage() and no channel loop and raises 2 to that power around middle C"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the Dmp knob", "why": "AddSynth.cpp:218 reads it with getVoltage() and no channel loop, clamps this jack to 0..10 and writes it into the Dmp knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "AddSynth.cpp:239 writes one voltage and no channel count is ever set"}
+    }
+  },
+  "comment": "The second amplitude jack is lettered Amps 15-31 on the panel and named AMP 16-31 in the tooltip, while the code fills partials 16 to 31 counting from zero, AddSynth.cpp:229-231, so the panel lettering overlaps the first jack by one. The damping is an exponential curve over the partial number, AddSynth.cpp:236. Each partial's phase step is clamped, AddSynth.cpp:222, so partials above half the sample rate fold rather than alias freely."
+}

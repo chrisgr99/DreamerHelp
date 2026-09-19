@@ -1,0 +1,49 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-harmony1",
+  "description": "Four-part chord generator: it reads one pitch as a scale degree and voices a triad for bass, tenor, alto and soprano, choosing the voicing by the common-practice voice-leading rules",
+  "params": [
+    {"ids": [3], "text": "Sets the root of the key, C through B; both the chord generator and the quantizer on the Root input follow it"},
+    {"ids": [4], "text": "Sets the mode of the key, one of the seven diatonic modes; both the chord generator and the quantizer on the Root input follow it"},
+    {"ids": [5], "text": "Chooses how inversions are treated: don't care, discourage two inverted chords in a row, or discourage inverted chords altogether"},
+    {"ids": [6], "text": "Chooses the spread of the four voices: closest together, the ordinary vocal ranges, or the full extended range, in the reverse order to the one the tooltip names"},
+    {"ids": [7], "text": "Switches on the rule used when two chords share no notes: the three upper voices move one way and the bass the other, each to the nearest scale degree"},
+    {"ids": [10], "text": "Shifts the incoming scale degree by up to seven degrees either way before the chord is picked, so the harmony moves in key rather than by semitones"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The chord's scale degree, read as a pitch at 1V per octave and quantized to the key; the octave makes no difference, and a change of quantized degree generates a new chord"},
+    {"ids": [1], "text": "Generates a new chord on each rising edge above 1.6V, so a held pitch can be re-voiced; a change of input pitch also generates one unless Retrig. on notes and CV is turned off"},
+    {"ids": [2], "text": "Sets the key root and mode from a twelve-channel Poly External Scale cable: under 4V a note outside the scale, under 9V a note in it, above that the root"}
+  ],
+  "outputs": [
+    {"ids": [1], "text": "The bass voice at 1V per octave; it is the lowest voice, so it always carries one channel"},
+    {"ids": [2], "text": "The tenor voice at 1V per octave, with the bass ahead of it on channel 0 when the bass jack is unpatched"},
+    {"ids": [3], "text": "The alto voice at 1V per octave, preceded by the bass and tenor on their own channels where their jacks are unpatched"},
+    {"ids": [4], "text": "The soprano voice at 1V per octave, preceded by any lower voice whose jack is unpatched, so patching this jack alone carries all four voices with the bass on channel 0"}
+  ],
+  "notes": [
+    "the score at the top is a display only, showing the last bar or two of chords with the scale degree in roman numerals and the figured bass under each",
+    "the number printed under each output jack is how many channels that jack is carrying",
+    "the red lamp beside PES lights when that cable has fewer than twelve channels or carries a scale the module does not recognise"
+  ],
+  "menu": [
+    "Repetition avoidance: off, 4, 8, 13 — sets how many recent chords the generator refuses to repeat",
+    "Sharps&Flats: Default+sharps, Default+flats, Sharps, Flats — chooses how a note that could be written either way is spelled on the score",
+    "Black notes on white paper — reverses the colours the score is drawn in",
+    "Retrig. on notes and CV — generates a chord whenever the input pitch changes, not only when a trigger arrives; with it off and Trig patched, the trigger is the only thing that generates one",
+    "Trigger delay — delays the Trig input by 5 samples, so a pitch that arrives a sample or two behind the trigger is the one used; it comes up on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "high above 1.6V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

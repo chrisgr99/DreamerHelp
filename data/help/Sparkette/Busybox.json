@@ -1,0 +1,81 @@
+{
+  "plugin": "Sparkette",
+  "module": "Busybox",
+  "description": "Four low-frequency oscillators of fixed shape, two ADSR envelopes each with its own VCA, and a noise source, all on one panel",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the sawtooth oscillator, 0.125Hz to 256Hz"},
+    {"ids": [1], "text": "Sets the rate of the triangle oscillator, 0.125Hz to 256Hz"},
+    {"ids": [2], "text": "Sets the rate of the square oscillator, 0.125Hz to 256Hz"},
+    {"ids": [3], "text": "Sets the rate of the sine oscillator, 0.125Hz to 256Hz"},
+    {"ids": [4], "text": "Sets the part of each cycle the square oscillator spends high, 0 to 100 per cent"},
+    {"ids": [5], "text": "Holds all four oscillators at the start of their cycle for as long as it is pressed, and lets them run from there when it is released"},
+    {"ids": [6], "text": "Sets the attack of the first envelope, the time it takes to climb to 10V, 0 to 4 seconds"},
+    {"ids": [7], "text": "Sets the decay of the first envelope, the time it takes to fall from 10V to the sustain level, 0 to 4 seconds"},
+    {"ids": [8], "text": "Sets the level the first envelope holds while its gate stays high, 0 to 100 per cent of 10V"},
+    {"ids": [9], "text": "Sets the release of the first envelope, the time it takes to fall back to 0V after its gate drops, 0 to 4 seconds"},
+    {"ids": [10], "text": "Sets the attack of the second envelope, the time it takes to climb to 10V, 0 to 4 seconds"},
+    {"ids": [11], "text": "Sets the decay of the second envelope, the time it takes to fall from 10V to the sustain level, 0 to 4 seconds"},
+    {"ids": [12], "text": "Sets the level the second envelope holds while its gate stays high, 0 to 100 per cent of 10V"},
+    {"ids": [13], "text": "Sets the release of the second envelope, the time it takes to fall back to 0V after its gate drops, 0 to 4 seconds"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets all four oscillators back to the start of their cycle on each rising edge above 1V"},
+    {"ids": [1], "text": "Opens the first envelope on each channel rising above 0.5V and releases it when that channel falls back; the number of channels patched here sets how many voices the envelope runs"},
+    {"ids": [2], "text": "The signal the first envelope's VCA multiplies, channel by channel: it passes through unchanged at 10V of envelope and is silenced at 0V"},
+    {"ids": [3], "text": "Opens the second envelope on each channel rising above 0.5V and releases it when that channel falls back; the number of channels patched here sets how many voices the envelope runs"},
+    {"ids": [4], "text": "The signal the second envelope's VCA multiplies, channel by channel: it passes through unchanged at 10V of envelope and is silenced at 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sawtooth, rising 0V to 10V over each cycle, or -5V to 5V with LFO 1 checked on the menu"},
+    {"ids": [1], "text": "The sawtooth turned over, falling 10V to 0V over each cycle, or the negative of the sawtooth with LFO 1 checked on the menu"},
+    {"ids": [2], "text": "The triangle, 0V to 10V and back over each cycle, or -5V to 5V with LFO 2 checked on the menu"},
+    {"ids": [3], "text": "The triangle turned over, so that it falls where the triangle rises, over the same range"},
+    {"ids": [4], "text": "The square, 0V while the cycle is low and 10V while it is high, or -5V and 5V with LFO 3 checked on the menu"},
+    {"ids": [5], "text": "The square turned over, high where the square is low, over the same range"},
+    {"ids": [6], "text": "The sine, 0V to 10V over each cycle, or -5V to 5V with LFO 4 checked on the menu"},
+    {"ids": [7], "text": "The sine turned over, falling where the sine rises, over the same range"},
+    {"ids": [8], "text": "White noise drawn fresh every sample, -5V to 5V, or 0V to 10V with Noise unchecked on the menu; the menu also sets how many channels it carries"},
+    {"ids": [9], "text": "The first envelope, 0V to 10V, with one channel for each channel of its gate jack"},
+    {"ids": [10], "text": "The first envelope's VCA input multiplied by the envelope, channel by channel"},
+    {"ids": [11], "text": "The second envelope, 0V to 10V, with one channel for each channel of its gate jack"},
+    {"ids": [12], "text": "The second envelope's VCA input multiplied by the envelope, channel by channel"}
+  ],
+  "notes": [
+    "an envelope does nothing at all until a cable is patched to its gate jack: with that jack empty its two outputs are left untouched at whatever they last carried",
+    "the four oscillators have fixed shapes and cannot be changed: the first is a sawtooth, the second a triangle, the third a square and the fourth a sine",
+    "the four oscillators share one reset, so the button and the reset jack line all of them up at once whatever their rates"
+  ],
+  "menu": [
+    "Noise channels — sets how many channels the noise output carries, 1 to 16, each drawn separately",
+    "Polarity (check = bipolar) — a heading over the five items below it, one for each oscillator and one for the noise",
+    "LFO 1 — checked, the sawtooth and its inverted twin run -5V to 5V instead of 0V to 10V",
+    "LFO 2 — checked, the triangle and its inverted twin run -5V to 5V instead of 0V to 10V",
+    "LFO 3 — checked, the square and its inverted twin run -5V to 5V instead of 0V to 10V",
+    "LFO 4 — checked, the sine and its inverted twin run -5V to 5V instead of 0V to 10V",
+    "Noise — checked, the noise output runs -5V to 5V; unchecked it runs 0V to 10V. It comes up checked"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 0.5V · stepped · polyphonic\n\nunpatched it reads the envelope does not run; a negative voltage does nothing here.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "high above 0.5V · stepped · polyphonic\n\nunpatched it reads the envelope does not run; a negative voltage does nothing here.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · continuous · one channel only",
+      "7": "0 to 10V · continuous · one channel only",
+      "8": "±5V · continuous · polyphonic",
+      "9": "0 to 10V · continuous · polyphonic",
+      "10": "±5V · continuous · polyphonic",
+      "11": "0 to 10V · continuous · polyphonic",
+      "12": "±5V · continuous · polyphonic"
+    }
+  }
+}

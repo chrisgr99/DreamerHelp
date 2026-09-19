@@ -1,0 +1,76 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoLooper1Exp",
+  "description": "A single looper track, either on its own or as an expander adding a track to sickoLooper1; it goes immediately to the right of that module or of another expander",
+  "params": [
+    {"ids": [0], "text": "Sets the level of the stereo input, 0 to 200%, with the centre at 100%"},
+    {"ids": [1], "text": "Silences the input; it has to be off before anything can be recorded"},
+    {"ids": [2], "text": "Sets how many bars the loop lasts, 1 to 16"},
+    {"ids": [3], "text": "Ties the track to the master module's clock, so a command takes effect on the next bar; standing alone this module always records and plays unsynced whatever this button is set to"},
+    {"ids": [4], "text": "Starts an idle track at the position the bar has already reached, instead of waiting for the loop to come round"},
+    {"ids": [5], "text": "Stops a playing or overdubbing track at once with an 8ms fade, instead of waiting for the loop to end"},
+    {"ids": [6], "text": "Plays, records or overdubs the loop once and then leaves the track idle"},
+    {"ids": [7], "text": "Plays or overdubs the loop backwards; the direction changes only when the loop reaches its end"},
+    {"ids": [8], "text": "Sets the crossfade between the end of a loop and its restart, 0 to 1000ms; it comes up at 8ms"},
+    {"ids": [9], "text": "Pans the track's own stereo output"},
+    {"ids": [10], "text": "Sets the level of the track's output, 0% to 100%"},
+    {"ids": [11], "text": "Starts recording on an empty track, or overdubbing on one that already holds a loop"},
+    {"ids": [12], "text": "Starts playback of the recorded loop; the PLAY Button Sequence menu item changes what repeated presses do"},
+    {"ids": [13], "text": "Stops playback, recording or overdubbing"},
+    {"ids": [14], "text": "Double-click to erase the recorded loop; it only works while the track is idle"},
+    {"ids": [15], "text": "Sends the source signal straight to the track's own outputs as well"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel of the source to record; with nothing in the right jack this one is used for both"},
+    {"ids": [1], "text": "The right channel of the source to record"},
+    {"ids": [3], "text": "A trigger here does what the REC button does"},
+    {"ids": [4], "text": "A trigger here does what the PLAY button does"},
+    {"ids": [5], "text": "A trigger here does what the STOP button does"},
+    {"ids": [6], "text": "A trigger here erases the recorded loop"},
+    {"ids": [7], "text": "Plays the loop faster or slower, one octave per volt, which changes its pitch"},
+    {"ids": [8], "text": "A trigger here flips the loop's playback direction, as the REV button does"},
+    {"ids": [9], "text": "Moves the pan, over the range chosen under PAN CV range"},
+    {"ids": [10], "text": "Attenuates the track's output volume"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the track output"},
+    {"ids": [1], "text": "The right channel of the track output"},
+    {"ids": [2], "text": "A 1ms pulse when the loop reaches its end, and on a forced stop when 'EOL pulse on stop' is ticked"}
+  ],
+  "notes": [
+    "with no sickoLooper1 to its left this module records and plays unsynced loops whatever the SYNC button says; synchronisation comes back as soon as a master is found.",
+    "nothing is recorded until the MUTE button is off and a source is connected; the level is set with the LVL knob while you test it.",
+    "there is no clock section, no tempo detection and no preset file handling here; the clock, the click and the all-tracks controls come from the sickoLooper1 to the left.",
+    "the PLAY and REC lights show the state: both off is empty, PLAY lit steady is idle, PLAY flashing is playing, REC flashing is recording, both flashing is overdubbing.",
+    "a fast flash on PLAY or REC means a command has been given and takes effect at the end of the loop; pressing the same button again cancels it.",
+    "right-clicking the track's bar display opens the track menu: Fade IN on playback, Play Full Tail on Stop, Import Wav, Export Wav, Extra samples Tail (1sec)."
+  ],
+  "menu": [
+    "PLAY Button Sequence — sets what the PLAY button and its jack do: start and stop, or record then play then overdub, or record then overdub then play, with STOP the only way out of the last two",
+    "Instant STOP button — makes the STOP button drop the track to idle at once, except during the first recording of a synced track",
+    "OVERDUB after REC — moves the track into overdub by itself at the end of its first recording",
+    "EOL pulse on stop — sends a pulse from the EoL output when the loop is forced to stop as well as at its natural end",
+    "PAN CV range: 0/10v, ± 5v, ±10v — sets the voltage span the PAN CV jack covers",
+    "Track settings — opens the same items the track's bar display carries, from the module's own menu",
+    "Add Expander — places another sickoLooperX to the right, chained to the same master"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads the jack to its left.",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "1V per octave · continuous · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads the PAN knob alone; a negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

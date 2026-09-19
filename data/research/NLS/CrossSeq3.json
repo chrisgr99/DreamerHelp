@@ -1,0 +1,34 @@
+{
+  "plugin": "NLS",
+  "module": "CrossSeq3",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:126 passes this jack raw to CrossSeq3_setFreq; src/CrossSeq3.vult:126 adds it to the freq knob, whose own range is 0 to 10, and :104 multiplies that sum into each LFO rate"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:128 divides this jack by 10 and multiplies by the matching rate attenuverter; src/CrossSeq3.vult:132 adds that to the rate1 knob"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:129 divides this jack by 10 and multiplies by the matching rate attenuverter; src/CrossSeq3.vult:135 adds that to the rate2 knob"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:130 divides this jack by 10 and multiplies by the matching rate attenuverter; src/CrossSeq3.vult:138 adds that to the rate3 knob"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:134 divides this jack by 10 and multiplies by the matching shape attenuverter; src/CrossSeq3.vult:159 adds that to the shape1 knob, which :64 lerps between waveforms"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:135 divides this jack by 10 and multiplies by the matching shape attenuverter; src/CrossSeq3.vult:162 adds that to the shape2 knob, which :64 lerps between waveforms"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:136 divides this jack by 10 and multiplies by the matching shape attenuverter; src/CrossSeq3.vult:165 adds that to the shape3 knob, which :64 lerps between waveforms"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:131 divides this jack by 10 and multiplies by the matching amount attenuverter; src/CrossSeq3.vult:150 adds that to the amount1 knob and clips the sum to 0 to 1"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:132 divides this jack by 10 and multiplies by the matching amount attenuverter; src/CrossSeq3.vult:153 adds that to the amount2 knob and clips the sum to 0 to 1"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq3Module.cpp:133 divides this jack by 10 and multiplies by the matching amount attenuverter; src/CrossSeq3.vult:156 adds that to the amount3 knob and clips the sum to 0 to 1"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CrossSeq3Module.cpp:127 passes this jack raw to CrossSeq3_setSync; src/CrossSeq3.vult:56 tests it above 0V and :58 resets all three LFO phases to 1.0 on the rising edge"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/CrossSeq3Module.cpp:157"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/CrossSeq3Module.cpp:158"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/CrossSeq3Module.cpp:159"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/CrossSeq3Module.cpp:160"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "why": "src/CrossSeq3Module.cpp:161"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "why": "src/CrossSeq3Module.cpp:162"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "why": "src/CrossSeq3Module.cpp:163"},
+      "7": {"family": "cv", "poly": false, "range": "±10V", "why": "src/CrossSeq3Module.cpp:164"},
+      "8": {"family": "cv", "poly": false, "range": "±10V", "why": "src/CrossSeq3Module.cpp:165"},
+      "9": {"family": "cv", "poly": false, "range": "±10V", "why": "src/CrossSeq3Module.cpp:166"},
+      "10": {"family": "cv", "poly": false, "range": "±15V", "why": "src/CrossSeq3Module.cpp:167"}
+    }
+  },
+  "source": "https://github.com/michelezaccagnini/NLS/blob/main/README.md",
+  "comment": "Written from the maker's source at commit 5ebe71e, the last commit carrying 2.1.6.0. Two differences from XSeq2 that the README does not mention and that are not visible on the panel. First, the phase knobs: CrossSeq2Module.cpp:101 passes the phase knob multiplied by two into a phase that runs 0 to 2, so on XSeq2 the knob covers a whole cycle, while CrossSeq3Module.cpp:140 passes it unmultiplied, so on XSeq3 the same knob covers half a cycle. Second, the shape attenuverters are configured -3 to 3 here and -1 to 1 on XSeq2. The 1x2x3 output is not a trigger like the other three: cross_detect3 in CrossSeq3.vult returns 1 for as long as the three absolute differences sum to less than 0.1, so it is a gate whose length follows how slowly the LFOs pass each other, and it has no minimum length. The d123 output is (lfo1 - lfo2) - lfo3, which is asymmetric and is not what the 1x2x3 output tests. Index order is not panel order in the output row: the diff jacks are indices 7 to 10 and sit above the trigger and LFO jacks, which are indices 0 to 6."
+}

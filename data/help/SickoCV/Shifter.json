@@ -1,0 +1,31 @@
+{
+  "plugin": "SickoCV",
+  "module": "Shifter",
+  "description": "A 64-stage shift register that samples a voltage on every trigger and outputs whichever stage back you select",
+  "params": [
+    {"ids": [0], "text": "Holds the trigger back by 0 to 5 samples before the input is sampled, so a sequencer clocked from the same pulse has time to change first"},
+    {"ids": [1], "text": "Selects how many stages back from the newest sample the output is taken, 1 to 64"},
+    {"ids": [2], "text": "Scales the STAGE CV, -100% to +100%; with that jack empty it scales the STAGE knob instead, fully clockwise pinning the output to the newest sample and fully anticlockwise reaching twice as far back"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here samples the IN voltage into the register and moves every stored value along one place"},
+    {"ids": [1], "text": "The voltage sampled into the register on each trigger"},
+    {"ids": [2], "text": "Moves the selected stage, 0-10V covering all 64, scaled by the trimpot above it and added to the STAGE knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage held in the selected stage of the register"}
+  ],
+  "menu": [
+    "Initialize on Start — empties the register and returns to the first stage when Rack loads a patch, instead of restoring what was stored"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

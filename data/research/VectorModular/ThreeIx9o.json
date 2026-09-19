@@ -1,0 +1,17 @@
+{
+  "plugin": "VectorModular",
+  "module": "ThreeIx9o",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/ThreeIx9o.cpp:84 reads one channel with getVoltage and :89-91 write it unchanged to the first three outputs; there is no clamp and no scaling anywhere in process"},
+      "1": {"poly": false, "step": "continuous", "negative": "swings", "normal": "the first input, one sample late", "why": "src/ThreeIx9o.cpp:85 uses the jack when connected and otherwise reads outputs[OUTPUT3].getVoltage(), which :91 wrote from the first input on the previous sample"},
+      "2": {"poly": false, "step": "continuous", "negative": "swings", "normal": "the second input, one sample late", "why": "src/ThreeIx9o.cpp:86 uses the jack when connected and otherwise reads outputs[OUTPUT6].getVoltage(), which :94 wrote from the second input on the previous sample"}
+    },
+    "outputs": {
+      "0": {"poly": false, "step": "continuous", "why": "src/ThreeIx9o.cpp:89 writes the first input to one channel with setVoltage, unscaled and unclamped"},
+      "2": {"poly": false, "step": "continuous", "why": "src/ThreeIx9o.cpp:91 writes the first input to one channel with setVoltage; :85 reads this same port back as the normal for the second input"},
+      "5": {"poly": false, "step": "continuous", "why": "src/ThreeIx9o.cpp:94 writes the second input to one channel with setVoltage; :86 reads this same port back as the normal for the third input"}
+    }
+  },
+  "comment": "No family is set on any jack. A multiple carries whatever you give it, so a colour here would be a guess, in the same way as Host's audio jacks.\n\nThe file opens with a helper called mapVoltageToBrightness that applies a logarithmic curve to a voltage. It is never called: the lamp brightness comes from the two lambdas inside process, which are linear between 0V and 5V. Dead code, no effect on anything a reader can click.\n\nAll three inputs and all nine outputs are configured with an empty name string (src/ThreeIx9o.cpp:68-79), so Rack shows a bare tooltip for every jack on this module. The census records that as three unnamed inputs; the outputs are unnamed too."
+}

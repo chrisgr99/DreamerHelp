@@ -1,0 +1,20 @@
+{
+  "plugin": "dbRackModules",
+  "module": "MVerb",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "normal": "0V", "why": "MVerb.cpp:443 reads channel k of this input for each of the first sixteen mesh points and scales it by the Amt knob"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "normal": "0V", "why": "MVerb.cpp:445 reads channel k minus 16 of this input for the last nine mesh points and scales it by the Amt knob"},
+      "2": {"family": "audio", "poly": false, "why": "MVerb.cpp:503 reads this input with getVoltage() and no channel loop"},
+      "3": {"family": "audio", "poly": false, "normal": "the InL jack", "why": "MVerb.cpp:505-508 read this input with getVoltage() and no channel loop, and use the left signal when it is empty"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the Wet knob", "why": "MVerb.cpp:510 reads it with getVoltage() and no channel loop and clamps a tenth of this jack to 0..1, in place of the knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the FB knob", "why": "MVerb.cpp:519 reads it with getVoltage() and no channel loop and clamps this jack to 0..10, in place of the knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "the ERAmp knob", "why": "MVerb.cpp:522 reads it with getVoltage() and no channel loop and takes a tenth of this jack, with no clamp, in place of the knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "MVerb.cpp:535 writes one voltage and no channel count is ever set"},
+      "1": {"family": "audio", "poly": false, "why": "MVerb.cpp:536 writes one voltage and no channel count is ever set"}
+    }
+  },
+  "comment": "A seventh input, Early Reflection Select Input, is configured at MVerb.cpp:417 but no jack widget was ever added for it, so the hole drawn under the ER knob on the panel takes no cable and the input gets no line. The whole module is monophonic per side. There is a fault in the mesh modulation: MVerb.cpp:441-446 fall through to the 16-24 jack for every mesh point when the 0-15 jack is not connected, and read it at channel k minus 16, which is a negative channel index for the first sixteen points. The mesh frequencies come up at twenty-five fixed values, MVerb.cpp:339-342. This is a port of the MVerb opcode by Jon Christopher Nelson and Michael Gogins, without the per-delay-line equalisers of the original; the maker documents that difference in the README."
+}

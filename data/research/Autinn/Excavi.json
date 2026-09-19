@@ -1,0 +1,24 @@
+{
+  "plugin": "Autinn",
+  "module": "Excavi",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Excavi.cpp:441 takes getChannels() on this input and all four outputs take their channel count from it; Excavi.cpp:511 reads channel c with getPolyVoltage and Excavi.cpp:512 raises 2 to the knob-plus-input sum, unclamped"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the A pitch input", "why": "Excavi.cpp:513 and :514 read channel c of this input with getPolyVoltage when it is patched and fall back to the A pitch input when it is not; Excavi.cpp:515 raises 2 to the knob-plus-input sum, unclamped"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Excavi.cpp:501 reads channel c of this input with getPolyVoltage, multiplies it by 0.1 and Excavi.cpp:503 clamps the knob-plus-input sum to 0 to 1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Excavi.cpp:506 reads channel c of this input with getPolyVoltage, multiplies it by 0.1 and Excavi.cpp:508 clamps the knob-plus-input sum to 0 to 1"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Excavi.cpp:525 reads channel c of this input with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Excavi.cpp:470 reads channel c of this input with getPolyVoltage and Excavi.cpp:471 multiplies it by 10 and clamps the knob-plus-input sum to 0 to 60 years"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Excavi.cpp:520 reads channel c of this input with getPolyVoltage, multiplies it by 0.2 and Excavi.cpp:521 clamps the knob-plus-input sum to -1 to 1"},
+      "8": {"family": "cv", "poly": true, "sumRange": "±5V", "step": "continuous", "negative": "swings", "why": "Excavi.cpp:455 reads channel c of this input with getPolyVoltage and adds it to the knob one for one; Excavi.cpp:457 clamps the sum to -5 to 5"},
+      "9": {"family": "cv", "poly": true, "sumRange": "±5V", "step": "continuous", "negative": "swings", "why": "Excavi.cpp:461 reads channel c of this input with getPolyVoltage and adds it to the knob one for one; Excavi.cpp:463 clamps the sum to -5 to 5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Excavi.cpp:442 sets this output's channel count from the A pitch input"},
+      "1": {"family": "audio", "poly": true, "why": "Excavi.cpp:443 sets this output's channel count from the A pitch input"},
+      "2": {"family": "audio", "poly": true, "why": "Excavi.cpp:444 sets this output's channel count from the A pitch input"},
+      "3": {"family": "audio", "poly": true, "why": "Excavi.cpp:445 sets this output's channel count from the A pitch input"}
+    }
+  },
+  "comment": "A tenth input, a CV for the sync-mode switch, is kept in the enum for patch compatibility (Excavi.cpp:67) but its configInput and its jack are both commented out (Excavi.cpp:135, :651), so no click can reach it and it gets no line. The shape parameter reads out as a named wave or a percentage between two of them, and above 3 as a pulse width from 50 per cent down to 2 per cent (Excavi.cpp:25 to :49). Age sets the same two high-pass corners as the Axe module, 30Hz plus 9Hz a year and 0.5Hz plus 4Hz a year, with a make-up gain of 1 plus a tenth a year (Excavi.cpp:478, :479, :472). The drift is two sine waves per oscillator at rates chosen from primes over 100 so the pattern does not repeat audibly (Excavi.cpp:417 to :430). Output scaling is 5 for each solo output and for the ring modulation, and 2.5 for the sum (Excavi.cpp:558 to :561)."
+}

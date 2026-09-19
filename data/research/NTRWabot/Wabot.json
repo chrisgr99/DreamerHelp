@@ -1,0 +1,11 @@
+{
+  "plugin": "NTRWabot",
+  "module": "Wabot",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/NTR_Wabot.cpp process() reads inputs[j].getVoltage() with no channel into audioRing[0], and the loudness meter scales it by 0.1 so that 10V is full scale"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/NTR_Wabot.cpp process() reads inputs[j].getVoltage() with no channel into audioRing[1], and the loudness meter scales it by 0.1 so that 10V is full scale"}
+    }
+  },
+  "comment": "Read from the maker's source and README at commit 9dbb673, the head of main. Two commits carry the installed 2.10.0: 7f87299 and 9dbb673. The installed build is 9dbb673, which added the configurable port and the optional token: it carries NTR_WABOT_PORT, NTR_WABOT_TOKEN, X-Wabot-Token and the message invalid or missing X-Wabot-Token, none of which exist at 7f87299. The panel SVG is empty; every mark on it is drawn in NTRWabotWidget::draw, so the names were taken from the nvgText calls there and checked against the VCV library screenshot at 400 pixels. The panel prints Start beside the button, Port and 7777 above it, L and R over the jacks and Analyze beneath them. The printed 7777 is a literal in draw() and does not follow wabotPort(), so a rack started with NTR_WABOT_PORT set shows a port number the module is not using; this is in a Note rather than on a control line, because the number is not a control and nothing can be clicked on it. The Start button starts the server and nothing else: stopServer() is called only from the destructor, so the server runs until the module is removed or Rack is closed, and startServer() returns at once if it is already running. Three status lights are configured and set every sample, but no LightWidget is ever added, so they cannot be seen or clicked; the orb drawn in draw() shows the same state and is not a widget either. The module has no context menu of its own, so there are no menu lines. There are no outputs."
+}

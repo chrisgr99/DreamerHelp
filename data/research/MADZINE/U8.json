@@ -1,0 +1,21 @@
+{
+  "plugin": "MADZINE",
+  "module": "U8",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:398-402, getChannels() sets the output channel count and getPolyVoltage(c) reads each"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:398-402 and 441, getChannels() and getPolyVoltage(c)"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "negative": "ignored", "why": "src/U8.cpp:408, 436-440, getPolyVoltage(duckChan)/10 clamped to 0..1, so negative voltages duck nothing"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 2V", "why": "src/U8.cpp:409, 425-431, getPolyVoltage(levelChan)/10 clamped to ±1 added to the 0..2 knob, then clamped to 0..2"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/U8.cpp:293-296, getVoltage() into a SchmittTrigger at Rack's default thresholds"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/U8.cpp:301-304, getVoltage() into a SchmittTrigger at Rack's default thresholds"},
+      "6": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:401, 419, getChannels() and getPolyVoltage(c)"},
+      "7": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:401, 448, getChannels() and getPolyVoltage(c)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:405, 428, setChannels then clamp(..., -10, 10)"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "src/U8.cpp:406, setChannels then the same clamp"}
+    }
+  },
+  "comment": "sumRange on the level jack is written as a voltage spelling because that is the only spelling the field takes; the figure is the gain the sum is clamped to, 0 to 2 times, not a voltage. The duck law is 1 - duckV/10 * duckKnob * 3, floored at zero (src/U8.cpp:412), so at the top of the DUCK knob a duck signal of a third of ten volts already silences the channel. The chain jacks are summed after the channel's own level, duck and mute, so a chained signal is never touched by this module's controls. The solo search walks leftExpander and rightExpander and stops at the first module that is not a U8, an ALEXANDERPLATZ or a SHINJUKU, reading their solo parameters by hardcoded index (src/U8.cpp:316-350). The panel prints U8, INPUT, LEVEL, DUCK and the pair MUTE and SOLO; the chain jacks and the two output jacks carry no lettering. Lettering is drawn in code at src/U8.cpp:619-660."
+}

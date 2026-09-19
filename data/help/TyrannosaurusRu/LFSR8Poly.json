@@ -1,0 +1,37 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "LFSR8Poly",
+  "description": "Sequencer running an eight-bit linear feedback shift register, sending the register bits out as polyphonic gates and as one weighted CV",
+  "params": [
+    {"ids": [0], "text": "Sets all eight feedback coefficients at once, as a whole number from 0 to 255 read as eight bits"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Switches one feedback coefficient on or off; the register bits whose coefficient is on are combined to make the bit shifted in"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15, 16], "text": "Scales what one register bit contributes to the CV output, 0 to 1; the first bit can add 10V and each bit after it half as much"},
+    {"ids": [17], "text": "Sets how many of the eight register bits are used, 1 to 8"},
+    {"ids": [18], "text": "Feeds the inverse of the combined bit back into the register, making it an XNOR register rather than an XOR one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets all eight feedback coefficients from a voltage, 0-10V covering 0 to 255, and overrides the COEF knob"},
+    {"ids": [1], "text": "Sets how many register bits are used from a voltage, 0-10V covering 1 to 8, and overrides the LEN knob"},
+    {"ids": [2], "text": "A voltage above 0V makes the register feed back the inverted bit, and moves the NOT button with it"},
+    {"ids": [3], "text": "A rising edge shifts the register one place, reading high above 2V and low below 0.1V"},
+    {"ids": [4], "text": "Scales the whole CV output, 10V leaving it at full and 0V collapsing it to nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "One channel per register bit in use, carrying 10V while that bit is set and the clock is high"},
+    {"ids": [1], "text": "One voltage summed from the set register bits, each bit weighted by its own V/OCT knob"}
+  ],
+  "notes": [
+    "a register holding all zeros stays at zero; pressing NOT feeds a 1 into it and starts the sequence again",
+    "the register is shifted only by a rising edge at CLK; with nothing patched there the outputs never change",
+    "every feedback coefficient starts switched off, so the register shifts in zeros and falls silent within a few clocks; switch at least one coefficient on for a repeating sequence"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped",
+      "3": "high above 2V · stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "TME",
+  "description": "Triadex Muse emulator: a 31 bit shift register clocked into a repeating pattern, with four sliders picking the note and four picking how the pattern grows",
+  "params": [
+    {"ids": [0], "text": "Picks what the ones bit of the note number follows: OFF, ON, one of the counter divisions C1/2 to C8, or one of the 31 register bits B1 to B31"},
+    {"ids": [1], "text": "Picks what the twos bit of the note number follows, from the same list of forty"},
+    {"ids": [2], "text": "Picks what the fours bit of the note number follows, from the same list of forty"},
+    {"ids": [3], "text": "Picks what the eights bit of the note number follows, from the same list of forty"},
+    {"ids": [4], "text": "Picks the first of the four taps that are exclusive-ORed together to make the bit read into the register"},
+    {"ids": [5], "text": "Picks the second of the four taps that are exclusive-ORed together to make the bit read into the register"},
+    {"ids": [6], "text": "Picks the third of the four taps that are exclusive-ORed together to make the bit read into the register"},
+    {"ids": [7], "text": "Picks the fourth of the four taps that are exclusive-ORed together to make the bit read into the register"},
+    {"ids": [8], "text": "Clears the register and restarts the counters"},
+    {"ids": [9], "text": "Steps the register on by hand"},
+    {"ids": [10], "text": "Multiplies the note number, 0 to 16, before it reaches the CV output, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge clocks the register on; with PWMClock set in the menu the falling edge is used as well"},
+    {"ids": [1], "text": "A rising edge clears the register and restarts the counters"},
+    {"ids": [2], "text": "Sets the eight note scale the Note output uses, one channel per note, 0-1V read as twelve semitones; with nothing patched it is a major scale"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Selects what that slider follows, a quarter of a volt per position over the list of forty, and overrides the slider while patched; the jacks under the X and Y sliders carry each other's tooltip names"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note number played as a pitch, taken from the scale with the top bit adding an octave"},
+    {"ids": [1], "text": "A 1ms trigger whenever the note number changes"},
+    {"ids": [2], "text": "The note number times the level; at 10/16V per step it addresses sixteen steps over 0-10V"}
+  ],
+  "menu": [
+    "PWMClock — takes the falling edge of the clock as the half step, so the module runs at the clock rate; turned off, only rising edges count and the clock has to run at double speed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 1V · stepped · polyphonic",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "one channel only"
+    }
+  }
+}

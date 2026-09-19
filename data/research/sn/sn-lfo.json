@@ -1,0 +1,16 @@
+{
+  "plugin": "sn",
+  "module": "sn-lfo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/sn-lfo.cpp:311 getChannels() sets the channel count, 215-216 clamp(knob + 10*clamp(getPolyVoltage/5,-1,1), 0, 10)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/sn-lfo.cpp:129, a dsp::SchmittTrigger on getVoltage() with its default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "src/sn-lfo.cpp:293-305, setChannels(2) in the POLY mode and 1 otherwise"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/sn-lfo.cpp:260 and 285, a 0.001s pulse at 10V"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "src/sn-lfo.cpp:246-249, setChannels(channels) with 5 times the wave per channel"}
+    }
+  },
+  "comment": "The three frequency ranges in the code are 0.1 to 10Hz, 0.02 to 2Hz and a linear 0.5 to 25Hz (src/sn-lfo.cpp:8-12); the maker's manual lists the second and third as 0.2-2Hz and 0.5-20Hz, which matches neither the menu labels nor the constants in this build. The panel prints no label beside the frequency modulation jack; the maker's tooltip calls it log frequency modulation. Unlike sn-vco, this module puts the phase control on the panel."
+}

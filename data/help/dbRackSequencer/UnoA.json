@@ -1,0 +1,32 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "UnoA",
+  "description": "Sixteen step address sequencer where each step can be skipped at random, with per-step probability and sequence reset from polyphonic inputs",
+  "params": [
+    {"ids": [0], "text": "The chance that a step is played rather than skipped, 0 to 100%, used for every step while nothing is patched into the probability input"},
+    {"ids": [1], "text": "Picks the order: forwards, backwards or pendulum"},
+    {"ids": [2], "text": "Sets the address space the step number is spread over, 4 to 32"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on, skipping steps whose probability says to skip them"},
+    {"ids": [1], "text": "A rising edge restarts the sequence, reseeds the random generator from the Seed input and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Sets the seed the random generator takes on a reset, so the same run of skips comes back; the seed is the voltage divided by ten and zero gives a fresh run"},
+    {"ids": [3], "text": "Sets the chance per step, one channel per step, -5V for a step that is always skipped through to 5V for a step that always plays"},
+    {"ids": [4], "text": "Sends the sequence back to its start when the step whose channel is above 1V is reached, one channel per step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The step the sequence has reached as a voltage, the address space spread over 0-10V"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only",
+      "3": "±5V · continuous · polyphonic",
+      "4": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

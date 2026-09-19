@@ -1,0 +1,70 @@
+{
+  "plugin": "Starling_Via",
+  "module": "SYNC",
+  "description": "An oscillator locked to an incoming clock, its frequency set as a ratio of that clock chosen from a grid of scales, with a morphing wavetable for its shape",
+  "params": [
+    {"ids": [0], "text": "Picks the X coordinate in the ratio grid, which is the numerator of the frequency ratio in most groups and a scan through an arpeggio in the Arppegios group"},
+    {"ids": [1], "text": "Picks the Y coordinate in the ratio grid, which is the denominator of the frequency ratio in most groups and the chord or quantization in the others"},
+    {"ids": [2], "text": "Scans across the current wavetable, morphing the shape of the oscillator"},
+    {"ids": [3], "text": "Sets one of the two voltages the main output runs between, -5V to +5V; patching the A input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the B input by -1 to +1 to set the other voltage the main output runs between; with nothing patched to B the input reads 5V, so the knob alone gives -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the assignable modulation input before the module adds it, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the Wave shape CV input before the module adds it, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through what happens to the A and B levels at each cycle: Off, Track and Hold, or Resample"},
+    {"ids": [8], "text": "Steps through the four scales of the current group, wrapping round at the end"},
+    {"ids": [9], "text": "Steps through what the assignable modulation input reaches: Y Ratio, Phase or Skew"},
+    {"ids": [10], "text": "Steps through how quickly the oscillator chases a new ratio: Slow, Medium, Fast or Instantaneous"},
+    {"ids": [11], "text": "Steps through the group of scales and waves the module works from: Harmonics, Arppegios, 1V/Oct or Rhythms"},
+    {"ids": [12], "text": "Steps through the four wavetables of the current group, wrapping round at the end"},
+    {"ids": [13], "text": "Tapping this sets the tempo the oscillator locks to, in place of a pulse at the Sync input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two voltages the main output runs between; patched here, it overrides the manual A input knob"},
+    {"ids": [1], "text": "The other voltage the main output runs between, multiplied by the B knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Moves the X coordinate through the ratio grid, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Reaches whichever of Y Ratio, Phase or Skew the MOD CV destination button has chosen, through the MOD CV amount knob"},
+    {"ids": [4], "text": "Scans the wavetable, through the Wave shape CV amount knob"},
+    {"ids": [5], "text": "The clock the oscillator locks to; each rising edge is measured to work out the tempo"},
+    {"ids": [6], "text": "A rising edge here restarts the oscillator's phase without changing the tempo it has measured"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator, scaled between the A and B levels"},
+    {"ids": [1], "text": "A 5V gate, high during the attack or a delta pulse according to the Logic Out menu setting"},
+    {"ids": [2], "text": "The oscillator itself as a voltage, without the A and B scaling"},
+    {"ids": [3], "text": "A 5V gate that fires when the frequency ratio changes"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the B input is normalled to 5V and the B knob multiplies whatever arrives by -1 to +1. Unpatched the knob is a -5V to +5V source; patched it attenuverts the cable.",
+    "the main output is the module's own signal scaled between the A and B levels. Set both of those to 0V and the main output is silent whatever else the module is doing.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it."
+  ],
+  "menu": [
+    "High during attack — makes the gate output high while the wave is rising; found under the Logic Out heading",
+    "Delta — makes the gate output a pulse at each change rather than a gate; found under the Logic Out heading",
+    "Triangle — sends a plain triangle to the contour output; found under the Signal Out heading",
+    "Contour — sends the shaped wave to the contour output; found under the Signal Out heading",
+    "Quadrature: 0 degrees, 90 degrees, 180 degrees, 270 degrees — shifts the contour output's phase against the main output",
+    "Group waves — restricts the wavetable button to the four waves belonging to the current group; found under the Wave Options heading",
+    "Global waves — lets the wavetable button reach every wave in the loaded set; found under the Wave Options heading",
+    "Stock presets: Harmonic Osc, Arpeggiated Osc, Bohlen-Pierce Modes, Modal Quantizer, Sequence, Tempo-Synced LFO — sets all six buttons at once to a factory combination",
+    "Select wavetable set — loads a wavetable file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Yare",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Yare.cpp:67 reads it with getVoltage() and no channel loop"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "10V", "why": "src/Yare.cpp:70 reads it with getNormalVoltage(10.f), divides by 10 and clamps to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "src/Yare.cpp:92 sets one voltage with no channel argument"}
+    }
+  },
+  "comment": "The module is tagged Polyphonic in plugin.json but the code is mono throughout: src/Yare.cpp:67 uses getVoltage() and line 92 setVoltage() with no channel index. The panel prints S&H and ENV on the mode switch; the maker's tooltip calls the same two positions 'Sample & Hold' and 'Release Env'. The Length knob's displayed number is rescaled when the switch moves (lines 72 and 75), so the same knob position reads differently in the two modes."
+}

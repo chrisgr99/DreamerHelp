@@ -1,0 +1,15 @@
+{
+  "plugin": "Submit",
+  "module": "Set",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Set.cpp:91 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Set.cpp:76 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds; Set.cpp:80 resets the pulse phase only"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Set.cpp:83 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds; Set.cpp:87 starts the timer without toggling it"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Set.cpp:108 triggers a 10ms pulse; Set.cpp:116 sets 10V while it runs"}
+    }
+  },
+  "comment": "The panel's RESET button and its RST input do different things. The button zeroes the displayed time and leaves the pulse divider alone (Set.cpp:44-47, 78); the input restarts the four-beat pulse count and leaves the time alone (Set.cpp:49-55, 80). The manual says this; the panel does not.\n\nThe RUN button toggles between running and paused (Set.cpp:63-71) while the RUN input only starts (Set.cpp:57-61, 87), so a trigger cannot pause the timer.\n\nThe timer is driven entirely by the clock: elapsed time is accumulated in whole clock intervals at Set.cpp:93-97, and an interval more than two and a half times the previous one is discarded. With no clock patched the display never leaves zero."
+}

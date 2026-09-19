@@ -1,0 +1,21 @@
+{
+  "plugin": "SickoCV",
+  "module": "Toggler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Toggler.cpp:154 getVoltage(), compared against 1V at :157-159 as a gate or at :194 as a rising edge"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Toggler.cpp:165 getVoltage() taken as a rising edge at 1V, inside the Toggle-mode branch only"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "Toggler.cpp:271 getChannels() becomes the loop bound, :275 reads getVoltage(c); with the jack empty :278 sends 10V times the envelope"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "Toggler.cpp:282 getChannels() becomes the loop bound, :286 reads getVoltage(c); with the jack empty :289 sends 10V times the envelope"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Toggler.cpp:210 getVoltage() times the attenuverter added to the knob as a time in seconds, capped at 10 seconds"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Toggler.cpp:147 getVoltage() * attenuverter * 0.1 added to the knob, the sum clamped to 0-1 at :148-151"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Toggler.cpp:231 getVoltage() times the attenuverter added to the knob as a time in seconds, capped at 10 seconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Toggler.cpp:275 setVoltage(value, c) and :276 setChannels(chan)"},
+      "1": {"family": "audio", "poly": true, "why": "Toggler.cpp:286 setVoltage(value, c) and :287 setChannels(chan)"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Toggler.cpp:196 sets 10V while open and :223 sets 0V when it closes; no setChannels on this port"}
+    }
+  },
+  "comment": "The sustain CV sumRange is a level, not a voltage: knob plus CV is clamped to 0-1, which is 0 to 100%. The attack and release CVs are added as seconds directly, so one volt at a full attenuverter adds one second; both are read only at the instant the stage starts, so moving them during a stage changes nothing. Left and right take their channel counts separately. The RESET jack is inside the Toggle-mode branch at Toggler.cpp:164, so it does nothing in Gate mode."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "4msCompany",
+  "module": "MPEG",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "MPEGCore.cc:155 passes this jack through the flip-flop declared at MPEGCore.cc:229, which has a 1V low and a 2V high; MPEGCore.cc:112 counts this jack's channels toward the voice count"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "MPEGCore.cc:152 passes this jack through the flip-flop declared at MPEGCore.cc:231, which has a 1V low and a 2V high; MPEGCore.cc:113 counts this jack's channels toward the voice count"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "why": "MPEGCore.cc:136 with MPEGCore.cc:131-133 divides this jack by -10V, adds a half, and clamps the result, so 5V reaches one end of the range and -5V the other"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "MPEGCore.cc:151 passes this jack through the flip-flop declared at MPEGCore.cc:230, which has a 1V low and a 2V high; MPEGCore.cc:114 counts this jack's channels toward the voice count"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "why": "MPEGCore.cc:137 with MPEGCore.cc:131-133 divides this jack by -10V, adds a half, and clamps the result, so 5V reaches one end of the range and -5V the other"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "MPEGCore.cc:165 scales the converter value by EnvelopeOutFullScaleInV and adds EnvelopeOutOffsetInV, set at -20V and 10V in MPEGCore.cc:221-222"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "MPEGCore.cc:159 puts out TriggerOutputInV, set at 5V in MPEGCore.cc:220"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 5V", "why": "MPEGCore.cc:166 scales the converter value by 5"}
+    }
+  },
+  "comment": "The two CV jacks are inverting: MPEGCore.cc:219 sets CVInputFullScaleInV to -10V, so a positive voltage moves the setting down and a negative one up. The ENV output is built the same way, from a -20V span with a +10V offset (MPEGCore.cc:221-222). The menu's option lists map onto the firmware's own enumerations at MPEGCore.cc:198-212 and flash_user.hh:13-41. The source carries a comment at MPEGCore.cc:203 doubting the cycle-jack mapping, and another at MPEGCore.cc:154 saying the ping input's low-pass filtering has not been modelled."
+}

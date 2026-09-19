@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Ratio",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Ratio.cpp:35 takes the channel count from this input and Ratio.cpp:61 reads it four channels at a time; Ratio.cpp:62 adds a logarithm to it"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "range": "±10V", "negative": "swings", "normal": "the Ratio knob", "why": "Ratio.cpp:38 reads it with getVoltage() and no channel loop and clamps this jack to -10..10; Ratio.cpp:40 writes its size times 3.2 into the snapped Ratio knob and Ratio.cpp:41 turns 1/x on when it is negative"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "the Fine knob", "why": "Ratio.cpp:47 reads it with getVoltage() and no channel loop and clamps this jack to -10..10; Ratio.cpp:48 writes a tenth of it into the Fine knob"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Ratio.cpp:64 sets this output's channel count from the V/Oct input"}
+    }
+  },
+  "comment": "The Ratio jack covers only part of the knob's span: 3.2 ratios per volt over 10V reaches 32, and the knob is snapped, so each 0.3125V step moves the ratio by one. The Fine knob is clamped to positive values while the ratio is at 1, Ratio.cpp:53-55, which keeps the ratio above zero."
+}

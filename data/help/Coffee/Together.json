@@ -1,0 +1,88 @@
+{
+  "plugin": "Coffee",
+  "module": "Together",
+  "description": "Eight clock dividers driving triggers, gates and four summed voltage columns, with randomisers on every group of controls",
+  "params": [
+    {"ids": [0], "text": "Advances the sequence one step, as a rising edge at the clock jack does"},
+    {"ids": [1], "text": "Sets the step count back to zero, as a rising edge at the reset jack does"},
+    {"ids": [2], "text": "Applies the nudge or randomise action to all thirty-two voltage knobs at once"},
+    {"ids": [3], "text": "Sets how far a nudge moves a voltage knob, 0 to 1"},
+    {"ids": [4], "text": "Picks what the randomise buttons do: Nudge moves a control up or down by the nudge amount, Random replaces it with a new value anywhere in its range"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "Sets how often that row fires, once every 1 to 64 steps of the clock; at 0 the row never fires"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20], "text": "Sets that row's contribution to the first column output, -1V to 1V, counted only on the steps where the row fires"},
+    {"ids": [21, 22, 23, 24, 25, 26, 27, 28], "text": "Sets that row's contribution to the second column output, -1V to 1V, counted only on the steps where the row fires"},
+    {"ids": [29, 30, 31, 32, 33, 34, 35, 36], "text": "Sets that row's contribution to the third column output, -1V to 1V, counted only on the steps where the row fires"},
+    {"ids": [37, 38, 39, 40, 41, 42, 43, 44], "text": "Sets that row's contribution to the fourth column output, -1V to 1V, counted only on the steps where the row fires"},
+    {"ids": [45, 46, 47, 48], "text": "Applies the nudge or randomise action to all eight voltage knobs in that column"},
+    {"ids": [49, 50, 51, 52, 53, 54, 55, 56], "text": "Applies the nudge or randomise action to the four voltage knobs in that row"},
+    {"ids": [57, 58, 59, 60, 61, 62, 63, 64], "text": "Held down, that row's divider is left alone by the divider randomiser"},
+    {"ids": [65, 66, 67, 68, 69, 70, 71, 72], "text": "Sets the chance that row produces a trigger and a gate on a step where it fires, 0 for never and 1 for always"},
+    {"ids": [73], "text": "Applies the nudge or randomise action to all eight dividers, skipping any row whose lock is held"},
+    {"ids": [74, 75, 76, 77], "text": "Multiplies that column's summed voltage before it reaches the output, -5 to 5"},
+    {"ids": [78, 80, 81], "text": "Nothing in the module reads this knob; the second column's offset knob is added to all four column outputs, because the code offsets every column with the same knob"},
+    {"ids": [79], "text": "Adds -5V to 5V to every column output, not only to the second one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here advances the sequence one step"},
+    {"ids": [1], "text": "A rising edge here sets the step count back to zero"},
+    {"ids": [2], "text": "A rising edge here applies the nudge or randomise action to all thirty-two voltage knobs"},
+    {"ids": [3], "text": "Nothing in the module reads this jack; the divider randomiser can be fired only from the button beside it"},
+    {"ids": [4, 5, 6, 7], "text": "A rising edge here applies the nudge or randomise action to all eight voltage knobs in that column"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "A rising edge here applies the nudge or randomise action to the four voltage knobs in that row"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Sends a 1ms pulse whenever any row fires and its probability lets it through"},
+    {"ids": [1], "text": "Goes to 10V on any step where at least one row fires, and back to 0V on a step where none does"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Sends a 1ms pulse on the steps where that row fires and its probability lets it through"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17], "text": "Goes to 10V on a step where that row fires and its probability lets it through, and stays high until the next step"},
+    {"ids": [18, 19, 20, 21], "text": "Carries that column's summed voltage: the knobs of every row that fired on this step, added together, multiplied by the column's scale knob and offset"}
+  ],
+  "notes": [
+    "a row only fires when the step count divides exactly by its divider setting, so a row set to 4 fires on every fourth clock",
+    "the code reads the second column's offset knob for all four columns, so turning the first, third or fourth changes nothing and turning the second shifts every column"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only",
+      "11": "high above 1V · stepped · one channel only",
+      "12": "high above 1V · stepped · one channel only",
+      "13": "high above 1V · stepped · one channel only",
+      "14": "high above 1V · stepped · one channel only",
+      "15": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · stepped · one channel only",
+      "15": "0 to 10V · stepped · one channel only",
+      "16": "0 to 10V · stepped · one channel only",
+      "17": "0 to 10V · stepped · one channel only",
+      "18": "continuous · one channel only",
+      "19": "continuous · one channel only",
+      "20": "continuous · one channel only",
+      "21": "continuous · one channel only"
+    }
+  }
+}

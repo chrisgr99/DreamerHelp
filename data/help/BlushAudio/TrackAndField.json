@@ -1,0 +1,36 @@
+{
+  "plugin": "BlushAudio",
+  "module": "TrackAndField",
+  "description": "Two sample and hold units, each switchable to track and hold, and each of which samples white noise made inside the module when its signal input is empty",
+  "params": [
+    {"ids": [0, 1], "text": "Up is sample and hold, taking one reading on each rising trigger and holding it; down is track and hold, following the input while the trigger is above 0V and freezing when it drops back"}
+  ],
+  "inputs": [
+    {"ids": [0, 2], "text": "The voltage that unit samples; with nothing patched here it samples white noise made inside the module instead"},
+    {"ids": [1, 3], "text": "In sample and hold a rising edge here takes a reading, going high above 1V and arming again below 0V; in track and hold the unit follows its input while this is above 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage the upper unit is holding, despite the maker's tooltip naming this jack Output B"},
+    {"ids": [1], "text": "The voltage the lower unit is holding; the maker never gave this jack a name, so Rack falls back to calling it Output 2"}
+  ],
+  "notes": [
+    "with both the signal and the trigger input of a unit empty, that unit's output is held at 0V",
+    "in track and hold with the signal input empty, the output takes a fresh noise value on every sample while the trigger is above 0V, which makes it a noise source rather than a held voltage",
+    "the noise both units draw on is one value per sample shared between them, so triggering both on the same sample gives both outputs the same voltage",
+    "the trigger detectors are single variables shared by every copy of this module in the patch, so a second Track and Field takes in the first one's trigger edges and both then fire wrongly",
+    "the lamp beside an output brightens with the voltage being held, dark at 0V, fully lit at 1V and above, and dark again for any negative voltage",
+    "one channel per jack; a polyphonic cable is reduced to its first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads white noise made inside the module.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads white noise made inside the module.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only"
+    }
+  }
+}

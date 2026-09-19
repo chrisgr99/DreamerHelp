@@ -1,0 +1,57 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Gate-Seq-64",
+  "description": "Gate sequencer of 64 steps, each step carrying a probability, arranged as four rows of 16, two of 32 or one of 64, with a song mode of 64 phrases",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], "text": "Turns that step's gate on or off and moves the cursor to it; the step is green when its gate is on and yellow while its probability is open, and in song mode it picks a phrase instead"},
+    {"ids": [64], "text": "Sets the length of the sequence and its run mode; held for 2 seconds it opens the clock resolution in pulses per step, which is what unlocks the gate types"},
+    {"ids": [65], "text": "Starts and stops the sequencer"},
+    {"ids": [66], "text": "Splits the 64 steps into four sequences of 16, two of 32, or one of 64"},
+    {"ids": [67], "text": "Copies the current sequence, or as much of it as the 4/8/ALL switch chooses, into the buffer; in song mode it copies phrases"},
+    {"ids": [68], "text": "Writes the buffer into the current sequence from the cursor, or into the song in song mode"},
+    {"ids": [69], "text": "Returns the sequencer to its first step, and puts the write cursor back at the first step"},
+    {"ids": [70], "text": "Opens probability for the step at the cursor and puts it on the display, where the main knob sets it from 0 to 1 in steps of 0.02; pressing it again turns that step's probability off"},
+    {"ids": [71], "text": "Switches between editing one sequence and building a song out of 64 phrases"},
+    {"ids": [72], "text": "Chooses the sequence being played and edited, or in song mode the sequence the phrase under the cursor calls up; it sets the probability instead while one is on the display"},
+    {"ids": [73], "text": "Sets how much copy and paste carry: four steps, eight steps, or the whole sequence together with its length and run mode"},
+    {"ids": [76, 77, 78, 79, 80, 81, 82, 83], "text": "Chooses the shape of the gate for the step at the cursor; its lamp is green when the clock resolution can produce that shape and red when it cannot"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequencer one step per pulse; with a clock resolution above one it takes that many pulses for each step"},
+    {"ids": [1], "text": "A trigger here returns the sequencer to its first step"},
+    {"ids": [2], "text": "A trigger here starts and stops the sequencer"},
+    {"ids": [3], "text": "Chooses the sequence from a voltage"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The gates of one of the sequences; with four rows of 16 each output carries a row, with two of 32 the first and third carry them, and with one of 64 only the first"}
+  ],
+  "notes": [
+    "pressing copy in one mode and paste in the other runs a shortcut instead: randomizing the gates or the probabilities, clearing the sequence, or refilling the song",
+    "in SEQ mode, holding the mouse button down on a step and dragging across the others paints the same gate state onto every step the cursor passes",
+    "with the mouse over the sequence display, a sequence number can be typed on the computer keyboard, two key presses within one second reading as a two-digit number",
+    "in song mode, with the mouse over the sequence display, the space bar moves on to the next phrase"
+  ],
+  "menu": [
+    "Lock steps, gates and gate p — stops the steps, the gate type buttons and the gate p button being changed by accident",
+    "Reset on run — returns the sequencer to the first step every time it is started",
+    "Retrigger gates on reset — holds the gate outputs low for 1ms after a reset so a trigger-sensitive target fires again; the choices are No, Yes, and Only when Run cable is unconnected",
+    "Single shot song — plays the song once instead of repeating it",
+    "Seq CV in level — sets how the SEQ input is read: 0-10V across the 32 sequences, the note voltages C4-G6, or Trig-Incr, where a trigger steps to the next sequence",
+    "AutoSeq when writing via CV inputs — moves on to the next sequence when writing from the expander runs off the end of the current one",
+    "Add expander (4HP right side) — places the GS-X expander against the right edge of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

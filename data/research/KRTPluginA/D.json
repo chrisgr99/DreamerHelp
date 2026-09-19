@@ -1,0 +1,14 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "D",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/D.cpp:80 and 95, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/D.cpp:93-95, scaled by a tenth and by the modulation knob, then added to the gain in the exponent"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/D.cpp:103, the extrapolated sum"}
+    }
+  },
+  "comment": "The gain knob is in decibels over -24 to 6 and is applied as two raised to a sixth of it (src/D.cpp:61, 84 and 95), which is six decibels per doubling. The modulation knob is the maker's centred dB scaling shape, two to the power minus two to the minus power, which is zero at the centre of the travel and reaches plus and minus one and a half at the ends (src/D.cpp:75-77). The one pole filter is set at four times the sample rate (line 88) and the four coefficients -120, 396, -440 and 165 sum to one, so a steady signal comes through at the gain set and only changing signals are lifted. The panel prints dB, CVdB, FRQ, IN, CVdB and OUT."
+}

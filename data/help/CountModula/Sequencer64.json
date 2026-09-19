@@ -1,0 +1,53 @@
+{
+  "plugin": "CountModula",
+  "module": "Sequencer64",
+  "description": "A 64-step gate, trigger and CV sequencer in eight rows of eight, with voltage control over sequence length and direction, one-shot modes, voltage addressing and a sample and hold on the CV outputs",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], "text": "Switches that step on, so the GATE output is high for the whole of it and the TRIG output pulses there with the clock"},
+    {"ids": [64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127], "text": "Sets the voltage this step sends to OUT, from 0V at one end of its travel to the full range chosen by SCALE at the other"},
+    {"ids": [128], "text": "Sets how many steps the sequence runs for, from 1 to 64; a cable in the length CV input takes over from it"},
+    {"ids": [129], "text": "Chooses one of nine stepping modes: forward, pendulum, reverse, random, those same four as one-shots, and voltage addressed"},
+    {"ids": [130], "text": "In voltage addressed mode, picks the active step, full travel reaching the last step of the sequence; with a cable in the address CV input it attenuates that voltage instead"},
+    {"ids": [131], "text": "Sets the voltage range the step knobs cover, 1V to 8V in 1V increments"},
+    {"ids": [132], "text": "GATE samples a step's voltage as that step's gate goes high and holds it until another switched-on step arrives; OFF passes the step voltage on every step; TRIG samples at each trigger pulse"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A high gate runs the sequencer and a low gate pauses it, picking up again at the next clock; with nothing patched the sequencer runs. 2V counts as high, 0.1V as low"},
+    {"ids": [1], "text": "A low-to-high edge moves the sequence on one step. 2V counts as high and 0.1V as low, and the time the clock spends high sets the length of the trigger output"},
+    {"ids": [2], "text": "A low-to-high edge restarts the sequence, which reaches step one on the next clock, or at once if the reset lands within 100uS of a clock edge. 2V counts as high"},
+    {"ids": [3], "text": "Sets the number of steps in the sequence from the applied voltage, 10V giving all 64, and disables the LENGTH knob for as long as a cable is connected"},
+    {"ids": [4], "text": "Sets the stepping mode from the applied voltage, one mode per volt: below 1V forward, then pendulum, reverse, random, the four one-shot modes, and voltage addressed from 8V up"},
+    {"ids": [5], "text": "In voltage addressed mode, selects the active step, 10V always reaching the last step whatever the sequence length; ADDR attenuates the voltage arriving here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V for the whole of any step that is switched on, staying high across consecutive switched-on steps"},
+    {"ids": [1], "text": "Carries 10V for as long as the clock pulse is high on any step that is switched on"},
+    {"ids": [2], "text": "In the one-shot modes, goes to 10V at the end of the last step and stays there until the sequence is restarted"},
+    {"ids": [3], "text": "Carries the voltage of the active step, multiplied by the range set by SCALE and held according to the S&H switch"},
+    {"ids": [4], "text": "Carries the voltage of the active step inverted, so a step set to 3V gives -3V here"}
+  ],
+  "notes": [
+    "a green light beside a step number shows that step falls within the current sequence length, and a red light shows the step that is active",
+    "no expander modules work with this sequencer"
+  ],
+  "menu": [
+    "Initialize — puts a row back to its defaults, All rows or one named row, and CV Only, Gates/Triggers Only or CV/Gates/Triggers Only",
+    "Randomize — sets a row at random, All rows or one named row, and CV Only, Gates/Triggers Only or CV/Gates/Triggers Only",
+    "Clone — copies one row's settings Into all other rows or into a single named row, choosing CV Only, Gates/Triggers Only or CV and Gates/Triggers",
+    "Pattern — sets the step buttons of All rows or one named row to All off, X - - - X - - -, X - X - X - X - or X - - - X - X -"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "0 to 8.99V · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

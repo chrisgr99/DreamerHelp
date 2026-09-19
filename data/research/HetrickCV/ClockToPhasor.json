@@ -1,0 +1,15 @@
+{
+  "plugin": "HetrickCV",
+  "module": "ClockToPhasor",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "why": "ClockToPhasor.cpp:82 scales this CV by PULSE_CV_SCALAR, 64 pulses over 5V"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "ClockToPhasor.cpp:78 passes it to a Rack SchmittTrigger, which fires above 1V (DSP/HCVTiming.h:17)"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "ClockToPhasor.cpp:89 passes it to a Rack SchmittTrigger, which fires above 1V (DSP/Phasors/HCVPhasor.h:30)"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "ClockToPhasor.cpp:73 and 91 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor; HCVPhasorCommon.h:6 scales a phasor to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "ClockToPhasor.cpp:93 writes HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"}
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorToClock",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorToClock.cpp:103 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"poly": true, "step": "stepped", "why": "PhasorToClock.cpp:93 floors the knob plus this CV to a whole step count"},
+      "2": {"poly": true, "range": "±5V", "step": "continuous", "why": "PhasorToClock.cpp:98 clamps the knob plus this CV to plus or minus 5V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorToClock.cpp:80 and 111 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the clock gate; HCVPhasorAnalyzers.h:121 makes it HCV_PHZ_GATESCALE or 0V, HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "1": {"poly": true, "range": "0 to 10V", "why": "PhasorToClock.cpp:110 writes the step phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"}
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "plugin": "SonusModular",
+  "module": "Luppolo",
+  "description": "A minimal loop station worked entirely from triggers: one jack records the loop and plays it, another overdubs onto it",
+  "params": [
+    {"ids": [0], "text": "Empties the loop and stops recording and overdubbing, for as long as it is held down"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be recorded"},
+    {"ids": [1], "text": "A rising edge starts recording; the next stops it and starts the loop playing; a third throws that loop away and records a new one"},
+    {"ids": [2], "text": "A rising edge starts mixing the incoming signal into the loop as it plays, and the next stops it; it does nothing until a loop has been recorded"},
+    {"ids": [3], "text": "Any voltage other than 0V here empties the loop and stops recording and overdubbing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The loop as it plays, or the incoming signal while recording"}
+  ],
+  "notes": [
+    "the red lamp is lit while recording or overdubbing and the green lamp once a loop exists.",
+    "an edge is counted only when the jack moves away from exactly 0V, and no further edge until it returns there, so a gate that never falls to zero triggers once and then never again.",
+    "overdubbing adds without scaling, so going round the loop again and again builds the level until it clips whatever it feeds.",
+    "the loop has no length limit; a long recording keeps taking memory until the loop is cleared.",
+    "the loop is not saved with the patch, so reloading gives an empty looper."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

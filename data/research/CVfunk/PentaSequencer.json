@@ -1,0 +1,22 @@
+{
+  "plugin": "CVfunk",
+  "module": "PentaSequencer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "PentaSequencer.cpp:232 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "PentaSequencer.cpp:175 reads it with getVoltage and takes anything above 1V as the star order"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±10V", "why": "PentaSequencer.cpp:290 reads it with getVoltage and adds it to every output; PentaSequencer.cpp:294 clamps the total to -10 to 10V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "PentaSequencer.cpp:186 reads it with getVoltage and takes anything above 1V as anticlockwise"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "PentaSequencer.cpp:165 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "PentaSequencer.cpp:158 reads it with getVoltage, divides by 10 and clamps to 0 to 1, then writes that straight into the slew knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "PentaSequencer.cpp:412 sets five channels on this output when Enable Polyphonic Output to Channel A is on; PentaSequencer.cpp:294 clamps each voltage to -10 to 10V"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"}
+    }
+  },
+  "comment": "The SLEW jack is placed over the SLEW knob at the same position (PentaSequencer.cpp:437), and patching it writes into the knob itself rather than being summed with it, so the knob visibly follows the CV. Only the A output can be made polyphonic; B to E are always one channel."
+}

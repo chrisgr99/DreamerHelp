@@ -1,0 +1,15 @@
+{
+  "plugin": "forsitan",
+  "module": "cumuli",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/cumuli.cpp:62, the jack voltage is added to the button and tested against 0.5V, so it is a level not an edge"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/cumuli.cpp:51, the jack voltage is added to the button and tested against 0.5V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/cumuli.cpp:66, the jack voltage is added to the button and tested against 0.5V"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/cumuli.cpp:72-75, the accumulator is clamped to 0..10 and 5V is subtracted when the switch is set bipolar"}
+    }
+  },
+  "comment": "The three gate jacks are levels rather than edges: each is summed with its own button and compared with 0.5V, so a steady 1V holds the gate open. The rates are ten raised to the knob's -2 to +2, which is 0.01 to 100 volts per second, divided by a hundred in super-slow mode. The accumulator itself is always kept between 0 and 10V internally and the bipolar switch subtracts 5V on the way out, which is why a reset in bipolar mode lands on -5V rather than 0V. The panel prints cumuli, up, rst, down, out, ±5V and 0-10V; the two rate knobs, the three buttons and the switch carry no lettering of their own beyond the section names."
+}

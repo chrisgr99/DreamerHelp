@@ -1,0 +1,19 @@
+{
+  "plugin": "Mental",
+  "module": "MentalFold",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalFold.cpp:56, a bare getVoltage folded about the threshold"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/MentalFold.cpp:59, added whole to the knob's 0 to 6V with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/MentalFold.cpp:62, halved and added to the knob's 0 to 5 with no clamp"},
+      "3": {"family": "audio", "poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalFold.cpp:57 read as a bare voltage; :79-88 reflected back about the threshold whenever its magnitude exceeds it, then multiplied by the gain"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/MentalFold.cpp:60 added whole to the knob's 0 to 6V with no clamp, giving the fold threshold"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/MentalFold.cpp:63 halved and added to the knob's 0 to 5 with no clamp, giving the gain the folded signal is multiplied by"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/MentalFold.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "1": {"family": "audio", "poly": false, "why": "src/MentalFold.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"}
+    }
+  },
+  "comment": "The panel prints Thresh and Gain over each pair of knobs. No range is given for the two CV inputs because neither is clamped: the threshold input is added whole to the knob and the gain input is halved and added, and a large enough negative voltage drives either below zero. The threshold knob comes up fully clockwise and the gain knob at the centre (src/MentalFold.cpp:44-47). The fold is a single reflection, not a repeated one, so a signal far above the threshold comes out inverted rather than folded again."
+}

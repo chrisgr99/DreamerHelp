@@ -1,0 +1,35 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "MIDI_CC_Note",
+  "description": "Turns MIDI controller messages into note messages, one note per controller number, for playing from the buttons on a controller",
+  "params": [
+    {"ids": [0], "text": "Scales the velocity of the notes sent; the controller's own value is multiplied by this, so at full clockwise a value of 127 gives velocity 127 and at halfway it gives 63"},
+    {"ids": [1], "text": "Moves the notes up one octave for each press, as far as six octaves above normal"},
+    {"ids": [2], "text": "Puts the notes back to no octave shift"},
+    {"ids": [3], "text": "Moves the notes down one octave for each press, as far as six octaves below normal"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the vMIDI stream whose controller messages become notes; every controller value is converted, despite the manual saying a value below 64 is read as a release"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the notes made from the controllers, always on channel 1; nothing else from the input reaches it"}
+  ],
+  "notes": [
+    "the note number is the controller number, plus the CC Base setting, plus twelve times the octave shift; a note landing outside 0 to 127 is not sent at all",
+    "only controller messages are converted; notes, clock and everything else arriving at the input are dropped",
+    "a controller repeating the value it last sent, within 2 seconds, is ignored, so a control that sends continuously does not flood the output",
+    "every message sent is a note on, and a controller value of 0 gives velocity 0, which is how a note is released",
+    "the display reads T: and the octave shift, and switches to N: and the last note number for a moment after each note"
+  ],
+  "menu": [
+    "CC Base: 0, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120 — added to every controller number before it becomes a note, so it sets which note controller 0 produces"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only"
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

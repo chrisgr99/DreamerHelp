@@ -1,0 +1,31 @@
+{
+  "plugin": "Venom",
+  "module": "Bypass",
+  "description": "Bypass: bypasses the modules at the far ends of its cables, by button or by CV",
+  "params": [
+    {"ids": [0], "text": "Pressing it turns the bypass state on or off and it glows red while that state is on; with momentary mode set, it inverts the state only while it is held"},
+    {"ids": [1], "text": "Sets what the trigger input does: dark, a rising edge toggles the bypass state; green, a high gate turns the bypass on and a low gate turns it off; red, that gate is inverted"},
+    {"ids": [2, 3, 4], "text": "Sets which modules at the source end of the cable patched into its input are bypassed: none, the source alone, or the source with its unbroken neighbours to the left, to the right, or both ways"},
+    {"ids": [5, 6, 7], "text": "Sets which modules at the far end of the cable patched into its output are bypassed: none, the target alone, or the target with its unbroken neighbours to the left, to the right, or both ways"},
+    {"ids": [8], "text": "Sets what the trigger button does: dark, each press toggles the bypass state; yellow, a press inverts the bypass state only while the button is held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger or gate that changes the bypass state, read as a Schmitt trigger going high at 2V and low at 0.1V; the G button sets which of the two it is"},
+    {"ids": [1, 2, 3], "text": "Passes every channel patched here through to the output it is paired with, and is the route by which the source module is bypassed"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "Carries the channels of the input it is paired with; while that input is unpatched the cable here has no channels, which the destination treats as no cable and so keeps its own normalled value"}
+  ],
+  "notes": [
+    "a run of neighbours ends at a gap, at another Bypass module, or at a Venom Blocker, and none of those three is included in it",
+    "nothing is bypassed until a cable runs between one of its pairs and the module concerned; from new each output bypasses the module it feeds and each input bypasses nothing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "EnigmaCurry",
+  "module": "Transport",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Transport.cpp:92 passes getNormalVoltage(0.0), a channel-0 read, to a dsp::SchmittTrigger with its default thresholds of 0 and 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Transport.cpp:108 passes getNormalVoltage(0.0), a channel-0 read, to a dsp::SchmittTrigger with its default thresholds of 0 and 1"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Transport.cpp:125 passes getNormalVoltage(0.0), a channel-0 read, to a dsp::SchmittTrigger with its default thresholds of 0 and 1, and only while playing"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Transport.cpp:85 passes getNormalVoltage(0.0), a channel-0 read, to a dsp::SchmittTrigger with its default thresholds of 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:163 writes 10 times the playing flag to channel 0 only"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:173 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with TRIGGER_DURATION, defined as 1e-3 at line 23"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:175 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with TRIGGER_DURATION, defined as 1e-3 at line 23"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:164 writes 10 times the playing-and-armed flag to channel 0 only"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:174 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with TRIGGER_DURATION, defined as 1e-3 at line 23"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Transport.cpp:176 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with TRIGGER_DURATION, defined as 1e-3 at line 23"}
+    }
+  },
+  "comment": "Read from the repository at commit 0aec914, whose plugin.json is byte-for-byte the installed one: it carries version 2.0.7 and the two installed models, where the next commit adds a third model, Pulse, that this build does not have. Its subject, \"Transport: change the default On Start action to no action\", is the change the installed build carries.\n\nSOMETHING A PERSON SHOULD CHECK. With the LENGTH knob at 0 and a clock running, src/Transport.cpp:132 evaluates playCount modulo recordLength with recordLength zero. Integer division by zero is undefined in C++, and what happens depends on the processor: on arm64, which this build is, the division returns zero rather than trapping, so the LOOP output pulses when the play counter reads 1 and not afterwards. Anyone relying on LENGTH 0 should test it rather than trust it.\n\nThe README calls the context menu item \"Stop on record length\"; the menu itself prints \"Stop after record length?\" (src/Transport.cpp:559), and the lines use what the menu prints.\n\nThe \"Play button is toggle?\" item is ticked when the module's playIsIdempotent flag is FALSE (src/Transport.cpp:573). Ticked therefore means a second play trigger stops playback, which is the behaviour the module comes up with.\n\nThe two seven-segment numbers are drawn by a custom overlay widget with no ParamWidget behind them, so they cannot be clicked for help; what they show is in a Note line instead.\n\nThe record and play counters wrap at 1000 (src/Transport.cpp:131), and the display prints XXX for anything above 999."
+}

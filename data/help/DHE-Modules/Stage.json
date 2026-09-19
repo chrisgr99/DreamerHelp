@@ -1,0 +1,36 @@
+{
+  "plugin": "DHE-Modules",
+  "module": "Stage",
+  "description": "Generates one envelope stage: on a trigger it travels from the voltage at IN to the LEVEL voltage over the set duration",
+  "params": [
+    {"ids": [0], "text": "Sets how long the stage takes, 10ms to 10 seconds, with the centre position giving 1 second"},
+    {"ids": [1], "text": "Sets the voltage at which the generated stage ends, 0-10V"},
+    {"ids": [2], "text": "Sets the curvature of the stage; centred is a straight line, clockwise pushes the steep part towards the end and counter-clockwise towards the start, and the extremes are nearly square"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage a stage starts from, sampled when the trigger arrives, and passed straight to OUT while DEFER is high"},
+    {"ids": [1], "text": "A rising edge starts a stage from the voltage at IN; a rise during a stage abandons it and starts a new one, and rises are ignored while DEFER is high; it reads high above 1V"},
+    {"ids": [2], "text": "While this gate is high the IN signal passes straight to OUT and any stage in progress is abandoned; it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the generated stage, the IN voltage while DEFER is high, or the LEVEL voltage after a stage has completed"},
+    {"ids": [1], "text": "Carries a 1ms 10V pulse when a stage completes"},
+    {"ids": [2], "text": "Carries 10V while a stage is being generated or while DEFER is high, and 0V otherwise"}
+  ],
+  "notes": [
+    "a knob turned while a stage runs takes effect at once, and the new value applies to the remainder of that stage",
+    "a stage runs only on a rising edge at the TRIG input; until the first one arrives OUT passes the IN voltage straight through, which is 0V with nothing patched",
+    "the module is mono: it reads the first channel of a polyphonic cable and ignores the rest, and every output carries a single channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

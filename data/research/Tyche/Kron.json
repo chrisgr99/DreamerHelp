@@ -1,0 +1,15 @@
+{
+  "plugin": "Tyche",
+  "module": "Kron",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the slider's own full 100%", "why": "Kron.cpp:104-113 rescales the jack from -5V and +5V to a ceiling of 0 to 100 and multiplies the slider into it, so the slider attenuates the jack; read at voltages[0] with no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Kron.cpp:77 getInput(MUTE_INPUT).getVoltage() >= 0.1f, a level test with no Schmitt trigger, read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Kron.cpp:117-119 resetTrigger.process(resetIn, 0.1f, 2.f), so a rising edge is detected past 2V and the jack is armed again below 0.1V; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Kron.cpp:97 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The division table at Kron.cpp:41-54 counts Omen pulses: 48 for a half note down to 4 for a sixteenth triplet, against 24 pulses per quarter note. The density test at line 80 compares the slider-and-CV figure against a noise value rescaled to 0 to 100, so at 100% every division fires. The pulse length is 1e-3 seconds (line 87). The one-sample mute problem the maker describes in the README is a consequence of the expander message flip and is visible in the code: the mute is read at line 77 before the chain message for this sample has been processed."
+}

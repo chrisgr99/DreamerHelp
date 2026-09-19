@@ -1,0 +1,54 @@
+{
+  "plugin": "NewtronAudio",
+  "module": "sequence_enhancer",
+  "description": "Takes a clock, a pitch and an optional gate, and runs them through one of eight fixed 16-step patterns that shorten the gate and shift the pitch by whole octaves",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the eight 16-step patterns runs, each one a fixed list of gate lengths and octave shifts"},
+    {"ids": [1], "text": "Scales the octave shifts the pattern carries, from none at the bottom of its travel to the full shift at the top; the result is rounded to whole octaves"},
+    {"ids": [2], "text": "Sets how long a step is against the clock, in seven positions: a quarter, a third, a half, the same, four thirds, twice and four times the clock rate, despite the fifth reading 1.5x in its tooltip"},
+    {"ids": [3], "text": "Sets how much of a step the gate is high for, from fully closed at the bottom of its travel to the whole step at the top, before the pattern shortens it"},
+    {"ids": [4], "text": "Sets how far the pattern is allowed to shorten the gate: at the bottom of its travel the gate keeps the length the slider set, and at the top the pattern's own length is used"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the speed CV jack, -1 to +1, and holds that jack at nothing in the centre"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the gate length CV jack, -1 to +1, and holds that jack at nothing in the centre"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps the chosen pattern on, 0V to 10V covering the eight; the voltage is cut to whole volts before it is used, so a fraction of a volt changes nothing"},
+    {"ids": [1], "text": "Adds to the octave scaling, 10V covering the whole of it, and a negative voltage takes it back down"},
+    {"ids": [2], "text": "Adds to how far the pattern may shorten the gate, 10V covering the whole of it, and a negative voltage takes it back down"},
+    {"ids": [3], "text": "Moves the step length through its seven positions, six of them at 10V with the trimpot above the jack turned fully up"},
+    {"ids": [4], "text": "Adds to the gate length through the trimpot above the jack, the whole span at 10V with the trimpot fully up"},
+    {"ids": [5], "text": "Takes the pitch that the pattern's octave shifts are added to"},
+    {"ids": [6], "text": "A clock here is what drives the whole module; every step is measured against the time between the last two rising edges"},
+    {"ids": [7], "text": "A trigger here returns the pattern to its first of 16 steps"},
+    {"ids": [8], "text": "An optional gate that latches the two outputs: while a cable is patched here, the pitch output changes only on a rising edge at this jack, and the gate output is held low until one arrives"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch from the pitch input with the pattern's octave shift added, as whole volts of octave"},
+    {"ids": [1], "text": "A 10V gate for each step, as long as the gate slider and the pattern between them make it"}
+  ],
+  "notes": [
+    "nothing happens at all without a clock: with no cable at CLK the module's process is skipped entirely, both outputs keep whatever they last held, and there is no run button",
+    "the gate input is optional and is most use on a polyphonic voice, where it sets which incoming note each channel holds; a monophonic patch usually needs only the clock",
+    "every input is polyphonic and the module runs as many channels as the input with the most has; an input carrying one channel is used for all of them",
+    "the channel count is taken again only when a step falls, so patching a cable with more channels takes effect on the next step rather than at once",
+    "the eight patterns are fixed in the module and cannot be edited; each is 16 steps of gate length and octave shift, and there is no menu on the module at all",
+    "the two trimpots do nothing unless a cable is patched to the jack below them; the algorithm, pitch and rhythm CV jacks have no trimpot and are taken at their full voltage"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "0 to 10V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "6": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

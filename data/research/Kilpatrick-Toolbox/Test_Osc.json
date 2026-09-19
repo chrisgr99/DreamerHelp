@@ -1,0 +1,13 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Test_Osc",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Test_Osc.cpp:236 casts this input's getVoltage to an int and takes a rising edge from it; Test_Osc.cpp:254 gates the momentary tone on the same voltage being greater than 1.0"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Test_Osc.cpp:276, :299, :325, :334 and :338 all write this output with setVoltage and setChannels is never called on it"}
+    }
+  },
+  "comment": "LEVEL, FREQ and SPEED are endless encoders, configured with infinite limits at Test_Osc.cpp:139-141; the value each one moves is kept in a separate parameter with no widget of its own (FREQ INDEX, ABS LEVEL, REF LEVEL and SPEED at :148-151), which is why the census lists twelve parameters and only eight positions. ABS LEVEL runs from 0.000015848931924611107 to 1.0, which is -96dB to 0dB, and moves 0.1dB a detent through adjustFactorByDb at :198. The sweep span is SWEEP_START_FREQ 20 and SWEEP_END_FREQ 20000 at :106-107, and the free range is LOG_START_FREQ 20.6 and LOG_END_FREQ 19912 at :108-109. The third-octave table is at :49-54; OCT steps the index by three and clamps it to 2 to 29, which is 31.5Hz to 16000Hz, while 3RD uses the whole table, 20Hz to 20000Hz. The reset to index 17, or to 1046.5Hz at LOG, is settingChange at :374-382. White noise is doubled before the output at :325 while the sine is not, so the two peak at the same voltage for a given LEVEL. The pink filter coefficients are at :329-331. The module has no appendContextMenu at all."
+}

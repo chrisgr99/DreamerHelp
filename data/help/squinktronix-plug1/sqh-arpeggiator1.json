@@ -1,0 +1,52 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-arpeggiator1",
+  "description": "Arpeggiator: voltages arriving on its polyphonic CV inputs are collected in a buffer and played back one per clock, in an order set by the mode",
+  "params": [
+    {"ids": [0], "text": "Chooses the playback order: up, down, up+down, down+up, up then down, down then up, inside-out, outside-in, order played, repeat low, repeat high, shuffle"},
+    {"ids": [1], "text": "Sets how many of the most recent input voltages the buffer keeps, 1 to 16; fully anticlockwise it keeps the last 32, which is the most it can hold"},
+    {"ids": [2], "text": "Sets how many notes are played before the pattern starts over, 1 to 16; fully anticlockwise the pattern runs its natural length, which is however many notes are in the buffer"},
+    {"ids": [3], "text": "Keeps notes in the buffer when their gate falls, so they accumulate as you play; switching it off empties the buffer of everything whose gate is already low"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltages to arpeggiate: a channel is written into the buffer when its gate goes high, so this normally takes a polyphonic cable at 1V per octave"},
+    {"ids": [1], "text": "Writes that channel's CV and CV2 into the buffer when it rises above 1.6V and drops that note when it falls; a mono cable here samples every channel of the CV input at once"},
+    {"ids": [2], "text": "Advances the arpeggio one step on each rising edge above 1.6V; the gate output follows the shape of this input, so a narrow clock gives short notes"},
+    {"ids": [3], "text": "Returns playback to the first step of the pattern on a rising edge above 1.6V"},
+    {"ids": [4], "text": "Overrides the Hold switch while patched: above 1.5V notes accumulate, below it they are dropped when their gate falls"},
+    {"ids": [5], "text": "Overrides the mode control while patched, a twelfth of a volt per mode from 0V, clamped at both ends of the list"},
+    {"ids": [6], "text": "A second voltage per channel, sampled at the same moment as CV and carried through the arpeggiation with it, so it comes out at the CV2 output beside the note it arrived with"},
+    {"ids": [7], "text": "Re-shuffles the playback order at the end of the current cycle on a rising edge, in shuffle mode; unpatched, the order is re-shuffled every cycle"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The arpeggiated voltage from the CV input, monophonic, changing on each clock"},
+    {"ids": [1], "text": "10V while the clock input is high and there is something in the buffer to play, 0V otherwise"},
+    {"ids": [3], "text": "The value the CV2 input carried for the note now playing, monophonic"}
+  ],
+  "notes": [
+    "nothing plays until there are notes in the buffer: patch a polyphonic CV and its gates, or turn Hold on and feed notes in one at a time",
+    "nothing advances without a clock either; the module has no clock of its own",
+    "the module quantizes nothing, so any voltage can be fed through it, and the modes reorder voltages rather than pitches"
+  ],
+  "menu": [
+    "Reset Mode II — holds the reset until the next clock, which carries out the reset instead of acting as a clock; with it off the reset happens on its own rising edge",
+    "Gate+Clock Delay — delays the gate input by 5 samples and the clock input by 10, so a CV that arrives a sample or two late is the one sampled"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1.6V · stepped · polyphonic",
+      "2": "high above 1.6V · stepped · one channel only",
+      "3": "high above 1.6V · stepped · one channel only",
+      "4": "high above 1.5V · stepped · one channel only\n\nunpatched it reads the Hold switch.",
+      "5": "0 to 0.91V · stepped · one channel only\n\nunpatched it reads the mode control; a negative voltage does nothing here.",
+      "6": "continuous · polyphonic",
+      "7": "high above 1.6V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "3": "one channel only"
+    }
+  }
+}

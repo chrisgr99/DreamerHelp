@@ -1,0 +1,23 @@
+{
+  "plugin": "aridacity",
+  "module": "BCrush",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process() takes const int channels = inputs[AUDIO_INPUT].getChannels() and reads getVoltage(c) in the loop; the signal is divided by 5 on the way in and multiplied by 5 on the way out"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "src/BCrush.cpp process(): clamp((params[SAMPLE_RATE_PARAM].getValue() + inputs[SAMPLE_RATE_INPUT].getVoltage()/10.f) * args.sampleRate, 100.f, args.sampleRate), read once outside the channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/BCrush.cpp process() passes inputs[CLOCK_HOLD_INPUT].getVoltage() to holdTrigger, a dsp::SchmittTrigger with the default 0V and 1V thresholds, and reads one channel only"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/BCrush.cpp process(): std::max((resParam + inputs[AMP_RES_INPUT].getVoltage(c)) * maxRes, 1.f) inside the channel loop, with maxRes 12.8"},
+      "4": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process(): if(inputs[GAIN_INPUT].isConnected()) audi *= inputs[GAIN_INPUT].getVoltage(c)/5.f, per channel"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/BCrush.cpp process(): quant <<= (int)(fabs(inputs[SHIFTL_INPUT].getVoltage(c)/100.f) * ampRes), per channel, with fabs discarding the sign"},
+      "6": {"family": "cv", "poly": true, "step": "stepped", "normal": "0V", "why": "src/BCrush.cpp process(): quant >>= (int)(inputs[SHIFTR_INPUT].getVoltage(c)/100.f * ampRes), per channel"},
+      "7": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process(): quant &= (int)(inputs[AND_INPUT].getVoltage(c)/10.f * ampRes), per channel"},
+      "8": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process(): quant |= (int)(inputs[OR_INPUT].getVoltage(c)/10.f * ampRes), per channel"},
+      "9": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process(): quant ^= (int)(inputs[XOR_INPUT].getVoltage(c)/10.f * ampRes), per channel"},
+      "10": {"family": "cv", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/BCrush.cpp process(): if(inputs[NOT_INPUT].isConnected() && fabs(inputs[NOT_INPUT].getVoltage(c)) > 1.f) quant = ~quant, per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/BCrush.cpp process() calls outputs[AUDIO_OUTPUT].setChannels(inputs[AUDIO_INPUT].getChannels()) and writes (quant/ampRes)*5.f per channel"}
+    }
+  },
+  "comment": "Read from the maker's source at tag commit 7a96486 (v2.1.0), the installed version. The gain input multiplies rather than adds and there is no gain knob, so a cable carrying 0V into gain silences the module while an empty gain jack leaves the signal alone; that is in the entry because it looks like a broken module. The right shift takes the shift count straight from the voltage without fabs, unlike the left shift, so a negative voltage there gives a negative shift count, which C++ leaves undefined; nothing is claimed about what it does. The resolution figure of 128 is the tooltip value at the knob's maximum: configParam gives the knob a range of 0 to 10 and a display multiplier of maxRes, 12.8."
+}

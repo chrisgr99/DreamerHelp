@@ -1,0 +1,46 @@
+{
+  "plugin": "Autinn",
+  "module": "Non",
+  "description": "A stereo brickwall limiter with four milliseconds of lookahead, so the gain is already down before a peak arrives",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the gain returns after a peak, from 1ms to 5 seconds"},
+    {"ids": [1], "text": "Sets the ceiling, from -15dB to 7.5dB, on a scale where 0dB is 5V and 7.5dB is about 12V"},
+    {"ids": [2], "text": "Sets how fast the gain comes down on a peak, from 0.02ms to 2ms"},
+    {"ids": [3], "text": "Multiplies the signal after limiting, from 0dB to 20dB"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One side of the stereo pair to be limited"},
+    {"ids": [1], "text": "One side of the stereo pair to be limited"},
+    {"ids": [2], "text": "Sets the ceiling from its own voltage instead of from the knob: the size of the voltage is read as a level, the knob is moved to match and 0V is taken as -15dB"},
+    {"ids": [3], "text": "Patching either sidechain jack switches detection away from the programme, so the gain follows what is here rather than what is being limited"},
+    {"ids": [4], "text": "Patching either sidechain jack switches detection away from the programme, so the gain follows what is here rather than what is being limited"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "That side of the pair after limiting and makeup gain, clamped to ±12V"},
+    {"ids": [1], "text": "That side of the pair after limiting and makeup gain, clamped to ±12V"}
+  ],
+  "notes": [
+    "the two sides share one gain, so a peak on either channel ducks both and the stereo image does not shift.",
+    "the red lamp lights while the limiter is holding the gain down and the blue lamp while the gain is at unity.",
+    "the four columns of lamps are levels: input left, input right, output left and output right, each covering 22.5dB in fifteen steps from green through yellow to red.",
+    "mono per side: a polyphonic cable is read as its first channel.",
+    "the detector runs at four times the sample rate, so the peak it measures is the one between the samples rather than only the ones on the sample grid.",
+    "the threshold jack takes over the knob for as long as it is patched, and the knob is left wherever the jack last put it when the cable is pulled."
+  ],
+  "menu": [
+    "Maximizer — adds automatic makeup gain equal to the amount the ceiling is below 0dB, so lowering the threshold makes the signal louder rather than quieter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

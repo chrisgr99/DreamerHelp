@@ -1,0 +1,71 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "WindowGenerators",
+  "description": "One envelope generator giving four differently shaped envelopes at once out of four stage times and a sustain level, with a gate output for every stage",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the first stage, from about 2ms to 32 seconds; turning it up shortens the stage"},
+    {"ids": [1], "text": "Sets the length of the second stage, from about 2ms to 32 seconds; turning it up shortens the stage"},
+    {"ids": [2], "text": "Sets the length of the third stage, from about 2ms to 32 seconds; turning it up shortens the stage"},
+    {"ids": [3], "text": "Sets the voltage the envelopes hold at through their sustain phase, 0V to 10V"},
+    {"ids": [4], "text": "Sets the length of the fourth stage, from about 2ms to 32 seconds; turning it up shortens the stage"},
+    {"ids": [5], "text": "Scales the T1 control input, -1 to +1, before it is added to the first stage's time"},
+    {"ids": [6], "text": "Scales the T2 control input, -1 to +1, before it is added to the second stage's time"},
+    {"ids": [7], "text": "Scales the T3 control input, -1 to +1, before it is added to the third stage's time"},
+    {"ids": [8], "text": "Scales the SUSTAIN control input, -1 to +1, before it is added to the sustain level"},
+    {"ids": [9], "text": "Scales the T4 control input, -1 to +1, before it is added to the fourth stage's time"},
+    {"ids": [10], "text": "Bends the slopes between logarithmic turned down, straight in the centre and exponential turned up, which also shifts the timing"},
+    {"ids": [11], "text": "Starts the envelopes while it is held down and holds them in sustain for as long as it is held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shortens the first stage as the voltage rises, a volt an octave, scaled by its attenuverter"},
+    {"ids": [1], "text": "Shortens the second stage as the voltage rises, a volt an octave, scaled by its attenuverter"},
+    {"ids": [2], "text": "Shortens the third stage as the voltage rises, a volt an octave, scaled by its attenuverter"},
+    {"ids": [3], "text": "Moves the sustain level, scaled by its attenuverter"},
+    {"ids": [4], "text": "Shortens the fourth stage as the voltage rises, a volt an octave, scaled by its attenuverter"},
+    {"ids": [5], "text": "Starts the envelopes on a rise past 1.8V and holds them in sustain for as long as it stays high"},
+    {"ids": [6], "text": "Starts the envelopes on each rise past 1.8V; with no gate held high alongside it, they run straight through to the end"},
+    {"ids": [7], "text": "Shortens all four stage times together as the voltage rises, with no attenuation of its own"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V while the ADASR envelope is in its first stage, and 0V otherwise"},
+    {"ids": [1], "text": "5V while the ADASR envelope is in its second stage, and 0V otherwise"},
+    {"ids": [2], "text": "5V while the ADASR envelope is in its third stage, and 0V otherwise"},
+    {"ids": [3], "text": "5V while the ADASR envelope is in its sustain phase, and 0V otherwise"},
+    {"ids": [4], "text": "5V while the ADASR envelope is in its fourth stage, and 0V otherwise"},
+    {"ids": [5], "text": "A delay, attack, decay, sustain and release envelope, 0V to 10V"},
+    {"ids": [6], "text": "An attack, hold, decay, sustain and release envelope, 0V to 10V"},
+    {"ids": [7], "text": "A delay, attack, hold and release envelope, 0V to 10V; this is the one shape that never sustains"},
+    {"ids": [8], "text": "An attack, decay, attack, sustain and release envelope, 0V to 10V, and the one whose timing the stage gates follow"},
+    {"ids": [9], "text": "5V when the ADASR envelope ends; patch it back into TRIGGER and the module cycles"}
+  ],
+  "notes": [
+    "the module cannot be started again until the third stage has finished, so a trigger arriving before then is ignored, which is what makes it usable as a frequency divider",
+    "patch END back into TRIGGER and the module cycles as an oscillator, the stage times setting its frequency a volt an octave",
+    "the DAHR shape is the exception to the sustain rule: it goes to its release when the third stage ends, whatever the gate is doing",
+    "every input in this module reads one channel, so polyphonic cables are cut down to their first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "bipolar · continuous · one channel only",
+      "5": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "0 to 5V · one channel only",
+      "2": "0 to 5V · one channel only",
+      "3": "0 to 5V · one channel only",
+      "4": "0 to 5V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

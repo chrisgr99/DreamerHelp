@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc5",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Osc5.cpp:107 takes the channel count from this input and Osc5.cpp:120 adds it to the Freq knob"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc5.cpp:124 and Osc5.cpp:126 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 0.98V", "why": "Osc5.cpp:111 reads it four channels at a time, scales it by the first breakpoint CV knob, adds the knob and clamps the total"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 0.98V", "why": "Osc5.cpp:116 reads it four channels at a time, scales it by the second breakpoint CV knob, adds the knob and clamps the total"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Osc5.cpp:140 sets this output's channel count from the V/Oct jack; Osc5.cpp:138 writes ten times the wave"}
+    }
+  },
+  "comment": "Both breakpoint jacks carry the maker's tooltip Wave CV, Osc5.cpp:92 and Osc5.cpp:95, which is the same name on two different jacks. Their attenuators run 0 to 0.1, Osc5.cpp:93 and Osc5.cpp:96, so a tenth of a breakpoint per volt is the most a cable can move. The breakpoint sums are fractions of a cycle rather than voltages, which is why the sumRange fields read that way."
+}

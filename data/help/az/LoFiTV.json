@@ -1,0 +1,49 @@
+{
+  "plugin": "az",
+  "module": "LoFiTV",
+  "description": "A slime mould simulation: agents crawl across a 127 by 127 pixel grid leaving coloured trails, one step per clock pulse, with three stepped voltages taken from the picture",
+  "params": [
+    {"ids": [0], "text": "Sets how many agents are created, 0 to 5000, read at the next reset; a cable in its CV input replaces this knob"},
+    {"ids": [1], "text": "Sets the angle either side of an agent's heading at which it samples the trail, 0 to 90 degrees, which is also the angle it turns by; a cable in its CV input replaces this knob"},
+    {"ids": [2], "text": "Sets how far ahead of an agent its three sample points are taken, 0 to 20 pixels; a cable in its CV input replaces this knob"},
+    {"ids": [3], "text": "Sets the largest amount of red an agent can be given, 0 to 1, each agent taking a random fraction of it; read at the next reset, and a cable in its CV input replaces this knob"},
+    {"ids": [4], "text": "Sets the largest amount of blue an agent can be given, 0 to 1, each agent taking a random fraction of it; read at the next reset, and a cable in its CV input replaces this knob"},
+    {"ids": [5], "text": "Sets the largest amount of green an agent can be given, 0 to 1, each agent taking a random fraction of it; read at the next reset, and a cable in its CV input replaces this knob"},
+    {"ids": [6], "text": "Sets how much of each pixel's colour spreads into the eight pixels around it on every step, 0 to 1; a cable in its CV input replaces this knob"},
+    {"ids": [7], "text": "Sets how much of a pixel's colour is kept after each step, 0 clearing it at once and 1 keeping all of it; a cable in its CV input replaces this knob"},
+    {"ids": [8], "text": "Sets how far an agent can be displaced by a jitter pulse, 0 to 25 pixels; a cable in its CV input replaces this knob"},
+    {"ids": [9], "text": "Clears the picture and creates a fresh set of agents at random positions, headings and colours"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the simulation one step, moving every agent forward, adding its colour to the pixel it lands on and turning it towards the strongest nearby trail"},
+    {"ids": [1], "text": "A rising edge clears the picture and creates a fresh set of agents at random positions, headings and colours"},
+    {"ids": [2], "text": "A rising edge displaces every agent by a random amount in each direction, scaled by the jitter force setting"},
+    {"ids": [3], "text": "Sets how far an agent can be displaced by a jitter pulse, -10V for none and +10V for 25 pixels, in place of the jitter force knob"},
+    {"ids": [4], "text": "Sets the largest amount of red an agent can be given, -10V for none and +10V for the full amount, read at the next reset, in place of the red knob"},
+    {"ids": [5], "text": "Sets the largest amount of blue an agent can be given, -10V for none and +10V for the full amount, read at the next reset, in place of the blue knob"},
+    {"ids": [6], "text": "Sets the largest amount of green an agent can be given, -10V for none and +10V for the full amount, read at the next reset, in place of the green knob"},
+    {"ids": [7], "text": "Sets how many agents are created, -10V for none and +10V for 5000, read at the next reset, in place of the agent count knob"},
+    {"ids": [8], "text": "Sets how much of each pixel's colour spreads into the eight pixels around it, -10V for none and +10V for all of it, in place of the diffusion knob"},
+    {"ids": [9], "text": "Sets how much of a pixel's colour is kept after each step, -10V clearing it at once and +10V keeping all of it, in place of the retainment knob"},
+    {"ids": [10], "text": "Sets the angle either side of an agent's heading at which it samples the trail and turns, -10V for 0 degrees and +10V for 90 degrees, in place of the sensor angle knob"},
+    {"ids": [11], "text": "Sets how far ahead of an agent its three sample points are taken, -10V for 0 and +10V for 20 pixels, in place of the sensor offset knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A stepped 0-10V from the brightness of every pixel whose row or column number is a multiple of three, moving once per step, despite the manual naming -10V to +10V"},
+    {"ids": [1], "text": "A stepped 0-10V from the brightness of every pixel whose row or column number is a multiple of five but not of three, moving once per step, despite the manual naming -10V to +10V"},
+    {"ids": [2], "text": "A stepped 0-10V from the brightness of every pixel whose row or column number is a multiple of seven but not of three or five, moving once per step, despite the manual naming -10V to +10V"}
+  ],
+  "notes": [
+    "the simulation advances at most 60 times a second; clock, reset and jitter edges arriving faster than that produce no step",
+    "each of the three voltage outputs keeps only the fractional part of the brightness total it sums, so the values jump rather than drift",
+    "an agent that crosses an edge of the grid reappears on the opposite edge",
+    "the picture and the three voltage outputs move only on a clock edge at the clock input; the simulation starts with 100 agents already on the grid, so no reset is needed first"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

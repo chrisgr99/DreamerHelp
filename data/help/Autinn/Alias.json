@@ -1,0 +1,33 @@
+{
+  "plugin": "Autinn",
+  "module": "Alias",
+  "description": "Measures how much noise and aliasing another module adds: it sends a stepped sine sweep, records what comes back, removes the harmonics and reports what is left",
+  "params": [
+    {"ids": [0], "text": "Starts a run, or starts a fresh one after the last has finished; a run is 256 steps from 50Hz to 20kHz"},
+    {"ids": [1], "text": "Sets how long the module holds each new frequency before measuring it, from 0.01 to 2.5 seconds"},
+    {"ids": [2], "text": "Switches between sending a ±5V sine, for measuring an effect, and sending a 1V per octave pitch, for measuring an oscillator"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The output of the module being measured, patched back here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The test signal, to be patched into the module being measured"}
+  ],
+  "notes": [
+    "nothing happens until both jacks are patched and the button is pressed; pulling either cable, or changing Rack's sample rate, abandons the run and clears the readings.",
+    "the reading is the power left after the fundamental and all its harmonics have been removed, measured against the power that was in them, in dB, so a lower number is a cleaner module.",
+    "the display shows the state of the run, the sample rate and settle time in use, the mode, the three benchmark scores, and a curve from 0dB down to -144dB.",
+    "the curve on the display has grid lines drawn at -60dB and -120dB and at each of the three benchmark frequencies.",
+    "the three benchmark frequencies are 100Hz, 997Hz and 9973Hz; the last two are primes, chosen so they share no factor with a 44.1kHz or 48kHz sample rate.",
+    "each step holds the wave until it reaches a zero crossing before changing frequency, so the sweep itself adds no clicks to what is being measured.",
+    "the settle time and the mode are read when the run starts and held for the whole run, so turning either during a run changes nothing until the next one."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "plugin": "Autinn",
+  "module": "Excavi",
+  "description": "Two morphing oscillators in one voice: A can sync and frequency-modulate B through zero, and the pair can be heard mixed, ring-modulated or on their own",
+  "params": [
+    {"ids": [0], "text": "Sets oscillator A's frequency, four octaves below C4 to six above, C4 being 261.63Hz"},
+    {"ids": [1], "text": "Sets oscillator B's frequency, four octaves below C4 to six above, C4 being 261.63Hz"},
+    {"ids": [2], "text": "Sets how old the circuit is, from 0 to 40 years; age lifts the two high-pass corners that bend both waves, adds gain to make up the bass it loses, and widens the slow pitch drift"},
+    {"ids": [3], "text": "Sets oscillator A's level, from silence to unity"},
+    {"ids": [4], "text": "Sets oscillator B's level, from silence to unity"},
+    {"ids": [5], "text": "Morphs oscillator A's wave from sine through triangle, sawtooth and square, and then narrows the square's pulse width from a half down to a fiftieth"},
+    {"ids": [6], "text": "Morphs oscillator B's wave from sine through triangle, sawtooth and square, and then narrows the square's pulse width from a half down to a fiftieth"},
+    {"ids": [7], "text": "Steps through three sync modes on each press: off, soft, and hard, where A resets B"},
+    {"ids": [8], "text": "Sets how much of A's output is added to B's frequency, from -1 to 1; at either end B's frequency is driven through zero and runs backwards for part of each cycle"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets oscillator A's pitch, an octave per volt, and sets how many polyphonic channels the whole module runs"},
+    {"ids": [1], "text": "Sets oscillator B's pitch, an octave per volt; with nothing patched here B follows oscillator A's pitch input"},
+    {"ids": [2], "text": "Adds to oscillator A's level, a tenth per volt, with the total clamped between silence and unity"},
+    {"ids": [3], "text": "Adds to oscillator B's level, a tenth per volt, with the total clamped between silence and unity"},
+    {"ids": [4], "text": "A rising edge resets oscillator A's phase, whatever the SYNC MODE button is set to"},
+    {"ids": [5], "text": "Adds to the age, ten years per volt, with the total clamped between 0 and 60 years"},
+    {"ids": [7], "text": "Adds to the cross modulation, a fifth per volt, with the total clamped between -1 and 1"},
+    {"ids": [8], "text": "Moves oscillator A's wave along the morph, one whole shape per volt, with the total clamped between -5 and 5"},
+    {"ids": [9], "text": "Moves oscillator B's wave along the morph, one whole shape per volt, with the total clamped between -5 and 5"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The two oscillators added and halved, which is the main voice"},
+    {"ids": [1], "text": "The two oscillators multiplied together, which is the ring modulation"},
+    {"ids": [2], "text": "Oscillator A alone, after its gain"},
+    {"ids": [3], "text": "Oscillator B alone, after its gain"}
+  ],
+  "notes": [
+    "with no output patched the module stops and only the sync lamps keep working, so nothing drifts on unheard.",
+    "the three small lamps show the sync mode: blue for off, yellow for soft and red for hard.",
+    "soft sync multiplies oscillator B by a raised cosine window tied to A's phase rather than resetting it, which thins the tone instead of cutting into it.",
+    "the pitch of each oscillator wanders on its own, driven by two slow sine waves at different rates, by at most 0.0005V for each year of age.",
+    "every discontinuity in either wave is smoothed with a polyBLEP, including the ones that sync and through-zero modulation create, so hard sync at high pitches does not alias.",
+    "the module runs at four times the sample rate below a 50kHz engine rate, twice above that and once above 100kHz.",
+    "the SHAPE, CROSS MOD, AGE and GAIN knobs each draw a gold arc from their own position round to where their CV jack has moved them."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the A pitch input.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "high above 1V · stepped · polyphonic",
+      "5": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "7": "bipolar · continuous · polyphonic",
+      "8": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "9": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic"
+    }
+  }
+}

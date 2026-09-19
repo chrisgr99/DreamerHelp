@@ -1,0 +1,20 @@
+{
+  "plugin": "voxglitch",
+  "module": "ghosts",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Ghosts.hpp:213 reads PURGE_TRIGGER_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "range": "high above 0V", "why": "Ghosts.hpp:205 tests this input against 0V with getVoltage() alone, and while a cable is in it the panel switch is not read"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Ghosts.hpp:173 multiplies this input by the attenuverter, adds the knob and Ghosts.hpp:174 clamps the total to 0..10 volts"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "Ghosts.hpp:151 divides this input by 10 and scales it by the graveyard maximum and the attenuverter before adding the knob; Ghosts.hpp:236 stores the total in an int"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Ghosts.hpp:169 multiplies this input by the attenuverter, adds the knob and Ghosts.hpp:170 clamps the total to 0..10 volts"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Ghosts.hpp:151 divides this input by 10 and scales it by the sample length and the attenuverter before adding the knob; Ghosts.hpp:180 holds the total below the end of the sample"},
+      "6": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "Ghosts.hpp:265 adds this input to the knob and raises 2 to the sum with approxExp2_taylor5"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "Param 13 (MODES) and param 9 (a pitch attenuator) exist in the code but have no control on the panel and no menu item; the module always runs in mode 0, whose figures are the ones quoted here."
+}

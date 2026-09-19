@@ -1,0 +1,73 @@
+{
+  "plugin": "TheAllElectricSmartGrid",
+  "module": "LameJuis",
+  "description": "Six gate inputs feed six logic operations; each operation that is high adds one of three tunable intervals to a pitch, and three voices read that pitch while ignoring inputs of their own choosing",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Up includes that input in this column's logic operation, the middle position leaves it out, and down includes it inverted, so a low gate counts as high"},
+    {"ids": [36, 37, 38, 39, 40, 41], "text": "Sends this column's gate to the Top, Middle or Bottom interval; each time the column is high, that interval is added once more to the pitch"},
+    {"ids": [42, 43, 44, 45, 46, 47], "text": "Chooses the logic operation for this column: OR, &, XOR, >=2, Maj or Off, reading only the inputs whose switches in the column are up or down"},
+    {"ids": [48, 49, 50], "text": "Chooses the interval this row contributes: OFF, 8va, P5, M3, P4, m3, M2, m2, 7/4, 11/8, 13/8 or 31/16, tuned as exact frequency ratios rather than equal-tempered steps"},
+    {"ids": [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68], "text": "Unlit, this voice ignores that input: the matrix is worked out at every combination of the ignored inputs and the pitches sorted for Pitch Select to choose from; lit, the input is used as it stands"},
+    {"ids": [69, 70, 71], "text": "Picks which of the pitches the co-muted inputs produce this voice takes, the lowest at full counter-clockwise and the highest at full clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Gate input A; with nothing patched it stays low, because there is no input above it to divide"},
+    {"ids": [1, 2, 3, 4, 5], "text": "A gate input, reading high above 1V and low below 0V; with nothing patched it runs at half the rate of the nearest patched input above, so one clock at A cascades down the column"},
+    {"ids": [6, 7, 8], "text": "Adds to that voice's Pitch Select knob at a fifth of the knob's range per volt, so 0V to 5V covers it; a polyphonic cable here makes that voice's two outputs polyphonic"},
+    {"ids": [9, 10, 11], "text": "Adds to the interval that row contributes, a volt per octave, so the knob can be left at OFF and the interval taken entirely from here"},
+    {"ids": [12], "text": "A trigger here resets the divide-by-two counters of the unpatched inputs, each taking effect the next time the input above it goes high"},
+    {"ids": [13], "text": "With a cable here the module works out a new step only on a pulse at this input, which steadies it when gates arrive on slightly different frames"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "5V while this column's logic operation is high and 0V otherwise, untouched by the interval and co-mute settings"},
+    {"ids": [6, 7, 8], "text": "That voice's pitch, a volt per octave, summed from the intervals that the high operations contribute"},
+    {"ids": [9, 10, 11], "text": "A 5V pulse 10ms long each time that voice's pitch changes"}
+  ],
+  "notes": [
+    "patch one clock to input A and the five inputs below it divide by two in turn, which gives a 64-step cycle to work from; without that, or gates of your own, nothing moves",
+    "the intervals are exact frequency ratios and stack as fractions, so pitches drift away from the keyboard; the 12 EDO Mode menu item rounds each interval to the nearest semitone instead",
+    "the light beside each input jack shows that input high, the light under each Logic Out shows that operation high, and the light by each Trig output flashes when the voice changes",
+    "LatticeExpander placed immediately to the right shows which notes the voices are landing on"
+  ],
+  "menu": [
+    "Randomize Matrix — sets the matrix switches at random; a submenu offers Level 0, Level 1 and Level 2, from tame to wild",
+    "Randomize Intervals — sets the three interval knobs at random; a submenu offers Level 0, Level 1 and Level 2, from tame to wild",
+    "Randomize CoMutes — sets the co-mute buttons at random; a submenu offers Level 0, Level 1 and Level 2, from tame to wild",
+    "Randomize Percentiles — sets the three Pitch Select knobs at random",
+    "Randomize All — sets the matrix, intervals, co-mutes and Pitch Select knobs at random together; a submenu offers Level 0, Level 1 and Level 2",
+    "12 EDO Mode — rounds each interval, knob and CV added together, to the nearest twelfth of an octave",
+    "Time Quantize Mode — reads the switches and knobs only when an input gate or a Pitch Select CV changes, so a change made by hand lands on the next step rather than mid-step"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads low, with no input above it; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the input above, divided by two; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the input above, divided by two; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads the input above, divided by two; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads the input above, divided by two; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads the input above, divided by two; a negative voltage does nothing here.",
+      "6": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "9": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 1V · stepped · one channel only\n\nunpatched it reads every frame is computed; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only",
+      "4": "0 to 5V · stepped · one channel only",
+      "5": "0 to 5V · stepped · one channel only",
+      "6": "1V per octave · continuous · polyphonic",
+      "7": "1V per octave · continuous · polyphonic",
+      "8": "1V per octave · continuous · polyphonic",
+      "9": "0 to 5V · stepped · polyphonic",
+      "10": "0 to 5V · stepped · polyphonic",
+      "11": "0 to 5V · stepped · polyphonic"
+    }
+  }
+}

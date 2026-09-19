@@ -1,0 +1,37 @@
+{
+  "plugin": "CountModula",
+  "module": "Stack",
+  "description": "Sixteen-place voltage stack, first in first out or last in first out, holding four control voltages in each place",
+  "inputs": [
+    {"ids": [0], "text": "A rising edge takes the oldest or newest stored entry, depending on the menu mode, sends its four voltages to the OUTPUT jacks and removes it from the stack; with the stack empty the outputs go to 0V"},
+    {"ids": [1], "text": "A rising edge samples all four INPUT jacks and stores them together as one entry; nothing is stored once the stack already holds sixteen"},
+    {"ids": [2], "text": "A rising edge empties the stack, and while the level stays high nothing can be pushed on; the voltage outputs keep their last values unless the menu is set to clear them"},
+    {"ids": [3, 4, 5, 6], "text": "The voltage sampled on that row each time a push is triggered"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries the voltage popped off the stack on that row, held until the next pop"},
+    {"ids": [4], "text": "Goes to 10V when a push is asked for while the stack already holds sixteen entries"},
+    {"ids": [5], "text": "Goes to 10V when a pop is asked for while the stack holds nothing"},
+    {"ids": [6], "text": "10V while the stack holds all sixteen entries and 0V otherwise"},
+    {"ids": [7], "text": "10V while the stack holds nothing and 0V otherwise"}
+  ],
+  "notes": [
+    "the lamp gauge marked F to E shows how many entries are stored, rising by one with each push and falling by one with each pop",
+    "this module is not polyphonic; only the first channel of a polyphonic cable is stored"
+  ],
+  "menu": [
+    "Mode — First In First Out (FIFO) returns values in the order they went on and Last In First Out (LIFO) returns the newest first; changing it empties the stack",
+    "Clear outputs on reset — sends the four voltage outputs to 0V when a reset arrives, instead of leaving them at their last popped values"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only"
+    }
+  }
+}

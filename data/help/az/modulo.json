@@ -1,0 +1,40 @@
+{
+  "plugin": "az",
+  "module": "modulo",
+  "description": "A sequencer that plays the notes you select on its keyboard, stepping through them in the order produced by repeatedly adding a step number and taking the remainder after dividing by a length",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Switches that note into the set the sequencer plays, in the lowest of the three octaves, where C is -1V"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Switches that note into the set the sequencer plays, in the middle octave, where C is 0V"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Switches that note into the set the sequencer plays, in the highest of the three octaves, where C is 1V"},
+    {"ids": [36], "text": "Scales the length CV by -10 to +10 before it is added to the length setting"},
+    {"ids": [37], "text": "Sets the length, the number the running total is divided by to give the remainder; 0 to 33, and the number in the window is the length actually in use"},
+    {"ids": [38], "text": "Scales the step CV by -10 to +10 before it is added to the step setting"},
+    {"ids": [39], "text": "Sets the step, the number added to the running total on every clock; 0 to 33, and the number in the window is the step actually in use"},
+    {"ids": [40], "text": "Switches the step between a prime number chosen by the step setting, 0 giving 2 and 33 giving 139, and the step setting used as the number itself"},
+    {"ids": [41], "text": "Switches the length between a prime number chosen by the length setting, 0 giving 2 and 33 giving 139, and the length setting used as the number itself"},
+    {"ids": [42], "text": "Offsets the position in the cycle by a whole number from 0 to the current length, changing which of the selected notes the cycle starts on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage that moves the length, scaled by the length attenuverter and added to the length setting, the total clamped to 0 to 167"},
+    {"ids": [1], "text": "A voltage that moves the step, scaled by the step attenuverter and added to the step setting, the total clamped to 0 to 167"},
+    {"ids": [2], "text": "A rising edge above 1V advances the sequence by one position and moves the output to the next note"},
+    {"ids": [3], "text": "A rising edge above 1V sends the sequence back to the start of its cycle"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note the sequencer is on, as 1V/octave pitch, held until the next clock, with 0V for the C of the middle octave"}
+  ],
+  "notes": [
+    "the key of the note being played is lit",
+    "the sequence repeats after a number of clocks equal to the length, and it visits the most notes when the length, the step and the number of selected notes are different primes",
+    "a clock has to be patched to the clock input and at least one key switched on before anything is played; with no key switched on the output stays at -1V and only the lowest key is lit"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped",
+      "3": "high above 1V · stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "wildergarden",
+  "module": "Pascal",
+  "description": "A sequencer that runs Pascal's triangle: each clock builds the next cell of a row from the two cells before it, and three counters turn that cell into triggers and pitches.",
+  "params": [
+    {"ids": [0], "text": "Holding this down drives the clock high, which is what the clock input does with a gate in it."},
+    {"ids": [1], "text": "Sets the cell the cursor is on to 1, which seeds a fresh pattern; holding it down keeps writing 1 every sample."},
+    {"ids": [2], "text": "Stops the cursor moving on to the next row when it reaches the end of this one, so the same row is recomputed over and over."},
+    {"ids": [3], "text": "Sets how many cells long a row is, 1 to 32; cells past that are cleared, so winding it down is a quick way to empty the grid."},
+    {"ids": [4, 5, 6], "text": "Sets the modulus for that counter, 1 to 32: the counter fires whenever the current cell does not divide evenly by this, and the row itself is kept modulo the three moduli multiplied together."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A falling edge here computes the next cell of the row and moves the cursor on; the rising edge is what latches the pitch outputs."},
+    {"ids": [1], "text": "A trigger here sets the cell the cursor is on to 1."},
+    {"ids": [2], "text": "Above 1V the cursor stays on the current row instead of moving on to the next."},
+    {"ids": [3], "text": "Adds to the length knob, 3.2 cells per volt, so 10V covers the whole 32."},
+    {"ids": [4, 5, 6], "text": "Adds to that counter's modulus, 3.2 divisions per volt, so 10V covers the whole 32."}
+  ],
+  "outputs": [
+    {"ids": [0, 2, 4], "text": "10V for as long as the clock is high and the current cell does not divide evenly by that counter's modulus, 0V otherwise."},
+    {"ids": [1, 3, 11], "text": "The current cell taken modulo that counter's modulus, one less, scaled so a full modulus would reach 10V; it is latched on the rising edge of the clock and held until the next cell that fires."},
+    {"ids": [5, 6, 7, 8, 9, 10], "text": "10V while the third counter is firing and its remainder is that number, so the six of them split the third counter's triggers across separate drums."}
+  ],
+  "notes": [
+    "Nothing moves without a clock: the grid is computed one cell per falling edge of the clock input or the clock button, and the module has no clock of its own.",
+    "The grid of lights is the triangle, four rows of 32 turned on their side, the cursor white; a cell takes red, green or blue for each counter whose modulus it does not divide by.",
+    "The row wraps round every four columns, so the fourth row is built from the first again.",
+    "The five blue lamps under each knob read that knob's setting as a binary number.",
+    "The grid and the lamps are lights rather than controls, so none of them can be clicked for help."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "0 to 10V · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 10V · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only",
+      "11": "0 to 10V · continuous · one channel only"
+    }
+  }
+}

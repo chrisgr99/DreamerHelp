@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "L4P",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "L4P.cpp:72 takes the channel count from this input and L4P.cpp:79 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "why": "L4P.cpp:73 takes the channel count from this input and L4P.cpp:89 reads it four channels at a time"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "the Freq knob alone", "why": "L4P.cpp:77 and L4P.cpp:87 read it four channels at a time, scale it by the Freq CV knob, add the Freq knob and raise 2 to that power"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "L4P.cpp:78 reads it four channels at a time, scales it by a tenth and the R CV knob, adds the R knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "L4P.cpp:94 sets this output's channel count from the InL jack"},
+      "1": {"family": "audio", "poly": true, "why": "L4P.cpp:95 sets this output's channel count from the InR jack"}
+    }
+  },
+  "comment": "The two sides clamp the cutoff differently: L4P.cpp:77 holds the left at 20Hz to 12000Hz while L4P.cpp:87 holds the right at 2Hz to a third of the sample rate. The maker documents neither, and the two sides therefore do not track each other at the ends of the knob's travel. The filter is taken from Csound code by Victor Lazzarini, L4P.cpp:4."
+}

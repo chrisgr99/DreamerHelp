@@ -1,0 +1,57 @@
+{
+  "plugin": "Befaco",
+  "module": "Rampage",
+  "description": "Two ramp generators that also work as slew limiters, envelope followers and function generators, with a logic section combining the two",
+  "params": [
+    {"ids": [0, 1], "text": "Picks the time range for that channel: Fast spans 1ms to 1 second, Medium spans 10ms to 10 seconds, and Slow spans 100ms to 100 seconds"},
+    {"ids": [2, 3], "text": "Bends the slope of that channel, logarithmic counter-clockwise, straight at noon and exponential clockwise"},
+    {"ids": [4, 5], "text": "Fires that channel's ramp by hand, one ramp per press"},
+    {"ids": [6, 7], "text": "Sets how long that channel takes to rise, from the shortest time its RANGE switch allows through to 1024 times that"},
+    {"ids": [8, 9], "text": "Sets how long that channel takes to fall, from the shortest time its RANGE switch allows through to 1024 times that"},
+    {"ids": [10, 11], "text": "Makes that channel retrigger itself the moment it finishes falling, so it runs as an oscillator"},
+    {"ids": [12], "text": "Attenuates one ramp against the other before the comparator, MIN and MAX outputs: counter-clockwise lowers B, clockwise lowers A, and at noon both pass at full level"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that channel slews, its rise and fall times limiting how fast the output can follow it"},
+    {"ids": [2, 3], "text": "A rising edge sends that channel's ramp to 10V and then back down; it reads high above 4V and low below 0.2V"},
+    {"ids": [4, 5], "text": "Lengthens that channel's rise time, each volt doubling it, and is added to the RISE knob"},
+    {"ids": [6, 7], "text": "Lengthens that channel's fall time, each volt doubling it, and is added to the FALL knob"},
+    {"ids": [8, 9], "text": "Shortens both the rise and the fall time of that channel, each volt halving them"},
+    {"ids": [10, 11], "text": "Switches cycling on for that channel while it stands at 4V or more, and is added to the CYCLE switch"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "A 10V gate for as long as that channel's output is climbing"},
+    {"ids": [2, 3], "text": "A 10V gate for as long as that channel's output is dropping"},
+    {"ids": [4, 5], "text": "A 1ms 10V pulse the moment that channel finishes falling"},
+    {"ids": [6, 7], "text": "That channel's ramp, 0-10V, or its input signal slewed by the rise and fall times"},
+    {"ids": [8], "text": "10V while ramp B stands above ramp A and 0V otherwise, both taken after BALANCE"},
+    {"ids": [9], "text": "Whichever of the two ramps is lower at each moment, taken after BALANCE"},
+    {"ids": [10], "text": "Whichever of the two ramps is higher at each moment, taken after BALANCE"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "high above 4V · stepped · polyphonic",
+      "3": "high above 4V · stepped · polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic",
+      "10": "high above 4V · stepped · polyphonic",
+      "11": "high above 4V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "0 to 10V",
+      "7": "0 to 10V"
+    }
+  }
+}

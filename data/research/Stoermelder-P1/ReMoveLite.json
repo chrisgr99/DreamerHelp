@@ -1,0 +1,19 @@
+{
+  "plugin": "Stoermelder-P1",
+  "module": "ReMoveLite",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "ReMove.cpp:398 compares its voltage against 1V in gate mode and ReMove.cpp:401 puts it through a SchmittTrigger at the same default threshold in trigger mode"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "ReMove.cpp:364 reads it with getVoltage, summed with the RESET button, into a SchmittTrigger at its default 1V threshold"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "ReMove.cpp:413 clamps its voltage to 0 to 10V as the position in the recording"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "why": "ReMove.cpp:373-385 branches on seqCvMode: :376 floors 0-10V onto a sequence, :379 rounds 12 per volt in C4 mode, :382 steps seqCvTrigger.process past 1V; :373 reads the jack only 1ms after a reset"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "why": "ReMove.cpp:495 reads it with getVoltage alone and rescales it across the mapped parameter"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "ReMove.cpp:255 reads it with getVoltage, summed with the REC button, into a SchmittTrigger at its default 1V threshold"}
+    },
+    "outputs": {
+      "0": {"family": "cv"},
+      "1": {"family": "trigger"}
+    }
+  },
+  "comment": "Parameter mapping is done by clicking the display at the top, and Unmap and Locate and indicate are on that display's menu rather than the panel's. The automation CV input reads 0 to 10V in unipolar mode and -5 to 5V in bipolar mode. The sequence input expects a trigger in TRIG mode, 1V per twelve sequences in C4 mode and a 0 to 10V ramp across the sequences in 10V mode."
+}

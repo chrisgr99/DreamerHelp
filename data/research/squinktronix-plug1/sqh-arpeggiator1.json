@@ -1,0 +1,22 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-arpeggiator1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "composites/Arpeggiator.h:117 channels read as the polyphony, :186 getVoltage(channel) per channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1.6V", "step": "stepped", "why": "composites/Arpeggiator.h:136-143 loops over the channel count; util/Constants.h:11 cGateHi 1.6V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "composites/Arpeggiator.h:166 clockOnlyDelay.process(input, 1), then SeqClock's GateTrigger"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "composites/Arpeggiator.h:168 getVoltage(0) into SeqClock::updateOnce, whose resetProcessor is a GateTrigger"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1.5V", "step": "stepped", "normal": "the Hold switch", "why": "composites/Arpeggiator.h:252-256 getVoltage(0) compared against 1.5, only when isConnected"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 0.91V", "step": "stepped", "negative": "ignored", "normal": "the mode control", "why": "composites/Arpeggiator.h:240-246 getVoltage(0) times 12, clamped to 0 and to the last of the 12 modes"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "why": "composites/Arpeggiator.h:187 getVoltage(channel) for the channel whose gate went high"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "why": "composites/Arpeggiator.h:157 getVoltage(0) into a GateTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "composites/Arpeggiator.h:209 setVoltage(..., 0) and no setChannels anywhere"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "composites/Arpeggiator.h:226-229 cGateOutHi 10V or cGateOutLow 0V on channel 0"},
+      "3": {"family": "cv", "poly": false, "why": "composites/Arpeggiator.h:210 setVoltage(..., 0) and no setChannels anywhere"}
+    }
+  },
+  "comment": "The Mode CV range is written as 0 to 0.91V because the code clamps voltage times 12 to the last of the twelve modes, which is 11/12V. The maker's manual says the Hold input is off at 0V or less and on above 5V; the code compares against 1.5V (composites/Arpeggiator.h:254), and the code is what ships. The manual also gives the Schmitt trigger threshold as 1.0V, where util/Constants.h:11 has 1.6V. Mode names in the manual differ from the ones the dropdown prints: the list is 'up then down' and 'down then up', not 'up and down' and 'down and up' (util/ArpegPlayer.h:54). Output 2 is an unused end-of-cycle output with no widget. Params 4 to 8 are hidden state and menu settings with no widget. Reset Mode II comes up on."
+}

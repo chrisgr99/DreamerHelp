@@ -1,0 +1,37 @@
+{
+  "plugin": "CountModula",
+  "module": "EventTimer",
+  "description": "Three digit countdown timer: it counts down from the value set on the display and puts out a gate and a trigger when it reaches zero",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Adds one to that digit of the count, stopping at 9; pressing it while the timer runs also changes the value the timer will return to on a reset"},
+    {"ids": [3, 4, 5], "text": "Takes one off that digit of the count, stopping at 0; pressing it while the timer runs also changes the value the timer will return to on a reset"},
+    {"ids": [6], "text": "Starts the count running; once it has started, pressing again does nothing unless the Retrigger menu option is on, in which case the count starts over"},
+    {"ids": [7], "text": "Sets the count back to its starting value, stops it and arms it so that it can be triggered again"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge takes one off the count; with nothing patched the count steps down once a second"},
+    {"ids": [1], "text": "A rising edge sets the count back to its starting value and arms it again, in parallel with the RESET button"},
+    {"ids": [2], "text": "A rising edge starts the count running, in parallel with the TRIGGER button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Goes to 10V when the count reaches zero and stays there until a reset"},
+    {"ids": [1], "text": "A 1ms trigger at the moment the count reaches zero"}
+  ],
+  "notes": [
+    "the display shows the count as it stands, and the RETRIGGER lamp is lit while the Retrigger menu option is on",
+    "patching the END gate or trigger output back into the TRIGGER input makes the timer restart itself, turning it into a clock divider"
+  ],
+  "menu": [
+    "Retrigger — makes each trigger restart the count from the beginning rather than being ignored while the timer runs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

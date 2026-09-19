@@ -1,0 +1,21 @@
+{
+  "plugin": "CVfunk",
+  "module": "TriDelay",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "normal": "the R audio jack", "why": "TriDelay.cpp:271 reads it with getVoltage, so only channel 1; TriDelay.cpp:275 copies the right input to both sides when this jack is empty"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the L audio jack", "why": "TriDelay.cpp:275 reads it with getVoltage, so only channel 1; TriDelay.cpp:271 copies the left input to both sides when this jack is empty"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "TriDelay.cpp:303 reads it with getVoltage, so only channel 1, and scales it by a thousandth of the buffer length over 36 before adding it to the knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±1V", "why": "TriDelay.cpp:307 reads it with getVoltage, so only channel 1; TriDelay.cpp:317 clamps the knob-plus-input total to -1 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "TriDelay.cpp:311 reads it with getVoltage, so only channel 1, and scales it by a hundredth; TriDelay.cpp:318 clamps each tap's feedback to 0 to 0.99"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 1V", "why": "TriDelay.cpp:315 reads it with getVoltage, so only channel 1, and scales it by a hundredth; TriDelay.cpp:299 clamps the total to 0 to 1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "TriDelay.cpp:327 adds it to the button value and TriDelay.cpp:330 starts the wipe whenever the total is above 0"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "TriDelay.cpp:329 adds it to the button value and TriDelay.cpp:336 holds the buffer whenever the total is above 0"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "TriDelay.cpp:404 writes one channel with setVoltage from the dry and wet blend"},
+      "1": {"family": "audio", "poly": false, "why": "TriDelay.cpp:405 writes one channel with setVoltage from the dry and wet blend"}
+    }
+  },
+  "comment": "Two inputs are declared and never given a port widget, GLOBAL_BP_IN and GLOBAL_BP_WIDTH_IN (TriDelay.cpp:91), so no click can reach them and they are left untagged. The menu's Delay Time items write the buffer length, but TriDelay.cpp:283 reads the panel switch and overwrites that value on the next sample, so only the switch has any lasting effect. Each tap's feedback is halved after the clamp (TriDelay.cpp:318), so the panel's 100 per cent is half the buffer level per tap."
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "IggyLabsModules",
+  "module": "more-ideas",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "more-ideas.cpp:205 reads getVoltage() with no channel into the Trigger at dsp/trigger.hpp:8, which goes high at 1V and returns low at 0.1V"},
+      "1": {"poly": false, "why": "declared at more-ideas.cpp:24 and given a jack at line 400, and inputs[RESET_INPUT] is read nowhere in process or subSampledProcess"},
+      "2": {"family": "cv", "poly": true, "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:136 adds getVoltageSum() to the rule knob when connected, and line 138 clamps the total to 0 and 255 before line 140 takes its floor"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:150 adds getVoltageSum() to the seed knob when connected, and line 152 clamps the total to 0 and 255 before line 154 takes its floor"},
+      "4": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:163 rescales getVoltageSum() from -10V and 10V onto 0 and 28 and adds that to the low knob, so 0V adds 14; line 165 clamps the total to 0 and 28"},
+      "5": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:172 rescales getVoltageSum() from -10V and 10V onto 0 and 28 and adds that to the high knob, so 0V adds 14; line 174 clamps the total to 0 and 28"},
+      "6": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:181 rescales getVoltageSum() from -10V and 10V onto 0 and 16 and adds that to the scale knob, so 0V adds 8; line 183 clamps the total to 0 and 16"},
+      "7": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "more-ideas.cpp:193 rescales getVoltageSum() from -10V and 10V onto 0 and 7 and adds that to the bit knob, so 0V adds 3.5; line 195 clamps the total to 0 and 7"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:109 and 116 write 10V when the clock is high and this bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"},
+      "8": {"family": "pitch", "poly": false, "why": "more-ideas.cpp:95 writes semitoneToCV of the quantized note and line 97 the raw voltage, both with setVoltage and no setChannels"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "more-ideas.cpp:112 and 118 write 10V when the clock is high and the chosen bit of the generation is 1 and 0V otherwise, with setVoltage and no setChannels"}
+    }
+  },
+  "comment": "Read from source at commit fb63bc3, the state the installed 2.0.0 matches: the six parameters carry the same ranges and defaults (rule 0 to 255 starting at 90, seed 0 to 255 starting at 30, low and high 0 to 28 starting at 0 and 14, scale 0 to 16, bit 0 to 7). THE MAKER'S OWN doc/more_ideas.md DISAGREES WITH THE CODE ABOUT THE thru / sel SWITCH. It says thru passes the input clock through to the clock output and sel pulses on any change of output CV. Neither is what happens: the clock output at lines 112 and 118 is 10V whenever the clock input is high and the chosen bit of the generation is 1, whichever way the switch is set. What the switch actually decides, at line 82, is whether the CV output is rewritten on every clock or only on a clock where the chosen bit is high. The maker's tooltip for it, Clock output mode, points at the clock output for the same reason and is wrong in the same way. The CV output is tagged pitch because the module comes up quantized; at raw it carries a plain control voltage over whatever span the menu names, so the colour is right for the default and not for both settings. The reset input is declared and drawn and read nowhere, so it gets a line saying so rather than being left to show an empty tooltip. All ten outputs and the eight lamp pairs are updated in subSampledProcess, which runs once every nine samples, so the gate edges follow the clock input to within that. None of the eight inputs is named with configInput, so Rack's own tooltips for them are empty."
+}

@@ -1,0 +1,37 @@
+{
+  "plugin": "dbRackModules",
+  "module": "L4P",
+  "description": "A four pole lowpass filter for two signals, each polyphonic, sharing one cutoff and one resonance",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff frequency, 4Hz to 16384Hz as a power of two"},
+    {"ids": [1], "text": "Attenuates the voltage at the Freq jack before it is added to the Freq knob, 0 to 100 per cent"},
+    {"ids": [2], "text": "Sets the resonance, 0 to 1, which is fed back through all four poles"},
+    {"ids": [3], "text": "Attenuates the voltage at the R jack before it is added to the R knob, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The first signal to be filtered, one per channel"},
+    {"ids": [1], "text": "The second signal to be filtered, one per channel"},
+    {"ids": [2], "text": "Modulates the cutoff, one octave per volt scaled by the Freq CV knob"},
+    {"ids": [3], "text": "Modulates the resonance, a tenth per volt scaled by the R CV knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first signal with the frequencies above the cutoff taken out; its cutoff is held between 20Hz and 12000Hz, which is a narrower span than the second side allows"},
+    {"ids": [1], "text": "The second signal with the frequencies above the cutoff taken out"}
+  ],
+  "notes": [
+    "the two sides are separate and nothing is normalled between them, so a signal patched into InL alone leaves OutR silent",
+    "the Freq knob reaches 16384Hz, but the left side stops following it at 12000Hz while the right side follows to a third of the sample rate"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the Freq knob alone; a negative voltage subtracts from the knob.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "plugin": "Starling_Via",
+  "module": "SCANNER",
+  "description": "A waveshaper that reads a two-dimensional surface: two input signals are the X and Y coordinates, and the height of the surface at that point is the output",
+  "params": [
+    {"ids": [0], "text": "Shapes the surface itself, blending the X and Y terrains together by whatever function the map button has chosen"},
+    {"ids": [1], "text": "Offsets where the X input reads on the surface, -1 to +1"},
+    {"ids": [2], "text": "Offsets where the Y input reads on the surface, -1 to +1"},
+    {"ids": [3], "text": "Sets one of the two voltages the main scan output runs between, -5V to +5V; patching the A input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the B input by -1 to +1 to set the other voltage the main scan output runs between; with nothing patched to B the input reads 5V, so the knob alone gives -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the X signal input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the Y signal input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through what a pulse at the Jump input does: Reverse, which turns the scan round, or Teleport, which jumps it elsewhere"},
+    {"ids": [8], "text": "Steps forward through the eight Y terrains: Slopes, Hills, Pyhisics World, Shapeshifting Range, Multiplier Mountains, Synthville, Steppes and Blockland"},
+    {"ids": [9], "text": "Steps through the function that combines the X and Y terrains into one surface: Add, Multiply, Difference or Lighten"},
+    {"ids": [10], "text": "Steps backward through the eight X terrains, wrapping round at the start"},
+    {"ids": [11], "text": "Steps backward through the eight Y terrains, wrapping round at the start"},
+    {"ids": [12], "text": "Steps forward through the eight X terrains: Slopes, Hills, Pyhisics World, Shapeshifting Range, Multiplier Mountains, Synthville, Steppes and Blockland"},
+    {"ids": [13], "text": "Nothing in the Rack module reads this button; on the hardware it opens the preset menu"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two voltages the main scan output runs between; patched here, it overrides the A knob"},
+    {"ids": [1], "text": "The other voltage the main scan output runs between, multiplied by the B knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Modulates the surface shape, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "The X coordinate read into the surface, through the X input attenuation knob"},
+    {"ids": [4], "text": "The Y coordinate read into the surface, through the Y input attenuation knob"},
+    {"ids": [5], "text": "A rising edge here reverses or teleports the scan, according to the JUMP input response button"},
+    {"ids": [6], "text": "While this is high the A and B levels are frozen at the values they held"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The height of the surface at the scanned point, scaled between the A and B levels"},
+    {"ids": [1], "text": "A 5V square taken from one bit of the scan"},
+    {"ids": [2], "text": "The height of the surface without the A and B scaling"},
+    {"ids": [3], "text": "A 5V square taken from a second bit of the scan"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the B input is normalled to 5V and the B knob multiplies whatever arrives by -1 to +1. Unpatched the knob is a -5V to +5V source; patched it attenuverts the cable.",
+    "the main output is the module's own signal scaled between the A and B levels. Set both of those to 0V and the main output is silent whatever else the module is doing.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it.",
+    "the four arrow buttons around the diamond step the X and Y terrains: two of them step Y forward and back, and the other two step X."
+  ],
+  "menu": [
+    "Stock presets: Slopes, Physics World, Multiplier Mountains, Synthville, Steppes, Blockland — sets all six buttons at once to a factory combination",
+    "Select wavetable set — loads a surface file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 5V · one channel only",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "0 to 5V · one channel only"
+    }
+  }
+}

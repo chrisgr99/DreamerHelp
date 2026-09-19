@@ -1,0 +1,14 @@
+{
+  "plugin": "SonusModular",
+  "module": "PanintheHaas",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "pith.cpp:58 reads this input with getVoltage, which is channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "pith.cpp:64 writes the input straight to this output with setVoltage and no channel index"},
+      "1": {"family": "audio", "poly": false, "why": "pith.cpp:65 writes a buffer sample to this output with setVoltage and no channel index"}
+    }
+  },
+  "comment": "pith.cpp:60 writes the incoming sample at index current_sample of a 4096-sample ring buffer and pith.cpp:62 reads at (current_sample + delay) modulo 4096, which is the oldest data rather than the newest: the sample read was written 4096 minus delay samples ago. The knob therefore runs backwards and the shortest delay the module can produce is 4086 samples. At 44.1kHz that is 92.6ms; the panel and the maker's README both describe 0 to 10ms. The buffer length is fixed in samples, so the delay in milliseconds changes with Rack's sample rate."
+}

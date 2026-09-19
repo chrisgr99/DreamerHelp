@@ -1,0 +1,62 @@
+{
+  "plugin": "BCNmodular",
+  "module": "SomeStructure",
+  "description": "Arrangement structure generator for Maestro: it steps through eight sections on a clock, each with its own length, its own target density and its own weight for each of Maestro's six channels",
+  "params": [
+    {"ids": [0], "text": "Chooses the style within the category the STYLE switch selects; the name of the style appears in the GENRE display"},
+    {"ids": [1], "text": "Chooses which set of styles the GEN SEL knob picks from: organic, electronic or custom"},
+    {"ids": [2], "text": "Auto steps to the next section on its own when the current one has run its bars; manual holds there until a JUMP button is pressed"},
+    {"ids": [3], "text": "Loosens the section lengths: at zero a section lasts exactly its duration, and higher settings let it end up to half that many bars early or late"},
+    {"ids": [4], "text": "Scales the Blur CV input before it is added to the PART BLUR knob, and turns it upside down below the middle"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "Sets how many bars that section lasts: Skip, 1, 2, 4 or 8 bars, where Skip passes the section over entirely"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20], "text": "Moves the arrangement to that section at once, in either mode, despite the manual saying a jump is held until the next bar"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Counts beats on each rise above 1V; a bar is as many beats as the menu says, and section durations are counted in bars"},
+    {"ids": [1], "text": "Returns the arrangement to the first section on a rising edge above 1V, and fires the section trigger"},
+    {"ids": [2], "text": "Adds to the PART BLUR knob through the BLUR ATT. control, 0V to 10V for the full amount of blur"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The whole structure on one sixteen-channel cable: density, randomness, length, blur, section number, the three triggers, a tension voltage, a protocol version and the six channel weights"},
+    {"ids": [1], "text": "The current section's target voice count, 0V to 10V standing for none to six voices, for patching to Maestro's DENS CV"},
+    {"ids": [2], "text": "Which section is playing, 0V for the first of the eight and 10V for the last"},
+    {"ids": [3], "text": "A 1ms pulse at 10V each time the arrangement moves to another section"},
+    {"ids": [4], "text": "A 1ms pulse at 10V every so many bars, the count set on the menu"},
+    {"ids": [5], "text": "A 1ms pulse at 10V when the arrangement comes back round to the first section"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "That channel's weight in the current section, 0V to 10V, for patching to the matching PROB CV on Maestro"}
+  ],
+  "notes": [
+    "nothing advances without a clock: sections are counted in bars of clock pulses and the module has no clock of its own",
+    "the display across the top names the voice each of Maestro's six channels is meant to carry in the current style; it is a suggestion and changes nothing in the patch",
+    "a section's lamp lights while that section is playing, and the next section's lamp blinks while manual mode is held for a jump",
+    "the name on each section is an editable field drawn in its own widget, so no help line can be reached by clicking it",
+    "the least that has to be patched for this to drive Maestro is DENSITY CV to its DENS CV and the six channel outputs to its PROB CV jacks, with both crossfade knobs turned fully to CV",
+    "the panel prints DENS CV over the column of six channel outputs, while each of them carries that channel's role weight rather than a density"
+  ],
+  "menu": [
+    "Phrase trigger every: 1, 2, 3, 4, 6 or 8 bars — sets how often the phrase trigger fires",
+    "Beats per bar: 2 to 8 beats — sets how many clock pulses make one bar",
+    "Part 1 — with the STYLE switch on custom, this sets that section's name, its target density, the weight for each of the six channels and the recommended voice names; one per section"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 10V · one channel only",
+      "10": "0 to 10V · one channel only",
+      "11": "0 to 10V · one channel only"
+    }
+  }
+}

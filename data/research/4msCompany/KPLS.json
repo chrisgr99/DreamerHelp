@@ -1,0 +1,14 @@
+{
+  "plugin": "4msCompany",
+  "module": "KPLS",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "ignored", "why": "KPLSCore.cc:58 divides this jack by 5V and clamps it between 0 and 1, then KPLSCore.cc:59 raises 2 to five times that, giving one octave per volt; KPLSCore.cc:42 takes the voice count from it"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2.5V", "why": "KPLSCore.cc:55 divides this jack by 5V and feeds the envelope, whose Schmitt trigger at envelope.h:29 uses the default 0.1 low and 0.5 high from schmittTrigger.h:43-44"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "KPLSCore.cc:43 with KPLSCore.cc:136 sets this output's channel count from the V/OCT jack"}
+    }
+  },
+  "comment": "The maker's manual gives the pitch range as 40hz - 200hz; KPLSCore.cc:79 maps the knob over 20 to 400Hz, which is what the tooltip shows. The manual's 'V/Oct input for the pitch' does not mention that the voltage is clamped at 0V, so a negative pitch voltage does nothing."
+}

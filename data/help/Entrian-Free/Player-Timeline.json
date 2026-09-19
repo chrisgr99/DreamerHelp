@@ -1,0 +1,56 @@
+{
+  "plugin": "Entrian-Free",
+  "module": "Player-Timeline",
+  "description": "Play-only timeline sequencer: plays up to 25 named songs of ten tracks of clips, built in Entrian Timeline and saved for the free plugin",
+  "params": [
+    {"ids": [0], "text": "Returns the playhead to the beginning, or to the start repeat marker with that option set on the menu"},
+    {"ids": [1], "text": "Starts and stops playback"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that drives playback, at four ticks per beat, which a clock module calls x4 or 1/16th"},
+    {"ids": [1], "text": "Chooses which of the 25 songs plays, C3 selecting the first and the 25 semitones up to C5 the last; set to trigger on the menu it steps to the next non-empty song or picks one at random"},
+    {"ids": [2], "text": "A trigger returning the playhead to the beginning, or to the start repeat marker with that option set on the menu; playback carries on immediately if the sequencer is running"},
+    {"ids": [3], "text": "A trigger toggling between running and stopped; while stopped the gates are closed and clock ticks are ignored"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "text": "Carries 1V/oct pitch where that track holds a melody clip, the segment voltage where it holds a CV clip, and a trigger where it holds a drum clip"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "A gate held open for the length of each note on that track, or a trigger on each accented note where the track holds a drum clip"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "text": "The velocity of the note being played on that track"},
+    {"ids": [30], "text": "Carries a reset out of the sequencer each time its Reset button is pressed, on the panel or in the editor window, so a clock module can be reset from here"},
+    {"ids": [31], "text": "Carries the Run button out of the sequencer, pressed on the panel or in the editor window, so a clock module can be started and stopped from here"}
+  ],
+  "notes": [
+    "the large display draws the sequence with the playhead as a vertical line, and clicking it opens a window showing the notes; they cannot be edited here, though a MIDI file can be imported",
+    "the module is empty when it is added. It plays a patch saved out of Entrian Sequencers, or a MIDI file imported into the editor window, and until one of those arrives there is nothing to play",
+    "clicking the large display opens an editor window showing the notes. They cannot be recorded here, but a MIDI file can be imported into that window or dropped onto it",
+    "the playhead and the start and end repeat markers are drawn on the large display and can be moved by clicking and dragging there, without opening the editor window",
+    "the small display names the song now playing, and clicking it lists the 25 songs to choose from",
+    "the Song CV/menu control in the editor window, not the panel menu, sets when a change of song takes effect: Instant at once, or End of phrase at the end of the current one"
+  ],
+  "menu": [
+    "Song selection input: — how the song input is read: Pitch, C3-C5; Trigger next non-empty song; Trigger random song (random but fair); or Trigger random song (truly random)",
+    "Shared playhead: — Don't share the playhead, Shared playhead leader or Shared playhead follower, which moves the playheads of all the linked Entrian sequencers together",
+    "Delay Clock/Reset/Run inputs — delays those three inputs by a whole number of samples, to offset the one-sample delay every Rack cable adds; Auto is the default and None the other choice",
+    "Set playhead to start marker on reset — a reset sends the playhead to the start repeat marker instead of to the beginning",
+    "Save patch to use Entrian Sequencers... — writes the patch out again with each Player module swapped for the Entrian Sequencers module it came from"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "10": "stepped",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped"
+    }
+  }
+}

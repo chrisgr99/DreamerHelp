@@ -1,0 +1,44 @@
+{
+  "plugin": "PhoturiElectronics",
+  "module": "Fairyfly",
+  "description": "A walk that hops between six outputs on its own clock, with the rate set by a voltage, and two further outputs built from the place it has reached",
+  "params": [
+    {"ids": [0], "text": "Chooses one of six sizes that the SIZE OUT and WINGS OUT voltages are built from: the lowest setting fixes the size at 0.1 and each step above it multiplies the size by about two and a half"},
+    {"ids": [1], "text": "Adds to the voltage at Clock, 0 to 1, which shortens the time between hops and lowers the voltage of the six outputs together"},
+    {"ids": [2], "text": "Sets how far the walk hops: at 0 it moves to the next output every time, and at full it can move on by anything from one place to six"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets how often the walk hops and how high the six outputs go: 0V gives a hop every 25.6 seconds at full voltage, 10V ten hops a second near 0V; no edge is read, despite the panel printing Clock"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [1], "text": "Carries 7.5V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [2], "text": "Carries 10V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [3], "text": "Carries 12.5V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [4], "text": "Carries 15V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [5], "text": "Carries 17.5V while the walk stands here and 0V at all other times, the voltage falling as Clock and the knob beside it rise"},
+    {"ids": [6], "text": "Carries the chosen size divided by the number of the output the walk stands on, multiplied by a counter that moves one place up or down at every hop"},
+    {"ids": [7], "text": "Carries the chosen size divided by the number of the output the walk stands on, scaled down as Clock and the knob beside it rise"}
+  ],
+  "notes": [
+    "with the knobs down and nothing patched, the walk hops once every 25.6 seconds, so the module can look as though it has stopped",
+    "the six outputs are not at the same voltage: they rise from 5V at the first to 17.5V at the sixth, and the top three go beyond the ±10V that Rack's modules expect",
+    "SIZE OUT and WINGS OUT divide by the number of the output the walk stands on, and at the first of the six that number is zero, so both carry an out-of-range value throughout that hop",
+    "the counter behind SIZE OUT can fall below its first place, and while it is there SIZE OUT carries 0V whatever else is set"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 7.5V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 12.5V · stepped · one channel only",
+      "4": "0 to 15V · stepped · one channel only",
+      "5": "0 to 17.5V · stepped · one channel only",
+      "6": "one channel only",
+      "7": "one channel only"
+    }
+  }
+}

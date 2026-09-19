@@ -1,0 +1,43 @@
+{
+  "plugin": "Coalescent",
+  "module": "Bunnies",
+  "description": "A predator-prey oscillator: a population of prey and a population of predators chase each other round a cycle about a quarter of a turn apart.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed the simulation runs at, -8 to +4 octaves; the centre gives C4 at 261.63Hz and the bottom about 1Hz."},
+    {"ids": [1], "text": "Sets the asymmetry between the two populations, 0 to 1: in Lotka-Volterra it is the predator-prey timescale ratio and the relative swing, and in Rosenzweig-MacArthur the predator's efficiency."},
+    {"ids": [2], "text": "Sets the size of the boom and bust, 0 to 1: in Lotka-Volterra a target the amplitude servo holds, and in Rosenzweig-MacArthur the enrichment that takes the system from rest into a cycle."},
+    {"ids": [3], "text": "Chooses Lotka-Volterra, a conservative cycle whose size is held where you set it, or Rosenzweig-MacArthur, which settles onto a limit cycle of its own."},
+    {"ids": [4], "text": "An attenuverter, -1 to +1, scaling the CV into the balance."},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, scaling the CV into the boom-bust size."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the RATE knob at 1V per octave, setting the speed the simulation runs at."},
+    {"ids": [1], "text": "Modulates the balance, at a tenth per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the boom-bust size, at a tenth per volt through its attenuverter."},
+    {"ids": [3], "text": "A continuous force added to the prey population at half a unit per volt: a short gate perturbs the cycle, and an audio-rate signal cross-modulates it."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The prey population centred on its equilibrium, soft-clipped to ±5V."},
+    {"ids": [1], "text": "The predator population centred on its equilibrium, soft-clipped to ±5V."},
+    {"ids": [2], "text": "A 10V pulse 1ms long at each local maximum of the prey population."},
+    {"ids": [3], "text": "A 10V pulse 1ms long at each local maximum of the predator population."}
+  ],
+  "notes": [
+    "Changing the mode switch re-seeds the simulation, so the cycle restarts from its default state rather than carrying over.",
+    "The peak outputs are most usable at LFO and low audio rates; at high rates the pulses crowd together."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    }
+  }
+}

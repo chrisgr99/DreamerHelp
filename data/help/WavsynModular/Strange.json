@@ -1,0 +1,35 @@
+{
+  "plugin": "WavsynModular",
+  "module": "Strange",
+  "description": "A chaotic CV source: a Henon or Ikeda attractor stepped forward at a rate you set or at an external clock, with its two coordinates on the outputs and a gate for every step",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new value is taken, on a logarithmic scale from one every 20 seconds fully left to 500 a second fully right; it is ignored while CLOCK is patched"},
+    {"ids": [1], "text": "Adds -2V to +2V to both CV outputs"},
+    {"ids": [2], "text": "Sets how much of each step the gate output stays high, from a thousandth of it to all of it"},
+    {"ids": [3], "text": "Chooses which attractor is stepped: Henon or Ikeda"},
+    {"ids": [4], "text": "Sets the constant the attractor is built on, mapped to between 0.7 and 1.0, which changes the run of values it produces"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the tempo from the time between two rising edges past 2V, one new value to the beat, and takes over from RATE"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V for the fraction of each step set by GATE and 0V for the rest of it"},
+    {"ids": [1], "text": "The attractor's first coordinate with BIAS added, held at that value until the next step"},
+    {"ids": [2], "text": "The attractor's second coordinate with BIAS added, held at that value until the next step"}
+  ],
+  "notes": [
+    "in Ikeda mode the step rate also follows the attractor's own magnitude, so the steps come unevenly; in Henon mode that term is one and the rate is steady",
+    "the attractor is put back to its starting point whenever a coordinate reaches -2.2V in Henon mode or -2V in Ikeda mode, which is what stops it sticking",
+    "all three outputs are one channel, and the two CV outputs hold their value between steps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads the RATE knob; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "one channel only",
+      "2": "one channel only"
+    }
+  }
+}

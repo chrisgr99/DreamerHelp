@@ -1,0 +1,21 @@
+{
+  "plugin": "TMT",
+  "module": "Spellbook",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "spellbook.cpp:648 stepForwardTrigger.process(getVoltage()), Rack's default 0V and 1V thresholds; ignored while the Index jack is patched (:646)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "spellbook.cpp:573 resetTrigger.process(getVoltage()); :582 starts a 5ms window in which the step inputs are ignored"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "spellbook.cpp:660-678: relative mode scales the voltage over the whole sequence, absolute mode takes (int)V modulo the row count"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "spellbook.cpp:654 stepBackTrigger.process(getVoltage())"},
+      "4": {"poly": true, "step": "continuous", "why": "spellbook.cpp:626-629 getVoltage per channel, bounded by getChannels() at :597"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "spellbook.cpp:605 and :613 one SchmittTrigger per channel, bounded by getChannels() at :596"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "spellbook.cpp:786 setChannels(activeChannels), the count decided by the polyphony mode at :697-727"},
+      "1": {"poly": false, "why": "spellbook.cpp:769 setVoltage with no channel argument"},
+      "17": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "spellbook.cpp:686 currentStep / (rowCount - 1) * 10"},
+      "18": {"family": "cv", "poly": false, "why": "spellbook.cpp:687 currentStep + 1, a volt per row"}
+    }
+  },
+  "comment": "Two things the readme does not match. In absolute index mode the row is (int)V modulo the row count (spellbook.cpp:663), which counts from zero, so 1V selects the second row rather than the first as the readme says; feeding the Absolute Index output back into the Index jack therefore lands one row late. And the Relative Index output divides by the row count minus one (spellbook.cpp:686), so a one-row sequence divides zero by zero and the jack carries a NaN. The sequence text is a custom text widget added with addChild, not a parameter, so it cannot be clicked for help; the same is true of the resize handles."
+}

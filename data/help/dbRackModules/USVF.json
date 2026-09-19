@@ -1,0 +1,43 @@
+{
+  "plugin": "dbRackModules",
+  "module": "USVF",
+  "description": "A state variable filter with a nonlinear stage in its loop, giving lowpass, bandpass and highpass at once and breaking up as it is driven",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff frequency, 256Hz to 23170Hz as a power of two"},
+    {"ids": [1], "text": "Attenuates the voltage at the Freq jack before it is added to the Freq knob, 0 to 100 per cent"},
+    {"ids": [2], "text": "Sets the Q, 0.5 to 20, which narrows the band and sharpens the ring at the cutoff"},
+    {"ids": [3], "text": "Attenuates the voltage at the Q jack before it is added to the Q knob, 0 to 1"},
+    {"ids": [4], "text": "Sets how hard the signal is pushed into the nonlinear stage, 0 to 1, which is what makes the filter unstable"},
+    {"ids": [5], "text": "Attenuates the voltage at the Drv jack before it is added to the Drv knob, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be filtered, one per channel"},
+    {"ids": [1], "text": "Modulates the cutoff, one octave per volt scaled by the Freq CV knob"},
+    {"ids": [2], "text": "Modulates the Q, a tenth per volt scaled by the Q CV knob"},
+    {"ids": [3], "text": "Modulates the drive, a tenth per volt scaled by the Drive CV knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal below the cutoff, with its constant offset removed"},
+    {"ids": [1], "text": "The band around the cutoff, with its constant offset removed"},
+    {"ids": [2], "text": "The signal above the cutoff, with its constant offset removed"}
+  ],
+  "notes": [
+    "the cutoff is held between 2Hz and four tenths of the sample rate however far the knob and the jack push it"
+  ],
+  "menu": [
+    "Nonlinear mode — picks the curve the drive is pushed through: Tanh, Hard Clip, Sin, Overdrive, Exp, Sqr or Abs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the Freq knob alone; a negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0.5 to 20V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    }
+  }
+}

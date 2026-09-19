@@ -1,0 +1,20 @@
+{
+  "plugin": "Sulamith",
+  "module": "GenEcho",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "GenEcho.cpp GenEcho::process: inA = inputs[WAV0_INPUT].getVoltage() * volume, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the LEFT input", "why": "GenEcho.cpp GenEcho::process: inB = isConnected() ? getVoltage() : inputs[WAV0_INPUT].getVoltage() * volume, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "GenEcho.cpp GenEcho::process: gTrigger.process(getVoltage() / 2.f), a Rack SchmittTrigger at its default 0.1V and 1V thresholds on half the voltage, so the real threshold is 2V, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "GenEcho.cpp GenEcho::process: delTrigger.process(getVoltage() / 2.f), a Rack SchmittTrigger at its default thresholds on half the voltage, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0.1 to 1V", "why": "GenEcho.cpp GenEcho::process: clamp(knob + getVoltage() / 10.f, 0.1, 1.f) times MAX_SAMPLE_SIZE, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "GenEcho.cpp GenEcho::process: clamp(knob + getVoltage() / 10, 0.f, 1.f), with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "GenEcho.cpp GenEcho::process: oct = 1 + the OC_PARAM switch + (getVoltage() > 1 ? 1 : 0), compared once per sample with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "GenEcho.cpp GenEcho::process: setVoltage(clamp(crossfade(input, loop, cross) * crossamp, -5.f, 5.f)) with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "GenEcho.cpp GenEcho::process: setVoltage(clamp(crossfade(input, loop, cross) * crossamp, -5.f, 5.f)) with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "Five of the eleven declared parameters have no widget on the panel and cannot be clicked: TRIG_PARAM, GATE_PARAM and the three STOR entries. The right input is read without the gain multiplier when it has its own cable but with it when it falls back to the left. dataToJson writes each of the 48000 samples of both buffers as a separate JSON key. Playback steps the read index by oct each sample, oct being 1 plus the switch's 0 to 3 plus 1 more while the OCT jack is above 1V, so the rate multiplier runs 1 to 5. The breakpoint machinery inherited from StochKit is multiplied by zero in this build and contributes nothing."
+}

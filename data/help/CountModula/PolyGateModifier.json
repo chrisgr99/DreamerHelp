@@ -1,0 +1,34 @@
+{
+  "plugin": "CountModula",
+  "module": "PolyGateModifier",
+  "description": "Lengthens or shortens polyphonic gates under voltage control; the number of channels on TRIGGER sets the number of output channels",
+  "params": [
+    {"ids": [0], "text": "Attenuverter for the CV input, -1 to +1, setting how far that input moves the gate length and in which direction"},
+    {"ids": [1], "text": "Sets the length added to the gate on every channel, reaching 1 second with the range set to FAST, 10 seconds at MED and 20 seconds at SLOW"},
+    {"ids": [2], "text": "Picks the full-scale gate length for every channel: FAST for up to 1 second, MED for up to 10 seconds, SLOW for up to 20 seconds"},
+    {"ids": [3], "text": "RETRIGGER holds each output channel high for as long as its input gate lasts plus the set length; ONE-SHOT holds it high for the set length alone. The setting covers every channel"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the gate length, scaled by the CV knob; the voltage is read over a range of -10V to +10V, and a monophonic cable applies the same voltage to every channel"},
+    {"ids": [1], "text": "The polyphonic gate or trigger that starts each channel's output gate; over 2V counts as high, and the STATUS matrix shows which channels are high"},
+    {"ids": [2], "text": "A gate over 2V cuts that channel's output gate short and holds it low until the next rising edge at TRIGGER; a monophonic cable applies the reset to every channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modified gates, one channel for each channel on TRIGGER, 10V while high and 0V while low"},
+    {"ids": [1], "text": "A 1ms trigger at 10V on a channel each time that channel's output gate ends"}
+  ],
+  "notes": [
+    "to shorten a gate, choose ONE-SHOT and a length shorter than the incoming gates"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "high above 2V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

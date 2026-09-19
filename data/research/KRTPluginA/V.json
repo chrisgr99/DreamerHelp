@@ -1,0 +1,29 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "V",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/V.cpp:130 and 163, added whole to the knob and sent out as the CV"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/V.cpp:129, scaled by a tenth and raised as a power of two with no knob to add to"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/V.cpp:131-133, scaled by 0.4 and added to both envelope time exponents"},
+      "3": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/V.cpp:141 and 160, read as that section's audio and multiplied by the gain CV and that section's envelope into its out jack"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:139, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.05 is also added to that section's CV output, unclamped and whatever its sign"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:140, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.07 is also added to that section's CV output, unclamped and whatever its sign"},
+      "6": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/V.cpp:141 and 160, read as that section's audio and multiplied by the gain CV and that section's envelope into its out jack"},
+      "7": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:139, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.05 is also added to that section's CV output, unclamped and whatever its sign"},
+      "8": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:140, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.07 is also added to that section's CV output, unclamped and whatever its sign"},
+      "9": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/V.cpp:141 and 160, read as that section's audio and multiplied by the gain CV and that section's envelope into its out jack"},
+      "10": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:139, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.05 is also added to that section's CV output, unclamped and whatever its sign"},
+      "11": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "swings", "normal": "0V", "why": "src/V.cpp:140, 142 and 163, summed with the section's other trigger and rescaled from 0.1 to 2 into a dsp::SchmittTrigger that fires its envelope; at :163 the same voltage times 0.07 is also added to that section's CV output, unclamped and whatever its sign"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"},
+      "1": {"family": "audio", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"},
+      "2": {"family": "pitch", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"},
+      "3": {"family": "audio", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"},
+      "4": {"family": "pitch", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"},
+      "5": {"family": "audio", "poly": true, "why": "src/V.cpp:120, maxPoly sets every output to the widest input's channel count"}
+    }
+  },
+  "comment": "The middle audio output is overwritten every sample with the sum of the sections whose own outputs are unpatched (src/V.cpp:161-166). Because the middle section is excluded from that sum as soon as its own jack is connected, and that same jack is then written with the sum, patching it loses the middle section's own signal altogether; that is what the line for it says. The gain input has no knob behind it, so an unpatched jack gives an exponent of zero and a gain of one, which with the envelope still applies but with nothing patched to a signal input gives silence. The two trigger offsets applied to the CV outputs are 0.05 and 0.07 volts per volt of trigger (line 163), which at 10V gates is 0.5V and 0.7V; the maker's README calls them five and seven semitones, which would be 0.417V and 0.583V. The panel prints Hz, ATK, DCY, CVHz, CVdB, CVs, then IN, T5, T7, CV and OUT for each of the three columns."
+}

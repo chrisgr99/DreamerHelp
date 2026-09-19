@@ -1,0 +1,33 @@
+{
+  "plugin": "Cella",
+  "module": "Euler",
+  "description": "Measures how fast its input is changing and puts out the angle of that slope, -90 to 90 degrees scaled onto -10V to 10V, with the absolute value and the two halves out separately",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency the slope is measured against, a fraction of a hertz up to 16Hz; it is also the sensitivity, since a higher setting makes the same change read as a steeper angle"},
+    {"ids": [1], "text": "Averages the input over up to 1 second before the slope is worked out, which takes the jitter out of a hand-moved controller"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal whose rate of change is measured"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The angle of the slope, 10V for a vertical rise, -10V for a vertical fall and 0V where the input is flat"},
+    {"ids": [1], "text": "The angle of the slope with the sign taken off, 0V where the input is flat and 10V for a vertical move either way"},
+    {"ids": [2], "text": "The angle of the slope while the input is rising, and 0V while it is falling or flat"},
+    {"ids": [3], "text": "The angle of the slope while the input is falling, put out as a positive voltage, and 0V while it is rising or flat"}
+  ],
+  "notes": [
+    "the slope is measured once every two cycles of the FREQ setting rather than every sample, up to a limit of 1024 samples between measurements, so a low setting gives a coarser reading",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

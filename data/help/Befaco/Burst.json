@@ -1,0 +1,45 @@
+{
+  "plugin": "Befaco",
+  "module": "Burst",
+  "description": "Trigger processor: one trigger in produces a run of up to 32 triggers, spread across a window set by a tapped tempo",
+  "params": [
+    {"ids": [0], "text": "Switches between one burst per trigger and a burst that restarts itself as soon as the last one ends"},
+    {"ids": [1], "text": "Sets how many triggers a burst contains, 1 to 32"},
+    {"ids": [2], "text": "Starts a burst by hand, one per press"},
+    {"ids": [3], "text": "Attenuates the quantity CV, from nothing through to its full effect"},
+    {"ids": [4], "text": "Skews the spacing within the burst: even at noon, crowded at the start and slowing down clockwise, spread at the start and speeding up counter-clockwise"},
+    {"ids": [5], "text": "Multiplies or divides the tapped tempo to set the length of the burst window, by 2, 3, 4 or 5 either way, with the tempo itself at noon"},
+    {"ids": [6], "text": "Sets the chance that a trigger fires the whole burst rather than a single trigger, 100% counter-clockwise falling to 0% clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the number of triggers in a burst, 5V adding sixteen, after the quantity attenuator"},
+    {"ids": [1], "text": "Skews the spacing within the burst, 10V covering the whole range, and is added to the distribution knob"},
+    {"ids": [2], "text": "Each pulse here sets the base tempo from the gap since the last one; a gap more than twice or less than half the one before it is discarded"},
+    {"ids": [3], "text": "Shifts the multiplication or division of the tempo, 10V covering four steps, and is added to the TIME DIV/MULT knob"},
+    {"ids": [4], "text": "Lowers the chance that a trigger fires the whole burst, 10V covering the whole range, and is added to the probability knob"},
+    {"ids": [5], "text": "A rising edge starts a burst"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V pulse at the base tempo, which runs at 2Hz until a ping sets it"},
+    {"ids": [1], "text": "A 1ms 10V pulse when a burst finishes; a burst cut short by the probability setting produces none"},
+    {"ids": [2], "text": "A 1ms 10V trigger for each event in the burst"}
+  ],
+  "menu": [
+    "Include original trigger in output — sends the trigger that started the burst out as the burst's first trigger; on by default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

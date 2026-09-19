@@ -1,0 +1,47 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Pulse-VCO",
+  "description": "A polyphonic pulse oscillator with pulse-width, frequency, phase and volume modulation",
+  "params": [
+    {"ids": [0], "text": "Scales the voltage at the frequency modulation jack, -1 to +1; at 0 that jack does nothing and a negative setting reverses the modulation"},
+    {"ids": [1], "text": "Scales the voltage at the phase modulation jack, -1 to +1; at 0 that jack does nothing and a negative setting reverses the modulation"},
+    {"ids": [2], "text": "Scales the voltage at the volume modulation jack, -1 to +1; at 0 that jack does nothing and a negative setting reverses the modulation"},
+    {"ids": [3], "text": "Scales the voltage at the pulse-width modulation jack, 0 to 1; at 0 that jack does nothing"},
+    {"ids": [4], "text": "Sets the frequency the oscillator plays at 0V, 10Hz to 20000Hz, starting at 261.626Hz for C4; the scale is linear in Hz, so most of the travel covers the top of the range"},
+    {"ids": [5], "text": "Shifts where in the cycle the wave starts, 0 to 1 of a cycle"},
+    {"ids": [6], "text": "Multiplies the output, 0 to 1; the wave itself runs to ±5V, so at 0.5 the output reaches ±2.5V"},
+    {"ids": [7], "text": "Sets how much of each cycle is spent at the high level, 1% to 99%, starting at 50%; it does nothing while Band is set to Limited"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch at 1V per octave from the frequency knob's setting at 0V, and sets how many polyphonic voices the module plays"},
+    {"ids": [1], "text": "Multiplies the frequency by its own voltage times the attenuator times a half, so 10V at full attenuation lifts the frequency six-fold; the result is held between 10Hz and 20000Hz"},
+    {"ids": [2], "text": "Shifts the start of the cycle by its own voltage times the attenuator divided by ten, so 10V at full attenuation is a whole cycle, added to the phase knob"},
+    {"ids": [3], "text": "Added to the volume knob at its own voltage times the attenuator divided by ten, so 10V at full attenuation adds 1"},
+    {"ids": [4], "text": "Added to the pulse-width knob at its own voltage times the attenuator divided by ten, so 10V at full attenuation adds a whole cycle's worth; it does nothing while Band is set to Limited"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the pulse wave, at the same number of polyphonic channels as the pitch input"}
+  ],
+  "notes": [
+    "with nothing patched to V-In the oscillator plays one voice at the frequency knob's setting",
+    "the four modulation jacks are read one channel at a time and the same modulation is applied to every polyphonic voice",
+    "the volume total is not held to any range, so a large voltage at the volume jack can drive the output well past ±5V or turn it inside out by going negative",
+    "the pulse width is set only in the Unlimited setting; the Limited table is a square wave at an even half cycle and neither the pulse-width knob nor its jack reaches it"
+  ],
+  "menu": [
+    "Band: Unlimited, Limited — chooses between a hard-edged pulse computed from the phase, which aliases, and a fixed square wave rebuilt from a set number of odd sine partials, which is cleaner",
+    "Harmonics: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 — sets how many odd partials the Limited square is built from, starting at 10"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "bipolar · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

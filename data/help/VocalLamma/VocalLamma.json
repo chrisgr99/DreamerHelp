@@ -1,0 +1,73 @@
+{
+  "plugin": "VocalLamma",
+  "module": "VocalLamma",
+  "description": "A formant vocal synthesiser: a glottal source through three band-pass filters that morph across the vowels OO, OH, AH, AY and EE, followed by a stereo ping-pong delay",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch in volts at one volt per octave, 0V to 10V, with 5V giving C4 at 261.63Hz"},
+    {"ids": [1], "text": "Sweeps the three formant frequencies across the five vowels in order, OO at the left through OH, AH and AY to EE at the right"},
+    {"ids": [2], "text": "Scales the voltage at VOWEL CV, -100% to +100%, before it is added to the VOWEL knob; at the centre that jack changes nothing"},
+    {"ids": [3], "text": "Sets how long the pitch takes to slide to a new value, 0 to 5 seconds"},
+    {"ids": [4], "text": "Sets the depth of a 5.5Hz vibrato on the pitch, reaching one semitone either way at the clockwise end"},
+    {"ids": [5], "text": "Sets the level of the synthesised voice going into the delay and the outputs, 0 to 100%"},
+    {"ids": [6], "text": "Scales all three formant frequencies together, 0.85 times at the left to 1.15 times at the right, which shifts the whole vowel up or down without changing the pitch"},
+    {"ids": [7], "text": "A latch putting the voice under gate control; unlit, the voice sounds without stopping, and lit, the voice sounds only while GATE is above 1V or a MIDI note is held"},
+    {"ids": [8], "text": "Sets the delay time, 10ms at the left to 2 seconds at the right; with a clock at SYNC DELAY it instead picks which whole multiple of the clock period the delay takes"},
+    {"ids": [9], "text": "Sets how much of each delayed channel is fed back into the other one, 0 to 100%"},
+    {"ids": [10], "text": "Balances the dry signal against the delayed one, dry alone at the left and delay alone at the right"},
+    {"ids": [11], "text": "Sets how much of the signal at EXT IN is added to the voice before the delay, 0 to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the PITCH knob at one volt per octave"},
+    {"ids": [1], "text": "Moves the vowel, scaled by VOW ATT; at a full attenuverter 10V covers the whole sweep from OO to EE, and the total with the knob is held inside it"},
+    {"ids": [2], "text": "Adds to the VIBRATO depth, 10V covering the whole depth, and the total is held between none and full"},
+    {"ids": [3], "text": "Adds to the TIME knob, 10V covering the whole sweep between 10ms and 2 seconds, and the total is held inside it"},
+    {"ids": [4], "text": "An audio signal to run through the delay alongside the voice, scaled by INPUT MIX before it is added"},
+    {"ids": [5], "text": "While GATE ON is lit the voice sounds whenever the voltage here is above 1V and fades out when it falls; with GATE ON unlit this jack is not read at all"},
+    {"ids": [6], "text": "Adds to the INPUT MIX level, 10V covering the whole span, and the total is held between 0 and 100%"},
+    {"ids": [7], "text": "Adds to the FORMANT scaling, 10V covering the whole span between 0.85 times and 1.15 times, and the total is held inside it"},
+    {"ids": [8], "text": "Adds to the GLIDE time, 10V adding 5 seconds, and the total is held between 0 and 5 seconds"},
+    {"ids": [9], "text": "Each rise above 1V flips the GATE ON latch, so a trigger here does what pressing that button does"},
+    {"ids": [10], "text": "A clock here is timed from one rise above 1V to the next, and the delay time is snapped to a whole multiple of that period, with TIME choosing the multiple"},
+    {"ids": [11], "text": "Adds to the VOICE level, 10V covering the whole range, and the total is held between silence and full"},
+    {"ids": [12], "text": "Adds to the MIX balance, 10V covering the whole span from dry to delay, and the total is held inside it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the dry signal mixed with the delay, soft-clipped through a tanh so it stops short of ±10V"},
+    {"ids": [1], "text": "The right channel of the dry signal mixed with the delay, soft-clipped through a tanh so it stops short of ±10V"},
+    {"ids": [2], "text": "The voice's pitch in volts at one volt per octave, taken after the glide and without the vibrato"}
+  ],
+  "notes": [
+    "the voice sounds from the moment the module is placed and keeps sounding; press GATE ON to make it answer a gate instead",
+    "the delay crosses over between the channels, each side fed from the other side's delayed signal, so the repeats alternate between the two outputs",
+    "a MIDI note sets the pitch and restarts the glottal cycle, and while any note is held the voice counts as gated",
+    "MIDI pitch bend sweeps the vowel, the mod wheel adds vibrato depth, CC12 moves the delay mix and CC13 moves the formant scaling",
+    "the pitch wanders very slightly on its own, from a slow random jitter mixed in before the glide, and that jitter is carried on PITCH OUT"
+  ],
+  "menu": [
+    "MIDI driver — picks which MIDI system the module takes its notes from",
+    "MIDI device — picks which attached MIDI device feeds the module",
+    "MIDI channel — picks which MIDI channel is read, or all of them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "10": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only"
+    }
+  }
+}

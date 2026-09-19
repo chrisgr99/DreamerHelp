@@ -1,0 +1,19 @@
+{
+  "plugin": "forsitan",
+  "module": "vorax",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/vorax.cpp:657, one getVoltage() injected into the feedback loop"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/vorax.cpp:658, the maker's own port name records 1V/oct, added to a parameter in semitones"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/vorax.cpp:659, 7.2dB of loop gain per volt, added to the -60..+12dB knob"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/vorax.cpp:743-746, the exponential loop cutoff is multiplied by 2 to the power of the voltage and clamped to 100Hz to 18000Hz, which is one volt per octave"},
+      "4": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/vorax.cpp:761-765, the echo time is multiplied by 2 to the power of minus the voltage and clamped to 0.05 to 5 seconds, so each positive volt halves it"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/vorax.cpp:710-714, bodyTarget() adds getVoltage() times 0.1 to the 0..1 body knob and clamps, so 0-10V covers the whole travel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/vorax.cpp:663, one setVoltage per side after the loop and echo, with no stated clamp"},
+      "1": {"family": "audio", "poly": false, "why": "src/vorax.cpp:664, one setVoltage per side after the loop and echo, with no stated clamp"}
+    }
+  },
+  "comment": "The signal path is noise plus feedback into a Karplus-Strong string, then overdrive, low-pass, high-pass and reverb, with a short body delay closing the loop and an echo send tapped off it. The right channel's body delay is offset by four samples, which decorrelates the two sides into a wide image. Every echo repeat is band-passed at 800Hz and soft-clipped, so long feedback settings degrade towards saturated warbles. The feedback gain jack is 7.2dB per volt, which is not one of the four range shapes, so range is left off it. configBypass passes the input jack to both outputs. The module is a port of Audrey II by Synthux Academy, from the MIT-licensed firmware. The panel prints vorax, pitch, feedback, body, lpf, half, hpf, verb, decay, send, time, echo fb, vol, in, v/oct, fb, lpf, time, body, l and r."
+}

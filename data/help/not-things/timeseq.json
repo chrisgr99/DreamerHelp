@@ -1,0 +1,63 @@
+{
+  "plugin": "not-things",
+  "module": "timeseq",
+  "description": "TimeSeq: a sequencer whose whole behaviour comes from a JSON script loaded through its menu, running any number of timed lanes at once",
+  "params": [
+    {"ids": [0], "text": "Starts a loaded script, or pauses it while it is running"},
+    {"ids": [1], "text": "Resets the script to the state it had when it was loaded, clearing its variables and internal triggers, and starts it again if it was running"},
+    {"ids": [2], "text": "Sets how fast the script is processed, -10 to 10: above 1 runs that many processing cycles per sample, below -1 runs one cycle every that many samples, and -1, 0 and 1 all run at normal speed"},
+    {"ids": [3], "text": "Sets the running time display back to zero without touching the script"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "A voltage or trigger the script can read, on up to sixteen channels"},
+    {"ids": [8], "text": "Starts a loaded script, or pauses it while it is running, on a trigger"},
+    {"ids": [9], "text": "Resets the script on a trigger, and starts it again if it was running"},
+    {"ids": [10], "text": "Replaces the rate knob while it is patched, the voltage rounded down to a whole number"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "A voltage the script sets, on up to sixteen channels; a freshly loaded or reset script leaves every output at 0V on one channel"},
+    {"ids": [8], "text": "A trigger each time the script's run state changes"},
+    {"ids": [9], "text": "A trigger each time the script is reset"}
+  ],
+  "notes": [
+    "the module does nothing at all until a script is loaded from the menu; with none loaded the display reads EMPTY",
+    "a script that fails validation is refused and the display reads ERROR; a script that is loaded but not running shows PAUSED",
+    "the lamps marked L, S and T blink when a lane loops, a segment starts and an internal trigger fires",
+    "the display below the status line draws a line for each output channel the script has set, between -10V and 10V, fading out when the channel stops being updated"
+  ],
+  "menu": [
+    "Load script... — reads a script from a file",
+    "Save script... — writes the loaded script to a file",
+    "Copy script — puts the loaded script on the clipboard",
+    "Paste script — loads a script from the clipboard, which is the quick way to test an edit",
+    "Clear script — removes the loaded script from the module",
+    "Copy failed assertions — puts the assertions the running script has failed on the clipboard"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "5": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "6": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "7": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "8": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "9": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "10": "stepped · one channel only\n\nunpatched it reads the rate knob."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "stepped",
+      "9": "stepped"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "plugin": "Cella",
+  "module": "Resonators",
+  "description": "Four Karplus-Strong resonators fed from one input, each tuned to its own pitch, with a shared decay, tone and mix and the four voices out separately as well as summed",
+  "params": [
+    {"ids": [0, 2, 4, 6], "text": "Tunes its resonator, -54 to 54 semitones from C4 at 261.63Hz"},
+    {"ids": [1, 3, 5, 7], "text": "Sets the level of its resonator's contribution, 0 to 1, the hover text reading it in decibels"},
+    {"ids": [8], "text": "Sets how long the resonators ring, 0 to 1; the setting is raised to the power of 0.2 and mapped onto a feedback of 0.7 to 0.995, so most of the useful travel is near the bottom"},
+    {"ids": [9], "text": "Sets the tone of all four resonators at once: counter-clockwise of the centre brings a lowpass down from 20kHz to 200Hz, clockwise takes a highpass up from 20Hz to 2000Hz"},
+    {"ids": [10], "text": "Scales the sum of the four resonators before it reaches the OUT jack, 0 to 1; the WET jack is not touched by it"},
+    {"ids": [11], "text": "Crossfades the OUT jack between the untouched input at fully counter-clockwise and the resonated sum at fully clockwise"},
+    {"ids": [12], "text": "Attenuates and inverts the DECAY jack, -1 to 1, before that voltage is added to the DECAY knob"},
+    {"ids": [13], "text": "Attenuates and inverts the COLOR jack, -1 to 1, before that voltage is added to the COLOR knob"},
+    {"ids": [14], "text": "Attenuates and inverts the GAIN jack, -1 to 1, before that voltage is added to each GAIN knob"},
+    {"ids": [15], "text": "Attenuates and inverts the MIX jack, -1 to 1, before that voltage is added to the MIX knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio the four resonators are excited with"},
+    {"ids": [1], "text": "One volt per octave added to the first resonator's FREQ knob; with more than one channel patched here, channels two to four tune the other three resonators unless they have cables of their own"},
+    {"ids": [2, 3, 4], "text": "One volt per octave added to its own resonator's FREQ knob, taking that resonator off any polyphonic cable in the first pitch jack"},
+    {"ids": [5], "text": "Divided by 10, scaled by its attenuverter and added to the DECAY knob; each channel of a polyphonic cable reaches the resonator of the same number, and the last channel covers any left over"},
+    {"ids": [6], "text": "Divided by 10, scaled by its attenuverter and added to the COLOR knob; each channel of a polyphonic cable reaches the resonator of the same number, and the last channel covers any left over"},
+    {"ids": [7], "text": "Divided by 10, scaled by its attenuverter and added to the GAIN knobs; each channel of a polyphonic cable reaches the resonator of the same number, and the last channel covers any left over"},
+    {"ids": [8], "text": "Divided by 10, scaled by its attenuverter and added to the MIX knob; only the first channel is read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input and the summed resonators crossfaded by MIX, the resonators first scaled by AMP"},
+    {"ids": [1], "text": "The four resonators on four channels, each at its own GAIN setting, with no AMP scaling and no dry signal mixed in"}
+  ],
+  "notes": [
+    "the pitch of each resonator, knob and jack together, is clamped to four and a half octaves either side of C4",
+    "with the module bypassed the audio input is passed straight to the OUT jack"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads the first pitch jack's second channel.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads the first pitch jack's third channel.",
+      "4": "1V per octave · continuous · one channel only\n\nunpatched it reads the first pitch jack's fourth channel.",
+      "5": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

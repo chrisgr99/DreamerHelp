@@ -1,0 +1,62 @@
+{
+  "plugin": "Ahornberg",
+  "module": "TapeRecorder",
+  "description": "An emulation of a microcassette recorder: it writes whatever arrives at the audio input onto a tape kept inside the patch, and plays it back forwards or backwards at any speed",
+  "params": [
+    {"ids": [0], "text": "Halts the tape while a play button stays on, so the reels can be turned by hand"},
+    {"ids": [1], "text": "Runs the tape forward"},
+    {"ids": [2], "text": "Runs the tape backwards"},
+    {"ids": [3], "text": "Winds the tape forward at the multiple of play speed set by the Fast Speed screw; Ctrl and a click jumps to the next loop point instead, and Ctrl with Shift jumps to the end of the tape"},
+    {"ids": [4], "text": "Winds the tape backwards at the multiple of play speed set by the Fast Speed screw; Ctrl and a click jumps to the previous loop point instead, and Ctrl with Shift jumps to the start"},
+    {"ids": [5], "text": "Sets how fast the two winding buttons move the tape, from a quarter of play speed to 20 times it"},
+    {"ids": [6], "text": "Nothing in the module reads this screw. It sets the rise rate of a slew limiter on the tape speed whose every use is commented out of the source, so turning it changes no sound."},
+    {"ids": [7], "text": "Sets the tempo the tape is measured in, 1 to 360 BPM; the tempo output pulses at it and the loop points are counted in its bars"},
+    {"ids": [8], "text": "Sets how many beats make a bar, 1 to 48, which fixes how much tape one bar covers"},
+    {"ids": [9], "text": "Sets the bar the loop starts at, 0 to 99"},
+    {"ids": [10], "text": "Sets the bar the loop ends at, 0 to 99"},
+    {"ids": [12, 13], "text": "Turn a reel to move the tape by hand, which scratches the recording while a play button and pause are both on. Dragging near the rim brakes the tape and dragging at the centre leaves it at full speed."},
+    {"ids": [14], "text": "Sets the loop start to the bar the tape has reached, and springs back off"},
+    {"ids": [15], "text": "Sets the loop end to the bar the tape has reached, and springs back off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio written to the tape, one polyphonic channel per track. It is also the bus back from the Tape Recorder Mixer, whose channels 5 to 8 erase a track and whose channels 9 to 12 saturate it."},
+    {"ids": [1], "text": "Moves the loop start, one bar per 1/12V, added to the loop start knob and never taken below bar 0"},
+    {"ids": [2], "text": "Moves the loop end, one bar per 1/12V, added to the loop end knob and never taken below bar 0"},
+    {"ids": [3], "text": "Multiplies the tape speed by two to the power of the voltage, so 1V plays the tape an octave higher and -1V an octave lower"},
+    {"ids": [4], "text": "A rising edge toggles the pause button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The tape playback, one polyphonic channel per track, at ten times the value stored on the tape; while the tape is not running this carries the audio input instead"},
+    {"ids": [1], "text": "The speed the tape is running at as a pitch, one volt per octave; the sign is dropped, so a reversed tape reads at the speed a forward one would"},
+    {"ids": [2], "text": "5V for each beat and 10V for the first beat of a bar, one millisecond long, as the tape passes them; nothing comes out unless a play button is on"},
+    {"ids": [3], "text": "5V while the tape plays forward, -5V while it plays backwards, 0V when it is stopped"}
+  ],
+  "notes": [
+    "recording is always on. Whenever a play button is on, whatever is at the audio input is written to the tape as it passes; to play a tape back without spoiling it, unpatch the audio input.",
+    "the loop is off while the loop start and loop end read the same bar.",
+    "the two winding buttons are momentary while a play button is on, and latch when the tape is stopped.",
+    "the Ctrl in the winding shortcuts is Cmd on a Mac, and holding Ctrl or Ctrl and Shift while turning a reel moves the tape more slowly.",
+    "the tape is kept inside the patch. Saving the patch writes the recording beside it as tape.wav, and saving a module preset writes a .wav of the same name beside the preset."
+  ],
+  "menu": [
+    "the text field at the top — holds the name written on the cassette label",
+    "Cassette Label: 1970, Red, Green, Purple, Brown, Rainbow, Stars, Snowflake, Flowers, Tape, Chip, Zzz — chooses the artwork printed on the cassette",
+    "Tape Length — sets how long the tape is, from MC 1 for one minute to MC 120 for two hours, and returns the transport to the start; MC 120 is barred while the track count is 4 Tracks",
+    "Track Count: Mono, Stereo, 4 Tracks — sets how many tracks the tape carries and how many channels the audio output has; 4 Tracks is barred on an MC 120 tape",
+    "Loop Mode: Cycle, Ping-Pong — chooses what happens at a loop point, Cycle jumping to the other end and Ping-Pong reversing the play direction; a new module comes up on Ping-Pong",
+    "Erase Tape — writes silence over the whole tape"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · one channel only\n\nunpatched it reads the knob alone; a negative voltage subtracts from the knob.",
+      "2": "stepped · one channel only\n\nunpatched it reads the knob alone; a negative voltage subtracts from the knob.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "1V per octave · continuous"
+    }
+  }
+}

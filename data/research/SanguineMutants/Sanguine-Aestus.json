@@ -1,0 +1,24 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Aestus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "aestus.cpp:171 divides this input by 5, aestus.cpp:187 adds the knob, and aestus.cpp:191 clamps the total to -1..1"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "aestus.cpp:172 divides this input by 5, aestus.cpp:188 adds the knob, and aestus.cpp:191 clamps the total to -1..1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "aestus.cpp:173 divides this input by 5, aestus.cpp:189 adds the knob, and aestus.cpp:191 clamps the total to -1..1"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "aestus.cpp:216 tests this input against 0.7V with getVoltage() alone"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "aestus.cpp:213 tests this input against 0.7V with getVoltage() alone"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "aestus.cpp:179 multiplies this input by 12 into the pitch in semitones"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "normal": "0.1V", "negative": "swings", "why": "aestus.cpp:170 reads this input with getNormalVoltage(0.1), divides by 5 and multiplies by the FM knob before adding it to the pitch"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "normal": "8V", "why": "aestus.cpp:206 reads this input with getNormalVoltage(8.0), divides by 8 and clamps that alone to 0..1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "aestus.cpp:219 tests this input against 0.7V with getVoltage() alone; aestus.cpp:154 also puts the generator into clocked mode whenever a cable is present"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "aestus.cpp:242 writes 5V or 0V from the end-of-attack flag"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "aestus.cpp:243 writes 5V or 0V from the end-of-release flag"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 8V", "why": "aestus.cpp:244 multiplies the unipolar sample by 8"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "why": "aestus.cpp:245 multiplies the bipolar sample by 5"}
+    }
+  },
+  "comment": "The DSP is Émilie Gillet's Tides generator, vendored unchanged at eurorack/tides; src/aestus.cpp is the Rack wrapper. The Sheep wavetable firmware is a model inside the same module rather than a separate one, chosen by the MODEL knob, and the mode button and CLOCK input change meaning with it. The FREQUENCY knob's default tuning is shifted by a volt: aestus.cpp:179 adds calibrationOffsets[1], which is -1.0, to the pitch input so that a centred knob gives C4; the Compatibility options menu restores the older tuning by selecting the 0.0 entry instead. Clock sync engages on a patched cable rather than on a held button as the hardware does, and aestus.cpp:154 ANDs that cable test with the model, so the Sheep model ignores it and needs the SYNC button. The peacocks plotter at aestus.cpp:278 bypasses the generator entirely and drives only UNI and BI."
+}

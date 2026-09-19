@@ -1,0 +1,61 @@
+{
+  "plugin": "mscHack",
+  "module": "TriadSeq2",
+  "description": "Three keyboard sequencers, each with its own clock, sixteen steps, eight patterns and a three-octave keyboard for setting the note of each step",
+  "params": [
+    {"ids": [18, 19, 20], "text": "Sets how long the pitch takes to slide from the previous note to the new one on a step marked for glide, up to 500ms"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "A rising edge here advances that row one step; with nothing patched, the row follows the clock of the first row"},
+    {"ids": [3, 4, 5], "text": "Adds its voltage to that row's pitch output, transposing the pattern"},
+    {"ids": [6, 7, 8], "text": "A rising edge here queues the next pattern for that row, which takes effect when the row reaches its first step"},
+    {"ids": [9], "text": "A rising edge here returns every row to the first step of its pattern"},
+    {"ids": [10], "text": "A rising edge here queues the next pattern on all three rows"},
+    {"ids": [11], "text": "Held above 0V this silences the trigger output of every row and freezes every pitch output at its last note"},
+    {"ids": [12, 13, 14], "text": "Held above 0V this silences that row's trigger output and freezes its pitch output at its last note"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A 50ms 10V pulse on each step the pattern marks with a note"},
+    {"ids": [3, 4, 5], "text": "The pitch of that row's current step, a volt per octave, with the row's octave setting and its V/Oct offset input added"}
+  ],
+  "notes": [
+    "a row plays nothing until a clock is patched to its TRIG input, or to the TRIG input of the first row, which the other two follow when their own is empty",
+    "a new module has all sixteen steps of every pattern set to the lowest note with a trigger on each, so clocking it gives a run of one repeated note",
+    "clicking a key on a row's keyboard sets the note of the step that row is showing",
+    "while a row is paused, right-clicking a key sets the note of the step being shown and moves on to the next step, rolling into the next pattern at the end",
+    "while a row is paused, holding Control and right-clicking a key sets that step to change pitch without firing the trigger output",
+    "the upper row of marks above a step or pattern strip sets the last one in the run, and the lower row picks which one is shown"
+  ],
+  "menu": [
+    "Ch 1: Reset Pattern to 1 — makes a trigger at Reset Clk return the first row to its first pattern as well as its first step",
+    "Ch 2: Reset Pattern to 1 — makes a trigger at Reset Clk return the second row to its first pattern as well as its first step",
+    "Ch 3: Reset Pattern to 1 — makes a trigger at Reset Clk return the third row to its first pattern as well as its first step"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only",
+      "11": "high above 0V · stepped · one channel only",
+      "12": "high above 0V · stepped · one channel only",
+      "13": "high above 0V · stepped · one channel only",
+      "14": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous",
+      "5": "1V per octave · continuous"
+    }
+  }
+}

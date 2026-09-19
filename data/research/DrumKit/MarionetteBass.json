@@ -1,0 +1,25 @@
+{
+  "plugin": "DrumKit",
+  "module": "MarionetteBass",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/controller/Marionette.cpp:113-126 reads this jack and triggers on a rise through the 0.5V threshold set at src/controller/Marionette.cpp:22"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "continuous", "negative": "swings", "normal": "the module's own envelope", "why": "src/controller/Marionette.cpp:47 returns this jack's voltage divided by 5 in place of the internal envelope"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:50 calls it for this jack"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:51 calls it for this jack"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:52 calls it for this jack"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "continuous", "negative": "swings", "normal": "the module's own envelope", "why": "src/controller/Marionette.cpp:75 returns this jack's voltage divided by 5 in place of the internal envelope"},
+      "7": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:78 calls it for this jack"},
+      "8": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:79 calls it for this jack"},
+      "9": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:80 calls it for this jack"},
+      "10": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:147 calls it for this jack"},
+      "11": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:134 calls it for this jack"},
+      "12": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:140 calls it for this jack"},
+      "13": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/Marionette.cpp:31-39 paramValue adds (voltage/10)*(high-low) to the knob and clamps; src/controller/Marionette.cpp:106 calls it for this jack"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/controller/Marionette.cpp:153 writes the mixed voice times 5 to this jack"}
+    }
+  },
+  "comment": "The maker names no port. Both DIRECTION switches are dead: src/controller/Marionette.cpp:63 and :91 test PITCH_DECAY_PARAM and AMP_DECAY_PARAM against 1.0 rather than the switch parameters, which is what the shipped build does — pitchEnvelope loads params[0] and ampEnvelope params[4], never params[3] or params[7]. An input at index 6 (AMP_ATTACK_CV_IN) and an output at index 1 (ENVELOPE_OUT) are declared but given no widget and never read or written, so they get no line. BLEND is configured 0 to 10 (src/controller/Marionette.cpp:15) while the panel marks the knob 0 to 5. SUB MIX is configured 0 to 5 but read over a 0 to 10 span (src/controller/Marionette.cpp:140), so the knob alone cannot reach a full sub mix."
+}

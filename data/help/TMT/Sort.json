@@ -1,0 +1,36 @@
+{
+  "plugin": "TMT",
+  "module": "Sort",
+  "description": "Reorders and filters the channels of a polyphonic cable, using two other polyphonic cables as the ranking and the filter",
+  "params": [
+    {"ids": [0], "text": "Alt mode: recalculates every sample rather than every 10ms, at a heavy cost in CPU"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The channels to be reordered and filtered; how many channels it carries is how many channels of the two keys are read"},
+    {"ids": [1], "text": "Ranks the data channels: the data channel whose key voltage is lowest comes out first, and equal keys keep their original order; with nothing patched every key reads 0V and the order is unchanged"},
+    {"ids": [2], "text": "Keeps a data channel when its key channel is 1V or more and drops it from the cable otherwise; the manual says 5V. Unpatched, every key reads 0V, so the selecting outputs carry nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The data channels unchanged"},
+    {"ids": [1], "text": "The data channels put in the order the Sort Key ranks them"},
+    {"ids": [2], "text": "Only the data channels the Select Key keeps, packed into consecutive channels"},
+    {"ids": [3], "text": "The data channels put in the order the Sort Key ranks them, then reduced to the ones the Select Key keeps"},
+    {"ids": [4], "text": "The data channels the Select Key keeps, then sorted by their own voltages from lowest to highest; the maker's tooltip says the Sort Key orders them, and it does not"},
+    {"ids": [5], "text": "The data channels sorted by their own voltages from lowest to highest"},
+    {"ids": [6], "text": "The data channels sorted by their own voltages from highest to lowest"}
+  ],
+  "notes": [
+    "with nothing patched into the Data input every output carries no channels at all."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V on every channel.",
+      "2": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V on every channel."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

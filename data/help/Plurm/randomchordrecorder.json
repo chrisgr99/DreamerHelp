@@ -1,0 +1,41 @@
+{
+  "plugin": "Plurm",
+  "module": "randomchordrecorder",
+  "description": "Polyphonic chord sequencer: chords are played into it and kept in twelve slots, and a trigger picks one of the recorded slots at random by weight",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 8, 9, 10, 11], "text": "Sets how often its slot is picked when TRIG fires, as a share of the total weight of the recorded slots inside the length; with every weight at zero the draw is even"},
+    {"ids": [6], "text": "Sets the weight of the seventh slot of the sequence rather than the eighth, because the seventh and eighth weight knobs are crossed in the code"},
+    {"ids": [7], "text": "Sets the weight of the eighth slot of the sequence rather than the seventh, because the seventh and eighth weight knobs are crossed in the code"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Jumps to that slot, playing what is recorded there and making it the slot the next recording is written into; pressing it during a recording abandons that recording"},
+    {"ids": [24], "text": "Sets how many of the twelve slots make up the sequence, 1 to 12; a slot past the end is never played and never drawn"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The notes of the chord being recorded, one per channel, taken while the matching channel of gate in is above 5V"},
+    {"ids": [1], "text": "A channel going above 5V starts a recording, and the chord is written into the current slot once every channel is back below 5V, after which the current slot moves on to the next empty one"},
+    {"ids": [2], "text": "A rising edge picks a new slot at random from the recorded slots inside the length, weighted by the weight knobs, and drops the gates briefly so the new chord retriggers"},
+    {"ids": [3], "text": "While this is above 5V a rising edge at TRIG replays the current slot instead of drawing a new one"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The notes of the current slot, one per channel; during a recording it carries the notes coming into v/oct in"},
+    {"ids": [1], "text": "10V on each channel of the current slot that holds a note, dropping to 0V for about ten samples whenever the slot changes so that the next chord retriggers"}
+  ],
+  "notes": [
+    "a slot light is dark past the end of the sequence, white with nothing recorded, green with a chord recorded, steady red on the current slot and blinking red while it records",
+    "there is nothing to play until a chord has been recorded. Hold a channel of gate in above 5V with its note at v/oct in, and the chord is written into the current slot once every gate is down",
+    "a trigger draws a new slot only when two or more slots inside the length hold a chord; with one or none it leaves the current slot where it is"
+  ],
+  "menu": [
+    "Polyphony Channels — how many channels v/oct out and gate out carry, 1 to 16, and 5 unless it is changed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "high above 5V · stepped",
+      "2": "stepped",
+      "3": "high above 5V · stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous"
+    }
+  }
+}

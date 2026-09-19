@@ -1,0 +1,59 @@
+{
+  "plugin": "CountModula",
+  "module": "MultiStepSequencer",
+  "description": "Eight step sequencer with a clock division, a repeat count and a probability setting on every step, and outputs for the divided clock, step changes and the repeat count",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets how many times that step plays, from once up to eight times, each play lasting the number of clock pulses set by that step's DIVISION knob"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage carried by the CV output while that step is active, between 0V and the voltage set by the SCALE knob"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Sets the chance of that step playing a gate or a trigger, 0% fully anticlockwise and 100% fully clockwise"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets how many clock pulses that step lasts, from 1 to 8, before the sequencer moves on to the next repeat or the next step"},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39], "text": "Applies that step's PROB setting to each repeat separately in its upper position, or to the whole step, so that all repeats play or none do, in its lower position; the middle position ignores PROB"},
+    {"ids": [40], "text": "Sets how many of the eight steps play, from 1 to 8. The small green lights mark the steps that fall within that count"},
+    {"ids": [41], "text": "ON samples the CV outputs when a trigger pulse starts and holds that voltage until the next trigger; OFF lets the CV outputs change on every step"},
+    {"ids": [42], "text": "Sets the range of the CV outputs in whole volts from 1V to 8V, a VALUE knob at its maximum giving that voltage"},
+    {"ids": [43], "text": "Picks forward, where the sequence runs left to right and starts over on the left; pendulum, where it runs out and back; or reverse, where it runs right to left"},
+    {"ids": [44, 45, 46, 47, 48, 49, 50, 51], "text": "Turns that step on or off. A step turned off plays no gate and no trigger, and the sequencer goes on counting through its divisions and repeats"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A high gate runs the sequencer and a low gate pauses it, picking up again at the next clock; with nothing patched the sequencer runs. 2V starts it, 0.1V stops it"},
+    {"ids": [1], "text": "A rising edge advances the sequencer, and the time the clock spends high sets the width of every pulse this module puts out. The threshold is 2V for high, 0.1V for low"},
+    {"ids": [2], "text": "A rising edge restarts the sequence at step one on the next clock and clears every step's division and repeat count"},
+    {"ids": [3], "text": "Sets how many steps play from the applied voltage and takes the STEPS knob out of circuit while a cable is patched; 10V gives all eight steps"},
+    {"ids": [5], "text": "Sets the play direction from the applied voltage and takes the direction switch out of circuit: under 2V forward, 2V to 4V pendulum, over 4V reverse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A pulse for every repeat of a step that is on and not dropped by its probability setting, as wide as the clock pulse"},
+    {"ids": [1], "text": "Goes to 10V for the whole of a step that is on, and stays at 0V for a step turned off or dropped by its probability setting"},
+    {"ids": [2], "text": "The current step's VALUE knob voltage, scaled by the SCALE knob"},
+    {"ids": [3], "text": "The current step's VALUE knob voltage, scaled by the SCALE knob and then negated"},
+    {"ids": [4], "text": "A pulse each time the sequencer moves on to the next step, as wide as the clock pulse"},
+    {"ids": [5], "text": "A pulse each time the sequencer moves on to a step that is on, as wide as the clock pulse; nothing comes out when the step being moved to is off"},
+    {"ids": [6], "text": "The current step's divided clock, each pulse as wide as the incoming clock pulse"},
+    {"ids": [7], "text": "0-10V in proportion to how far through its repeats the current step is, so a step set to four repeats gives 2.5V, then 5V, then 7.5V, then 10V"},
+    {"ids": [8], "text": "A trigger at the end of the last step; in pendulum mode that falls at the end of the reverse half of the cycle"}
+  ],
+  "notes": [
+    "the TOTAL LENGTH display gives the whole sequence in clock pulses, adding up each step's division multiplied by its repeats, which helps in matching the length to another sequencer"
+  ],
+  "menu": [
+    "Initialize — puts part of every step back to its default: CV and step selection only, CV only, Step selection only, or Probability only",
+    "Randomize — sets part of every step at random: CV and step selection only, CV only, Step selection only, or Probability only"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "stepped · one channel only",
+      "5": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "0 to 10V",
+      "8": "stepped"
+    }
+  }
+}

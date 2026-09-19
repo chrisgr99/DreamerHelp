@@ -1,0 +1,13 @@
+{
+  "plugin": "Autinn",
+  "module": "Disee",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "Disee.cpp:64 takes getChannels() on this input and Disee.cpp:74 reads channel c with getPolyVoltage"}
+    },
+    "outputs": {
+      "0": {"family": "cv"}
+    }
+  },
+  "comment": "Disee.cpp:76 calls setVoltage with no channel index inside the per-channel loop, so all sixteen filtered values are written to channel 0 in turn while Disee.cpp:65 has already set the output's channel count from the input. The polyphonic output is therefore wrong; the first line of the entry and the second Note say so. The one-pole filter corner is 1Hz, set at Disee.cpp:69, which is where \"roughly a second\" comes from."
+}

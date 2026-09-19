@@ -1,0 +1,18 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Organism",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the internal envelope squared, up to 10V", "why": "src/Organism.cpp:204-211 takes the channel count from the widest of inputs 0 to 3 and 5; line 240 reads getNormalVoltage(intlMod, v), divides by 5, multiplies by 14 and wraps the result round the fourteen algorithms"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the internal envelope squared, up to 10V", "sumRange": "±1V", "why": "src/Organism.cpp:236-237 reads getNormalVoltage(intlMod, v), divides by 5, scales it by the attenuverter and clamps the total with the knob to -1..1"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the internal envelope squared, up to 10V", "sumRange": "±1V", "why": "src/Organism.cpp:238-239 reads getNormalVoltage(intlMod, v), divides by 5, scales it by the attenuverter and clamps the total with the knob to -1..1"},
+      "3": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Organism.cpp:226 adds getVoltage(v) to the tune knob in the exponent of a power of two against FREQ_C4"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "an internal sine at the oscillator's fundamental", "why": "src/Organism.cpp:234 reads getNormalVoltage(sin_2pi_9(phases[v][0][0]), v), multiplies by the FM knob and adds it into the exponent of a power of two"},
+      "5": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "fully open", "why": "src/Organism.cpp:386 divides getVoltage(voice) by 10 and uses it as the level the envelope rises to; line 373 holds the envelope at 1 when the jack is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Organism.cpp:213 sets the channel count; line 372 sets softClip(sum*2.5,10,0.5) per channel"}
+    }
+  },
+  "comment": "The panel prints STRUCT, MORPH, ATK, DEC, SUS, LPG, FM, V/OCT and GATE, with a hash mark by the partial count knob and a keyboard graphic by the algorithm knob; the four-letter display above shows the current algorithm's own tag. src/Organism.cpp:88 calls configInput on SPECIMEN_CV_INPUT a second time with the name 'Gate', which overwrites that jack's real name and leaves the gate jack with no name at all, so Rack's tooltips on those two jacks are wrong and missing respectively. The maker's manual names the expander Domesticate; the panel and the slug both say O-Tamer. The fourteen algorithms are Basic, Organ, Low Quality, Fish, Combed Saw, Metallic, Keys, Fractal-ish, Particles, Prism, Chaotic, Noise, Phase Mod and Per-Partial AM."
+}

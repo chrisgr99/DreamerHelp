@@ -1,0 +1,20 @@
+{
+  "plugin": "MSM",
+  "module": "TreasureVCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "ExperimentalVCO.cpp:104 multiplies this jack by twelve into a semitone pitch"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.01V", "why": "ExperimentalVCO.hpp:78-79 subtract 0.01 from this jack's voltage and reset the phase when the result rises above zero with the previous sample at or below it, so the sync point is 0.01V"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "ExperimentalVCO.cpp:132 adds three times this jack to the knob, clamps the sum to 0 to 13 and truncates it to a whole waveform number"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ExperimentalVCO.cpp:111 adds 120 times this jack to the knob and clamps the sum to 512 to 2047"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ExperimentalVCO.cpp:114 adds this jack, scaled by its attenuator, to the knob and clamps the sum to 0.01 to 1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ExperimentalVCO.cpp:120 adds this jack, scaled by its attenuator, to the knob and clamps the sum to 0.01 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ExperimentalVCO.cpp:126 adds this jack, scaled by its attenuator, to the knob and clamps the sum to 0.01 to 1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "why": "ExperimentalVCO.cpp:106 adds this jack, scaled by its attenuator, to the same semitone pitch the volt per octave jack feeds", "polarity": "bipolar"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "ExperimentalVCO.cpp:145 passes the output through saturate2(), which Resources.hpp:26 fixes at five"}
+    }
+  },
+  "comment": "The FM input is exponential, not linear. ExperimentalVCO.cpp:106 adds it to the same semitone pitch figure the volt per octave jack feeds, so it shifts pitch by the same doubling law rather than adding to frequency."
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Shape",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Shape.cpp:114 isConnected() && getVoltage() >= 1.f, held as a gate"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "10V", "why": "src/TL_Shape.cpp:167-169 clamp(getVoltage()/10, 0, 1), else 1.f"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the right input", "why": "src/TL_Shape.cpp:182 reads this jack, :191 copies the right input here instead where this one is unpatched, and :194 multiplies it by the VCA gain into L OUT"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input", "why": "src/TL_Shape.cpp:183 reads this jack, :187 copies the left input here instead where this one is unpatched, and :195 multiplies it by the VCA gain into R OUT"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TL_Shape.cpp:163 setVoltage(env*10.f)"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/TL_Shape.cpp:194 setVoltage(left*gain), gain at most 1"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/TL_Shape.cpp:195"}
+    }
+  },
+  "comment": "The envelope and the VCA are independent: processVca() reads only CV In and the VOL knob, never env (TL_Shape.cpp:166-196). The maker's summary calls the module \"ADSR + VCA\" without saying the two are not joined internally, which is the thing most likely to make it look broken. The gate test is a level compare at 1V rather than a Schmitt trigger, and the panel TRIG button is a gate rather than a trigger: it holds the envelope at sustain while held. The release always falls from whatever level the envelope had reached, over the full release time. Times run from 1ms to 10 seconds (knobToTime at TL_Shape.cpp:94); the maker gives no figures. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

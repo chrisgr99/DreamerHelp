@@ -1,0 +1,28 @@
+{
+  "plugin": "MADZINE",
+  "module": "MADDYPlus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "why": "src/MADDYPlus.cpp:1553-1562, freq = pow(2, freqParam + getVoltage()*atten)"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the CVD knob alone", "why": "src/MADDYPlus.cpp:1763-1772, clamp(getVoltage(), 0, 10) scales the knob's 1000ms; unpatched the knob sets the time outright"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the CVD knob alone", "why": "src/MADDYPlus.cpp:1848-1859, clamp(getVoltage(), 0, 10) scales the knob’s 1000ms; unpatched the knob sets the time outright"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDYPlus.cpp:1615-1616, a 0.001f clock pulse read out at 10V"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDYPlus.cpp:1571-1578, 10V while the reset pulse timer runs and 0V otherwise"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MADDYPlus.cpp:1643-1644, the track envelope clamped to 0..1 and multiplied by 10"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv", "poly": false, "range": "±10V", "why": "src/MADDYPlus.cpp:1708, the chosen knob's own -10V to +10V value"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDYPlus.cpp:1709, a 0.01f pulse at 10V"},
+      "10": {"family": "cv", "poly": false, "range": "±10V", "why": "src/MADDYPlus.cpp:1773-1791, a knob voltage read back out of the delay buffer"},
+      "11": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDYPlus.cpp:1799, a 0.01f pulse at 10V"},
+      "12": {"family": "cv"},
+      "13": {"family": "trigger"}
+    }
+  },
+  "comment": "The reset button is a momentary parameter that the module writes back to zero itself and it also drives the reset output for 0.1 seconds (src/MADDYPlus.cpp:1571-1584); the reset jack on this panel is an output, unlike MADDY's, which is an input. The clock CV jack shifts the internal rate through its own attenuverter rather than replacing the clock. The length clamp is 1 to 32 while configParam allows up to 48, as in MADDY. The six sequencer modes are Sequential, Custom, Jump and each of those reversed (src/MADDYPlus.cpp:1160-1220). The second and third sequencers each add a step delay of 0 to 5 steps and a time delay of up to a second with its own CV jack; the first has neither. Chaos is on the first sequencer only. The panel prints M A D D Y +, LEN, RST, FREQ, DECAY, SWING, CLK, T1 to T3 with FILL and D/M, Step 1 to Step 5 with the digits, MODE, DENSITY, CHAOS, CV OUT, TRIG OUT, CLK SRC, the six chain and track labels, and for each of the two extra sequencers CLK SRC, MODE, DENSITY, CVD, DELAY and DCV IN. Lettering is drawn in code at src/MADDYPlus.cpp:2074-2212."
+}

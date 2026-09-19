@@ -1,0 +1,19 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Quad_Panner",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Quad_Panner.cpp:138-141 read this input with getVoltage, which is channel 1 only"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Quad_Panner.cpp:105 reads this input with getVoltage, scales it by CV_IN_SCALE 0.2 declared at :60, adds the joystick position and clamps the total to -1 to +1"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Quad_Panner.cpp:106 reads this input with getVoltage, scales it by CV_IN_SCALE 0.2 declared at :60, adds the joystick position and clamps the total to -1 to +1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Quad_Panner.cpp:142 writes this output with setVoltage and setChannels is never called on it"},
+      "1": {"family": "audio", "poly": false, "why": "Quad_Panner.cpp:143 writes this output with setVoltage and setChannels is never called on it"},
+      "2": {"family": "audio", "poly": false, "why": "Quad_Panner.cpp:144 writes this output with setVoltage and setChannels is never called on it"},
+      "3": {"family": "audio", "poly": false, "why": "Quad_Panner.cpp:145 writes this output with setVoltage and setChannels is never called on it"},
+      "4": {"family": "audio", "poly": true, "why": "Quad_Panner.cpp:102 sets this output to four channels and Quad_Panner.cpp:146 writes four voltages to it with writeVoltages"}
+    }
+  },
+  "comment": "The pan law is at Quad_Panner.cpp:108-115: the axis position is mapped to 0 to 1 and each side takes the arc tangent of that times 1.7, clamped to positive. At the centre that gives the arc tangent of 0.85, about 0.7045, which is 3.05dB down per axis and 6.1dB down where the two multiply; the 3dB and 6dB in the line are that arithmetic, not stored constants. The 1.7 at :110 and the CV_IN_SCALE 0.2 at :60 are literals in the source. The joystick is a KilpatrickJoystick widget added at :195 with no ParamWidget behind it, so only RESET appears in the census paramPos. The menu holds two plain labels, \"Quad Panner Shortcuts\" and \"Hold P and click joy edge to snap.\", and no selectable item, so the snap gesture is written as a Note rather than a Menu line."
+}

@@ -1,0 +1,35 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Gravity",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "gravity.cpp:376 reads it with getVoltage, so only channel 1, and scales it by a tenth into the speed value"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "gravity.cpp:383 reads it with getVoltage, so only channel 1, scales it by a tenth and clamps the knob-plus-input total to 0 to 1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "gravity.cpp:394 reads it with getVoltage, so only channel 1, and adds it to the pull angle at a fifth of a half turn per volt, or at a tenth per volt for the sun's strength at gravity.cpp:397"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "gravity.cpp:403 reads it with getVoltage, so only channel 1, and divides it by a sixth of 10V to pick one of the six modes"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "gravity.cpp writes one channel with setVoltage from the tracked point's horizontal position"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "gravity.cpp writes one channel with setVoltage from the wedge distance, or ±5V when the menu sets bipolar distance"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "gravity.cpp writes one channel with setVoltage, 10V while the ray gate is held"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"},
+      "16": {"family": "trigger"},
+      "17": {"family": "trigger"},
+      "18": {"family": "trigger"},
+      "19": {"family": "trigger"}
+    }
+  },
+  "comment": "The mode CV is named \"Mode CV (0-10V -> 4 modes)\" by the maker (gravity.cpp:286) but gravity.cpp:403 divides the 10V by a sixth of its span and clamps to the six modes, so the tooltip is out of date. The gravity control means something different in each mode, so its tooltip reading in degrees is right only for the pendulum and the billiards."
+}

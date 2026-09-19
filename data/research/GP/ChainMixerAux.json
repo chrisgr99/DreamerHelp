@@ -1,0 +1,19 @@
+{
+  "plugin": "GP",
+  "module": "ChainMixerAux",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "ChainMixerAux.cpp:179 reads inputs[Return1L].getVoltageSum(), which adds every polyphonic channel"},
+      "1": {"family": "audio", "poly": true, "why": "ChainMixerAux.cpp:180 reads inputs[Return1R].getVoltageSum(), which adds every polyphonic channel"},
+      "2": {"family": "audio", "poly": true, "why": "ChainMixerAux.cpp:234 reads inputs[Return2L].getVoltageSum(), which adds every polyphonic channel"},
+      "3": {"family": "audio", "poly": true, "why": "ChainMixerAux.cpp:235 reads inputs[Return2R].getVoltageSum(), which adds every polyphonic channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "ChainMixerAux.cpp:122 writes one value with setVoltage and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "ChainMixerAux.cpp:125-131 writes one value with setVoltage and never calls setChannels"},
+      "2": {"family": "audio", "poly": false, "why": "ChainMixerAux.cpp:140 writes one value with setVoltage and never calls setChannels"},
+      "3": {"family": "audio", "poly": false, "why": "ChainMixerAux.cpp:143-149 writes one value with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "ChainMixerAux.cpp:36-39 calls configParam(ParamSolo1, ...) twice and configParam(ParamMute1, ...) twice, never ParamSolo2 or ParamMute2. Two consequences, both visible in the installed build's census: the AUX 1 solo and mute buttons carry the names Solo AUX 2 and Mute AUX 2, and the AUX 2 solo and mute buttons have no ParamQuantity at all, so Rack's ParamWidget refuses to drag them and they stay at zero. The maker's manual describes AUX 2 solo and mute as working."
+}

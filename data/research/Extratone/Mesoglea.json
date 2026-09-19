@@ -1,0 +1,15 @@
+{
+  "plugin": "Extratone",
+  "module": "Mesoglea",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Mesoglea.cpp process(): mode 2 tests inputs[SANDH_INPUT].getVoltage(i) inside for(i=0;i<16;i++); getMonoflip() loops all 16 channels for mode 1"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/Mesoglea.cpp process(): flipTrigger[i].process(params[FLIPBUTTON_PARAM+i].getValue()||inputs[FLIP_INPUT].getVoltage(i)) — the || makes any non-zero voltage, of either sign, read as 1"},
+      "2": {"poly": true, "step": "continuous", "negative": "swings", "normal": "10V", "why": "src/Mesoglea.cpp process(): voltage=inputs[TOMUTE_INPUT].getVoltage(i)*params[GATE_PARAM+i] where the channel exists, else 10.f*params[GATE_PARAM+i]"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/Mesoglea.cpp process(): outputs[OUTPUT_OUTPUT].setVoltage(voltage,i) for i<16 with channels set from the largest input channel count"}
+    }
+  },
+  "comment": "MODE_PARAM holds the OFF/MONO/POLY state and has no ParamWidget, so it cannot be clicked; the MODE button steps it. The sixteen gate states and the sixteen pending-flip flags are likewise parameters with no widget, saved with the patch but unreachable by a click. The FLIP jack's test is a boolean OR of a float, not a threshold, so any non-zero voltage counts as high; every other trigger in this plugin uses Rack's 1V default. TO MUTE and OUT carry whatever is patched in, so they are given no family."
+}

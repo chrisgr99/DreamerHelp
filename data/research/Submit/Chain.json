@@ -1,0 +1,31 @@
+{
+  "plugin": "Submit",
+  "module": "Chain",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:171 reads getVoltage"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input of the same channel", "why": "Chain.cpp:172 uses isConnected to fall back to the left input"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:207 reads getVoltage"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input of the same channel", "why": "Chain.cpp:208 uses isConnected to fall back to the left input"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Chain.cpp:186 uses isConnected; Chain.cpp:187 clamps getVoltage to 0V to 10V; Chain.cpp:188 scales the fader by one minus a tenth of it"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Chain.cpp:222 uses isConnected; Chain.cpp:223 clamps getVoltage to 0V to 10V; Chain.cpp:224 scales the fader by one minus a tenth of it"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Chain.cpp:191 uses isConnected and compares getVoltage against 1V"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Chain.cpp:227 uses isConnected and compares getVoltage against 1V"},
+      "8": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:243 reads getVoltage; Chain.cpp:264 adds it straight to the left output"},
+      "9": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:244 reads getVoltage; Chain.cpp:265 adds it straight to the right output"},
+      "14": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:246 reads getVoltage; Chain.cpp:257 scales it by the larger of the two FX 1 send knobs"},
+      "15": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left return of the same loop", "why": "Chain.cpp:247 uses isConnected to fall back to the left return"},
+      "16": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chain.cpp:248 reads getVoltage; Chain.cpp:262 scales it by the larger of the two FX 2 send knobs"},
+      "17": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left return of the same loop", "why": "Chain.cpp:249 uses isConnected to fall back to the left return"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Chain.cpp:264 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "why": "Chain.cpp:265 sets one channel with setVoltage"},
+      "2": {"family": "audio", "poly": false, "why": "Chain.cpp:268 sets one channel with setVoltage"},
+      "3": {"family": "audio", "poly": false, "why": "Chain.cpp:269 sets one channel with setVoltage"},
+      "4": {"family": "audio", "poly": false, "why": "Chain.cpp:270 sets one channel with setVoltage"},
+      "5": {"family": "audio", "poly": false, "why": "Chain.cpp:271 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "Four inputs — Send 1 L/R Chain In and Send 2 L/R Chain In — are configured and are summed into the send outputs (Chain.cpp:268-271), but the widget adds no jack for them (Chain.cpp:384-394), so they read 0V and cannot be patched. The manual lists 'send-chain inputs' among the module's inputs.\n\nThe return inputs are multiplied by the larger of the two channels' send knobs for that loop, muted channels counting as zero (Chain.cpp:254-262). That is not how a conventional send and return works and it is not in the manual: with both send knobs down, a return is silent no matter what is patched to it.\n\nThe sends are taken after the fader and before the pan (Chain.cpp:198-204), so a send is mono-summed in position but follows the channel level.\n\nThe panel names the two channel strips CH 1-2 and CH 3-4. Each is one stereo channel, not two.\n\nThe mute CV test is written out twice in each channel, at Chain.cpp:191-192 and 227-228; the repetition has no effect."
+}

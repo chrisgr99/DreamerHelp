@@ -1,0 +1,17 @@
+{
+  "plugin": "Bruer",
+  "module": "SEQ1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "SEQ1.cpp:303 passes getVoltage() with no channel argument to a SchmittTrigger at Rack's default thresholds of 0V and 1V; the module never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "SEQ1.cpp:286 passes getVoltage() with no channel argument to a SchmittTrigger at Rack's default thresholds of 0V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "SEQ1.cpp:473 writes the note number divided by twelve with setVoltage and no channel argument, and SEQ1.cpp:450-470 build that note number from the register and the octave range"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQ1.cpp:386 writes 10V or 0V from a PulseGenerator triggered for 0.005 seconds at SEQ1.cpp:344"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQ1.cpp:390 writes 10V or 0V from a PulseGenerator triggered for 0.005 seconds at SEQ1.cpp:347"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQ1.cpp:394 writes 10V or 0V from a PulseGenerator triggered for 0.005 seconds at SEQ1.cpp:350"}
+    }
+  },
+  "comment": "Read at commit 8be57aa, the last commit to touch plugin.json and the one carrying the installed 2.0.3; its plugin.json is byte for byte the installed file, and the only later commit, fed0b77, changes the README alone. The module implements neither dataToJson nor dataFromJson, so the shift register, the twelve noteEnabled flags and the three Euclidean shifts are not saved with the patch; the note buttons are momentary, which means Rack saves nothing useful for them either and the note set comes back as the hard-coded C major on every load. The knob the panel prints SCALE is read at SEQ1.cpp:451 as an octave count, one to eight, and multiplied by twelve to give the number of semitones the output spans; the scale proper is the twelve note buttons. The knob the panel prints STEP is the sequence length, which is what its tooltip calls it. The Euclidean shift is applied in opposite directions in the two places it is used: SEQ1.cpp:337-339 shift the step index before testing the pattern, which moves the triggers earlier, while SEQ1.cpp:374-376 shift the lamp index after testing, which moves the display later, so with a non-zero shift the lamps and the triggers disagree. CLOCK_LIGHT is set every sample at SEQ1.cpp:270 and no LightWidget is ever added for it, so it can be neither seen nor clicked. The quantiser's nearest-note search at SEQ1.cpp:237-259 ranges from -12 to 24 semitones and stops as soon as the distance grows, so a step can be mapped to a note up to an octave below the octave its own index implies. Nothing here is polyphonic."
+}

@@ -1,0 +1,69 @@
+{
+  "plugin": "CVfunk",
+  "module": "Strata",
+  "description": "A layered sequencer: a pitch row of eight stages, a semitone row of seven and an octave row of four run at their own clock ratios, and their outputs are added into one note",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets that stage's pitch, -2V to 2V, which the semitone and octave rows are added to"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14], "text": "Sets that step's transposition in semitones, -12 to 12"},
+    {"ids": [15, 16, 17, 18], "text": "Sets that step's transposition in octaves, -3 to 3"},
+    {"ids": [19, 20, 21, 22, 23, 24, 25, 26], "text": "Switches that pitch stage in or out of the sequence; the last one left in its group of four cannot be switched out"},
+    {"ids": [27, 28, 29, 30, 31, 32, 33], "text": "Switches that semitone step in or out of the sequence"},
+    {"ids": [34, 35, 36, 37], "text": "Switches that octave step in or out of the sequence"},
+    {"ids": [38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Adds one to that row's beat count on each press, which is how many times the row advances per cycle"},
+    {"ids": [48, 49, 50, 51, 52, 53, 54, 55, 56, 57], "text": "Takes one off that row's beat count on each press, down to none, at which the row stops advancing"},
+    {"ids": [58, 59, 60, 61, 62, 63, 64, 65, 66, 67], "text": "Adds one to that row's step count on each press, which is how many clock beats the row's cycle lasts"},
+    {"ids": [68, 69, 70, 71, 72, 73, 74, 75, 76, 77], "text": "Takes one off that row's step count on each press, down to none, at which the row is switched off"},
+    {"ids": [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101], "text": "Steps that position of the gate pattern through gate, inverted gate and silence on each press"},
+    {"ids": [102], "text": "Sets how many steps of the gate pattern are used, 1 to 24"},
+    {"ids": [103], "text": "Sets how the pitch row and the gate pattern advance together: Stage moves the pattern once per stage, Step moves it on every beat and samples the note with it, and Hybrid falls between them"},
+    {"ids": [104], "text": "Sets which way the semitone row runs: Fwd forward, Rev backward, and Ping-Pong turning round at each end"},
+    {"ids": [105], "text": "Sets which half of the pitch row the octave transposition is applied to: Left, Right, or Both"},
+    {"ids": [106], "text": "Returns every row and the gate pattern to their first positions on each press"},
+    {"ids": [107], "text": "Sets whether the sequence runs: Off holds every row where it is, On runs it round and round, and One-Shot stops it after one pass"},
+    {"ids": [108, 109, 110, 111], "text": "Jumps to that layer on each press and brings its knobs, switches and ratios back onto the panel"},
+    {"ids": [112], "text": "Steps to the next layer on each press, wrapping round after four"},
+    {"ids": [113], "text": "Added to the note the sequencer puts out, -2V to 2V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances every row by one beat; the row ratios are counted against it, so the module has no tempo of its own"},
+    {"ids": [1], "text": "A rise returns every row and the gate pattern to their first positions"},
+    {"ids": [2], "text": "Added to the note the sequencer puts out, on top of the offset knob"},
+    {"ids": [3], "text": "A rise steps to the next layer; with the menu set to select by CV it picks the layer directly at one volt per layer instead"},
+    {"ids": [4], "text": "Changes the gate pattern length, added to the pattern knob, the total rounded up and clamped to 1 to 24"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the gate pattern is on a gate step and 0V otherwise"},
+    {"ids": [1], "text": "Carries 10V while the gate pattern is not on a gate step"},
+    {"ids": [2], "text": "The note the sequencer puts out: the current pitch stage plus the current semitone step, the current octave step and the two offsets, snapped to whole semitones and clamped to -10 to 10V"}
+  ],
+  "notes": [
+    "nothing runs until a clock is patched and the play switch is away from Off; every row's timing is counted in clock beats, so the module has no tempo of its own",
+    "each of the three rows has its own beats and steps count, so they come back into line only every so often; that is what makes long patterns out of short rows",
+    "each layer holds its own knobs, switches, ratios and gate pattern, and the panel shows only the current layer, so the controls jump when the layer changes",
+    "the semitone row is added to the note only while its step count is above none, and the same holds for the octave row"
+  ],
+  "menu": [
+    "Paste Mode — a label over the three choices below it, setting what a paste writes into the layer",
+    "Knobs + Beats — makes a paste write both the knob settings and the row ratios",
+    "Knobs Only — makes a paste write the knob settings and leave the row ratios alone",
+    "Beats Only — makes a paste write the row ratios and leave the knob settings alone",
+    "Copy Layer — takes a copy of the current layer",
+    "Paste Layer — writes the copied layer into the current one, as far as the paste mode allows",
+    "Paste to All Layers — writes the copied layer into all four, as far as the paste mode allows",
+    "Layer Advance by CV (1V/layer) — makes the layer jack pick the layer directly at one volt per layer, instead of each rise stepping to the next"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "3": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "bipolar · stepped · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 1 to 24V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "1V per octave · continuous · one channel only"
+    }
+  }
+}

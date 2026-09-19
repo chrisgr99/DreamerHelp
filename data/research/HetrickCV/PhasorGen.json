@@ -1,0 +1,23 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorGen",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "PhasorGen.cpp:180 adds it to the pitch in volts through its own depth knob, with no clamp on the jack"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorGen.cpp:206 clamps the knob plus this CV to plus or minus 5V"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorGen.cpp:210 clamps the knob plus this CV to plus or minus 5V"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "why": "PhasorGen.cpp:217 scales this CV by PULSE_CV_SCALAR, 64 pulses over 5V"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "why": "PhasorGen.cpp:171 clamps the knob plus this CV to 0 to 5V"},
+      "5": {"family": "cv", "poly": true, "range": "1V per octave", "step": "continuous", "why": "PhasorGen.cpp:179 adds this jack straight to the frequency knob in volts per octave"},
+      "6": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorGen.cpp:176 passes it to a Rack SchmittTrigger, which fires above 1V (DSP/HCVTiming.h:17)"},
+      "7": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorGen.cpp:214 passes it to a Rack SchmittTrigger, which fires above 1V (DSP/Phasors/HCVPhasor.h:30)"},
+      "8": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorGen.cpp:213 tests each channel against 1V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorGen.cpp:165 and 221 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorGen.cpp:222 writes the phasor's pulse per channel; HCVPhasor.h:43 and 57 scale it by HCV_PHZ_GATESCALE, 10V"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "PhasorGen.cpp:172 and 223 write the jitter sample times 5V per channel"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorGen.cpp:225 writes HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets that constant to 10V"}
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "plugin": "MADZINE",
+  "module": "WeiiiDocumenta",
+  "description": "Stereo recorder that cuts what it captures into slices at transients and plays them back at any speed in either direction, up to eight voices at once, with a feedback loop and a three-band equaliser",
+  "params": [
+    {"ids": [0], "text": "Chooses which slice is played, sweeping across the slices found in the recording from the first to the last"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the scan jack, -1 to +1"},
+    {"ids": [2], "text": "Sets the level a peak has to reach before it is counted as the start of a new slice, 0V to 10V; moving it rescans the recording"},
+    {"ids": [3], "text": "Sets how close together two slice points are allowed to be, 1ms to 1 second; moving it rescans the recording"},
+    {"ids": [5], "text": "While it is held down the module slides every knob picked on the menu to a new random setting, and back when it is let go"},
+    {"ids": [6], "text": "Sets how much of the output is fed back into the buffer, 0 to 1"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the feedback jack, -1 to +1"},
+    {"ids": [8], "text": "Lifts or cuts everything below 80Hz in the output, -12dB to +12dB"},
+    {"ids": [9], "text": "Lifts or cuts a band around 2500Hz in the output, -12dB to +12dB"},
+    {"ids": [10], "text": "Lifts or cuts everything above 12000Hz in the output, -12dB to +12dB"},
+    {"ids": [11], "text": "Sets the playback speed: eight times over backwards at the bottom of its travel, halted a quarter of the way up, normal speed at halfway and eight times over forwards at the top"},
+    {"ids": [12], "text": "Sets how many voices play the recording at once, 1 to 8; above one they are spread across the stereo field"},
+    {"ids": [13], "text": "Sets how long the sample-and-hold takes to slide to each new value, 0 to 1 second"},
+    {"ids": [14], "text": "Multiplies the sample-and-hold output, 0 to 5 times"},
+    {"ids": [15], "text": "Attenuates and inverts the voltage at the amount jack, -1 to +1"},
+    {"ids": [16], "text": "Sets how often the sample-and-hold takes a new value, 0.01Hz to 100Hz"},
+    {"ids": [17], "text": "Attenuates and inverts the voltage at the rate jack, -1 to +1"},
+    {"ids": [18], "text": "Starts and stops recording into the buffer"},
+    {"ids": [19], "text": "Cycles the transport: each press moves between looping and playing once through"},
+    {"ids": [20], "text": "Stops playback at once; held down for two seconds it also empties the buffer and its slices"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal being recorded; with nothing patched to the right jack this one feeds both sides"},
+    {"ids": [1], "text": "The right side of the signal being recorded"},
+    {"ids": [2], "text": "Added to the SCAN knob through the trimmer below it, a tenth of the sweep per volt; the total is held between the two ends of it"},
+    {"ids": [3], "text": "Added to the THRSH knob through the trimmer below it, one volt of threshold per volt"},
+    {"ids": [4], "text": "Added to the FDBK knob through the trimmer below it, a tenth per volt; the total is held between 0 and 1"},
+    {"ids": [5], "text": "Added to the SPEED knob, one times speed per volt; the total is held between eight times backwards and eight times forwards"},
+    {"ids": [6], "text": "Added to the POLY knob, seven tenths of a voice per volt; the total is held between 1 and 8"},
+    {"ids": [7], "text": "Added to the AMT knob through the trimmer below it, half a step per volt; the total is held between 0 and 5"},
+    {"ids": [8], "text": "Added to the RATE knob through the trimmer below it, one volt per doubling of the rate; the total is held between 0.01Hz and 100Hz"},
+    {"ids": [9], "text": "Replaces the left side of the output entirely with whatever is patched here, before the equaliser"},
+    {"ids": [10], "text": "Replaces the right side of the output entirely with whatever is patched here, before the equaliser"},
+    {"ids": [11], "text": "A rising edge starts and stops recording into the buffer"},
+    {"ids": [12], "text": "A rising edge cycles the transport between looping and playing once through"},
+    {"ids": [13], "text": "Held above 0.5V it stops playback, and held there for two seconds it empties the buffer and its slices"},
+    {"ids": [14], "text": "While it is held above 1V the module slides every knob picked on the menu to a new random setting"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the recording as it is played back, through the return, the equaliser and the feedback loop"},
+    {"ids": [1], "text": "The right side of the recording as it is played back, through the return, the equaliser and the feedback loop"},
+    {"ids": [2], "text": "The sample-and-hold, ±10V, taken from the module's own feedback signal and slewed"},
+    {"ids": [3], "text": "The left side of the output before the equaliser, for sending to an effect"},
+    {"ids": [4], "text": "The right side of the output before the equaliser, for sending to an effect"}
+  ],
+  "notes": [
+    "the module does nothing until something is recorded into it. Press REC with a signal at the input jacks, press it again to stop, then press PLAY/LOOP.",
+    "the blue line across the waveform display is the loop end point and is moved by dragging it. It is a parameter with no knob of its own, so a click on it cannot reach this help.",
+    "slices are found by scanning the recording for peaks above the threshold, no closer together than the minimum slice time. Moving either control rescans the whole recording.",
+    "a cable in either return jack replaces that side of the output outright rather than being mixed with it, so the send and return pair is an insert, not an aux."
+  ],
+  "menu": [
+    "Load WAV — reads a WAV file into the buffer in place of anything recorded",
+    "Save WAV — writes whatever is in the buffer out as a WAV file",
+    "Morph Time — a slider setting how long the CHAOS button takes to slide the knobs to their random settings",
+    "Morph Amount — a slider setting how far from their current settings the CHAOS button is allowed to move them",
+    "Morph Targets — a tick for each knob the CHAOS button is allowed to move: EQ Low, EQ Mid, EQ High, Threshold, Min Slice Time, Scan, Feedback, S&H Slew, S&H Amount, S&H Rate and Speed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±8V.",
+      "6": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "1V per octave · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "±10V · continuous · one channel only",
+      "10": "±10V · continuous · one channel only",
+      "11": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "12": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "14": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "±10V · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous"
+    }
+  }
+}

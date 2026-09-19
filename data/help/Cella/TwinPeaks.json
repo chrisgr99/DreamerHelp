@@ -1,0 +1,52 @@
+{
+  "plugin": "Cella",
+  "module": "TwinPeaks",
+  "description": "Two resonant lowpass filters fed the same signal, with the second subtracted from the first to give a two-peaked bandpass; built to be pinged with stepped voltages at high resonance",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff of filter A, 20Hz to 20kHz, and comes up at the bottom of that range"},
+    {"ids": [1], "text": "Sets the cutoff of filter B, 20Hz to 20kHz, and comes up at the top of that range"},
+    {"ids": [2], "text": "Sets the resonance of both filters at once, 0 to 1; the band marked on the panel is the part of the travel that pings well"},
+    {"ids": [3], "text": "Attenuates and inverts the RES jack, -1 to 1, before that voltage reaches the resonance of both filters"},
+    {"ids": [4], "text": "Sends some of the input signal to filter A's own cutoff, -1 to 1"},
+    {"ids": [5], "text": "Sends some of the input signal to filter B's own cutoff, -1 to 1"},
+    {"ids": [6], "text": "Scales everything modulating filter A's cutoff together, -1 to 1, so it can attenuate or invert the whole sum"},
+    {"ids": [7], "text": "Scales everything modulating filter B's cutoff together, -1 to 1, so it can attenuate or invert the whole sum"},
+    {"ids": [8], "text": "Attenuates and inverts the FM A jack, -1 to 1, before the FM A knob scales it"},
+    {"ids": [9], "text": "Attenuates and inverts the FM B jack, -1 to 1, before the FM B knob scales it"},
+    {"ids": [10], "text": "Sends some of filter B's output to filter A's cutoff, -1 to 1"},
+    {"ids": [11], "text": "Chooses how steep both filters are: two poles for 12dB per octave, three for 18dB, four for 24dB"},
+    {"ids": [12], "text": "Crossfades the output from filter A's lowpass alone at 0 to the full two-peaked response at 1"},
+    {"ids": [13], "text": "Attenuates and inverts the LP-TWP jack, -1 to 1, before that voltage is added to the LP-TWP knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the resonance of both filters, scaled by its attenuverter and added to the RES knob"},
+    {"ids": [1], "text": "One volt per octave on filter A's cutoff, added with no attenuverter in the way"},
+    {"ids": [2], "text": "One volt per octave on filter B's cutoff, added with no attenuverter in the way"},
+    {"ids": [3], "text": "Modulates filter A's cutoff, scaled by its own attenuverter and then by the FM A knob; it also feeds filter B while the FM B jack has no cable"},
+    {"ids": [4], "text": "Modulates filter B's cutoff, scaled by its own attenuverter and then by the FM B knob"},
+    {"ids": [5], "text": "The signal both filters are fed; its channel count sets the polyphony of the whole module"},
+    {"ids": [6], "text": "Divided by 10, scaled by its attenuverter and added to the LP-TWP knob, the total clamped to 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Filter A's output minus filter B's, the subtraction scaled by the LP-TWP setting, clamped to -12V and 12V"}
+  ],
+  "notes": [
+    "every route to a cutoff is summed and then capped, so neither filter can be pushed above the 20kHz its knob already reaches at the top",
+    "a tiny amount of noise is added to the input inside each filter, which is what lets a high resonance setting break into self-oscillation with nothing patched",
+    "the filter core is the one from Audible Instruments' Liquid Filter, with a three-pole output added for the 18dB setting"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads FM A.",
+      "5": "±5V · continuous · polyphonic",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "±12V · continuous · polyphonic"
+    }
+  }
+}

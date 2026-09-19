@@ -1,0 +1,14 @@
+{
+  "plugin": "SS-Modules",
+  "module": "melodygen",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 10V", "why": "melodygen.cpp:81 reads the jack with getVoltage() alone, melodygen.cpp:139 counts it high at 10V and above and melodygen.cpp:241 counts it low below 10V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "melodygen.cpp:227 and 243 write 10V and melodygen.cpp:160 and 248 write 0V, one value each with setVoltage()"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "melodygen.cpp:225 divides the note number in semitones by 12 and melodygen.cpp:253 writes that one value with setVoltage()"}
+    }
+  },
+  "comment": "Source read at SS-modules commit 1894a74, the head of main. Three commits carry version 2.0.0; the installed build was matched to this one by the window check added in ddfa91d, whose compare against 12.0 is present in it. The gate threshold really is 10V and not the usual 1V or 2V: melodygen.cpp:139 tests gateIn >= 10.f, so gates below 10V do nothing at all, which makes the module look broken beside makers who send 5V. The trill rate is (10 - knob) * 1000 samples between alternations, so the knob's bottom gives 10000 samples and its top gives zero, alternating every sample. Root gravity is rolled after the repeat rule and replaces the note outright, which is what the maker's tooltip means by overriding the repeat percentage. One quirk of the gate output: on the sample where the input gate falls, melodygen.cpp:243 writes 10V again before the next sample writes 0V, so the output gate is one sample longer than the input. The module configures a BLINK light that no widget ever places and that process never writes."
+}

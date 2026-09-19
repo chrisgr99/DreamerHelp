@@ -1,0 +1,35 @@
+{
+  "plugin": "HetrickCV",
+  "module": "BinaryNoise",
+  "description": "Random two-state generator: every new sample the output is drawn high or low, giving digital noise at audio rates and unpredictable gates at slow rates",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new state is drawn"},
+    {"ids": [1], "text": "Attenuverter for the S. Rate CV input, -1 to +1, and zero at startup, so that input does nothing until this is turned up"},
+    {"ids": [2], "text": "Sets the chance that a new sample comes out high; fully anticlockwise never goes high and fully clockwise always does"},
+    {"ids": [3], "text": "Attenuverter for the Probability CV input, -1 to +1, and zero at startup, so that input does nothing until this is turned up"},
+    {"ids": [4], "text": "Fast runs the generator across its full rate range; Slow divides that rate by 100 for modulation speeds"},
+    {"ids": [5], "text": "Stepped snaps between the two states; Slewed interpolates linearly between them, which gives a smooth modulation source"},
+    {"ids": [6], "text": "Bipolar swings between -5V and 5V; Unipolar gives 0-10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here draws one new state, replacing the internal rate clock"},
+    {"ids": [1], "text": "Modulates the rate, scaled by the S. Rate attenuverter"},
+    {"ids": [2], "text": "Modulates the probability, scaled by the Probability attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The two-state signal"}
+  ],
+  "notes": [
+    "the generation rate is set as a fraction of the patch's own sample rate, so changing the patch's sample rate changes the speed and the sound of what comes out."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

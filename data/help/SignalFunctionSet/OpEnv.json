@@ -1,0 +1,63 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "OpEnv",
+  "description": "A DX7 operator envelope on its own: a voice is read from a cartridge file, its carrier envelope taken, and played as a 0-10V envelope from a gate, with an offset on each of its eight stage settings",
+  "params": [
+    {"ids": [0], "text": "Picks the patch whose carrier envelope is used"},
+    {"ids": [1], "text": "Picks which loaded bank the patch comes from"},
+    {"ids": [2, 3, 4, 5], "text": "Shifts that stage's rate, -99 to 99 added to the patch's own figure; a rate is a speed rather than a time, so higher is faster"},
+    {"ids": [6, 7, 8, 9], "text": "Shifts that stage's level, -99 to 99 added to the patch's own figure, clamped to the DX7's own 0 to 99 range"},
+    {"ids": [10], "text": "Scales the envelope output"},
+    {"ids": [11], "text": "Shifts the voice's own tremolo speed"},
+    {"ids": [12], "text": "Shifts how long after the note starts the tremolo fades in"},
+    {"ids": [13], "text": "Shifts how deep the tremolo is"},
+    {"ids": [14], "text": "Shifts how sensitive the carrier is to the tremolo, 0 to 3; tremolo needs this, the depth and the rate all above zero"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise starts the attack and a fall starts the release"},
+    {"ids": [1], "text": "Picks the patch, 0-10V across the voice slots, added to the voice knob"},
+    {"ids": [2], "text": "Picks the bank, one volt per bank, added to the bank knob"},
+    {"ids": [3, 4, 5, 6], "text": "Shifts that stage's rate, ±5V across the whole offset range"},
+    {"ids": [7, 8, 9, 10], "text": "Shifts that stage's level, ±5V across the whole offset range"},
+    {"ids": [11], "text": "Scales the envelope's speed with pitch the way the DX7 does, so a note higher up the keyboard gets a faster envelope"},
+    {"ids": [12], "text": "Scales the envelope output, 0-10V added to the output level knob"},
+    {"ids": [13], "text": "Shifts the tremolo speed, ±5V added to the LFO knob"},
+    {"ids": [14], "text": "Shifts the tremolo depth, ±5V added to the depth knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0-10V"}
+  ],
+  "notes": [
+    "the envelope has four rates and four levels rather than attack, decay, sustain and release: it ramps to each level in turn, holds at the third under the gate, then moves to the fourth",
+    "because neighbouring levels in a DX7 patch are often equal and the rates saturate, a small offset sometimes makes no audible difference; that is how the original behaves"
+  ],
+  "menu": [
+    "Release to 0V — ends the release at 0V rather than at the patch's own fourth level",
+    "Banks — a label over the bank items below it",
+    "Load bank (.syx)… — reads a thirty-two voice DX7 cartridge file, which is then kept with the patch",
+    "Remove current bank — drops the selected bank; it appears only once more than one bank is loaded",
+    "LFO waveform — a label over the waveform choices below it, which set the shape of the tremolo: From voice, Triangle, Saw down, Saw up, Square, Sine or Sample & hold"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "±5V",
+      "5": "±5V",
+      "6": "±5V",
+      "7": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "8": "±5V",
+      "9": "±5V",
+      "10": "±5V",
+      "11": "1V per octave · stepped · one channel only\n\nunpatched it reads no rate scaling.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "13": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "14": "±5V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

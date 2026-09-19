@@ -1,0 +1,20 @@
+{
+  "plugin": "Ahornberg",
+  "module": "TapeRecorder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "TapeRecorder.cpp calcAudio() reads getVoltage(i), getVoltage(i + 4) and getVoltage(i + 8) for each of up to four tracks, so twelve channels are read"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "the knob alone", "why": "processLoopInput() in TapeRecorder.cpp: loopStart = (int)(getVoltage() * 12 + 0.5 + knob), then clamped up to 0"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "the knob alone", "why": "processLoopInput() in TapeRecorder.cpp: loopEnd = (int)(getVoltage() * 12 + 0.5 + knob), then clamped up to 0"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "processSpeedInput() in TapeRecorder.cpp multiplies the tape speed by exp2(getVoltage()), so a negative voltage slows it rather than being dropped"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "processTransportInput() feeds rescaleInput(), which is rescale(v, 0.1, 2, 0, 1) in src/util/Switches.cpp, into a SchmittTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "setChannels(trackCount) in TapeRecorder::process(), trackCount being 1, 2 or 4 from the Track Count menu"},
+      "1": {"family": "pitch"},
+      "2": {"family": "trigger"},
+      "3": {"family": "cv"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3a9441f, whose plugin.json carries the installed 2.3.4, and from manuals/README.md in the same tree. Motor Power is proved dead: it is passed to speedSlewLimiter.setRiseFall in two places, and every speedSlewLimiter.process call in TapeRecorder.cpp is commented out. The Loop Mode parameter has no widget of its own and is reached only through the menu. The audio input's channel layout above channel 4 is what the Tape Recorder Mixer chain writes; the mixer sends -10V on channels 5 to 8 while recording, and never writes anything to channels 9 to 12, so the saturation those channels control can only be reached with a polyphonic cable of your own."
+}

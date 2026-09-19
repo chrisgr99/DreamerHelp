@@ -1,0 +1,23 @@
+{
+  "plugin": "4msCompany",
+  "module": "SISM",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "SISMCore.cc:32 takes this channel's voice count from the jack and SISMCore.cc:61 reads it per voice"},
+      "1": {"poly": true, "step": "continuous", "normal": "the CH 1 input", "why": "SISMCore.cc:62 tests isPatched<Ch_2In> and, when this jack is empty, reads CH 1's voltage into channel 2's slot instead, before either channel's scale and shift at SISMCore.cc:68"},
+      "2": {"poly": true, "step": "continuous", "why": "SISMCore.cc:34 takes this channel's voice count from the jack and SISMCore.cc:63 reads it per voice"},
+      "3": {"poly": true, "step": "continuous", "normal": "the CH 3 input", "why": "SISMCore.cc:64 tests isPatched<Ch_4In> and, when this jack is empty, reads CH 3's voltage into channel 4's slot instead, before either channel's scale and shift at SISMCore.cc:68"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "±10V", "why": "SISMCore.cc:70 clamps this output between the limits set at SISMCore.cc:133-134; SISMCore.cc:39 sets its channel count from its own input"},
+      "1": {"poly": true, "range": "±10V", "why": "SISMCore.cc:71 clamps this output between the limits set at SISMCore.cc:133-134; SISMCore.cc:40 sets its channel count from its own input"},
+      "2": {"poly": true, "range": "±10V", "why": "SISMCore.cc:72 clamps this output between the limits set at SISMCore.cc:133-134; SISMCore.cc:41 sets its channel count from its own input"},
+      "3": {"poly": true, "range": "±10V", "why": "SISMCore.cc:73 clamps this output between the limits set at SISMCore.cc:133-134; SISMCore.cc:42 sets its channel count from its own input"},
+      "4": {"poly": true, "range": "0 to 10V", "why": "SISMCore.cc:87 sums only the positive parts and clamps between 0 and the limit at SISMCore.cc:133"},
+      "5": {"poly": true, "range": "-10 to 0V", "why": "SISMCore.cc:88 sums only the negative parts and clamps between the limit at SISMCore.cc:134 and 0"},
+      "6": {"poly": true, "range": "±10V", "why": "SISMCore.cc:84 adds a channel only when its own output jack is unpatched, and SISMCore.cc:90 clamps the total"},
+      "7": {"poly": true, "range": "±10V", "why": "SISMCore.cc:83 adds every channel and SISMCore.cc:89 clamps the total"}
+    }
+  },
+  "comment": "No family is set on the jacks: the module scales and offsets whatever is patched, audio or CV. The SHIFT knobs are configured over -10V to 10V (SISM_info.hh:20) but SISMCore.cc:139 multiplies by maximumShiftInV, which SISMCore.cc:132 sets at 9.5V, so the knob is short of its own tooltip at both ends."
+}

@@ -1,0 +1,38 @@
+{
+  "plugin": "RexAudio",
+  "module": "PWM",
+  "description": "Turns any audio input into a pulse wave whose width you set and modulate, by comparing the input against a threshold or by subtracting a delayed copy of it from itself",
+  "params": [
+    {"ids": [0], "text": "Sets the pulse width, from 0.01 to 0.99 of a cycle; 0.5 gives a square wave with odd harmonics only, and moving away from it brings in even harmonics"},
+    {"ids": [1], "text": "Sets the frequency of the internal LFO that modulates the width, from 0.1Hz to 20Hz; with a cable in PWM CV the LFO is not used and this knob changes nothing you can hear"},
+    {"ids": [2], "text": "Scales how far the width is modulated, by the internal LFO when PWM CV is empty and by the PWM CV voltage when it is patched; the swing is proportional to the PULSE WIDTH setting"},
+    {"ids": [3], "text": "Crossfades between the dry input and the pulse; at 100% only the pulse is heard"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio input that is turned into a pulse wave"},
+    {"ids": [1], "text": "Tracks the pitch of the input so the delay stays the same fraction of a cycle at every note; in comparator mode nothing in the output depends on it"},
+    {"ids": [2], "text": "Modulates the pulse width and replaces the internal LFO for as long as a cable is in it; ±5V gives the full swing set by PWM DEPTH"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pulse, crossfaded with the dry input by MIX, at as many channels as the wider of IN and V/OCT"}
+  ],
+  "notes": [
+    "the module comes up in comparator mode, and delay mode is chosen from the panel menu",
+    "in delay mode patch V/OCT, or the delay is computed as though the input were C4 at 261.63Hz and the width will be wrong at every other pitch",
+    "the width is clamped to between 0.01 and 0.99 of a cycle, so neither the knob nor the modulation can close the pulse completely"
+  ],
+  "menu": [
+    "Comparator Mode — the output swings to 5V whenever the input is above a threshold set by PULSE WIDTH and to -5V otherwise, which works with any input and needs no V/OCT",
+    "Delay Mode — subtracts a delayed copy of the input from itself, the delay being the pulse width as a fraction of one cycle, which suits sawtooth inputs and keeps more of the input's character"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V, which is C4.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads the internal LFO."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

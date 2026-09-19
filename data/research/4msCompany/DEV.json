@@ -1,0 +1,29 @@
+{
+  "plugin": "4msCompany",
+  "module": "DEV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0.5V", "why": "DEVCore.cc:189 passes this jack to CVToBool at quantization.h:6, which compares against 0.5V, and exclusive-ors the result with each side's button"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "DEVCore.cc:167 scales this jack and passes it through both of that side's attenuverter knobs, which add to or subtract from the slider settings"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "DEVCore.cc:167 scales this jack and passes it through both of that side's attenuverter knobs, which add to or subtract from the slider settings"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "DEVCore.cc:198 passes this jack through triggerDetector, the FlipFlop at DEVCore.cc:112 with a 1V low and a 2V high, and a rising edge calls osc.doRetrigger()"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "why": "DEVCore.cc:192-193 call setTargetVoltage(followInput.process(this jack)) while FOLLOW is patched, so that side's envelope slews to this voltage; DEVCore.cc:195 sets the target to 0V when it is not, and TriangleOscillator.h:38-45 reads anything at or below 0.1V as 0V"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "why": "DEVCore.cc:192-193 call setTargetVoltage(followInput.process(this jack)) while FOLLOW is patched, so that side's envelope slews to this voltage; DEVCore.cc:195 sets the target to 0V when it is not, and TriangleOscillator.h:38-45 reads anything at or below 0.1V as 0V"},
+      "6": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "DEVCore.cc:198 passes this jack through triggerDetector, the FlipFlop at DEVCore.cc:112 with a 1V low and a 2V high, and a rising edge calls osc.doRetrigger()"},
+      "7": {"family": "audio", "poly": true, "step": "continuous", "why": "DEVCore.cc:328 takes side A's audio channel count from this jack and DEVCore.cc:327 reads it per channel"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "why": "DEVCore.cc:232-236 read isPatched on this jack and, when it is patched, take getInputOrLast from it in place of the envelope as that side's VCA control"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "why": "DEVCore.cc:232-236 read isPatched on this jack and, when it is patched, take getInputOrLast from it in place of the envelope as that side's VCA control"},
+      "10": {"family": "audio", "poly": true, "step": "continuous", "normal": "the AUDIO A input", "why": "DEVCore.cc:332-337 test isPatched on this jack and, when it is empty, hand side B the same reader and channel count as AUDIO A"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 8V", "why": "DEVCore.cc:353 puts out 8V while side A's envelope is falling; DEVCore.cc:350 sets the channel count from side A"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 8V", "why": "DEVCore.cc:361 puts out 8V while side B's envelope is not falling; DEVCore.cc:358 sets the channel count from side B"},
+      "2": {"family": "cv", "poly": true, "why": "DEVCore.cc:345 puts out the larger of the two envelope outputs; DEVCore.cc:343 sets the channel count from the wider side"},
+      "3": {"family": "audio", "poly": true, "why": "DEVCore.cc:253 passes that side's audio input through its VCA; DEVCore.cc:230 sets the channel count from the audio input"},
+      "4": {"family": "cv", "poly": true, "why": "DEVCore.cc:210 puts out the envelope after the LEVEL and OFFSET knobs at DEVCore.cc:207-208; DEVCore.cc:146 sets the channel count"},
+      "5": {"family": "cv", "poly": true, "why": "DEVCore.cc:210 puts out the envelope after the LEVEL and OFFSET knobs at DEVCore.cc:207-208; DEVCore.cc:146 sets the channel count"},
+      "6": {"family": "audio", "poly": true, "why": "DEVCore.cc:253 passes that side's audio input through its VCA; DEVCore.cc:230 sets the channel count from the audio input"}
+    }
+  },
+  "comment": "The two envelope outputs have no fixed range: DEVCore.cc:207-208 double the oscillator's 0V to 5V swing, multiply by the LEVEL knob read as -1 to +1, and add the OFFSET knob read as -10V to +10V, so the swing runs to 10V either way and can be shifted beyond that. The EOF B output is the inverse of a falling test rather than an end-of-fall pulse: DEVCore.cc:360 has it high whenever side B is not falling. Audio B normals to Audio A (DEVCore.cc:332-337) but the envelope sides are otherwise separate. The timing circuit is modelled at component level (DEVCore.cc:154-186), so no millisecond figures are stated here."
+}

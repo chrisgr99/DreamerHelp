@@ -1,0 +1,18 @@
+{
+  "plugin": "CVfunk",
+  "module": "Clpy",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Clpy.cpp:189 takes getChannels() on this input and Clpy.cpp:206 reads each channel; Clpy.cpp:210 clamps the knob-plus-input total to 0 to 10"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the right clip jack", "why": "Clpy.cpp:190 takes getChannels() on this input and Clpy.cpp:219 reads each channel; Clpy.cpp:239 copies the right clip value here when this jack is empty"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the left clip jack", "why": "Clpy.cpp:191 takes getChannels() on this input and Clpy.cpp:222 reads each channel; Clpy.cpp:240 copies the left clip value here when this jack is empty"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "why": "Clpy.cpp:186 takes getChannels() on this input and Clpy.cpp:201 reads each channel with getPolyVoltage"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "normal": "the left input", "why": "Clpy.cpp:186 takes getChannels() on this input; Clpy.cpp:202 falls back to the left input's voice when this one has none"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Clpy.cpp:193 sets its channel count from the two signal inputs; Clpy.cpp:253 clamps the shaped signal to -10 to 10V"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "Clpy.cpp:194 sets its channel count from the two signal inputs; Clpy.cpp:254 clamps the shaped signal to -10 to 10V"}
+    }
+  },
+  "comment": "The shaper is a windowed sine fold that crosses over to the clip level as the driven signal passes about 0.93 of the window, and the crossover is smoothed with a cubic blend (Clpy.cpp:69). Supersampling runs the shaper at eight sub-steps, interpolating the clip CV as well as the signal, and follows it with a post-filter (Clpy.cpp:48)."
+}

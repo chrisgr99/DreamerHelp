@@ -1,0 +1,22 @@
+{
+  "plugin": "Ondas",
+  "module": "Bittorio",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: a Rack SchmittTrigger at its default 0.1V and 1V thresholds on getVoltage() with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "ignored", "normal": "the rule knob", "why": "Bittorio.cpp Bittorio::process: clamp(getVoltage(), 0.0f, 5.0f) / 5.0f * 255 rounded to a uint8_t, inside an isConnected() branch that otherwise reads the knob, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: a shared Rack SchmittTrigger at its default thresholds on getVoltage() with no channel argument, gated by a one-second cooldown, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "ignored", "normal": "the seed knob", "why": "Bittorio.cpp Bittorio::process: clamp(getVoltage(), 0.0f, 5.0f) / 5.0f * 65535 rounded to a uint16_t, inside an isConnected() branch that otherwise reads the knob, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Bittorio.cpp:179 passes this jack to edgeDetectorTrigger, the same SchmittTrigger object the random rule jack at :146 uses, so a rise on either blocks the other; :180 then sets a cooldown of one second of samples, and :175-176 clears that cooldown as soon as the jack reads zero"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 3V", "step": "stepped", "negative": "ignored", "normal": "the window knob", "why": "Bittorio.cpp Bittorio::process: floor(clamp(getVoltage(), 0.f, 3.f)) inside an isConnected() branch that otherwise reads the knob, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: a Rack SchmittTrigger at its default thresholds on getVoltage() with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: setVoltage(cellIsOn ? 5.f : 0.f) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: setVoltage(cellIsOn ? 5.f : 0.f) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: setVoltage(cellIsOn ? 5.f : 0.f) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 5V", "step": "stepped", "why": "Bittorio.cpp Bittorio::process: setVoltage(cellIsOn ? 5.f : 0.f) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The four outputs read history[sector + i] with sector clamped to 0 to 3 and i running 0 to 3, so generations 7 to 15 of the sixteen computed are never reachable. Both random jacks are processed through the single member edgeDetectorTrigger, so a rising edge consumed by the rule branch leaves the seed branch seeing a trigger already high. A PulseGenerator array pgenGateOut is declared and never used. The outputs are levels held between clock pulses, not pulses."
+}

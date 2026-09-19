@@ -1,0 +1,63 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc8",
+  "description": "Two additive oscillators of up to sixteen partials each, each able to modulate the other's frequency through zero",
+  "params": [
+    {"ids": [0, 1], "text": "Sets how far the other oscillator modulates this one's frequency, 0 to 300 per cent"},
+    {"ids": [2, 3], "text": "Sets how many partials its oscillator adds, 1 to 16"},
+    {"ids": [4, 5], "text": "Sets how quickly the partials of its oscillator fall away towards the top, 0.1 to 3"},
+    {"ids": [6, 7], "text": "Tilts its oscillator between odd and even partials, -1 to 1; at 0 both are heard, at -1 the odd ones alone and at 1 the even ones alone"},
+    {"ids": [8, 9], "text": "Sets which partial its oscillator starts from, 0 to 24, so the fundamental and the partials below it are left out"},
+    {"ids": [10, 11], "text": "Stretches the spacing of the partials of its oscillator, -1.25 to 1.25; away from 0 they stop being whole multiples and the sound turns metallic"},
+    {"ids": [12, 13], "text": "Sets the ratio its oscillator runs at against the pitch, -32 to 32; below 1 the ratio is turned upside down, which gives the divisions"},
+    {"ids": [14, 15], "text": "Adds a fraction to the ratio of its oscillator, -1 to 1"},
+    {"ids": [16, 17], "text": "Attenuates the voltage at the FM CV jack before it is added to the FM knob, 0 to 100 per cent"},
+    {"ids": [18, 19], "text": "Attenuates the voltage at the Decay jack before it is added to the Decay knob, 0 to 100 per cent"},
+    {"ids": [20, 21], "text": "Attenuates the voltage at the Odd/Even jack before it is added to the Odd/Even knob, 0 to 100 per cent"},
+    {"ids": [22, 23], "text": "Attenuates the voltage at the Stretch jack before it is added to the Stretch knob, 0 to 100 per cent"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Modulates that amount, scaled by the FM CV knob"},
+    {"ids": [2, 3], "text": "Modulates that fall-off, one per volt scaled by the Decay CV knob"},
+    {"ids": [4, 5], "text": "Modulates that tilt, a tenth per volt scaled by the Odd/Even CV knob"},
+    {"ids": [6, 7], "text": "Modulates that stretching, scaled by the Stretch CV knob"},
+    {"ids": [8, 9], "text": "Sets the ratio of its oscillator by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [10, 11], "text": "Sets that fraction by cable, a tenth per volt, and moves the knob while it is patched"},
+    {"ids": [12, 13], "text": "Sets that number by cable, 1.6 partials per volt, and moves the knob while it is patched"},
+    {"ids": [14, 15], "text": "Sets that first partial by cable, 1.6 partials per volt, and moves the knob while it is patched"},
+    {"ids": [16], "text": "Sets the pitch of both oscillators by cable, 1V per octave, one channel per voice"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The wave of its oscillator, -5V to 5V"}
+  ],
+  "notes": [
+    "the frequency modulation is always between the two oscillators: each one is modulated by the other's output at the amount set on its own side, so turning up both FM knobs gives cross modulation",
+    "the modulation is added to the frequency in hertz rather than to the pitch, so it passes through zero and stays in tune",
+    "the ratio, fine, partial count and first partial jacks move their knobs, and are read once every 32 samples"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 3V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 3V.",
+      "4": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1V.",
+      "5": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1V.",
+      "6": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1.25V.",
+      "7": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±1.25V.",
+      "8": "±10V · stepped · one channel only\n\nunpatched it reads the Ratio knob.",
+      "9": "±10V · stepped · one channel only\n\nunpatched it reads the Ratio knob.",
+      "10": "±10V · continuous · one channel only\n\nunpatched it reads the Fine knob.",
+      "11": "±10V · continuous · one channel only\n\nunpatched it reads the Fine knob.",
+      "12": "0 to 10V · stepped · one channel only\n\nunpatched it reads the Num Partials knob; a negative voltage does nothing here.",
+      "13": "0 to 10V · stepped · one channel only\n\nunpatched it reads the Num Partials knob; a negative voltage does nothing here.",
+      "14": "0 to 10V · stepped · one channel only\n\nunpatched it reads the First Partial knob; a negative voltage does nothing here.",
+      "15": "0 to 10V · stepped · one channel only\n\nunpatched it reads the First Partial knob; a negative voltage does nothing here.",
+      "16": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

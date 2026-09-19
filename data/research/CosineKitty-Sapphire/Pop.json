@@ -1,0 +1,14 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "Pop",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "pop_vcv.cpp:205 reads this input per channel and adds the attenuated voltage straight to the speed knob in octaves, the total held between -7 and +7", "poly": true},
+      "1": {"family": "cv", "step": "continuous", "sumRange": "±5V", "negative": "subtracts", "why": "pop_vcv.cpp:206 reads this input per channel; sapphire_vcvrack.hpp:1094 adds the attenuated voltage over five, times the control's span, to the knob and clamps the total to that span, so ±5V at the attenuverter at 100% covers the whole control, the total held between 0 and 1", "poly": true},
+      "2": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "pop_vcv.cpp:201 reads this input per channel into a GateTriggerReceiver; sapphire_vcvrack.hpp:738 reads it high at 1V and low below 0.1V", "poly": true}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "why": "pop_vcv.cpp:190 sets this output to the channel count the knob asks for and line 224 writes the pulse for each channel"}
+    }
+  }
+}

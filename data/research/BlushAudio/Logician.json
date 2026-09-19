@@ -1,0 +1,19 @@
+{
+  "plugin": "BlushAudio",
+  "module": "Logician",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 5.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logician.cpp:62 reads getVoltage() with no channel; lines 71-77 make high true only when the value is at or above 5.1 and low true only at or below 4.9, so anything below 4.9 including negatives reads the same"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 5.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logician.cpp:63 reads getVoltage() with no channel and lines 73-74 apply the same 4.9 and 5.1 comparisons; line 98 also tests isConnected to pick NOT mode"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 5.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logician.cpp:64 reads getVoltage() with no channel and lines 75-76 apply the same 4.9 and 5.1 comparisons"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 5.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logician.cpp:65 reads getVoltage() with no channel and lines 77-78 apply the same 4.9 and 5.1 comparisons; line 210 also tests isConnected to pick NOT mode"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Logician.cpp writes only 0.0f or 10.0f into this port with setVoltage, at lines 90, 104, 112, 131, 139 and onwards, and never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Logician.cpp writes only 0.0f or 10.0f into this port with setVoltage, at lines 201, 216, 224 and onwards, and never calls setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Logician.cpp writes only 0.0f or 10.0f into this port with setVoltage, at lines 91, 105, 113, 132, 140 and onwards, and never calls setChannels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Logician.cpp writes only 0.0f or 10.0f into this port with setVoltage, at lines 202, 217, 225 and onwards, and never calls setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit e5f0e3d, the only commit carrying version 2.2.0. The panel prints INPUT 1A, INPUT 1B, OUTPUT 1 and OUTPUT 1 with a bar over it for the inverted one, and the same for the lower gate. The 4.9 and 5.1 thresholds come from a comparator at 5.0 and hysterisisAmount 0.1 at Logician.cpp:68-73; the maker's spelling of the variable is hysterisis, and what it actually builds is a dead band rather than hysteresis, because between 4.9 and 5.1 neither the high nor the low test passes and no branch runs, so the output keeps its previous value. Almost every comparison in this file is written with a single equals sign inside the condition, for example (input1a = low1a) and (input1a = (high1a) && (input1b = (high1b))); each of these assigns and then tests, and each was worked through by hand. In every case the value tested is the correct one, because C++ evaluates the assignment's right-hand side first and the clobbered variable is not read again, so the AND, OR, XOR and NOT results are all right despite the way they are written. The two mode buttons are SvgSwitch widgets built with three frames that all load the same file, res/modebutton.svg for the first gate and res/modebutton2.svg for the second, so the button never changes appearance. configLight is called for only two of the twelve lights, OUTPUT1HIGHGREEN and OUTPUT2HIGHRED at lines 51-52, which is the pair mismatched: for the first gate the green half is named and for the second the red half is. Lights cannot be clicked for help, so this shows only in tooltips. Every configured parameter and port is read in process(); nothing is configured twice and no jack is left unread."
+}

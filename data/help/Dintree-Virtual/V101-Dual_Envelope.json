@@ -1,0 +1,32 @@
+{
+  "plugin": "Dintree-Virtual",
+  "module": "V101-Dual_Envelope",
+  "description": "Two independent envelope generators, each switchable between ADSR, AR and a free-running LFO",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the attack time, the climb from 0V to 10V; fully counter-clockwise is the fastest and fully clockwise the slowest"},
+    {"ids": [2, 3], "text": "Sets the fall from the peak down to the S level, and only when the mode switch is at ADSR; fully counter-clockwise is the fastest"},
+    {"ids": [4, 5], "text": "Sets the level the envelope holds while the gate is high in ADSR mode, 0V at fully counter-clockwise and a shade under 10V at fully clockwise; moving it during the hold moves the output at once"},
+    {"ids": [6, 7], "text": "Sets the fall back to 0V: after the gate goes low in ADSR mode, and straight down from the peak in AR and LFO modes; fully counter-clockwise is the fastest"},
+    {"ids": [8, 9], "text": "Switched up to ADSR the envelope attacks, decays to the S level, holds while the gate is high and releases; at AR a gate starts an attack and release that runs to its own end; at LFO the two repeat"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "A gate above 1V starts the envelope; in ADSR mode it releases when the gate goes low, in AR mode the cycle finishes regardless, and in LFO mode the gate starts the LFO and going low stops it"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The envelope, 0V to 10V, generated at 1kHz and smoothed by a one-pole filter on the way out"}
+  ],
+  "notes": [
+    "in LFO mode the LFO free-runs as soon as the mode switch reaches LFO, but a gate at GATE IN takes that over and starts and stops it. Switching the mode away and back restores free running.",
+    "the envelopes are generated at 1kHz, so a very fast attack or decay steps rather than glides. That is a deliberate part of the clone of the microcontroller hardware."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

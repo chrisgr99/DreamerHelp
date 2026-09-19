@@ -1,0 +1,32 @@
+{
+  "plugin": "StellareModular-Link",
+  "module": "Link2",
+  "description": "Takes its tempo and bar position from an Ableton Link session on the local network and puts out one clock at a chosen division, a bar reset, and the session tempo as a voltage",
+  "params": [
+    {"ids": [0], "text": "Hold it and the clock and reset outputs drop to 0V; they come back at the start of the next bar, in step with the session again, and the lamp beside it is lit while the module is waiting for that bar"},
+    {"ids": [1], "text": "Shifts the whole clock early or late by up to five thirty-seconds of a beat, to make up for the delay a Link connection adds; it is centred on no shift"},
+    {"ids": [2], "text": "Steps between five clock rates, marked 4, 2, 1, 1/2 and 1/4 for the number of beats in one clock period; it snaps to those five and starts on 1, a pulse every beat"},
+    {"ids": [3], "text": "Delays every second sixteenth of the beat by up to three thirty-seconds of a beat, which is what turns a straight clock into a shuffled one, despite the maker's README calling it swing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse a sixteenth of a beat long, repeating at the rate the CLOCK knob sets; the pulse stays that short whatever the rate, so a slow setting gives a short blip rather than a square wave"},
+    {"ids": [1], "text": "A 10V pulse a sixteenth of a beat long at the start of every bar"},
+    {"ids": [3], "text": "The session tempo as a voltage, 0V for 120BPM and a volt for every doubling, so 60BPM is -1V and 240BPM is +1V"}
+  ],
+  "notes": [
+    "this module has no inputs; the clock comes from the network. Any Link-enabled program on the same LAN or wireless network, another copy of Rack included, joins the session and shares its tempo",
+    "with no other Link peer anywhere on the network the session runs on its own at 120BPM, and the outputs follow that",
+    "a bar is taken as four beats whatever the session's own time signature, so the reset fires once every four beats",
+    "both modules in this plugin share one connection to the network, so a second one joins the session the first one is already in"
+  ],
+  "menu": [
+    "Enable Link Start/Stop — makes the clock and reset outputs stop when the Link session is stopped and rejoin at the top of a bar when it plays; it comes up off, so the module runs either way"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "3": "continuous · one channel only"
+    }
+  }
+}

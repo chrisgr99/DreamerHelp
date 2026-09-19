@@ -1,0 +1,15 @@
+{
+  "plugin": "Mojo",
+  "module": "dogs",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/dogs.cpp line 41, getVoltage with no channel loop"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/dogs.cpp line 42, getVoltage with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/dogs.cpp line 44, setVoltage with no setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "src/dogs.cpp line 45, setVoltage with no setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3bcad57, whose plugin.json is byte for byte the installed one. Three things the panel does not say. The two channels are not driven alike: the left goes through std::tanh, which flattens, and the right through std::sin, which folds back once the signal passes a quarter turn, so the same signal in both jacks comes out different. The trimmer drawn inside the Output group multiplies the signal BEFORE the saturating curve, so it is a second drive control and not an output level. And the large knob is configured from -1 to -0.52, which makes both terms of the mix negative: every output is inverted, and the cross term is the incoming signal divided by that value plus 0.5, running from twice at the counter-clockwise end to fifty times at the clockwise end. Nothing is named: configParam and the port configs were all called with an empty name, so no control in the module has a tooltip."
+}

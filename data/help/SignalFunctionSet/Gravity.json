@@ -1,0 +1,63 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Gravity",
+  "description": "A chaos and motion engine: one moving point driven by any of six systems, read out as position, radius and angle, six wedge distances and six boundary gates",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the running system moves, which is the pen speed in the drawing modes"},
+    {"ids": [1], "text": "Sets how complicated the running system is: the energy of the pendulum and the orbit, the number of balls or dots, how often the turtle picks a command, or how intricate the figure is"},
+    {"ids": [2], "text": "Mode-dependent: the direction of the pull, the strength of the central sun, the bias of new dots toward the centre or rim, the bias between common and unusual turtle commands, or the figure form"},
+    {"ids": [3], "text": "Picks which of the six systems runs: Pendulum, Gravity Well, Billiards, Hungry Man, Turtle or Pattern"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the speed, scaled by a tenth and added to the speed knob, the total read as about one octave per volt"},
+    {"ids": [1], "text": "Changes the complexity, scaled by a tenth and added to the chaos knob, the total clamped to the knob's travel"},
+    {"ids": [2], "text": "Changes the pull direction or strength, added to the gravity knob at 36 degrees per volt for the angle, or a tenth per volt for the sun's strength"},
+    {"ids": [3], "text": "Picks the system, 0-10V across all six, added to the mode knob; the maker's tooltip names four modes but the code spreads the same 10V across six"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The horizontal position of the tracked point, ±5V"},
+    {"ids": [1], "text": "The vertical position of the tracked point, ±5V"},
+    {"ids": [2], "text": "How far the tracked point is from the centre, -5V at the centre and 5V at the rim"},
+    {"ids": [3], "text": "The angle of the tracked point measured from the pull direction, ±5V for a full turn either way"},
+    {"ids": [4, 5, 6, 7, 8, 9], "text": "How far the tracked point is from the centre, faded in as the point approaches that sixty-degree wedge; the menu can make it a plain bipolar distance present at all times"},
+    {"ids": [10, 11, 12, 13, 14, 15], "text": "A 10V gate as the tracked point sweeps across that boundary ray, held for the time set on the menu"},
+    {"ids": [16], "text": "A 10V gate whenever any of the six boundary rays is crossed"},
+    {"ids": [17], "text": "A 10V gate when one of the odd-numbered rays is crossed, counting the ray pointing straight down as the first"},
+    {"ids": [18], "text": "A 10V gate when one of the even-numbered rays is crossed"},
+    {"ids": [19], "text": "A 10V gate when a ray is crossed that is not the one crossed before it"}
+  ],
+  "notes": [
+    "the display is not only a picture: in Pendulum mode either joint can be dragged to throw the pendulum, and in Billiards the cue ball can be dragged back and released to launch it"
+  ],
+  "menu": [
+    "Relaunch (kick) — puts energy back into the running system, which throws the pendulum back into a tumble",
+    "Clear drawing — wipes the canvas and starts a fresh drawing; it appears only in Turtle and Pattern modes",
+    "Sector CV: Morph (0-10V, in-sector only), Bipolar distance (+-5V, always live) — chooses whether a wedge output carries a voltage only while the point is near it, or always carries the distance",
+    "Gate hold: Tight (30ms), Medium (60ms), Gluey (120ms) — sets how long each ray gate is held high",
+    "Trail length: Off, Short, Medium, Long — sets how long the fading motion trail is in the pendulum, orbit and billiards modes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V",
+      "3": "±5V",
+      "4": "0 to 10V · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped"
+    }
+  }
+}

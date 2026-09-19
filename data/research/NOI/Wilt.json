@@ -1,0 +1,14 @@
+{
+  "plugin": "NOI",
+  "module": "Wilt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Wilt.cpp:100 reads getVoltage() with no channel into the redux stage"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Wilt.cpp:101-108 multiplies getVoltage() by the attenuverter, optionally truncates it, maps -5V to 5V onto -50 to 50 samples, adds it to the redux knob and clamps the total to 0 and 100"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Wilt.cpp:145 writes the reverb output with setVoltage, the clamp on line 144 commented out, and setChannels never called"}
+    }
+  },
+  "comment": "Source read at commit 2b2ad81. Two parameters have no ParamWidget. EXP_PARAM, index 2, is never passed to configParam either, so it has no name and no quantity. SPEED_CV_PARAM, index 7, is configured as a Speed CV attenuverter but never added to the widget, so it is pinned at its default of 0; SPEED_CV_INPUT, input index 2, likewise has no PortWidget. Together those make the ring-modulation stage at Wilt.cpp:117-122 unreachable: it runs only when the speed CV jack is connected, and no cable can reach that jack. Had the jack existed, that stage would multiply the signal by the attenuverter and silence the module. Wilt.cpp:91 gives the feedback parameter the unit 's', which the tooltip prints; the value is a feedback coefficient passed to overrideFeedback at filter.cpp:255, not a time."
+}

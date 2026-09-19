@@ -1,0 +1,62 @@
+{
+  "plugin": "forsitan",
+  "module": "tabes",
+  "description": "A tape loop that wears out: the play head reads it and the write head puts a slightly worse copy back in the same place, so the recording dulls, sags and drops out a little more on every pass",
+  "params": [
+    {"ids": [0], "text": "Sets how much is lost on each pass: at the bottom of its travel it takes hundreds of passes to hear a change, at the top the loop crumbles in minutes"},
+    {"ids": [1], "text": "Sets how much the play head wobbles in speed, and the wobble grows a little as the tape ages"},
+    {"ids": [2], "text": "Starts and stops recording onto the tape"},
+    {"ids": [3], "text": "Puts fresh tape in the machine: the loop goes back to the original recording with no wear, crossfaded over about 10ms so it does not click"},
+    {"ids": [4], "text": "Sets how soon the next play head starts: at the bottom of its travel the repeats run back to back, and at the top the next begins when the current one is halfway, so the loop plays over itself"},
+    {"ids": [5], "text": "Sets how much of what comes back at the return jack is written onto the tape, 0 to 1"},
+    {"ids": [6], "text": "Layers the input onto the tape while it keeps running, so a piece can be built up pass over pass"},
+    {"ids": [7], "text": "Sets how loud the overdub is written, and with it how much of the old tape the record head wipes: gentle sound-on-sound at the bottom of its travel, a punch-in replace at the top"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to record; the channel count of the cable at the moment recording starts sets how many tracks the tape has"},
+    {"ids": [1], "text": "Above 1V the machine is recording"},
+    {"ids": [2], "text": "A rising edge through 1V puts fresh tape in the machine"},
+    {"ids": [3], "text": "Added to the decay knob, a fifth of its travel per volt"},
+    {"ids": [4], "text": "Added to the wow knob, a fifth of its travel per volt"},
+    {"ids": [5], "text": "Added to the overlap knob, a fifth of its travel per volt"},
+    {"ids": [6], "text": "Added to the send knob, a fifth of its travel per volt"},
+    {"ids": [7], "text": "What comes back from whatever the send jack was patched into; it is written onto the tape as far as the send knob allows"},
+    {"ids": [8], "text": "Above 1V the machine is overdubbing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The loop, ±5V, on as many channels as the tape was recorded with"},
+    {"ids": [1], "text": "0.1V for every completed pass of the tape, stopping at 10V: an odometer for how worn it is"},
+    {"ids": [2], "text": "A 1ms trigger at every heard loop restart, which with overlap up is twice per turn of the tape"},
+    {"ids": [3], "text": "A 0V to 10V ramp following the audible play head, one per heard repeat, clean of the wow so it stays a steady clock"},
+    {"ids": [4], "text": "The loop as read off the tape, for feeding an effect and bringing it back to the return jack; it carries the tape's own channel count"}
+  ],
+  "notes": [
+    "nothing is heard until something has been recorded. Press rec or open the rec gate with a signal at the in jack, then let go.",
+    "the tape has one transport and several tracks: the wobble, the dropouts, the seam and the record crossfade are shared, so a stereo image stays locked together.",
+    "the age, eoc and ramp jacks are always single-channel, and the CV jacks, the two gates and the splice trigger read the first channel only."
+  ],
+  "menu": [
+    "Monitor input — whether the signal at the input jack is heard at the output: While recording or empty, Always, or Never",
+    "Clear loop — empties the tape and starts again with nothing recorded"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "±10V · continuous · polyphonic",
+      "8": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "±10V · continuous · polyphonic"
+    }
+  }
+}

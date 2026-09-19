@@ -1,0 +1,35 @@
+{
+  "plugin": "CountModula",
+  "module": "GateModifier",
+  "description": "Lengthens or shortens a gate under voltage control, and fires a trigger at the end of each gate it produces",
+  "params": [
+    {"ids": [0], "text": "Attenuverter for the CV input, -1 to +1, setting how far that input moves the gate length and in which direction"},
+    {"ids": [1], "text": "Sets the length added to the gate, reaching 1 second with the range set to FAST, 10 seconds at MED and 20 seconds at SLOW"},
+    {"ids": [2], "text": "Picks the full-scale gate length: FAST for up to 1 second, MED for up to 10 seconds, SLOW for up to 20 seconds"},
+    {"ids": [3], "text": "RETRIGGER holds the output high for as long as the input gate lasts plus the set length; ONE-SHOT holds the output high for the set length alone, whatever the input gate does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the gate length, scaled by the CV knob; the voltage is read over a range of -10V to +10V"},
+    {"ids": [1], "text": "The gate or trigger that starts the output gate; over 2V counts as high, and it counts as low again below 0.1V"},
+    {"ids": [2], "text": "A gate over 2V here cuts the output gate short and holds the output low until the next rising edge at TRIGGER"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modified gate, 10V while high and 0V while low"},
+    {"ids": [1], "text": "A 1ms trigger at 10V each time the output gate ends"}
+  ],
+  "notes": [
+    "to shorten a gate, choose ONE-SHOT and a length shorter than the incoming gate",
+    "this module is monophonic: only the first channel of a polyphonic cable is read, and every output carries a single channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

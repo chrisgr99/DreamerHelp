@@ -1,0 +1,28 @@
+{
+  "plugin": "MADZINE",
+  "module": "NIGOQ",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/NIGOQ.cpp:1262, getVoltage() straight into the two envelopes, which use a SchmittTrigger at Rack's defaults"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1240-1248, waveMorph += getVoltage()/10, then clamp(0, 1)"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/NIGOQ.cpp:1026-1030, getVoltage()/5 clamped to ±1 and used in place of the internal oscillator"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/NIGOQ.cpp:1109-1112, getVoltage()/5 clamped to ±1 and used in place of the generated wave"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "why": "src/NIGOQ.cpp:1359-1367, the cutoff is multiplied by 2 raised to (cv/10 * 2 - 1) * 2, so 0V is two octaves down and 10V two up"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1331-1338, rectifyAmount += getVoltage()/10, then clamp(0, 1)"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1290-1299, fmModAmount += getVoltage()/10 * atten, then clamp(0, 1)"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1302-1311, foldAmount += getVoltage()/10, then clamp(0, 1)"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1314-1323, tmAmount += getVoltage()/10 * atten, then clamp(0, 1)"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/NIGOQ.cpp:1342-1351, rectModAmount += getVoltage()/10 * atten, then clamp(0, 1)"},
+      "10": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/NIGOQ.cpp:1230-1234, modFreq *= (1 + getVoltage()/5 * atten)"},
+      "11": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/NIGOQ.cpp:1224-1227, modFreq *= pow(2, getVoltage())"},
+      "12": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/NIGOQ.cpp:1284-1288, finalFreq *= (1 + getVoltage()/5 * atten * 10)"},
+      "13": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/NIGOQ.cpp:1278-1282, finalFreq *= pow(2, getVoltage())"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "0 to 10V", "why": "src/NIGOQ.cpp:1442 and 1036, the wave is shifted to 0..10V before the envelope"},
+      "1": {"family": "audio", "poly": false, "why": "src/NIGOQ.cpp:1443, the plain sine before the shaping, with no clamp stated in the code"},
+      "2": {"family": "audio", "poly": false, "why": "src/NIGOQ.cpp:1444, the shaped voice, with no clamp stated in the code"}
+    }
+  },
+  "comment": "Input 3, External Final Input, replaces the final oscillator's generated wave rather than being mixed with it (src/NIGOQ.cpp:1109-1112); the modulation EXT IN does the same for the modulation oscillator (src/NIGOQ.cpp:1025-1030). The modulation frequency knob covers six decades, 0.001Hz to 6000Hz, and the final one 20Hz to 8000Hz, both exponential. The final oscillator is not a plain sine: it carries a second harmonic at 8 per cent and a third at 5 per cent (src/NIGOQ.cpp:1114-1117). The FM index is the knob squared times four and the phase increment is allowed to go negative, which is what makes it through-zero. The DECAY knob maps to 0 to 0.3 seconds over its lower half and 0.3 to 3 seconds over its upper, and at 3 seconds or more the envelopes are held open and reset, which is the Drone reading on its tooltip. The three CV ATT trimmers apply only to the FM, TM and RECT modulation-amount jacks; the FOLD, RECTIFY and LPF jacks have no trimmer and go in at a tenth of the knob's travel per volt. The scope's time knob is a transparent widget over the display and the trigger lamp is a clickable light, both ParamWidgets with census positions. The panel prints N I G O Q, MOD FREQ, FINAL FREQ, WAVE, SYNC, TRIG, EXT IN twice, LPF, RECTIFY, FOLD, FM, TM, RECT, CV ATT three times, M.V/O, M.FM, F.FM, F.V/O, DEC and BASS. Lettering is drawn in code at src/NIGOQ.cpp:1651-1760."
+}

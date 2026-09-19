@@ -1,0 +1,16 @@
+{
+  "plugin": "TMT",
+  "module": "Sort",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "sort.cpp:134 getChannels() sets maxChannels, which bounds every read of all three inputs"},
+      "1": {"poly": true, "step": "continuous", "normal": "0V on every channel", "why": "sort.cpp:142 getVoltage(i) when connected, 0.0f when not; :166 stable_sort on those values"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V on every channel", "why": "sort.cpp:143 getVoltage(i) when connected, 0.0f when not; :182 and :195 compare against 1.0f"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "sort.cpp:153 setChannels(maxChannels)"},
+      "2": {"poly": true, "why": "sort.cpp:187 setChannels(selectedData.size())"}
+    }
+  },
+  "comment": "Two disagreements with the maker's own words. The Select Key threshold is 1.0V in the code (sort.cpp:182) where the readme says 5V; and the Selected, then Sorted output sorts the selected values by their own magnitude (sort.cpp:207, a plain std::sort on the voltages) rather than by the Sort Key, which is what both the readme and the port's tooltip describe."
+}

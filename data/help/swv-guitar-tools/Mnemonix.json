@@ -1,0 +1,99 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "Mnemonix",
+  "description": "Bucket-brigade delay modelled on an analogue memory delay pedal, with chorus and vibrato modulation of the delay clock, a compander, and the hiss and clock bleed of the original circuit",
+  "params": [
+    {"ids": [0], "text": "Sets the drive into the modelled preamp and compander, so higher settings add saturation before the delay"},
+    {"ids": [1], "text": "Fades between the direct signal and the delayed one, on a law that lifts the middle so the level does not drop there"},
+    {"ids": [2], "text": "Sets how much of the delayed signal is returned to the input for repeats; high settings bloom into self-oscillation"},
+    {"ids": [3], "text": "Sets the delay time by setting the bucket-brigade clock period, about 33ms fully anticlockwise to about 410ms fully clockwise, or 819ms in the long range; moving it bends the repeats"},
+    {"ids": [4], "text": "Sets how far the chorus or vibrato modulation moves the delay clock"},
+    {"ids": [5], "text": "Chooses chorus or vibrato: chorus modulates at about 0.35Hz in the middle of the delay range and vibrato at about 1.65Hz, and shorter delay times raise both"},
+    {"ids": [6], "text": "Chooses the modulation wave, a triangle in one position and a square in the other; the square steps the delay time between two values"},
+    {"ids": [7], "text": "Engages the effect in the upper position and bypasses it in the lower, despite the panel printing BYPASS beside it; bypassed, the input comes out untouched"},
+    {"ids": [8], "text": "Doubles the longest delay time, from about 410ms to about 819ms"},
+    {"ids": [9], "text": "Scales the Level CV input before it is added to the LEVEL knob, backwards at negative settings"},
+    {"ids": [10], "text": "Scales the Blend CV input before it is added to the BLEND knob, backwards at negative settings"},
+    {"ids": [11], "text": "Scales the Feedback CV input before it is added to the FEED knob, backwards at negative settings"},
+    {"ids": [12], "text": "Scales the Delay CV input before it is added to the delay time, backwards at negative settings"},
+    {"ids": [13], "text": "Scales the Depth CV input before it is added to the DEPTH knob, backwards at negative settings"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be delayed; each channel of a polyphonic cable gets its own delay engine, up to sixteen"},
+    {"ids": [1], "text": "Adds to the LEVEL knob after the trimpot for this jack scales it, 5V covering the whole range at a trimpot fully clockwise"},
+    {"ids": [2], "text": "Adds to the BLEND knob after the trimpot for this jack scales it, 5V covering the whole range at a trimpot fully clockwise"},
+    {"ids": [3], "text": "Adds to the FEED knob after the trimpot for this jack scales it, 5V covering the whole range at a trimpot fully clockwise"},
+    {"ids": [4], "text": "Adds to the delay time after the trimpot for this jack scales it, 5V covering the whole range at a trimpot fully clockwise, whether the knob or the tapped tempo is setting that time"},
+    {"ids": [5], "text": "Adds to the DEPTH knob after the trimpot for this jack scales it, 5V covering the whole range at a trimpot fully clockwise"},
+    {"ids": [6], "text": "Chooses vibrato above 1V and chorus below it while patched, in place of the CH/VB switch"},
+    {"ids": [7], "text": "Chooses the square modulation wave above 1V and the triangle below it while patched, in place of the TRI/SQ switch"},
+    {"ids": [8], "text": "Engages the effect above 1V and bypasses it below while patched, in place of the BYPASS switch"},
+    {"ids": [9], "text": "Chooses the long delay range above 1V and the normal range below it while patched, in place of the RANGE switch"},
+    {"ids": [10], "text": "Sets the delay time from the interval between rising edges above 2V, taking taps between 0.08 and 4 seconds apart, and switches the menu's Timing to the tapped setting"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The direct and delayed signals mixed by the BLEND control, one channel per input channel, or two when a mono input is spread by one of the stereo modes"},
+    {"ids": [1], "text": "The input signal passed through untouched, for parallel patching"},
+    {"ids": [2], "text": "The delayed signal on its own, before the BLEND control"},
+    {"ids": [3], "text": "The LEVEL control's value after its CV and trimpot, as 0V to 10V"},
+    {"ids": [4], "text": "The BLEND control's value after its CV and trimpot, as 0V to 10V"},
+    {"ids": [5], "text": "The FEED control's value after its CV and trimpot, as 0V to 10V"},
+    {"ids": [6], "text": "The delay time as a proportion of the current range after its CV and trimpot, as 0V to 10V"},
+    {"ids": [7], "text": "The DEPTH control's value after its CV and trimpot, as 0V to 10V"},
+    {"ids": [8], "text": "10V while vibrato is chosen and 0V while chorus is"},
+    {"ids": [9], "text": "The modulation wave itself, triangle or square as chosen, swinging between -5V and 5V"},
+    {"ids": [10], "text": "10V while the effect is engaged and 0V while it is bypassed"},
+    {"ids": [11], "text": "10V while the long delay range is chosen and 0V while the normal range is"},
+    {"ids": [12], "text": "A square wave at the bucket-brigade clock divided by 64, switching between 0V and 10V, so it speeds up as the delay time shortens"},
+    {"ids": [13], "text": "A square wave at the bucket-brigade clock divided by 512, switching between 0V and 10V, so it speeds up as the delay time shortens"},
+    {"ids": [14], "text": "The modelled compander's envelope as 0V to 10V, rising with the level going into the delay"}
+  ],
+  "notes": [
+    "the DELAY knob does nothing while the menu's Timing is set to Tap/sync delay: the tapped tempo and division set the time, and the Delay CV is added to that",
+    "a stereo mode other than Mono pedal spreads a mono input over two channels only while the effect is engaged",
+    "tapping the Tap input switches the menu's Timing to Tap/sync delay on its own, which takes the DELAY knob out of circuit"
+  ],
+  "menu": [
+    "Artifact profile: Cleaner BBD, Rev_D authentic, Worn unit — sets how much hiss, clock bleed and drift the delay adds",
+    "Bypass behavior: Trails, CPU mute — chooses whether the delay memory keeps running while the effect is bypassed, or is cleared and the processing skipped",
+    "Timing: Free delay knob, Tap/sync delay — chooses whether the DELAY knob sets the time or the tapped tempo and division do",
+    "Division: 1/1, 1/2, 1/4., 1/4, 1/8., 1/8, 1/8T, 1/16 — on the Timing submenu, sets the note value of the tapped tempo that the delay time takes",
+    "Tap tempo seed: 60 BPM, 90 BPM, 120 BPM, 140 BPM — on the Timing submenu, sets a tempo without tapping and switches Timing to the tapped setting",
+    "Stereo mode: Mono pedal, Wide chorus, Ping-pong offset — chooses whether a mono input is spread over two channels, and how far the second channel's delay and modulation are offset",
+    "Advanced calibration — seven trims over input gain, bucket-brigade bias, clock bleed, compander, noise, wet makeup and feedback headroom, each from off to 200 per cent of normal",
+    "Reset calibration trims — returns all seven calibration trims to 100 per cent",
+    "Clear delay memory — empties the delay buffer, cutting off repeats and any self-oscillation"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "2": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "3": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "4": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "5": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads the CH/VB switch.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads the TRI/SQ switch.",
+      "8": "high above 1V · stepped · one channel only\n\nunpatched it reads the BYPASS switch.",
+      "9": "high above 1V · stepped · one channel only\n\nunpatched it reads the RANGE switch.",
+      "10": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "±5V · one channel only",
+      "10": "0 to 10V · one channel only",
+      "11": "0 to 10V · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · one channel only"
+    }
+  }
+}

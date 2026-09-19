@@ -1,0 +1,66 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "RandomCurve",
+  "description": "Random voltages joined by six different transition shapes, in 4HP, so the outputs move rather than jump",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new random value is picked, from 0.0039Hz fully counter-clockwise to 1024Hz fully clockwise"},
+    {"ids": [1], "text": "Sets how wide a span the random values are drawn from, 0V for one fixed voltage to 10V at the far right"},
+    {"ids": [2], "text": "Sets where the span falls: its centre, or its bottom or top, according to the button beside it, -10V to +10V"},
+    {"ids": [3], "text": "Weights the odds within the span: counter-clockwise favours the middle or the minimum, clockwise favours the edges or the maximum, according to the mode button below it"},
+    {"ids": [4], "text": "Attenuates and inverts the rate CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [5], "text": "Attenuates and inverts the range CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [6], "text": "Attenuates and inverts the anchor CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [7], "text": "Attenuates and inverts the distribution CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [8], "text": "Steps the anchor knob's meaning through minimum, centre and maximum, with a light showing which"},
+    {"ids": [9], "text": "Switches what the two ends of the distribution knob favour: the centre and the edges, or the minimum and the maximum"},
+    {"ids": [10], "text": "Holds a change of span until the next random value is picked, so a curve already under way is left alone"},
+    {"ids": [11], "text": "Makes each new value land in the opposite half of the span from the one before, which turns the output into alternating rises and falls; it is ignored in Min/Max distribution"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the rate, every volt here doubling it after the trim knob"},
+    {"ids": [1], "text": "Adds its voltage to the span after the trim knob, which can carry the span past the knob's own 10V"},
+    {"ids": [2], "text": "Adds its voltage to the anchor after the trim knob"},
+    {"ids": [3], "text": "Moves the distribution, 5V covering half the knob's travel at full trim"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Fires a 1ms pulse each time a new random value is picked, which marks the start of every curve segment"},
+    {"ids": [1], "text": "Carries a straight line from the last value to the next"},
+    {"ids": [2], "text": "Carries the last value held, then a jump to the next halfway through, like a sample and hold"},
+    {"ids": [3], "text": "Carries an S-shaped curve from the last value to the next, easing out of one and into the other"},
+    {"ids": [4], "text": "Carries the S-curve turned inside out, so it leaves one value fast and arrives at the next fast, with a sharp corner at each"},
+    {"ids": [5, 6], "text": "Carries whichever of the four shapes the menu sets for it, logarithmic unless you change it; a mark beside it shows the shape in colour"}
+  ],
+  "notes": [
+    "every output moves between the same random values at the same moments; only the shape of the journey differs",
+    "this module is monophonic; the curves come out on one channel each"
+  ],
+  "menu": [
+    "User 1 curve mode, User 2 curve mode: Log, Exp, Top rounded/bottom sharp, Bottom rounded/top sharp — sets the shape that output uses, shown by its mark in green, red, blue or orange",
+    "Set min/max-range — sets the range and anchor knobs together to a named pair of voltages",
+    "Distibution-range: 60% (value-range not affected) up to 100% — narrows what the distribution knob covers, so a full turn no longer collapses the span to one voltage",
+    "LFO rate chaos — picks a new random speed for each cycle, so the curve segments run at uneven lengths",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Auto select process quality — picks the process quality from the dialled-in rate and from which ports are patched, and greys out the manual choice while it is on",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only"
+    }
+  }
+}

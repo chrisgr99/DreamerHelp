@@ -1,0 +1,42 @@
+{
+  "plugin": "Ahornberg",
+  "module": "MoreFunWithFrames",
+  "description": "A chord builder for Regen Modular Frames: it rescales four of that module's parameter outputs into semitone intervals and stacks them into a polyphonic chord above one incoming pitch",
+  "params": [
+    {"ids": [0], "text": "Sets how many notes the chord has, 2 to 5. The first note is the pitch at the note input, and each further note takes its interval from the next time-table input in turn."},
+    {"ids": [1, 2, 3, 4], "text": "Chooses how the voltage beside it is converted: both settings multiply it by 2.125, then linear subtracts 5V while linear with jump point subtracts 21.33V from anything above 10.625V"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "One of the four values to convert, taken from a parameter output of Frames, 0 to 10V"},
+    {"ids": [4], "text": "The root of the chord, one volt per octave"},
+    {"ids": [5], "text": "The gate for the chord, copied out on one channel per note"},
+    {"ids": [6], "text": "Patching anything here turns the chord into an arpeggio: each rising edge steps to the next note, the pitch and gate outputs drop to one channel, and a gate of 0V restarts from the root"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The converted voltage from the input beside it"},
+    {"ids": [4], "text": "The chord, one polyphonic channel per note, root first; while a clock is patched it is the arpeggio on a single channel instead"},
+    {"ids": [5], "text": "The gate input on one channel per note of the chord, with 0V on the channel of any note whose time-table input reads 0V; while a clock is patched it is the gate input on a single channel instead"}
+  ],
+  "notes": [
+    "a time-table input reading exactly 0V does not add a note: that voice holds the pitch it last had and its channel of the gate output is taken to 0V.",
+    "the multiplier of 2.125 turns a full 0 to 10V sweep into 21.25V, one semitone for each step of a 256-step source, and the jump point folds the top half of that sweep to negative semitones.",
+    "each converted output is only written while it is patched, and the chord and gate outputs only while they are patched.",
+    "this module behaves exactly like Fun with Frames: its process function is a line-for-line copy of that one's.",
+    "the port names promise glide time, a glide base note, vibrato and arpeggio, and none of it was written; the intended design is left in the source as comments."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "4": "continuous · polyphonic",
+      "5": "stepped · polyphonic"
+    }
+  }
+}

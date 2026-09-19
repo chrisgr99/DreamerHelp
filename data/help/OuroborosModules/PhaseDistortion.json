@@ -1,0 +1,38 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "PhaseDistortion",
+  "description": "Phase-distortion waveshaper: instead of clipping or folding the signal it modulates the signal's own phase, which adds overtones while leaving the level largely where it was",
+  "params": [
+    {"ids": [0], "text": "Sets how far the phase is pushed, 0 to 1; at 0 the signal passes through untouched"},
+    {"ids": [1], "text": "Shifts the phase by a fixed amount before the modulation, -180 to 180 degrees"},
+    {"ids": [2], "text": "Attenuates and inverts the AMT jack, -1 to 1, before that voltage is added to the AMT knob"},
+    {"ids": [3], "text": "Attenuates and inverts the BIAS jack, -1 to 1, before that voltage is added to the BIAS knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be shaped; its channel count sets the polyphony of the whole module"},
+    {"ids": [1], "text": "The signal that does the modulating; with no cable it takes the signal input, which is what makes the module shape a signal with itself"},
+    {"ids": [2], "text": "Divided by 10, scaled by its attenuverter and added to the AMT knob, the total clamped to 0 and 1"},
+    {"ids": [3], "text": "Scaled by its attenuverter and added to the BIAS knob, the total clamped to the knob's own range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The shaped audio, with the DC taken out of it"}
+  ],
+  "notes": [
+    "with no cable in the signal input the output is a single channel at 0V; nothing else on the panel matters until something is patched there",
+    "on a harmonically rich input it helps to filter the signal before sending it to the modulator jack, or the distortion turns to noise"
+  ],
+  "menu": [
+    "Oversampling: Off, 2x, 4x, 8x, 16x — runs the shaping above the sample rate to keep the new overtones from aliasing; it starts at 4x and adds a few dozen samples of delay"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads Signal.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic"
+    }
+  }
+}

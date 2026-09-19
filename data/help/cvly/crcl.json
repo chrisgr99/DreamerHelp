@@ -1,0 +1,53 @@
+{
+  "plugin": "cvly",
+  "module": "crcl",
+  "description": "Quantizer, sequencer and negative-harmony generator laid out on the circle of fifths, with a button for each of the twelve intervals",
+  "params": [
+    {"ids": [0], "text": "Steps through the three modes in turn; the lit lamp shows whether quant + sh, sequencer or neg harmony is in force"},
+    {"ids": [1], "text": "Puts the root itself into the set of notes the module uses"},
+    {"ids": [2], "text": "Puts the fifth into the set of notes the module uses"},
+    {"ids": [3], "text": "Puts the major second into the set of notes the module uses"},
+    {"ids": [4], "text": "Puts the major sixth into the set of notes the module uses"},
+    {"ids": [5], "text": "Puts the major third into the set of notes the module uses"},
+    {"ids": [6], "text": "Puts the major seventh into the set of notes the module uses"},
+    {"ids": [7], "text": "Puts the tritone into the set of notes the module uses"},
+    {"ids": [8], "text": "Puts the minor second into the set of notes the module uses"},
+    {"ids": [9], "text": "Puts the minor sixth into the set of notes the module uses"},
+    {"ids": [10], "text": "Puts the minor third into the set of notes the module uses"},
+    {"ids": [11], "text": "Puts the minor seventh into the set of notes the module uses"},
+    {"ids": [12], "text": "Puts the fourth into the set of notes the module uses"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage to be quantised in quant + sh and neg harmony modes; in sequencer mode its level sets the direction instead, 0V or above running forward and below 0V running backward"},
+    {"ids": [1], "text": "In quant + sh and neg harmony modes a rising edge takes a fresh sample of the cv input and holds it until the next edge; in sequencer mode it is the clock that advances the sequence"},
+    {"ids": [2], "text": "A rising edge sends the sequence back to its first note, and does nothing in the other two modes"},
+    {"ids": [3], "text": "Sets the root the intervals are measured from, as a 1V/octave pitch; in quant + sh and neg harmony modes only the fraction of a volt is used"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantised or sequenced note as a 1V/octave pitch"},
+    {"ids": [1], "text": "A 1ms 10V pulse each time the note at the cv out changes"}
+  ],
+  "notes": [
+    "with no interval button switched on the module puts out the root and nothing else.",
+    "the quantizer splits each octave evenly between however many intervals are switched on, so every one of them gets the same share of the incoming voltage rather than the share nearest to it.",
+    "sequencer mode is monophonic; the other two modes follow the larger of the cv in and tg in channel counts."
+  ],
+  "menu": [
+    "Quant + SH — quantises the cv input to the notes switched on around the circle, sampling it on a trigger when one is patched",
+    "Sequencer — steps around the notes switched on around the circle, clocked from the tg in jack, and keeps the note within one octave of the root",
+    "Negative harmony — quantises the cv input and then returns the note mirrored about the axis between the root and the fifth",
+    "Load Scale: Ionian/Major, Dorian, Phrygian, Lydian, Mixolydian, Aeolian/Minor, Locrian, Harmonic Minor, Whole Tone, Major Pentatonic, Minor Pentatonic, Blues Scale — loads that scale"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "stepped · one channel only",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic"
+    }
+  }
+}

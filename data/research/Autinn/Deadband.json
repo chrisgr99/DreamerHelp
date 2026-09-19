@@ -1,0 +1,15 @@
+{
+  "plugin": "Autinn",
+  "module": "Deadband",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "Deadband.cpp:80 takes getChannels() on this input and Deadband.cpp:87 reads channel c with getPolyVoltage"},
+      "1": {"family": "cv", "poly": true, "sumRange": "0 to 5V", "step": "continuous", "negative": "subtracts", "why": "Deadband.cpp:83 takes getChannels() on this input and Deadband.cpp:91 reads channel c with getPolyVoltage when it carries more than one; Deadband.cpp:94 clamps the knob-plus-input total to 0 to 5"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Deadband.cpp:84 takes getChannels() on this input and Deadband.cpp:92 reads channel c with getPolyVoltage when it carries more than one; Deadband.cpp:95 subtracts it from the knob and clamps to 0 to 1, so a negative voltage raises the gap"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Deadband.cpp:81 sets this output's channel count from the input"}
+    }
+  },
+  "comment": "The GAP parameter is configured at Deadband.cpp:55 with a minimum of 1 and a maximum of 0, which reverses the knob. The width CV attenuator spans 0 to 1 (Deadband.cpp:54) and the gap CV attenuator 0 to 0.2 (Deadband.cpp:56), which is where the two different per-volt figures come from. Deadband.cpp:60 and :61 configure the signal input and output with an empty name."
+}

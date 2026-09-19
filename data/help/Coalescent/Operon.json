@@ -1,0 +1,47 @@
+{
+  "plugin": "Coalescent",
+  "module": "Operon",
+  "description": "A three-phase oscillator built on the repressilator: three genes each repressing the next around a ring, so their three proteins run about 120 degrees apart.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed the simulation runs at, -8 to +4 octaves; the centre gives C4 at 261.63Hz and the bottom about 1Hz for clock and LFO use."},
+    {"ids": [1], "text": "Sets the promoter strength, 0 to 60, which is what starts the ring oscillating; it leaves rest at about 3."},
+    {"ids": [2], "text": "Sets the cooperativity of the repression, 1.2 to 8, taking the shape from smooth to sharp relaxation pulses."},
+    {"ids": [3], "text": "Sets the ratio between protein and mRNA decay, 0.2 to 5, which shifts the period, the spacing of the phases and the duty cycle."},
+    {"ids": [4], "text": "Sets the floor of transcription that carries on whatever the repressor is doing, 0 to 1."},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, scaling the CV into the promoter strength."},
+    {"ids": [6], "text": "An attenuverter, -1 to +1, scaling the CV into the cooperativity."},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, scaling the CV into the decay ratio."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the PITCH knob at 1V per octave, setting the speed the simulation runs at."},
+    {"ids": [1], "text": "Modulates the promoter strength, 6 units per volt through its attenuverter, with the total clamped to 0 through 80."},
+    {"ids": [2], "text": "Modulates the cooperativity, 0.6 per volt through its attenuverter, with the total clamped to 1.01 through 10."},
+    {"ids": [3], "text": "Modulates the decay ratio, 0.5 per volt through its attenuverter, with the total clamped to 0.05 through 8."},
+    {"ids": [4], "text": "Adds a signal into the transcription of gene 1 at half a unit per volt, which kicks a near-threshold rest into a burst, entrains a running ring, or cross-modulates at audio rate."}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "One of the three proteins as a ±5V audio signal, centred on the ring's fixed point and soft-clipped."},
+    {"ids": [3, 4, 5], "text": "A 10V pulse 1ms long each time that protein crosses upward through its centre, once per cycle."}
+  ],
+  "notes": [
+    "Near the oscillation threshold the swing is small and the gates can stay quiet while the protein outputs are already moving; raising DRIVE or HILL brings them back.",
+    "The screen plots the three centred proteins over about the last 10 seconds, sampled 25 times a second, so an audio-rate setting aliases there."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    }
+  }
+}

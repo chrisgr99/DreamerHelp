@@ -1,0 +1,53 @@
+{
+  "plugin": "forsitan",
+  "module": "vorax",
+  "description": "A feedback drone: a plucked-string model fed only inaudible noise inside a loop that self-excites once the feedback passes the loop's losses, with a reverb in the loop and an echo after it",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the string as a pitch, MIDI note 16 to 72"},
+    {"ids": [1], "text": "Sets the gain round the feedback loop, -60dB at the bottom of its travel to +12dB at the top; the drone wakes around unity"},
+    {"ids": [2], "text": "Sets a short delay in the loop, 1ms to 100ms: short gives a comb-coloured resonance and long a slow pulsing swell"},
+    {"ids": [3], "text": "Sets the corner of the low-pass inside the loop, 100Hz to 18000Hz, which steers which partials the feedback favours"},
+    {"ids": [4], "text": "Sets the corner of the high-pass inside the loop, 10Hz to 4000Hz, which steers which partials the feedback favours"},
+    {"ids": [5], "text": "Sets how much reverb is mixed in, and the reverb is inside the loop so the wet signal feeds back too"},
+    {"ids": [6], "text": "Sets how long the reverb tail rings, inside the loop"},
+    {"ids": [7], "text": "Sets how much of the loop is sent to the tape echo"},
+    {"ids": [8], "text": "Sets the echo delay, 50ms to 5 seconds"},
+    {"ids": [9], "text": "Sets the echo feedback, 0 to 1.5; past 1 the repeats grow until the soft clipper catches them"},
+    {"ids": [10], "text": "Sets the output level"},
+    {"ids": [11], "text": "Halves the echo time at once for a doppler warp, and doubles it back when switched off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A signal injected into the feedback loop, for the string to chew on"},
+    {"ids": [1], "text": "Added to the pitch knob, one volt per octave"},
+    {"ids": [2], "text": "Added to the feedback knob, 7.2dB per volt"},
+    {"ids": [3], "text": "Added to the loop low-pass cutoff, one volt per octave"},
+    {"ids": [4], "text": "Added to the echo time, one volt per octave, with a positive voltage shortening it"},
+    {"ids": [5], "text": "Added to the body knob, a tenth of its travel per volt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the loop"},
+    {"ids": [1], "text": "The right side of the loop, whose body delay is four samples shorter than the left, which is what makes the image wide"}
+  ],
+  "notes": [
+    "nothing sounds until the feedback knob rises past the loop's losses. With it at the bottom the module is silent however hard it is driven.",
+    "no oscillator generates the tone. The string is fed a constant stream of white noise at -90dBFS and the loop builds a tone out of it.",
+    "with Fast body CV off, an oscillator on the body jack bends the drone like tape wow and does nothing at all past a few hertz; with it on, the same modulation throws sidebands off the drone."
+  ],
+  "menu": [
+    "Fast body CV — shortens the two glides on the body delay to about a millisecond each and recomputes the delay length every sample, but only while a cable is in the body jack"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

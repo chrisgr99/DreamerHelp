@@ -1,0 +1,39 @@
+{
+  "plugin": "ML_modules",
+  "module": "Evolution",
+  "description": "A shift register of up to sixteen stages whose new value is either fed back from the end of the loop or replaced from one of two CV inputs, for sequences that change by degrees",
+  "params": [
+    {"ids": [0], "text": "Sets how many stages the loop runs through before the value comes back round, a whole number from 1 to 16"},
+    {"ids": [1], "text": "Sets the chance that a new value is taken from the CV inputs rather than fed back from the end of the loop, 0 repeating the pattern and 1 replacing every value"},
+    {"ids": [2], "text": "Sets the chance that a replaced value is taken from B rather than A, 0 always taking A and 1 always taking B"},
+    {"ids": [3], "text": "Sets how much of the new A or B voltage goes into a replaced value against the fed-back one, 0 keeping the fed-back voltage and 1 taking the new one outright"},
+    {"ids": [4], "text": "Sets how many stages further down the register the Out 2 voltage is taken from, a whole number from 1 to 16"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two voltages a replaced value can be taken from; with nothing patched it is a fresh random voltage between -5V and 5V"},
+    {"ids": [1], "text": "One of the two voltages a replaced value can be taken from; with nothing patched it is the A voltage plus 1V"},
+    {"ids": [2], "text": "A rising edge moves every stored value on one stage and works out a new value for the head of the register"},
+    {"ids": [3], "text": "Scales the loop length set by the Length knob by its voltage over 5V, so 2.5V halves it"},
+    {"ids": [4], "text": "Adds its voltage over 10V to the replacement chance set by the Replace knob"},
+    {"ids": [5], "text": "Adds its voltage over 10V to the chance set by the Parent knob"},
+    {"ids": [6], "text": "Adds its voltage over 10V to the amount set by the Mix knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage at the head of the register, the one most recently worked out"},
+    {"ids": [1], "text": "A voltage held further down the register, at the stage the offset knob picks"}
+  ],
+  "notes": [
+    "a trigger arriving before its CV has settled stores the old voltage, so a quantizer or scaler in the CV path needs the same delay put into the trigger path"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "0 to 5V · stepped · one channel only",
+      "4": "±10V · continuous · polyphonic",
+      "5": "±10V · continuous · polyphonic",
+      "6": "±10V · continuous · polyphonic"
+    }
+  }
+}

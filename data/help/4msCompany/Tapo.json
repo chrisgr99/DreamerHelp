@@ -1,0 +1,63 @@
+{
+  "plugin": "4msCompany",
+  "module": "Tapo",
+  "description": "Multi-tap delay whose taps are tapped in by hand: each tap on the sensor adds another echo at the time you tapped it",
+  "params": [
+    {"ids": [0], "text": "Sets the level of the input going into the delay"},
+    {"ids": [1], "text": "Scales the whole tap pattern in time, stretching or shrinking every tap together"},
+    {"ids": [2], "text": "Sets how much of the delayed signal is fed back in"},
+    {"ids": [3], "text": "Sets how much the tap times wander under their own slow random modulation"},
+    {"ids": [4], "text": "Crossfades the output between the dry input and the taps"},
+    {"ids": [5], "text": "Sets how long the module takes to fade from one tap pattern to the next"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "A short press loads the pattern held in that slot of the current bank; holding it offers to save the pattern into that slot, which a second press on the same button confirms"},
+    {"ids": [12], "text": "Chooses what tapping does: OFF adds no taps at all, ADD builds a pattern from the taps as they come, and INS folds each new tap into the length of the pattern already there"},
+    {"ids": [13], "text": "A short press turns repeat on and off, which loops the tap pattern; a long press clears every tap"},
+    {"ids": [14], "text": "Tap it to add a tap at that moment; the first tap starts the count and the ones after it set the times"},
+    {"ids": [15], "text": "A short press removes the last tap added; a long press turns tap quantising on and off"},
+    {"ids": [16], "text": "Chooses what a tap's velocity changes: AMP its level, LPF a low-pass filter on it, and RES a band-pass filter on it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the TIME knob; the voltage is read upside down, so -5V stretches the pattern and +5V shrinks it"},
+    {"ids": [1], "text": "Moves the FEEDBACK knob; the voltage is read upside down, so -5V raises it and +5V lowers it"},
+    {"ids": [2], "text": "Moves the MODULATION knob; the voltage is read upside down, so -5V raises it and +5V lowers it"},
+    {"ids": [3], "text": "Moves the DRY/WET knob; the voltage is read upside down, so -5V goes wetter and +5V drier"},
+    {"ids": [4], "text": "The signal to be delayed, up to 22V"},
+    {"ids": [5], "text": "A gate above 0.5V turns repeat on and off"},
+    {"ids": [6], "text": "A rising edge above 0.5V adds a tap at that moment, in place of tapping the sensor"},
+    {"ids": [7], "text": "Sets the velocity given to the next tap added, 0V to 8V"},
+    {"ids": [8], "text": "A clock above 0.5V that new taps are quantised to"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "An 8V pulse, 4ms long, each time a tap is detected"},
+    {"ids": [1], "text": "The left side of the delay, or both sides summed when OUT 2 is empty"},
+    {"ids": [2], "text": "The right side of the delay"}
+  ],
+  "notes": [
+    "The module does nothing until taps are entered: tap the sensor, or send edges to the TAP jack, and each one after the first adds an echo.",
+    "With nothing patched into AUDIO OUT 2, AUDIO OUT 1 carries both sides summed; patching OUT 2 splits them."
+  ],
+  "menu": [
+    "Velocity: Min, Low, Med, High, Max — sets the velocity a new tap is given when nothing is patched into the velocity jack",
+    "Bank: A, B, C, D — chooses which bank of six saved patterns the six buttons reach",
+    "Pan: SUM/R, RND, ALT — sets where each new tap is placed across the two outputs: all to one side, at random, or alternating",
+    "Mode: Edit, Seq — chooses whether the taps work as a delay being edited or as a sequence"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±22V · continuous · one channel only",
+      "5": "high above 0.5V · stepped · one channel only",
+      "6": "high above 0.5V · stepped · one channel only",
+      "7": "0 to 8V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "8": "high above 0.5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 8V · stepped · one channel only",
+      "1": "±17V · continuous · one channel only",
+      "2": "±17V · continuous · one channel only"
+    }
+  }
+}

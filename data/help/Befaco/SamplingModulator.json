@@ -1,0 +1,37 @@
+{
+  "plugin": "Befaco",
+  "module": "SamplingModulator",
+  "description": "Sample and hold with a clock of its own that reaches audio rate, and an eight-step switch deciding which ticks fire",
+  "params": [
+    {"ids": [0], "text": "Sets the sampling rate of the internal clock, from 1Hz up to well past audio rate"},
+    {"ids": [1], "text": "Tunes the internal clock over one octave above whatever RATE sets"},
+    {"ids": [2], "text": "Picks whether the internal clock times the sampling, or the CLOCK/SYNC input does"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Picks what that step does: On fires a sample, Off skips it, and Reset ends the pattern there so the sequence restarts from step 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "In external mode a rising edge here takes a sample; in internal mode it resets the internal clock's phase, hard-syncing it. It reads high above 2V and low below 0.1V"},
+    {"ids": [1], "text": "Volt-per-octave control of the internal clock rate, added to the RATE and FINE knobs"},
+    {"ids": [2], "text": "A rising edge here takes a sample outside the clock's own timing, reading high above 2V and low below 0.1V"},
+    {"ids": [3], "text": "The signal being sampled"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V square wave at the internal clock rate, at 50% duty"},
+    {"ids": [1], "text": "A trigger on each step switched On, at 50% duty when internally clocked and a short pulse when externally clocked"},
+    {"ids": [2], "text": "The input sampled and held at each firing step, holding its value until the next one"}
+  ],
+  "menu": [
+    "Remove DC Offset — centres the clock and trigger outputs on 0V instead of running them from 0V upwards; on by default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

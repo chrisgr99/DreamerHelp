@@ -1,0 +1,23 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "A",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/A.cpp:168 and 189, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/A.cpp:175-183, added to both frequency knobs in octaves before two is raised to that power"},
+      "2": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/A.cpp:191-193, read only while a cable is patched, then put through a four tap estimator"},
+      "3": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/A.cpp:195, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/A.cpp:178 and 182, multiplied by the MAM and MOD knobs and added to the two frequencies in octaves"},
+      "5": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/A.cpp:196, maxPoly loops over getChannels and getPolyVoltage reads the channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"},
+      "1": {"family": "audio", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"},
+      "2": {"family": "cv", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"},
+      "3": {"family": "audio", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"},
+      "4": {"family": "audio", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"},
+      "5": {"family": "audio", "poly": true, "why": "src/A.cpp:168, maxPoly sets every output to the widest input's channel count"}
+    }
+  },
+  "comment": "Index order is not panel order. The panel prints FRQ, REZ, MOD on the first row and OFF, AM, MAM on the second, but the enum runs FRQ, MOD, REZ, OFF, MAM, RING, and the widget places index 1 in the third column and index 2 in the second (src/A.cpp:236-241); the jacks are ordered the same way. All the tags here are written from the widget. The tracking output is the one place the module contradicts its own naming: src/A.cpp:210 sends the corner frequency in hertz straight to setVoltage, so a corner at C4 puts 261.63V on that jack and the clamp at line 185 lets it reach half the sample rate. The maker calls it Tracking CV, and it does track, but not at any voltage a 1V per octave input will read. The resonance knob is in dBQ and is turned into a filter k by raising two to a sixth of it and inverting (src/A.cpp:87-90 and 166). The predictive input is read only while a cable is patched to it."
+}

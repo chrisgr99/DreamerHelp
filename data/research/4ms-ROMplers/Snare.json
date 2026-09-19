@@ -1,0 +1,17 @@
+{
+  "plugin": "4ms-ROMplers",
+  "module": "Snare",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "range": "±10V", "negative": "subtracts", "normal": "0V", "why": "one_shot_base.hh:78 reads this input with getNormalVoltage(0) and passes it to indexed_cv_knob; cv_knob_utils.hh:79-88 divides it by 10, adds the knob, rounds to a sample number and clamps to 0..15"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "sumRange": "±5V", "why": "one_shot_base.hh:98 reads this input with getNormalVoltage(0); cv_knob_utils.hh:91-96 divides it by 5, adds the knob and clamps the total to -1..+1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "one_shot_base.hh:100 reads this input with getNormalVoltage(0); cv_knob_utils.hh:17-20 puts the knob on a -5 to 5V scale, adds this voltage and clamps the total to ±5V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "one_shot_base.hh:64 reads this input with getVoltage; line 67 fires on a rise past 1V"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V", "why": "one_shot_base.hh:136-137 uses 5V unless the jack is connected, then clamps its voltage to 0..5V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "one_shot_base.hh:142 sets the output to the sample value, which sample.hh:16 scales to -1..1, multiplied by 10"}
+    }
+  },
+  "comment": "All ten acoustic one-shot modules share one implementation, src/one_shot_base.hh, and differ only in which sixteen samples they hold. The Sample, Pitch and Decay jacks carry no printing on the panel; the manual's opening section says every unlabelled jack is the CV input for the parameter beside it. Decay is scaled against the length of the sample that was selected at the trigger, so the same knob position gives a different time on a long sample and a short one. The samples are stored at 44.1kHz and the playback position is rate-converted against the engine sample rate, so the pitch does not move with the engine rate."
+}

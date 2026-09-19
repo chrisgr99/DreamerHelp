@@ -1,0 +1,18 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "CxFade1x2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "CxFade1x2.cpp:134 divides getVoltage() by 5 and applies the trim knob before adding it to the fade knob"},
+      "1": {"poly": true, "normal": "0V", "why": "CxFade1x2.cpp:97 takes the section's channel count from this jack and CxFade1x2.cpp:145 reads getPolyVoltage(c)"},
+      "2": {"poly": true, "normal": "0V", "why": "CxFade1x2.cpp:100 takes the section's channel count from this jack and CxFade1x2.cpp:148 reads getPolyVoltage(c)"},
+      "3": {"poly": true, "normal": "the upper B input", "why": "CxFade1x2.cpp:155 tests this jack with isConnected and line 156 reads it with getPolyVoltage per channel; with the jack empty line 157 uses the B1 jack's value instead, so the normalling crosses sides — A2 falls back to B1, not to A1 — and line 108 crosses the channel count the same way. The B1 value is itself 0V when that jack is empty. Line 153 runs the whole block only while the RIGHT-2 output has a cable in it."},
+      "4": {"poly": true, "normal": "the upper A input", "why": "CxFade1x2.cpp:158 tests this jack with isConnected and line 159 reads it with getPolyVoltage per channel; with the jack empty line 160 uses the A1 jack's value instead, so the normalling crosses sides — B2 falls back to A1, not to B1 — and line 111 crosses the channel count the same way. The A1 value is itself 0V when that jack is empty. Line 153 runs the whole block only while the RIGHT-2 output has a cable in it."}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "CxFade1x2.cpp:103 sets this output to the larger of its own pair's channel counts"},
+      "1": {"poly": true, "why": "CxFade1x2.cpp:113 sets this output to the larger of its own pair's channel counts"}
+    }
+  },
+  "comment": "The panel prints A1, B1, A2 and B2 with the two outputs marked 1 and 2. The crossed normalling is what makes a stereo pair fade one way at output 1 and the other way at output 2."
+}

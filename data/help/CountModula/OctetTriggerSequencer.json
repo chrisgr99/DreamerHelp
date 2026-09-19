@@ -1,0 +1,41 @@
+{
+  "plugin": "CountModula",
+  "module": "OctetTriggerSequencer",
+  "description": "Two-channel trigger sequencer in which each 8-step pattern is a whole number from 0 to 255, the eight bits of that number being the eight steps",
+  "params": [
+    {"ids": [0, 1], "text": "Attenuverter over that channel's pattern CV, from fully inverted through nothing to full; the result is added to the number set by the SELECT knob"},
+    {"ids": [2, 3], "text": "Chooses that channel's 8-step pattern as a number from 0 to 255; a change of pattern reaches the output on the next rising clock edge, so no stray triggers are made while scrolling"},
+    {"ids": [4], "text": "Chains the two patterns while it is on, so that OUT A plays pattern A then pattern B, sixteen steps in all"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 2V moves both channels on one step; the two channels stay locked to each other"},
+    {"ids": [1], "text": "A rising edge above 2V restarts both channels at step one on the next clock pulse"},
+    {"ids": [2], "text": "A gate above 2V lets the sequencer run and a level below 0.1V holds it; with nothing patched the sequencer runs"},
+    {"ids": [3, 4], "text": "Shifts that channel's pattern number, by an amount set by that channel's CV knob; at the widest CV scale 10V covers the full 255, and the CV scale menu narrows that to 128, 64 or 32"},
+    {"ids": [5], "text": "A gate above 2V chains the two patterns, so that OUT A plays pattern A then pattern B, sixteen steps in all"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries channel A's pattern, 10V on each step whose bit is set; the output mode menu makes those clock-width pulses, gates lasting the whole step, or 1ms triggers"},
+    {"ids": [1], "text": "Carries channel B's pattern, 10V on each step whose bit is set; with the patterns chained it can instead be silent, follow OUT A, or take the off beats, set by the chained pattern mode menu"}
+  ],
+  "menu": [
+    "Output mode — leads to Channel A, Channel B or Both, each setting that channel's output to Clocks, Gates or Triggers",
+    "CV scale — leads to Channel A, Channel B or Both, setting how far 10V moves the pattern number: 0V - 10V = 0 - 255, 0 - 128, 0 - 64 or 0 - 32",
+    "Channel B chained pattern mode — sets what OUT B does while the patterns are chained: No output, Follow channel A or Inverse of channel A",
+    "Add CV expander — places an Octet Trigger Sequencer CV Expander to the right of this module",
+    "Add gate expander — places an Octet Trigger Sequencer Gate Expander to the right of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "aridacity",
+  "module": "Clip",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Clip.cpp process() takes channels from inputs[AUDIO_INPUT].getChannels() and reads getVoltage(c) in the loop; the signal is divided by 5 on the way in and multiplied by 5 on the way out"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Clip.cpp process(): audi *= params[GAIN_PARAM].getValue() + inputs[GAIN_INPUT].getVoltage(c)/10.f, per channel, with the knob spanning 0 to 2"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Clip.cpp process(): pushSiz = params[PUSH_PARAM].getValue() + inputs[PUSH_SIZ_INPUT].getVoltage(c)/10.f, in units of 5V"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Clip.cpp process(): pushCent = inputs[PUSH_POS_INPUT].getVoltage(c)/5.f, in units of 5V, which is one volt of centre per volt"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Clip.cpp process(): limit = params[LIMIT_PARAM].getValue() + inputs[LIMIT_SIZ_INPUT].getVoltage(c)/10.f, in units of 5V"},
+      "5": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Clip.cpp process(): limCenter = inputs[LIMIT_POS_INPUT].getVoltage(c)/5.f, in units of 5V, which is one volt of centre per volt"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/Clip.cpp process() calls outputs[AUDIO_OUTPUT].setChannels(inputs[AUDIO_INPUT].getChannels()) and writes audi*5.f per channel"}
+    }
+  },
+  "comment": "Read from the maker's source at tag commit 7a96486 (v2.1.0), the installed version. The panel prints pull over the left switch and clip over the right one; configSwitch names them Inner limit with the choices Push and Pull, and Outer limit with the choices off and on, and in both cases the choice names are in the order the code tests for, so neither switch is reversed. The outer limit comes up on. Nothing bounds the output when that switch is off, so the gain knob at twice can put out more than 10V."
+}

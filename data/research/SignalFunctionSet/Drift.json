@@ -1,0 +1,23 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Drift",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "quadlfo.cpp:180 reads it with getVoltage, so only channel 1, divides by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "quadlfo.cpp:185 reads it with getVoltage, so only channel 1, divides by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "quadlfo.cpp:179 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "quadlfo.cpp:202 reads it with getVoltage, so only channel 1, divides by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±5V", "why": "quadlfo.cpp:207 reads it with getVoltage, so only channel 1, and clamps the knob-plus-input total to -5 to 5V"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 5V", "why": "quadlfo.cpp:212 reads it with getVoltage, so only channel 1, and clamps the knob-plus-input total to 0 to 5V"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "quadlfo.cpp:315 writes one channel with setVoltage from the lowest of the four waves"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv", "poly": false, "why": "quadlfo.cpp:311 writes one channel with setVoltage from the centred and scaled wave"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"}
+    }
+  },
+  "comment": "The frequency input jack is named \"Clock\" by the maker (quadlfo.cpp:72) while the panel prints FREQ. It is read as a clock, not as a CV: the rate comes from the time between rises, clamped to 0.1 to 100Hz, and each rise resets output A's phase (quadlfo.cpp:186). The chaos at the top of the SHAPE travel is a Brownian random walk stepped once per cycle (quadlfo.cpp:86), which is separate from the Lorenz attractor the STABIL knob drives."
+}

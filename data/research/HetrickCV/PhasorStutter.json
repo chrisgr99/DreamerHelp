@@ -1,0 +1,17 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorStutter",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorStutter.cpp:105 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorStutter.cpp:114 tests each channel against 1V"},
+      "2": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorStutter.cpp:98 floors the knob plus this CV to a whole step count"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorStutter.cpp:103 floors the knob plus this CV to a whole repeat count"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorStutter.cpp:87 and 124 or 133 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor times HCV_PHZ_UPSCALE; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorStutter.cpp:125 and 134 write HCV_PHZ_GATESCALE or 0V per channel; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "2": {"poly": true, "range": "0 to 10V", "why": "PhasorStutter.cpp:126 and 135 write the substep phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"}
+    }
+  }
+}

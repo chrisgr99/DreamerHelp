@@ -1,0 +1,20 @@
+{
+  "plugin": "acModules",
+  "module": "Ov3rCross",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "-5 to 10V", "step": "continuous", "negative": "swings", "why": "src/Ov3rCross.cpp process(): clamp(getVoltage(), -5.f, 10.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/Ov3rCross.cpp process(): inTrigger.process(rescale(getVoltage(), 0.1f, 2.f, 0.f, 1.f))"},
+      "2": {"poly": false, "step": "continuous", "negative": "swings", "why": "src/Ov3rCross.cpp setState(): outVoltage = sendCVThru ? cvThru : cvIN, with no clamp or scaling of its own"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "src/Ov3rCross.cpp process(): setVoltage on OUTPUT_CV_HIGH, mono; the voltage is the control CV or whatever is patched to CV THRU, so no range is claimed"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Ov3rCross.cpp process(): pulseOutputs[0].trigger(1e-3f), setVoltage(10.f)"},
+      "2": {"poly": false, "why": "src/Ov3rCross.cpp process(): setVoltage on OUTPUT_CV_MID, mono; the voltage is the control CV or whatever is patched to CV THRU, so no range is claimed"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Ov3rCross.cpp process(): pulseOutputs[1]"},
+      "4": {"poly": false, "why": "src/Ov3rCross.cpp process(): setVoltage on OUTPUT_CV_LOW, mono; the voltage is the control CV or whatever is patched to CV THRU, so no range is claimed"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Ov3rCross.cpp process(): pulseOutputs[2]"}
+    }
+  },
+  "comment": "The three CV outputs carry whatever is patched to CV THRU when that jack is in use, so their family and range depend on what the patch feeds them and both are left blank rather than guessed; when CV THRU is empty they carry the control voltage and so span -5V to +10V. The CV THRU signal is passed through with no clamping. The trigger input is rescaled so that 0.1V reads as low and 2V as high, which is a higher threshold than Rack's usual 1V. The two cutoff knobs are stopped from crossing: the code sets the HIGH knob's minimum to LOW plus 0.05V and the LOW knob's maximum to HIGH minus 0.05V every sample. The zone boundaries are inclusive at both ends: at or below LOW is the low zone and at or above HIGH is the high zone. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

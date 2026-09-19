@@ -1,0 +1,32 @@
+{
+  "plugin": "LilacLoop",
+  "module": "Lopper",
+  "description": "Unfinished module the maker marks as work in progress: a gate records a take, the take then loops with a fade in and out and a crossfade at the loop point, and takes pile up until they are released",
+  "params": [
+    {"ids": [0], "text": "Sets how quickly the end of the take crossfades into the loop, 1 spreading the fade across the whole loop and 1000 finishing it in a thousandth of it"},
+    {"ids": [1], "text": "Sets how fast a take fades in when it starts, 0.01 taking a hundred seconds to reach full level and 40 taking 25ms"},
+    {"ids": [2], "text": "Sets how fast a take fades out when it is released, 0.01 taking a hundred seconds to reach silence and 40 taking 25ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Rising through 0V starts recording a new take and releases whatever was already looping; falling through 0V ends the recording, and that take starts to loop"},
+    {"ids": [1], "text": "The signal recorded into the take"},
+    {"ids": [2], "text": "Sets the crossfade rate from 0 at 0V to 1 at 10V, and the Crossfade knob is not read at all while a cable is patched here"},
+    {"ids": [3], "text": "Scales the Att knob by a tenth per volt, so 10V leaves the knob setting alone and 0V holds the fade-in at a standstill"},
+    {"ids": [4], "text": "Scales the Rel knob by a tenth per volt, so 10V leaves the knob setting alone and 0V holds the fade-out at a standstill"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A pulse each time the newest loop returns to its start, 1V high rather than the 10V a gate usually carries"},
+    {"ids": [1], "text": "The position inside the newest loop, 0V at its start rising to 10V at its end"},
+    {"ids": [2], "text": "Every take that has not yet faded to silence, added together"},
+    {"ids": [3], "text": "Nothing in the module writes to this jack, so it stays at 0V"}
+  ],
+  "expects": {
+    "inputs": {
+      "1": "continuous"
+    },
+    "outputs": {
+      "0": "stepped",
+      "2": "continuous"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Torus-Osc",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Torus.cpp:345 reads this input with getVoltage(0), which is channel 1 alone; Torus.cpp:346 adds it to the knob and passes the sum to VoltToFreq, which LydConversion.cpp:13 makes a doubling per volt from 130.813"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Torus.cpp:350 reads this input with getVoltage(0); Torus.cpp:351 adds it to the knob and passes the sum to VoltToFreq, which LydConversion.cpp:13 makes a doubling per volt from 130.813"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "swings", "sumRange": "0 to 5V", "normal": "0V", "why": "Torus.cpp:336 reads this input with getVoltage(0) and adds it to the knob; Torus.cpp:338 takes the absolute value of the total and clamps it to 0 to 5"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "swings", "sumRange": "0 to 5V", "normal": "0V", "why": "Torus.cpp:337 reads this input with getVoltage(0) and adds it to the knob; Torus.cpp:339 takes the absolute value of the total and clamps it to 0 to 5"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Torus.cpp:382 reads this input with getVoltage(0) and multiplies it by the PM knob; with no cable the knob alone is used"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Torus.cpp:330 reads this input with getVoltage(0), maps ±5V onto -10 to 45 and adds it to the knob; Torus.cpp:332 clamps the total to -10 to 45"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "normal": "the Drive knob", "why": "Torus.cpp:423 reads this input with getVoltage(0) and multiplies its absolute value by a fifth of the Drive knob, using the knob alone when unconnected"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "why": "Torus.cpp:388 reads this input with getVoltage(0) and compares it against 0V; Torus.cpp:389 turns that into a rising-edge trigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Torus.cpp:321 sets every output to one channel"},
+      "1": {"family": "audio", "poly": false, "why": "Torus.cpp:321 sets every output to one channel"},
+      "2": {"family": "audio", "poly": false, "why": "Torus.cpp:321 sets every output to one channel"}
+    }
+  },
+  "comment": "Read from src/Torus.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. Manual-Torus.md says the LFO buttons drop the pitch by eight octaves; Torus.cpp:364 and 367 divide by 1024, which is ten. Both Windings knobs are configured 1 to 6 (lines 190 and 191) but the value is clamped to 5 (lines 338 and 339), so the last fifth of each knob does nothing. The Radius knob is configured -10 to 42 (line 193) while the clamp after the jack is added runs to 45, so the jack can push it past what the knob alone reaches. The output scaling has no final clamp: four detuned copies are each limited to the loudness-compensation figure and then added (lines 456 to 460), so the three outputs can pass 5V by several times when Detune is off centre. The Drive Type switch has no printed label. The panel prints Type, Follow, Radius and PM where the hover texts read Equation, Little Pitch Follow, Radial Difference and FM. The panel-theme submenu is plugin-wide and cosmetic, so it has no line."
+}

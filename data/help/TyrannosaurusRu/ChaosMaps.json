@@ -1,0 +1,32 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "ChaosMaps",
+  "description": "Sequencer stepping one iteration of a chaotic map on each clock, with the logistic and tent maps to choose between",
+  "params": [
+    {"ids": [0], "text": "Sets the map's coefficient, the knob's 0 to 1 covering 2 to 4 for the logistic map and 1 to 2 for the tent map"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the R input before it is added to the coefficient"},
+    {"ids": [2], "text": "Chooses which map is iterated, logistic or tent, and the readout names the one that is set"},
+    {"ids": [3], "text": "Returns the map to its starting value of 0.61834"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage added to the coefficient, scaled by the slider for R, with 10V covering the knob's whole range at the slider's full setting"},
+    {"ids": [1], "text": "A voltage above 0.1V returns the map to its starting value of 0.61834"},
+    {"ids": [2], "text": "A rising edge runs one iteration of the map, reading high above 2V and low below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current value of the map, 0-10V"},
+    {"ids": [1], "text": "Carries 10V on the steps where the new value of the map is lower than the step before, and 0V otherwise"}
+  ],
+  "notes": [
+    "the map is stepped only by a rising edge at CLK; with nothing patched there the outputs never change"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "high above 0.1V · stepped",
+      "2": "high above 2V · stepped"
+    },
+    "outputs": {
+      "0": "0 to 10V"
+    }
+  }
+}

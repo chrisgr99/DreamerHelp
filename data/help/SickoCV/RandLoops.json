@@ -1,0 +1,73 @@
+{
+  "plugin": "SickoCV",
+  "module": "RandLoops",
+  "description": "A shift register of random bits that loops as a sequence, giving a stepped voltage and a trigger, with thirty-two stored patterns",
+  "params": [
+    {"ids": [0], "text": "Sets what happens to the bit entering the register on each clock: centred makes it random, fully clockwise locks the loop, and moving left of centre doubles the loop length with the same chances"},
+    {"ids": [1], "text": "Sets how many steps the loop runs, up to 16, and up to 32 with the CTRL knob left of centre"},
+    {"ids": [2], "text": "Attenuates the CV output, 0% to 100%"},
+    {"ids": [3], "text": "Forces the next bit entering the register to be off"},
+    {"ids": [4], "text": "Forces the next bit entering the register to be on"},
+    {"ids": [5], "text": "Randomises every bit in the register at once"},
+    {"ids": [6], "text": "Selects one of the thirty-two stored patterns, 0 to 31; the choice only takes effect when SET is pressed, unless AUTO is on"},
+    {"ids": [7], "text": "Loads the selected pattern, even after randomisation has changed it"},
+    {"ids": [8], "text": "Double-click to store the current sequence and its length into the selected pattern"},
+    {"ids": [9], "text": "Applies the pending pattern change"},
+    {"ids": [10], "text": "Applies a pattern change the moment it is made, instead of waiting for the SET button"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the CTRL setting, added to the CTRL knob"},
+    {"ids": [1], "text": "A trigger here does what the DEL button does"},
+    {"ids": [2], "text": "A trigger here does what the ADD button does"},
+    {"ids": [3], "text": "Advances the register one step on each trigger"},
+    {"ids": [4], "text": "A trigger here restarts the sequence from its beginning"},
+    {"ids": [5], "text": "A trigger here clears the register, turning every bit off"},
+    {"ids": [6], "text": "A trigger here does what the RND button does"},
+    {"ids": [7], "text": "Selects the pattern by voltage, or steps to the next stored one on each trigger with Prog Input type set to Trig"},
+    {"ids": [8], "text": "A trigger here does what the RECL button does"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse each time the sequence advances onto an on bit, or a gate or a clock-width pulse under Trig Output type"},
+    {"ids": [1], "text": "The voltage built from the on bits of the register, attenuated by the SCALE knob"}
+  ],
+  "notes": [
+    "every bit off gives 0V and every bit on gives 10V; each bit position is worth a different amount, doubling as you go by default.",
+    "a pattern is only saved by double-clicking STOR; randomising and moving on loses it."
+  ],
+  "menu": [
+    "Buffered Del/Add — makes one press of DEL or ADD affect only the next bit, instead of holding while the button is down",
+    "Buffered Random — makes one press of RND randomise once, instead of holding while the button is down",
+    "Math Settings — a submenu holding Bit Resolution and Voltage progression",
+    "Bit Resolution: 8 bit, 16 bit — sets how many of the register's bits the output voltage is built from",
+    "Voltage progression: 2x (std.), 1.3x, Fibonacci — sets how much each further bit is worth in the output voltage",
+    "Trig Output type: Trig, Gate, Clock Width — chooses whether an on bit sends a 1ms pulse, a gate held until an off bit, or a pulse the length of the incoming clock's high part",
+    "Ignore Prog Ctrl — leaves the CTRL knob alone when a pattern is recalled, instead of restoring the stored setting",
+    "Ignore Prog Scale — leaves the SCALE knob alone when a pattern is recalled, instead of restoring the stored setting",
+    "Don't advance — makes the first clock after a reset hold on the first step rather than moving off it",
+    "Prog Input type: CV, Trig — chooses whether the PROG jack reads a voltage or steps to the next stored pattern on each trigger",
+    "Scan Last Prog — reads every pattern again and reports the highest one that holds anything",
+    "Copy Sequence — puts the current sequence on a clipboard shared with trigSeq modules",
+    "Paste Sequence — takes a sequence off that clipboard; it is shown as a plain label when the clipboard is empty",
+    "DISK operations — a submenu with Load Preset and Save Preset for all thirty-two patterns, and Import and Export trigSeq seq. for the working sequence",
+    "Erase ALL progs — clears every stored pattern, behind an 'Are you Sure?' submenu whose only item is ERASE!",
+    "Initialize on Start — clears the register when Rack loads a patch, without erasing the stored patterns",
+    "Tips — a submenu that only prints reminders about storing patterns with a double-click"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "±10V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

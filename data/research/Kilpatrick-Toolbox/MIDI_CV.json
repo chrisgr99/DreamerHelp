@@ -1,0 +1,15 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "MIDI_CV",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "MIDI_CV.cpp:114 wraps this input in a CVMidi reader, which calls Port::getVoltage at utils/CVMidi.h:71 and so reads channel 1 only"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "why": "MIDI_CV.cpp:259 writes this output with setVoltage and never calls setChannels, so it stays at one channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "MIDI_CV.cpp:259 writes this output with setVoltage and never calls setChannels; Midi2Note/Midi2Note.cpp:134 returns the gate as the held flag times 10"},
+      "2": {"family": "cv", "poly": false, "why": "MIDI_CV.cpp:259 writes this output with setVoltage and never calls setChannels, so it stays at one channel"}
+    }
+  },
+  "comment": "Pitch is note times one twelfth minus 5V plus the bend, at Midi2Note/Midi2Note.cpp:291, so note 60 sits at 0V. Velocity and the CC outputs are the MIDI value times 0.007874016 times ten, minus five (Midi2Note.cpp:294 and MIDI_CV.cpp:166). Note limits 12 and 115 are NOTE_MIN and NOTE_MAX at Midi2Note.h:31-32. The families given to the three outputs describe the two note modes, which is how the module comes up; in CC mode all three carry controller values and the colours are then wrong, which is why each line says so. LEARN_TIMEOUT at MIDI_CV.cpp:80 is RT_TASK_RATE times 4 task runs at 4000 runs per second, which is 4 seconds, and the comment on that line says 2 seconds. The smoothing constants are PITCH_GATE_SMOOTHING and CC_CV_SMOOTHING at plugin.hpp:52-53. BEND_RANGE is a tenth parameter with no configParam and no widget; it exists only to save the menu choice into the patch."
+}

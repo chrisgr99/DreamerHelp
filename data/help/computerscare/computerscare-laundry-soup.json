@@ -1,0 +1,57 @@
+{
+  "plugin": "computerscare",
+  "module": "computerscare-laundry-soup",
+  "description": "Six trigger sequencers programmed as text, each row typed as the number of clocks from one trigger to the next.",
+  "params": [
+    {"ids": [0], "text": "Advances every row by one step."},
+    {"ids": [1], "text": "Returns every row to the start of its pattern."},
+    {"ids": [2, 3, 4, 5, 6, 7], "text": "Forces that row to restart its pattern on the next clock, which is how a newly typed pattern takes effect without waiting for the old one to finish."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger advances every row that has no cable in its own clock input."},
+    {"ids": [1], "text": "A trigger returns every row that has no cable in its own reset input to the start of its pattern."},
+    {"ids": [2, 3, 4, 5, 6, 7], "text": "A trigger advances that row by one step, and a cable here makes the row ignore the global clock."},
+    {"ids": [8, 9, 10, 11, 12, 13], "text": "A trigger returns that row to the start of its pattern, and a cable here makes the row ignore the global reset."}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "Sends 10V on the steps that row's pattern calls for, with one polyphonic channel per pattern where the text sets more than one."},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "Sends a trigger on the first step of that row's pattern."}
+  ],
+  "notes": [
+    "a pattern is a string of step lengths: 2 triggers every second clock, 31 triggers on the 1st and 4th of every four, and 0 is a rest.",
+    "angle brackets hold a step length above 9, and @8 forces the pattern to repeat every 8 clocks whatever its own length is.",
+    "semicolons split a row into separate patterns for separate polyphonic channels, the hash character stands for the channel number, and arithmetic can be used wherever a length is expected.",
+    "a red display means a newly typed pattern is waiting for the running one to come back to its first step.",
+    "the six text fields start empty and no row sends anything until a pattern is typed into its field; click the field and type, for example 2 to trigger every second clock."
+  ],
+  "menu": [
+    "Set All Channels Polyphony — sets every row's output to Automatic or to a fixed 1 to 16 channels.",
+    "Channel 1 Polyphony — sets that row's output to Automatic or to a fixed 1 to 16 channels; there is one such item per row, Channel 1 through Channel 6."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads the global CLOCK jack.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack.",
+      "9": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack.",
+      "10": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack.",
+      "11": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack.",
+      "12": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack.",
+      "13": "high above 2V · stepped · one channel only\n\nunpatched it reads the global RESET jack."
+    },
+    "outputs": {
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "plugin": "patina",
+  "module": "MemoryPad",
+  "facts": {
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "src/memorypad.cpp _setXYOutputs() ends with setVoltage(5.f * value * attenuation) and never calls setChannels; the value is 0 to 1 with the polarity latch off and -1 to 1 with it on"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "src/memorypad.cpp _setXYOutputs() ends with setVoltage(5.f * value * attenuation) and never calls setChannels; the value is 0 to 1 with the polarity latch off and -1 to 1 with it on"}
+    }
+  },
+  "comment": "Shipped commit 34f1a17: the installed plugin.json is byte for byte the repository's, seven commits carry version 2.0.1, and the installed build has both the Path Color menu items added at 2a74160 and MemoryPadTrackpad::drawLayer, which only exists after the dark-room change merged at 597b613; 4fc0b21 and the merge above it touch only the build workflow. TRACKPAD_X_PARAM and TRACKPAD_Y_PARAM (indices 0 and 1) are configured with an empty name and have no ParamWidget: the pad is a plain OpaqueWidget that writes to them through their ParamQuantity, so neither can be clicked and neither is tagged. The module has no inputs of any kind. process() returns early with the raw pad position whenever a recording is running or no path has been stored, so a freshly placed module holds both outputs at 0V. The maker's own module description in plugin.json says the outputs can be set to bipolar or unipolar values, which the code confirms: unipolar is 0V to 5V, not the 0V to 10V a reader might expect."
+}

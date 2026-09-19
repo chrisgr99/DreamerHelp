@@ -1,0 +1,39 @@
+{
+  "plugin": "DrumKit",
+  "module": "SyntheticBassDrum",
+  "description": "A synthesised bass drum: one oscillator whose frequency is bent on each hit, a square sub-oscillator under it, and a burst of pink noise for the beater click.",
+  "params": [
+    {"ids": [0], "text": "Sets the oscillator frequency, 60Hz at the centre of the knob and 5Hz for each step either side, so 35Hz at one end and 85Hz at the other."},
+    {"ids": [1], "text": "Sets the decay time of the envelope that bends the oscillator frequency; the knob runs from -0.2 to 1.2 seconds and the value used is held between 0 and 2.2 seconds."},
+    {"ids": [2], "text": "Sets the decay time of the envelope on the drum's level; the knob runs from -5 to 5 seconds and the value used is held between 0 and 2.2 seconds, so much of its travel does nothing."},
+    {"ids": [3], "text": "Crossfades between the main oscillator at one end and the square sub-oscillator at the other."},
+    {"ids": [4], "text": "Multiplies the whole voice by 0 to 10 before the output clips at ±5V, so the upper part of its travel drives the drum into distortion."},
+    {"ids": [5], "text": "Sets the level of the pink noise burst that opens each hit, 0 to 2.5V before the drive is applied."},
+    {"ids": [6], "text": "Chooses how far below the main oscillator the sub-oscillator runs: the same frequency, an octave down, or two octaves down."},
+    {"ids": [7], "text": "Chooses a sine or a square wave for the main oscillator; the sub-oscillator is a square either way."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Starts a hit each time the voltage rises through 0.5V."},
+    {"ids": [1], "text": "Adds to the PITCH knob at 5Hz per volt, with no clamp on the result."},
+    {"ids": [2], "text": "Adds to the PITCH DECAY knob at 1 second per volt, with the total held between 0 and 2.2 seconds."},
+    {"ids": [3], "text": "Adds to the AMP DECAY knob at 1 second per volt, with the total held between 0 and 2.2 seconds."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The drum's audio, clipped to ±5V."}
+  ],
+  "notes": [
+    "the length of the gate changes nothing: each hit releases its two envelopes a fixed fraction of a second after the trigger, and the noise click is shorter again.",
+    "the pitch envelope is subtracted from the oscillator frequency rather than added, so the frequency dips at the start of a hit and climbs back to what PITCH sets."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

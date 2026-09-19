@@ -1,0 +1,49 @@
+{
+  "plugin": "shapetaker",
+  "module": "Recollect",
+  "description": "Two gesture memories for Evocation with separate transforms and a morph between them, and it goes immediately to the right of the Evocation it belongs to",
+  "params": [
+    {"ids": [0], "text": "Moves between the two transformed memories, all of A at the bottom and all of B at the top, crossfading matching points of the two contours"},
+    {"ids": [1], "text": "Low-pass smooths the selected memory in both directions at once, so hand jitter softens without the contour shifting earlier or later"},
+    {"ids": [2], "text": "Replaces the selected memory's detail with fewer straight segments, low settings keeping the hand and high settings leaving the geometry"},
+    {"ids": [3, 4], "text": "Chooses which memory the next finished Evocation recording lands in, and which one the transform controls edit"},
+    {"ids": [5], "text": "Flips the selected memory in time before it is morphed, which is separate from Evocation's own loop direction"},
+    {"ids": [6], "text": "Folds the selected memory into the first half of its length and plays it back out through the second, so it ends where it started"},
+    {"ids": [7], "text": "Scales the selected transformed memory so its highest point reaches full"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the morph knob, 10V covering the whole span from A to B and clamping at the ends; only the first channel is read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The transformed memory A on its own, 0-10V"},
+    {"ids": [1], "text": "The transformed memory B on its own, 0-10V"},
+    {"ids": [2], "text": "The current morph between the two transformed memories, 0-10V"}
+  ],
+  "notes": [
+    "it shows AWAITING EVOCATION and does nothing until an Evocation is the module immediately to its left; a gap or another module between them breaks the link",
+    "Evocation stays the performer: it records the gesture and supplies the triggers, loop direction, loop window, phase, clock fit and polyphony that these outputs follow",
+    "a memory is written when a finished Evocation recording arrives, and by default the selector then moves to the other memory ready for the next take",
+    "transforms never rewrite the stored take, so any of them can be changed or reset later",
+    "the three jacks here are fixed at 0-10V and ignore Evocation's per-lane voltage range, invert and peak normalization",
+    "it is inactive while Evocation is in ADSR mode, and both memories survive that"
+  ],
+  "menu": [
+    "Alternate A/B after each capture — moves the record target to the other memory after each successful new take",
+    "Capture Evocation gesture — copies the gesture Evocation currently holds straight into the selected memory",
+    "Write protect — locks that memory against capture, clearing, copying into it and swapping, while leaving its transforms editable",
+    "Reset transforms — returns reverse, palindrome, smooth, simplify and normalize to neutral for the selected memory",
+    "Swap A and B — exchanges the two memories, and is refused unless both are unlocked",
+    "Clear — empties that memory",
+    "Show on screen — chooses which memory's source trace the screen draws"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic"
+    }
+  }
+}

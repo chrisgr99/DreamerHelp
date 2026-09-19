@@ -1,0 +1,20 @@
+{
+  "plugin": "Myth",
+  "module": "Mavka",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "sumRange": "±4V", "normal": "0V", "why": "src/Mavka.cpp:54 adds this input's getVoltage() to the pitch knob and src/Mavka.cpp:55 clamps the sum to -4 and 4 octaves"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 1V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "src/Mavka.cpp:75 adds this input's getVoltage() to the sine level knob and src/Mavka.cpp:76 clamps the sum to 0 and 1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 1V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "src/Mavka.cpp:79 adds this input's getVoltage() to the triangle level knob and src/Mavka.cpp:80 clamps the sum to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 1V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "src/Mavka.cpp:83 adds this input's getVoltage() to the saw level knob and src/Mavka.cpp:84 clamps the sum to 0 and 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 1V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "src/Mavka.cpp:87 adds this input's getVoltage() to the square level knob and src/Mavka.cpp:88 clamps the sum to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Mavka.cpp:91 writes five times the waveform times its level with setVoltage(), which is channel 1 alone"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Mavka.cpp:90 writes five times the waveform times its level with setVoltage(), which is channel 1 alone"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Mavka.cpp:93 writes five times the waveform times its level with setVoltage(), which is channel 1 alone"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Mavka.cpp:92 writes five times the waveform times its level with setVoltage(), which is channel 1 alone"}
+    }
+  },
+  "comment": "Read from src/Mavka.cpp at commit e511dd9, version 2.0.1; the code has not changed since the 2.0.1 bump at ed9c274. The pitch knob's own range is 0 to 1, so the knob alone covers a single octave upwards from C4 and every lower pitch has to come from the v/oct jack, which the maker's README does not mention. The level CV jacks are summed with the knob in the knob's own 0 to 1 units, at src/Mavka.cpp:75, 79, 83 and 87, so they behave as a 0 to 1V control rather than the 0 to 10V a reader would expect; the README says only that the CV value will be added to the knob value. The phase counter wraps at 0.5 and subtracts 1, so it runs from -0.5 to 0.5, and the saw, triangle and square are all built from that signed phase."
+}

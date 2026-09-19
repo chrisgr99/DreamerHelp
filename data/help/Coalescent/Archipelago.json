@@ -1,0 +1,66 @@
+{
+  "plugin": "Coalescent",
+  "module": "Archipelago",
+  "description": "Eight habitats in a line, each adapting to its own point on an environmental gradient, with mutation and neighbour migration shaping where the traits step and where the population can hold on.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed evolution runs at, -8 to +4 octaves, giving 4 units of evolutionary time per second at the centre."},
+    {"ids": [1], "text": "Sets how hard each habitat is pulled toward its own optimum, 0 to 1 on the knob, mapped to a selection strength of 8 times the square of that."},
+    {"ids": [2], "text": "Sets the mutation diffusion through trait space: exactly zero at the bottom, then 0.00001 to 0.003 per unit of evolutionary time on a logarithmic scale."},
+    {"ids": [3], "text": "Sets the migration between neighbouring habitats: exactly zero at the bottom, then 0.002 to 2 per unit of evolutionary time on a logarithmic scale."},
+    {"ids": [4], "text": "Sets the slope of the environmental gradient, -0.85 to +0.85 trait units; the optimum of habitat 8 differs from habitat 1 by twice this, and positive values favour higher traits toward habitat 8."},
+    {"ids": [5], "text": "Closes the migration link between habitats 4 and 5, 0 to 1, with a permeability of one minus the setting squared; 0 leaves it open and 1 shuts it exactly."},
+    {"ids": [6], "text": "Adds a shared offset to all eight environmental optima, -0.85 to +0.85 trait units."},
+    {"ids": [7], "text": "Restores the deterministic starting field at the current gradient and climate, and clears the event state."},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, scaling the CV into the selection strength."},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, scaling the CV into the mutation diffusion."},
+    {"ids": [10], "text": "An attenuverter, -1 to +1, scaling the CV into the migration."},
+    {"ids": [11], "text": "An attenuverter, -1 to +1, scaling the CV into the gradient slope."},
+    {"ids": [12], "text": "An attenuverter, -1 to +1, scaling the CV into the central barrier."},
+    {"ids": [13], "text": "Chooses Row, which links habitats 1 through 8 in a line so the two end habitats have one neighbour each, or Ring, which adds an 8 to 1 link and gives every habitat two."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Doubles the speed evolution runs at for every volt, added to the RATE knob, with the two together clamped to -12 through +4 octaves."},
+    {"ids": [1], "text": "Modulates the selection strength, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the mutation diffusion, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [3], "text": "Modulates the migration, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [4], "text": "Modulates the gradient slope, a tenth per volt through its attenuverter."},
+    {"ids": [5], "text": "Modulates the central barrier, a tenth per volt through its attenuverter."},
+    {"ids": [6], "text": "Adds 0.1 trait units per volt to the shared climate offset, with the total clamped to -0.85 through +0.85; there is no attenuverter on this one."},
+    {"ids": [7], "text": "A rising edge past 1V restores the deterministic starting field."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Eight channels of local mean trait, one per habitat, at 2V per trait unit and spanning -2V to +2V; a channel freezes at its last value while its habitat is empty."},
+    {"ids": [1], "text": "Eight channels of local population mass, one per habitat, 0 to 10V; this is what says whether a habitat is occupied at all."},
+    {"ids": [2], "text": "The abundance-weighted mean trait across all eight habitats, at 2V per trait unit and spanning -2V to +2V."},
+    {"ids": [3], "text": "The trait mean of habitats 5 to 8 minus that of habitats 1 to 4, at 2V per trait difference and spanning -4V to +4V."},
+    {"ids": [4], "text": "The current migration activity between neighbours, unsigned and normalised to 0 to 10V."},
+    {"ids": [5], "text": "A 10V pulse 1ms long when any habitat becomes occupied."},
+    {"ids": [6], "text": "A 10V pulse 1ms long when any habitat stops being occupied."}
+  ],
+  "notes": [
+    "The barrier only ever closes the link between habitats 4 and 5. In Row that cuts the line into two groups of four; in Ring, migration travels the other way round instead.",
+    "There is no step input: the field is a continuous ecology, and a knob or CV change alters what happens next without redrawing the population already on screen.",
+    "The screen draws the eight habitats left to right as stacked trait distributions, with the line through them tracking each local mean."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only",
+      "7": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±2V · continuous · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "±2V · continuous · one channel only",
+      "3": "±4V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only"
+    }
+  }
+}

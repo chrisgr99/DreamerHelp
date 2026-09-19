@@ -1,0 +1,39 @@
+{
+  "plugin": "Calvario",
+  "module": "Calvario",
+  "description": "A 3HP cross-modulator: two inputs are scaled, turned into 32-bit integers, XORed bit for bit, shifted left, and crossfaded against the first input untouched",
+  "params": [
+    {"ids": [0], "text": "Sets how far the XOR result is shifted left before it leaves the module: two bits in the Soft position, four in the Hard position, where the extra shift overflows the 32-bit result and wraps it"},
+    {"ids": [1], "text": "Scales the first input on its way into the XOR, from nothing at the bottom of its travel to a fifth of full scale at the top; it comes up at the bottom"},
+    {"ids": [2], "text": "Scales the second input on its way into the XOR, from nothing at the bottom of its travel to a fifth of full scale at the top; it comes up at the bottom"},
+    {"ids": [3], "text": "Crossfades the output between the first input untouched at the bottom of its travel and the XOR result alone at the top; it comes up at the centre, an equal blend of the two"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two signals XORed together, clamped to ±5V before it is scaled and converted; the same signal, unclamped and unscaled, is also the dry side of the crossfade"},
+    {"ids": [1], "text": "The other of the two signals XORed together, clamped to ±5V before it is scaled and converted; it reaches the output through the XOR and by no other path"},
+    {"ids": [2], "text": "Adds to the first input's scaling, ±5V covering the knob's whole travel; the total is never clamped, so negative voltage drives the scaling below zero and inverts that input before the XOR"},
+    {"ids": [3], "text": "Adds to the second input's scaling, ±5V covering the knob's whole travel; the total is never clamped, so negative voltage drives the scaling below zero and inverts that input before the XOR"},
+    {"ids": [4], "text": "Adds to the crossfade setting, but clamped to 0V and 1V first, so 1V is the most it can do and moves the crossfade a fifth of its travel; negative voltage contributes nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The crossfade of the first input against the XOR result, clamped to ±5V"}
+  ],
+  "notes": [
+    "both scaling knobs come up at the bottom, where the XOR reads zero from both inputs. Until one is raised the output carries the first input alone, at half level.",
+    "the module is monophonic: every jack reads or writes one channel.",
+    "the lamp follows the absolute output voltage and reaches full brightness at 5V.",
+    "the panel carries no lettering at all, so the only names these controls have are the tooltips Rack shows on hover."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "Autinn",
+  "module": "Fauna",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Fauna.cpp:204 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Fauna.cpp:180 reads this input with getVoltage, multiplies it by the attenuator and raises 2 to that power, so a negative voltage lowers the corner; Fauna.cpp:181 clamps the result to 20Hz to 20000Hz"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Fauna.cpp:179 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Fauna.cpp:177 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 4"},
+      "4": {"family": "audio", "poly": false, "why": "Fauna.cpp:265 reads this input with getVoltage, which is channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Fauna.cpp:261 writes this output with setVoltage and no channel index, so it carries one channel"},
+      "1": {"family": "audio", "poly": false, "why": "Fauna.cpp:323 writes this output with setVoltage and no channel index, so it carries one channel"}
+    }
+  },
+  "comment": "The tuning coefficient is the bilinear pre-warp tan(pi Fc / Fs) (Fauna.cpp:186), which is the one real difference from Retri's fitted polynomial; the oversampling is fixed at 2 (Fauna.cpp:69) where Retri chooses it from the engine rate. Voltage scaling, auto level and the two-channel layout are the same as Retri's. The ceiling is 20000Hz here and 18000Hz there (Fauna.cpp:28)."
+}

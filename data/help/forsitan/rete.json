@@ -1,0 +1,39 @@
+{
+  "plugin": "forsitan",
+  "module": "rete",
+  "description": "Eight leaky integrators wired into each other through a random mixing matrix, with clippers and DC blockers in the loop: a self-oscillating instrument from steady tones to chaos",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets how much that node's signal is fed into the matrix, 0 to 1"},
+    {"ids": [8], "text": "Sets how much of each integrator leaks away: thin and fast-decaying at the bottom of its travel, close to pure integration and heavy at the top"},
+    {"ids": [9], "text": "Multiplies everything going through the matrix, from once to a thousand times over, and it is the control that carries the module from silence through tones into saturated chaos"},
+    {"ids": [10], "text": "Attenuates the signal at the in jack before it is injected into the nodes, 0% to 100%"},
+    {"ids": [11], "text": "Re-rolls the random mixing matrix, which is a different instrument every time"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Added to that node's gain knob, a fifth of its travel per volt"},
+    {"ids": [8], "text": "A signal injected into all eight nodes, with the sign alternating from node to node"},
+    {"ids": [9], "text": "A rising edge through 1V re-rolls the random mixing matrix"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the eight nodes spread across the stereo field at equal power"},
+    {"ids": [1], "text": "The right side of the eight nodes spread across the stereo field at equal power"},
+    {"ids": [2], "text": "All eight nodes on one eight-channel cable, ±5V each"}
+  ],
+  "notes": [
+    "this plays itself. With nothing patched, a tiny internal noise floor keeps the network from settling at zero, so it makes sound as soon as it is in the rack.",
+    "the matrix seed is saved with the patch, so a saved patch reopens sounding as it did.",
+    "the two lamps follow the level of the left and right outputs."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "±10V · one channel only",
+      "9": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

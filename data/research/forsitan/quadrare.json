@@ -1,0 +1,17 @@
+{
+  "plugin": "forsitan",
+  "module": "quadrare",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/quadrare.cpp:225, one getVoltage() into the block buffer"},
+      "1": {"poly": false, "why": "src/quadrare.cpp:370-375, the jack’s first channel is read once per block and held for its duration; the voltage times the block size replaces that coefficient after the band gains are applied, so the slider does not multiply it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/quadrare.cpp:226, the reconstruction crossfaded with the delayed dry signal"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": true, "why": "src/quadrare.cpp:228, the sixteen coefficients' own contributions on one sixteen-channel cable"},
+      "3": {"poly": false, "why": "src/quadrare.cpp:214, one mono jack per coefficient at every block size"}
+    }
+  },
+  "comment": "The coefficient jacks get no family: a coefficient is neither audio nor a control voltage, and what is patched between an out and its in can be anything. Patching a coefficient output straight back into its input changes nothing, to float precision, which is what makes the pair an insert. Slider gains are applied before the substitution, so a coefficient driven from outside is not multiplied by its slider. The zero buttons always land on zero from any partial position, so a button is one press from silence whatever the slider was doing, and each one touches only its own column. The panel prints quadrare, the numbers 0 to 15 over the columns, coeff out, zero, coeff in, in, size, keep, quant, level, dry/wet, above, comp, res and out."
+}

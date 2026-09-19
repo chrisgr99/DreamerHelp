@@ -1,0 +1,25 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-sub",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Sub.h:459 takes the channel count of this input for the voice count, and :546 reads it per channel as pitch"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "why": "Sub.h:350-353 reads this input per channel pair, scales it by a tenth, clamps that to -1..1 and rounds the result down to a whole divisor of 1 to 16"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "why": "Sub.h:350-353 reads this input per channel pair, scales it by a tenth, clamps that to -1..1 and rounds the result down to a whole divisor of 1 to 16"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "why": "Sub.h:350-353 reads this input per channel pair, scales it by a tenth, clamps that to -1..1 and rounds the result down to a whole divisor of 1 to 16"},
+      "4": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "why": "Sub.h:350-353 reads this input per channel pair, scales it by a tenth, clamps that to -1..1 and rounds the result down to a whole divisor of 1 to 16"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "8": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "9": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "10": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Sub.h:317-320 reads this input per channel pair and multiplies the knob gain by a tenth of it; unpatched it is normalled to 10V"},
+      "11": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "Sub.h:326 reads this input per channel pair into a scaler whose CV domain is -5..5 (AudioMath.h:124-149)"},
+      "12": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "Sub.h:326 reads this input per channel pair into a scaler whose CV domain is -5..5 (AudioMath.h:124-149)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Sub.h:459 takes the voice count from the V/OCT input and the output follows it"}
+    }
+  },
+  "comment": "Params 8, 9, 10 and 11, the four trim knobs under the Div A and Div B controls, are left with no line: computeDivisorSub in composites/Sub.h is called with the divisor knob passed as both the knob and the trim, so these four params are never read and the subharmonic tune CV is scaled by the divisor knob instead. Param 27 is the AGC menu setting and has no control on the panel. The V/OCT input is continuous with the quantizer scale off, which is how it comes up (Sub.h:376 and SimpleQuantizer.h:10-16); choosing a scale makes it stepped."
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "forsitan",
+  "module": "textor",
+  "description": "Captures two seconds of sound and weaves it into a loop of short fragments, a brand new loop every time the big knob moves, with three strands of fragments that each have a level and a gate output",
+  "params": [
+    {"ids": [0], "text": "The loom: at the far anticlockwise end it erases the sample and stops, entering the low zone starts a two-second capture, and anywhere above that any movement weaves a completely new loop"},
+    {"ids": [1], "text": "Sets the level of the long, sparse foundation strands, and with it the level of their delay tail"},
+    {"ids": [2], "text": "Sets the level of the medium strands crossing them, and with it the level of their delay tail"},
+    {"ids": [3], "text": "Sets the level of the shorter, brighter accents an octave up, and with it the level of their delay tail"},
+    {"ids": [4], "text": "Chooses whether the fragments are long overlapping smears or short percussive pieces; flipping it re-renders the weave in the new setting rather than making a new one"},
+    {"ids": [5], "text": "Chooses whether the fragments are shifted by sympathetic intervals, octaves, fifths and fourths, or by whole semitones picked at random"},
+    {"ids": [6], "text": "Starts a two-second capture without stopping the loop; the new sound replaces the old inside the weave that is already running"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to capture"},
+    {"ids": [1], "text": "A rising edge through 1V starts a two-second capture"},
+    {"ids": [2], "text": "Weaves a new loop on any change of voltage here, in place of moving the knob"},
+    {"ids": [3], "text": "Paces the loom's steps in place of the weave's own tempo"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the woven loop"},
+    {"ids": [1], "text": "The right side of the woven loop"},
+    {"ids": [2], "text": "A gate at every firing of the long, sparse strands; it fires even with nothing recorded"},
+    {"ids": [3], "text": "A gate at every firing of the medium strands; it fires even with nothing recorded"},
+    {"ids": [4], "text": "A gate at every firing of the bright accents; it fires even with nothing recorded"}
+  ],
+  "notes": [
+    "the three gate outputs fire whether or not anything is recorded, so this doubles as a random rhythm generator on its own.",
+    "the sample is not saved with the patch. Only the weave's seed survives a reload, so reopening a patch gives the same loop structure with nothing in it until something is recorded again.",
+    "every weave rolls its own tempo, between about 45ms and 300ms a step, so a loop of about sixteen steps runs between roughly 0.7 and 4.8 seconds."
+  ],
+  "menu": [
+    "Restart loop on every weave — makes each new weave start from the beginning of its loop rather than carrying on from where the old one had reached",
+    "Loop evolution — how far a weave drifts as it repeats: Frozen, which repeats it exactly, Slow, where a strand changes about once a minute, or Fast, the drift measured in the maker's recordings",
+    "Declick — fades the fragment edges to keep the joins from clicking"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only",
+      "3": "high above 1V · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "stepped · one channel only",
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

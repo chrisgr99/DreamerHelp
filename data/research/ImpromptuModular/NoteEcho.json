@@ -1,0 +1,19 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "NoteEcho",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "NoteEcho.cpp:476 reads the matching channel of this input as the pitch of the note it stores"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "NoteEcho.cpp:466-469 reads the matching channel of this input into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "NoteEcho.cpp:477 reads the matching channel of this input as the second CV of the note it stores; unpatched the CV2 knob stands in"},
+      "3": {"family": "trigger", "poly": false, "why": "NoteEcho.cpp:440-443 reads channel one of this input only (getVoltage with no channel), and reads it either as a clock edge or, with the BPM CV option on, as a tempo of two to the power of volts"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "NoteEcho.cpp:437 reads channel one of this input only (getVoltage with no channel) into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "NoteEcho.cpp:426-432 sets the channel count of this output from the polyphony of the incoming notes"},
+      "1": {"family": "trigger", "poly": true, "why": "NoteEcho.cpp:426-432 sets the channel count of this output from the polyphony of the incoming notes"},
+      "2": {"family": "cv", "poly": true, "why": "NoteEcho.cpp:426-432 sets the channel count of this output from the polyphony of the incoming notes"}
+    }
+  },
+  "comment": "The source defines an Input normalization submenu for the CV2 input and a Filter out identical notes (experimental) item, but neither is added to any menu in the installed build, so no line covers them. The CV2 normalization on this module is the NORM knob on the panel. The clock input is read as a clock edge, or as a tempo CV of two to the power of volts when the BPM CV option is on (NoteEcho.cpp:441-443), so what it expects depends on that setting."
+}

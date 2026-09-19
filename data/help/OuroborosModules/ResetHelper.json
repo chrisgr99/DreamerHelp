@@ -1,0 +1,32 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "ResetHelper",
+  "description": "Turns gates and triggers from up to four sources into one clean reset trigger, ignoring further arrivals for a set time so that several sources cannot reset a sequencer twice over",
+  "params": [
+    {"ids": [0], "text": "Sets how long after a trigger further arrivals are ignored, 0ms to 1000ms"},
+    {"ids": [1], "text": "Sets how long the output trigger lasts, 1ms to 1000ms"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "One of the four sources; a rise past 2V calls for a reset trigger"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A trigger of the set length whenever a reset is asked for and the merge window has passed"}
+  ],
+  "notes": [
+    "the merge window is held to at least the trigger length, so it can never be shorter than the trigger it is meant to cover",
+    "a further arrival while a trigger is already going out does not lengthen it, and no second trigger follows",
+    "the output's channel count is the largest of the four inputs, and an input with one channel triggers every output channel",
+    "the lamps beside the jacks turn blue when that jack is carrying more than one channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "high above 2V · stepped · polyphonic",
+      "3": "high above 2V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

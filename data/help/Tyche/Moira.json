@@ -1,0 +1,57 @@
+{
+  "plugin": "Tyche",
+  "module": "Moira",
+  "description": "A probabilistic voltage selector: each trigger picks one of three voltages for the main output and a second one for the auxiliary output",
+  "params": [
+    {"ids": [0], "text": "Sets how likely X is against the other two, 0 to 100%; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [1], "text": "Sets how likely Y is against the other two, 0 to 100%; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [2], "text": "Sets how likely Z is against the other two, 0 to 100%; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [3], "text": "Sets the voltage X carries, -10V to +10V; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [4], "text": "Sets the voltage Y carries, -10V to +10V; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [5], "text": "Sets the voltage Z carries, -10V to +10V; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [6], "text": "Picks which of 128 fixed random patterns this module follows, so the same seed can give a different run of choices here"},
+    {"ids": [7], "text": "Sets how long the outputs take to slide from the old voltage to the new one, 0 to 20 seconds, along an ease-in-out curve"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scales the X probability slider down, -5V taking X out of the running and +5V leaving the slider where it is"},
+    {"ids": [1], "text": "Scales the Y probability slider down, -5V taking Y out of the running and +5V leaving the slider where it is"},
+    {"ids": [2], "text": "Scales the Z probability slider down, -5V taking Z out of the running and +5V leaving the slider where it is"},
+    {"ids": [3], "text": "Takes the X voltage from here instead of the knob, with the knob left as an attenuator on it"},
+    {"ids": [4], "text": "Takes the Y voltage from here instead of the knob, with the knob left as an attenuator on it"},
+    {"ids": [5], "text": "Takes the Z voltage from here instead of the knob, with the knob left as an attenuator on it"},
+    {"ids": [6], "text": "A rising edge past 1V picks a new voltage for the main output and a new one for the auxiliary output"},
+    {"ids": [7], "text": "A rising edge past 1V sends the choices back to the start of the pattern"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 1ms long whenever X becomes the main output's choice"},
+    {"ids": [1], "text": "A 10V pulse 1ms long whenever Y becomes the main output's choice"},
+    {"ids": [2], "text": "A 10V pulse 1ms long whenever Z becomes the main output's choice"},
+    {"ids": [3], "text": "Carries a second choice, drawn from the two the main output did not pick, weighted by their probabilities against each other"},
+    {"ids": [4], "text": "Carries the voltage of whichever of X, Y and Z was picked"}
+  ],
+  "notes": [
+    "the three probabilities are relative, so equal sliders give each a third of the choices and only the ratio between them matters",
+    "nothing is picked until a trigger arrives; with no trigger patched the outputs stay at 0V",
+    "a slider glows white at the brightness of its own probability, green while it is the main output's choice and blue while it is the auxiliary output's",
+    "the main and auxiliary outputs carry as many channels as the widest of the three voltage inputs; the X, Y and Z pulse outputs are always one channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads the slider's own position; a negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the slider's own position; a negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads the slider's own position; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads the knob's own voltage.",
+      "4": "±10V · continuous · polyphonic\n\nunpatched it reads the knob's own voltage.",
+      "5": "±10V · continuous · polyphonic\n\nunpatched it reads the knob's own voltage.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "polyphonic",
+      "4": "polyphonic"
+    }
+  }
+}

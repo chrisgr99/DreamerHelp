@@ -1,0 +1,15 @@
+{
+  "plugin": "RexAudio",
+  "module": "PWM",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "PWM.cpp:114 loads the voltages array per channel; PWM.cpp:180 sets the comparator threshold to (0.5 minus width) times 10, which spans -5V to 5V"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V, which is C4", "why": "PWM.cpp:120 multiplies the voltage by the natural log of 2 and raises e to it, times FREQ_C4; PWM.cpp:118 loads the voltages array per channel"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the internal LFO", "why": "PWM.cpp:126 divides the voltage by 5 and PWM.cpp:131 clamps the result to -1 and 1; PWM.cpp:124 uses the LFO instead when the jack is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "PWM.cpp:96 setChannels to the wider of the audio and V/OCT channel counts"}
+    }
+  },
+  "comment": "The mode is a parameter, MODE_PARAM, but it has no widget on the panel, so it can only be set from the panel menu and no click can reach it for help. Its default of 1 is comparator mode. Both modes pass the result through a one-pole lowpass at 19000Hz. In delay mode a pitch change of a semitone or more starts a 0.05 second crossfade onto a second delay line, and smaller changes glide the delay time instead, which is what the README describes as tracking legato and vibrato. The README says the PWM rate knob is unused when PWM CV is connected; the code still advances the LFO, it simply discards its value, so the effect is as the README says. Comparator mode also multiplies the pulse by an envelope taken from the rectified input, so silence at the input gives silence rather than a DC offset."
+}

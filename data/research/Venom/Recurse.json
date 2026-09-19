@@ -1,0 +1,17 @@
+{
+  "plugin": "Venom",
+  "module": "Recurse",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "Recurse.cpp:98 reads it per channel and multiplies the signal by it"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "Recurse.cpp:99 reads it per channel and adds it, in volts, to the signal"},
+      "2": {"poly": true, "why": "Recurse.cpp:109 reads one channel of this jack per recursion pass"},
+      "3": {"poly": true, "why": "Recurse.cpp:96 reads every channel of the jack; its channel count sets the module width"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "Recurse.cpp:107 and 119 a per-channel write then setChannels(outChannels times recurCount); the input's channel count multiplied by the recursion count sets the width"},
+      "1": {"poly": true, "why": "Recurse.cpp:115 and 120 a per-channel write then setChannels(outChannels), taken from the input's channel count"}
+    }
+  },
+  "comment": "The return input is read one channel per recursion pass, so its channel count is the input width multiplied by the recursion count."
+}

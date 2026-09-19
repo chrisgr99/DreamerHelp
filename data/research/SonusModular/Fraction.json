@@ -1,0 +1,16 @@
+{
+  "plugin": "SonusModular",
+  "module": "Fraction",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "fraction.cpp:66 reads this input with getVoltage and adds it to the knob; fraction.cpp:67 clamps the sum to -4 to 4 octaves"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "fraction.cpp:71 reads this input with getVoltage, multiplies it by 0.2 and adds it to the knob with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "fraction.cpp:73 reads this input with getVoltage, multiplies it by -0.2 and adds it to the knob with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "fraction.cpp:85 clamps this output to ±5V and fraction.cpp:90 writes it with setVoltage and no channel index"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "fraction.cpp:86 clamps this output to ±5V and fraction.cpp:91 writes it with setVoltage and no channel index"}
+    }
+  },
+  "comment": "The waveform is a sample counter raised to the exponent, divided by itself plus one, and mapped to a voltage (fraction.cpp:82 to :86). The first output is scaled by 2 and offset by -1 before a gain of 5; the second by 2 and offset by -0.5 before a gain of 10, which is why the two are not a matched pair. The octave knob is a snapping knob, so it moves in whole octaves. The counter resets when it reaches the sample rate divided by the frequency, rounded down (fraction.cpp:75 to :80)."
+}

@@ -1,0 +1,37 @@
+{
+  "plugin": "MSM",
+  "module": "RandomSource",
+  "description": "Sample and hold building staircase voltages out of whatever is patched into it, with a slew limiter on a second output",
+  "params": [
+    {"ids": [0], "text": "Attenuates the held voltage before it reaches both outputs, silent at 0 and full at 1."},
+    {"ids": [1], "text": "Attenuates the voltage at the CV S input before it adds to the SAMPLE setting, 0 to 1."},
+    {"ids": [2], "text": "Adds 5V to the sampled voltage in one position and passes it as sampled in the other."},
+    {"ids": [3], "text": "Sets how fast the SLEW OUT voltage travels, from 10000V per second at 0 to 0.1V per second at 1."},
+    {"ids": [4], "text": "Crossfades the slew between a constant rate and a rate proportional to the distance left to travel, which rounds the corners of the staircase."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge takes a new sample of the IN voltage and holds it until the next one."},
+    {"ids": [1], "text": "The voltage that is sampled; with nothing patched here the SAMPLE knob's own value is sampled instead, so the randomness comes from what you patch in."},
+    {"ids": [2], "text": "Slows the slew, adding a tenth of the SLEW knob's travel per volt."},
+    {"ids": [3], "text": "Adds to the SAMPLE setting through the CV S knob, a fifth of the knob's travel per volt."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage held since the last trigger, scaled by SAMPLE."},
+    {"ids": [1], "text": "The held voltage with the slew limiter applied."}
+  ],
+  "notes": [
+    "a new module holds both outputs at 0V: the SAMPLE knob comes up at 0, which scales the held voltage to nothing, and no voltage is sampled until a clock reaches CLK."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the sample range knob plus its CV.",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "±10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "AmbushedCat",
+  "module": "Tape",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Tape.cpp:512 reads getVoltage and scales it by 0.2; there is no getPolyVoltage or channel loop in the module"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "the left input", "why": "Tape.cpp:513 falls back to the left input's value when isConnected is false"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Tape.cpp:520 and :525 write one processed channel, divided by 0.2, to this output"},
+      "1": {"family": "audio", "poly": false, "why": "Tape.cpp:521 writes 0 here while it is unpatched and :526 the processed right channel once it is"}
+    }
+  },
+  "comment": "Whether the module runs in stereo is decided by an output cable, not an input one: Tape.cpp:514 sets stereo from outputs[RIGHT_OUTPUT].isConnected(), and with that jack empty the two inputs are averaged at :518 and one tape channel is used for both. The right input is normalled from the left at :513. Print-through is dead in this build: storePrint still fills its buffer but getPrintEcho at :65 returns zero, and tickDrift is never called, so eqDrift stays at 1. The panel carries no lettering on any control; the artwork is a PNG drawn over the SVG and prints only the module's name. The library screenshot for this plugin shows a later Tape with eleven CV jacks that the installed 2.0.0 build does not have."
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "C1COMP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/C1COMP.cpp:877 getVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "normal": "the left input", "why": "src/C1COMP.cpp:878-880 isConnected else inL"},
+      "2": {"family": "audio", "poly": false, "normal": "the jack being compressed", "why": "src/C1COMP.cpp:915-919, getChannels>0 selects processStereoWithKey"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/C1COMP.cpp:937 setVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "why": "src/C1COMP.cpp:938 setVoltage, one channel only"}
+    }
+  },
+  "comment": "AUTO release is unreachable. src/C1COMP.cpp:999 clamps the knob plus any CV to a maximum of 0.89, and line 1000 then tests `releaseRaw >= 0.9f`, which can never be true; setAutoRelease(true) is called nowhere else in the file. The comment on line 998 says the clamp is there so that CV modulation preserves access to AUTO, but the clamp is applied whether or not an expander is present. The top 11% of the knob is therefore a dead zone holding the release at about 1167ms, while ReleaseParamQuantity prints AUTO there and the README lists \"plus AUTO mode\". The THRESHOLD knob is a 0 to 1 parameter displayed as -20dB to +10dB. The four squares above the display write compressorType directly and the engine is rebuilt when process() notices the change. DISPLAY_ENABLE_PARAM has no ParamWidget and cannot be clicked for help."
+}

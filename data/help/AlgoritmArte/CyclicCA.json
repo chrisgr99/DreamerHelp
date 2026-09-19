@@ -1,0 +1,46 @@
+{
+  "plugin": "AlgoritmArte",
+  "module": "CyclicCA",
+  "description": "Cyclic cellular automaton drawn on the panel and read out as two control voltages, where a cell steps to the next state when a neighbour already holds that state",
+  "params": [
+    {"ids": [0], "text": "Sets the size of the random block dropped onto the grid, 1 to 50 percent of the grid height"},
+    {"ids": [1], "text": "Sets the width of a cell in pixels, 1 to 6; changing it refills the grid with random states"},
+    {"ids": [2], "text": "Replaces the next colour in the state palette with one built from the hue, saturation and lightness inputs"},
+    {"ids": [3], "text": "Sets how many states a cell can take, 2 to 26, the last wrapping back to the first"},
+    {"ids": [4], "text": "Drops a block of cells in random states onto the grid at a random position"},
+    {"ids": [5], "text": "Replaces one of the four neighbour positions with a random one"},
+    {"ids": [6], "text": "Refills the whole grid with random states"},
+    {"ids": [7], "text": "Sets how often the grid is evolved, 0 to 31, one step per drawn frame at 31; at 0 the grid stops evolving"},
+    {"ids": [8, 9, 10, 11], "text": "Picks one of the four cells compared against each cell, as a position in the seven by seven square around it, 0 to 48; 24 is the cell itself and the four defaults give its nearest four neighbours"},
+    {"ids": [12], "text": "Makes that random block a diamond or a square"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the hue of the next sampled colour, the voltage divided by ten with its sign dropped; a random hue is used when nothing is patched"},
+    {"ids": [1], "text": "Sets the lightness of the next sampled colour, the voltage divided by ten with its sign dropped; a random lightness is used when nothing is patched"},
+    {"ids": [2], "text": "Sets the saturation of the next sampled colour, the voltage divided by ten with its sign dropped; a random saturation is used when nothing is patched"},
+    {"ids": [3], "text": "A rising edge replaces the next colour in the state palette with one built from the hue, saturation and lightness inputs"},
+    {"ids": [4], "text": "A rising edge drops a block of cells in random states onto the grid at a random position"},
+    {"ids": [5], "text": "A rising edge replaces one of the four neighbour positions with a random one"},
+    {"ids": [6], "text": "A rising edge refills the whole grid with random states"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The average state of the cells down the upper half of a vertical line one third across the grid, scaled to -2V to 2V"},
+    {"ids": [1], "text": "The average state of the cells down the upper half of a vertical line two thirds across the grid, scaled to -2V to 2V"}
+  ],
+  "notes": [
+    "The grid is evolved from the panel drawing, so it stops evolving whenever the module is scrolled out of view or the window is hidden, and the outputs hold their last value",
+    "At a SPEED of 0 the grid stops evolving and the outputs hold their last value"
+  ],
+  "expects": {
+    "inputs": {
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped"
+    },
+    "outputs": {
+      "0": "±2V",
+      "1": "±2V"
+    }
+  }
+}

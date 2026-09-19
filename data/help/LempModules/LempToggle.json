@@ -1,0 +1,31 @@
+{
+  "plugin": "LempModules",
+  "module": "LempToggle",
+  "description": "A latching switch: while it is engaged the output carries a constant voltage you set, and while it is off the output is 0V",
+  "params": [
+    {"ids": [0], "text": "Switches the latch on with one press and off with the next; the lamp in it glows while the latch is on"},
+    {"ids": [1], "text": "Sets the voltage the output carries while the latch is on, 0V to 10V, and it starts fully clockwise at 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 2V flips the latch, exactly as a press of HOLD does; it rearms once the voltage falls below 0.1V"},
+    {"ids": [1], "text": "Added to the CONST trimpot volt for volt while the latch is on, with the total held between 0V and 10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage set by CONST plus the modulation input while the latch is on, and 0V while it is off"}
+  ],
+  "notes": [
+    "the output stays at 0V until the latch is switched on, either by pressing HOLD or by a trigger at the trigger input",
+    "the modulation input is only read while the latch is on, so a voltage there cannot lift the output off zero by itself",
+    "the latch state is saved with the patch, and a newly added module comes up with the latch off",
+    "the module is monophonic: both inputs are read as one channel and the output carries one channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "plugin": "Extratone",
+  "module": "Meganeura",
+  "description": "A clock multiplier with four independent rows and two clock inputs you can flip between, for stacking faster and faster pulse streams",
+  "params": [
+    {"ids": [0], "text": "Swaps the module between its two clock inputs"},
+    {"ids": [2], "text": "Makes every row fire on each beat of the chosen clock even where that row's gate is closed, while leaving the faster subdivisions to the open rows alone"},
+    {"ids": [3, 4, 5, 6], "text": "How many pulses this row puts out for each beat of the chosen clock, a whole number from 1 to 8"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V swaps the module between its two clock inputs"},
+    {"ids": [1], "text": "One of the two clock inputs, and the one in use when a patch is loaded; the interval between two rising edges above 1V is the tempo every output is worked out from"},
+    {"ids": [2], "text": "The second of the two clock inputs, brought into use by FLIP; the interval between two rising edges above 1V is then the tempo every output is worked out from"},
+    {"ids": [3, 4, 5, 6], "text": "Runs this row while the voltage here is at or above 5V and stops it below that; with nothing patched the row runs"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 1ms pulse at this row's multiplied rate"},
+    {"ids": [4], "text": "A 1ms pulse at the first two rows' multipliers multiplied together, counting only rows whose gate is open"},
+    {"ids": [5], "text": "A 1ms pulse at the first three rows' multipliers multiplied together, counting only rows whose gate is open"},
+    {"ids": [6], "text": "A 1ms pulse at all four rows' multipliers multiplied together, counting only rows whose gate is open"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched and has ticked twice: the tempo is measured from the gap between two edges at whichever input is in use.",
+    "the multiplied beats stop once a whole clock interval has gone by with no new edge, so a clock that stops leaves the module silent rather than free-running.",
+    "flipping to the other clock keeps the tempo last measured there, so the rows carry on at the old rate until that clock ticks twice."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "4": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "5": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "6": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped · one channel only",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

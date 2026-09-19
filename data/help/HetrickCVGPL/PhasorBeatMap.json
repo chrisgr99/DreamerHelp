@@ -1,0 +1,53 @@
+{
+  "plugin": "HetrickCVGPL",
+  "module": "PhasorBeatMap",
+  "description": "Drum pattern generator driven by a phasor rather than a clock, a port of Mutable Instruments Grids: a ramp sweeps 32 steps of a bar, and three channels of triggers and accents come off a map",
+  "params": [
+    {"ids": [0], "text": "Moves east and west across the map of drum patterns, blending the four patterns nearest the point chosen; in Euclid it sets the pattern length for channel 1 instead"},
+    {"ids": [1], "text": "Moves north and south across the map of drum patterns, blending the four patterns nearest the point chosen; in Euclid it sets the pattern length for channel 2 instead"},
+    {"ids": [2], "text": "Adds random variation to the pattern, drawn afresh each time the phasor returns to 0V; at the bottom of its travel the bar repeats exactly. In Euclid it sets the pattern length for channel 3 instead"},
+    {"ids": [3, 4, 5], "text": "Sets how many of that channel's steps fire, from none at the bottom of its travel to the densest the chosen pattern offers at the top"},
+    {"ids": [6], "text": "Selects the pattern source: Original and Henri are two maps of drum patterns, Euclid replaces them with a Euclidean rhythm on each channel"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A ramp from 0V to 10V across one bar, cut into 32 steps by where the voltage is; running it backwards plays the bar backwards, and holding the voltage steady holds one step"},
+    {"ids": [1], "text": "Added to the Map X knob, 10V covering the knob's whole travel, and the total held within it"},
+    {"ids": [2], "text": "Added to the Map Y knob, 10V covering the knob's whole travel, and the total held within it"},
+    {"ids": [3], "text": "Added to the Chaos knob, 10V covering the knob's whole travel, and the total held within it"},
+    {"ids": [4, 5, 6], "text": "Added to that channel's Fill knob, 10V covering the knob's whole travel, and the total held within it"},
+    {"ids": [7], "text": "Added to the Mode knob at one mode per 2.5V, the total rounded and held within the three modes; it is read only while a cable is patched"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A 1ms pulse at 10V on each step that channel fires; the Trigger Mode menu item turns it into a gate lasting half a step instead"},
+    {"ids": [3, 4, 5], "text": "A 1ms pulse at 10V on the steps that channel fires with an accent; in Euclid it fires where that channel's Euclidean pattern comes back round to its start instead"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per bar, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in.",
+    "in Euclid the patterns are read on every second step, so a bar holds 16 places rather than 32 and the odd-numbered steps are always silent.",
+    "the lamp above each channel's jacks lights for 100ms whenever that channel fires, whichever of the two output jacks the pulse went to.",
+    "every jack on the module is monophonic; only the first channel of a polyphonic cable is read, and each output carries one channel."
+  ],
+  "menu": [
+    "Trigger Mode: Pulse, Gate — Pulse sends a 1ms pulse on each hit, Gate holds the output high for the first half of the step the hit falls on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

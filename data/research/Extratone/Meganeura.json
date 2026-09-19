@@ -1,0 +1,25 @@
+{
+  "plugin": "Extratone",
+  "module": "Meganeura",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Meganeura.cpp process(): flipperTrigger.process(params[FLIPPER_PARAM].getValue()+inputs[FLIPPER_INPUT].getVoltage())"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Meganeura.cpp process(): clockTrigger.process(inputs[CLOCK_INPUT].getVoltage())"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Meganeura.cpp process(): clockTrigger2.process(inputs[CLOCK2_INPUT].getVoltage())"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Meganeura.cpp process(): gate[i]=(!inputs[GATE_INPUT+i].isConnected()||inputs[GATE_INPUT+i].getVoltage()>=5.f)"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Meganeura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Meganeura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Meganeura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "src/Meganeura.cpp process(): outputs[CLOCK_OUTPUT+i].setVoltage(outPulse[i].process(args.sampleTime)?10.f:0.f), a single channel"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger", "poly": false, "why": "src/Meganeura.cpp process(): outputs[PRODUCT_OUTPUT+p].setVoltage(prodPulse[p].process(args.sampleTime)?10.f:0.f), a single channel"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"}
+    }
+  },
+  "comment": "An eighth output is declared (PRODUCT_OUTPUT+3) and never given a PortWidget or a voltage, so there is no jack for it on the panel and it gets no tag. CLOCK_PARAM is the hidden state saying which clock is in use; it has no ParamWidget and is toggled only by the FLIP button or jack. Each row's multiplier is applied by comparing a sample counter against the measured interval, so the subdivisions of a row are evenly spaced but the last one before a new clock edge can be short. Neither clock is normalled to the other: with only CLOCK2 patched, flipping to CLOCK1 stops everything."
+}

@@ -1,0 +1,43 @@
+{
+  "plugin": "SickoCV",
+  "module": "RandLoopsMini",
+  "description": "A shift register of random bits that loops as a sequence, giving a stepped voltage and a trigger, in 2HP",
+  "params": [
+    {"ids": [0], "text": "Sets what happens to the bit entering the register on each clock: centred makes it random, fully clockwise locks the loop, and moving left of centre doubles the loop length with the same chances"},
+    {"ids": [1], "text": "Sets how many steps the loop runs, up to 16, and up to 32 with the CTR knob left of centre"},
+    {"ids": [2], "text": "Attenuates the CV output, 0% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the CTR setting, added to the CTR knob"},
+    {"ids": [1], "text": "Advances the register one step on each trigger"},
+    {"ids": [2], "text": "A trigger here restarts the sequence from its beginning"},
+    {"ids": [3], "text": "A trigger here clears the register, turning every bit off"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage built from the on bits of the register, attenuated by the SCL knob"},
+    {"ids": [1], "text": "A 1ms pulse each time the sequence advances onto an on bit, or a gate or a clock-width pulse under Trig Output type"}
+  ],
+  "notes": [
+    "every bit off gives 0V and every bit on gives 10V; each bit position is worth a different amount, doubling as you go by default."
+  ],
+  "menu": [
+    "Bit Resolution: 8 bit, 16 bit — sets how many of the register's bits the output voltage is built from",
+    "Voltage progression: 2x (std.), 1.3x, Fibonacci — sets how much each further bit is worth in the output voltage",
+    "Trig Output type: Trig, Gate, Clock Width — chooses whether an on bit sends a 1ms pulse, a gate held until an off bit, or a pulse the length of the incoming clock's high part",
+    "Don't advance — makes the first clock after a reset hold on the first step rather than moving off it",
+    "DISK operations — a submenu with Import trigSeq seq. and Export trigSeq seq., which read and write the working sequence as a file the trigSeq modules can also use",
+    "Initialize on Start — clears the register when Rack loads a patch"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

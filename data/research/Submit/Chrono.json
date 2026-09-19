@@ -1,0 +1,26 @@
+{
+  "plugin": "Submit",
+  "module": "Chrono",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Chrono.cpp:439 reads getVoltage; Chrono.cpp:525 writes it into the delay buffer"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the IN/L input", "why": "Chrono.cpp:440 uses isConnected to fall back to the left input; Chrono.cpp:675 uses it for the right dry signal only"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:287 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:294 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:288 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:289 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:532 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:404 uses isConnected and adds getVoltage times 0.5 to the knob; Chrono.cpp:406 rounds and clamps the total to 0 to 5"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Chrono.cpp:347 compares getVoltage against 1V; Chrono.cpp:350 measures the interval between rising edges"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:424 uses isConnected and adds getVoltage times 0.4 to the knob; Chrono.cpp:426 rounds and clamps the total to 0 to 4"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Chrono.cpp:625 uses isConnected and adds getVoltage times 0.1 to the knob, clamped to 0 to 1"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Chrono.cpp:302 uses isConnected and compares getVoltage against 1V"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Chrono.cpp:328 uses isConnected and compares getVoltage against 1V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Chrono.cpp:690 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "why": "Chrono.cpp:691 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "The HEADS legend is wrong. Chrono.cpp:198-205 holds six head-level rows, each giving the triplet, beat and dotted heads a weight of 1 or 0.5, and the maker's own comments name them ALL, TRP, DOT, QTR, DUB, SUB from row 0 upward — the reverse of the configSwitch labels at Chrono.cpp:215, which are SUB, DUB, QTR, DOT, TRP, ALL from value 0. The slider's minimum is at the bottom (Chrono.cpp:52-55), so value 0 is the SUB position, and it applies the all-equal row. Matched against the lit squares drawn on Chrono.svg the table does not line up in either direction: the panel's DOT pattern, outer two heads loud and the middle one quiet, does not exist in the table at all. What the six positions actually do, from SUB upward: all three heads full; triplet full; beat full; dotted full; triplet and beat full; beat and dotted full, with the remaining heads at half level in each case.\n\nThe manual calls the second momentary button Break and describes a tape-stop slowdown. The panel prints DRY, the parameter is named Dry, and the code crossfades to the dry input over 1 second (Chrono.cpp:327-335, 687-688). The tape-stop machinery is still in the file — brakeSpeed and brakeSpeedSmooth at Chrono.cpp:153-154 — but nothing ever writes to them, so brakeSpeedSmooth stays at 1 and the slowdown never happens.\n\nThe manual lists stereo audio inputs. Only IN/L is written into the delay buffer (Chrono.cpp:439, 525); IN/R reaches the output through the dry path alone (Chrono.cpp:675), so the echoes are mono however the module is patched.\n\nThere is no tone control: the variable named tone is fixed at 1.0 at Chrono.cpp:290."
+}

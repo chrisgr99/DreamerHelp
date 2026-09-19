@@ -1,0 +1,48 @@
+{
+  "plugin": "Sckitam",
+  "module": "MarkovSeq",
+  "description": "An eight-state sequencer driven by a Markov chain: every clock draws the next state at random from the probabilities set for the current one, and the output carries that state's value and input",
+  "params": [
+    {"ids": [0], "text": "Steps the chain on by hand, drawing the next state exactly like a clock pulse"},
+    {"ids": [1], "text": "Scales the output, 0 to 1, after the state value and the state input have been summed"},
+    {"ids": [2], "text": "Smooths the move from one state's knob value to the next, 0 for an instant change and 0.999 for the slowest glide; the signals at the State inputs are not slewed"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Sets the value carried by the output while that state is current, -10V to 10V, added to the signal at that state's input"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18], "text": "Makes that state the next one, in place of the state drawn at random, until the next clock arrives"},
+    {"ids": [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82], "text": "Sets the relative probability of the chain moving from one state to another; the eight probabilities for a state are divided by their sum, so equal settings make every destination equally likely"},
+    {"ids": [83, 84, 85, 86, 87, 88, 89, 90], "text": "Sets every probability of moving into that state to 0.5, from all eight states at once"},
+    {"ids": [91, 92, 93, 94, 95, 96, 97, 98], "text": "Sets every probability of moving into that state to zero, from all eight states at once, so nothing leads there"},
+    {"ids": [99, 100, 101, 102, 103, 104, 105, 106], "text": "Sets every probability of leaving that state to 0.5, towards all eight states at once"},
+    {"ids": [107, 108, 109, 110, 111, 112, 113, 114], "text": "Sets every probability of leaving that state to zero, towards all eight states at once"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise to 1V or more moves the chain on: the state drawn last becomes current and the one after it is drawn"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "The signal carried by the output while that state is current, added to that state's knob value and faded in and out over about 2.5ms to stop a click"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15, 16], "text": "A rise to 1V or more makes that state the next one, in place of the state drawn at random"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current state's knob value plus the signal at its input, scaled by the gain and limited to -10V to 10V"},
+    {"ids": [1], "text": "Carries the number of the current state, 0V for the first up to 7V for the eighth"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "A 10V trigger 1ms long when that state becomes the current one"}
+  ],
+  "notes": [
+    "the red lamp beside a state marks the current state and the blue lamp marks the state the next clock will move to",
+    "the number of channels at the first State input sets the polyphony of the Out jack",
+    "Placed fresh the grid is set to a forward chain, state 1 to 2 to 3 and round to 1 again, so the module runs as a plain eight-step sequencer until a probability is changed",
+    "Every state value knob comes up at 0V, so the output rests at 0V until values are set or the state inputs are patched"
+  ],
+  "menu": [
+    "If all probabilities are zero.... — picks what the chain does when every probability out of the current state is zero: Remain on the current state, or Transitions to all states are equiprobable"
+  ],
+  "expects": {
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoSampler2",
+  "description": "A wav sample player and recorder with a cyclic time-stretch, cue and loop cursors, a four-stage envelope and polyphonic pitch tracking",
+  "params": [
+    {"ids": [0], "text": "Sets the output volume, 0 to 100%"},
+    {"ids": [1], "text": "Sets where playback begins and the attack starts, as a percentage of the sample"},
+    {"ids": [2], "text": "Sets where playback ends and the release starts, as a percentage of the sample"},
+    {"ids": [3], "text": "Sets where a loop begins, as a percentage of the sample"},
+    {"ids": [4], "text": "Sets where a loop ends, as a percentage of the sample"},
+    {"ids": [5], "text": "Sets the crossfade at a loop join, the fade before the end of the sample, and the fade in and out of a recording, 1ms to 10 seconds"},
+    {"ids": [6], "text": "Sets how long the envelope takes to rise, 1ms to 10 seconds"},
+    {"ids": [7], "text": "Sets how long the envelope takes to fall to the sustain level, 1ms to 10 seconds"},
+    {"ids": [8], "text": "Sets the level the envelope holds at, 0% to 100%"},
+    {"ids": [9], "text": "Sets how long the envelope takes to fall to silence, 1ms to 10 seconds"},
+    {"ids": [11], "text": "Chooses whether playback is started by a trigger or held open by a gate"},
+    {"ids": [12], "text": "Chooses what a trigger does in trigger mode: Start/Stop alternates, Restart plays from the cue start every time"},
+    {"ids": [13], "text": "Plays between the loop cursors over and over instead of stopping at the cue end"},
+    {"ids": [14], "text": "Plays the sample backwards, from the cue end towards the cue start"},
+    {"ids": [15], "text": "Reverses the playback direction at the cursors instead of jumping back, so the sample runs forwards and backwards in turn"},
+    {"ids": [16], "text": "Starts recording at once; it is available only while no sample is loaded or recorded, so the sample has to be cleared first"},
+    {"ids": [17], "text": "Sets the level of the recording inputs, 0 to 200%"},
+    {"ids": [18], "text": "Passes the recording inputs through to the outputs"},
+    {"ids": [19], "text": "Loads the previous file in the same folder"},
+    {"ids": [20], "text": "Loads the next file in the same folder"},
+    {"ids": [21], "text": "Starts playback by hand, working as the PLAY jack does"},
+    {"ids": [22], "text": "Moves the cue and loop cursors to the nearest zero crossings, which stops loop clicks; it should be off for one-cycle waveforms"},
+    {"ids": [23], "text": "Lengthens or shortens the sample without changing its pitch, 1% to 999%, with 100% leaving it alone"},
+    {"ids": [24], "text": "Sets the length of the repeated cycle the time-stretch is built from, 1ms to 99ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Starts playback: a trigger in trigger mode, or held high in gate mode"},
+    {"ids": [1], "text": "Shifts the output volume, added to the VOL knob"},
+    {"ids": [2], "text": "Raises the playback pitch one octave per volt; a polyphonic cable here plays one voice per channel"},
+    {"ids": [3], "text": "The left channel to be recorded; recording is only possible with a cable in here"},
+    {"ids": [4], "text": "The right channel to be recorded, which makes the recording stereo"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the sample, or the whole of a mono file duplicated"},
+    {"ids": [1], "text": "The right channel of the sample, or the whole of a mono file duplicated"},
+    {"ids": [2], "text": "A 1ms pulse at whichever points are ticked under 'EOC pulse from'"},
+    {"ids": [3], "text": "A 1ms pulse when the release stage ends"}
+  ],
+  "notes": [
+    "nothing plays until a sample is loaded or recorded: right-click the panel and use Load Sample, or right-click the waveform display.",
+    "the REC button is only active while the sample slot is empty, so a loaded or recorded sample has to be cleared before recording again.",
+    "there is no STOP button or jack; in trigger mode with Start/Stop a second trigger stops playback, and in Restart mode playback is stopped by moving the MODE switch to Gate.",
+    "stretching a sample gives the characteristic metallic sound of cyclic time-stretching, most audible when slowing down; the XFD and SIZ knobs trade one artefact against another."
+  ],
+  "menu": [
+    "Load Sample — opens a file chooser for the sample this module plays",
+    "Save FULL Sample — writes the whole sample to a wav file",
+    "Save CUE Region — writes the part between the cue cursors to a wav file",
+    "Save LOOP Region — writes the part between the loop cursors to a wav file",
+    "Trim Sample after Save — keeps only the saved part in memory afterwards, instead of keeping the whole sample",
+    "Save Oversampled — writes the file at the module's internal rate, twice Rack's, for editing elsewhere",
+    "Select Samples Root — picks a folder, after which a Samples Browser submenu appears for loading",
+    "Anti-aliasing filter — adds two-times oversampling and a 20kHz lowpass before the outputs",
+    "Polyphonic OUTs — carries the V/Oct polyphony through to the outputs; with it off every voice is summed into single-channel outputs",
+    "Polyphonic Master IN — lets the VOL CV jack take a polyphonic cable matching the V/Oct channels, for per-voice velocity",
+    "Auto Monitor Off — turns monitoring off by itself once a recording stops",
+    "EOC pulse from — a submenu of seven points, each ticked or not, at which the EOC output sends a pulse: TRG/GATE (stop), CUE END, CUE START, LOOP END, LOOP START, PING and PONG",
+    "Disable NAV Buttons — stops the panel navigation buttons from loading anything, so they cannot be pressed by accident",
+    "Reset Cursors — puts the cue and loop cursors back to 0% and 100%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

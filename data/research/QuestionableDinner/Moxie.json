@@ -1,0 +1,18 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Moxie",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±10V", "why": "src/Moxie.cpp:227-233 takes the channel count from the widest of the four inputs; line 267 reads getVoltage(v), adds the Bias knob and soft clips the total at 10V"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Moxie.cpp:241-243 multiplies getVoltage(v) by the FM knob and adds it into the exponent of a power of two"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Moxie.cpp:241-244 adds getVoltage(v) straight into the exponent of a power of two"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Moxie.cpp:259-261 empties both accumulators when getVoltage(v) crosses from zero or below to above zero"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±24V", "step": "continuous", "why": "src/Moxie.cpp:235-237 sets the channel count on all three outputs; line 456 clamps to -24..24"},
+      "1": {"family": "audio", "poly": true, "range": "±24V", "step": "continuous", "why": "src/Moxie.cpp:235-237 sets the channel count on all three outputs; line 457 clamps to -24..24"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Moxie.cpp:459 soft clips at 10V when the menu's clip option is on and sends the raw value when it is off"}
+    }
+  },
+  "comment": "The panel prints FREQ, BITE and MORPH, letters the state switch DEAD above and ALIVE below, and letters the outputs plus, minus and MAIN; the bias knob and the power jack carry no lettering of their own. The frequency knob's tooltip name, unit and scaling are rewritten each sample from the mode switch (src/Moxie.cpp:270-272 and 297-299), so it reads as a frequency in continuous mode and as a slope multiplier in slope mode. A fault in src/Moxie.cpp:57: the saved state for the Old Oscillator Models menu item is read back out of the 'dc' field rather than the 'old' one, so reloading a patch gives that setting whatever value the DC removal option had. The maker's manual describes the dead state as one oscillator waiting for the other; in the code it is a flip-flop that gates each half off until the other has fired."
+}

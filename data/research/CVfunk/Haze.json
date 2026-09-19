@@ -1,0 +1,20 @@
+{
+  "plugin": "CVfunk",
+  "module": "Haze",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Haze.cpp:377 reads it with getVoltage, so only channel 1"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the L audio jack", "why": "Haze.cpp:378 reads it with getVoltage, so only channel 1, and falls back to the left input when this jack is empty"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Haze.cpp:318 reads it with getVoltage, so only channel 1, and scales it by a tenth; Haze.cpp:365 clamps the knob-plus-input total to 0 to 1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Haze.cpp:318 reads it with getVoltage, so only channel 1, and scales it by a tenth; Haze.cpp:366 clamps the knob-plus-input total to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Haze.cpp:318 reads it with getVoltage, so only channel 1, and scales it by a tenth; Haze.cpp:354 clamps the knob-plus-input total to 0 to 1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Haze.cpp:318 reads it with getVoltage, so only channel 1, and scales it by a tenth; Haze.cpp:355 clamps the knob-plus-input total to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Haze.cpp:318 reads it with getVoltage, so only channel 1, and scales it by a tenth; Haze.cpp:357 clamps the knob-plus-input total to a fifth through twice"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Haze.cpp:472 writes one channel with setVoltage from the dry and wet blend"},
+      "1": {"family": "audio", "poly": false, "why": "Haze.cpp:473 writes one channel with setVoltage from the dry and wet blend"}
+    }
+  },
+  "comment": "The rate, depth and darkening filter are recomputed only every few dozen samples rather than every sample (Haze.cpp:362), which is why a fast CV into RATE or DEPTH steps rather than glides. The dry path is multiplied by the reciprocal of the density setting and the wet path by that same figure clamped between a half and one and a half (Haze.cpp:469), so the density control changes drive without changing output level much."
+}

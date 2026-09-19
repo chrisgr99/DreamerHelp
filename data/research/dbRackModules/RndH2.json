@@ -1,0 +1,21 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndH2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "RndH2.cpp:153 takes the channel count from this input and RndH2.cpp:188 reads it per channel into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "RndH2.cpp:166 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "the Seed knob", "why": "RndH2.cpp:168 reads it with getVoltage() and no channel loop and writes it times 0.1 into the Seed knob, only when a trigger arrives at Rst"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "half the Strength knob", "why": "RndH2.cpp:134 reads it per channel with getNormalPolyVoltage(strength*.5f,chn), doubles it and clamps the result to 1..20"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "RndH2.cpp:127 reads it per channel with getPolyVoltage(chn), scales it by 0.1 and the Range CV knob, adds the Range knob and clamps the total to 0..1"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "RndH2.cpp:128 reads it per channel with getPolyVoltage(chn), scales it by the Ofs CV knob, adds the Ofs knob and clamps the total to -5..5"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "RndH2.cpp:220 sets this output's channel count"},
+      "1": {"family": "cv", "poly": true, "why": "RndH2.cpp:222 sets this output's channel count"},
+      "2": {"family": "cv", "poly": true, "why": "RndH2.cpp:224 sets this output's channel count"},
+      "3": {"family": "cv", "poly": true, "why": "RndH2.cpp:218 sets this output's channel count"}
+    }
+  },
+  "comment": "The Range and Ofs sections and the slew limiter are applied only in the clocked branch, RndH2.cpp:193-202; the unclocked branch at RndH2.cpp:204-214 writes the raw drawn values. The maker's README does not mention that. Range is a scaling of 0 to 1 rather than a voltage span."
+}

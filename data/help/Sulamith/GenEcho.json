@@ -1,0 +1,49 @@
+{
+  "plugin": "Sulamith",
+  "module": "GenEcho",
+  "description": "A stereo looper that records a second of audio, plays it back over and over, and lets you speed it up and blend it against the incoming signal",
+  "params": [
+    {"ids": [2], "text": "Sets how much of the buffer is played back before it wraps, 15% to 90% of one second"},
+    {"ids": [3], "text": "Multiplies the left input on the way in and the recorded loop on the way out, 0 to 2"},
+    {"ids": [4], "text": "Blends between the incoming signal and the loop, 0 to 1, starting at half of each"},
+    {"ids": [5], "text": "Starts recording a new loop from the two inputs, wiping what was there"},
+    {"ids": [6], "text": "Wipes the loop back to silence"},
+    {"ids": [7], "text": "Multiplies the playback speed: +0 plays at speed, +1 doubles it for an octave up, +2 trebles it and +3 quadruples it for two octaves up"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel of the audio to be recorded and mixed against the loop"},
+    {"ids": [1], "text": "The right channel of the audio to be recorded and mixed against the loop"},
+    {"ids": [2], "text": "A rising edge starts recording a new loop, as the SAMPLE button does"},
+    {"ids": [3], "text": "A rising edge wipes the loop, as the DELETE button does"},
+    {"ids": [4], "text": "Added to the LENGTH knob at a tenth of the buffer per volt"},
+    {"ids": [5], "text": "Added to the DRY/WET knob at a tenth per volt"},
+    {"ids": [6], "text": "A voltage above 1V steps the playback speed up by one more multiple than the OCT+ switch alone gives"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the left channel, the loop blended against the incoming signal and clamped to ±5V"},
+    {"ids": [1], "text": "Carries the right channel, the loop blended against the incoming signal and clamped to ±5V"}
+  ],
+  "notes": [
+    "the module does nothing until a loop has been recorded; press SAMPLE or send a pulse to the SAMPLE jack with audio at the inputs",
+    "recording begins at the first moment the left input reads exactly 0V, so a loop started against silence will not begin until signal arrives",
+    "the buffer is one second of audio at a 48kHz sample rate, and the LENGTH control chooses how much of it plays",
+    "the recorded audio is written into the patch file sample by sample, so a patch holding this module is very large and slow to save",
+    "the GAIN knob is applied to the left input and to a right channel taken from the left, but not to a right input with its own cable",
+    "the OCT+ switch reads +0 to +3 but sets a playback rate of one to four times, so only +1 and +3 are whole octaves"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the LEFT input.",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0.1 to 1V.",
+      "5": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

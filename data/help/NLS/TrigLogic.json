@@ -1,0 +1,36 @@
+{
+  "plugin": "NLS",
+  "module": "TrigLogic",
+  "description": "Passes a trigger through to one output or the other according to two tests made on two signals, which are usually LFOs",
+  "params": [
+    {"ids": [0], "text": "Chooses what is tested on the lfo1 input: dir tests which way that signal moved between this sample and the last, sign tests whether it is above or below 0V"},
+    {"ids": [1], "text": "Chooses what is tested on the lfo2 input: dir tests which way that signal moved between this sample and the last, sign tests whether it is above or below 0V"},
+    {"ids": [2], "text": "Sets what the lfo1 test has to find for that side to pass: plus for rising or positive, minus for falling or negative, zero for no change at all or exactly 0V"},
+    {"ids": [3], "text": "Sets what the lfo2 test has to find for that side to pass: plus for rising or positive, minus for falling or negative, zero for no change at all or exactly 0V"},
+    {"ids": [4], "text": "Chooses whether both sides have to pass before a trigger reaches the trig output, or only one of them"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The trigger to be passed or blocked; whatever voltage is here appears unchanged at whichever of the two outputs the tests send it to"},
+    {"ids": [1], "text": "The first of the two signals tested"},
+    {"ids": [2], "text": "The second of the two signals tested"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the voltage at the trig input while the tests pass, and 0V while they do not"},
+    {"ids": [1], "text": "Carries the voltage at the trig input while the tests do not pass, and 0V while they do, so between them the two outputs let every trigger through somewhere"}
+  ],
+  "notes": [
+    "with dir selected, the zero setting is almost never matched, because a moving signal changes by some amount at every sample; it matches an unpatched jack, which never changes at all",
+    "the two switches and the two small knobs are read once every four samples, while the trigger and the two signals are read every sample"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

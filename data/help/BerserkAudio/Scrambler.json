@@ -1,0 +1,36 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Scrambler",
+  "description": "A buffer effect that passes a run of samples through untouched, then records the next run, cuts it into chunks, shuffles them and plays the result back",
+  "params": [
+    {"ids": [0], "text": "Sets how many samples pass straight through before the module starts recording, a whole number from 0 to 3000; at 0 the recording starts at once"},
+    {"ids": [1], "text": "Sets how many samples are recorded and shuffled each time round, a whole number from 0 to 3000; at 0 the module passes its input through and does nothing else"},
+    {"ids": [2], "text": "Sets how many samples make up each chunk the recording is cut into before the chunks are shuffled, a whole number from 1 to 200; at 1 every single sample is reordered"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio the module passes through and records"},
+    {"ids": [1], "text": "Adds 1000 samples per volt to the pass-through length, and the total is held at 0 or above"},
+    {"ids": [2], "text": "Adds 1000 samples per volt to the length that is recorded and shuffled, and the total is clamped to 16384 samples, so this jack reaches lengths the knob cannot"},
+    {"ids": [3], "text": "Adds 1000 samples per volt to the chunk size, read once at the moment a recording fills rather than continuously, and the total is held at 1 or above"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The audio, carrying the input during the pass-through run, 0V while the module is recording, and the shuffled recording during playback"}
+  ],
+  "notes": [
+    "the module repeats three phases: it passes the input through for the CLEAN samples, records the SCRAMBLE samples with its output at 0V, then plays those samples back shuffled",
+    "the gap of silence while the module records is as long as the SCRAMBLE setting, so a long scramble length makes a long hole in the output",
+    "samples left over when the recorded length does not divide evenly by the chunk size are appended to the end of the playback unshuffled",
+    "one channel in and one channel out; a polyphonic cable into the audio input is reduced to its first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

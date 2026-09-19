@@ -1,0 +1,17 @@
+{
+  "plugin": "SickoCV",
+  "module": "RandLoopsMini",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "RandLoopsMini.cpp reads this jack with getVoltage() and adds it to the CTRL knob, which runs -1 to +1 at :123"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "RandLoopsMini.cpp takes this jack as a rising edge at 1V and advances the register"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "RandLoopsMini.cpp takes this jack as a rising edge at 1V and restarts the sequence"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "RandLoopsMini.cpp takes this jack as a rising edge at 1V and clears the register"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "RandLoopsMini.cpp sums the weighted bit values, every bit off giving 0V and every bit on giving 10V, then scales by the SCL knob"},
+      "1": {"poly": false, "range": "0 to 10V", "why": "RandLoopsMini.cpp writes a pulse, a gate or a clock-width pulse at 10V with setVoltage(); no setChannels in the file"}
+    }
+  },
+  "comment": "This version has no DEL, ADD or RND buttons and no stored patterns, so the register is shaped by the CTR knob and the CLR jack alone. The census output order is Out first and Trig second, which matches the panel from top to bottom. The LEN knob comes up at 8 here rather than the 16 the full randLoops uses. The TRG output has no family because Trig Output type changes what it carries."
+}

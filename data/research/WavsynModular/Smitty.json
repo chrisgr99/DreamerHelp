@@ -1,0 +1,15 @@
+{
+  "plugin": "WavsynModular",
+  "module": "Smitty",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Smitty.cpp:68 reads channel one only with getVoltage, divides by 5 and multiplies by half the Shape knob"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Smitty.cpp:47 reads this jack and :51 sets the frequency to Rack's FREQ_C4 times two to the power of that voltage, so it is one volt per octave"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Smitty.cpp:79 writes five times a sine, with no channel count set"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Smitty.cpp:81 writes five times a sine, with no channel count set"}
+    }
+  },
+  "comment": "Smitty.cpp:57-61 resets the oscillator state and sets epsilon to zero on any change of frequency, so while a V/OCT input is moving the module outputs five times the sine of a constant rather than a swept tone; it settles as soon as the pitch is held. With the shape CV patched the knob acts as its attenuator, so at a knob setting of zero the jack has no effect at all."
+}

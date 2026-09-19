@@ -1,0 +1,37 @@
+{
+  "plugin": "NocturnalEncoder",
+  "module": "AMDecoder",
+  "description": "Two independent envelope followers that turn an amplitude-modulated audio signal back into a control voltage, each with an attenuverter, an offset, a scale and a gate output",
+  "params": [
+    {"ids": [0, 1], "text": "Sets how long that channel's follower takes to rise through 10V, from 1ms fully counter-clockwise to about 0.2 seconds fully clockwise"},
+    {"ids": [2, 3], "text": "Sets how long that channel's follower takes to fall through 10V, from 1ms fully counter-clockwise to about 0.2 seconds fully clockwise"},
+    {"ids": [4, 5], "text": "Scales the followed envelope for that channel, -1 to 1, inverting it below 0 and silencing it at 0"},
+    {"ids": [6, 7], "text": "Added to that channel's envelope after the attenuverter and the scale, -10V to 10V"},
+    {"ids": [8, 9], "text": "Multiplies that channel's envelope by 1 to 3 times, after the attenuverter and before the offset"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The amplitude-modulated audio for that channel; the channel's OUT and GATE jacks are written only while a cable is in here"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "That channel's followed envelope after the attenuverter, the scale and the offset, clamped to -15V and 15V"},
+    {"ids": [2, 3], "text": "10V while that channel's OUT jack stands at 2V or more and 0V below that, despite the manual describing the threshold as half the follower's range"}
+  ],
+  "notes": [
+    "A channel writes its OUT and GATE jacks only while a cable is in its IN jack. Pull that cable out and both jacks hold the last voltage they were given.",
+    "The red lamp beside an input lights when the voltage there passes 9.99V.",
+    "The green lamp beside an output follows the raw envelope, before the attenuverter, scale and offset are applied, so it can be dark while that output is high.",
+    "The module has no menu of its own beyond Rack's."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±15V · one channel only",
+      "1": "±15V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

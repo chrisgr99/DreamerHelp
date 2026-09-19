@@ -1,0 +1,16 @@
+{
+  "plugin": "3HR",
+  "module": "Xtenuat3hr",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "Xtenuat3hr.cpp:65 takes the larger of this port's getChannels() and the other input's, and 70 reads it with getPolyVoltageSimd"},
+      "1": {"poly": true, "why": "Xtenuat3hr.cpp:65 takes the larger of this port's getChannels() and the other input's, and 70 reads it with getPolyVoltageSimd"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Xtenuat3hr.cpp:84 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Xtenuat3hr.cpp:85 reads it with getPolyVoltageSimd, scales it by 0.2 times the CV knob and clamps the sum with the knob to -1 and 1"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "Xtenuat3hr.cpp:67 sets this port's channel count from the wider input and 76 writes it with setVoltageSimd"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. The two signal inputs and the output get no family: the module passes whatever is patched into it, and the maker names them audio while the inversion law is designed for a 0 to 10V envelope. The inversion at Xtenuat3hr.cpp:74 is abs(mix - 10) times the size of the setting, not a multiply by a negative number, which is what the README means by 'fully inverts'."
+}

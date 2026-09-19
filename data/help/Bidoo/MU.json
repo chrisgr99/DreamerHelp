@@ -1,0 +1,66 @@
+{
+  "plugin": "Bidoo",
+  "module": "MU",
+  "description": "One step of a sequence, chained to other copies of itself by patching each step's end output into the next step's start input",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo in whole beats per minute, 0 to 800, and the step that has nothing patched to its tempo input sets the tempo for every step downstream of it"},
+    {"ids": [1], "text": "Adds hundredths of a beat per minute to the tempo"},
+    {"ids": [2], "text": "Sets how long the step lasts as a percentage of a beat, 0 to 1600%, so 100% is a quarter note in 4/4, 50% an eighth and 200% a half"},
+    {"ids": [3], "text": "Trims the length of the step by up to half a percent either way, which is how swing is set"},
+    {"ids": [4], "text": "Sets how long each trig stays at 10V as a fraction of the step, 0 to 100%"},
+    {"ids": [5], "text": "The chance that the step fires its trigs at all, 0 for never and 100% for every pass"},
+    {"ids": [6], "text": "The chance that the step's end pulse leaves by the alternate end output rather than the normal one, which is how a chain forks"},
+    {"ids": [7], "text": "How many trigs the step fires, 1 to 64"},
+    {"ids": [8], "text": "How far apart the trigs are as a fraction of the step, 0 to 100%; below the trig length the trigs run into each other"},
+    {"ids": [9], "text": "Sets the voltage the step sends from its CV output, 0V to 10V"},
+    {"ids": [10], "text": "Starts the step by hand, without waiting for a pulse at the start input"},
+    {"ids": [11], "text": "Turns on stacking for the CV, so the voltage arriving from the previous step is added to this step's own CV value"},
+    {"ids": [12], "text": "Turns on stacking for the gate, so the gate arriving from the previous step is passed on underneath this step's own trigs instead of being cut off while the step is active"},
+    {"ids": [13], "text": "Holds the gate output at 0V while the step plays, leaving the CV and the end pulses running"},
+    {"ids": [14], "text": "Delays the first trig from the start of the step, 0 to 100% of the step length"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here starts the step"},
+    {"ids": [1], "text": "A trigger here stops the step at once, with no end pulse"},
+    {"ids": [2], "text": "The gate coming from the previous step in the chain; while this step is idle it passes straight to the gate output"},
+    {"ids": [3], "text": "The CV coming from the previous step in the chain; while this step is idle it passes straight to the CV output"},
+    {"ids": [4], "text": "0V to 10V sets the tempo from 1 to 800.99 beats per minute, replacing the tempo knobs while it is patched"},
+    {"ids": [5], "text": "Modulates the trig length, -10V to +10V shifting it by the whole 0 to 100% range"},
+    {"ids": [6], "text": "Added to the CV value the step sends, -10V to +10V, and the sum is clamped to 0V to 10V"},
+    {"ids": [7], "text": "Modulates how many trigs the step fires, -10V to +10V shifting the count by 64 either way"},
+    {"ids": [8], "text": "Modulates the spacing of the trigs, -10V to +10V shifting it by the whole 0 to 100% range"},
+    {"ids": [9], "text": "Modulates the delay before the first trig, 0V to 10V shifting it across the whole step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A one-sample 10V pulse when the step finishes, for starting the next step in the chain"},
+    {"ids": [1], "text": "A one-sample 10V pulse when the step finishes, sent here instead of the normal end output on the passes the ALT probability picks, so the chain can take a second route"},
+    {"ids": [2], "text": "The step's trigs at 10V while it plays, and the gate arriving from the previous step while it is idle"},
+    {"ids": [3], "text": "The step's CV value while it plays, and the CV arriving from the previous step while it is idle"},
+    {"ids": [4], "text": "The tempo as a voltage, 0V to 10V across 1 to 800.99 beats per minute, for patching into the tempo input of the next step"}
+  ],
+  "notes": [
+    "a step holds its own tempo, gate pattern and CV value, and passes the chain's gate and CV straight through while it is idle",
+    "hovering over any knob or jack names it in the display and reads out its current value",
+    "a step is idle when the patch is loaded and stays idle until a pulse arrives at its start input or it is started by hand"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "±10V · continuous · one channel only",
+      "6": "±10V · continuous · one channel only",
+      "7": "±10V · continuous · one channel only",
+      "8": "±10V · continuous · one channel only",
+      "9": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "4": "0 to 10V"
+    }
+  }
+}

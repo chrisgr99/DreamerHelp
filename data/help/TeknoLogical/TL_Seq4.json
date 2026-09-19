@@ -1,0 +1,45 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Seq4",
+  "description": "Two independent trigger sequencers on one panel: an upper one of 4 or 8 steps and a lower one of 8 or 16, each step latched on or off.",
+  "params": [
+    {"ids": [0], "text": "Chooses 4 or 8 steps for the upper sequencer."},
+    {"ids": [1], "text": "Reverses the direction the upper sequencer runs in."},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Latches that step of the upper sequencer on or off; a trigger comes out when the playhead lands on a step that is on."},
+    {"ids": [10], "text": "Chooses 8 or 16 steps for the lower sequencer."},
+    {"ids": [11], "text": "Reverses the direction the lower sequencer runs in."},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27], "text": "Latches that step of the lower sequencer on or off; a trigger comes out when the playhead lands on a step that is on."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V moves the upper sequencer on one step, or back one step while its reverse switch is on."},
+    {"ids": [1], "text": "A rising edge past 1V flips the upper sequencer between 4 and 8 steps, moving the panel switch with it."},
+    {"ids": [2], "text": "A rising edge past 1V flips the upper sequencer's reverse switch, moving the panel switch with it."},
+    {"ids": [3], "text": "A rising edge past 1V moves the lower sequencer on one step, or back one step while its reverse switch is on."},
+    {"ids": [4], "text": "A rising edge past 1V flips the lower sequencer between 8 and 16 steps, moving the panel switch with it."},
+    {"ids": [5], "text": "A rising edge past 1V flips the lower sequencer's reverse switch, moving the panel switch with it."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 1ms long each time the upper sequencer's playhead lands on a step that is latched on."},
+    {"ids": [1], "text": "A 10V pulse 1ms long each time the lower sequencer's playhead lands on a step that is latched on."}
+  ],
+  "notes": [
+    "There is no reset jack. Reset arrives only from a TL_Reseter placed directly to the left or the right, whose A half resets the upper sequencer and B half the lower one.",
+    "A reset puts the playhead at the first step, or at the last step while that sequencer is reversed.",
+    "Shortening a sequencer does not move the playhead. If it was on a step beyond the new length it stays there until the next clock brings it back inside.",
+    "The step pattern is held in the switch positions and so survives a patch save, but the playhead position does not: both sequencers start again from step 1 on load."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "OMEg1",
+  "module": "Masino",
+  "description": "Arpeggiator: it plays the notes held at its polyphonic pitch input in an order and a rhythm chosen by two knobs",
+  "params": [
+    {"ids": [0], "text": "Chooses the rhythm: UNF spreads the hits evenly, EUC spreads them as a Euclidean pattern, PRM puts them on prime-numbered pulses, WBE on the weak beats, SBE on the strong beats and RND at random"},
+    {"ids": [1], "text": "Chooses the order the held notes are played in: UPP upwards, DWN downwards, TCE from the ends towards the centre, FCE from the centre towards the ends and RND at random"},
+    {"ids": [2], "text": "Sets how many octaves the arpeggio climbs through, one to three"},
+    {"ids": [3], "text": "Sets how many of the pulses carry a note, as a percentage; it changes nothing under the PRM rhythm"},
+    {"ids": [4], "text": "Sets the length of the gate output as a percentage of the gap between clock pulses"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V is one pulse of the arpeggio"},
+    {"ids": [1], "text": "Sets the density knob directly from 0 to 5V, in steps, and moves the knob with it; the knob cannot be turned while a cable is in"},
+    {"ids": [2], "text": "Sets the gate length knob directly from 0 to 5V, in steps, and moves the knob with it; the knob cannot be turned while a cable is in"},
+    {"ids": [3], "text": "Sets the octaves knob directly from 0 to 5V, in steps, and moves the knob with it; the knob cannot be turned while a cable is in"},
+    {"ids": [4], "text": "The notes to arpeggiate, one per channel, at 1V per octave"},
+    {"ids": [5], "text": "A rising edge above 2V returns the arpeggio to its first pulse"},
+    {"ids": [6], "text": "Sets the rhythm knob directly from 0 to 5V, in steps, and moves the knob with it; the knob cannot be turned while a cable is in"},
+    {"ids": [7], "text": "Sets the melody knob directly from 0 to 5V, in steps, and moves the knob with it; the knob cannot be turned while a cable is in"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V for the share of the clock interval the gate length knob sets"},
+    {"ids": [1], "text": "The note being played, one at a time, at 1V per octave"},
+    {"ids": [2], "text": "A 1ms pulse at 10V on each note"}
+  ],
+  "notes": [
+    "nothing is played until a clock is patched to clck and at least one note is held at the 1v/o input; the arpeggio is built from the channels present on that input",
+    "the pitch input and the clock should come through chains of the same length, or the two arrive a sample or more apart and the arpeggio picks up the wrong notes"
+  ],
+  "menu": [
+    "Pulses per quarter: 2 PPQN, 3 PPQN, 4 PPQN, 5 PPQN, 6 PPQN — sets how many pulses of the incoming clock make one beat",
+    "Pulses per quarter factor: X1, X2, X3 — multiplies the pulses-per-quarter setting"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "unipolar · stepped · one channel only\n\nunpatched it reads the density knob's own setting; a negative voltage does nothing here.",
+      "2": "unipolar · stepped · one channel only\n\nunpatched it reads the gate length knob's own setting; a negative voltage does nothing here.",
+      "3": "unipolar · stepped · one channel only\n\nunpatched it reads the octaves knob's own setting; a negative voltage does nothing here.",
+      "4": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "unipolar · stepped · one channel only\n\nunpatched it reads the rythm knob's own setting; a negative voltage does nothing here.",
+      "7": "unipolar · stepped · one channel only\n\nunpatched it reads the melody knob's own setting; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

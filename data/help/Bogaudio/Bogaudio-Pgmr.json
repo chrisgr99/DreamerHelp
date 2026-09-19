@@ -1,0 +1,54 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Pgmr",
+  "description": "Four-step programmer — knobs A, B, C and D per step, going to the four outputs when that step is current",
+  "params": [
+    {"ids": [0], "text": "With this on, a clock pulse advances the sequence from step 1 upwards; with it off, a clock pulse runs it backwards"},
+    {"ids": [1], "text": "With this on, the voltage at the SELECT input is read only when a clock pulse arrives, rather than continuously"},
+    {"ids": [2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 14, 15, 17, 18, 19, 20], "text": "Sets the voltage that row's output carries while that step is the current one, ±10V by default"},
+    {"ids": [6, 11, 16, 21], "text": "Makes that step the current one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the sequence by one step; the channels patched here set the module's polyphony"},
+    {"ids": [1], "text": "Adds to the step number, one step per 2.5V and wrapping round at the end; with PGMRX expanders fitted, the volts per step becomes 10V divided by the total step count"},
+    {"ids": [2, 3, 4, 5], "text": "A trigger here makes that step the current one"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The voltage set by that row's knob on the step now selected"},
+    {"ids": [4], "text": "A trigger whenever the step changes"},
+    {"ids": [5, 6, 7, 8], "text": "5V for as long as that step is the current one, or a 1ms trigger at the moment of selection if the menu is set to Trigger"}
+  ],
+  "notes": [
+    "takes PGMRX expanders, four steps each"
+  ],
+  "menu": [
+    "Polyphony channels from — chooses which input sets the module's channel count, CLOCK input or SELECT input",
+    "Reverse step on negative clock — a clock pulse that goes below 0V steps backwards, which the FWD/REV switch then reverses again",
+    "Triggered select mode — the SELECT input takes triggers that advance a second sequence whose length the SELECT knob sets, instead of reading a voltage",
+    "Wrap select at steps — the select value wraps round at the STEPS setting rather than at the full number of steps",
+    "Output on selected step — that step's own output emits a Gate lasting as long as the step is current, or a Trigger at the moment it is selected",
+    "Save last selected step to patch — stores the step last chosen by a button press or step trigger, and returns to it when the patch is loaded",
+    "Range — sets the voltage span the knobs cover: +/-10V, +/-5V, +/-3V, +/-2V, +/-1V, 0V-10V, 0V-5V, 0V-3V, 0V-2V or 0V-1V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "±9.99V · stepped · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "high above 1V · stepped · polyphonic",
+      "4": "high above 1V · stepped · polyphonic",
+      "5": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "0 to 5V · stepped · polyphonic",
+      "5": "0 to 5V · stepped · polyphonic",
+      "6": "0 to 5V · stepped · polyphonic",
+      "7": "0 to 5V · stepped · polyphonic",
+      "8": "0 to 5V · stepped · polyphonic"
+    }
+  }
+}

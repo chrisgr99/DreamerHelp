@@ -1,0 +1,54 @@
+{
+  "plugin": "forsitan",
+  "module": "vespae",
+  "description": "The EDP Wasp filter as Doepfer rebuilt it: a state-variable filter made of CMOS inverters on one supply rail, giving low-pass, band-pass, high-pass and notch at once",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff, 20Hz to 20000Hz"},
+    {"ids": [1], "text": "Sets the resonance; the last tenth of its travel tips the filter into self-oscillation"},
+    {"ids": [2], "text": "Sets the level going in, -21.6dB at the bottom of its travel to +21.6dB at the top, unity in the middle; this is the dirt control"},
+    {"ids": [3], "text": "Sets how much headroom the emulated supply has, a roomy 12V at the bottom of its travel down to a mean 2V at the top"},
+    {"ids": [4], "text": "Crossfades the mix output from pure low-pass fully anticlockwise to pure high-pass fully clockwise, with a notch between them whose frequency moves as it turns"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the fm jack before it moves the cutoff, reaching one volt per octave at either end"},
+    {"ids": [6], "text": "Sets how far the v/oct jack moves the cutoff, 0% to 100%"},
+    {"ids": [7], "text": "Walks the inverter's switching point off the middle of the supply, which makes the clipping lopsided; it is a modification, not part of the circuit"},
+    {"ids": [8], "text": "Raises the noise of the inverters inside the feedback loop; it is a modification, not part of the circuit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to filter"},
+    {"ids": [1], "text": "Moves the cutoff one volt per octave, scaled by the trk trimmer"},
+    {"ids": [2], "text": "Moves the cutoff through the fm attenuverter"},
+    {"ids": [3], "text": "Added to the res knob, a tenth of its travel per volt, so ±5V covers the whole knob"},
+    {"ids": [4], "text": "Added to the mix knob, a tenth of its travel per volt, so ±5V covers the whole knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The low-pass, twelve decibels per octave"},
+    {"ids": [1], "text": "The high-pass, twelve decibels per octave"},
+    {"ids": [2], "text": "The band-pass, six decibels per octave either side"},
+    {"ids": [3], "text": "The notch, the low-pass and high-pass summed at equal weight"},
+    {"ids": [4], "text": "The crossfade the mix knob sets between the low-pass and high-pass nodes, which is the only output the original hardware has besides the band-pass"}
+  ],
+  "notes": [
+    "the mix output is 6dB down at the centre of its knob, because the crossfade is passive and both halves are at half level there. That is what the hardware does and it is not made up for.",
+    "the notch is only deep while the filter is behaving. Driven hard the saturating amplifiers pull the cutoff about at twice the signal frequency and the null smears with it.",
+    "each of the five outputs has its own lamp, following that output's level."
+  ],
+  "menu": [
+    "Oversampling — 1× (rawest, lightest), 2× (default), 4×, 8× or 16× (cleanest)"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous"
+    }
+  }
+}

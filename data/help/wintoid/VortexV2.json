@@ -1,0 +1,63 @@
+{
+  "plugin": "wintoid",
+  "module": "VortexV2",
+  "description": "Multi-mode filter with twelve outputs running at once, one response each, polyphonic to 16 voices, with a saturating drive stage ahead of them",
+  "params": [
+    {"ids": [0], "text": "Sets the filter corner, 20Hz at the left and 20kHz at the right, with every octave given the same amount of travel"},
+    {"ids": [1], "text": "Sets the resonance at the corner, sweeping the filter damping from 0.707 at the left to 0.01 at the right"},
+    {"ids": [2], "text": "Sets the gain into a soft-clipping stage ahead of the filters, unity at the left and ten times at the right"},
+    {"ids": [3], "text": "Scales the Cutoff CV input before it shifts the corner, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [4], "text": "Scales the Reso CV input before it changes the damping, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [5], "text": "Scales the Drive CV input before it is added to the drive, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [6], "text": "Scales the V/OCT input before it shifts the corner, and inverts it below centre; it comes up at full positive, so the corner tracks a volt per octave straight away"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be filtered; its channel count sets how many voices the module runs, and it is divided by 5 on the way in and multiplied by 5 again at each output"},
+    {"ids": [1], "text": "Multiplies the corner by two raised to its own voltage, after the attenuverter beside it, and the result is held between 20Hz and 20kHz"},
+    {"ids": [2], "text": "Raises the resonance after the attenuverter beside it, each volt at a full attenuverter taking 0.2 off the damping, and the damping is held between 0.01 and 0.707"},
+    {"ids": [3], "text": "Adds a tenth of its voltage to the drive after the attenuverter beside it, and the total is held between 0 and 1"},
+    {"ids": [4], "text": "Shifts the corner a volt per octave after the attenuverter beside it, and the result is held between 20Hz and 20kHz"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A one-pole low pass of the driven signal, 6dB per octave; RESO has no effect on it"},
+    {"ids": [1], "text": "A two-pole low pass of the driven signal, 12dB per octave, damped by RESO"},
+    {"ids": [2], "text": "Two two-pole low pass sections in series, 24dB per octave, each damped by RESO"},
+    {"ids": [3], "text": "A one-pole high pass of the driven signal, 6dB per octave; RESO has no effect on it"},
+    {"ids": [4], "text": "A two-pole high pass of the driven signal, 12dB per octave, damped by RESO"},
+    {"ids": [5], "text": "Two two-pole high pass sections in series, 24dB per octave, each damped by RESO"},
+    {"ids": [6], "text": "A two-pole band pass of the driven signal centred on the corner, damped by RESO"},
+    {"ids": [7], "text": "Two identical band pass sections in series, narrowing the band that the single one passes"},
+    {"ids": [8], "text": "A two-pole notch of the driven signal, cutting the corner and passing either side of it, damped by RESO"},
+    {"ids": [9], "text": "Two identical notch sections in series, deepening the cut that the single one makes"},
+    {"ids": [10], "text": "A two-pole all pass of the driven signal, passing every frequency and shifting phase around the corner, damped by RESO"},
+    {"ids": [11], "text": "Two identical all pass sections in series, doubling the phase shift the single one applies"}
+  ],
+  "notes": [
+    "an output with nothing patched into it is reset and skipped, so its filter starts from silence when a cable is plugged back in and it costs nothing while unpatched.",
+    "a mono cable, or one with fewer channels than the audio input, is copied to every voice on each of the four CV jacks.",
+    "the drive stage is a soft clip bounded at plus or minus 3, so a hot input or a feedback build cannot run away."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic"
+    }
+  }
+}

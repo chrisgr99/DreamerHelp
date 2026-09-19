@@ -1,0 +1,17 @@
+{
+  "plugin": "MADZINE",
+  "module": "Pinpple",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Pinpple.cpp:625-638, getVoltage() crossfaded against pink and blue noise, no channel loop"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "why": "src/Pinpple.cpp:552-561, freqCV*0.1 added to a 0..1 scale spanning log2(20000/20) octaves, so one volt is one octave"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/Pinpple.cpp:563-573, getVoltage()/10 * atten, then clamp(param + cv, 0, 1)"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Pinpple.cpp:389-395 and 545-550, the voltage goes to a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds; a rising edge fires a 2ms pulse that pings the filter and opens the VCA envelope, and re-randomises the per-hit drift"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/Pinpple.cpp:577-586, getVoltage()/10 * atten, then clamp(param + cv, 0, 1)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Pinpple.cpp:660-666, a single setVoltage of the filter output times the envelope and the volume"}
+    }
+  },
+  "comment": "The filter is the Ripples band-pass, ported from Mutable Instruments, and the modulation voltage is added to the filter's exponential frequency control and then floored at the knob setting (src/Pinpple.cpp:517, v_oct = min(v_oct, 0)), so modulation only ever lowers the frequency. The frequency jack is named '1V/Oct Frequency CV' by the maker and the arithmetic bears that out to within a third of a per cent. Each trigger also adds a random offset to the frequency and decay of about six parts in a hundred thousand of full scale (src/Pinpple.cpp:375-383); that is too small to be worth a line. The panel prints FREQ, DECAY, FM AMT, LPG IN MIX, TRIG IN and OUTPUT; the mute button, the volume trimmer and the three attenuverters carry no lettering. Lettering is drawn in code at src/Pinpple.cpp:772-815."
+}

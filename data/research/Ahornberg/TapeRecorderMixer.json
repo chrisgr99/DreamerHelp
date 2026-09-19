@@ -1,0 +1,24 @@
+{
+  "plugin": "Ahornberg",
+  "module": "TapeRecorderMixer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "TapeRecorderMixer.cpp process() reads inputs[AUDIO_INPUT].getVoltage() with no channel argument"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the send, so the loop is skipped", "why": "the effects return is only mixed inside if (inputs[AUDIO_FX_RETURN].isConnected()) in TapeRecorderMixer.cpp"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "process() copies getVoltage(i) for i up to the track count and again from 4 upwards, shifting each channel by one"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "why": "getChannels() on this jack is what sets channelNumber, and channel 16 is decoded for the track number and link flag"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "rescaleInput(), which is rescale(v, 0.1, 2, 0, 1) in src/util/Switches.cpp, into a SchmittTrigger"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "rescaleInput() into fxBypassInputTrigger in TapeRecorderMixer.cpp"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "rescaleInput() into soloInputTrigger in TapeRecorderMixer.cpp"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "rescaleInput() into muteInputTrigger in TapeRecorderMixer.cpp"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the knob alone", "why": "clamp(getVoltage(), 0.f, 20.f) / 10.f multiplied into the input level knob in TapeRecorderMixer.cpp"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": true, "why": "setChannels(PORT_MAX_CHANNELS) on both bus outputs in TapeRecorderMixer::process()"},
+      "3": {"family": "audio", "poly": true, "why": "setChannels(PORT_MAX_CHANNELS) on both bus outputs in TapeRecorderMixer::process()"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3a9441f, whose plugin.json carries the installed 2.3.4. Three controls and two jacks were proved dead by reading every use of their parameter: Tape Ducking, its CV input, the Erase CV input, the Solo switch and the Delay in samples screw are each referenced only where they are configured and where their widget is created. The plugin.json tags this module as a voltage-controlled amplifier and the panel prints duck, so the missing ducking is a real conflict with what the maker documents. A Link To Left Module parameter also exists and its widget is hidden at construction and never shown, so no click can reach it and it gets no line. The Erase knob is named Tape Erase Amount by the maker and what it actually does is set the level of the tape return mixed into the channel; the erasing itself is done by the record switch, which sends -10V down the bus."
+}

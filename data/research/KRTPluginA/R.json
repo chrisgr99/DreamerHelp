@@ -1,0 +1,15 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "R",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/R.cpp:62 and 71, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "1": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/R.cpp:62 and 72, maxPoly loops over getChannels and getPolyVoltage reads the channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/R.cpp:75"},
+      "1": {"family": "audio", "poly": true, "why": "src/R.cpp:76"}
+    }
+  },
+  "comment": "The AS output compounds across polyphonic channels: `as` is computed once before the channel loop and then multiplied by each channel's output inside it (src/R.cpp:66 and 73), so channel 0 carries the knob level times the output, channel 1 carries that times its own output, and so on. Channel 0 is the only one that behaves as the panel implies. Both knobs use the maker's centred dB scaling, two to the power minus two to the minus power over -1 to 1, which is zero at the centre and plus and minus one and a half at the ends (src/R.cpp:46-47 and 51-53). The panel prints ON, AS, IN, ON, AS and OUT."
+}

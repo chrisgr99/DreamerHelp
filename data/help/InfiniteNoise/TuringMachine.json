@@ -1,0 +1,98 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "TuringMachine",
+  "description": "A 32-bit pattern shifted along by a clock, in 10HP, with the chance of a bit changing under a knob, read out as sixteen pulses and two voltages",
+  "params": [
+    {"ids": [0], "text": "Chooses which bit a change lands on: the lowest bit, or a randomly picked one of the bits in use"},
+    {"ids": [1], "text": "Holds the pattern while it is pressed, or until the next press when its latch button is on, and the CV jack is ignored while it is held"},
+    {"ids": [2], "text": "Makes the lock button a toggle rather than a control that lasts while held"},
+    {"ids": [3], "text": "Chooses how the lock input is read: as a gate that locks while it is high, or as a trigger that flips the lock each time"},
+    {"ids": [4], "text": "Sets the chance that a clock pulse changes a bit at all, 0% fully counter-clockwise to 100% fully clockwise, at 50% in the centre"},
+    {"ids": [5], "text": "Attenuates and inverts the change-probability CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [6], "text": "Sets what a changed bit becomes: the centre always flips it, counter-clockwise leans it towards 0 and clockwise towards 1"},
+    {"ids": [7], "text": "Attenuates and inverts the bit-probability CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [8], "text": "Sets how many of the 32 bits the pattern runs round, 3 to 32, and 8 unless you move it"},
+    {"ids": [9], "text": "Attenuates and inverts the length CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [10], "text": "Sets how wide a span the two voltage outputs cover, 0V to 10V"},
+    {"ids": [11], "text": "Attenuates and inverts the range CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [12], "text": "Sets where that span falls, -10V to +10V, read as its bottom, middle or top according to the button beside it"},
+    {"ids": [13], "text": "Attenuates and inverts the anchor CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [14], "text": "Steps the anchor knob's meaning through minimum, centre and maximum, with a light showing which"},
+    {"ids": [15], "text": "Clears the pattern, to random bits or to all zeros or all ones according to the switch beside it"},
+    {"ids": [16], "text": "Chooses what a reset writes: Rnd fills the pattern at random, 0's clears every bit, 1's sets every bit"},
+    {"ids": [17], "text": "Shifts the pattern one place and then gives the change probability its chance, exactly as a clock pulse does"},
+    {"ids": [18], "text": "Shifts the pattern one place without any chance of a bit changing, exactly as a rotate pulse does"},
+    {"ids": [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], "text": "Chooses what that pulse output carries: green for a gate held while its bit is 1, red for a trigger as the bit turns from 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A high gate or a trigger freezes the pattern; a red mark beside the Lock label shows when it is held"},
+    {"ids": [1], "text": "Moves the change probability, 10V covering the knob's full travel at full trim"},
+    {"ids": [2], "text": "Moves the bit probability, 10V covering the knob's full travel at full trim"},
+    {"ids": [3], "text": "Moves the sequence length, each 0.345V adding one more step at full trim"},
+    {"ids": [4], "text": "Adds its voltage to the span after the trim knob"},
+    {"ids": [5], "text": "Adds its voltage to the anchor after the trim knob"},
+    {"ids": [6], "text": "A rising edge clears the pattern as the reset switch says"},
+    {"ids": [7], "text": "A rising edge gives the change probability its chance to flip a bit"},
+    {"ids": [8], "text": "A rising edge shifts the pattern one place; with the jack empty it reads the clock, so a clock alone both shifts and changes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the lowest eight bits as a value from 0 to 255, mapped across the chosen span in 255 steps"},
+    {"ids": [1], "text": "Carries the lowest eight bits counted rather than weighted, so only how many are 1 matters, giving nine levels across the span"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Carries the bit of that number as a gate or a trigger, according to the button beside it"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17], "text": "Carries a gate or a trigger while both of the two named bits are 1 at once, which fires less often than a single bit does"},
+    {"ids": [18], "text": "Carries all sixteen pulses as sixteen channels, always as gates however the individual buttons are set"}
+  ],
+  "notes": [
+    "the outputs are always built from eight bits: with the length above 8 only the lowest eight are used, and with it below 8 the pattern is repeated to fill eight",
+    "the 32-bit pattern is saved with the patch, so a sequence you like comes back when you load it",
+    "a clock and a rotate arriving in the same cycle rotate first and then take their chance on a bit change"
+  ],
+  "menu": [
+    "Lock-mode: Both change and rotate, Only bit-change, Only rotate — chooses what the lock freezes; by default the pattern keeps rotating while locked",
+    "Lock prevents reset — makes the lock block reset requests too, which it does not do unless you turn this on",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 1V · stepped · one channel only\n\nunpatched it reads the clock input; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "stepped · one channel only",
+      "10": "stepped · one channel only",
+      "11": "stepped · one channel only",
+      "12": "stepped · one channel only",
+      "13": "stepped · one channel only",
+      "14": "stepped · one channel only",
+      "15": "stepped · one channel only",
+      "16": "stepped · one channel only",
+      "17": "stepped · one channel only",
+      "18": "stepped · polyphonic"
+    }
+  }
+}

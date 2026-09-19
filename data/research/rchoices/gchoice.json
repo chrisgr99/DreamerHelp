@@ -1,0 +1,22 @@
+{
+  "plugin": "rchoices",
+  "module": "gchoice",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "1": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "2": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "3": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "4": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "5": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "6": {"poly": false, "why": "gchoice.cpp:69 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "gchoice.cpp:50 multiplies getVoltage() by the mean attenuator, whose range is 0 to 0.6, and adds it to the mean slider; line 53 clamps the sum to 0 and 6"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "gchoice.cpp:51 multiplies getVoltage() by the spread attenuator, whose range is 0 to 0.35, and adds it to the spread knob; line 54 clamps the sum to 0.5 and 3.5"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "gchoice.cpp:59 rescales getVoltage() from the 0.1 to 2 window onto 0 to 1 and feeds it to a dsp::SchmittTrigger, whose default thresholds fire at 1 and reset at 0"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "gchoice.cpp:69 writes one value with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "Source read at commit 0a84df9, the only commit whose plugin.json carries the installed 2.0.0. THE SEVEN SOURCE JACKS ARE WIRED BOTTOM UP: GchoiceWidget adds SOURCE_INPUTS+6 at the top of the column and SOURCE_INPUTS+0 at the bottom, so index order is the reverse of panel order. That is consistent with the rest of the module — the mean slider's top end is 6 and the lamp array is added in the same reversed order — so the curve's centre really does follow the slider up the panel. All four parameters are configured with an empty name and no unit, and there is no configInput or configOutput, so Rack's hover tooltips are blank throughout. The mean slider is a tall SvgSlider declared in plugin.hpp; it has a ParamWidget and a census position, so it can be clicked for help even though the panel art shows nothing where it sits. random_gaussian in utility.cpp rounds a normal deviate to an integer and gchoice.cpp:62 discards anything outside 0 to 6, which is why a wide spread makes some triggers do nothing rather than folding back. The lamps are fed 0.8 times a gaussian, so a probability lamp never reaches full brightness; only the lamp for the chosen input is set to 1, which is how the maker's README says it is meant to read. The module has no dataToJson, so the choice is lost when a patch is saved. The seven source jacks and the output are given no family, because a router of this kind carries whatever is patched into it."
+}

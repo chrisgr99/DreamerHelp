@@ -1,0 +1,37 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscS",
+  "description": "An additive sawtooth built from up to 512 partials, which makes it free of aliasing at any pitch",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -8 to 4 as a power of two around middle C, which is about 1Hz to 4186Hz"},
+    {"ids": [1], "text": "Shifts the pitch by up to a tenth of an octave either way"},
+    {"ids": [2], "text": "Scatters the phases again at the setting chosen, which changes the sound without changing the harmonics"},
+    {"ids": [3], "text": "Picks how the phases are set at a reset: 0 puts them all at the start, and WB, Chy and Nrm draw them from a Weibull, a Cauchy or a normal distribution"},
+    {"ids": [4], "text": "Sets how many partials are added, as a power of two from 1 to 512; fewer partials soften the wave and cost less to compute"},
+    {"ids": [5], "text": "Sets the seed the scattering is drawn from, 0 to 1, so the same scattering can be had again"},
+    {"ids": [6], "text": "Sets how far the phases of the partials are scattered when they are reset, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "A trigger here scatters the phases again at the setting chosen"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sawtooth, -5V to 5V"}
+  ],
+  "notes": [
+    "with the phase mode at 0 the wave is an ordinary saw; the other three settings give the same harmonics with the partials out of step, which takes the edge off the transient"
+  ],
+  "menu": [
+    "use thread — works the partials out on a background thread, which keeps them off the audio thread at the cost of some delay",
+    "Thread buffer size — sets how many samples that background thread works on at a time; a larger buffer glitches less and delays more"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

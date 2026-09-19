@@ -1,0 +1,62 @@
+{
+  "plugin": "voxglitch",
+  "module": "VXDrums",
+  "description": "VX Drums: six synthesised drum voices in six columns, struck over one polyphonic trigger cable, with four knobs each, four polyphonic CV inputs, a stereo mix and a dry output per voice",
+  "params": [
+    {"ids": [0, 4, 8, 12, 16, 20], "text": "Sets the pitch of that column's drum, or the tone centre of a noise-based voice; each model has its own range, and the tooltip gives the value in that model's own units"},
+    {"ids": [1, 5, 9, 13, 17, 21], "text": "Sets how long that column's voice rings, in seconds, over a range belonging to the model loaded in that column"},
+    {"ids": [2, 6, 10, 14, 18, 22], "text": "Sets the one control that means something different in every model: punch on a kick, snap on a snare, the burst spacing on a clap, metal on a hat; the tooltip names it in the model's own word"},
+    {"ids": [3, 7, 11, 15, 19, 23], "text": "Sets the level of that column's voice, 0% to 120%, into both the stereo mix and that voice's dry output"},
+    {"ids": [24], "text": "Sets how much harder an accented hit lands, by driving that voice's circuit harder rather than only raising its level"},
+    {"ids": [25], "text": "Saturation on the stereo mix, applied after the voices are summed and ahead of VOLUME; the dry outputs do not pass through it"},
+    {"ids": [26], "text": "Sets the level of the stereo mix, after DRIVE"},
+    {"ids": [27], "text": "Sets how far each strike may differ from the last: at 0 every hit plays as the knobs are set, and turned up each strike draws its own offsets for that voice's TUNE, DECAY, SHAPE and LEVEL"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Strikes one voice per channel: 1 bass drum, 2 snare, 3 clap, 4 percussion, 5 closed hat, 6 open hat. An edge reaching 2V strikes, and that channel must fall to 0.1V before it strikes again"},
+    {"ids": [1], "text": "A voice struck while this is at 2V or above hits harder and brighter, by as much as the ACCENT knob sets; a mono cable accents every voice and a polyphonic one accents channel for channel with TRIG"},
+    {"ids": [2], "text": "Adds to the TUNE knobs, channels 1 to 6 for the six columns and channel 7 for ACCENT; 10V is a knob's whole travel, and the total is clamped to the ends of the knob"},
+    {"ids": [3], "text": "Adds to the DECAY knobs, channels 1 to 6 for the six columns; 10V is a knob's whole travel, and channel 7 does nothing since the master strip has no decay knob"},
+    {"ids": [4], "text": "Adds to the SHAPE knobs, channels 1 to 6 for the six columns and channel 7 for DRIVE; 10V is a knob's whole travel, and the total is clamped to the ends of the knob"},
+    {"ids": [5], "text": "Adds to the LEVEL knobs, channels 1 to 6 for the six columns and channel 7 for VOLUME; 10V is a knob's whole travel, and the total is clamped to the ends of the knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the six voices summed, through DRIVE and VOLUME, with each voice at its fixed place across the stereo field"},
+    {"ids": [1], "text": "The right side of the six voices summed, through DRIVE and VOLUME, with each voice at its fixed place across the stereo field"},
+    {"ids": [2, 3, 4, 5, 6, 7], "text": "That voice alone, with its LEVEL and any accent applied but not DRIVE or VOLUME; taking it here does not remove the voice from the stereo mix"}
+  ],
+  "notes": [
+    "the KIT display at the top right names the set of six drum circuits loaded; click it to choose another, and the knobs keep their positions while each position takes on the new model's range",
+    "in the House kit a new module starts on, SHAPE is punch on the bass drum, snap on the snare, burst spacing on the clap, drive on the rimshot in the PERC column, and metal on both hats",
+    "a strike in the closed hat column cuts off the open hat column; hat models fade out when cut off, and any other model placed there carries on",
+    "a mono cable into TRIG fires the bass drum alone; build the polyphonic trigger cable with a merge, or take one from a VX Drum Sequencer's TRIG output",
+    "this is the top half of a two-panel drum machine: a VX Drum Sequencer placed below drives it through TRIG and ACC, and neither module has a clock of its own",
+    "the light above a column flashes each time that voice is struck"
+  ],
+  "menu": [
+    "Kit — loads a named set of six drum circuits, the seven factory kits first and any you have saved below them",
+    "Kit Customization — a model submenu per column, Bass drum model through Open hat model, each listing Kit default and then every model; below them Save kit as…, Update kit and Manage kits",
+    "Stereo panning — ticked, the clap goes a little left, the percussion a little right and the hats either side of centre; unticked, every voice is dead centre. The dry outputs are untouched",
+    "Reset knobs to model defaults — sets every column's TUNE, DECAY and SHAPE to the defaults of the model that column is playing, leaving LEVEL and the master knobs alone"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads the same gate on every voice.",
+      "2": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "MADZINE",
+  "module": "EuclideanRhythm",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/EuclideanRhythm.cpp:458-466, read only while patched; a rising edge through 1V on a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds times the interval since the last edge and steps every track"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/EuclideanRhythm.cpp:468-477, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds, in parallel with the RESET button; a rising edge calls onReset and the rest of that sample's processing is skipped"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:497-506, length = round(clamp(lengthParam + getVoltage()*atten, 1, 32))"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:508-518, fillCV = getVoltage()*atten*10, clamp(fillParam + fillCV, 0, 100)"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:520-530, shift = round(clamp(shiftParam + getVoltage()*atten, 0, length-1))"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:497-506 with i = 1, reading TRACK2_LENGTH_CV_INPUT: length = round(clamp(lengthParam + getVoltage()*atten, 1, 32)), one step per volt at the attenuator's full travel"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:508-518 with i = 1, reading TRACK2_FILL_CV_INPUT: fillCV = getVoltage()*atten*10 added to the fill percentage, then clamp(0, 100) and rounded to a whole number of steps"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:520-530 with i = 1, reading TRACK2_SHIFT_CV_INPUT: shift = round(clamp(shiftParam + getVoltage()*atten, 0, length-1))"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:497-506 with i = 2, reading TRACK3_LENGTH_CV_INPUT: length = round(clamp(lengthParam + getVoltage()*atten, 1, 32)), one step per volt at the attenuator's full travel"},
+      "9": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:508-518 with i = 2, reading TRACK3_FILL_CV_INPUT: fillCV = getVoltage()*atten*10 added to the fill percentage, then clamp(0, 100) and rounded to a whole number of steps"},
+      "10": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/EuclideanRhythm.cpp:520-530 with i = 2, reading TRACK3_SHIFT_CV_INPUT: shift = round(clamp(shiftParam + getVoltage()*atten, 0, length-1))"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/EuclideanRhythm.cpp:534-535, trigPulse of 0.01f scaled to 10V"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/EuclideanRhythm.cpp:540-547, 10V when any track output is above 0V"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/EuclideanRhythm.cpp:295-327, the active track's own trigger pulse at 10V"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"}
+    }
+  },
+  "comment": "The LEN and SHFT jacks take one step per volt and the FILL jack ten per cent per volt, none of which is one of the four range shapes, so range is left off those. The chain outputs are computed only while the clock jack is patched. The panel prints CLK, RST, LEN, FILL, SHFT, D/M, OUT 1 to OUT 3, 1+2, 2+3, 1213 and OR; the reset button beside RST carries no lettering. Lettering is drawn in code, at src/EuclideanRhythm.cpp:610-689."
+}

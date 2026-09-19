@@ -1,0 +1,93 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Clock-Long",
+  "description": "Master clock putting out eighteen divisions and multiples of one tempo at once, plus six ramps running across the longer spans, in any time signature from 2 to 16 beats",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo, doubling for each unit of travel: 7.5BPM at fully counter-clockwise, 120BPM at the 0 position and 240BPM at fully clockwise"},
+    {"ids": [1], "text": "Sets how many beats a measure has, 2 to 16; changing it restarts every clock"},
+    {"ids": [2], "text": "Sets the note value one beat counts as, the bottom number of the time signature: 2 for a half note, 4 for a quarter, 8 for an eighth, 16 for a sixteenth; changing it restarts every clock"},
+    {"ids": [3], "text": "Moves the second half of each beat later or earlier, -1 to 1, the centre giving an even beat; it reaches the eighth, sixteenth and offbeat quarter outputs"},
+    {"ids": [4], "text": "Bends the six ramp outputs from nearly logarithmic at -0.99, through a straight line at 0, to exponential at 0.99"},
+    {"ids": [5], "text": "Sets how much of its own cycle each pulse output stays high, 1% to 99%"},
+    {"ids": [6], "text": "Returns every clock to the start of its cycle"},
+    {"ids": [7], "text": "Starts and stops the whole clock; while it is stopped every output stays at 0V and the clocks are held at their reset point"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the BPM knob, doubling the tempo for every volt"},
+    {"ids": [1], "text": "An external clock: each rise past 1V counts as one beat, and the tempo is taken from the average of the last four gaps, which replaces the BPM knob and its jack altogether"},
+    {"ids": [2], "text": "A rise past 1V returns every clock to the start of its cycle, and a cable here replaces the Reset button"},
+    {"ids": [3], "text": "Each rise past 0.9V starts or stops the clock, and a cable here replaces the Run button"},
+    {"ids": [4], "text": "Divided by 5 and added to the Pulse Width knob, the total clamped between 1% and 99%"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 0.08 seconds long each time the clock starts and each time it stops"},
+    {"ids": [1], "text": "A 10V pulse 0.08 seconds long each time the clock is reset"},
+    {"ids": [2], "text": "A pulse on every beat, the clock every other output is divided from"},
+    {"ids": [3], "text": "Four pulses in each beat, the offbeat ones moved by Swing"},
+    {"ids": [4], "text": "Two pulses in each beat, the second of them moved by Swing"},
+    {"ids": [5], "text": "A pulse every three quarters of a beat, free-running rather than pulled back at the bar line"},
+    {"ids": [6], "text": "One pulse in each beat, halfway through it, moved by Swing"},
+    {"ids": [7], "text": "Three pulses in the time of two beats"},
+    {"ids": [8], "text": "Three pulses in each measure"},
+    {"ids": [9], "text": "Two pulses in each measure; on an odd number of beats the first part takes the extra beat, so five beats split three then two"},
+    {"ids": [10], "text": "One pulse at the start of every measure"},
+    {"ids": [11], "text": "One pulse every four measures"},
+    {"ids": [12], "text": "One pulse every number of measures equal to the beats in a measure, so every eight measures in 8/8"},
+    {"ids": [13], "text": "One pulse every sixteen measures"},
+    {"ids": [14], "text": "One pulse every number of measures equal to the beats multiplied by the note value, so every sixteen measures in 4/4"},
+    {"ids": [15], "text": "A ramp from 0V to 10V across each half measure, bent by the Curve knob"},
+    {"ids": [16], "text": "A ramp from 0V to 10V across each measure, bent by the Curve knob"},
+    {"ids": [17], "text": "A ramp from 0V to 10V across each four measures, bent by the Curve knob"},
+    {"ids": [18], "text": "A ramp from 0V to 10V across as many measures as there are beats in one, bent by the Curve knob"},
+    {"ids": [19], "text": "A ramp from 0V to 10V across each sixteen measures, bent by the Curve knob"},
+    {"ids": [20], "text": "A ramp from 0V to 10V across the beats multiplied by the note value in measures, bent by the Curve knob"},
+    {"ids": [21], "text": "A pulse every three eighths of a beat, its cycle pulled back to the start of every measure"},
+    {"ids": [22], "text": "A pulse every three quarters of a beat, its cycle pulled back to the start of every measure"},
+    {"ids": [23], "text": "A pulse every two beats, its cycle pulled back to the start of every measure"},
+    {"ids": [24], "text": "Three pulses in the time of two beats, the cycle pulled back to the start of every measure"},
+    {"ids": [25], "text": "A pulse every beat and a half, its cycle pulled back to the start of every measure"}
+  ],
+  "notes": [
+    "the clock comes up stopped, and nothing leaves any output until Run is pressed or a cable in the Run jack takes it high",
+    "the two displays read the tempo in beats per minute and the time signature the Beats and Quaver knobs set",
+    "the measure-bound outputs restart at every bar line, so a division that does not fit the bar begins again rather than carrying its offset into the next one",
+    "every output is monophonic and every pulse output is 10V while it is high"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 0.9V · stepped · one channel only",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads the Pulse Width knob; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · stepped · one channel only",
+      "15": "0 to 10V · one channel only",
+      "16": "0 to 10V · one channel only",
+      "17": "0 to 10V · one channel only",
+      "18": "0 to 10V · one channel only",
+      "19": "0 to 10V · one channel only",
+      "20": "0 to 10V · one channel only",
+      "21": "0 to 10V · stepped · one channel only",
+      "22": "0 to 10V · stepped · one channel only",
+      "23": "0 to 10V · stepped · one channel only",
+      "24": "0 to 10V · stepped · one channel only",
+      "25": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

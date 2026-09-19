@@ -1,0 +1,40 @@
+{
+  "plugin": "Venom",
+  "module": "WaveFolder",
+  "description": "Wave Folder amplifies a signal and folds it back at 5V either way through a fixed number of stages, with every amplifier under voltage control",
+  "params": [
+    {"ids": [0], "text": "Sets the maximum number of folding stages, 2 to 6 with a default of 3, which caps how many folds heavy amplification can produce"},
+    {"ids": [1], "text": "Sets oversampling against the aliasing folding and modulation introduce: off, x2, x4 by default, x8, x16 or x32, and it is applied to every input"},
+    {"ids": [2], "text": "Sets the amplification applied to the input before any folding, 0 to 10 with unity at 1; more amplification gives more folds"},
+    {"ids": [3], "text": "Sets the amplification applied inside each folding stage, 0.5 to 10 on an exponential scale that spreads out the useful values between 1 and 2"},
+    {"ids": [4], "text": "Adds -5V to 5V to the input before any amplification, which makes the folding asymmetric"},
+    {"ids": [5], "text": "Attenuates or inverts the pre-amp CV before it is summed with the Pre-amp knob, -100% to 100%"},
+    {"ids": [6], "text": "Attenuates or inverts the stage amp CV before it is summed with the Stage amp knob, -100% to 100%"},
+    {"ids": [7], "text": "Attenuates or inverts the bias CV before it is summed with the Bias knob, -100% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Voltage control of the pre-amp; the attenuated voltage is summed with the knob and the total is unconstrained. Audio rate CV works"},
+    {"ids": [1], "text": "Voltage control of the stage amplification; the attenuated voltage is summed with the knob and the total is unconstrained. Audio rate CV works"},
+    {"ids": [2], "text": "Voltage control of the bias; the attenuated voltage is summed with the knob and the total is unconstrained. Audio rate CV works"},
+    {"ids": [3], "text": "The signal to be folded, always oversampled at the rate the OVER SAMPLE button selects"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The folded signal, soft clipped at 6V either way by tanh saturation"}
+  ],
+  "menu": [
+    "Disable oversampling, in a CV input's own port menu — leaves that one input unoversampled, which saves CPU on slow modulation; the light beside the port turns red while it is off",
+    "Bipolar VCA (ring mod), in the pre-amp or stage amp CV input's own port menu — passes negative amplification and inverts the signal; a yellow light beside the port shows it",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

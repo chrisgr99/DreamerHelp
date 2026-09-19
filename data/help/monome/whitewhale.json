@@ -1,0 +1,51 @@
+{
+  "plugin": "monome",
+  "module": "whitewhale",
+  "description": "A probabilistic step sequencer played from a grid controller, giving four trigger outputs and two control voltages",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock, from a 2 second period at fully counter-clockwise to a 47ms period at fully clockwise"},
+    {"ids": [1], "text": "A general-purpose control whose job depends on what the grid is showing: hold a grid key standing for a continuous value and turn this to edit that value"},
+    {"ids": [2], "text": "Short-press to open the preset view on the grid; press and hold to save the current state into the active preset slot"},
+    {"ids": [3], "text": "Click to reclaim a grid that has been taken by another module; the right-click menu is where a grid is first chosen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A clock for the sequencer; each rising edge above 2.21V advances it one step, and the width of the incoming pulse sets the length of the trigger outputs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A gate at the current clock rate, following the internal clock or the external one as appropriate"},
+    {"ids": [1, 2, 3, 4], "text": "One of four trigger outputs, 0V low and 8V high, firing on the steps set for it on the grid"},
+    {"ids": [5], "text": "A control voltage, 0V to 10V, stepping through the values set for it on the grid; quantized to the nearest semitone unless the grid is in curves mode"},
+    {"ids": [6], "text": "A control voltage, 0V to 10V, stepping through the values set for it on the grid; quantized to the nearest semitone unless the grid is in curves mode"}
+  ],
+  "notes": [
+    "this module does nothing but run a clock until a grid is connected. Add a grid module or attach a hardware grid, then right-click here and pick it from the Device Connection list.",
+    "once a sequence has been entered from the grid, the grid can be disconnected and the sequence keeps playing.",
+    "inserting a patch cable into the clock input with nothing at the other end stops the sequencer.",
+    "a hardware grid needs serialosc installed; a virtual grid module needs nothing."
+  ],
+  "menu": [
+    "Firmware Tools — opens a submenu naming the firmware and its version, with the input and output rate settings, a screenshot command, and the firmware reload commands",
+    "Input rate — sets how often the module reads its jacks, from 1x at the audio sample rate down to /16; found on the Firmware Tools submenu",
+    "Output rate — sets how often the module writes its jacks, from 1x at the audio sample rate down to /16; found on the Firmware Tools submenu",
+    "Save PNG screenshot — writes a picture of the module to disk; found on the Firmware Tools submenu",
+    "Switch Firmware — loads a different firmware build into the module; found on the Firmware Tools submenu",
+    "Hot Reload — reloads the firmware and keeps both the working memory and the stored presets; found on the Firmware Tools submenu",
+    "Reload & Restart — reloads the firmware, discards the working memory and keeps the stored presets; found on the Firmware Tools submenu",
+    "Clear NVRAM — wipes the module's stored presets and keeps the working memory; found on the Firmware Tools submenu",
+    "Device Connection — lists the hardware and virtual grids the module can attach to; pick one to connect it, and the USB jack on the panel then shows a plug in it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2.21V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 8V · stepped · one channel only",
+      "1": "0 to 8V · stepped · one channel only",
+      "2": "0 to 8V · stepped · one channel only",
+      "3": "0 to 8V · stepped · one channel only",
+      "4": "0 to 8V · stepped · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only"
+    }
+  }
+}

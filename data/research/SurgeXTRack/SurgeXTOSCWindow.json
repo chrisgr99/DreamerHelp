@@ -1,0 +1,19 @@
+{
+  "plugin": "SurgeXTRack",
+  "module": "SurgeXTOSCWindow",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "VCO.h:334 takes getChannels() on this input for the module channel count and VCO.h:537 adds each channel to the pitch in semitones"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "VCO.h:334 takes getChannels() on this input for the module channel count and VCO.h:637 passes each channel to a SchmittTrigger, whose default high threshold is 1V"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "why": "XTModule.h:833 takes getChannels() on this input and XTModule.h:912 reads every channel, scaling it by 0.1 so that plus or minus 10V covers the whole depth set for it"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "why": "XTModule.h:833 takes getChannels() on this input and XTModule.h:912 reads every channel, scaling it by 0.1 so that plus or minus 10V covers the whole depth set for it"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "why": "XTModule.h:833 takes getChannels() on this input and XTModule.h:912 reads every channel, scaling it by 0.1 so that plus or minus 10V covers the whole depth set for it"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "why": "XTModule.h:833 takes getChannels() on this input and XTModule.h:912 reads every channel, scaling it by 0.1 so that plus or minus 10V covers the whole depth set for it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.h:722 multiplies this output by SURGE_TO_RACK_OSC_MUL, which is 5"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.h:722 multiplies this output by SURGE_TO_RACK_OSC_MUL, which is 5"}
+    }
+  },
+  "comment": "The menu item reads Retrigger With Phase=0 while the parameter the maker configured for it is named Random Phase on Retrigger; the item name is the one printed on screen and is what the line uses. The retrigger input is read twice over: a rising edge through 1V restarts the oscillator, and its level is also read as a gate that is high above 2V."
+}

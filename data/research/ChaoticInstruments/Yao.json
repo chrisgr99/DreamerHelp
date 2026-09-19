@@ -1,0 +1,15 @@
+{
+  "plugin": "ChaoticInstruments",
+  "module": "Yao",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "1": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false},
+      "1": {"family": "trigger", "poly": false}
+    }
+  },
+  "comment": "No source is published. The two output jacks are printed the wrong way round. The envelope is written to outputs[0] and the pulse to outputs[1], and the maker's own port names agree, calling them Envelope CV and Beat gate. The widget binds outputs[0] to the SVG element named cv and outputs[1] to the one named gate, but the two panel files disagree about where those elements are: in Yao.svg the circle named gate is at x 112.83 and cv at 158.5, while in Yao-dark.svg they are the other way round, and no other panel in the plugin has such a mismatch. SvgHelper::findNamed searches whichever theme's file is loaded, so which physical hole carries which signal depends on the theme the module was created under. The scanned positions here are from a dark-theme Rack, where outputs[0], the envelope, is the left jack, under the lettering GATE, and outputs[1], the pulse, is the right one under CV. In the light theme they land the other way round and the lettering is then correct. The lettering itself sits at the same place in both files. Somebody should tell the maker. The fourteen clock ratios are printed by the RatioQuantity as /8, /6, /4, /3, /2, then multiplications by 2/3, 3/4, 1, 1.5, 2, 3, 4, 6 and 8, with the default at index 7, which is times 1. The change engine draws a random number each beat and does nothing unless it falls below the Mutability knob; otherwise it moves one of three depth values by 0.125 towards 0 or 1 depending on the matching trigram bit, and when a depth reaches its end that bit flips and one of the other two lines is chosen at random. The three depths modulate the beat rate as a power of two, the symmetry and the phase. The beat frequency is clamped to 50Hz and the clock period to a floor of two samples. Nothing in the plugin reads a channel count, so every port is mono. The panel menu also carries Reload panel and Poll SVG for reload, which every module in this plugin has and which only reload the panel artwork; they are left out."
+}

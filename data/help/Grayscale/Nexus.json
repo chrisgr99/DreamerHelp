@@ -1,0 +1,60 @@
+{
+  "plugin": "Grayscale",
+  "module": "Nexus",
+  "description": "Twelve-channel macro controller: a keyframe stores the levels of all twelve VCAs at one point on a timeline, and the large knob moves along that timeline, interpolating between the keyframes",
+  "params": [
+    {"ids": [0], "text": "Chooses which channels the AMP knob edits, and clicking it moves the selection scope on to the next of one channel, a column of two, and all twelve"},
+    {"ids": [1], "text": "Sets the level of the channels in the selection scope at the current keyframe, and clicking it flips those channels between their lowest and highest levels"},
+    {"ids": [2], "text": "Moves along the timeline, interpolating levels between the keyframes on either side; VCA levels can be edited only while it points at a keyframe"},
+    {"ids": [3], "text": "Inverts the levels of the channels in the selection scope at the current keyframe, and pressing it again puts them back"},
+    {"ids": [4], "text": "Adds a keyframe at the current timeline position, or deletes the keyframe already there"},
+    {"ids": [5], "text": "Normals an internal 10V offset to every channel input with nothing patched, so those channels generate control voltages instead of passing an external signal"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the MOD input before it moves the timeline, and at the centre no modulation gets through"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Audio or control voltage into that channel's VCA; each odd-numbered input is normalled to the even-numbered input beside it, so one cable fills a stereo pair"},
+    {"ids": [12], "text": "Moves the timeline, added to the position of the large knob and scaled by the MOD attenuator; in the two sequencer modes a trigger here moves to the next keyframe"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "That channel's input after its VCA, and patching it subtracts that channel from the mix output for its row"},
+    {"ids": [12], "text": "A 10ms trigger each time a keyframe becomes active"},
+    {"ids": [13], "text": "The mix of the odd-numbered channel outputs, without any channel whose own output jack is patched"},
+    {"ids": [14], "text": "The mix of the even-numbered channel outputs, without any channel whose own output jack is patched"}
+  ],
+  "notes": [
+    "the maker's manual says at least two keyframes are needed before there is anything to interpolate; turn the timeline knob to a position, press KEY, move to another position and press KEY again",
+    "the AMP knob changes nothing while the timeline knob points between keyframes; move it onto a keyframe, or add one with KEY, before editing levels"
+  ],
+  "menu": [
+    "Selection scope — chooses Single, Columns or All for which channels the AMP knob edits",
+    "Sequencing mode — chooses Keyframer, which interpolates between keyframes, Sequencer (step), which moves on one keyframe at a trigger, or Sequencer (random)",
+    "Interpolation curve — chooses Linear, Exponential, Logarithmic, Sine, Step A or Step B for how the selected channels travel between keyframes",
+    "VCA response — chooses Linear, 25%, 50%, 75% or Exponential for how the level of the selected channels follows the AMP knob",
+    "Copy keyframe — takes the levels of the keyframe at the timeline position now, and Paste keyframe writes them at whatever position is reached next",
+    "Randomize levels — gives every channel in the selection scope a new random level at the current keyframe",
+    "Delete all keyframes — empties the timeline and returns every channel to linear interpolation and linear response",
+    "Factory presets — a submenu of twelve worked examples, from Null (no keyframes) and Min/max fader through the submixes and crossfaders to Six CV/gate sequencers",
+    "Toggle min/max levels — flips the channels in the selection scope between their lowest and highest levels, which is what clicking the AMP knob does",
+    "Invert levels — inverts the levels of the channels in the selection scope, which is what the VAR button does"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic",
+      "10": "polyphonic",
+      "11": "polyphonic",
+      "12": "one channel only"
+    },
+    "outputs": {
+      "12": "stepped"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "plugin": "ChowDSP",
+  "module": "ChowTape",
+  "description": "A physical model of magnetic tape: the audio is driven through a Jiles-Atherton model of the tape's magnetic hysteresis, which is where tape distortion comes from",
+  "params": [
+    {"ids": [0], "text": "Sets the width of the hysteresis loop. At the left the loop is at its widest, which gives the dead band and the coarse distortion of underbiased tape, and turning it right closes the loop up."},
+    {"ids": [1], "text": "Sets the level at which the tape saturates; turning it up brings the saturation point down, so the sound distorts sooner"},
+    {"ids": [2], "text": "Sets how hard the audio is driven into the hysteresis model, which changes the shape of the distortion rather than only its level"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be put on tape; it is divided by 5 and clamped, so anything past 5V is already at the top of the model's range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The processed audio, at 4.18 times the model's own output"}
+  ],
+  "notes": [
+    "the model runs at four times the sample rate when the module is added; the oversampling menu changes that."
+  ],
+  "menu": [
+    "Oversampling: 1x, 2x, 4x, 8x, 16x — sets how many times the internal sample rate is raised before the nonlinearity is computed; higher settings reduce aliasing and cost more CPU",
+    "Publication — opens the 2019 DAFx paper the tape model comes from in a web browser"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous"
+    }
+  }
+}

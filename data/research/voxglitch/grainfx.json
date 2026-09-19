@@ -1,0 +1,28 @@
+{
+  "plugin": "voxglitch",
+  "module": "grainfx",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "why": "GrainFx.hpp:219 reads this input with getVoltage() alone and multiplies the jitter spread by it"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "why": "GrainFx.hpp:128 rescales this input from -10V..+10V onto the 1 to 6400 window range and clamps it there"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "why": "GrainFx.hpp:128 rescales this input from -10V..+10V onto the 0 to 1 position range and clamps it there; while a cable is in it the internal LFO is not used (GrainFx.hpp:188)"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "GrainFx.hpp:268 divides this input by 10 and subtracts 5 before the attenuverter and the knob"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "GrainFx.hpp:279 reads SPAWN_TRIGGER_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "why": "GrainFx.hpp:246 divides this input by 5 and subtracts 1 when the PAN switch is set to unipolar, and GrainFx.hpp:251 divides it by 10 when the switch is set to bipolar"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "why": "GrainFx.hpp:258 assigns this input's voltage to audio_buffer.frozen, a bool, so any voltage other than 0V sets it and audio_buffer.hpp:39 then stops pushing new audio into the buffer; unpatched, :262 takes the flag from the FREEZE switch instead, so no voltage is read"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling; the total is stored in the unsigned int max_grains at GrainFx.hpp:8"},
+      "9": {"family": "audio", "poly": false, "step": "continuous", "why": "GrainFx.hpp:169 reads this input with getVoltage() alone and pushes it straight into the audio buffer"},
+      "10": {"family": "audio", "poly": false, "step": "continuous", "why": "GrainFx.hpp:169 reads this input with getVoltage() alone and pushes it straight into the audio buffer"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling into the spawn countdown at GrainFx.hpp:288"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling to the 500Hz maximum at GrainFx.hpp:160"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "GrainFx.hpp:148 divides this input by 10 and GrainFx.hpp:152 clamps that alone to 0..1 before the attenuverter and the knob"},
+      "14": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "GrainFx.hpp:137 divides this input by 10 and GrainFx.hpp:141 clamps that alone to 0..1 before scaling; GrainFx.hpp:175 stores the result in the unsigned int selected_waveform"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv"}
+    }
+  },
+  "comment": "The PITCH CV is scaled as the voltage divided by ten minus five before the attenuator, so at 0V it shifts the reading speed a long way negative; that looks like a mistake in the code rather than a designed range, and the line avoids quoting a figure. Param 12 (SPAWN_THROTTLING_KNOB) is declared but has no control on the panel. Input 5 (CONTOUR) and param 12 have no jack or control on the panel and are not read. PAN's range depends on the PAN switch: set to unipolar the code divides the voltage by 5 and subtracts 1, so 0 to 10V covers hard left to hard right; set to bipolar it divides by 10, so ±10V covers the same span. No range is written for that jack because it is not fixed."
+}

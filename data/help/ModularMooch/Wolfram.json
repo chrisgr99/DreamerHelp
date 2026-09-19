@@ -1,0 +1,67 @@
+{
+  "plugin": "ModularMooch",
+  "module": "Wolfram",
+  "description": "An 8 by 8 grid of cells run by cellular automata rules, read out as two voltages and two pulses; each trigger advances one generation, and the pattern can be locked into a loop of a set length",
+  "params": [
+    {"ids": [0], "text": "Turning it chooses the rule the algorithm runs, from the 256 rules of Wolf or the 30 rules of Life; with the menu open it changes the parameter on the page being shown instead"},
+    {"ids": [1], "text": "Opens and closes the menu on the display, which is where the seed, the mode, the choice of gain or slew, and the algorithm are set"},
+    {"ids": [2], "text": "Steps the algorithm's mode on by one: CLIP, WRAP and RAND on Wolf, and CLIP, WRAP, BOTL and RAND on Life; with the menu open it moves to the next menu page instead"},
+    {"ids": [3], "text": "Sets how many steps the pattern loops over when it is locked, choosing between 2, 3, 4, 6, 8, 12, 16, 32 and 64"},
+    {"ids": [4], "text": "Sets the chance that a step generates a new pattern rather than replaying the loop; at 0 the sequence is locked and repeats at the set length, and at 1 every step generates"},
+    {"ids": [5], "text": "Shifts the grid sideways by up to four cells before it is read out, -4 to +3, which changes both voltages and both pulses without altering the pattern itself"},
+    {"ids": [6], "text": "Sets the highest voltage XOUT reaches, 0V to 10V; it is shown only while the menu's FX page reads GAIN, and does not act on XPULSE"},
+    {"ids": [7], "text": "Slews XOUT, from no slew at 0% to 5 seconds for the full swing at 100%, or 5ms at 100% with Audio Rate on; it is shown only while the menu's FX page reads SLEW, and does not act on XPULSE"},
+    {"ids": [8], "text": "Sets the highest voltage YOUT reaches, 0V to 10V; it is shown only while the menu's FX page reads GAIN, and does not act on YPULSE"},
+    {"ids": [9], "text": "Slews YOUT, from no slew at 0% to 5 seconds for the full swing at 100%, or 5ms at 100% with Audio Rate on; it is shown only while the menu's FX page reads SLEW, and does not act on YPULSE"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger above 2V here returns a locked sequence to its first step, or pushes the seed back into the grid while the sequence is generating"},
+    {"ids": [1], "text": "Adds to the PROB knob, 10V covering the whole span from locked to generating every step; the total is held between those two ends"},
+    {"ids": [2], "text": "Adds to the offset in whole cells, 10V shifting it by seven; the total is held within the -4 to +3 the knob covers"},
+    {"ids": [3], "text": "Shifts the rule away from the one chosen with SEL, 10V moving it across the whole set of rules and a negative voltage moving it back the other way"},
+    {"ids": [4], "text": "Chooses the algorithm while a cable is patched, 0V to under 5V giving Wolf and 5V and above giving Life, which overrides the algorithm set in the menu"},
+    {"ids": [5], "text": "A trigger above 2V here advances the grid one generation, or steps a locked sequence on by one; with Audio Rate on, every zero crossing of the voltage here advances it instead"},
+    {"ids": [6], "text": "A trigger above 2V here brings one living cell into the grid, and a trigger below -2V removes one"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The bottom row of the grid read as an 8-bit number on Wolf, or the count of living cells on Life, as 0V to 10V before the gain or slew trimpot"},
+    {"ids": [1], "text": "A 1ms pulse at 10V each time the grid changes, when the bottom left cell is alive on Wolf or the population has grown on Life"},
+    {"ids": [2], "text": "The right-hand column of the grid read as an 8-bit number on Wolf, or the whole 64-cell grid read as a 64-bit number on Life, as 0V to 10V before the gain or slew trimpot"},
+    {"ids": [3], "text": "A 1ms pulse at 10V each time the grid changes, when the top right cell is alive on Wolf, or when the Life pattern has stopped changing or fallen into a two-step repeat"}
+  ],
+  "notes": [
+    "nothing moves until a clock or trigger is patched to TRIG; every step of the grid is taken on an edge there, and with no cable patched the module holds whatever it was showing",
+    "the display is the 8 by 8 grid itself, and the menu is drawn over it; MENU opens the menu, MODE walks through its four pages, and SEL changes the value on the page being shown",
+    "the four menu pages are the seed the grid starts from, the algorithm's boundary mode, the choice of gain or slew for the two trimpots, and which algorithm runs",
+    "double-clicking SEL pushes the seed back into the grid; while a menu page is open it returns that page's parameter to its default instead",
+    "turning SEL with the menu shut brings up a small rule readout over the bottom of the grid for three quarters of a second",
+    "the grid and the menu are drawn in one display widget with no control of its own, so nothing on it can be clicked for help",
+    "Wolf is a one-dimensional automaton: one row of eight cells is fed through one of 256 rules to make the next row, and the rows march down the grid",
+    "Life is a two-dimensional automaton on the whole 8 by 8 grid, with 30 rules to choose from, of which Conway's Game of Life is one",
+    "patching a cable to ALGO takes the choice of algorithm away from the menu for as long as it is patched, and patching one to RULE does the same for the rule set with SEL"
+  ],
+  "menu": [
+    "Algorithm: Wolf, Life — picks which of the two automata runs, the same choice as the menu's ALGO page",
+    "Sync — on, a change to a control is taken up at the next step; off, it is taken up at once",
+    "Audio Rate — on, steps come from zero crossings of the voltage at TRIG rather than from triggers, the DC offset is filtered out of both voltage outputs, and the pulses shorten to one sample",
+    "Display: Redrick, OLED, Rack, Lamp, Mono — sets the colour the grid and the menu text are drawn in",
+    "Cell: LED, Pixel — draws each cell of the grid as a round lamp or as a square pixel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

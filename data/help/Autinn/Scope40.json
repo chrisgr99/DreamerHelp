@@ -1,0 +1,56 @@
+{
+  "plugin": "Autinn",
+  "module": "Scope40",
+  "description": "A four-channel oscilloscope with an automatic time base, a trigger section, statistics, and X-Y plotting",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Moves that channel's trace up or down the screen, by up to five divisions either way"},
+    {"ids": [4], "text": "Sets the time across one division, from 10µs to 1 second"},
+    {"ids": [5], "text": "Sets how long the trigger is held off after firing, from 100µs to 10 seconds"},
+    {"ids": [6], "text": "Sets the voltage the trigger fires at, from -10V to 10V"},
+    {"ids": [7], "text": "Chooses which channel the trigger is taken from, A, B, C, D or the external trigger jack"},
+    {"ids": [8], "text": "Chooses the trigger mode: Auto sweeps whether or not a trigger arrives, Norm sweeps only on a trigger, Single sweeps once and stops, and X-Y plots one channel against another instead of against time"},
+    {"ids": [9], "text": "Chooses whether the trigger fires on a rising or a falling edge"},
+    {"ids": [10], "text": "Freezes the display at the end of the sweep now being drawn, or at once in X-Y mode; pressing it again releases the freeze"},
+    {"ids": [11], "text": "Turns the automatic time base on and off; with it on the time per division is set from the frequency measured on the trigger channel"},
+    {"ids": [12], "text": "Steps the statistics readout through three settings: off, the trigger channel alone, and every channel"},
+    {"ids": [13, 14, 15, 16], "text": "Sets that channel's volts per division, in thirteen steps from 20V down to 5mV, the first of which switches the channel off"},
+    {"ids": [17, 18, 19, 20], "text": "Switches that channel between the audio drawing, which fills each pixel column with the highest and lowest sample in it, and the CV drawing, which joins the samples with a line"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "The signal that channel shows"},
+    {"ids": [4], "text": "A signal to trigger from, used when the source is set to the external trigger"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse at every trigger the module finds, sent whether or not the display is frozen and whatever the holdoff is set to"}
+  ],
+  "notes": [
+    "the display is drawn by the module rather than built from Rack widgets, so nothing on it can be clicked for help; it is 20 divisions across and 8 down.",
+    "the maker registered the trigger output with the call that names an input, so the channel A input jack shows the trigger output's description and the trigger output shows no name.",
+    "changing the trigger source, the trigger mode or the edge clears the measured frequency and cancels any holdoff already running.",
+    "a polyphonic cable into a channel can show all sixteen of its channels at once; which of them are drawn, and which one the trigger is taken from, are set on the menu."
+  ],
+  "menu": [
+    "Show grid — draws the division grid behind the traces",
+    "Show baselines — draws a line across the screen at each channel's zero level",
+    "Show centerline — draws a line across the middle of the screen",
+    "Auto-time periods 1 — fits one cycle of the measured wave across the screen when the automatic time base is on",
+    "Auto-time periods 3 — fits three cycles of the measured wave across the screen when the automatic time base is on, which is where the module starts",
+    "Auto-time periods 10 — fits ten cycles of the measured wave across the screen when the automatic time base is on",
+    "Auto-time periods 25 — fits twenty-five cycles of the measured wave across the screen when the automatic time base is on",
+    "Auto-time periods 50 — fits fifty cycles of the measured wave across the screen when the automatic time base is on",
+    "AC Coupling (Block DC) — opens a line per channel, each reading DC or AC; on AC a 0.1Hz filter takes the offset out of that channel before it is drawn",
+    "Polyphony — opens a line per channel, each holding View Channels, which ticks which of the sixteen polyphonic channels are drawn, and Trigger Source, which picks one of them",
+    "X-Y Plot Routing — opens Plot 1 and Plot 2, each with an X-Axis Source and a Y-Axis Source chosen from Channel A to Channel D or Off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

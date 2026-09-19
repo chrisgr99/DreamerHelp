@@ -1,0 +1,28 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-7",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "why": "CatroModulo_CM-7.cpp:59-63 pass the voltage to CM_BpmClock::setcv, and CatroModulo.hpp:642 turns a volt into 60 bpm while :581 clamps the tempo at zero"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "CatroModulo_CM-7.cpp:75-79 pass the voltage to CM_BpmClock::addcv, which at CatroModulo.hpp:590 adds cv*60 to the tempo already set"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "why": "CatroModulo_CM-7.cpp:82-86 read this jack with getVoltage, channel 0 only, and OR it with the RST button through C++ ||, so any voltage other than exactly 0V, negative included, becomes 1.0 and 0V becomes 0.0. The same 1.0 or 0.0 goes to CM_BpmClock::setReset on all five clocks, and each clock's own dsp::SchmittTrigger fires when it reaches 1 and rearms at 0; a firing zeroes that clock's phase, clears its three tracking triggers and forces its clock outputs high for one frame, so all five restart on the same sample."}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "2": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "3": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "4": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "5": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "6": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "7": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "8": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "9": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "10": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "11": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "12": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"},
+      "13": {"family": "cv", "poly": false, "why": "CatroModulo_CM-7.cpp:66-72 and :96-102 write one value each with setVoltage and the module never calls setChannels"}
+    }
+  },
+  "comment": "Read at commit d55cb70. The maker's manual gives the bpm standard as 1V per 50 bpm; CM_BpmClock::cvtobpm at CatroModulo.hpp:642 multiplies by 60. The seven tempo voltage outputs are written at lines 66 to 72, before the second input is applied at lines 75 to 79, so that input reaches the square waves only. Fourteen lights are configured and seven GreenRedLight widgets cover them, but the clock outputs never go below zero, so the red half of every one of them is dead. Nothing here is polyphonic."
+}

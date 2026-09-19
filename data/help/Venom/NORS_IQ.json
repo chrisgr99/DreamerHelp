@@ -1,0 +1,66 @@
+{
+  "plugin": "Venom",
+  "module": "NORS_IQ",
+  "description": "Quantizer for a scale built from a run of up to 13 intervals, where the run need not add up to an octave",
+  "params": [
+    {"ids": [0], "text": "Chooses the unit the intervals are displayed and typed in: volts, cents, or a frequency ratio shown relative to 1"},
+    {"ids": [1], "text": "Sets the interval that EDPO divides into equal chromatic steps, an octave by default and clamped to 4 octaves"},
+    {"ids": [2], "text": "Sets how many equal divisions the pseudo-octave is cut into, 12 by default, from 1 to 100"},
+    {"ids": [3], "text": "Sets how many intervals the scale runs through before it repeats, 1 to 13, with 12 by default"},
+    {"ids": [4], "text": "Sets the note the scale starts from, C4 by default, clamped between C0 and C8"},
+    {"ids": [5], "text": "Chooses whether the scale root is displayed and typed as Hz, cents or volts"},
+    {"ids": [6], "text": "Sets whether a pitch falling between two scale notes is rounded up, rounded down, or taken to the nearest note"},
+    {"ids": [7], "text": "Spreads the notes of the scale over even slices of the whole scale interval, so random input pitches choose each note equally often"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], "text": "Sets that one interval of the scale, in chromatic steps when EQUAL DIVS is on, or as a direct interval of 0 to 2 octaves when it is off"},
+    {"ids": [21], "text": "When on, each interval is a number of chromatic steps from dividing the pseudo-octave by EDPO; when off, each interval knob sets its interval directly and PSEUD-OCT INTERVAL and EDPO are ignored"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "text": "Adds to that interval knob, at 10 chromatic steps per volt when EQUAL DIVS is on, or a volt per octave when it is off"},
+    {"ids": [13], "text": "Adds to the PSEUD-OCT INTERVAL knob at a volt per octave, monophonic"},
+    {"ids": [14], "text": "Adds to the EDPO knob at 10 divisions per volt, monophonic"},
+    {"ids": [15], "text": "Adds to the SCALE LENGTH knob at 0.5V per step, monophonic"},
+    {"ids": [16], "text": "Adds to the SCALE ROOT knob at a volt per octave, monophonic"},
+    {"ids": [17], "text": "The pitch to be quantized, polyphonic"},
+    {"ids": [18], "text": "A trigger patched here quantizes the input pitch on each trigger and holds it in between; unpatched, the quantizing is continuous"},
+    {"ids": [19], "text": "Up to 13 channels patched here modulate the 13 interval knobs in turn"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch"},
+    {"ids": [1], "text": "A 1ms 10V trigger each time a new note is quantized, or the TRIG input passed through when that is patched"},
+    {"ids": [2], "text": "Every note of the scale as pitches, from the scale root through the first note of the next pseudo-octave, one channel per note"},
+    {"ids": [3], "text": "A whole-numbered voltage naming the pseudo-octave each quantized note landed in, 0 being the one containing the scale root"}
+  ],
+  "menu": [
+    "Preset — factory presets in five folders of example scales: octave repeating 12ET, non-octave equal divisions, non-octave repeating ratios, cent temperaments, isoharmonic chords"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only",
+      "7": "one channel only",
+      "8": "one channel only",
+      "9": "one channel only",
+      "10": "one channel only",
+      "11": "one channel only",
+      "12": "one channel only",
+      "13": "0 to 4V · continuous · one channel only",
+      "14": "0 to 10V · stepped · one channel only",
+      "15": "stepped · one channel only",
+      "16": "±4V · continuous · one channel only",
+      "17": "1V per octave · continuous · polyphonic",
+      "18": "high above 1V · stepped · polyphonic",
+      "19": "polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

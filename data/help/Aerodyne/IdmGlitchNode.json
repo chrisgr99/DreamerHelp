@@ -1,0 +1,39 @@
+{
+  "plugin": "Aerodyne",
+  "module": "IdmGlitchNode",
+  "description": "A sixteen-bit shift register turned into a quantised control voltage: each clock rolls the register round and now and then flips the bit coming back in, so a pattern repeats until it mutates",
+  "params": [
+    {"ids": [0], "text": "The chance that the bit coming back round is flipped on each clock, none fully left and every clock fully right"},
+    {"ids": [1], "text": "The chance that a gate is joined by an accent pulse, none fully left and every gate fully right; it does not change the data being injected, which is what the maker's README says it does"},
+    {"ids": [2], "text": "Pushes a set bit into the register, fires a gate and an accent at once, and works out a new voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V rolls the register round by one place and works out a new voltage from it"},
+    {"ids": [1], "text": "A rising edge above 1V puts the register back to the fixed pattern it starts on"},
+    {"ids": [2], "text": "Adds to the PROB knob, 10V covering the knob's whole range, with the total held between no chance at all and every clock"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse whenever the bit newly rolled round is set, and whenever the inject button is pushed"},
+    {"ids": [1], "text": "The low eight bits of the register read as a voltage between -5V and +5V, quantised to twelfth-of-a-volt steps and held until the next clock"},
+    {"ids": [2], "text": "A 1ms pulse on the gates picked out by DENS, and on every push of the inject button"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched to CLK IN: the shift, the gate and the voltage are all worked out on a clock edge.",
+    "the register comes up on the same fixed pattern every time, which is also what RST IN puts it back to.",
+    "the screen is drawn rather than built out of controls: the ring of sixteen dots is the register, the left arc is PROB and the right arc is DENS, and none of it can be clicked.",
+    "the maker's README describes a DATA input carrying the voltage to be sampled and shifted; no such jack exists, and the register is fed only from its own last bit.",
+    "the maker's README calls the third input an INJECT CV; the panel prints PROB CV, and adding to PROB is what it does."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "stepped"
+    }
+  }
+}

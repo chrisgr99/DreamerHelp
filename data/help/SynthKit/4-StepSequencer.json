@@ -1,0 +1,30 @@
+{
+  "plugin": "SynthKit",
+  "module": "4-StepSequencer",
+  "description": "Four-step pitch sequencer clocked from outside, with one octave knob for all four steps and a semitone knob per step",
+  "params": [
+    {"ids": [0], "text": "Sets the octave of all four steps, snapping to whole numbers 1 to 8; 4 gives 0V and each number above it adds a volt, so the range is -3V to 4V"},
+    {"ids": [1, 2, 3, 4], "text": "Sets the semitone for that step, snapping to whole numbers 0 to 11, and adds that many twelfths of a volt to the octave voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise past 1.7V moves on to the next step and sets NOTE OUT to that step's pitch"},
+    {"ids": [1], "text": "A rise past 1.7V makes the next clock play step 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the step now playing, held until the next clock; nothing is output before the first clock arrives"}
+  ],
+  "notes": [
+    "the twelve semitones are stored rounded to two decimal places, so a step can be up to 4 cents away from equal temperament",
+    "NOTE OUT carries 0V until the first clock arrives; turning the knobs on their own changes nothing",
+    "the lamp beside a step is lit while that step is playing",
+    "the place in the sequence is not written into the patch file, so the first clock after a patch is loaded plays step 1"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped"
+    },
+    "outputs": {
+      "0": "continuous"
+    }
+  }
+}

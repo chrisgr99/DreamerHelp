@@ -1,0 +1,21 @@
+{
+  "plugin": "shapetaker",
+  "module": "Clairaudient",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "clairaudient.cpp:838 getPolyVoltage for that voice is added straight to the cached base pitch at :844, one volt per octave"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the V pitch jack", "why": "docs/manuals/Clairaudient.md records the per-voice normalization from the V pitch input when this jack is empty or narrower"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "docs/manuals/Clairaudient.md gives 0-10V adding 0 to 100 percentage points at full positive attenuation, clamped"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "clairaudient.cpp:861 applyAttenuvertedCv adds getPolyVoltage times the attenuverter over CV_FORMANT_SCALE (:17, one tenth) to the width knob, and :338 clamps the sum to 0 to 1"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 5V", "normal": "0V", "why": "clairaudient.cpp:865 applyAttenuvertedCv adds getPolyVoltage times the attenuverter over CV_SHAPE_SCALE (:16, one fifth) to the shape knob, and :338 clamps the SUM to 0 to 1, so a negative pulls the knob down rather than swinging"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 5V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 5V", "normal": "0V", "why": "clairaudient.cpp:866 applyAttenuvertedCv adds getPolyVoltage times the attenuverter over CV_SHAPE_SCALE (:16, one fifth) to the shape knob, and :338 clamps the SUM to 0 to 1, so a negative pulls the knob down rather than swinging"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "clairaudient.cpp:873 applyAttenuvertedCv adds getPolyVoltage times the attenuverter over CV_XFADE_SCALE (:18, one tenth) to the crossfade knob, and :338 clamps the SUM to 0 to 1"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "docs/manuals/Clairaudient.md gives 0-10V adding 0 to 100 percentage points at full positive attenuation, clamped"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "docs/manuals/Clairaudient.md states both outputs carry the voice count of the widest input cable, up to 16"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "docs/manuals/Clairaudient.md states both outputs carry the voice count of the widest input cable, up to 16"}
+    }
+  },
+  "comment": "Two parameter slots keep the panel positions and saved indices of retired fine-tune attenuverters and now carry the formant depth and stereo width attenuverters, which is why those two sit out of line with the rest of the parameter order (clairaudient.cpp, ParamId enum)."
+}

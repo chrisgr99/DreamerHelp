@@ -1,0 +1,53 @@
+{
+  "plugin": "Gemini",
+  "module": "Gemini",
+  "description": "Two oscillators, Castor and Pollux, each mixing a ramp, a pulse and a sub-octave square, plus a modulating oscillator routed by a four-way mode knob; after Winterbloom's Castor & Pollux",
+  "params": [
+    {"ids": [0], "text": "Sets Castor's pitch: three octaves either way in semitone steps while the Castor pitch input is empty, and a continuous offset of up to one octave either way added to that input once a cable is in it"},
+    {"ids": [1], "text": "Offsets Pollux's pitch by up to one octave either way; in Hard Sync mode it sets how far above the sync source Pollux runs instead, none at fully counter-clockwise up to three octaves fully clockwise"},
+    {"ids": [2], "text": "Sets the rate of the modulating oscillator, 64Hz at fully counter-clockwise rising to 2048Hz at fully clockwise; in Hard Sync mode nothing reads that oscillator, so the knob changes nothing"},
+    {"ids": [3], "text": "Sets the width of Castor's pulse wave: fully counter-clockwise holds it at its low level for the whole cycle, and turning up lengthens the high part until it fills the cycle"},
+    {"ids": [4], "text": "Sets the width of Pollux's pulse wave: fully counter-clockwise holds it at its low level for the whole cycle, and turning up lengthens the high part until it fills the cycle"},
+    {"ids": [5], "text": "Fades the Mix output between Castor at fully counter-clockwise and Pollux at fully clockwise; the two single-oscillator outputs are unaffected by it"},
+    {"ids": [6], "text": "Sets how much of Castor's ramp wave goes into Castor's mix"},
+    {"ids": [7], "text": "Sets how much of Castor's pulse wave goes into Castor's mix"},
+    {"ids": [8], "text": "Sets how much of Pollux's pulse wave goes into Pollux's mix"},
+    {"ids": [9], "text": "Steps through four modes: Chorus adds the modulator to Pollux's pitch, LFO PWM to both pulse widths, LFO FM to Castor's pitch, and Hard Sync resets Pollux's phase whenever Castor's wraps"},
+    {"ids": [10], "text": "Sets how much of Castor's sub-octave square goes into Castor's mix"},
+    {"ids": [11], "text": "Sets how much of Pollux's sub-octave square goes into Pollux's mix"},
+    {"ids": [12], "text": "Sets how much of Pollux's ramp wave goes into Pollux's mix"},
+    {"ids": [13], "text": "Switches the knobs to a second set of remembered values; only the modulator knob in Chorus mode and the two pulse width knobs in LFO PWM mode differ, so in LFO FM and Hard Sync nothing changes"},
+    {"ids": [14], "text": "Switches the oscillator modelling on and off, and comes up on: it turns the ramp from a straight sawtooth into a capacitor discharge curve and makes the sub-octave square sag across each half cycle"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to Castor's pulse width at a fifth of the knob's travel per volt, so 5V covers the whole of it, and the total is held between the two ends of the knob"},
+    {"ids": [1], "text": "Added to Pollux's pulse width at a fifth of the knob's travel per volt; in Hard Sync mode it is read as Pollux's pitch instead, clamped to 6V either way, which is a slip in the code"},
+    {"ids": [2], "text": "Sets Castor's pitch at 1V per octave, with the Castor pitch knob added as an offset of up to one volt either way; patching anything here also stops that knob stepping in semitones"},
+    {"ids": [3], "text": "Sets Pollux's pitch at 1V per octave, and with nothing patched Pollux follows Castor's pitch; in Hard Sync mode this jack is never read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Castor's ramp, pulse and sub mixed by its three level knobs"},
+    {"ids": [1], "text": "Castor and Pollux mixed by the crossfade knob"},
+    {"ids": [2], "text": "Pollux's ramp, pulse and sub mixed by its three level knobs"}
+  ],
+  "notes": [
+    "the oscillator the panel and the tooltips call an LFO runs from 64Hz to 2048Hz, so Chorus, LFO PWM and LFO FM are all audio-rate modulation rather than slow movement",
+    "the module is monophonic: each input is read as one channel and each output carries one channel",
+    "the knobs are read once every 128 samples, and changing the mode knob or the alt button snaps every other knob to the value remembered for the new setting",
+    "in Chorus mode the modulator knob works the other way round from its tooltip: with the alt button off it sets the depth, and the rate comes from where it was left with the alt button on",
+    "with the modelling switch on, each of the six waves also passes through a one-pole low-pass and a one-pole high-pass before it reaches the mix"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "2": "1V per octave · continuous · one channel only\n\nthe knob and this input are summed and the total held to 1V per octave.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads Castor's pitch; the knob and this input are summed and the total held to 1V per octave."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only"
+    }
+  }
+}

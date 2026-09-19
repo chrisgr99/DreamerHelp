@@ -1,0 +1,45 @@
+{
+  "plugin": "ChowDSP",
+  "module": "Werner",
+  "description": "A state-variable filter from a 2020 DAFx paper by Werner and McClellan, with saturating nonlinearities added inside the loop, and an attenuverter beside every control",
+  "params": [
+    {"ids": [0], "text": "Sets the filter frequency, 20Hz at the left to 20000Hz at the right"},
+    {"ids": [1], "text": "Scales the frequency control voltage and inverts it below the middle; at full clockwise ten volts there moves the knob across its whole range"},
+    {"ids": [2], "text": "Sets the resonant feedback around the filter, 0 to 0.95, taking it towards self-oscillation as it is turned up"},
+    {"ids": [3], "text": "Scales the feedback control voltage and inverts it below the middle; at full clockwise ten volts there moves the knob across its whole range"},
+    {"ids": [4], "text": "Sets the damping of the passband, 0.25 to 1.25; the lower the setting the more the filter rings"},
+    {"ids": [5], "text": "Scales the damping control voltage and inverts it below the middle; at full clockwise ten volts there moves the knob across its whole range"},
+    {"ids": [6], "text": "Sets how hard the three saturating elements inside the filter loop are driven, from a tenth to ten, with makeup gain applied after them"},
+    {"ids": [7], "text": "Scales the drive control voltage and inverts it below the middle; at full clockwise ten volts there moves the knob across its whole range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be filtered"},
+    {"ids": [1], "text": "Shifts the filter frequency, scaled by the attenuverter beside it and added to the knob"},
+    {"ids": [2], "text": "Shifts the feedback, scaled by the attenuverter beside it and added to the knob"},
+    {"ids": [3], "text": "Shifts the damping, scaled by the attenuverter beside it and added to the knob"},
+    {"ids": [4], "text": "Shifts the drive, scaled by the attenuverter beside it and added to the knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered audio"}
+  ],
+  "notes": [
+    "each control voltage jack does nothing until the small knob beside it is moved off its centre, because the voltage is multiplied by that attenuverter before it reaches the control.",
+    "the filter runs at twice the sample rate when the module is added; the oversampling menu changes that."
+  ],
+  "menu": [
+    "Oversampling: 1x, 2x, 4x, 8x, 16x — sets how many times the internal sample rate is raised before the nonlinearity is computed; higher settings reduce aliasing and cost more CPU",
+    "Publication — opens the 2020 DAFx paper this filter comes from in a web browser"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

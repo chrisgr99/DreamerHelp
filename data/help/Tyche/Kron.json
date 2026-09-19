@@ -1,0 +1,35 @@
+{
+  "plugin": "Tyche",
+  "module": "Kron",
+  "description": "A trigger generator for one clock division, firing or staying silent at each division by chance, and taking its randomness from an Omen to its left",
+  "params": [
+    {"ids": [0], "text": "Sets how often a division fires, 0 to 100%; with a cable in the jack below it this becomes an attenuator on that voltage instead"},
+    {"ids": [1], "text": "Picks which of 128 fixed random patterns this module follows, so the same seed can give a different rhythm here"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets how often a division fires, -5V for never and +5V for always, scaled down by the slider above it"},
+    {"ids": [1], "text": "While this is at 0.1V or more no triggers leave the module, though the pattern keeps running underneath"},
+    {"ids": [2], "text": "A rising edge past 2V puts the pattern back to its first step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 1ms long on each division the pattern fires"}
+  ],
+  "notes": [
+    "this module does nothing on its own; it needs an Omen to its left, directly or through a chain of Tyche modules, and a clock patched into that Omen",
+    "the lamp on the slider is yellow when a division fires, red when one would have fired but the mute input stopped it, and dark otherwise",
+    "a Kron muted by another Kron placed further left in the chain is one sample behind, and the mute does not take effect; the maker records this as an open problem"
+  ],
+  "menu": [
+    "Division: 1/2, 1/2t, 1/2., 1/4, 1/4t, 1/4., 1/8, 1/8t, 1/8., 1/16, 1/16t, 1/16. — picks how often the module gets a chance to fire"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads the slider's own full 100%; a negative voltage subtracts from the knob.",
+      "1": "high above 0.1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only"
+    }
+  }
+}

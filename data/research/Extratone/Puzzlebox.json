@@ -1,0 +1,17 @@
+{
+  "plugin": "Extratone",
+  "module": "Puzzlebox",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 2V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Puzzlebox.cpp process(): if(inputs[YELLOW_INPUT].getVoltage()==red+green){progress++;} — red and green are each random::uniform(), so the only value that scores is 0V to 2V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Puzzlebox.cpp process(): if(inputs[RED_INPUT].getVoltage()==red){progress++;} with red=random::uniform()"},
+      "2": {"family": "cv", "poly": false, "range": "-1 to 0V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Puzzlebox.cpp process(): if(inputs[MAG_INPUT].getVoltage()==-green){progress++;} with green=random::uniform()"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 1V", "why": "src/Puzzlebox.cpp process(): outputs[RED_OUTPUT].setVoltage(red*(progress>0)) with red=random::uniform()"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 1V", "why": "src/Puzzlebox.cpp process(): outputs[GREEN_OUTPUT].setVoltage(green*(progress>1))"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Puzzlebox.cpp process(): setVoltage(progress) below five conditions, otherwise setVoltage(target) with target=random::uniform()*10"}
+    }
+  },
+  "comment": "The five conditions and the three knob settings are all in src/Puzzlebox.cpp, which carries the comment \"Looking through the source code for clues really ruins the fun!\"; the settings are deliberately left out of these lines. The two random values are redrawn every 2000 process calls, so at 44.1kHz they last about 45ms. The equality tests are exact float comparisons, which is what forces the outputs to be patched back to the inputs. The three lights are LightWidgets and cannot be clicked, so they carry no line."
+}

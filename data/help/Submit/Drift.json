@@ -1,0 +1,79 @@
+{
+  "plugin": "Submit",
+  "module": "Drift",
+  "description": "A West Coast style voice: an oscillator, a wavefolding overtone branch, a cycling slope generator, a contour envelope and a low pass gate at the output",
+  "params": [
+    {"ids": [0], "text": "Sets the octave in nine steps from -4 to +4; at 0 the oscillator plays C4"},
+    {"ids": [1], "text": "Tunes the oscillator over -7 to +7 semitones"},
+    {"ids": [2], "text": "Moves the overtone branch through even harmonics, then odd harmonics, and above seven tenths of its travel into ring modulation of the triangle by the Slope"},
+    {"ids": [3], "text": "Folds the overtone wave, adding reflections as it is raised"},
+    {"ids": [4], "text": "Sets how long the Slope takes to rise, before TIME scales it"},
+    {"ids": [5], "text": "Sets how long the Slope takes to fall, before TIME scales it"},
+    {"ids": [6], "text": "Scales the Slope rise and fall times together over a forty to one range"},
+    {"ids": [7], "text": "Bends the Slope rise and fall between logarithmic and exponential; moving away from centre also shortens both times, by up to 55%"},
+    {"ids": [8], "text": "Switches the Slope between one shot and free running; it comes up free running"},
+    {"ids": [9], "text": "Sets the attack time of the Contour envelope"},
+    {"ids": [10], "text": "Sets the level the Contour holds while its gate is high; at zero a trigger gives a plain attack and decay"},
+    {"ids": [11], "text": "Sets the Contour decay and release time"},
+    {"ids": [12], "text": "Bends the Contour from linear towards exponential and shortens all of its stages, by up to 65%"},
+    {"ids": [13], "text": "Crossfades the output between the plain triangle and the folded overtone branch"},
+    {"ids": [14], "text": "Switches the overtone branch into the output; with it off the voice is the plain triangle. It comes up on"},
+    {"ids": [15], "text": "Sets the depth of the linear FM taken from the FM input; at zero there is no frequency modulation"},
+    {"ids": [16], "text": "An attenuverter, -1 to +1, setting the depth of the modulation reaching MULTIPLY"},
+    {"ids": [17], "text": "Holds the low pass gate open so the voice sounds without any gate patched; it comes up off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Volt-per-octave pitch, added to the OCTAVE and FINE knobs"},
+    {"ids": [1], "text": "AC-coupled linear frequency modulation of the oscillator, scaled by FM AMT"},
+    {"ids": [2], "text": "Offsets OVERTONE, 10V covering the knob's full travel"},
+    {"ids": [3], "text": "Offsets MULTIPLY through MLT AMT, 8V covering the knob's full travel; with nothing patched here the Slope is used instead"},
+    {"ids": [4], "text": "A rising edge above 1V starts the Slope; an edge arriving during the rise stage is ignored"},
+    {"ids": [5], "text": "A rising edge above 1V starts the Slope while TRIG is unpatched, and the voltage here gates the Contour while CTR is unpatched"},
+    {"ids": [6], "text": "Shifts the Slope rise and fall times together: each volt halves them, each negative volt doubles them"},
+    {"ids": [7], "text": "Shifts the Contour decay and release time: each volt halves it, each negative volt doubles it"},
+    {"ids": [8], "text": "Gates the Contour above 1V, taking over from GATE"},
+    {"ids": [9], "text": "Drives the low pass gate in place of the Contour while it is patched; 8V opens the gate fully"},
+    {"ids": [13], "text": "Offsets TIMBRE, 5V covering the knob's full travel"},
+    {"ids": [14], "text": "Shifts the Contour attack time: each volt halves it, each negative volt doubles it"},
+    {"ids": [15], "text": "Offsets SUSTAIN, 8V covering the knob's full travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator's triangle wave, 10V peak to peak, taken before the overtone branch"},
+    {"ids": [1], "text": "The oscillator's square wave, 10V peak to peak, taken before the overtone branch"},
+    {"ids": [2], "text": "A 10V pulse 1ms long at the end of the Slope fall"},
+    {"ids": [3], "text": "A 10V pulse 1ms long at the end of the Contour attack"},
+    {"ids": [4], "text": "The Slope generator, 0-8V"},
+    {"ids": [5], "text": "The Contour envelope, 0-8V"},
+    {"ids": [6], "text": "The finished voice, after the low pass gate, saturation and DC blocking, ±5V"}
+  ],
+  "notes": [
+    "LINE OUT stays silent until the low pass gate is opened. Patch a gate or trigger to GATE or CTR, patch DYN, or turn DRONE on",
+    "the module is monophonic; every input reads its first channel only"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "±8V · continuous · one channel only\n\nunpatched it reads the Slope generator; the knob and this input are summed and the total held to ±8V.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads the GATE input; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "±10V · continuous · one channel only",
+      "7": "±10V · continuous · one channel only",
+      "8": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "9": "0 to 8V · continuous · one channel only\n\nunpatched it reads the Contour envelope; a negative voltage subtracts from the knob.",
+      "13": "0 to 5V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "14": "±10V · continuous · one channel only",
+      "15": "0 to 8V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 8V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 8V · one channel only",
+      "5": "0 to 8V · one channel only",
+      "6": "±5V · continuous · one channel only"
+    }
+  }
+}

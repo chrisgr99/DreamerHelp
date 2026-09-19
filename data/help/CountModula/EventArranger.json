@@ -1,0 +1,34 @@
+{
+  "plugin": "CountModula",
+  "module": "EventArranger",
+  "description": "Gate pattern generator built on a 15 bit counter: each bit is set to count as high, as low, or not at all, and the output is high whenever the count matches every bit set either way",
+  "params": [
+    {"ids": [0], "text": "Holds the count at zero for as long as it is held down, releasing it to run again"},
+    {"ids": [1], "text": "Runs the counter while engaged and holds it while released; engaging it sets the count back to zero"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "text": "Chooses how that bit of the counter is used: 1 matches while the bit is high, 0 matches while the bit is low, and X leaves the bit out of the pattern"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge advances the counter by one"},
+    {"ids": [1], "text": "A high gate holds the count at zero and it runs again when the gate falls, in parallel with the RESET button"},
+    {"ids": [2], "text": "A high gate runs the counter and a low gate holds it; a cable here overrides the RUN button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V whenever the count matches every bit switch set to 1 or 0, and 0V otherwise"},
+    {"ids": [1], "text": "10V whenever the count fails to match the bit switches, and 0V when it matches them"},
+    {"ids": [2], "text": "A 1ms trigger each time the gate turns on"}
+  ],
+  "notes": [
+    "with every bit switch at X there is nothing to match, and the gate output stays at 0V",
+    "the divisions this module can produce are long, so it is best driven by a fast clock"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "2": "stepped"
+    }
+  }
+}

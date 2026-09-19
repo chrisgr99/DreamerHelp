@@ -1,0 +1,43 @@
+{
+  "plugin": "Extratone",
+  "module": "Pureneura",
+  "description": "A clock multiplier with four independent rows, each turning one clock into a whole-number multiple of it",
+  "params": [
+    {"ids": [1], "text": "Makes every row fire on each clock beat even where that row's gate is closed, while leaving the faster subdivisions to the open rows alone; it is ignored while the BASE row's jack is patched"},
+    {"ids": [2, 3, 4, 5], "text": "How many pulses this row puts out for each beat of the clock, a whole number from 1 to 8"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes over the BASE switch while patched: at or above 1V every row fires on each clock beat whatever its own gate is doing, and below 1V only open rows do"},
+    {"ids": [1], "text": "The clock being multiplied; the interval between two rising edges above 1V is the tempo every output is worked out from"},
+    {"ids": [2, 3, 4, 5], "text": "Runs this row while the voltage here is at or above 5V and stops it below that; with nothing patched the row runs"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 1ms pulse at this row's multiplied rate"},
+    {"ids": [4], "text": "A 1ms pulse at the first two rows' multipliers multiplied together, counting only rows whose gate is open"},
+    {"ids": [5], "text": "A 1ms pulse at the first three rows' multipliers multiplied together, counting only rows whose gate is open"},
+    {"ids": [6], "text": "A 1ms pulse at all four rows' multipliers multiplied together, counting only rows whose gate is open"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched to CLOCK and has ticked twice: the tempo is measured from the gap between two edges.",
+    "the multiplied beats stop once a whole clock interval has gone by with no new edge, so a clock that stops leaves the module silent rather than free-running."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads the BASE switch; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "3": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "4": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here.",
+      "5": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row runs; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped · one channel only",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

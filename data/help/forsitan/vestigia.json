@@ -1,0 +1,95 @@
+{
+  "plugin": "forsitan",
+  "module": "vestigia",
+  "description": "A stereo memory effect: a write head runs endlessly round a buffer, a map is kept of where real sound is, and fragments are recalled from it, each return a little more worn than the last",
+  "params": [
+    {"ids": [0], "text": "Sets how far back the recall engine may reach, 50ms to the whole buffer"},
+    {"ids": [1], "text": "Sets how often and how likely an automatic recall is; at the bottom of its travel only the event button and jack recall anything"},
+    {"ids": [2], "text": "Sets how hard a recalled fragment deteriorates: the interpolation coarsens, the top end goes, the sample rate and bit depth drop, the timing jitters, and at the top dropouts appear"},
+    {"ids": [3], "text": "Turns distinct fragments into a diffuse, slowly modulated allpass cloud with stereo crossfeed, from discrete repeats up to something close to reverb"},
+    {"ids": [4], "text": "Sets how long stored regions keep their integrity: low lets a region be recalled many times, high makes it fade as the write head passes over it and be avoided after fewer replays"},
+    {"ids": [5], "text": "Sets how unstable the behaviour is: per-fragment jitter in position and pitch, spatial drift, and a scattering of the recall timing by up to seventy per cent either way"},
+    {"ids": [6], "text": "Sets how likely a recalled fragment is to play backwards; it is chosen afresh for each recollection rather than crossfaded"},
+    {"ids": [7], "text": "Crossfades the dry and treated signals at equal power"},
+    {"ids": [8], "text": "Sets the final output level, unity at noon"},
+    {"ids": [9], "text": "Sets how far a recalled fragment's pitch may stray: unisons and octaves at the bottom of its travel, then fifths and fourths, then thirds, then the full chromatic set"},
+    {"ids": [10], "text": "Chooses when memories return: a window round a region's strongest block fired by transients, a rate following the input's envelope, or a rate rising as the input falls quiet"},
+    {"ids": [11], "text": "Chooses what the present does to what is already stored: Oblivion replaces it, Remanence rewrites it but leaves traces, and Sediment accumulates on top of it through a saturator and a DC blocker"},
+    {"ids": [12], "text": "Stops the write head, while recollection, feedback and deterioration all keep running; the transport keeps advancing so the timing stays consistent when it is let go"},
+    {"ids": [13], "text": "Forces a recall from a valid region"},
+    {"ids": [14], "text": "Wipes the buffer, the activity map, the region descriptors, the playback heads and the feedback"},
+    {"ids": [15], "text": "Chooses what the recall engine reads: the dry input, the mix, or the wet recollections themselves, which makes the recalls self-triggering"},
+    {"ids": [16], "text": "Sets how much of the wet output is fed back into what is written, from none through regeneration and past unity into self-oscillation, bounded by a saturator and a limiter"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal to store"},
+    {"ids": [1], "text": "The right side of the signal to store; with nothing patched here the left jack feeds both sides"},
+    {"ids": [2], "text": "Above its threshold the write head is stopped; the menu chooses whether it is a gate, a toggle, or a toggle on the rising edge"},
+    {"ids": [3], "text": "A rising edge forces a recall from a valid region"},
+    {"ids": [4], "text": "A rising edge wipes the buffer and everything derived from it"},
+    {"ids": [5], "text": "Added to the memory knob, ±5V for about half its travel"},
+    {"ids": [6], "text": "Added to the recall knob, ±5V for about half its travel"},
+    {"ids": [7], "text": "Added to the age knob, ±5V for about half its travel"},
+    {"ids": [8], "text": "Added to the smear knob, ±5V for about half its travel"},
+    {"ids": [9], "text": "Added to the forget knob, ±5V for about half its travel"},
+    {"ids": [10], "text": "Added to the temper knob, ±5V for about half its travel"},
+    {"ids": [11], "text": "Added to the direction knob, ±5V for about half its travel"},
+    {"ids": [12], "text": "Added to the mix knob, ±5V for about half its travel"},
+    {"ids": [13], "text": "Added to the out knob, ±5V for about half its travel"},
+    {"ids": [14], "text": "Added to the harmony knob, ±5V for about half its travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the treated signal"},
+    {"ids": [1], "text": "The right side of the treated signal"},
+    {"ids": [2], "text": "The recalled material before the smear, the feedback and the mix, for treating in parallel or feeding back by another path"},
+    {"ids": [3], "text": "A short 10V pulse whenever a recollection actually begins"},
+    {"ids": [4], "text": "The envelope of whatever the src switch has the recall engine reading, 0V to 10V"},
+    {"ids": [5], "text": "A slow voltage from the module's own state, the mean age of the active regions blended with the activity at the write head; the menu makes it stepped or smooth and bipolar or unipolar"}
+  ],
+  "notes": [
+    "that switch prints its three settings in the order those three behaviours are described.",
+    "the recall engine only ever picks regions the activity map says contain sound, so it never recalls silence.",
+    "the strip across the top is a view of the buffer: yellow bars are the energy in each block, a moving line is the write head, and the panel flashes on each recollection.",
+    "with the src switch on wet and the fb trimmer high the module becomes a drone generator that sustains itself with nothing patched in."
+  ],
+  "menu": [
+    "Quality — how many region descriptors are kept: Eco (4 descriptors), Standard (8) or High (16)",
+    "Buffer size — how long the buffer is: 4 s, 8 s, 16 s or 32 s",
+    "Remanence retention — how much of the old material survives a pass in the remanence memory mode: 10%, 30%, 50% or 70%",
+    "Sediment input amount — how hard the present is added on top in the sediment memory mode: 0.5x, 1.0x, 1.5x or 2.0x",
+    "Sediment saturation — the shape the sediment mode saturates with: Soft, Tape or Fold",
+    "Temper scatters recall timing — on by default; switched off, the recall clock stays regular however far temper is turned up",
+    "Freeze behavior — how the freeze button and jack act: Gate, Toggle, or Toggle on rising edge",
+    "Mono output — Stereo, Left only, Stereo sum or Equal-power sum",
+    "Random seed — Random on load, or Fixed so a patch always behaves the same way",
+    "Reseed now — rolls a new seed at once",
+    "Chaos out: stepped — holds the chaos output at a value between updates rather than sliding",
+    "Chaos out: bipolar — puts the chaos output at ±5V rather than 0V to 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only",
+      "9": "±5V · continuous · one channel only",
+      "10": "±5V · continuous · one channel only",
+      "11": "±5V · continuous · one channel only",
+      "12": "±5V · continuous · one channel only",
+      "13": "±5V · continuous · one channel only",
+      "14": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · one channel only"
+    }
+  }
+}

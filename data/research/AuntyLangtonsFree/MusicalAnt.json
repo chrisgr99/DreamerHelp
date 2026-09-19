@@ -1,0 +1,20 @@
+{
+  "plugin": "AuntyLangtonsFree",
+  "module": "MusicalAnt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "the clock knob runs the ant instead", "why": "MusicalAnt.cpp:334 rescales getVoltage from 0.1 and 2 into 0 and 1 before a dsp::SchmittTrigger at its default thresholds, so the jack goes high at 2V and low at 0.1V; :332 makes the internal clock the fallback"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "MusicalAnt.cpp:381 and :385 write 10 while the clock is high and 0 while it is low"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "MusicalAnt.cpp:599-606 writes 10 here on a left turn and 0 on a right turn, and nothing else writes it"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "MusicalAnt.cpp:599-606 writes 10 here on a right turn and 0 on a left turn, and nothing else writes it"},
+      "3": {"family": "pitch", "poly": false, "why": "MusicalAnt.cpp:595 writes closestVoltageForX, which is the octave knob plus the cell number times 0.0833, quantised"},
+      "4": {"family": "pitch", "poly": false, "why": "MusicalAnt.cpp:596 writes closestVoltageForY, which is the octave knob plus the cell number times 0.0833, quantised"},
+      "5": {"family": "pitch", "poly": false, "why": "MusicalAnt.cpp:590 writes closestVoltageForShadowX, inside the branch at :539 that runs only while the shadow switch reads zero"},
+      "6": {"family": "pitch", "poly": false, "why": "MusicalAnt.cpp:591 writes closestVoltageForShadowY, inside the branch at :539 that runs only while the shadow switch reads zero"},
+      "9": {"family": "pitch", "poly": true, "why": "MusicalAnt.cpp:387-396 writes two channels always and two more when the shadow switch reads one, calling setChannels with 4 or 2"}
+    }
+  },
+  "comment": "The shadow ant switch is read with opposite senses in two places. At MusicalAnt.cpp:539 the ant itself walks only while the parameter reads zero, which is the switch's lower position, and the display at :809 draws it under the same test; but at :389 the polyphonic output adds the shadow channels only while the parameter reads one. The two can therefore never both be true, and since the parameter defaults to one, a fresh module comes up with a still shadow ant and a four channel poly output whose last two channels hold its starting pitch. The invert switches are broken: :595 and :596 subtract the ant's cell from tempSideLength, which at :594 is the raw resolution knob value of 0 to 6 rather than the grid width of 8 to 144, so the inverted branch produces a large negative cell number and a pitch far below the octave knob. The same expression is used for the poly output at :387-388. The effect knob, parameter 14, is configured at :134 and given a widget at :956 at x 253.9 on a panel 195 pixels wide, and no code reads it. Input 1 and outputs 7 and 8 are declared but never given widgets and never written. The internal clock is guarded at :353 by a test for the knob being above zero, so the lower fifth of that knob's travel is a dead zone in which the module does nothing. The clock knob, the resolution knob, the skip knob, the loop knobs and all twelve quantiser knobs are configured with an empty name, so their tooltips carry no text."
+}

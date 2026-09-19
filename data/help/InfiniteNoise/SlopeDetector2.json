@@ -1,0 +1,47 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "SlopeDetector2",
+  "description": "Two sections in 2HP each reporting whether a signal is rising, flat or falling, as gates or as triggers",
+  "params": [
+    {"ids": [0], "text": "Sets how big a change between readings counts as movement: 0V fully counter-clockwise, 0.0005V at the centre and 0.01V fully clockwise, despite the manual naming a different range"},
+    {"ids": [1, 2, 3, 4, 5, 6], "text": "Chooses what that output carries: green for a gate held while that phase lasts, red for a 1ms trigger when the phase begins"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that section measures; with the B jack empty the B section reads the A signal"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries a gate while that section is rising, or a trigger as the rise begins"},
+    {"ids": [2, 3], "text": "Carries a gate while that section is flat, or a trigger as the steady phase begins"},
+    {"ids": [4, 5], "text": "Carries a gate while that section is falling, or a trigger as the fall begins"}
+  ],
+  "notes": [
+    "a phase lasts until a different one begins, so short flat patches do not interrupt a rise; a steady phase needs the whole hold time flat, 6ms unless you change it",
+    "this module is monophonic; a polyphonic input is read on channel 1 only",
+    "feeding a slow source that updates only every 64th or 256th cycle makes each step between readings large, so the threshold usually has to be raised for a steady phase to be recognised at all",
+    "the red light above the threshold knob means a timing setting is shorter than one process interval and cannot be kept to; its tooltip names which one"
+  ],
+  "menu": [
+    "Input smoothing — smooths each section's input before the slope is measured, with time constants from 0.5ms to 100ms, and is Off unless you set it",
+    "Slope reversal hysteresis: Off (1x, default), 1.5x, 2x, 3x, 5x — makes an already running rise or fall harder to reverse, by requiring that many times the threshold in the other direction",
+    "Steady hold time — sets how long the signal must stay flat before the steady phase starts, from Off through 1ms up to 10 seconds, and 6ms unless you change it",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only\n\nunpatched it reads 0V.",
+      "1": "one channel only\n\nunpatched it reads the A-CV input."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only"
+    }
+  }
+}

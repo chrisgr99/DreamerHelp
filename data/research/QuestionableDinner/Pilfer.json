@@ -1,0 +1,22 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Pilfer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Pilfer.cpp:219 reads getVoltage(idx) into the exponent of a power of two that multiplies the acceleration; read only while the jack is connected"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Pilfer.cpp:227 reads getVoltage(idx), divides by 10 and line 136 clamps the total against the knob to 1..2"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Pilfer.cpp:243 reads getVoltage(idx), halves it and line 138 clamps the total to 0..10"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Pilfer.cpp:235 reads getVoltage(idx), divides by 10 and line 137 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Pilfer.cpp:251 reads getVoltage(idx), halves it and line 139 clamps the total to 0..10"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Pilfer.cpp:147 reads getVoltage(i) and multiplies it by the shake attenuverter"},
+      "6": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Pilfer.cpp:124-126 takes the channel count from the widest of this jack, the second axis jack and shake; line 152 reads getVoltage(i)"},
+      "7": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Pilfer.cpp:124-126 sets the channel count; line 153 reads getVoltage(i)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Pilfer.cpp:191 sets the channel count; lines 167 and 176 set a voltage per channel"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Pilfer.cpp:192 sets the channel count; lines 168 and 177 set a voltage per channel"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "src/Pilfer.cpp:193 sets the channel count; line 187 sets the speed per channel"}
+    }
+  },
+  "comment": "The panel letters the big knobs with a Greek alpha for acceleration and a Greek mu for friction, and prints DIST, BOUNCE, DRIVE, SHAKE, HI and LO on the range switch, EXP and LIN on the friction switch, and R-theta and XY on the coordinate switch; the two input jacks are lettered X/R and Y/theta and the outputs X, Y and V. The oversampling control is the small number display at the top right. Two things the manual gets wrong about the wall: it is at ten units, not twelve, and it is a circle in both coordinate systems, with no square case in the code (src/Pilfer.cpp:281 and 316). The control voltage jacks are only read while something is patched into them; an unpatched jack contributes nothing rather than zero volts. src/Pilfer.cpp:198 leaves the return value of filterParams uninitialised when neither a knob has moved nor a jack is connected, so the parameter refresh in that state is left to chance."
+}

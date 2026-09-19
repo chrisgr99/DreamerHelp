@@ -1,0 +1,22 @@
+{
+  "plugin": "CountModula",
+  "module": "BinarySequencerPlus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "BinarySequencerPlus.cpp:307 reads the jack with getVoltage into gpClock; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "BinarySequencerPlus.cpp:299 reads the jack with getVoltage into gpReset; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "10V, so the sequencer runs", "why": "BinarySequencerPlus.cpp:296 reads the jack with getNormalVoltage(10V) into gpRun; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the SCALE switch", "why": "BinarySequencerPlus.cpp:372 clamps the jack's getVoltage to -10V to 10V and divides it by eighty to give the per-knob scale"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "the COUNT switch", "why": "BinarySequencerPlus.cpp:293 reads the jack with getNormalVoltage of the switch into gpDir; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "the GATE switch", "why": "BinarySequencerPlus.cpp:292 reads the jack with getNormalVoltage of the switch into gpGatemode; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "the FLIP switch", "why": "BinarySequencerPlus.cpp:291 reads the jack with getNormalVoltage of the switch into gpFlip; GateProcessor (inc/GateProcessor.hpp) takes it high above 2V and low below 0.1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"}
+    }
+  },
+  "comment": "Three figures in the maker's manual disagree with the code, and the code is what is written here. The manual says a knob at full scale equates to a sixth of the sampled S&H voltage; BinarySequencerPlus.cpp:372 divides by eighty against eight knobs of ±10, which is an eighth. The manual's prime row reads 1, 3, 5, 7, 11, 13, 15, 17; BinarySequencerPlus.cpp:76 holds 2, 3, 5, 7, 11, 13, 17, 19. The manual gives the B1 divisions as 2 to 256; BinarySequencerPlus.cpp:73 masks the counter with 1 to 128, one bit per knob. Because the numbers differ per mode and per flip state, the division knobs' own line names none of them; the knob's tooltip is renamed to the division it currently holds."
+}

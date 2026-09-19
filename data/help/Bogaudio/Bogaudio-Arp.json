@@ -1,0 +1,37 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Arp",
+  "description": "Arpeggiator fed from polyphonic pitch and gate — patch it straight to Rack's MIDI-CV",
+  "params": [
+    {"ids": [0], "text": "Up, down, pendulum, pendulum repeat, in order, random, shuffle"},
+    {"ids": [1], "text": "Output gate length, as a proportion of the clock period"},
+    {"ids": [2], "text": "Latches the arpeggio so it keeps playing after every input gate has fallen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One note per pulse; required, or nothing happens"},
+    {"ids": [1], "text": "Restarts playback on the next clock"},
+    {"ids": [2, 3], "text": "A gate going high on a channel of GATE adds the pitch on that channel of V/OCT to the arpeggio"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The outputs are monophonic. Patch into ASSIGN to play them through a polyphonic voice"}
+  ],
+  "notes": [
+    "nothing plays until a clock arrives at CLOCK; notes are added by gates on the channels of GATE, taking their pitches from the matching channels of V/OCT"
+  ],
+  "menu": [
+    "Use new notes — notes played while the arpeggio is running join it On arpeggio restart or Immediately",
+    "Max gate length — the GATE knob is read against the Clock interval, or as Fixed (500ms), which ignores the clock"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 5V · one channel only"
+    }
+  }
+}

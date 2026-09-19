@@ -1,0 +1,12 @@
+{
+  "plugin": "voxglitch",
+  "module": "drumrandomizer",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "DrumRandomizer.hpp:262 reads this input with getVoltage(channel) inside a loop over all sixteen channels and sets the same width on the output"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "DrumRandomizer.hpp:129 reads STEP_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "DrumRandomizer.hpp:226 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"}
+    }
+  },
+  "comment": "The polyphonic gate input and output carry whatever gates are patched in, so neither is given a family beyond that; the code only copies the incoming voltage of channels that pass, so a blocked channel keeps whatever it last carried rather than going to 0V."
+}

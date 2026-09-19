@@ -1,0 +1,43 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "CxFade1x2",
+  "description": "One fade control blending two pairs of signals at once, in 2HP, for a stereo pair or two separate mono signals",
+  "params": [
+    {"ids": [0], "text": "Sets the blend, all A fully counter-clockwise and all B fully clockwise"},
+    {"ids": [1], "text": "Attenuates and inverts the fade CV between -100% and +100%, and is ignored while the jack is in trigger mode"},
+    {"ids": [2], "text": "Jumps the fade knob between full A and full B, and works only while nothing is patched into the fade jack"},
+    {"ids": [3], "text": "Chooses how the jack beside it is read: as a voltage that moves the fade, or in red as a trigger that flips between full A and full B"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the fade, 5V covering half the knob's travel at full trim, or flips it on each trigger in trigger mode"},
+    {"ids": [1, 3], "text": "The A side of that pair; with the lower A jack empty it reads the upper B input"},
+    {"ids": [2, 4], "text": "The B side of that pair; with the lower B jack empty it reads the upper A input"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries that pair blended by the fade"}
+  ],
+  "notes": [
+    "patching only the upper A and the lower B inputs gives two outputs that fade in opposite directions, because of the crossed normalling",
+    "patching only one input of a pair turns that section into an attenuator, since the fade runs it against silence"
+  ],
+  "menu": [
+    "Fade-mode (scaling of fade-knob/input): Logarithmic, Linear, Exponential — bends how the fade moves across the knob's travel",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "polyphonic\n\nunpatched it reads 0V.",
+      "2": "polyphonic\n\nunpatched it reads 0V.",
+      "3": "polyphonic\n\nunpatched it reads the upper B input.",
+      "4": "polyphonic\n\nunpatched it reads the upper A input."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

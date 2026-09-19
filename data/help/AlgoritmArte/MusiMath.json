@@ -1,0 +1,45 @@
+{
+  "plugin": "AlgoritmArte",
+  "module": "MusiMath",
+  "description": "Note generator that adds one of two numbers to a running value at each clock and picks a note by counting the 1s in that value written in a chosen base",
+  "params": [
+    {"ids": [0], "text": "Sets the low part of addend A, 0 to 63"},
+    {"ids": [1], "text": "Sets the high part of addend A, 0 to 63, each step worth 64"},
+    {"ids": [2], "text": "Sets the low part of addend B, 0 to 63"},
+    {"ids": [3], "text": "Sets the high part of addend B, 0 to 63, each step worth 64"},
+    {"ids": [4], "text": "Sets the base the running value is written in before its 1s are counted, 1 to 10; at 1 the running value itself becomes the note index"},
+    {"ids": [5], "text": "Appends the scale in reverse, so the sequence turns round at the top instead of dropping back"},
+    {"ids": [6], "text": "Sets how many notes the scale runs to, 1 to 24, repeating the chosen notes an octave higher once they run out"},
+    {"ids": [7], "text": "Chooses when a note is played: 1 at every clock pulse, 2 only when the note differs from the one before, 3 only when it repeats the one before"},
+    {"ids": [8], "text": "Shifts the played note by -24 to 24 semitones, or by that many notes of the scale when the REL button is lit"},
+    {"ids": [9], "text": "Sets how often addend B is added in place of addend A, never at 0 and always at 1"},
+    {"ids": [10], "text": "Puts the running value back to the start value"},
+    {"ids": [11], "text": "Sets the low part of the starting value, 0 to 63; moving it reloads the running value from the start value"},
+    {"ids": [12], "text": "Sets the high part of the starting value, 0 to 63, each step worth 64; moving it reloads the running value from the start value"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "text": "Adds that note to the scale or takes it out; the last remaining note cannot be switched off"},
+    {"ids": [25], "text": "Makes the offset count notes of the scale rather than semitones"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge adds one of the two addends to the running value and plays the note that follows from it"},
+    {"ids": [1], "text": "Adds to the offset knob at 1V per octave, a twelfth of a volt per semitone, the total held to -24 to 24 semitones"},
+    {"ids": [2], "text": "Adds a tenth of its voltage to the probability knob, so 10V alone always picks addend B"},
+    {"ids": [3], "text": "A rising edge above 1V puts the running value back to the start value"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Rests at 10V and drops to 0V for 1ms at each note played"},
+    {"ids": [1], "text": "The pitch of the note being played, 1V per octave, limited to -5V to 5V"}
+  ],
+  "notes": [
+    "A note is played only on a rising edge at the CLK input, so with nothing patched there the outputs never change"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous",
+      "3": "high above 1V · stepped"
+    },
+    "outputs": {
+      "1": "1V per octave · continuous"
+    }
+  }
+}

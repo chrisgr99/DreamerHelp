@@ -1,0 +1,34 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Imp",
+  "description": "Turns each clock tick into sixteen polyphonic gates, each with its own random delay and length, after dividing the clock and filtering it by chance",
+  "params": [
+    {"ids": [0], "text": "Sets the delay between the tick and the start of the gate, 0 to 1 second"},
+    {"ids": [1], "text": "Sets how much random time is added to or taken off the delay, up to 2 seconds either way, drawn from a bell curve and never taking the delay below zero"},
+    {"ids": [2], "text": "Sets the length of the gate, from 1ms to 1 second"},
+    {"ids": [3], "text": "Sets how much random time is added to or taken off the gate length, up to 2 seconds either way, with 1ms as the shortest gate made"},
+    {"ids": [4], "text": "Divides the incoming clock, 1 to 64, so that only every nth tick goes on to the probability stage"},
+    {"ids": [5], "text": "Sets the chance that a tick surviving the division goes on to make gates, 0 to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock; each rising edge is counted, and the module makes nothing until something is patched here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Sixteen channels of 10V gates from one accepted tick, each channel given its own delay and length; a tick arriving before a channel's gate has finished is discarded for that channel"}
+  ],
+  "notes": [
+    "the module makes nothing until a clock is patched into IN.",
+    "the display reads the tempo at IN in beats per minute, then the chance, the delay and its spread in milliseconds, the gate length and its spread in milliseconds, and the division."
+  ],
+  "menu": [
+    "Randomize first output — Randomized gives channel 1 its own random delay and length, Non-randomized gives it the plain values set by the DELAY LEN and GATE LEN knobs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

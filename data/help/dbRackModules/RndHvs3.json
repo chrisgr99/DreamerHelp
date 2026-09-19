@@ -1,0 +1,40 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndHvs3",
+  "description": "Fills a cube of seeded random values and reads 32 of them out at a point set by three voltages, so a smooth move through the cube gives 32 smooth voltages",
+  "params": [
+    {"ids": [0], "text": "Sets the density the distribution is built with, 0.001 to 1; what it changes differs by distribution, and with Discr it sets the chance that a value is 10V rather than 0V"},
+    {"ids": [1], "text": "Sets the seed the cube is filled from, 0 to 1"},
+    {"ids": [3], "text": "Picks the distribution the cube is filled with: Discr, Weib, Beta, Cauchy or Exp"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the reading point along the first axis of the cube, 0-10V across its whole width"},
+    {"ids": [1], "text": "Moves the reading point along the second axis of the cube, 0-10V across its whole width"},
+    {"ids": [2], "text": "Moves the reading point along the third axis of the cube, 0-10V across its whole width"},
+    {"ids": [3], "text": "Picks the distribution by voltage, one volt per distribution from 0V for Discr to 4V for Exp, and moves the selector while it is patched"},
+    {"ids": [4], "text": "Sets the seed by voltage in place of the Seed knob, 0-10V mapped onto 0 to 1, and moves the knob while it is patched"},
+    {"ids": [5], "text": "Sets the density by voltage in place of the Dens knob, 0-10V mapped onto 0 to 1, and moves the knob while it is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first sixteen of the 32 values at the reading point, one per channel"},
+    {"ids": [1], "text": "The last sixteen of the 32 values at the reading point, one per channel, numbered 16 to 31 despite the panel printing Out15-31"}
+  ],
+  "notes": [
+    "the cube holds 32 values on each node of a 7 by 7 by 7 lattice, and a reading between nodes is interpolated from the eight around it, so the outputs change smoothly as X, Y and Z move",
+    "turning the Dens or Seed knob changes nothing until the knob is let go; the cube is then refilled in a background thread, which the patch carries on playing through"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 4.99V · stepped · one channel only\n\nunpatched it reads the Dist selector; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Seed knob; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Dens knob; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

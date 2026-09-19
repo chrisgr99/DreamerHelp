@@ -1,0 +1,34 @@
+{
+  "plugin": "VsWorld",
+  "module": "XLimitJIVCO",
+  "description": "A polyphonic oscillator for the X-Limit JI Autotuner modules: it adds its two pitch inputs in double precision and reads band-limited tables, so two pitches a fraction of a cent apart do not beat.",
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here restarts the waveform; a monophonic cable restarts every channel together, a polyphonic one restarts each channel from its own."},
+    {"ids": [1], "text": "Added to the pitch at the V/Oct jack before the frequency is worked out, which is where an Autotuner's residual output goes."},
+    {"ids": [2], "text": "Sets the pitch at 1V per octave, 0V giving C4; the number of channels here is the number of channels every output carries."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A sine, ±5V."},
+    {"ids": [1], "text": "A triangle, ±5V."},
+    {"ids": [2], "text": "A sawtooth read from a band-limited table, with the number of harmonics taken from the pitch so that none of them passes a fifth of the sample rate."},
+    {"ids": [3], "text": "A square read from a band-limited table, with the number of harmonics taken from the pitch so that none of them passes a fifth of the sample rate."}
+  ],
+  "notes": [
+    "There is nothing to turn: the pitch comes entirely from the two input jacks, so the module is silent until one of them is patched to something other than 0V, where it puts out C4.",
+    "The module keeps eight phases but runs over as many channels as V/Oct carries, so more than eight channels writes past the end of that store. Keep the input to eight channels.",
+    "Building the two wavetables takes ten million entries each, so a new instance costs a noticeable pause and about 160MB of memory."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "HexSeqP2",
+  "description": "Sixteen trigger tracks written as hexadecimal text, four steps to a character, with 100 patterns and a chance of adding or dropping triggers",
+  "params": [
+    {"ids": [0], "text": "Picks which of the 100 patterns is played and edited"},
+    {"ids": [1], "text": "While on, the pattern is picked by hand and a cable in the pattern input no longer moves the selection"},
+    {"ids": [2], "text": "Copies all sixteen hex lines of the current pattern"},
+    {"ids": [3], "text": "Writes the copied hex lines into the current pattern"},
+    {"ids": [4], "text": "Pushes the patterns after the current one along by one place and empties the current one; the hundredth pattern is lost"},
+    {"ids": [5], "text": "Removes the current pattern and pulls every later pattern back one place"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], "text": "At 100% its track plays its written triggers; below that each written trigger has that chance of firing, and above it each step with no written trigger has the extra chance of firing"},
+    {"ids": [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], "text": "The chance that its track fires an inverted trigger on a step where nothing is written, 0 to 100%"},
+    {"ids": [38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53], "text": "Runs its track; while it is off that track fires nothing on either output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves every track on by one step"},
+    {"ids": [1], "text": "A rising edge sends every track back to its first step"},
+    {"ids": [2], "text": "Selects the pattern, 0.1V per pattern over 0-10V; while it is patched the pattern cannot be picked by hand unless Edit is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10ms trigger on a track's channel for each step that fires, sixteen channels wide"},
+    {"ids": [1], "text": "Carries 10V on a track's channel while the step it has reached fires, sixteen channels wide"},
+    {"ids": [2], "text": "Passes the clock through on a track's channel while the step it has reached fires, sixteen channels wide, despite its tooltip reading Inverted Clock"},
+    {"ids": [3], "text": "A 10ms trigger on a track's channel for each step that fires an inverted trigger, sixteen channels wide"},
+    {"ids": [4], "text": "Passes the clock through on a track's channel while the step it has reached is not firing, sixteen channels wide"}
+  ],
+  "notes": [
+    "every line of every pattern comes up empty, so no track fires until hexadecimal digits are typed into a line or a pattern is randomised",
+    "each line is typed as hexadecimal digits, one digit to four steps, and a star in place of a digit draws a new random digit every time it is read",
+    "the number keys 1 to 9 move the cursor to that line of the pattern"
+  ],
+  "menu": [
+    "ShowLights — hides or shows the step lights over the text lines",
+    "Clock In Delay — holds the clock back by 0 to 10 samples, to let a pattern change arrive first",
+    "Random — opens a density slider that sets how thickly a randomise fills a line",
+    "Random length from — sets the fewest digits a randomised line is given, 1 to 16",
+    "Random length to — sets the most digits a randomised line is given, 1 to 16",
+    "Randomize Pattern — writes new random lines into the current pattern",
+    "Initialize Pattern — empties every line of the current pattern",
+    "right clicking a hex line opens that line's own menu, not the module's: Cut, Copy, Paste, Select all, and Euclidean, which writes a Euclidean rhythm of a chosen length and hit count"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 9.99V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

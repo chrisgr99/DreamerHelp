@@ -1,0 +1,45 @@
+{
+  "plugin": "modular80",
+  "module": "RadioMusic",
+  "description": "A sampler that plays a folder of audio files as radio stations: the knob picks a file, and every file runs on while unheard, so tuning to one drops you wherever it has reached.",
+  "params": [
+    {"ids": [0], "text": "Chooses which file of the loaded bank plays, the travel divided evenly among however many there are."},
+    {"ids": [1], "text": "Sets where in the file playback restarts from, as a fraction of its length; with Pitch Mode on it sets the playback speed instead, over eight octaves centred on the middle of the travel."},
+    {"ids": [2], "text": "Restarts the file from the point the START knob sets; in bank select mode it steps to the next bank instead."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the STATION knob at a fifth of the knob's travel per volt, so 5V covers the whole bank."},
+    {"ids": [1], "text": "Adds to the START knob at a fifth of its travel per volt; with Pitch Mode on that works out at 1.6 octaves per volt, not the 1V per octave the source comment claims."},
+    {"ids": [2], "text": "A rising edge restarts the file from the point the START knob sets."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The playing file, scaled so its loudest sample reaches 5V; with Stereo Output enabled it carries two channels on one cable."}
+  ],
+  "notes": [
+    "The module plays nothing until a root directory is picked from the right-click menu. That folder's audio files are the first bank and each subfolder is another, up to 16 and 2GB each.",
+    "All four lamps blinking slowly means files are being read into memory; all four blinking fast means a file could not be read.",
+    "In bank select mode the four lamps read the bank number as binary and the RESET button steps through the banks; leaving the mode loads the one you stopped on.",
+    "Only .wav and .raw files are read unless All files allowed is on; a .raw file is taken as headerless 16-bit PCM at 44.1kHz."
+  ],
+  "menu": [
+    "Root Directory — opens a folder chooser and rescans; the chosen folder is the first bank and its subfolders are the rest",
+    "Enter Bank Select Mode — hands the RESET button and the four lamps over to picking a bank, and the item then reads Exit Bank Select Mode, which loads it",
+    "Clear Current Bank — unloads the bank that is playing and stops the sound",
+    "Stereo Output enabled — sends a stereo file out as two channels on one polyphonic cable and a mono file as the same signal on both; off, a stereo file is summed to one",
+    "Pitch Mode enabled — turns the START knob and its input into a playback speed spanning eight octaves rather than a start point",
+    "Looping enabled — starts a file again when it reaches its end; it is on when the module is added",
+    "Crossfade enabled — fades between the old file and the new one over about 25ms rather than cutting; it is on when the module is added",
+    "Files sorted — reads the files of a bank in name order rather than the order the folder hands back",
+    "All files allowed — reads every file in the folder rather than only those ending .wav or .raw"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

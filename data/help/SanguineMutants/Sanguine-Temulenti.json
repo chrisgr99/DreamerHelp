@@ -1,0 +1,70 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Temulenti",
+  "description": "Function generator with four models in one panel: the tidal modulator, a sixteen-voice harmonic oscillator, a duophonic random walk generator and a wavetable scanner, with a quantiser on the pitch",
+  "params": [
+    {"ids": [0], "text": "Advances the mode on each press; what the three modes are follows the model: AD, cyclic and AR envelopes, which harmonics ring, how the clocks start, or the wave bank"},
+    {"ids": [1], "text": "Advances the frequency range on each press: high after medium, low after high, then medium again; with the harmonic oscillator chosen it sets sine quality rather than range"},
+    {"ids": [2], "text": "Chooses the model: tidal modulator, two bumps, two drunks or Sheep; the display beside it shows T, B, D or S"},
+    {"ids": [3], "text": "Sets the rate, four octaves either side of centre; with the random walk model it sets the rate of the main clock, and while clock sync is on it sets the ratio between the clock and the output"},
+    {"ids": [4], "text": "Attenuverts the FM input, 5V shifting the pitch by an octave at full clockwise; with the random walk model it also sets the width of the output gates"},
+    {"ids": [5], "text": "Sets the curvature of the rise and fall; with the harmonic oscillator it picks the first centre frequency, with the random walk the interpolation between steps, and with Sheep the X coordinate"},
+    {"ids": [6], "text": "Sets the split between rise and fall; with the harmonic oscillator it picks the second centre frequency, with the random walk the two clocks' delay and probability, and with Sheep the Y coordinate"},
+    {"ids": [7], "text": "Low-pass filters the wave counter-clockwise of noon and wavefolds it clockwise; with the harmonic oscillator it sets how many harmonics ring, and with the random walk the largest step"},
+    {"ids": [8], "text": "Locks the generator to the CLOCK input while it is on"},
+    {"ids": [9], "text": "Switches the built-in quantiser on and picks its scale from semitones, major, minor, whole tones, pentatonic minor, poor pentatonic and fifths; the three lamps beside it show the choice in binary"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the SHAPE knob, 5V covering the whole knob range"},
+    {"ids": [1], "text": "Adds to the SLOPE knob, 5V covering the whole knob range"},
+    {"ids": [2], "text": "Adds to the SMOOTH knob, 5V covering the whole knob range"},
+    {"ids": [3], "text": "A voltage of 0.7V or more starts the envelope or resets the cycle; with the harmonic oscillator it randomises the phase of every harmonic, and with the random walk it starts the clocks"},
+    {"ids": [4], "text": "A voltage of 0.7V or more stops the wave where it is until the voltage falls again; with the harmonic oscillator each gate instead permutes the harmonics sent to the UNI output"},
+    {"ids": [5], "text": "Sets the rate, one volt per octave, quantised to the scale the QNTZ knob selects"},
+    {"ids": [6], "text": "Shifts the rate through the FM attenuverter; with nothing patched it reads a constant 0.1V"},
+    {"ids": [7], "text": "Scales the UNI and BI outputs like a VCA, 8V giving full level and higher voltages clipped; with nothing patched it reads 8V"},
+    {"ids": [8], "text": "Synchronises the generator to this signal while clock sync is on, reading high at 0.7V; with clock sync off, edges here randomise the harmonic oscillator's settings or the random walk's range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V once the rising segment has finished; with the harmonic oscillator it carries a one-bit version of the BI output, and with the random walk the clock of channel 1"},
+    {"ids": [1], "text": "Carries 5V once the falling segment has finished; with the harmonic oscillator it carries a square sub-oscillator an octave down, and with the random walk the clock of channel 2"},
+    {"ids": [2], "text": "The wave as a unipolar signal, 0-8V; with the harmonic oscillator it carries the permuted harmonics, and with the random walk the walk of channel 1"},
+    {"ids": [3], "text": "The wave as a bipolar signal, -5V to 5V, with a positive and a negative bump in each cycle; with the harmonic oscillator it is that model's main output, and with the random walk the walk of channel 2"}
+  ],
+  "notes": [
+    "the module is monophonic: every jack reads or writes a single channel.",
+    "clock sync is engaged by the SYNC button alone, unlike Aestus, where patching a cable to CLOCK engages it as well.",
+    "with the random walk model the SHAPE, SLOPE and SMOOTH knobs are read inverted for channel 2, so the two channels agree only with the knob centred."
+  ],
+  "menu": [
+    "Model: Tidal Modulator, Two Bumps - Harmonic oscillator, Two Drunks - Random walk, Sheep - Wavetable synthesizer — chooses the model the module runs",
+    "Mode: AD Envelope, Cyclic, AR Envelope — sets what the tidal modulator does, and appears only with that model",
+    "Harmonics: Odd, First 16, Octaves — picks which harmonics ring, and appears only with the harmonic oscillator model",
+    "Mode: Trigger, Cycling, Gate — sets how the random walk clocks are started, and appears only with that model",
+    "Wave table: Additive harmonics, PWMish, Nodi WMAP — picks the bank of waves the Sheep model scans, and appears only with that model",
+    "Frequency range: High, Medium, Low — sets the frequency range",
+    "Sine quality: High, Medium, Low — sets how finely the sine waves are interpolated, and replaces the frequency range entry with the harmonic oscillator model",
+    "Quantizer scale: Off, Semitones, Major, Minor, Whole tones, Pentatonic Minor, Poor pentatonic, Fifths — picks the scale the pitch is quantised to",
+    "Compatibility options — the submenu holding the settings that restore how older versions of the module behaved",
+    "Frequency knob center is C4 — subtracts a volt from the pitch so a centred FREQUENCY knob gives C4; switching it off restores the older tuning. It is on the Compatibility options submenu"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "1": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "2": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "3": "high above 0.7V · stepped · one channel only",
+      "4": "high above 0.7V · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0.1V.",
+      "7": "0 to 8V · continuous · one channel only\n\nunpatched it reads 8V; a negative voltage does nothing here.",
+      "8": "high above 0.7V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 8V · one channel only",
+      "3": "±5V · one channel only"
+    }
+  }
+}

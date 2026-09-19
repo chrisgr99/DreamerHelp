@@ -1,0 +1,40 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Gator",
+  "description": "Polyphonic gate generator timed against a phase ramp, with gate length, jitter, ratcheting and strumming set per channel",
+  "params": [
+    {"ids": [0], "text": "Sets the gate length in phase lengths, from the shortest trigger at 0 to 100 phases, and is replaced by the LEN input while that is patched"},
+    {"ids": [1], "text": "Sets how much random offset is added to the moment each gate fires, 0% for exact timing and 100% for very loose timing; the JTR input is added to it"},
+    {"ids": [2], "text": "Sets how many extra gates are added to each gate, 0 to 10; a negative setting runs the extra gates ahead of the beat so the last of them lands on it"},
+    {"ids": [3], "text": "Sets the time between ratcheted gates in phase lengths; at 0 no extra gates are produced whatever the count is"},
+    {"ids": [4], "text": "Spreads the gates of the polyphonic channels in time, positive firing the lowest channel first and negative the highest, -100% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phase ramp all timing is measured against, -10V half a beat early, 0V on the beat and 10V half a beat late"},
+    {"ids": [1], "text": "Sets the threshold on the phase at which gates fire, shifting every channel in time together"},
+    {"ids": [2], "text": "A channel held above 5V produces a gate at the next threshold crossing, and the number of channels here sets the number of output channels"},
+    {"ids": [3], "text": "Added to the firing threshold per channel, moving that channel's gates up to nearly half a beat earlier or later"},
+    {"ids": [4], "text": "Sets the gate length per channel in place of the knob, 0.1V for one phase and 10V for 100 phases"},
+    {"ids": [5], "text": "Added to the jitter knob per channel, 10V for fully loose timing"},
+    {"ids": [6], "text": "Sets the number of extra gates per channel in place of the knob, 1V for each gate"},
+    {"ids": [7], "text": "Sets the time between ratcheted gates per channel in place of the knob, 1V for one phase length"},
+    {"ids": [8], "text": "Sets the strum spread in place of the knob, and acts on all channels together rather than per channel"},
+    {"ids": [9], "text": "A trigger clears every gate, ratchet and strum in progress"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The polyphonic gate output"}
+  ],
+  "notes": [
+    "no gate is produced until a phase ramp is patched to PHS and a channel of GATE is held high; the PHS output of Swing is the ramp it is built for",
+    "a ratchet or a strum is abandoned where a later gate on the same channel starts a new gate event"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped",
+      "9": "stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "plugin": "phrasing-module",
+  "module": "phrasing",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the Density knob", "why": "Phrasing.cpp:147-150 tests isConnected and then divides getVoltage() with no channel by 10 and clamps it to 0 and 1, replacing the knob's value rather than adding to it"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Phrasing.cpp:201-202 tests isConnected and passes getVoltage() with no channel to a dsp::SchmittTrigger left at its default thresholds of 0 and 1"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Phrasing.cpp:201-202 tests isConnected and passes getVoltage() with no channel to a dsp::SchmittTrigger left at its default thresholds of 0 and 1"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Phrasing.cpp:201-202 tests isConnected and passes getVoltage() with no channel to a dsp::SchmittTrigger left at its default thresholds of 0 and 1"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Phrasing.cpp:201-202 tests isConnected and passes getVoltage() with no channel to a dsp::SchmittTrigger left at its default thresholds of 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false},
+      "1": {"family": "cv", "poly": false},
+      "2": {"family": "cv", "poly": false},
+      "3": {"family": "cv", "poly": false}
+    }
+  },
+  "comment": "Read at commit 811b78f, the repository head. Six commits carry the installed 2.2.0. The installed res/Phrasing.png matches the blob first written at 218dfb2, which narrows it to 218dfb2 or 811b78f, and those two differ only in the density CV: 218dfb2 writes the scaled voltage into the Density parameter with setValue, 811b78f keeps it in a local. 811b78f is what shipped: the input voltage is scaled by 0.1 and clamped, and nothing is stored back into the parameter, so the Density knob does not move when CV is patched. Earlier 2.2.0 commits also used single green lane lamps where the shipped build uses MediumLight<RedGreenBlueLight>, which agrees. The README says the trig inputs need about 1.7V; the code uses dsp::SchmittTrigger at its defaults, so the threshold is 1V, and the lines say 1V. The README describes the Density CV as a knob-plus-CV control; the code replaces the knob outright while a cable is patched. A lane switched off with its enable button outputs 0V and ignores its Floor knob, which the README does not say. With Guarantee one on and every enabled lane's Weight at zero, the first enabled lane is chosen rather than the highest-weight one; that case is left out of the switch's line. The Gap Jitter and Dur Jitter knobs are scaled by 0.30 and 0.50 before use, so their full travel is plus or minus 30% and plus or minus half. The panel prints no name on the Guarantee switch, the Density CV jack, the four enable buttons or the four lamps. The maker's own panel and plugin.json call the four channels lanes, and the lines follow that. Nothing is polyphonic: every jack is read with getVoltage() and no channel, and nothing calls setChannels or getPolyVoltage."
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "Autinn",
+  "module": "Big",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "Myria.cpp:164 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "Myria.cpp:166 reads this input with getVoltage, multiplies by 2 and Myria.cpp:167 truncates and clamps the knob-plus-input sum to 0 to 19"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Myria.cpp:169 reads this input with getVoltage, multiplies by 0.1 and clamps the knob-plus-input sum to 0 to 1"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "why": "Myria.cpp:170 reads this input with getVoltage, multiplies by 1.5 and takes the knob-plus-input sum modulo 16, so a negative voltage wraps rather than stopping"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Myria.cpp:178 and :250 set this output to sixteen channels whatever is patched"}
+    }
+  },
+  "comment": "The twenty chord tables are at Myria.cpp:50 to :71; their intervals are reduced to pitch classes and sorted at Myria.cpp:104 to :121, so an interval above an octave folds back. The pool of candidate pitches spans -4V to 5V (Myria.cpp:200 to :207) and is padded an octave at a time if it holds fewer than sixteen notes (Myria.cpp:209 to :214). The inversion CV uses the C remainder operator, so a negative sum gives a negative index; the index is used to offset a start position that is then clamped into the pool, so it does not crash. The shuffle order is saved with the patch."
+}

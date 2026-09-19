@@ -1,0 +1,52 @@
+{
+  "plugin": "AmbientModules",
+  "module": "LunarVCO",
+  "description": "Oscillator with six waveforms, hard sync and a full ADSR envelope and VCA built in",
+  "params": [
+    {"ids": [0], "text": "Chooses the waveform: sine, triangle, inverted saw, square, saw morphing to inverted saw, or sine morphing to saw"},
+    {"ids": [1], "text": "Tunes the oscillator over half an octave either way"},
+    {"ids": [2], "text": "Lifts the oscillator by three octaves while it is lit"},
+    {"ids": [3], "text": "Adds an oscillator an octave below the main one while it is lit"},
+    {"ids": [4], "text": "Switches the FM input between linear and exponential response; exponential while it is lit"},
+    {"ids": [5], "text": "Sets the pulse width of the square wave, or the blend point of the two morphing waveforms, and does nothing to the other three"},
+    {"ids": [6], "text": "Scales the shape CV input, -100% to 100%, so that below zero the CV is inverted"},
+    {"ids": [7], "text": "Scales the FM input, -100% to 100%, so that below zero the modulation is inverted"},
+    {"ids": [8], "text": "Sets how long the envelope takes to rise to full, 1ms to 15 seconds"},
+    {"ids": [9], "text": "Sets how long the envelope takes to fall from full to the sustain level, 1ms to 15 seconds"},
+    {"ids": [10], "text": "Sets the level the envelope holds at while the gate stays high, 0% to 100%"},
+    {"ids": [11], "text": "Sets how long the envelope takes to fall to silence once the gate closes, 1ms to 15 seconds"},
+    {"ids": [12], "text": "Holds the envelope open for as long as it is lit, whatever the gate input is doing"},
+    {"ids": [13], "text": "Turns the envelope into a free-running cycle of attack and release, skipping the decay stage, once a gate has arrived or Hold is lit; the sustain knob then sets how high it climbs"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch, 1V per octave with 0V giving C4"},
+    {"ids": [1], "text": "Modulates the frequency, linearly or exponentially as the FM mode button is set, scaled by the FM amount knob"},
+    {"ids": [2], "text": "Modulates the shape knob, scaled by the shape CV knob"},
+    {"ids": [3], "text": "A rising edge here sets the oscillator's phase back to the start, which hard-syncs it to whatever is patched"},
+    {"ids": [4], "text": "Opens the envelope while it is high, and is ignored while Hold is lit or a cable is patched to the envelope input"},
+    {"ids": [5], "text": "Replaces the envelope entirely while a cable is patched here, along with the gate input and the Hold button; 0-10V, so another module's envelope output drives this one"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator with the envelope applied to its level"},
+    {"ids": [1], "text": "The envelope currently shaping the audio output, 0-10V"},
+    {"ids": [2], "text": "The oscillator's raw phase ramp, -5V to 5V and untouched by the envelope; patch it into another oscillator's sync input to lock the two together"}
+  ],
+  "notes": [
+    "the module's channel count follows whichever of its CV inputs carries the most channels, including the envelope input."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "stepped · polyphonic",
+      "4": "stepped · polyphonic",
+      "5": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "plugin": "eightfold",
+  "module": "SDComparator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V on every channel", "why": "src/SDComparator.cpp:100 reads getVoltage(i) for channels below getChannels() and substitutes 0 beyond that, then adds the matching knob"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "normal": "0V", "why": "src/SDComparator.cpp:91 reads it with getVoltage() and no channel index and line 101 compares it with each threshold"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:113 and 119 write 10 or 0 with no channel index"},
+      "8": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/SDComparator.cpp:124 calls setChannels(8) and lines 114 and 120 write one gate per channel"}
+    }
+  },
+  "comment": "configSwitch at src/SDComparator.cpp:60 gives DOT_PARAM the choice names {\"On\", \"Off\"} in that order, so value 0 reads as On and value 1 as Off; process() at line 110 uses dot behaviour when the value is 1, the position the tooltip calls Off. The names are the wrong way round and the switch's line says so. The comparison at line 101 is >= rather than >, and the highest-threshold search at line 104 uses a strict > so an earlier of two equal thresholds wins. The range written for the input is the range over which it can do anything, since every threshold is clamped to -10V..+10V; the jack itself is not clamped."
+}

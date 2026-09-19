@@ -1,0 +1,22 @@
+{
+  "plugin": "TwinSlide",
+  "module": "TwinSlide",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlide.cpp:1683 resetTrigger.process(inputs[RESET_INPUT].getVoltage() + RESET_PARAM)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlide.cpp:1573 clockTrigger.process(inputs[CLOCK_INPUT].getVoltage())"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlide.cpp:1070 runningTrigger.process(RUN_PARAM + inputs[RUNCV_INPUT].getVoltage())"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TwinSlide.cpp:1821 clamp(getVoltage(),-10,10); src/SynthDSP.hpp:1462 baseCutoffHz *= pow(2,cutoffCv)"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TwinSlide.cpp:1821 same loop, t=1"},
+      "9": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/TwinSlide.cpp:1823 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "10": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/TwinSlide.cpp:1823 same loop, t=1"},
+      "11": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/TwinSlide.cpp:1824 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "12": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/TwinSlide.cpp:1824 same loop, t=1"}
+    },
+    "outputs": {
+      "4": {"family": "audio", "poly": false, "range": "±10V", "why": "src/TwinSlide.cpp:1861 setVoltage(clamp(out,-10,10)); :1798 guarded by isConnected on either audio output"},
+      "5": {"family": "audio", "poly": false, "range": "±10V", "why": "src/TwinSlide.cpp:1861 same loop, t=1"}
+    }
+  },
+  "comment": "Inputs 3 to 6 (Track A CV, Track B CV, Track A Gate, Track B Gate) and outputs 0 to 3 (Track A/B CV and gate) are configured but never given a jack on the panel; the CV and gate outputs are used internally as the bus that feeds the two voices and the expander. Every jack is read with getVoltage(), so the module is monophonic per track. Three things the manual states do not match this build: it puts the 47 temperament presets on the right-click menu, where this build has no Microtuning item at all and the presets are stepped through by the arrows beside INITIALIZE on the panel; it says a step's gate shape is chosen by holding a step button and turning the encoder, where the code takes it from the keyboard once the lower key-mode button is lit; and its Expert Mode table labels Decay Speed 6.0x as slower decay, where the figure multiplies the decay rate and so makes the envelope fall faster. The manual is written for 2.1.5 and also lists a Bass Comp scale that runs the opposite way to the code. The panel prints CPY, PST, CLR and TRANS/ROTATE where the maker's own parameter names read Copy, Paste, Clear track and Transpose / rotate; the copy button and the 4/8/T switch are both named Copy, so one of them wears the other's tooltip."
+}

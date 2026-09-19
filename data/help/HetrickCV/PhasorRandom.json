@@ -1,0 +1,46 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorRandom",
+  "description": "Cuts an incoming phasor into steps and disrupts them at random, one step at a time",
+  "params": [
+    {"ids": [0], "text": "How many steps the phasor cycle is cut into, 1 to 64, at 1 by default"},
+    {"ids": [1], "text": "Scales the STEPS CV before it is added to the knob, -1 to +1; at full depth 5V spans the whole 64-step range"},
+    {"ids": [2], "text": "How often a step gets disrupted: none at all fully counter-clockwise, every step fully clockwise"},
+    {"ids": [3], "text": "Scales the CHANCE CV before it is added to the knob, -1 to +1"},
+    {"ids": [4], "text": "Picks what a disrupted step does: SLICE plays a random other step, REVERSE SLICE plays one backwards, REVERSE PHASOR mirrors the position, SLOPE bends the ramp, STUTTER repeats it, FREEZE holds it"},
+    {"ids": [5], "text": "Scales the MODE CV before it is added to the knob, -1 to +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor to be cut up and randomised"},
+    {"ids": [1], "text": "Modulates the step count, scaled by the attenuverter and added to the knob"},
+    {"ids": [2], "text": "Modulates the chance, scaled by the attenuverter and added to the knob"},
+    {"ids": [3], "text": "Modulates the mode, scaled by the attenuverter and added to the knob"},
+    {"ids": [4], "text": "Above 1V every step is disrupted, whatever CHANCE is set to"},
+    {"ids": [5], "text": "Above 1V the randomisation runs; below that the phasor passes through untouched. With nothing patched here it runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The randomised phasor, 0-10V"},
+    {"ids": [1], "text": "A 0-10V staircase, one level per step, following the step the output is playing"},
+    {"ids": [2], "text": "A 0-10V ramp across the current step while that step is being disrupted, and 0V the rest of the time"},
+    {"ids": [3], "text": "10V over the first half of each disrupted step, and 0V the rest of the time"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "0 to 5V · continuous · polyphonic",
+      "3": "stepped · polyphonic",
+      "4": "high above 1V · stepped · polyphonic",
+      "5": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "plugin": "GlueTheGiant",
+  "module": "BusDepot",
+  "description": "Master fader and VU meters for a bus chain, summing the three stereo buses to a stereo mix out and passing them on separately at the master level",
+  "params": [
+    {"ids": [0], "text": "Turns the output on and off at the FADE IN and FADE OUT times; ctrl-click skips the fade, and a press held for 0.7 seconds auditions this Bus Depot and mutes every other one in the patch"},
+    {"ids": [1], "text": "Sets the level of the aux input, which is added to the red stereo bus ahead of the master fader; fully clockwise is unity"},
+    {"ids": [2], "text": "Sets the level of all three stereo buses together, after which they are summed to MIX OUT"},
+    {"ids": [3], "text": "Sets how long the ON button takes to take the output down, 26ms to 34 seconds"},
+    {"ids": [4], "text": "Sets how long the ON button takes to bring the output up, 26ms to 34 seconds"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V turns the output on or off, with the same fade the ON button uses, except while an audition is running"},
+    {"ids": [1], "text": "Scales the MASTER LEVEL knob, silent at 0V and full at 10V; with nothing patched the jack reads 10V, so the knob alone sets the level"},
+    {"ids": [2], "text": "The left channel of the aux input when R is patched; with R empty, every channel of the cable arriving here is summed and fed to both sides of the red bus"},
+    {"ids": [3], "text": "The right channel of the aux input; patching here stops the L/M/P jack from being summed and fed to both sides"},
+    {"ids": [4], "text": "Takes the three stereo buses from another module's BUS OUT"},
+    {"ids": [5], "text": "Sets the fade time in place of the FADE IN and FADE OUT knobs, 26ms at 0V rising to 34 seconds at 10V; the menu chooses whether it replaces the fade in, the fade out, or both"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channels of all three stereo buses summed, after the master level and the fade"},
+    {"ids": [1], "text": "The right channels of all three stereo buses summed, after the master level and the fade"},
+    {"ids": [2], "text": "Carries the three stereo buses on one polyphonic cable after the master level and the fade, kept separate, so a mix group can go on to another Bus Depot or to send effects"}
+  ],
+  "notes": [
+    "this is where a bus chain ends; it needs another Glue the Giant module's BUS OUT patched into its BUS IN, and its own MIX OUT jacks are what carry the three buses summed to stereo",
+    "holding any Bus Depot's ON button for 0.7 seconds puts every Bus Depot in the patch into audition, that one heard and the rest muted; a single click on any of their ON buttons ends it"
+  ],
+  "menu": [
+    "Level CV Filters — chooses No filter or Smoothing (default), which slews the level CV over 26ms from silence to full and takes the clicks off a stepped CV",
+    "Fade Speed Modulation — chooses which knob the fade CV replaces: Fade in and fade out (default), Fade in only, or Fade out only",
+    "Audition Modes — chooses Normal (default) or Always audition, which keeps this Bus Depot playing while another one is being auditioned"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous"
+    }
+  }
+}

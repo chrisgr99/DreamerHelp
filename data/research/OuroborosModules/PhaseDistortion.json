@@ -1,0 +1,16 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "PhaseDistortion",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "why": "Warp.cpp:85 takes the module's channel count from this input and Warp.cpp:105 reads each channel with getPolyVoltage"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "Signal", "why": "Warp.cpp:106 reads this input with getNormalPolyVoltage, falling back to the signal input when it is unconnected"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "Warp.cpp:95 reads this input with getNormalPolyVoltage, divides by 10 and scales by the attenuverter; Warp.cpp:101 clamps the total to 0 and 1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "±5V", "normal": "0V", "why": "Warp.cpp:98 reads this input with getNormalPolyVoltage and scales it by the attenuverter; Warp.cpp:102 clamps the total to ±5 before turning it into radians"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Warp.cpp:86 sets this output's channel count from the signal input; Warp.cpp:137 writes one channel at a time"}
+    }
+  },
+  "comment": "Read from src/Warp at commit 37a37b0, the commit whose plugin.json carries the installed 2.2.3, alongside the plugin's wiki page for Warp, which matches the code. The BIAS knob runs -5 to 5 and is shown in degrees at 36 degrees per unit (Warp.cpp:36), so its ends are -180 and 180 degrees. The BIAS jack is added at one unit per volt with no division, unlike the AMT jack, which is divided by 10. With the signal input unconnected the module writes a single channel of 0V and returns early (Warp.cpp:79 and 80). The Oversample parameter is declared with no widget, so no click can reach it; it is on the context menu."
+}

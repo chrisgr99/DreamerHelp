@@ -1,0 +1,47 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorSwing",
+  "description": "Swings an incoming phasor, pushing the steps within each group late or early",
+  "params": [
+    {"ids": [0], "text": "How many steps the phasor cycle is cut into, 1 to 64, at 4 by default"},
+    {"ids": [1], "text": "Scales the STEPS CV before it is added to the knob, -1 to +1; at full depth 5V spans the whole 64-step range"},
+    {"ids": [2], "text": "How many steps are treated as one swing group, 1 to 64, at 2 by default; the swing is applied across that group"},
+    {"ids": [3], "text": "Scales the GROUPING CV before it is added to the knob, -1 to +1; at full depth 5V spans the whole 64-step range"},
+    {"ids": [4], "text": "How hard the swing pushes; centred gives even steps, one way puts the upstep early and the other puts it late"},
+    {"ids": [5], "text": "Scales the SWING CV before it is added to the knob, -1 to +1"},
+    {"ids": [6], "text": "Adds a random amount to the swing on each group: none at all fully counter-clockwise"},
+    {"ids": [7], "text": "Scales the VARIATION CV before it is added to the knob, -1 to +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor to be swung"},
+    {"ids": [1], "text": "Modulates the step count, scaled by the attenuverter and added to the knob"},
+    {"ids": [2], "text": "Modulates the group size, scaled by the attenuverter and added to the knob"},
+    {"ids": [3], "text": "Modulates the swing amount, scaled by the attenuverter and added to the knob"},
+    {"ids": [4], "text": "Modulates the variation amount, scaled by the attenuverter and added to the knob"},
+    {"ids": [6], "text": "Above 1V the swing runs; below that the phasor passes through untouched. With nothing patched here the swing runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The swung phasor, 0-10V"},
+    {"ids": [1], "text": "A 0-10V ramp across each step of the swung phasor"},
+    {"ids": [2], "text": "10V over the first half of each swung step, and 0V the rest of the time"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "0 to 5V · continuous · polyphonic",
+      "5": "stepped · polyphonic",
+      "6": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "plugin": "VsWorld",
+  "module": "XLimitJIAutotuner",
+  "description": "A JI quantizer: it builds every pitch reachable by multiplying the root by eight primes raised to the powers you allow, then snaps each channel of the input to the nearest of them.",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets how many powers of that prime the search may use, 0 to 20, taken as a span running from minus that figure to plus it; at 0 the prime is left out."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitches to be tuned, 1V per octave; the first channel is the root the others are measured against, and it comes out untouched."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The tuned pitches, 1V per octave, one channel for each channel of the input, clamped to ±10V."},
+    {"ids": [1], "text": "What the tuned pitch lost when it was rounded from double to single precision, for adding back at an oscillator that takes it."}
+  ],
+  "notes": [
+    "Every knob comes up at 0, which is a list of one pitch, so the module passes the input through unchanged until a knob is raised.",
+    "Turning a knob rebuilds the whole list of allowed pitches, and a large list costs real CPU time while it is built.",
+    "The red lamp lights when the knobs ask for more than ten million pitches; the list is then left as it was and the new setting is ignored until the knobs come back down.",
+    "In the circle, the lines reaching the outer edge are every allowed pitch within one octave, and the shorter lines inside are the pitches being put out right now, one per channel.",
+    "The plugin ships tuning systems as module presets, so the Preset submenu on the right-click menu is the quickest way to a working setting."
+  ],
+  "menu": [
+    "Remap keyboard inputs to tuning circle steps — takes each incoming semitone as one step along the list of allowed pitches, instead of tuning the pitch that semitone names"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "plugin": "acModules",
+  "module": "Pick6",
+  "description": "A finger-picking trigger sequencer: each incoming pick moves through an eight-step pattern and fires one of six string triggers, with a matching note voltage.",
+  "params": [
+    {"ids": [0], "text": "Chooses the pattern, 1 to 50; the last two are the custom slots a Pick6p expander edits."},
+    {"ids": [1], "text": "Chooses what happens at the end of a pattern: loop it, play the next pattern once and come back, or play a silent bar and come back."},
+    {"ids": [2], "text": "Adds and removes notes as the pattern repeats: it moves picks off strings the chord mutes, drops picks from full patterns every eighth measure, and fills in skipped steps."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 2V moves the pattern on one step and fires the trigger for whichever string that step names."},
+    {"ids": [1], "text": "A rising edge past 2V puts the sequence back before its first step and restarts the measure count."},
+    {"ids": [2], "text": "Takes over the pattern knob while a cable is here: 0V to 10V spans the 50 patterns, and the knob is moved to follow."},
+    {"ids": [3], "text": "Six channels of note voltage plus six channels of mute flag, where 0V plays the string and anything above 4.9V mutes it; a thirteenth channel is ignored."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note voltage of the string the current step picked."},
+    {"ids": [1], "text": "Six channels of trigger, one per string; a 10V pulse 1ms long comes out of the channel for the string that was picked."},
+    {"ids": [2], "text": "A 10V pulse 1ms long on every step that picks a string, whichever string it was."}
+  ],
+  "notes": [
+    "Nothing moves until triggers arrive at PICK. The module has no clock of its own.",
+    "With nothing patched to POLY IN the six note voltages are those of an open E chord, so the CV output is useful with no chord source at all.",
+    "A Pick6p placed immediately to the right edits the last two patterns; a lamp in each module's name lights when they are joined."
+  ],
+  "menu": [
+    "Muted Note CV to 0V — sends 0V out of the CV output on a step that is muted or skipped, instead of holding the previous step's voltage.",
+    "Smart Riff in Blank Pattern — lets the smart riff add notes while a blank pattern is playing, which is otherwise left silent.",
+    "Offset End Of Pattern — reverses the order of the end-of-pattern setting, so the next or silent bar is played first and the chosen pattern second."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "continuous · polyphonic\n\nunpatched it reads an open E chord."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "high above 1V · stepped · one channel only"
+    }
+  }
+}

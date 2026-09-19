@@ -1,0 +1,19 @@
+{
+  "plugin": "MADZINE",
+  "module": "Quantizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Quantizer.cpp:167-170, getChannels() sets the loop bound and getVoltage(c) reads each channel"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Quantizer.cpp:167-170, the same loop for the second jack"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Quantizer.cpp:167-170, the same loop for the third jack"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/Quantizer.cpp:150-156, scale += getVoltage()*0.2 with no clamp on the total"},
+      "4": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Quantizer.cpp:158-165, offset += getVoltage(), and offset is in the same units as the incoming pitch"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Quantizer.cpp:201-204, setVoltage(semitone/12 + cents/1200, c) then setChannels from the input"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Quantizer.cpp:201-204, the same for the second voice"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Quantizer.cpp:201-204, the same for the third voice"}
+    }
+  },
+  "comment": "The twenty-four microtune parameters are declared but have no ParamWidget: the note rows are a pair of custom widgets added with addChild (src/Quantizer.cpp:481-505, 542-552), so none of them appears in paramPos and no help click can reach one. They get no line, no tag and no props, and a Note covers them instead. The note on and off state is not a parameter at all; it is module state saved in the patch. The Offset knob is configured with a display multiplier of 12 and a range of -1 to +1, so its tooltip reads in semitones while the value is in volts; the Offset CV jack adds volts directly, which is why one volt there is a whole semitone rather than a twelfth of the knob. The quantiser works on a grid of 48 half-semitone slots over two octaves and picks the nearest enabled note (src/Quantizer.cpp:207-227). A directional preset makes the cents depend on whether the quantised note rose or fell from the last one (src/Quantizer.cpp:187-196). The panel prints Quanti2er, Amount and Offset; the three input and three output jacks carry no lettering. Layout is at src/Quantizer.cpp:520-570."
+}

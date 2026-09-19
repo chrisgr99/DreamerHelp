@@ -1,0 +1,67 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Big-Button-Seq2",
+  "description": "Six-channel gate and CV sequencer of 128 steps played in from one big button; it runs whenever its clock runs and has no run control of its own",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the six channels every button acts on; it can be turned while the sequencer runs and takes effect at once"},
+    {"ids": [1], "text": "Sets how many steps the current channel plays before it loops round, 1 to 128"},
+    {"ids": [2], "text": "Sets the chance that the gate of the step about to be reached is flipped in the current channel: at the left end nothing changes, at the right end every step is flipped"},
+    {"ids": [3], "text": "Returns every channel to its first step"},
+    {"ids": [4], "text": "Turns off every gate of the current channel and returns all of its stored voltages to C4"},
+    {"ids": [5], "text": "Switches the current channel between its two stored sequences"},
+    {"ids": [6], "text": "Clears the gate at the current step while it is held down, so holding it through several steps clears them all"},
+    {"ids": [7], "text": "Plays a gate on every clock pulse of the current channel while it is held down, starting on the next pulse"},
+    {"ids": [8], "text": "Turns on the gate of the current step in the current channel and stores the voltage at CV IN as that step's CV"},
+    {"ids": [9], "text": "With this off, the gates played by FILL sound but are not written into the sequence"},
+    {"ids": [10], "text": "Quantizes the big button and DEL to the nearest beat rather than the beat last reached; it needs a steady clock of at least 30 BPM, and switches itself off internally below that"},
+    {"ids": [11], "text": "Samples each channel's CV output on that channel's own gate, so the voltage changes only as a gate fires"},
+    {"ids": [12], "text": "Advances the sequencer one step for each press, for programming a sequence without a running clock"},
+    {"ids": [13], "text": "Switches the display between the length of the current channel and the step it has reached"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequencer one step per pulse; stopping this clock is the only way to stop the sequencer"},
+    {"ids": [1], "text": "Chooses the channel from a voltage, 0-10V spread over the six channels"},
+    {"ids": [2], "text": "A trigger here turns on the gate of the current step and stores the voltage at CV IN as that step's CV"},
+    {"ids": [3], "text": "Added to the LEN knob, 10V covering the whole 128 steps"},
+    {"ids": [4], "text": "Added to the RND knob after being divided by ten, so 10V reaches full probability with the knob at its left end"},
+    {"ids": [5], "text": "A trigger here returns every channel to its first step"},
+    {"ids": [6], "text": "A trigger here turns off every gate of the current channel and returns all of its stored voltages to C4"},
+    {"ids": [7], "text": "A trigger here switches the current channel between its two stored sequences"},
+    {"ids": [8], "text": "Above 0.5V here clears the gate at the current step, and goes on clearing each step while it stays high"},
+    {"ids": [9], "text": "Above 0.5V here plays a gate on every clock pulse of the current channel while it stays high"},
+    {"ids": [10], "text": "The voltage taken into a step when the big button is pressed, and taken on every clock pulse while FILL runs with MEM on, which is how the module is used as a CV recorder"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "The clock pulse itself on each step of that channel that holds a gate"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "The stored voltage of the step that channel has reached"}
+  ],
+  "menu": [
+    "Retrigger gates on reset — holds the gate outputs low for 1ms after a reset so a trigger-sensitive target fires again; the choices are No and Yes",
+    "Big and Del on next step — registers every big button and DEL press on the step after the current one, and SNAP then has no effect",
+    "Metronome light — sets how often the big button's light blinks as a metronome: Every clock, /2, /4, /8, or Full length",
+    "Portable sequence — holds Copy sequence and Paste sequence, which move the current channel's sequence between this module and other sequencers that support the format"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 0.5V · stepped · one channel only",
+      "9": "high above 0.5V · stepped · one channel only",
+      "10": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

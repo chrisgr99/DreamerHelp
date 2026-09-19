@@ -1,0 +1,37 @@
+{
+  "plugin": "forsitan",
+  "module": "artifex",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/artifex.cpp:193, one getVoltage() per side into the effect"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "normal": "the left input", "why": "src/artifex.cpp:194 and doc/artifex.md, left is normalled to right so a mono source fills both"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "src/artifex.cpp:195 and doc/artifex.md, ten volts covers the nine modes and the count wraps"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:196, added to the time knob through the shared attenuverter"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "src/artifex.cpp:374-377, the voltage is sampled into stepHold on each step of the clock, summed with the free time jack, scaled by 0.2 times the shared time attenuverter and added to the 0..1 time knob"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:198, added to the feedback knob through its attenuverter"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:199, added to the amount knob through its attenuverter"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:200, added to the filter knob, which has no attenuverter"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:201, added to the stereo knob, which has no attenuverter"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/artifex.cpp:202, a trigger read as a rising edge"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/artifex.cpp:203, a clock read as rising edges"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/artifex.cpp:204, added to the LFO rate knob through its attenuverter"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/artifex.cpp:205, a reset read as a rising edge"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/artifex.cpp:206, a reset read as a rising edge"},
+      "14": {"family": "cv", "poly": false, "range": "high above 1V", "negative": "swings", "why": "src/artifex.cpp:230-237 and 320, patternMode() ignores the switch whenever the jack is patched and reads the voltage as three states: above 1V randomises the gate pattern, below -1V inverts it, in between it is left alone; the menu item \"Pattern inputs use the hardware window\" moves those edges to 3.2V and 1.6V"},
+      "15": {"family": "cv", "poly": false, "range": "high above 1V", "negative": "swings", "why": "src/artifex.cpp:230-237 and 321, patternMode() ignores the switch whenever the jack is patched and reads the voltage as three states: above 1V randomises the CV pattern, below -1V inverts it, in between it is left alone; the menu item \"Pattern inputs use the hardware window\" moves those edges to 3.2V and 1.6V"},
+      "16": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "src/artifex.cpp:209 and doc/artifex.md, ten volts covers the thirty-two rhythms and the count wraps"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/artifex.cpp:211, one setVoltage per side after the effect and the level knob"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/artifex.cpp:213 and doc/artifex.md, the follower reads 10V at the 5V clip point"},
+      "3": {"family": "cv", "poly": false, "why": "src/artifex.cpp:214, the LFO triangle"},
+      "4": {"family": "trigger"},
+      "5": {"family": "cv"},
+      "6": {"family": "trigger", "poly": false, "why": "src/artifex.cpp, the pattern's gate for the current step"},
+      "7": {"family": "cv"},
+      "8": {"family": "trigger", "poly": false, "why": "src/artifex.cpp, the running clock passed on"}
+    }
+  },
+  "comment": "The time knob has two CV jacks sharing one attenuverter: one continuous and one sampled and held on each step of the clock. The mode and rhythm CV jacks both span their whole list over ten volts and wrap, so an oscillator sweeps the machine without trimming; a small attenuverter setting picks between two neighbouring modes instead. Mode changes from CV wait for the next clock step by default, so a modulated change lands on the beat. The two pattern switches are each normalled to the jack below them. The euclidean half of the rhythm list skips six densities because at sixteen steps those are patterns the hand-written half already holds. The module is built after Bastl Instruments' Citadel FX Wizard, and its bottom half is the same circuit as vates's. The panel prints artifex, fx mode, time, feedback, amount, free, step, filter, stereo, trig, tempo, clk, sync, rate, mod, reset, pwm, env, tri, saw, pulse, rhythm, gate ptrn, cv ptrn, reset, gate, cv, clk, gain, in, level and out."
+}

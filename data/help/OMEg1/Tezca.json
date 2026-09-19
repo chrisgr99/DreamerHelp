@@ -1,0 +1,64 @@
+{
+  "plugin": "OMEg1",
+  "module": "Tezca",
+  "description": "Generates a chord progression by walking Bartók's axis system, with a polyphonic chord, a bass note, the notes of the current mode, a gate and a trigger",
+  "params": [
+    {"ids": [0], "text": "Scales the voltage at the bass CV input before it multiplies the bass knob"},
+    {"ids": [1], "text": "Scales the voltage at the voicing CV input before it multiplies the voicing knob"},
+    {"ids": [2], "text": "Scales the voltage at the chord CV input before it multiplies the chord knob"},
+    {"ids": [3], "text": "Scales the voltage at the steps CV input before it multiplies the steps knob"},
+    {"ids": [4], "text": "Chooses which note of the chord is taken as the bass: ROOT, 1ST INV or 2ND INV"},
+    {"ids": [5], "text": "Chooses the voicing: DEFAULT, OPEN, ROOTLESS or THREE NOTES"},
+    {"ids": [6], "text": "Sets how many notes the chord holds, three to seven, which has an effect only under the DEFAULT voicing"},
+    {"ids": [7], "text": "Sets how many clock pulses pass before the progression moves to another chord, two to thirty-six"},
+    {"ids": [8], "text": "Returns the progression to the tonic and builds a fresh chord"},
+    {"ids": [9], "text": "Starts and stops the progression; the module comes up running"},
+    {"ids": [10], "text": "From the tonic, the chance of moving to the dominant; the rest of the chance goes to the subdominant"},
+    {"ids": [11], "text": "From the subdominant, the chance of moving to the tonic; the rest of the chance goes to the dominant"},
+    {"ids": [12], "text": "From the dominant, the chance of moving to the tonic; the rest of the chance goes to the subdominant"},
+    {"ids": [13], "text": "Sets the length of the gate output as a share of the gap between clock pulses, never shorter than 1ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Multiplies the bass knob by this voltage, scaled by the trimmer beside it"},
+    {"ids": [1], "text": "Multiplies the voicing knob by this voltage, scaled by the trimmer beside it, so a cable resting at 0V holds the DEFAULT voicing"},
+    {"ids": [2], "text": "Multiplies the chord knob by this voltage, scaled by the trimmer beside it; the result is held between three and seven notes"},
+    {"ids": [3], "text": "Multiplies the steps knob by this voltage, scaled by the trimmer beside it; the result is held between two and thirty-six"},
+    {"ids": [4], "text": "A rising edge above 2V returns the progression to the tonic and builds a fresh chord"},
+    {"ids": [5], "text": "A rising edge above 2V starts the progression, and the next one stops it"},
+    {"ids": [6], "text": "Each rising edge above 2V is one pulse of the progression; nothing moves until a clock is patched here"},
+    {"ids": [7], "text": "Sets the tonic the axis system is built on, read as a pitch; with nothing patched here the tonic is C4"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowest note of the chord, on its own, an octave below the chord output"},
+    {"ids": [1], "text": "Every note of the current mode, one per channel"},
+    {"ids": [2], "text": "The chord, one note per channel, with the bass note left out"},
+    {"ids": [3], "text": "10V for the share of the clock interval the gate length knob sets, restarted on each clock pulse"},
+    {"ids": [4], "text": "A 1ms pulse at 10V on each clock pulse"}
+  ],
+  "notes": [
+    "nothing happens until a clock is patched to the clock input; the module returns early on every sample while that jack is empty",
+    "the three circles across the middle of the panel light to show which of the tonic, subdominant and dominant axes the progression is on"
+  ],
+  "menu": [
+    "Mode transition: Gentle, Rude — Gentle moves between modes in order of brightness, from Lydian down to Locrian, and Rude moves at random"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · stepped · one channel only\n\nunpatched it reads a multiplier of 1, leaving the knob alone; a negative voltage does nothing here.",
+      "1": "unipolar · stepped · one channel only\n\nunpatched it reads a multiplier of 1, leaving the knob alone; a negative voltage does nothing here.",
+      "2": "unipolar · stepped · one channel only\n\nunpatched it reads a multiplier of 1, leaving the knob alone; a negative voltage does nothing here.",
+      "3": "unipolar · stepped · one channel only\n\nunpatched it reads a multiplier of 1, leaving the knob alone; a negative voltage does nothing here.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V, which is C4."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only"
+    }
+  }
+}

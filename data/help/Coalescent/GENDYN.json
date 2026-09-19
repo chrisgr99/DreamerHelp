@@ -1,0 +1,52 @@
+{
+  "plugin": "Coalescent",
+  "module": "GENDYN",
+  "description": "A stochastic oscillator after Xenakis's GENDY3: a piecewise-linear waveform whose breakpoints each take a random walk every cycle, so the pitch and the timbre drift together.",
+  "params": [
+    {"ids": [0], "text": "Sets how many breakpoints make up one cycle of the waveform, 2 to 64."},
+    {"ids": [1], "text": "Scales how far the amplitude walk moves a breakpoint each cycle, 0 to 1, which sets the rate of timbral change."},
+    {"ids": [2], "text": "Scales how far the duration walk moves a breakpoint each cycle, 0 to 1, which sets the rate of the glissandi."},
+    {"ids": [3], "text": "Sets the amplitude barrier the walk reflects off, 0 to 1; 0 freezes the amplitudes and 1 opens the full ±5V swing."},
+    {"ids": [4], "text": "Sets the centre frequency the segment durations are built around, 20Hz to 5000Hz; the default 261.63Hz is C4."},
+    {"ids": [5], "text": "Sets how far the segment durations may open either side of the centre frequency, 0 to 1; at 0 the pitch is fixed."},
+    {"ids": [6], "text": "Chooses which distribution the random draws come from: Cauchy, Gaussian, Uniform or Logistic."},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, scaling the CV into the amplitude step scale."},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, scaling the CV into the duration step scale."},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, scaling the CV into the amplitude barrier."},
+    {"ids": [10], "text": "An attenuverter, -1 to +1, scaling the CV into the duration barrier width."},
+    {"ids": [11], "text": "Sets how many cycles a breakpoint's step keeps its direction: 0% gives uncorrelated jitter, the default 30% about 16 cycles, 100% long steady glides."},
+    {"ids": [12], "text": "Scales the durations of every cycle so the measured period tracks the centre frequency while the waveform keeps changing shape; the switch comes up off."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the amplitude step scale, at a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [1], "text": "Modulates the duration step scale, at a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the amplitude barrier, at a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [3], "text": "Modulates the duration barrier width, at a tenth of the knob's range per volt through its attenuverter."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator's audio, ±5V, with a 5Hz high-pass removing the walk's slow drift."},
+    {"ids": [1], "text": "A 10V trigger 1ms long at the end of every completed waveform cycle."},
+    {"ids": [2], "text": "The frequency of the most recently completed cycle as 1V/octave, 0V for C4, clamped to ±5V."}
+  ],
+  "notes": [
+    "The waveform drawn at the top is the current breakpoints of one cycle, redrawn about 45 times a second rather than every cycle.",
+    "The evolved breakpoints are saved with the patch, so a sound left to run reloads with the shape it had."
+  ],
+  "menu": [
+    "Initial waveform: Sine, Triangle, Saw, Square, Random — chooses the shape the breakpoints are seeded from and re-seeds at once; the four deterministic shapes start on the exact centre pitch.",
+    "Re-seed waveform — re-seeds the breakpoints from the chosen initial waveform."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "1V per octave · continuous · one channel only"
+    }
+  }
+}

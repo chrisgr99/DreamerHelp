@@ -1,0 +1,20 @@
+{
+  "plugin": "DogmanDevices",
+  "module": "LogProb",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "LogProb.cpp:62 reads the jack with getPolyVoltage(c) inside the per-channel loop"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "LogProb.cpp:71 reads the jack with getPolyVoltage(c) inside the per-channel loop"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "LogProb.cpp:56-79 takes the channel count from this jack and reads each channel with getPolyVoltage(c)"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "LogProb.cpp:56-80 takes the channel count from this jack and reads each channel with getPolyVoltage(c)"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "LogProb.cpp:88-90 reads each channel with getPolyVoltage(i)"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "LogProb.cpp:83-84 sets the channel count and writes each channel"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 5V", "step": "stepped", "why": "LogProb.cpp:87-90 sets the channel count and writes 5V or 0V per channel"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "LogProb.cpp:85-86 sets the channel count and writes each channel"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "LogProb.cpp:87-88 sets the channel count and writes each channel"}
+    }
+  },
+  "comment": "The inverter output writes 5V rather than the 10V the three logic outputs use (LogProb.cpp:89). The two coin-toss results are single booleans shared by every channel (LogProb.cpp:32-33), so under polyphony the last channel's toss decides the result for all of them. The toss is taken by a BooleanTrigger fed the raw voltage (LogProb.cpp:60, 69), which counts any voltage other than zero as high, while the logic itself reads a gate as high only above 1V."
+}

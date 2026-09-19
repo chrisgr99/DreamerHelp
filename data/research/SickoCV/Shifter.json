@@ -1,0 +1,15 @@
+{
+  "plugin": "SickoCV",
+  "module": "Shifter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Shifter.cpp:139 rising edge taken when the voltage reaches 1V and the previous sample was below it; getVoltage() only, no getPolyVoltage or getChannels in the file"},
+      "1": {"poly": false, "step": "continuous", "why": "Shifter.cpp:145 getVoltage() written into the register; no getPolyVoltage or getChannels in the file"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "Shifter.cpp:117 getVoltage()/0.15625 scaled by the trimpot and added to the knob, truncated to an integer stage and clamped to 1-64 at :121-125"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "Shifter.cpp:129 and :150 setVoltage() with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Shifter.cpp:111 tests inputs[OUT_OUTPUT].isConnected(), which indexes the input array with an output index and so reads the TRIG jack rather than the OUT jack; the flag it sets is only used to force the output to refresh, so the fault does not change what the module outputs. The IN and OUT jacks carry whatever is patched, so they get no family."
+}

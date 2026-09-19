@@ -1,0 +1,15 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Overtone",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "overtone.cpp:145 reads it with getVoltage, so only channel 1, and adds it to the frequency knob"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "overtone.cpp:157 reads it with getVoltage, so only channel 1, clamps it to 0 to 10V and turns it into a bit pattern or a count"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 5V", "negative": "ignored", "why": "overtone.cpp:185 reads it with getVoltage, so only channel 1, clamps it to 0 to 5V and picks one of three filter settings from it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "overtone.cpp:254 writes one channel with setVoltage from the normalised sum, clamped to -10 to 10V"}
+    }
+  },
+  "comment": "The overtone amplitudes are one over the harmonic number, and the output is divided by the sum of the amplitudes actually sounding (overtone.cpp:249), which is what keeps the level steady as harmonics are switched. A cable in the MASK jack overrides the eight panel switches entirely (overtone.cpp:156); the lamps then follow the CV rather than the switches."
+}

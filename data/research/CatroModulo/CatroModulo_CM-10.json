@@ -1,0 +1,25 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-10",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-10.cpp:60 tests getVoltage() > 0 with no channel argument; the module never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-10.cpp:60 tests getVoltage() > 0 with no channel argument; the module never calls setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-10.cpp:54 reads this jack with getVoltage, channel 0 only, and passes the voltage unscaled to a dsp::SchmittTrigger left at Rack's defaults of 1V high and 0V low. Each firing shifts the held bit out to the output and takes a new one in: the stored capture if override is armed, otherwise whether the in jack is above 0V at that instant. There is no isConnected guard, so an unpatched jack rests at 0V and the register simply never moves."},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-10.cpp:54 reads this jack with getVoltage, channel 0 only, and passes the voltage unscaled to a dsp::SchmittTrigger left at Rack's defaults of 1V high and 0V low. Each firing shifts the held bit out to the output and takes a new one in: the stored capture if override is armed, otherwise whether the in jack is above 0V at that instant. There is no isConnected guard, so an unpatched jack rests at 0V and the register simply never moves."},
+      "4": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "why": "CatroModulo_CM-10.cpp:66 turns the voltage into 1.0 or 0.0 with || and multiplies by 10 into a SchmittTrigger"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "why": "CatroModulo_CM-10.cpp:66 turns the voltage into 1.0 or 0.0 with || and multiplies by 10 into a SchmittTrigger"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "why": "CatroModulo_CM-10.cpp:70 turns the voltage into 1.0 or 0.0 with || and multiplies by 10 into a SchmittTrigger"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "why": "CatroModulo_CM-10.cpp:70 turns the voltage into 1.0 or 0.0 with || and multiplies by 10 into a SchmittTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"},
+      "2": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"},
+      "3": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"},
+      "4": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"},
+      "5": {"family": "trigger", "poly": false, "why": "CatroModulo_CM-10.cpp:75 to :77 write one value each with setVoltage and the module never calls setChannels"}
+    }
+  },
+  "comment": "Read at commit d55cb70. The step pass-through output is not a copy of the step pulse's shape: line 76 reports 10V for any non-zero reading at the step jack, including negative ones, so a bipolar clock comes out of it as a continuous 10V. The step input itself needs to cross 1V because it goes to a bare SchmittTrigger, while the capture and override jacks respond to any voltage away from zero. Nothing here is polyphonic."
+}

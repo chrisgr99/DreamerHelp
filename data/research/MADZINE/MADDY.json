@@ -1,0 +1,21 @@
+{
+  "plugin": "MADZINE",
+  "module": "MADDY",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "src/MADDY.cpp:1162-1166, the voltage is compared with the previous sample's: a rise through 2V restarts the clock phase and every track; unpatched the jack reads 0V, so it never fires"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDY.cpp:1194-1196, a 0.001f pulse at 10V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MADDY.cpp:803-805, the envelope clamped to 0..1 and multiplied by 10"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MADDY.cpp:870, the active track's envelope multiplied by 10"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv", "poly": false, "range": "±10V", "why": "src/MADDY.cpp:1320, the chosen knob's own -10V to +10V value"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MADDY.cpp:1321, a 0.01f pulse at 10V"}
+    }
+  },
+  "comment": "The clock is an internal LFO run the way SwingLFO runs its pulse output: two narrow pulses per cycle, the second offset by the swing setting, mixed and read as clock edges (src/MADDY.cpp:1180-1192). So the rate at the clock jack is twice the FREQ figure, unevenly spaced. The length clamp at src/MADDY.cpp:1197-1198 is 1 to 32 while configParam allows up to 48, which makes the top third of the knob dead; that is worth knowing because the tooltip still counts up past 32. The three track outputs are envelopes, not triggers, despite their configured names. The decay time is 10 raised to (mappedDecay - 0.8) * 5 seconds with a floor of 10ms, where mappedDecay is the cube root of the knob scaled to 0.8, and the curve is taken from the same knob (src/MADDY.cpp:764-771). Attack time is shared by all three tracks and lives only on the menu. Pattern rotation is on the menu too, 0 to 4 steps per track, and a reset from the jack leaves it alone. The panel prints M A D D Y, RST, FREQ, SWING, CLK, LEN, DECAY, T1 to T3 with FILL and D/M under each, Step 1 to Step 5 with the digits 1 to 5, MODE, DENSITY, CHAOS, CV OUT, TRIG OUT, CLK SRC, and T1, T2, T3, 12, 23 and 1213 over the six bottom jacks. Lettering is drawn in code at src/MADDY.cpp:1423-1509."
+}

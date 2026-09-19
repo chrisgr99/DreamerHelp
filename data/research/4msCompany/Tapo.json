@@ -1,0 +1,23 @@
+{
+  "plugin": "4msCompany",
+  "module": "Tapo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "TapoCore.cc:268 with TapoCore.cc:265 divides this jack by minus twice BiploarCVInputFullScaleInVolt, set at 5V in TapoCore.cc:444, and adds a half, so 0V is the centre and the voltage is read upside down; TapoCore.cc:21 derives from SmartCoreProcessor, which has no poly buffer"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "TapoCore.cc:272 with TapoCore.cc:265 divides this jack by minus twice BiploarCVInputFullScaleInVolt, set at 5V in TapoCore.cc:444, and adds a half, so 0V is the centre and the voltage is read upside down"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "TapoCore.cc:276 with TapoCore.cc:265 divides this jack by minus twice BiploarCVInputFullScaleInVolt, set at 5V in TapoCore.cc:444, and adds a half, so 0V is the centre and the voltage is read upside down"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "TapoCore.cc:280 with TapoCore.cc:265 divides this jack by minus twice BiploarCVInputFullScaleInVolt, set at 5V in TapoCore.cc:444, and adds a half, so 0V is the centre and the voltage is read upside down"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "range": "±22V", "why": "TapoCore.cc:226 clamps this jack at AudioInputFullScaleInVolt, set at 22V in TapoCore.cc:441"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "TapoCore.cc:299-300 compare this jack against GateInputThresholdInVolt, set at 0.5V in TapoCore.cc:440"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "TapoCore.cc:303-304 compare this jack against GateInputThresholdInVolt, set at 0.5V in TapoCore.cc:440"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "why": "TapoCore.cc:291 with TapoCore.cc:288 divides this jack by VelocityCVInputFullScaleInVolt, set at 8V in TapoCore.cc:445, and clamps it between 0 and 1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "TapoCore.cc:307-308 compare this jack against GateInputThresholdInVolt, set at 0.5V in TapoCore.cc:440"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 8V", "why": "TapoCore.cc:430 puts out GateOutVoltageInVolt, set at 8V in TapoCore.cc:438, for the GateOutLengthInS of 4ms set at TapoCore.cc:437"},
+      "1": {"family": "audio", "poly": false, "range": "±17V", "why": "TapoCore.cc:230-237 scale by AudioOutputFullScaleInVolt, set at 17V in TapoCore.cc:442, and sum both sides when OUT 2 is unpatched"},
+      "2": {"family": "audio", "poly": false, "range": "±17V", "why": "TapoCore.cc:232-233 scale by AudioOutputFullScaleInVolt, set at 17V in TapoCore.cc:442"}
+    }
+  },
+  "comment": "All four bipolar CV jacks are inverted: TapoCore.cc:265 divides by minus ten and adds a half, so a rising voltage lowers the setting. The audio scaling is unusual for this plugin: the input is taken as full scale at 22V and the outputs at 17V (TapoCore.cc:441-442). The edit switch is printed ADD, OFF and INS and the code maps those to the firmware's EDIT_NORMAL, EDIT_OFF and EDIT_OVERDUB (TapoCore.cc:332-343 with parameters.hh:48-52); in overdub the tap counter wraps inside the existing pattern length, in normal it runs on (multitap_delay.cc:222-227). The panel's multi-button settings gestures are switched off in this build (ui.hh:191), the same settings being on the right-click menu instead."
+}

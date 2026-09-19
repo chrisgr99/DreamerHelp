@@ -1,0 +1,44 @@
+{
+  "plugin": "Comfortzone",
+  "module": "kickbaba",
+  "description": "A clocked kick and bass voice for psytrance: a pitch-swept sine kick on each beat, a filtered saw bass on the sixteenths between them, and ramp and gate outputs spanning a sixteen-bar cycle",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch the kick sweep ends on, in twelve semitone steps from C1 up to C2"},
+    {"ids": [1], "text": "Sets the pitch the kick sweep starts from, in thirty-six semitone steps from C6 up to C9"},
+    {"ids": [2], "text": "Moves the first control point of the kick's pitch curve along in time, holding the sweep near its top for longer at the start of each kick"},
+    {"ids": [3], "text": "Raises the first control point of the kick's pitch curve, making the fall from the SWEEP pitch down to the PITCH pitch more gradual"},
+    {"ids": [4], "text": "Sets the bass note, in twelve semitone steps from C1 up to B1, before the V/OCT input transposes it"},
+    {"ids": [5], "text": "Chooses one of five saw shapes for the bass oscillator"},
+    {"ids": [6], "text": "Warps the saw shape chosen by SAW, sweeping the shaping factor of whichever shape is selected"},
+    {"ids": [7], "text": "Scales the level of the first bass note after each kick; the other bass notes play at full level"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger restarts the kick's pitch envelope and holds the bass silent until the next quarter note"},
+    {"ids": [1], "text": "Transposes the bass, one octave per volt over -4V to 4V, and leaves the kick pitch alone"},
+    {"ids": [2], "text": "The clock, one pulse per bar; the time between pulses is divided into sixteen steps, and nothing sounds until two pulses have arrived"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The kick drum, a sine sweeping down from the SWEEP pitch to the PITCH pitch, at 5V peak"},
+    {"ids": [1], "text": "The bass, a saw through a four-pole low-pass whose cutoff falls across each sixteenth note"},
+    {"ids": [2], "text": "A ramp rising from 0V to 8V across the sixteen-bar cycle"},
+    {"ids": [3], "text": "8V through the sixteenth bar of the cycle and 0V through the other fifteen"},
+    {"ids": [4], "text": "A ramp falling from 8V to 0V across the first fifteen bars of the sixteen-bar cycle, then holding at 0V for the last one"}
+  ],
+  "notes": [
+    "the bass plays on the second, third and fourth sixteenth of each quarter note, leaving the first of the four to the kick",
+    "the module is silent until a clock is patched to BAR and two pulses have arrived; it takes all of its timing, one bar per pulse, from that clock and produces nothing without it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "0 to 8V",
+      "4": "8 to 0V"
+    }
+  }
+}

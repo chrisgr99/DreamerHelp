@@ -1,0 +1,17 @@
+{
+  "plugin": "EnigmaCurry",
+  "module": "Latch",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Latch.cpp:47 takes the channel count from this jack and line 55 tests getPolyVoltage(c) >= 1.f for each channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Latch.cpp:47 takes the channel count from this jack and line 49 tests getPolyVoltage(c) >= 1.f for each channel"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Latch.cpp:47 takes the channel count from this jack and line 55 tests getPolyVoltage(c) >= 1.f for each channel"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "src/Latch.cpp:47 takes the channel count from this jack and line 49 tests getPolyVoltage(c) >= 1.f for each channel"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/Latch.cpp:59 writes 10 or 0 per channel and line 61 calls setChannels with the larger of the two inputs' channel counts"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/Latch.cpp:59 writes 10 or 0 per channel and line 61 calls setChannels with the larger of the two inputs' channel counts"}
+    }
+  },
+  "comment": "Read from the repository at commit 0aec914, whose plugin.json is byte-for-byte the installed one at version 2.0.7.\n\nThe README describes the inputs as taking triggers. The code tests a level, not an edge: getPolyVoltage(c) >= 1.f at src/Latch.cpp:49 and 55. A gate left high therefore keeps the latch in that state, and a reset held high locks out the trigger for as long as it is held. Nothing about the behaviour contradicts the README for ordinary triggers, so the difference is recorded here rather than in a control's line.\n\nThe one-sample hold after each change comes from HYSTERISYS_SAMPLES, defined as 1 at src/Latch.cpp:24; on that sample the channel's output is not written at all and simply keeps its previous value.\n\nThe channel count is max(1, trigger channels, reset channels), so a side with nothing patched still outputs one channel at 0V.\n\nThe panel prints TRIG, RESET and LATCH twice each, once per side; the maker's tooltips add the numbers 1 and 2."
+}

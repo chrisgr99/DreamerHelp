@@ -1,0 +1,15 @@
+{
+  "plugin": "moDllz",
+  "module": "Kn8b",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "src/Kn8b.cpp:220 and 193, getChannels() bounds the per-channel loops"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/Kn8b.cpp:313-316, getChannels() then getVoltage(i % numCvIn) * 0.1f added to the knob"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/Kn8b.cpp:311, a single getVoltage() * 0.1f"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/Kn8b.cpp:216 setChannels(numOutCh), with a voltage written per channel"}
+    }
+  },
+  "comment": "The main input and the output carry whatever is patched in, so neither is given a family. The main knob's mode switch is configured with the choices Trim and Scale (src/Kn8b.cpp:149); in the code Trim adds five times the knob as an offset and Scale multiplies by it, which is what the times and plus signs printed beside the knob show. The channel count, the per-channel polarity and the per-channel operation are set by clicking zones of each channel's display (src/Kn8b.cpp:716-736), which are not ParamWidgets and so cannot be clicked for help. In the amplifier mode the module runs every sample; otherwise it runs at the rate chosen in the menu. configBypass wires the input straight to the output."
+}

@@ -1,0 +1,35 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Xenizer",
+  "description": "A quantizer that snaps an incoming pitch to one of eight built-in microtonal scales, none of which repeats at the octave",
+  "params": [
+    {"ids": [0], "text": "Chooses one of eight scales, named PBDE-71, F2 Toxin, Dimethylaminobenzene, Mycose, Alpha-Muurolene, Acridinone, 2-Octanoylfuran and Alpha-D-Galactose"},
+    {"ids": [1], "text": "Chooses which of the scale's twelve degrees is treated as the root, numbered 1 to 12, rotating the other degrees around it and lifting by one period any that would fall below the new root"},
+    {"ids": [2], "text": "Transposes the quantized pitch, -5V to 5V, added after the snapping so it moves the whole scale rather than being snapped itself"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be quantized, read at 1200 cents per volt"},
+    {"ids": [1], "text": "Adds one scale to the selection per volt, and the sum of knob and voltage is clamped to the eight scales"},
+    {"ids": [2], "text": "Adds one degree to the root selection per volt, and the sum of knob and voltage is clamped to the twelve degrees"},
+    {"ids": [3], "text": "Adds to the transposition, one octave per volt, and the sum of knob and voltage is not clamped"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch snapped to the nearest degree of the chosen scale, with the transposition added afterwards"}
+  ],
+  "notes": [
+    "each scale carries its own period in place of the octave, and the eight run from 1495 cents to 4404 cents, so the output repeats at that interval rather than at 1200 cents",
+    "the scales are twelve degrees each, the first being the root at 0 cents, and the period is the point at which the pattern starts again",
+    "one channel in and one channel out; a polyphonic cable into the pitch input is reduced to its first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 7V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 7V.",
+      "2": "0 to 11V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 11V.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only"
+    }
+  }
+}

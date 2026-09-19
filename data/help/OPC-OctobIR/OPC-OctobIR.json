@@ -1,0 +1,60 @@
+{
+  "plugin": "OPC-OctobIR",
+  "module": "OPC-OctobIR",
+  "description": "Convolution reverb with two impulse response slots, crossfading between the two convolutions either from a knob or from the level of the incoming audio",
+  "params": [
+    {"ids": [0], "text": "Crossfades between the two impulse responses on an equal-power curve, fully counter-clockwise for IR A alone and fully clockwise for IR B alone; it is not read while dynamic blending is on"},
+    {"ids": [1], "text": "Sets the gain applied to both outputs, -24dB to +24dB"},
+    {"ids": [2], "text": "Switches IR A into the blend; with IR A off and an impulse response loaded in B the output is IR B alone, and with both slots off the audio passes through unchanged"},
+    {"ids": [3], "text": "Switches IR B into the blend; with IR B off and an impulse response loaded in A the output is IR A alone, and with both slots off the audio passes through unchanged"},
+    {"ids": [4], "text": "Sets the level of the IR A convolution in the mix, -12dB to +12dB"},
+    {"ids": [5], "text": "Sets the level of the IR B convolution in the mix, -12dB to +12dB"},
+    {"ids": [6], "text": "Turns on dynamic blending, where the input level drives the blend through the THRESHOLD, RANGE, KNEE, ATTACK and RELEASE settings and the BLEND knob is no longer read"},
+    {"ids": [7], "text": "Makes dynamic blending follow the level at the SIDECHAIN input instead of the audio input; it changes nothing unless DYNAMIC is on and a cable is patched to SIDECHAIN"},
+    {"ids": [8], "text": "Sets the input level at which dynamic blending begins to move toward IR B, -60dB to 0dB"},
+    {"ids": [9], "text": "Sets how far above the threshold the input must rise for dynamic blending to reach IR B, 1dB to 60dB"},
+    {"ids": [10], "text": "Sets the width of the soft knee centred on the threshold, 0dB to 20dB; the blend follows a squared curve across it and is half way to IR B at the top of the knee"},
+    {"ids": [11], "text": "Chooses whether the level driving dynamic blending is measured as a peak or as an RMS average, printing PEAK or RMS"},
+    {"ids": [12], "text": "Sets how fast dynamic blending moves toward IR B as the level rises, 1ms to 500ms"},
+    {"ids": [13], "text": "Sets how fast dynamic blending falls back toward IR A as the level drops, 1ms to 1000ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Audio into the convolution; patched on its own it is convolved and sent to both outputs"},
+    {"ids": [1], "text": "The right side of a stereo pair into the convolution; patched on its own it is convolved and sent to both outputs"},
+    {"ids": [2], "text": "Audio whose level drives dynamic blending in place of the main input; patching a cable here turns the SIDECHAIN button on"},
+    {"ids": [3], "text": "Sets the threshold, 0V for -60dB and 10V for 0dB, and replaces the THRESHOLD knob while it is patched"},
+    {"ids": [4], "text": "Sets the blend, 0V for IR A alone and 10V for IR B alone, and replaces the BLEND knob while it is patched; patching a cable here turns the DYNAMIC button off"},
+    {"ids": [5], "text": "Turns dynamic blending on while the voltage here is above 1V and off below it, in place of the DYNAMIC button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the convolved audio; with nothing patched to either audio input it carries 0V"},
+    {"ids": [1], "text": "The right side of the convolved audio; with nothing patched to either audio input it carries 0V"}
+  ],
+  "notes": [
+    "The module passes audio through unchanged until an impulse response is loaded. Click one of the two file displays, or the folder button beside it, and choose a file.",
+    "Impulse responses are read by a WAV reader, so the file has to be a WAV; the file dialog also offers AIFF and FLAC and those fail to load.",
+    "An impulse response longer than 10 seconds is refused, with the reason written to Rack's log.",
+    "CLR empties that impulse response slot, and the arrow buttons beside it load the previous or next audio file in the same folder in alphabetical order, wrapping round at the ends.",
+    "SWAP exchanges the two impulse responses, and exchanges the two trim knob settings with them."
+  ],
+  "menu": [
+    "Dynamic Mode — turns dynamic blending on and off, the same switch the DYNAMIC button carries",
+    "Sidechain Enable — turns sidechain detection on and off, the same switch the SIDECHAIN button carries",
+    "Swap IR Order — exchanges the two impulse responses and their trim settings",
+    "Clear — on an impulse response file display's own right-click menu; empties that slot"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads the THRESHOLD knob; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the BLEND knob; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads the DYNAMIC button."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

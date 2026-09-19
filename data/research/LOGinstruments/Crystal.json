@@ -1,0 +1,17 @@
+{
+  "plugin": "LOGinstruments",
+  "module": "Crystal",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "crystal.cpp:87 reads getVoltage() with no channel argument and line 99 passes it to a SchmittTrigger at Rack's default thresholds of 0V and 1V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "crystal.cpp:92 rounds the voltage to a whole number and takes it modulo the six waveform types, so a negative voltage selects a negative index"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "crystal.cpp:94 multiplies the voltage by 12 and clamps it to -32 and 54 semitones, and crystal.hpp:348 turns that into 261.626 times two to the power of the semitones over twelve"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "crystal.cpp:158 writes one value with setVoltage and the module never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "crystal.cpp:156 writes one value with setVoltage and the module never calls setChannels"},
+      "2": {"family": "audio", "poly": false, "why": "crystal.cpp:157 writes one value with setVoltage and the module never calls setChannels"}
+    }
+  },
+  "comment": "Read at commit 1fc62fa, the only commit carrying the installed 2.0.4 and byte for byte the installed plugin.json. Four of the nine ParamIds are dead: PARAM_F0, PARAM_OSC_TYPE, PARAM_PITCH_IN_AMT and PARAM_KEYB_SCALE are never given a configParam and never given a widget, so they have no tooltip, no position and no way of being reached; F0 and OSC_TYPE are still read at crystal.cpp:75, where with no ParamQuantity they always return zero. The automatic reset condition at crystal.cpp:101 is written as ((cv1 > cv2) > cv3), a chained comparison: the left side becomes 0 or 1 and is then compared against the third input, so any third-input voltage below 0V makes the condition true whatever the other two read, and the module restarts every voice every 1024 samples. Since the third input is the pitch input, that means every pitch below C4 retriggers the whole bank continuously. Voice 0 is processed twice per sample, once for each detune output at crystal.cpp:147 and :148, so it runs at twice the rate of the other voices and the two side outputs get different consecutive samples of it. The volume knob is treated as power decibels, ten to the power of the value over ten, which is half the usual amplitude decibel law. Nothing here is polyphonic and the plugin adds no context menu items."
+}

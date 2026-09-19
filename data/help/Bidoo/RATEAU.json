@@ -1,0 +1,42 @@
+{
+  "plugin": "Bidoo",
+  "module": "RATEAU",
+  "description": "Gate generator built on a grid of sixteen cells, each dividing the incoming clock its own way, with eight outputs taking the rows and the columns of that grid",
+  "params": [
+    {"ids": [0], "text": "Puts the grid knobs on the division setting, where a cell fires a gate once every 1 to 64 clock ticks and a cell left at 0 stays silent"},
+    {"ids": [1], "text": "Puts the grid knobs on the step setting, where a cell set above 0 fires once per reset rather than repeating, that many of its divisions after the reset"},
+    {"ids": [2], "text": "Puts the grid knobs on the probability setting, from a cell that never fires to one that fires on every division"},
+    {"ids": [3], "text": "Puts the grid knobs on the speed setting, running a cell at a multiple of the clock from a quarter of it up to sixteen times it"},
+    {"ids": [4], "text": "Puts the grid knobs on the clock shift setting, holding a cell back by 0 to 64 whole clock ticks after each reset"},
+    {"ids": [5], "text": "Puts the grid knobs on the time shift setting, moving a cell up to a tick early or a tick late, which is how swing is set"},
+    {"ids": [6], "text": "Puts the grid knobs on the pulse width setting, from a gate of no length at all to one filling the whole division"},
+    {"ids": [7], "text": "Chooses which of the sixteen stored patterns is played and edited, 0 to 15, and the change takes effect at the next reset"},
+    {"ids": [8], "text": "Edits pattern A, which is what the four outputs marked A play while the grid is in independent mode"},
+    {"ids": [9], "text": "Edits pattern B, which is what the four outputs marked B play while the grid is in independent mode"},
+    {"ids": [10], "text": "Puts the grid on one shared pattern that feeds all eight outputs at once, the A outputs from its rows and the B outputs from its columns"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19], "text": "Silences its own output; the lamp is green while that output plays and red while it is muted"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Sets one value for that cell of the grid — its division, step, probability, speed, clock shift, time shift or pulse width, whichever page is selected; the cell's other six values are kept"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock every cell counts its divisions from"},
+    {"ids": [1], "text": "A trigger here restarts every cell, so the clock shifts and step offsets are counted from here again, and it brings in the pattern the PTRN knob has been moved to"},
+    {"ids": [2], "text": "0V to 10V adds 0 to 15 to the pattern chosen by the PTRN knob"},
+    {"ids": [3], "text": "A trigger here switches the grid between the matrix pattern and the independent A and B patterns"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "10V while any of the four cells in its row of the grid is firing, and in independent mode that row is read from pattern A"},
+    {"ids": [4, 5, 6, 7], "text": "10V while any of the four cells in its column of the grid is firing, and in independent mode that column is read from pattern B"}
+  ],
+  "notes": [
+    "the strip above the grid knobs reads out the value of the last knob touched, on whichever page is selected",
+    "every cell of the grid comes up at 0, which is silent, so no gates leave the outputs until cells are turned up on the division page"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    }
+  }
+}

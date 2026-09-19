@@ -1,0 +1,58 @@
+{
+  "plugin": "Autinn",
+  "module": "Bass",
+  "description": "The filter and envelopes of an acid bass synthesiser, without the oscillator: patch a tone into it and gate it, and it gives you the sweep, the accent and the squelch",
+  "params": [
+    {"ids": [0], "text": "Sets the resting corner frequency of the filter, from 40Hz to 4500Hz"},
+    {"ids": [1], "text": "Sets how far the filter envelope sweeps the corner, reaching five octaves at its maximum; about a third of the sweep is below the resting frequency and the rest above it"},
+    {"ids": [2], "text": "Sets the resonance, from none to 125 per cent, past which the filter squeals on every note"},
+    {"ids": [3], "text": "Sets how much louder and brighter an accented note is than a plain one, from a quarter to all of the available accent"},
+    {"ids": [4], "text": "Sets how long the filter envelope takes to fall, from 200ms to 2 seconds"},
+    {"ids": [5], "text": "Scales what the cutoff jack adds, 5V covering the whole cutoff range at its maximum"},
+    {"ids": [6], "text": "Scales what the resonance jack adds, 5V covering the whole resonance range at its maximum"},
+    {"ids": [7], "text": "Scales what the decay jack adds, 5V covering the whole decay range at its maximum"},
+    {"ids": [8], "text": "Scales what the sweep jack adds, 5V covering the whole sweep range at its maximum"},
+    {"ids": [9], "text": "Switches the gate jack between being read as a gate, where releasing it ends the note, and as a trigger, where the note runs its decay out whatever the jack does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge starts a note; whether its falling edge ends one depends on the GATE/TRIG button"},
+    {"ids": [1], "text": "A note is accented when this jack is at 1V or more as its gate begins, or if it arrives during the attack"},
+    {"ids": [2], "text": "The oscillator tone to be filtered; the maker expects peaks no higher than 7V, above which accented notes hard clip"},
+    {"ids": [3], "text": "Adds to the resting corner frequency, scaled by its attenuator"},
+    {"ids": [4], "text": "Adds to the resonance, scaled by its attenuator, with the total clamped between none and 125 per cent"},
+    {"ids": [5], "text": "Adds to the filter envelope's fall time, scaled by its attenuator, with the total clamped between 200ms and 2 seconds"},
+    {"ids": [6], "text": "Adds to the sweep depth, scaled by its attenuator, with the total clamped between none and five octaves"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered and enveloped note, with its DC removed and hard clipped at ±12V"}
+  ],
+  "notes": [
+    "this module makes no sound on its own: it needs a tone patched into OSC and a gate, and the accent jack is separate from the gate.",
+    "mono only: a polyphonic cable is read as its first channel and the output carries one channel.",
+    "the upper row of four lamps follows the filter envelope through attack, sustain, decay and ended, and the row below it follows the amplitude envelope the same way.",
+    "the sustain lamp of each envelope row is never lit; neither envelope has a sustain stage.",
+    "the blue lamp is lit while the current note is accented, and the two small lamps beside the button show whether the gate jack is being read as a gate or as a trigger.",
+    "the accent lengthens and deepens the filter envelope rather than being an envelope of its own, which is why turning the resonance up makes accents bite harder.",
+    "the corner frequency is held between 16Hz and 18000Hz however far the envelope and the CV try to push it.",
+    "the four large knobs each draw a gold arc from their own position round to where their CV jack and attenuator have moved them."
+  ],
+  "menu": [
+    "Oversample x2 — runs the filter at twice the sample rate, which is where the module starts",
+    "Oversample x4 — runs the filter at four times the sample rate",
+    "ENVMOD Octaves mode — sweeps the corner in octaves, the way the original does, rather than in hertz; with it off the ENVMOD knob is read as a span in hertz and its tooltip changes to match"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±12V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "plugin": "AmbientModules",
+  "module": "LunarPapaSrapa",
+  "description": "Noise and drone voice in which a slow square-wave modulator frequency- or amplitude-modulates an audio-rate square oscillator, mixed with white noise, with a sample and hold and an envelope of its own",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the modulator, 1Hz up to about 261.63Hz"},
+    {"ids": [1], "text": "Sets the pitch of the audio oscillator, from about 16.35Hz to about 2637Hz"},
+    {"ids": [2], "text": "Sends the modulator into the audio oscillator's frequency while it is lit; it can be lit alongside AM"},
+    {"ids": [3], "text": "Sends the modulator into the audio oscillator's level while it is lit; it can be lit alongside FM"},
+    {"ids": [4], "text": "Sets how strongly the modulator acts on the audio oscillator, 0% to 100%"},
+    {"ids": [5], "text": "Divides the modulator's rate down against the audio oscillator, 0% to 100%"},
+    {"ids": [6], "text": "Sets how much of the internal white noise is mixed into the output, 0% to 100%"},
+    {"ids": [7], "text": "Puts out clean white noise while it is lit, with the pitch, FM, AM and divider settings set aside; the panel marks it solo"},
+    {"ids": [8], "text": "Sets how long the envelope takes to rise, 1ms to 15 seconds"},
+    {"ids": [9], "text": "Sets how long the envelope takes to fall once the gate closes, 1ms to 15 seconds"},
+    {"ids": [10], "text": "Holds the envelope open for as long as it is lit, whatever the gate input is doing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Opens the envelope while it is high, and is ignored while Hold is lit or a cable is patched to the envelope input"},
+    {"ids": [1], "text": "Sets the pitch of the audio oscillator, 1V per octave added to the pitch knob"},
+    {"ids": [2], "text": "A rising edge takes a new sample of whatever is at the sample and hold input"},
+    {"ids": [3], "text": "The signal the sample and hold takes its samples from; with nothing patched it samples the internal noise"},
+    {"ids": [4], "text": "Replaces the envelope entirely while a cable is patched here, along with the gate input and the Hold button; 0-10V, so another module's envelope output drives this one"},
+    {"ids": [5], "text": "Adds to the modulation depth knob, 0-10V covering its whole travel, and each channel drives its own modulator"},
+    {"ids": [6], "text": "Adds to the divider knob, 0-10V covering its whole travel, and each channel drives its own modulator"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modulator on its own, running whether or not the envelope is open"},
+    {"ids": [1], "text": "The oscillator and noise mix with the envelope applied to its level"},
+    {"ids": [2], "text": "The envelope currently shaping the audio output, 0-10V"},
+    {"ids": [3], "text": "The voltage held since the last rising edge at the sample and hold clock"}
+  ],
+  "notes": [
+    "the sample and hold section keeps a channel count of its own, taken from its clock and signal jacks, so it is independent of the rest of the panel.",
+    "the noise source is one generator shared by every polyphonic channel rather than one per channel, which follows the hardware.",
+    "the blue lamp flashes on each new sample and its brightness follows the size of the value held on channel 1."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "stepped · polyphonic",
+      "3": "polyphonic\n\nunpatched it reads the internal noise generator.",
+      "4": "0 to 10V · continuous · polyphonic",
+      "5": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

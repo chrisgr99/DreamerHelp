@@ -1,0 +1,17 @@
+{
+  "plugin": "MSM",
+  "module": "RandomSource",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "RandomSource.cpp:70 runs trigger.process on this jack at the default 0V and 1V thresholds and rolls a new random value on a rising edge past 1V"},
+      "1": {"poly": false, "step": "continuous", "normal": "the sample range knob plus its CV", "why": "RandomSource.cpp:75 reads this jack with getNormalVoltage(range), which supplies the sample range knob plus its attenuated CV when nothing is patched"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "RandomSource.cpp:94 adds this jack over ten to the slew knob with nothing bounding the sum below"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "RandomSource.cpp:67 adds this jack over five, scaled by its attenuator, to the range knob", "negative": "swings"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "RandomSource.cpp:82 passes the output through saturate(), which Resources.hpp:23 fixes at ten"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "RandomSource.cpp:109 passes the output through saturate(), which Resources.hpp:23 fixes at ten"}
+    }
+  },
+  "comment": "With nothing patched into the sample input, RandomSource.cpp:75 normals it to the sample range figure and line 79 then multiplies the held value by that same figure, so the sample and hold output holds a steady voltage rather than a random one."
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Clipper",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "Clipper.cpp Clipper::process: getChannels() on this jack sets the output channel count and getVoltage(idx) reads each channel in the loop, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Clipper.cpp Clipper::process: UTM_in = getVoltage() with no channel argument, used as UTM_attn_param * UTM_in + UTM_param and then floored at 0.f or 5.f depending on the polarity setting, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Clipper.cpp Clipper::process: LTM_in = getVoltage() with no channel argument, used as LTM_attn_param * LTM_in + LTM_param and then capped at 0.f or 5.f depending on the polarity setting, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"poly": true, "step": "continuous", "why": "Clipper.cpp Clipper::process: setChannels(num_channels) then setVoltage(out_Volt, idx) per channel, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The audio jacks carry whatever is patched to them, so no family is set for them. The unipolar 5V offset is applied only in the branch taken when the modulation jack is unpatched; patching a modulation jack silently drops it, so in the unipolar setting the lower threshold shifts down by 5V and the upper threshold is pinned to 5V when its attenuator is at 0. Folding is a single reflection, out = 2 * threshold - out, not repeated. Both attenuators are configured with the name \"Attenuation for Upper Threshold Modulation\" and both threshold knobs with the name \"Volt\"."
+}

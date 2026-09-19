@@ -1,0 +1,24 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Temulenti",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "temulenti.cpp:175 divides this input by 5, temulenti.cpp:215 adds the knob, and temulenti.cpp:219 clamps the total to -1..1"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "temulenti.cpp:176 divides this input by 5, temulenti.cpp:216 adds the knob, and temulenti.cpp:219 clamps the total to -1..1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "temulenti.cpp:177 divides this input by 5, temulenti.cpp:217 adds the knob, and temulenti.cpp:219 clamps the total to -1..1"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "temulenti.cpp:243 tests this input against 0.7V with getVoltage() alone"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "temulenti.cpp:240 tests this input against 0.7V with getVoltage() alone"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "temulenti.cpp:181 multiplies this input by 12 into the pitch in semitones"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "normal": "0.1V", "negative": "swings", "why": "temulenti.cpp:174 reads this input with getNormalVoltage(0.1) and temulenti.cpp:183 divides it by 5, multiplies by the FM knob and clamps the result to -1..1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "normal": "8V", "why": "temulenti.cpp:233 reads this input with getNormalVoltage(8.0), divides by 8 and clamps that alone to 0..1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "temulenti.cpp:246 tests this input against 0.7V with getVoltage() alone"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "temulenti.cpp:269 writes 5V or 0V from the end-of-attack flag"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "temulenti.cpp:270 writes 5V or 0V from the end-of-release flag"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 8V", "why": "temulenti.cpp:271 multiplies the unipolar sample by 8"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "why": "temulenti.cpp:272 multiplies the bipolar sample by 5"}
+    }
+  },
+  "comment": "The DSP is the Parasite firmware for Tides, vendored as alt_firmware/bumps; src/temulenti.cpp is the Rack wrapper. The manual says the SYNC button behaves as it does in Aestus, which would include engaging on a patched CLOCK cable; temulenti.cpp:160 reads the button alone, with no test of the CLOCK input's connected state, so only the button engages it here. The quantiser at temulenti.cpp:194 works on the whole pitch — knob plus V/OCT plus the calibration offset — before the FM amount is applied, so FM is not quantised. With the harmonic oscillator model and the C4 compatibility option switched off, temulenti.cpp:187 subtracts a further twelve semitones, which the maker's comment marks as an addition of their own rather than original behaviour. The peacocks plotter of Aestus is not present."
+}

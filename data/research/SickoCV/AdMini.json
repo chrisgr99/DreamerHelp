@@ -1,0 +1,17 @@
+{
+  "plugin": "SickoCV",
+  "module": "AdMini",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "AdMini.cpp takes getChannels() from this jack as the envelope's channel count and compares each channel against 1V"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "AdMini.cpp adds getVoltage() to the attack time in seconds, floored at the 1ms minimum"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "AdMini.cpp adds getVoltage() to the decay time in seconds, floored at the 1ms minimum"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "why": "AdMini.cpp takes getChannels() from this jack as the amplifier's loop bound and reads getVoltage(c)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "AdMini.cpp writes the envelope scaled by 10 per channel and sets the channel count from the trigger jack"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "AdMini.cpp clamps the amplified signal to ±10V and sets the channel count from the signal or trigger jack"}
+    }
+  },
+  "comment": "There is no MODE switch on the panel: AdMini.cpp:592-600 puts the two modes on the menu, printed 'Function (red)' and 'Loop (yellow)' after the light colour that shows them. There is no sustain or release stage here, so the menu offers only those two. The census output order is Envelope first and Signal second, which is the reverse of their order down the panel."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "LogicalAudio",
+  "module": "L-Rantics",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "the Tic 2 jack", "why": "src/L-Rantics.cpp:135 tests the voltage against 1.0f, and line 140 copies the Tic 2 reading into this channel when only Tic 2 is connected"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "the Tic 1 jack", "why": "src/L-Rantics.cpp:136 tests the voltage against 1.0f, and line 139 copies the Tic 1 reading into this channel when only Tic 1 is connected"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "src/L-Rantics.cpp:97 clamps it to -5..5 and adds 6, giving 1..11, and line 120 uses it in place of the left knob when this jack is connected"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "src/L-Rantics.cpp:124 reads this jack, but line 123 tests L_CV_INPUT rather than R_CV_INPUT for the cable, so the jack is only consulted while the left one is patched"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "src/L-Rantics.cpp:206 calls setVoltage with no channel index and setChannels is never called"},
+      "1": {"family": "cv", "poly": false, "why": "src/L-Rantics.cpp:207 calls setVoltage with no channel index and setChannels is never called"}
+    }
+  },
+  "comment": "Line 123 of src/L-Rantics.cpp reads `if (inputs[L_CV_INPUT].isConnected())` where the right channel is being resolved; the body then reads R_CV_INPUT. The right level CV is therefore gated on the left jack's cable. docs/L-Rantics.md says each CV input overrides its own knob, which the code does not do. The manual also gives the output range as -1V to +1V, or 0V to +2V unipolar, but src/L-Rantics.cpp:173 adds the level, which is 1 to 9 from the knob or 1 to 11 from CV, to a random value between -1 and +1. The internal-clock timer and interval are function-level statics inside process() (src/L-Rantics.cpp:130), so they are shared by every instance of the model in the patch. The source comment there says 0.4 to 1.2 seconds; the expression gives 0.2 to 1.0. The polarity LightId names are the reverse of the behaviour they show, but the lamps sit beside the panel glyph that matches what each switch position does, so nothing visible is wrong."
+}

@@ -1,0 +1,43 @@
+{
+  "plugin": "CountModula",
+  "module": "GatedComparator",
+  "description": "An eight-bit shift register fed by a comparator, with a weighted sum of the bits as a CV output, for building random gate patterns and melodies",
+  "params": [
+    {"ids": [0], "text": "Sets the level the comparator input has to pass for a high bit to be clocked into the shift register, -5V to +5V"},
+    {"ids": [1], "text": "Sets how far the threshold voltage moves the comparator threshold, and in which direction, from -1 to +1"},
+    {"ids": [2], "text": "Enables the loop input, so that what is patched there is folded into the bit being clocked in"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "While on, that bit adds its weight to the random melody outputs; bit 1 is worth 1/255th of 8V and each higher bit twice as much as the one below it"},
+    {"ids": [11], "text": "Picks how the loop input and the comparator result are combined: XOR, AND or OR"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge here shifts every bit along by one and clocks the comparator result into the first bit"},
+    {"ids": [1], "text": "The signal the comparator measures; while it is above the threshold, a high bit is ready to be clocked in"},
+    {"ids": [2], "text": "Moves the comparator threshold, by the amount and direction set on the CV attenuverter"},
+    {"ids": [3], "text": "A gate here is combined with the comparator result before it reaches the shift register, using the operation chosen on LOOP LOGIC, and takes effect only while the loop is enabled"},
+    {"ids": [4], "text": "A gate above 2V here enables the loop input, overriding the LOOP ENABLE switch"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the comparator input is above the threshold, and 0V while it is below"},
+    {"ids": [1], "text": "The weighted sum of the bits that are set and switched on, from 0V with none of them to 8V with all eight"},
+    {"ids": [2], "text": "The weighted sum of the bits that are set and switched on with its sign flipped, from 0V down to -8V"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "10V while that bit of the shift register is set, and 0V while it is clear"}
+  ],
+  "menu": [
+    "Initialize Random Melody Only — puts the eight melody bit switches back to their default positions and leaves the rest of the module as it is",
+    "Randomize Random Melody Only — sets the eight melody bit switches at random and leaves the rest of the module as it is",
+    "Add CV expander — places a Sequencer CV Expander to the right of this module",
+    "Add output expander — places a Sequencer Output Expander to the right of this module",
+    "Add trigger expander — places a Sequencer Trigger Expander to the right of this module",
+    "Add random melody expander — places a Gated Comparator Random Melody expander to the right of this module",
+    "Add logic expander — places a Gated Comparator Gate Logic expander to the right of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "one channel only",
+      "2": "continuous · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "high above 2V · stepped · one channel only"
+    }
+  }
+}

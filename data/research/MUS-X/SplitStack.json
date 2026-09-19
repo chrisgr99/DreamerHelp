@@ -1,0 +1,26 @@
+{
+  "plugin": "MUS-X",
+  "module": "SplitStack",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "SplitStack.cpp:72 takes the module's channel count from this input and SplitStack.cpp:85 reads it with getPolyVoltageSimd"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "SplitStack.cpp:90 reads this input with getPolyVoltageSimd and passes it straight through; SplitStack.cpp:141 looks for a rise of more than 1V on it when the split point is being learned"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "why": "SplitStack.cpp:95 reads this input with getPolyVoltageSimd and passes it straight through"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "why": "SplitStack.cpp:100 reads this input with getPolyVoltageSimd and passes it straight through"},
+      "4": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "SplitStack.cpp:105 reads this input with getPolyVoltageSimd and passes it straight through"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "SplitStack.cpp:85 sets this output's channel count from the pitch input, or to zero when part A is silent"},
+      "1": {"family": "pitch", "poly": true, "why": "SplitStack.cpp:87 sets this output's channel count from the pitch input, or to zero when part B is silent"},
+      "2": {"family": "trigger", "poly": true, "why": "SplitStack.cpp:90 sets this output's channel count from the pitch input, or to zero when part A is silent"},
+      "3": {"family": "trigger", "poly": true, "why": "SplitStack.cpp:92 sets this output's channel count from the pitch input, or to zero when part B is silent"},
+      "4": {"family": "cv", "poly": true, "why": "SplitStack.cpp:95 sets this output's channel count from the pitch input, or to zero when part A is silent"},
+      "5": {"family": "cv", "poly": true, "why": "SplitStack.cpp:97 sets this output's channel count from the pitch input, or to zero when part B is silent"},
+      "6": {"family": "cv", "poly": true, "why": "SplitStack.cpp:100 sets this output's channel count from the pitch input, or to zero when part A is silent"},
+      "7": {"family": "cv", "poly": true, "why": "SplitStack.cpp:102 sets this output's channel count from the pitch input, or to zero when part B is silent"},
+      "8": {"family": "trigger", "poly": true, "why": "SplitStack.cpp:105 sets this output's channel count from the pitch input, or to zero when part A is silent"},
+      "9": {"family": "trigger", "poly": true, "why": "SplitStack.cpp:107 sets this output's channel count from the pitch input, or to zero when part B is silent"}
+    }
+  },
+  "comment": "Read from src/SplitStack.cpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1. The README spells the section heading Spit/Stack. A part that is not playing has its outputs set to zero channels rather than to 0V (SplitStack.cpp:200 onwards), which is what makes a downstream synth go quiet rather than hold a note. The split test is strictly below the split point for part A and at or above it for part B (SplitStack.cpp:157). Learning the split point looks for the gate rising by more than 1V from its previous value (SplitStack.cpp:141), so a gate already high when the button is held does not set it."
+}

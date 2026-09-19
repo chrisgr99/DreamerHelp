@@ -1,0 +1,77 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Trace",
+  "description": "A loop of moving paper and four brushes: four control voltages are drawn onto it by mouse or from the patch, and four read heads play them back",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the paper moves, -4 to 4 times; negative runs it backwards"},
+    {"ids": [1], "text": "Sets how much paper goes round; it is a length in cells rather than a duration, so running faster shortens the loop instead of squashing what is drawn on it"},
+    {"ids": [2], "text": "Smooths what the read heads pick up, without changing what is drawn"},
+    {"ids": [3], "text": "Sets how much ink a pass lays down"},
+    {"ids": [4], "text": "Sets how much ink a pass lifts; balanced against the ink knob it sets whether repeated passes build up or wash out"},
+    {"ids": [6], "text": "Runs the paper"},
+    {"ids": [7], "text": "Runs the paper backwards"},
+    {"ids": [8], "text": "Returns the paper to its start on each press"},
+    {"ids": [9, 10, 11, 12], "text": "Points the mouse at that lane, so drawing on the paper writes to it"},
+    {"ids": [13], "text": "Points the mouse at erasing rather than at a lane"},
+    {"ids": [14], "text": "Fans the four read heads apart along the paper, ±100 per cent"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Draws that lane from a voltage instead of the mouse"},
+    {"ids": [4], "text": "While this is high the draw CV inputs record onto the paper and while it is low they do not; unpatched, they always record, despite the tooltip calling this jack retired"},
+    {"ids": [5], "text": "Each rise advances the paper one cell"},
+    {"ids": [6], "text": "Marks the bar, for the clocks-per-bar setting on the menu"},
+    {"ids": [7], "text": "Changes the paper speed, added to the speed knob"},
+    {"ids": [8], "text": "Changes the smoothing, added to the slew knob"},
+    {"ids": [9], "text": "Changes how much ink a pass lays down, added to the ink knob"},
+    {"ids": [10], "text": "A high gate runs the paper, taking the run button's place"},
+    {"ids": [11], "text": "A high gate runs the paper backwards, taking the reverse button's place"},
+    {"ids": [12], "text": "A rise returns the paper to its start"},
+    {"ids": [13, 14, 15, 16], "text": "Moves that lane's own read head along the paper, added to the spread"},
+    {"ids": [17, 18, 19, 20], "text": "Sets how thick that lane's stroke is as it is drawn, which is also that lane's velocity"},
+    {"ids": [21], "text": "Changes how far the read heads are fanned apart, added to the spread knob"},
+    {"ids": [22], "text": "Changes how much ink a pass lifts, added to the leak knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The line under that lane's read head"},
+    {"ids": [4, 5, 6, 7], "text": "How much ink is on the paper under that lane's read head"}
+  ],
+  "notes": [
+    "nothing comes out until something has been drawn: the paper starts blank and the outputs rest until a brush or a draw CV has laid a line down",
+    "the paper moves whether or not anything is being drawn, so where the mouse is sets what a stroke does: left of the playhead it edits, right of it it composes ahead, on it it performs",
+    "a brush cannot write while the paper is running backwards, because a stroke laid over paper moving the other way would retrace and eat itself",
+    "each lane also reports where its line turns around: the slope is classed as rising, falling or flat, and events fire on the changes, so a scribble makes notes at its turning points"
+  ],
+  "menu": [
+    "Lane 1 — a submenu of that lane's own settings",
+    "Range: Bipolar +/-5V, Unipolar 0-10V — sets the voltage span that lane's value output covers",
+    "Read: Smooth, Stepped (sharp edges) — chooses whether that lane's read is interpolated or held in steps",
+    "Quantize — snaps that lane's value output to a grid",
+    "Clear lane — wipes what is drawn on that lane",
+    "Copy to lane 2 — copies that lane's drawing onto another, which with the heads fanned apart gives several reads of one gesture",
+    "Stroke weight: Hairline, Fine, Normal, Bold, Heavy — sets how far the ink is allowed to swing the drawn line's width",
+    "Clocks per bar: 1, 2, 4, 8, 12, 16, 24, 32 — says how many clock pulses make a bar",
+    "Clear all paper — wipes every lane"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "12": "stepped · one channel only",
+      "13": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "17": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "21": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "22": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "4": "one channel only"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "Submit",
+  "module": "Squeeze",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Squeeze.cpp:111 uses isConnected; Squeeze.cpp:113-118 latches high above 1V and low below 0.1V"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "Squeeze.cpp:128 uses isConnected; Squeeze.cpp:131 takes the absolute value of getVoltage divided by 5, clamped to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Squeeze.cpp:142 sets the shaped envelope times AMOUNT times 10"}
+    }
+  },
+  "comment": "The Contour switch is labelled the wrong way up. Squeeze.cpp:45 configures value 0 as Lin, value 1 as Exp and value 2 as Log, and a CKSSThree's value 0 is the bottom position; Squeeze.svg prints lin at the top and log at the bottom. So the bottom position gives the straight response the panel calls log, and the top gives the square root it calls lin.\n\nThe audio detector takes the absolute value of the input (Squeeze.cpp:131), so a negative swing raises the envelope exactly as a positive one does. The gate and audio envelopes are combined with a maximum rather than a sum (Squeeze.cpp:139), which the manual describes correctly.\n\napplyContour at Squeeze.cpp:52-61 has a fourth case, a smoothstep, that no switch position can select."
+}

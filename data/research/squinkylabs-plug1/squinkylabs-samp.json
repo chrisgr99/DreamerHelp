@@ -1,0 +1,18 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-samp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "stepped", "why": "Samp.h:367-370 takes the channel count of this input for the output, and :482-484 rounds each channel to a MIDI note at note-on"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "Samp.h:533 reads this input with getPolyVoltage and multiplies it by 12.7 into a whole MIDI velocity of 1 to 127"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 2V", "step": "stepped", "why": "Samp.h:502 reads this input with getVoltageSimd into a trigger whose thresholds are 1V and 2V (SqSchmidtTrigger.h:51-52)"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "why": "Samp.h:446-448 reads this input with getPolyVoltageSimd and adds it to the pitch through the pitch trim"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "why": "Samp.h:553 reads this input with getPolyVoltageSimd as the linear FM modulator"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Samp.h:552 reads this input with getPolyVoltageSimd and scales it by a tenth; unpatched it is normalled to 10V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Samp.h:370 sets the channel count of this output from the pitch input"}
+    }
+  },
+  "comment": "Params 0, 5 and 6, the key switch, the patch schema number and the trigger delay setting, have no control on the panel. The 5 sample trigger delay is GateDelay<5> in composites/Samp.h, and TRIGGERDELAY_PARAM defaults to 1."
+}

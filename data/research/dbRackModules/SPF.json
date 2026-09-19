@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SPF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "SPF.cpp:74 takes the channel count from this input and SPF.cpp:81 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "why": "SPF.cpp:75 takes the channel count from this input when it carries more and SPF.cpp:82 reads it four channels at a time"},
+      "2": {"family": "audio", "poly": true, "why": "SPF.cpp:76 takes the channel count from this input when it carries more and SPF.cpp:83 reads it four channels at a time"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1.999V", "why": "SPF.cpp:80 reads it four channels at a time, scales it by a fifth and the R CV knob, adds the R knob and clamps the total to 0..1.999 before taking it from 2"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "the Freq knob alone", "why": "SPF.cpp:78-79 read it four channels at a time, scale it by the Freq CV knob, add the Freq knob and raise 2 to that power"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SPF.cpp:87 sets this output's channel count from whichever input carries the most channels"}
+    }
+  },
+  "comment": "The filter is taken from Csound code by Victor Lazzarini, SPF.cpp:3. The resonance sum is subtracted from 2 to make the damping, SPF.cpp:80, so the knob reads as resonance and its top end, 1.999 after the clamp, is where it rings hardest. Only the LP input is configured as a bypass to the output, SPF.cpp:64."
+}

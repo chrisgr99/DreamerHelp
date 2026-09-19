@@ -1,0 +1,14 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "Hurdle",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Hurdle.cpp process(): clamp(inputs[PROBABILITY_INPUT].getVoltage(), 0.0f, 10.0f), then probability >= random::uniform() * 10.0f at the rising edge; no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Hurdle.cpp process(): gateInIsHigh = inputs[GATE_INPUT].getVoltage() >= 1.0f, one voltage, no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Hurdle.cpp process(): setVoltage(10.0f) or setVoltage(0.0f), no setChannels"}
+    }
+  },
+  "comment": "The decision is probability >= random::uniform() * 10.0f, so 10V always opens the gate and 0V never does. There is no Schmitt hysteresis on the gate input: the single 1.0f threshold decides both edges, and the open gate is closed again by the input falling below it rather than by a new draw. The README's 0V-10V for 0%-100% wording matches the code."
+}

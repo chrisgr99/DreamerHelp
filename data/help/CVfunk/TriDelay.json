@@ -1,0 +1,63 @@
+{
+  "plugin": "CVfunk",
+  "module": "TriDelay",
+  "description": "A three-tap stereo delay: one delay time, pan and feedback setting for all three taps, with a per-tap offset on each, and a switch choosing how long the buffer is",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time all three taps are offset from, as a fraction of the buffer length"},
+    {"ids": [1], "text": "Attenuverts the delay CV before it is added to the delay knob"},
+    {"ids": [2], "text": "Shifts that tap's delay away from the global time, a whole buffer length either way"},
+    {"ids": [3], "text": "Shifts that tap's delay away from the global time, a whole buffer length either way"},
+    {"ids": [4], "text": "Shifts that tap's delay away from the global time, a whole buffer length either way"},
+    {"ids": [5], "text": "Sets where all three taps are placed across the stereo field before their own offsets, hard left to hard right"},
+    {"ids": [6], "text": "Attenuverts the pan CV before it is added to the pan knob"},
+    {"ids": [7], "text": "Shifts that tap's position across the stereo field away from the global pan, the whole width either way"},
+    {"ids": [8], "text": "Shifts that tap's position across the stereo field away from the global pan, the whole width either way"},
+    {"ids": [9], "text": "Shifts that tap's position across the stereo field away from the global pan, the whole width either way"},
+    {"ids": [10], "text": "Sets how much of each tap is fed back into the buffer, 0 to 100 per cent before the per-tap offsets"},
+    {"ids": [11], "text": "Attenuverts the feedback CV before it is added to the feedback knob"},
+    {"ids": [12], "text": "Shifts that tap's feedback away from the global setting, -100 to 100 per cent"},
+    {"ids": [13], "text": "Shifts that tap's feedback away from the global setting, -100 to 100 per cent"},
+    {"ids": [14], "text": "Shifts that tap's feedback away from the global setting, -100 to 100 per cent"},
+    {"ids": [15], "text": "Sets the balance between the untreated signal and the three taps, none to all wet"},
+    {"ids": [16], "text": "Attenuverts the dry and wet CV before it is added to the mix knob"},
+    {"ids": [17], "text": "Wipes the delay buffer on each press, a slice at a time until it is empty"},
+    {"ids": [18], "text": "Cuts the input off and lets the buffer circulate on its own while it is held, so the delay becomes a loop"},
+    {"ids": [19], "text": "Picks how long the buffer is, 36, 360 or 3600ms, which is also the span both the delay knob and the tap offsets are measured against"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left signal into the delay; with nothing patched, the right input feeds both sides"},
+    {"ids": [1], "text": "The right signal into the delay; with nothing patched, the left input feeds both sides"},
+    {"ids": [2], "text": "Changes the global delay time, added to the delay knob through its attenuverter at one thousandth of the buffer length per volt scaled against 36ms"},
+    {"ids": [3], "text": "Changes the global pan, added to the pan knob through its attenuverter, the total clamped to the full width"},
+    {"ids": [6], "text": "Changes the global feedback, scaled by a hundredth and added to the feedback knob through its attenuverter"},
+    {"ids": [7], "text": "Changes the dry and wet balance, scaled by a hundredth and added to the mix knob through its attenuverter, the total clamped to none through all wet"},
+    {"ids": [8], "text": "Any voltage above 0V wipes the delay buffer, added to the clear button rather than edge-detected"},
+    {"ids": [9], "text": "Any voltage above 0V holds the buffer circulating and cuts the input off, added to the hold button rather than edge-detected"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the delayed and mixed signal"},
+    {"ids": [1], "text": "The right side of the delayed and mixed signal"}
+  ],
+  "notes": [
+    "the delay knob and the three tap offsets are read as fractions of the buffer length, so changing the BUFFER SIZE switch changes every delay time at once"
+  ],
+  "menu": [
+    "Delay Time: 36 ms, 360 ms, 3600 ms — sets the buffer length, but the BUFFER SIZE switch on the panel overwrites it on the very next audio sample, so the choice made here does not hold"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads the R audio jack.",
+      "1": "continuous · one channel only\n\nunpatched it reads the L audio jack.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "8": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

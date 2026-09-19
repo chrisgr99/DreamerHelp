@@ -1,0 +1,65 @@
+{
+  "plugin": "gregsbrain",
+  "module": "dSpec",
+  "description": "Two-channel additive oscillator: each channel builds its waveform out of a set of sine waves picked by an algorithm chosen on the screen, and the panel knobs then filter and reshape that set",
+  "params": [
+    {"ids": [0], "text": "Turn it to move the focus between the controls on the current page and click it to select one, then turn to change the value and click again; double-click a control's name to map it to an Aux input"},
+    {"ids": [1], "text": "Scales the voltage at the Comb Width jack before it is added to the comb width offset knob, from none of it through to all of it"},
+    {"ids": [2], "text": "Sets how wide the teeth of the comb filter are; with nothing patched into Comb Width it sets the width on its own"},
+    {"ids": [3], "text": "Sets how deep the comb's teeth cut, with the comb turned inside out on one side of the centre so its peaks become troughs, and the comb off at the centre; it has no input jack of its own"},
+    {"ids": [4], "text": "Sets how strongly the Mod1 and Mod2 audio inputs reshape the harmonics of their channels; it has no input jack of its own"},
+    {"ids": [5], "text": "Scales the voltage at the Low Pass jack before it is added to the low-pass offset knob, from none of it through to all of it"},
+    {"ids": [6], "text": "Sets where the exponential curve that thins out the upper harmonics falls; the centre of its travel is no shift and the ends are the full swing either way, and with Low Pass empty it acts alone"},
+    {"ids": [7], "text": "Shifts the pitch of both channels in semitone steps and sets the root note the quantizer works from; with nothing patched into Transpose it does that on its own"},
+    {"ids": [8], "text": "Scales the voltage at the O/E Mix jack before it is added to the odd-even offset knob, from none of it through to all of it"},
+    {"ids": [9], "text": "Sets the balance between odd and even multiples of the fundamental, odd being reedy and even warmer; with nothing patched into O/E Mix it sets the balance on its own"},
+    {"ids": [10], "text": "Scales the voltage at the Noise Mix jack before it is added to the noise offset knob, from none of it through to all of it"},
+    {"ids": [11], "text": "Sets how much randomness goes into the spectrum, and with Noise Mix empty it does that alone; whether the randomness adds new frequencies or jitters the ones already there is set on the Algorithm page"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Drives whatever screen controls have been mapped to it, 0 to 5V spread evenly across that control's values; a negative voltage is read as its positive twin, so -3V and +3V give the same value"},
+    {"ids": [1], "text": "An audio signal whose own harmonics multiply the harmonics of the first channel, adding no new frequencies of its own; it feeds Mod2 as well whenever nothing is patched there"},
+    {"ids": [2], "text": "A pulse here flips whatever screen check boxes have been mapped to it, read as high above 0.2V"},
+    {"ids": [3], "text": "An audio signal whose own harmonics multiply the harmonics of the second channel; with nothing patched here it reads Mod1"},
+    {"ids": [4], "text": "Moves the width of the comb's teeth, scaled by the comb width attenuation knob and added to the comb width offset knob"},
+    {"ids": [5], "text": "Moves the low-pass curve, scaled by the low-pass attenuation knob and added to the low-pass offset knob"},
+    {"ids": [6], "text": "Shifts the pitch of both channels, added to the Transpose knob at a tenth of full scale per volt; despite the blue nut and the manual's wording, it does not track 1V per octave"},
+    {"ids": [7], "text": "Moves the odd-to-even balance, scaled by the odd-even attenuation knob and added to the odd-even offset knob"},
+    {"ids": [8], "text": "Sets the pitch of the first channel at 1V per octave, before the quantizer on the Quantization page turns that into a note"},
+    {"ids": [9], "text": "Moves the amount of randomness in the spectrum, scaled by the noise attenuation knob and added to the noise offset knob"},
+    {"ids": [10], "text": "Sets the pitch of the second channel at 1V per octave, before the quantizer on the Quantization page turns that into a note"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first channel's audio"},
+    {"ids": [1], "text": "The second channel's audio"}
+  ],
+  "notes": [
+    "an attenuation knob and the offset knob beside it are a pair: with the jack empty the offset knob alone sets the level, and with a cable in it the attenuation knob scales what is added",
+    "the knobs come up hard anticlockwise when the module is added, which is not where the maker's reset puts them; Initialize on the panel menu centres the offset knobs and Comb Depth",
+    "which set of frequencies each channel is built from is set on the Algorithm page and which notes it may play on the Quantization page; the panel only shapes what those two settle",
+    "while the pointer is over the encoder the mouse scroll wheel turns it rather than scrolling the rack",
+    "the System pages the maker's manual describes are not in this plugin; Initialize on the panel menu is what puts the settings back"
+  ],
+  "menu": [
+    "Capture mouse scroll — turns off the module taking the mouse scroll wheel over the encoder, so the wheel scrolls the rack as it normally does"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "bipolar · continuous · polyphonic",
+      "2": "high above 0.2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "bipolar · continuous · polyphonic\n\nunpatched it reads Mod1.",
+      "4": "bipolar · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only",
+      "7": "bipolar · continuous · one channel only",
+      "8": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only",
+      "10": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

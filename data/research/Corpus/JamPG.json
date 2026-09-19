@@ -1,0 +1,26 @@
+{
+  "plugin": "Corpus",
+  "module": "JamPG",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "nothing; the playhead never moves", "why": "src/JamPG.cpp:284-288 isConnected() guard then clockTrigger.process(getVoltage()), Rack SchmittTrigger 0.1V/1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "nothing; only the RST button resets", "why": "src/JamPG.cpp:279-281 isConnected() guard then resetTrigger.process(getVoltage())"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/JamPG.cpp:292 clamp(redLevelSmooth + getVoltage()/10, 0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/JamPG.cpp:293 clamp(greenLevelSmooth + getVoltage()/10, 0, 1)"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/JamPG.cpp:294 clamp(blueLevelSmooth + getVoltage()/10, 0, 1)"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:301 setVoltage(rGate ? 10 : 0), no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:302"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:303"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:306 currentRed * rLevel * 10"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:307"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:308"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:312 playheadX / imageWidth * 10"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:313 playheadY / imageHeight * 10"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:251 eolPulse.trigger(1e-3f), :320 setVoltage(10 or 0)"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/JamPG.cpp:256 eofPulse.trigger(1e-3f), :321 setVoltage(10 or 0)"}
+    }
+  },
+  "comment": "Read at commit 0178c63 (HEAD, version 2.0.0). All five commits in the repository carry 2.0.0 and none of them touches src/ or res/ after the initial commit, so every candidate is the same code; nothing needed settling against the installed build.\n\nThe README says the image can be loaded by clicking the display area. It cannot: JamPGDisplay is a TransparentWidget with drawLayer only and no onButton handler (src/JamPG.cpp:372-614), so only the LOAD button and the panel menu open the dialog. The code wins and the line says so.\n\nThe README describes STEP as 'Pixels to advance per clock pulse'. The same step value is also added to playheadY when a row ends (src/JamPG.cpp:250), so a step above 1 skips rows as well as columns; the README does not say this.\n\nThe level knobs scale the CV outputs only. The gate comparison at src/JamPG.cpp:297-299 is against the raw pixel value, not the levelled one, so turning a level to zero silences that CV output while its gate keeps firing. The README's 'Attenuator for each color channel' does not distinguish the two.\n\nThe playhead advances before the pixel is read (src/JamPG.cpp:286-287), so the pixel at 0,0 is never sampled after a reset.\n\nThe four lights (three gate indicators and an image-loaded lamp) are lights, not params, and have no census position.\n\nThe panel menu also carries two labels rather than items — the image filename and its pixel dimensions — which cannot be chosen and so get no Menu line."
+}

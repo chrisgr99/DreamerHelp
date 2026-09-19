@@ -1,0 +1,46 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-4",
+  "description": "A tempo clock with a numeric display, three square-wave outputs at half, one and twice the beat, and gold-ringed jacks carrying the tempo itself as a voltage for the other Catro/Modulo modules",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo, 0 to 500 bpm, read out on the display"},
+    {"ids": [1], "text": "Restarts the internal clock when pressed and drives the reset output to 10V while it is held down"},
+    {"ids": [2], "text": "Sets the step the tempo knob moves in across its three positions: 0.01, 1 or 5 bpm"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Measures the tempo of a clock patched here and adds it to the tempo knob; it locks on after two pulses of equal spacing and holds that tempo until the spacing changes"},
+    {"ids": [1], "text": "Adds to the tempo, 1V for every 60 bpm, where the maker's manual says 1V for every 50 bpm; every output except the plain tempo voltage follows the sum"},
+    {"ids": [2], "text": "Restarts the internal clock on a rising edge and drives the reset output to 10V while the voltage here is away from zero"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The tempo as a voltage, 1V for every 60 bpm, taken before the + input is added"},
+    {"ids": [1], "text": "The tempo with the + input added, as a voltage, 1V for every 60 bpm"},
+    {"ids": [2], "text": "Half the tempo as a voltage, 1V for every 60 bpm"},
+    {"ids": [3], "text": "Twice the tempo as a voltage, 1V for every 60 bpm"},
+    {"ids": [4], "text": "A 0-10V square wave at one pulse every two beats, half of each cycle high"},
+    {"ids": [5], "text": "A 0-10V square wave at one pulse per beat, half of each cycle high"},
+    {"ids": [6], "text": "A 0-10V square wave at two pulses per beat, half of each cycle high"},
+    {"ids": [7], "text": "10V while the reset button is held down or the reset input is away from zero, for restarting the other modules at the same moment"}
+  ],
+  "notes": [
+    "the tempo knob comes up at 0 bpm, so the module makes no pulses at all until it is turned up or a clock is patched to the ext input",
+    "the gold-ringed jacks throughout Catro/Modulo carry a tempo as a voltage rather than as pulses; chain one module's tempo output into the next module's tempo input to hold them all at one tempo"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "one channel only"
+    }
+  }
+}

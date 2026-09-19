@@ -1,0 +1,16 @@
+{
+  "plugin": "NullSet",
+  "module": "QuickMelody",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 2V", "why": "QuickMelody.cpp:74-75 sets the output channel count from this port's getChannels(), and 85 reads each channel in turn"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "QuickMelody.cpp:66-68 reads getVoltage() with no channel and rescales 0.1V to 2V into a Schmitt trigger"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "QuickMelody.cpp:95-100 reads getVoltage() with no channel and uses it in place of the Max knob when the port is connected"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "QuickMelody.cpp:88-93 reads getVoltage() with no channel and uses it in place of the Min knob when the port is connected"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "QuickMelody.cpp:75 sets this port's channel count from the clock input and 104 writes one voltage per channel"}
+    }
+  },
+  "comment": "Source read at commit 21bfcbf, the commit whose plugin.json carries the installed 2.0.0. The Max and Min knobs are configured with defaults of -5 and +5 (QuickMelody.cpp:29-30), so the default Max is below the default Min; the output is computed as (max - min) * phase + min at line 103, which simply runs the sweep downward. The Max and Min inputs replace their knobs rather than being added to them."
+}

@@ -1,0 +1,58 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Cycle",
+  "description": "A four-channel low-frequency oscillator measured in bars rather than hertz: all four share one cycle, each with its own shape and depth, and the bar input locks the whole set to the music",
+  "params": [
+    {"ids": [0], "text": "Sets the rate: locked to a bar it is a division or multiple of the bar, from 64 bars per cycle down to an eighth of a bar; free-running it is 0.02Hz to 20Hz"},
+    {"ids": [1], "text": "Fans the four channels apart around the cycle, from all four together at one end of the travel to a full spread at the other"},
+    {"ids": [2], "text": "Sets how steady the channels are: at the top of the travel they repeat exactly, and lower down each cycle's depth wanders"},
+    {"ids": [3], "text": "Restarts the cycle at the top of the next downbeat on each press"},
+    {"ids": [4, 5, 6, 7], "text": "Sets that channel's position around the shape ring — sine, triangle, sawtooth, square, staircase, stepped random and back to sine; with its shape link on it is an offset from the channel above"},
+    {"ids": [8, 9, 10, 11], "text": "Sets that channel's depth, from full level clockwise through silence at the centre to full inverted level anticlockwise; with its scale link on it is an offset from the channel above"},
+    {"ids": [12, 13, 14], "text": "Links those two channels' shapes, so the lower one follows the upper one with its own knob acting as an offset around the ring"},
+    {"ids": [15, 16, 17], "text": "Links those two channels' depths, so the lower one follows the upper one with its own knob acting as an offset"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the step grid for the staircase and stepped random shapes: one step per rise, in place of the step count the bar division would give"},
+    {"ids": [1], "text": "Sets the timing: the bar length is measured from the time between rises and the cycle is hard-aligned to every downbeat, so it cannot drift however long it runs"},
+    {"ids": [2], "text": "A rise restarts the cycle at the top of the next downbeat"},
+    {"ids": [3], "text": "Changes the rate or the bar division, added to the frequency knob"},
+    {"ids": [4], "text": "Changes the phase spread, added to the phase knob"},
+    {"ids": [5], "text": "Changes how far the depth wanders, added to the stability knob"},
+    {"ids": [6, 7, 8, 9], "text": "Rotates that channel around the shape ring, added to its shape knob and wrapping rather than stopping at an end"},
+    {"ids": [10, 11, 12, 13], "text": "Changes that channel's depth, added to its scale knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That channel's wave as 0-5V, for levels and cutoffs"},
+    {"ids": [4, 5, 6, 7], "text": "That channel's wave as ±5V, the same shape centred on 0V, for pitch, panning and frequency modulation"},
+    {"ids": [8], "text": "A trigger each time the cycle comes round to the top"}
+  ],
+  "notes": [
+    "with nothing patched at BAR the module free-runs in hertz like an ordinary low-frequency oscillator; patching BAR hands the timing to the bar and turns the frequency knob into a bar division",
+    "all six link buttons come up on, so a fresh module has all four channels ganged to the first; a linked channel's own knob becomes an offset rather than going dead",
+    "the stepped random shape draws one fresh set of step voltages per cycle and all four channels share it, so they jump together"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "0 to 5V",
+      "2": "0 to 5V",
+      "3": "0 to 5V",
+      "4": "±5V · one channel only",
+      "5": "±5V",
+      "6": "±5V",
+      "7": "±5V",
+      "8": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

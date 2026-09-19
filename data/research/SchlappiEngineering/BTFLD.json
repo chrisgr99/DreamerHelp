@@ -1,0 +1,20 @@
+{
+  "plugin": "SchlappiEngineering",
+  "module": "BTFLD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "0 to 11.7V", "step": "continuous", "negative": "ignored", "why": "src/btfld.cpp line 185 reads inputs[INPUT_INPUT].getVoltage() with no channel loop; line 202 clamps the gain-staged signal to 0 to 11.7V, so at the +10 range anything below 0V is discarded"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the folded output", "why": "src/btfld.cpp line 177: the jack is read when connected and the folded output's own voltage is used when it is not; line 178 adds knob times jack times 0.1 to the gain, so a negative voltage lowers the gain and can take it below zero"},
+      "2": {"family": "audio", "poly": false, "sumRange": "0 to 11.7V", "step": "continuous", "negative": "subtracts", "why": "src/btfld.cpp lines 192 and 200: the jack is read with getVoltage and added to the gain-staged signal before the 0 to 11.7V clamp at line 202"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 256 sets one voltage with no setChannels anywhere in the file"},
+      "1": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 224 sets one voltage with no setChannels anywhere in the file"},
+      "2": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 224 sets one voltage with no setChannels anywhere in the file"},
+      "3": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 224 sets one voltage with no setChannels anywhere in the file"},
+      "4": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 224 sets one voltage with no setChannels anywhere in the file"},
+      "5": {"family": "audio", "poly": false, "why": "src/btfld.cpp line 249 sets one voltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Three places where the hardware manual and the code disagree, the code winning each time. (1) The manual says of IN that \"If no input is detected then a +10V signal is normalized here\"; src/btfld.cpp line 185 calls getVoltage() with no isConnected test, so an unpatched IN reads 0V and the module is silent. (2) The manual's own normalling claim for CV — the saw output fed back — is what the code does (line 177), so that one holds. (3) The manual describes the ±5 setting as AC coupling the outputs; in the code AC coupling is applied to the stepped and folded outputs only (lines 248 and 250), while the four bit outputs get a fixed -5V offset instead (line 224).\n\nThe STEP_INDICATOR_LIGHT is declared at line 89 and given a LightWidget at line 301, and no line of process ever writes it. It is a lamp on the panel that can never light.\n\nNo range or polarity is recorded for the jacks because both ends depend on the RANGE switch: at +10 the converter input is clamped to 0 to 11.7V and the bit outputs run 0 to 10V, at ±5 a 5V offset is added first and the bit outputs run -5V to +5V.\n\nThe bit outputs are not instantaneous comparators: src/btfld.cpp lines 40 to 53 hold a bit low until its value has been stable for one and a half sample periods of the eight times oversampled signal, which is what makes the converter asynchronous rather than clocked.\n\nRange, gain and step figures are all literals in src/btfld.cpp: gain 0 to 2 at line 124, the 0 to 11.7V clamp at line 167, the sixteen steps at lines 204 to 211, the 10/16 rescale at line 247."
+}

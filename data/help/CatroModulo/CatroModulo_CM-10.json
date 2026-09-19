@@ -1,0 +1,44 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-10",
+  "description": "Two independent one-bit stages: on each step a stage passes the bit it was holding to its output and reads a new bit from its input, and either stage can capture a bit and play it back later",
+  "params": [
+    {"ids": [0, 1], "text": "Copies the bit that stage is holding into its store when pressed, replacing what was there"},
+    {"ids": [2, 3], "text": "Arms the stored bit when pressed, so the next step loads that bit instead of reading the input; it happens once and the input is read again after"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that stage reads as a bit on each step, anything above 0V counted as a one"},
+    {"ids": [2, 3], "text": "Moves that stage on by one bit on each rising edge above 1V: the held bit goes to the output and the input is read into the hold"},
+    {"ids": [4, 5], "text": "Copies the bit that stage is holding into its store on a rising edge; any voltage away from zero counts as high"},
+    {"ids": [6, 7], "text": "Arms the stored bit on a rising edge, so the next step loads that bit instead of reading the input, once; any voltage away from zero counts as high"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The bit that stage was holding before the last step, 10V for a one and 0V for a zero"},
+    {"ids": [2, 3], "text": "10V whenever the voltage at that stage's step input is away from zero, for passing the step on to the next stage"},
+    {"ids": [4, 5], "text": "10V while the bit that stage is holding is a one and 0V while it is a zero, which is what the lamp shows as well"}
+  ],
+  "notes": [
+    "the two halves are not joined inside the module; to build a shift register patch one stage's output into the next stage's input and its step output into the next stage's step input",
+    "nothing moves until a clock is patched to a step input, and until then every output holds the value it already had"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 0V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 0V · stepped · one channel only",
+      "5": "high above 0V · stepped · one channel only",
+      "6": "high above 0V · stepped · one channel only",
+      "7": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only"
+    }
+  }
+}

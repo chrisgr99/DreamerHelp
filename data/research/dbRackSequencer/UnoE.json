@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "UnoE",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Uno.hpp:113 reads the jack with getVoltage, channel 0 only, and feeds a Rack dsp::SchmittTrigger left at its defaults, so it fires on the crossing above 1V and rearms only below 0V; an edge landing inside the 1ms pulse a reset starts is thrown away. Line 127 reads the same raw voltage a second time: on a step without Glide the Gate output is high only while this jack is above 1V, so the gate copies the clock rather than being generated."},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Uno.hpp:98 reads the jack with getVoltage, channel 0 only, and feeds a Rack dsp::SchmittTrigger left at its defaults, firing on the crossing above 1V and rearming only below 0V; the edge is ORed with the reset arriving from the master, reseeds the random generator from the Seed jack, and starts a 1ms pulse during which line 113 discards clock edges."},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "why": "Uno.hpp:102 reads this input with getVoltage() and a tenth of it, rounded to four places, seeds the random generator"}
+    },
+    "outputs": {
+      "0": {"family": "cv"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"}
+    }
+  },
+  "comment": "The clock, reset and seed inputs are read in Uno.hpp, by the UnoStrip template this module and Uno share, rather than in UnoE.cpp."
+}

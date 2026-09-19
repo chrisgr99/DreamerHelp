@@ -1,0 +1,19 @@
+{
+  "plugin": "Kalliste",
+  "module": "KArp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "KArp.cpp:808 reads inputs[RUN_INPUT].getVoltage() with no channel argument into a dsp::SchmittTrigger, whose default thresholds are 0V and 1V, so a negative voltage reads low"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "KArp.cpp:812 reads inputs[RESET_INPUT].getVoltage() with no channel argument into a dsp::SchmittTrigger, whose default thresholds are 0V and 1V, so a negative voltage reads low"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "KArp.cpp:979 calls setChannels with the number of cells switched on in the column, up to 6, and line 998 writes one voltage per channel from getChordNoteVoltage at line 240"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "KArp.cpp:980 calls setChannels with the same count as the pitch output, and line 999 writes the same 10V or 0V to every channel"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "KArp.cpp:1009 calls setChannels(3) and line 1011 writes root, third and fifth from getChordNoteVoltage"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "KArp.cpp:1021 calls setChannels(3) and line 1033 writes the same 10V or 0V to all three channels"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "KArp.cpp:1016 writes one value with setVoltage and never calls setChannels; getRootVoltage at line 238 returns octave minus 4 plus the root in twelfths of a volt"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "KArp.cpp:1036 calls setChannels(1) and line 1038 writes 10V while a 5ms timer set at line 921 is running, 0V otherwise"}
+    }
+  },
+  "comment": "Source read at commit d7e66fd, the head of the repository. The installed plugin.json is byte-identical to the one there and carries 2.0.1, which nine commits share; the two installed panel SVGs hash to the blobs from the initial import and have never changed, so they settle nothing. The four commits after the version bump that touch src/ (3dbf0f6, 1b0a1d9) only move font loading into draw() and fix module-browser rendering; process() and every control are identical across the whole 2.0.1 range, so the reading does not depend on which of them shipped. SEVENTEEN PARAMETERS CANNOT BE CLICKED FOR HELP. The sixteen chord-type buttons (MODE_1_PARAM upwards) and RUN are configured with configButton and configSwitch, but the widget constructor adds them with createWidgetCentered<KArpModeButton> and createWidgetCentered<KArpRunButton> — plain Widgets, not ParamWidgets — so the census records paramPos for only the first 20 of the 37 parameters and no click can reach the rest. They are covered by Note lines instead. The 96 grid cells and the RST SEQ button are plain widgets with no parameter at all. CTRL-CLICK PREVIEW NAMES THE WRONG CHORD. KArpMatrixButton::onButton calls getChordNoteName(column, row, ...), using the column number as the chord index, while buildActiveArpVoltages at line 604 sounds getChordNoteVoltage(activeChord, row). The name shown therefore matches what is played only when the sequence is on the chord of that number. A COMMENT CONTRADICTS THE CODE: the comment above KArp.cpp:1009 says CHORD_V/OCT carries six channels — root, third, fifth and those three an octave up — but the call is setChannels(3) and only three are written. Three is what the lines say. The six outputs have no configOutput call, so Rack shows no tooltip on any of them. K-SCENE reads leftExpander, so it goes to the right of K-ARP."
+}

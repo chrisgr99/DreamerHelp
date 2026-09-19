@@ -1,0 +1,15 @@
+{
+  "plugin": "AaronKarp-EarthTones",
+  "module": "PolarCV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the speed knob", "why": "src/PolarCV.cpp process(): speed_inp = clamp(inputs[SPEED_INPUT].getVoltage(), 0.f, 10.f), read only when isConnected(), one voltage per frame"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "src/PolarCV.cpp process(): setVoltage(current_cursor.y * 10.0f), where the radius is a sine or cosine and so lies between -1 and 1"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "src/PolarCV.cpp process(): setVoltage(carts.x * 10.0f), where carts.x is the radius times sin(theta)"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "why": "src/PolarCV.cpp process(): setVoltage(carts.y * 10.0f), where carts.y is the radius times cos(theta)"}
+    }
+  },
+  "comment": "Three things in this module do not match what it shows or says. First, the speed CV: speed_range_slope is (0.02 - 0.0001) / (0 - 10), which is negative, so 0V gives the slowest forward rate and 10V gives a large negative rate — the CV runs the point backwards and the mapping is plainly the wrong way round. Second, the mult button: the multiplier is applied as cur_mlt * cur_mlt, so the choices printed as 0.5x, 1x and 2x change the rate by 0.25, 1 and 4. Third, the equation printed on the screen for the first of the four reads A sin(theta) + B cos(theta), while the code computes sin(A theta) * cos(B theta); the other three printed forms match their code. Two parameters, CUR_EQ_PARAM and CUR_TIME_MULT_IDX_PARAM, hold the current equation and multiplier as saved state and have no widget on the panel, so they get no line and no tag. The A and B knobs are snapped to whole numbers over 0 to 20 and both displayed and used at half that."
+}

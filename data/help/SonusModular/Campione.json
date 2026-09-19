@@ -1,0 +1,48 @@
+{
+  "plugin": "SonusModular",
+  "module": "Campione",
+  "description": "A sampler that records what is patched into it, then plays it back at any speed, forwards or backwards, between chosen start and end points",
+  "params": [
+    {"ids": [0], "text": "Starts recording on each press, clearing whatever was there; the next press stops it"},
+    {"ids": [1], "text": "Starts or stops playing on each press when ONE-SHOT is on; with it off, playing runs for as long as the button is held"},
+    {"ids": [2], "text": "Sets the playback speed, half at one end and one and a half times at the other, and the pitch with it"},
+    {"ids": [3], "text": "Reverses the direction of play on each press"},
+    {"ids": [4], "text": "Throws the recorded sample away on each press"},
+    {"ids": [5], "text": "Sets where playback begins, as a fraction of the recorded sample from its start to its end"},
+    {"ids": [6], "text": "Sets where playback ends, as a fraction of the recorded sample from its start to its end"},
+    {"ids": [7], "text": "Switches between stopping at the end point and running round from the end point back to the start"},
+    {"ids": [8], "text": "Switches between playing the sample once for each trigger, and playing it only while the play control is held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be recorded"},
+    {"ids": [1], "text": "A rising edge starts recording, clearing whatever was there; the next stops it"},
+    {"ids": [2], "text": "A rising edge starts or stops playing when ONE-SHOT is on; with it off, playing runs for as long as this jack is above 0V"},
+    {"ids": [3], "text": "Adds to the playback speed; -5V stops it, 0V leaves the knob alone and 5V doubles what the knob gives"},
+    {"ids": [4], "text": "A rising edge reverses the direction of play"},
+    {"ids": [5], "text": "A rising edge throws the recorded sample away"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sample as it plays, or the incoming signal while recording"}
+  ],
+  "notes": [
+    "nothing comes out until something has been recorded; the module ships empty and the sample is not saved with the patch.",
+    "the speed control is the average of the knob and the CV jack, so the knob alone spans half speed to one and a half times, and the jack is needed to reach a standstill or double speed.",
+    "playback reads whole samples with no smoothing between them, so a speed other than 1 is noticeably grainy.",
+    "the red lamp is lit while recording and the green lamp while playing.",
+    "an edge is counted only when a jack or button moves away from exactly 0V and no further edge is counted until it returns there.",
+    "with END set below START the two are pulled together and playback stays on one sample."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

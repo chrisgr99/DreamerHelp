@@ -1,0 +1,19 @@
+{
+  "plugin": "dbRackModules",
+  "module": "MPad2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "MPad2.cpp:191 reads this input per channel as the pitch and the outputs take their channel count from it"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the BW knob", "why": "MPad2.cpp:160 reads it with getVoltage() and no channel loop and rescales 0-10V onto the knob's 0.5 to 60"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the Scl knob", "why": "MPad2.cpp:164 reads it with getVoltage() and no channel loop and rescales 0-10V onto the knob's 0.5 to 4"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "silence", "why": "MPad2.cpp:151 reads sixteen channels of this input and clamps each to 0..10 for the strength of that partial"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "silence", "why": "MPad2.cpp:151 reads sixteen channels of this input and clamps each to 0..10 for the strength of that partial"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "silence", "why": "MPad2.cpp:151 reads sixteen channels of this input and clamps each to 0..10 for the strength of that partial"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "MPad2.cpp:203 sets this output's channel count from the V/Oct jack"},
+      "1": {"family": "audio", "poly": true, "why": "MPad2.cpp:204 sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The two jacks under BW and Scl are the inputs the maker never named, so both carry blank tooltips. The three partial jacks are lettered 1-16, 17-32 and 33-48 on the panel and named Partials 2-17, 18-33 and 34-49 in the tooltips, MPad2.cpp:79-81; the code fills partials 0 to 47 from them in order, MPad2.cpp:98-103, so the panel is right. With the first partial jack empty the loop breaks and the other two are never read, MPad2.cpp:155-157."
+}

@@ -1,0 +1,23 @@
+{
+  "plugin": "ChordChemist",
+  "module": "ChordChemist",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:190 reads it with getVoltage into a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:191 reads it with getVoltage into a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "ChordCircle.cpp:226-229 reads it with getVoltage, multiplies by 12, adds 36 and calls setValue on the root parameter, clamped to 0 and 60"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:232-238 divides it by 10, multiplies by 42 and calls setValue on the scale parameter, clamped to 0 and 42"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:220-223 divides it by 10, multiplies by 12 and calls setValue on the spread parameter, clamped to 0 and 12"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "range": "1 to 16V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:214-217 clamps it to 1 and 16 and calls setValue on the steps parameter"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "ChordCircle.cpp:198-200 adds it to the button's value and feeds the sum to a dsp::SchmittTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "pitch"},
+      "1": {"family": "pitch"},
+      "2": {"family": "pitch"},
+      "3": {"family": "pitch"},
+      "4": {"family": "pitch"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 2a337ce, the head of main, which is the second commit carrying version 2.0.3. The earlier one, 1cae193, returns early from ValueDisplay::draw and CircleDisplay::draw when there is no module; the installed build instead branches to placeholder-drawing code on a null module, which is what 2a337ce changed, so that is the build that shipped. The manifest is byte for byte the installed one. Sixteen further inputs, indices 7 to 22, are declared as STEP_DEGREE_INPUT_0 to 15 and are given no PortWidget and read nowhere, so they get no line and no tag. The four CV jacks call setValue on their own knobs rather than adding to them, which the maker's manual calls motorized controls; the knob follows the cable and cannot be turned while it is patched, and it stays where the cable left it afterwards. The four voice lights are configured and set to full brightness on every clock but no LightWidget is ever added, so nothing on the panel shows them. The module defines no dataToJson, so the per-step chord qualities are lost when a patch is saved and every step reverts to the doubled root. Three things in the maker's manual disagree with the code and the code wins: the manual says a spread above half transposes the root down an octave, which nothing in process does; it gives the root CV range as 0V to 5V where the code reaches the ends of the parameter at -3V and +2V; and it names the three upper outputs as the third, fifth and extension where the code sorts and permutes the three upper pitch classes for the smallest total span and then writes them out in rising order."
+}

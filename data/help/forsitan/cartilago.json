@@ -1,0 +1,53 @@
+{
+  "plugin": "forsitan",
+  "module": "cartilago",
+  "description": "One low-frequency oscillator of four shapes driving either a transistor attenuator that never quite closes or a resonant filter, after the Gristleizer",
+  "params": [
+    {"ids": [0], "text": "Chooses the shape of the oscillator: triangle, ramp up, ramp down or pulse"},
+    {"ids": [1], "text": "Sets the oscillator's rate, a sixty-fourth of a hertz at the bottom of its travel to 128Hz at the top"},
+    {"ids": [2], "text": "Chooses what the oscillator modulates: the attenuator, or the filter"},
+    {"ids": [3], "text": "Sets how much of the oscillator reaches the control, 0% to 125%; past 100% the control flattens against its ends, which is where a tremolo starts to sound square"},
+    {"ids": [4], "text": "Sets where the modulation is centred, ±100%; with depth at zero it is a manual gain or cutoff control"},
+    {"ids": [5], "text": "Sets the symmetry of the shape, 2% to 98%: on the triangle it slides the peak, from a falling ramp through a triangle to a rising one, and on the pulse it is the duty cycle"},
+    {"ids": [6], "text": "Sets the level going into the nonlinearity, -20dB to +20dB, so the input saturates ahead of the attenuator"},
+    {"ids": [7], "text": "Sets the filter's resonance, 0% to 100%, which does nothing while the mode switch is on the attenuator"},
+    {"ids": [8], "text": "Sets the output level, 0% to 200%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to modulate, one attenuator and one filter per channel of a polyphonic cable"},
+    {"ids": [1], "text": "Moves the oscillator's rate, one volt per octave, which takes it into the audio band and beyond"},
+    {"ids": [2], "text": "Added to the depth knob, a tenth of its travel per volt; the total is held between 0% and 125%"},
+    {"ids": [3], "text": "Added to the bias knob, a fifth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [4], "text": "A voltage added to the oscillator's own output before it reaches the control, a fifth of full scale per volt"},
+    {"ids": [5], "text": "A rising edge through 1V restarts the oscillator at the beginning of its cycle"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modulated signal, on as many channels as the input carries"},
+    {"ids": [1], "text": "The oscillator itself, for driving the rest of the rack"}
+  ],
+  "notes": [
+    "the two fixed ramp shapes ignore the shape knob altogether.",
+    "there is one oscillator for the whole module, however many channels the input carries, because the original is one modulator in one box.",
+    "the attenuator never quite closes, so even at full depth some signal gets through."
+  ],
+  "menu": [
+    "Oversampling — 1× (rawest, lightest), 2× (default), 4×, 8× or 16× (cleanest); it only matters once the oscillator is in the audio band",
+    "Band-limited LFO shapes — rounds off the corners of the ramp and pulse shapes so they alias less at audio rates",
+    "FET control feedthrough (tick) — lets a little of the control voltage leak into the audio path, as the transistor in the original does, which puts a tick on each cycle",
+    "VCF mode is lowpass — makes the filter a low-pass rather than the band-pass it is otherwise"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "one channel only"
+    }
+  }
+}

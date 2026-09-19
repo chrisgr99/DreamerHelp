@@ -1,0 +1,58 @@
+{
+  "plugin": "EH_modules",
+  "module": "FV-1emu",
+  "description": "Emulation of the Spin Semiconductor FV-1 reverb and effects chip, running an assembler program loaded from a .spn file, with the chip's three control pots brought out as knobs",
+  "params": [
+    {"ids": [0], "text": "Sets the loaded program’s first control, 0 to 1; what it changes is decided by the program, and the display names it when the program comes from a bank that says"},
+    {"ids": [1], "text": "Sets the loaded program’s second control, 0 to 1; what it changes is decided by the program, and the display names it when the program comes from a bank that says"},
+    {"ids": [2], "text": "Sets the loaded program’s third control, 0 to 1; what it changes is decided by the program, and the display names it when the program comes from a bank that says"},
+    {"ids": [3], "text": "Attenuverter on the CV jack for the first control, and at its centre when the module is added, which leaves that jack doing nothing"},
+    {"ids": [4], "text": "Attenuverter on the CV jack for the second control, and at its centre when the module is added, which leaves that jack doing nothing"},
+    {"ids": [5], "text": "Attenuverter on the CV jack for the third control, and at its centre when the module is added, which leaves that jack doing nothing"},
+    {"ids": [6], "text": "Steps back one program in the loaded FX bank, or back through the .spn files in the folder the current program came from when no bank is loaded"},
+    {"ids": [7], "text": "Steps on one program in the loaded FX bank, or on through the .spn files in the folder the current program came from when no bank is loaded"},
+    {"ids": [8], "text": "Balances untreated signal against the program’s output: anticlockwise gives the untreated signal alone and stops the emulator, clockwise gives the program alone, the centre gives both at full level"},
+    {"ids": [9], "text": "Attenuverter on the DRY/WET jack, and at its centre when the module is added, which leaves that jack doing nothing"},
+    {"ids": [10], "text": "Trims the left input going into the emulator: silent fully anticlockwise, unchanged at the centre, and doubled fully clockwise"},
+    {"ids": [11], "text": "Trims the right input going into the emulator: silent fully anticlockwise, unchanged at the centre, and doubled fully clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the first control, a tenth of a unit per volt with its attenuverter fully open, on the knob's own 0 to 1 scale"},
+    {"ids": [1], "text": "Adds to the second control, a tenth of a unit per volt with its attenuverter fully open, on the knob's own 0 to 1 scale"},
+    {"ids": [2], "text": "Adds to the third control, a tenth of a unit per volt with its attenuverter fully open, on the knob's own 0 to 1 scale"},
+    {"ids": [3], "text": "The left input; with nothing patched into the right input the right channel is fed silence rather than this signal"},
+    {"ids": [4], "text": "The right input; with nothing patched into the left input the left channel is fed silence rather than this signal"},
+    {"ids": [5], "text": "Adds to the dry and wet balance, half a unit per volt with its attenuverter fully open, on the knob's own -1 to +1 scale"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel, the trimmed left input and the program's left output mixed by DRY/WET, clipped to ±10V"},
+    {"ids": [1], "text": "The right channel, the trimmed right input and the program's right output mixed by DRY/WET, clipped to ±10V"}
+  ],
+  "notes": [
+    "Clicking the display with either mouse button opens its own menu, which is where the FX bank is loaded and where the bank's programs are listed by category.",
+    "The module comes up with demo.spn, the one program shipped with the plugin, so the arrow buttons do nothing until another .spn file or an FX bank is loaded.",
+    "A bank of 157 programs is published as programs.json in the maker's repository; it is not part of the plugin and has to be fetched and loaded.",
+    "All four attenuverters are at their centre when the module is added, so none of the four CV jacks does anything until one is turned.",
+    "Each jack carries one channel, so a polyphonic cable is reduced to its first channel.",
+    "The back arrow cannot reach the first program of a bank: stepping back from the second jumps to the last instead."
+  ],
+  "menu": [
+    "Select SPN File... — opens a file chooser for one FV-1 assembler program, and the arrow buttons then step through the other .spn files in that same folder",
+    "Parser log... — writes what the assembler made of the loaded program into a file beside the plugin and opens it",
+    "Select FX-Bank... — on the display's own menu rather than the panel's: opens a file chooser for a programs.json holding many programs at once"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only"
+    }
+  }
+}

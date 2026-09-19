@@ -1,0 +1,27 @@
+{
+  "plugin": "WordGenerator",
+  "module": "WordGenerator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "1": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "2": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts"},
+      "4": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "5": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "6": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts"},
+      "7": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false},
+      "1": {"family": "trigger", "poly": false},
+      "2": {"family": "trigger", "poly": false},
+      "3": {"family": "trigger", "poly": false},
+      "4": {"family": "trigger", "poly": false},
+      "5": {"family": "trigger", "poly": false},
+      "6": {"family": "trigger", "poly": false}
+    }
+  },
+  "comment": "The maker publishes no source and gives no plugin, manual, source or changelog URL. THE FOUR AUDIO-ISH OUTPUTS ARE NAMED THE WRONG WAY ROUND. The jacks the panel prints CV A and CV B hold 10V or 0V for the whole of a step, which is a gate; the jacks it prints GATE A and GATE B emit a 1ms pulse, which is a trigger. The code is unambiguous: outputs 2 and 3 are written from the bit value directly, outputs 0 and 1 from a countdown initialised to 0.001 seconds. SECOND FAULT, in a tooltip: the Clock Rate parameter is configured with a range of -3.321928 to 9.965784 and a default of 3.321928, which are log2 of 0.1, 1000 and 10, but with a display base of 0 and a unit of ' Hz', so Rack's readout shows the exponent labelled as a frequency. Both are called out in the lines. The switches are configSwitch with printed choices: Clock Mode gives Internal and External, Mode gives 16 bit and 32 bit, Run Mode gives Auto and Single. The two Invert switches and all thirty-two bit buttons are configSwitch with no choice names at all. Every trigger jack, the clock input included, uses the same hand-written three-state edge detector that arms above 1.0 and rearms at or below 0.0, not Rack's dsp::SchmittTrigger. The 16/32 and the two invert jacks write back into their own parameters, so a trigger visibly moves the switch on the panel; that also means the setting a patch reloads with is wherever the last trigger left it. PRN substitution is redrawn for all sixteen bit positions of both words at every step boundary using rack::random::local, and it is compared against the knob-plus-CV value once per bit, so a setting of 0.5 gives a different word every cycle. Reset reseeds a 32-bit LFSR from rack::random::local, falling back to 0xABCDEF12 when that returns a zero high word. The thirty-two lamps are fed the effective word, after inversion and after PRN substitution, so a lamp can disagree with the button under it. All nine inputs are read on channel 0 only and all seven outputs are written on channel 0 only; nothing in the module calls setChannels."
+}

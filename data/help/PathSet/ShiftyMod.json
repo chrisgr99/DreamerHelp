@@ -1,0 +1,50 @@
+{
+  "plugin": "PathSet",
+  "module": "ShiftyMod",
+  "description": "Shift register for gates with a controllable delay on each of its seven rows, turning one clock or trigger into seven varied gate patterns",
+  "params": [
+    {"ids": [0], "text": "Spreads the rows in time: at 0 all seven rows hit on the same beat, at 1 each row hits one beat later than the row above it, and at 2 two beats later"},
+    {"ids": [1], "text": "Sets the chance that a row keeps its current delay value rather than rolling a new one, 0 to 100%; at 100% the pattern of delays stops changing"},
+    {"ids": [2], "text": "Sets how many clock beats pass between hits entering the shift register, 0 to 15, and how often the chance of holding a delay value is rolled"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9], "text": "Scales that row's delay voltage, from none of it to its full 16 beats, and scales the internal noise value when nothing is patched to that row's delay input"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16], "text": "Adds up to three extra hits to that row's gate, at timings that change as the knob turns and that shift again with the delay value for the row"},
+    {"ids": [17, 18, 19, 20, 21, 22, 23], "text": "Suppresses hits on that row, sweeping through 693 patterns of 24 beats, from every hit passing to no hit passing"},
+    {"ids": [24], "text": "Sets the speed of the internal clock, 10 to 5000 beats per minute; the internal clock runs only while nothing is patched to Clock"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the shift register one step on each rising edge, reading high above 2V and low below 0.1V; an internal clock runs when nothing is patched here"},
+    {"ids": [1], "text": "A rising edge puts a hit into the shift register; while this is patched the clock divider no longer makes hits of its own"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8], "text": "Sets that row's delay before the ramp is added, 0-10V spanning 16 beats and then scaled by that row's knob; unpatched, the row uses an internal noise value"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6], "text": "Carries 10V while the clock is high and that row has a hit that its mute pattern let through, and 0V otherwise"}
+  ],
+  "notes": [
+    "Bypassing this module routes the Clock input to all seven gate outputs"
+  ],
+  "menu": [
+    "Add Expander (right 8HP) — places the Shifty expander beside this module, adding a CV input and an attenuverter for most of these knobs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads the module's own internal clock.",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "3": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "4": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "5": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "6": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "7": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit.",
+      "8": "0 to 10V · stepped · one channel only\n\nunpatched it reads a fresh random value on every hit."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

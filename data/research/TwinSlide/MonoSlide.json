@@ -1,0 +1,22 @@
+{
+  "plugin": "TwinSlide",
+  "module": "MonoSlide",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/MonoSlide.cpp:138 clamp(getVoltage(),-10,10); src/SynthDSP.hpp:1462 baseCutoffHz *= pow(2,cutoffCv)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/MonoSlide.cpp:140 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/MonoSlide.cpp:141 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/MonoSlide.cpp:143 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/MonoSlide.cpp:135 accent = inputs[ACCENT_INPUT].getVoltage() >= 1.0f"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/MonoSlide.cpp:144-145 fineCv = V/5, clamp(knob+fineCv,-1,1); SynthDSP.hpp:1388 7/12 octave per unit"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/MonoSlide.cpp:146 clamp(knob + clamp(V,-10,10)*0.1, 0, 1)"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/MonoSlide.cpp:132; src/SynthDSP.hpp:1391 targetFreq = 261.626*pow(2,pitch)"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/MonoSlide.cpp:133 gate = getVoltage() >= 1.0f"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/MonoSlide.cpp:134 slide = getVoltage() >= 1.0f"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/MonoSlide.cpp:166 setVoltage(clamp(out,-10,10)); :130 process returns early while unpatched"}
+    }
+  },
+  "comment": "Every input is read with getVoltage(), so the voice is monophonic. Two places where the manual disagrees with the code: it lists the ACC jack as accent CV, where the code compares it against 1V and uses it as a gate, the accent amount coming from the ACC knob alone; and it gives the FINE jack as ±1V for ±700 cents, where the code divides the voltage by five, so the full swing needs ±5V. The manual's MonoSlide Expert Mode table also omits Bass Comp, which is the seventh slider in the submenu, and its Decay Speed column calls 6.0x the slower setting when the figure multiplies the decay rate. Panel order and index order agree throughout."
+}

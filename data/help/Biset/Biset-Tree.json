@@ -1,0 +1,53 @@
+{
+  "plugin": "Biset",
+  "module": "Biset-Tree",
+  "description": "A sequencer that grows a tree and reads a run of neighbouring branches as a sequence, five voltages coming off every step",
+  "params": [
+    {"ids": [0], "text": "Sets how much the angle of a new branch varies when a branch grows on alone"},
+    {"ids": [1], "text": "Sets how much the angles vary when a branch splits into several"},
+    {"ids": [2], "text": "Sets how strongly branches are pulled towards the sun as they grow"},
+    {"ids": [3], "text": "Sets how many branches a split makes, 1 to 4"},
+    {"ids": [4], "text": "Sets how many steps the sequence runs before it returns to its start, 1 to 64"},
+    {"ids": [5], "text": "Attenuates the LENGTH input before it is added to the LENGTH knob"},
+    {"ids": [6], "text": "Moves the starting point of the run through the tree, so a different set of branches is read"},
+    {"ids": [7], "text": "Attenuates the OFFSET input before it is added to the OFFSET knob"},
+    {"ids": [8], "text": "Sets how much of the wind pushing the branch being read is added to that branch's five voltages"},
+    {"ids": [9], "text": "Attenuates the WIND input before it is added to the WIND knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V throws the tree away and starts a new one from a single branch"},
+    {"ids": [1], "text": "A rising edge past 1V sends the sequence back to its first step"},
+    {"ids": [2], "text": "A rising edge past 1V moves the sequence on one step and writes new voltages to the five outputs"},
+    {"ids": [3], "text": "Shifts the sequence length, 10V covering the whole of the 1 to 64 range at full attenuation; the total is held inside it"},
+    {"ids": [4], "text": "Moves the starting point of the run through the tree, 10V covering the whole tree at full attenuation"},
+    {"ids": [5], "text": "Shifts how much wind is added, 10V covering the whole of the WIND knob's travel at full attenuation; the total is held between none of it and all of it"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4], "text": "One of the five voltages held by the branch the sequence is reading, -5V to +5V, changing only when a clock arrives"}
+  ],
+  "notes": [
+    "the five outputs change only when a rising edge arrives at CLOCK; with no clock patched the tree grows and nothing comes out.",
+    "the tree keeps growing while the patch runs, up to 1024 branches, so the same OFFSET setting reaches different branches as it fills out.",
+    "the wind blows on its own and is strongest on the small branches, so a run taken from further out changes more from step to step."
+  ],
+  "menu": [
+    "Branch mutation chance — sets the chance that the branch being read is given new random values each time the sequence reaches it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V · one channel only",
+      "2": "±5V · one channel only",
+      "3": "±5V · one channel only",
+      "4": "±5V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "plugin": "HarmonicAnomalies",
+  "module": "HexNut",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "why": "HexNut.cpp line 135, inputs[INPUT_INPUT].getVoltage() taken straight into setVoltage with no scaling or clamp"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "HexNut.cpp line 139, setVoltage of whatever the tile holds, with no scaling"}
+    }
+  },
+  "comment": "Read from the repository at commit 9f2eacb, whose plugin.json carries the installed 2.0.2 and the three installed modules; the repository's head adds a fourth module, Repeat, that this build does not have. The buffer length of 21931 tiles is the maker's own figure in Hex.hpp line 98 for a radius of 86, which is what HexNut is built with, and at the usual sample rate that is close to half a second. Parameter 4 is the grain size, declared on HexNut because HexaGrain inherits from it, but HexNut's widget never adds it: it has no position, cannot be clicked and gets no line. The input and the output carry no family: the module writes and reads plain samples and is used for audio and for control voltages alike. Both are read and written a single channel at a time, with getVoltage and setVoltage. There is no clock and no trigger: the heads advance by the knob values on every sample, so the loop time is set by how fast the heads are moving rather than by a tempo. The panel prints CLIP where the parameter is named Crop and SPREAD where it is named Read Ring Radius; the panel wins. The two mode controls are three-position switches driven by a plain parameter running 1 to 3, so their tooltip shows a number rather than the mode name."
+}

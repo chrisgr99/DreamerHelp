@@ -1,0 +1,25 @@
+{
+  "plugin": "forsitan",
+  "module": "guttur",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/guttur.cpp:557-559, the voltage times the DRIVE attenuverter is added straight to the 0 to 10 drive knob with no further scaling, then clamped to 0 to 10"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/guttur.cpp:562-564, the voltage times the TONE attenuverter times 0.1 is added to the 0..1 tone knob, which maps exponentially over four decades; nothing reads the result while the audio forcing jack is patched"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/guttur.cpp:566-568, the voltage times the DAMP attenuverter times 0.1 is added to the 0..1 damping knob, which maps exponentially over four decades"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/guttur.cpp:570-572, the voltage times the RATE attenuverter is added straight to the 0 to 10 rate knob with no tenth-scaling, then clamped to 0 to 10"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/guttur.cpp:547-551 and 586, bankRow() takes the bank A knob minus one plus the voltage times 1.9, rounds it and clamps to 0..19, so 0-10V spans the twenty rows"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/guttur.cpp:547-551 and 587, bankRow() takes the bank B knob minus one plus the voltage times 1.9, rounds it and clamps to 0..19, so 0-10V spans the twenty rows"},
+      "6": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/guttur.cpp:591, the pitch multiplier is multiplied by 2 to the power of the voltage, which is one volt per octave"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/guttur.cpp:419, added to the exponential resonance parameter"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/guttur.cpp:420, added to the 0 to 2 bank gain"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/guttur.cpp:421, added to the 0 to 2 bank gain"},
+      "10": {"family": "audio", "poly": false, "range": "±10V", "normal": "the internal forcing sine", "why": "src/guttur.cpp:583 and 650, patching the jack sets enableAudioInput, and :219-221 then forces the Duffing oscillator with getVoltage() times 0.2 in place of the internal sine, leaving TONE unread"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/guttur.cpp:423, a reset trigger read as a rising edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/guttur.cpp:424 and doc/guttur.md, the filter sum DC blocked, about ±5V and hard limited at ±10V"},
+      "1": {"family": "cv", "poly": false, "why": "src/guttur.cpp:425, the chaotic state after the distortion, clamped and DC blocked"}
+    }
+  },
+  "comment": "Only the four chaos knobs have attenuverters; the six resonator CV jacks go straight in. The smooth knob has no jack at all. The forcing sine's frequency is the tone knob times the rate knob, so those two multiply into one figure. The bank gains and the level knob together set the total feedback gain, which is why turning them down can stop the module sounding altogether. configBypass passes the audio input to the audio output. The module ports Tom Mudd's Gutter Synthesis under GPL-3.0, also drawing on Kjeldgaard and Carver's SuperCollider port. The panel prints guttur, drive, tone, damp, rate, smooth, filters, bank a, bank b, pitch, q, spread, level, gain a, gain b, dist, reset, in, out and duff."
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "ZZC",
+  "module": "FN-3",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "the PWM knob alone", "why": "FN.cpp:249 getVoltageSimd/10 + pwParam, clamp(0,1)"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the SHIFT knob alone", "why": "FN.cpp:266 getVoltageSimd<float_4>(c) / -5.f + shiftParam"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "a phase held at the SHIFT setting", "why": "FN.cpp:279 getVoltageSimd<float_4>(c) / 10.f, wrapped"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "FN.cpp:307-309 setVoltageSimd then setChannels(channels)"}
+    }
+  },
+  "comment": "The sum of knob and CV is clamped to 0-1 for the pulse width (FN.cpp:250) but not for the phase offset, which is wrapped into a single turn instead (FN.cpp:280). The knob is snapped to hundredths, with extra detents at a third and two thirds in both directions (FN.cpp:168-180)."
+}

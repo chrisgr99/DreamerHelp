@@ -1,0 +1,23 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Velamina",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "velamina.cpp:127 reads this input four channels at a time and velamina.cpp:103 takes the module's channel count from the largest getChannels() of the four signal inputs"},
+      "1": {"poly": true, "step": "continuous", "why": "velamina.cpp:127 reads this input four channels at a time and velamina.cpp:103 takes the module's channel count from the largest getChannels() of the four signal inputs"},
+      "2": {"poly": true, "step": "continuous", "why": "velamina.cpp:127 reads this input four channels at a time and velamina.cpp:104 takes the module's channel count from the largest getChannels() of the four signal inputs"},
+      "3": {"poly": true, "step": "continuous", "why": "velamina.cpp:127 reads this input four channels at a time and velamina.cpp:104 takes the module's channel count from the largest getChannels() of the four signal inputs"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "sumRange": "0 to 8V", "why": "velamina.cpp:119 multiplies this input by the slider, adds the offset knob and clamps the total to 0..8 before dividing by 5"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "sumRange": "0 to 8V", "why": "velamina.cpp:119 multiplies this input by the slider, adds the offset knob and clamps the total to 0..8 before dividing by 5"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "sumRange": "0 to 8V", "why": "velamina.cpp:119 multiplies this input by the slider, adds the offset knob and clamps the total to 0..8 before dividing by 5"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "sumRange": "0 to 8V", "why": "velamina.cpp:119 multiplies this input by the slider, adds the offset knob and clamps the total to 0..8 before dividing by 5"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "velamina.cpp:141 writes four channels at a time and velamina.cpp:191 sets the channel count"},
+      "1": {"poly": true, "why": "velamina.cpp:141 writes four channels at a time and velamina.cpp:191 sets the channel count"},
+      "2": {"poly": true, "why": "velamina.cpp:141 writes four channels at a time and velamina.cpp:191 sets the channel count"},
+      "3": {"poly": true, "why": "velamina.cpp:141 writes four channels at a time and velamina.cpp:191 sets the channel count"}
+    }
+  },
+  "comment": "This is a rewrite rather than a port: src/velamina.cpp implements the revised Veils behaviour directly on Rack's SIMD accessors, and the maker cites the gain curve graph the hardware manual points at. The signal jacks are left without a family because an amplifier carries whatever you patch into it. The gain is worked out two different ways: with a cable at the channel's CV jack, velamina.cpp:119 computes the CV times the slider plus the offset, clamps that to 0..8, divides by 5 and raises it to a power set by the response knob; with no cable, velamina.cpp:123 uses the slider plus the offset with no division at all, so the offset knob's 5V worth of range is added straight to a gain of at most 1 and the channel can reach a gain of six. The manual says the offset applies to the modulation and not to the signal, which holds only while a CV cable is present. The chaining is done by clearing the running sum only when a channel's output is connected, at velamina.cpp:141."
+}

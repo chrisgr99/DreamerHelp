@@ -1,0 +1,18 @@
+{
+  "plugin": "Submit",
+  "module": "Sweep",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sweep.cpp:149 uses isConnected, divides getVoltage by 10 and adds it to the knob, clamped to 0 to 1"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sweep.cpp:150 uses isConnected, divides getVoltage by 10 and adds it to the knob, clamped to 0 to 1"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sweep.cpp:134 uses isConnected and compares getVoltage against 1V"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Sweep.cpp:157 reads getVoltage"},
+      "4": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input", "why": "Sweep.cpp:158 uses isConnected to fall back to the left input"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Sweep.cpp:188 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "why": "Sweep.cpp:189 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "Reset writes to the Sweep parameter (Sweep.cpp:144), so it drags the knob back to centre rather than overriding it internally. Anything else driving that parameter, including Rack's own parameter automation, is fighting it.\n\nThe reset button and the three CV jacks carry no lettering on the panel. The maker's tooltips name them Reset, Sweep CV, Resonance CV and Reset CV.\n\nThe manual says Reset 'returns the filter to its reset position' without saying that the reset position is the centre bypass, or that the knob moves.\n\nBoth halves of the sweep run 20Hz to 20000Hz, so the centre is the open end of both filters, not a crossover (Sweep.cpp:169-186)."
+}

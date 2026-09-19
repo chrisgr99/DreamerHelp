@@ -1,0 +1,38 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SPF",
+  "description": "A Steiner Parker filter with three ways in, one for each of lowpass, bandpass and highpass, mixed into a single output",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff frequency, 16Hz to 16384Hz as a power of two"},
+    {"ids": [1], "text": "Attenuates the voltage at the Freq jack before it is added to the Freq knob, 0 to 100 per cent"},
+    {"ids": [2], "text": "Sets the resonance, 0 to 2; the higher it is the less the filter is damped and the harder it rings at the cutoff"},
+    {"ids": [3], "text": "Attenuates the voltage at the R jack before it is added to the R knob, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be filtered lowpass, one per channel"},
+    {"ids": [1], "text": "The signal to be filtered bandpass, one per channel"},
+    {"ids": [2], "text": "The signal to be filtered highpass, one per channel"},
+    {"ids": [3], "text": "Modulates the resonance, a fifth per volt scaled by the R CV knob"},
+    {"ids": [4], "text": "Modulates the cutoff, one octave per volt scaled by the Freq CV knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The three filtered signals added together"}
+  ],
+  "notes": [
+    "the three inputs are the three ways into one filter rather than three separate filters, so patching the same signal into two of them mixes those responses",
+    "the cutoff is held between 2Hz and a third of the sample rate however far the knob and the jack push it",
+    "the channel count of the output is that of whichever of the three inputs carries the most channels"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1.999V.",
+      "4": "1V per octave · continuous · polyphonic\n\nunpatched it reads the Freq knob alone; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

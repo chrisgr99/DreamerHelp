@@ -1,0 +1,94 @@
+{
+  "plugin": "MADZINE",
+  "module": "UniRhythm",
+  "description": "Four-role rhythm generator: each role has two voices but one set of outputs, carrying whichever fired last, with a three-band isolator, drive and a poly cable for Portal",
+  "params": [
+    {"ids": [0, 5, 10, 15], "text": "Chooses the style that role's pattern is built from: W.African, Afro-Cuban, Brazilian, Balkan, Indian, Gamelan, Jazz, Electronic, Breakbeat or Techno"},
+    {"ids": [1, 6, 11, 16], "text": "Sets how busy that role's pattern is, 0% to 90%"},
+    {"ids": [2, 7, 12, 17], "text": "Sets how many steps that role's pattern runs for, 4 to 32"},
+    {"ids": [3, 8, 13, 18], "text": "Shifts the pitch of that role's voices, one octave down fully anticlockwise to one octave up fully clockwise"},
+    {"ids": [4, 9, 14, 19], "text": "Multiplies the decay of that role's voices, a fifth of the style's own length at the bottom of its travel to twice it at the top"},
+    {"ids": [20], "text": "Sets how far the patterns are allowed to drift from the straight style template each time round, 0% to 100%"},
+    {"ids": [21], "text": "Sets how far each hit is nudged off the grid in time and in level, 0% to 100%"},
+    {"ids": [22], "text": "Delays the off-beats, 0% for an even grid and 100% for the widest shuffle"},
+    {"ids": [23], "text": "Sets what share of the hits are dropped as rests, 0% to 100%"},
+    {"ids": [24], "text": "Sets how heavy a fill is when one is called for, 0% to 100%; at zero the fill jack does nothing"},
+    {"ids": [25], "text": "Shortens or lengthens the gates, 0% to 100%"},
+    {"ids": [28], "text": "Sets how far apart the four roles are placed in the stereo mix, all in the centre at 0% and at their full fixed spread at 100%"},
+    {"ids": [29], "text": "Builds a fresh set of patterns for every role from their current style, density and length settings"},
+    {"ids": [30], "text": "Returns every role to the start of its pattern"},
+    {"ids": [31, 32, 33, 34], "text": "Crossfades that role between the drums built into the module and whatever is patched into its EXT IN jack, 0% for the synthesised drums and 100% for the patched signal"},
+    {"ids": [35], "text": "Cuts or lifts everything below 250Hz in the stereo mix: silence fully anticlockwise, unchanged in the middle, four times over fully clockwise"},
+    {"ids": [36], "text": "Cuts or lifts everything between 250Hz and 4000Hz in the stereo mix: silence fully anticlockwise, unchanged in the middle, four times over fully clockwise"},
+    {"ids": [37], "text": "Cuts or lifts everything above 4000Hz in the stereo mix: silence fully anticlockwise, unchanged in the middle, four times over fully clockwise"},
+    {"ids": [38], "text": "Saturates the stereo mix, 0% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V advances the patterns by one, two or four steps, according to the pulses-per-beat figure set on the menu"},
+    {"ids": [1], "text": "A rising edge above 1V returns every role to the start of its pattern"},
+    {"ids": [2], "text": "A rising edge above 1V builds a fresh set of patterns for every role"},
+    {"ids": [3], "text": "Added to the REST knob, ten points per volt"},
+    {"ids": [4], "text": "A rising edge above 1V rebuilds the patterns as a fill of the weight set by the FILL knob"},
+    {"ids": [5, 9, 13, 17], "text": "Added to that role's STYLE knob, one style per volt"},
+    {"ids": [6, 10, 14, 18], "text": "Added to that role's DENSITY knob, ten points per volt"},
+    {"ids": [7, 11, 15, 19], "text": "Added to that role's FREQ knob, a fifth of an octave per volt"},
+    {"ids": [8, 12, 16, 20], "text": "Added to that role's DECAY knob, 0.18 of the multiplier per volt"},
+    {"ids": [21, 23, 25, 27], "text": "A signal for that role's first voice to play in place of its own drum, gated by that voice's envelope and scaled by its velocity"}
+  ],
+  "outputs": [
+    {"ids": [0, 4, 8, 12], "text": "That role's audio, whichever of its two voices fired last, at the crossfade set by its MIX knob"},
+    {"ids": [1, 5, 9, 13], "text": "A 10V gate for the length of that role's hit"},
+    {"ids": [2, 6, 10, 14], "text": "That role's pitch as one volt per octave, with 0V standing for C4"},
+    {"ids": [3, 7, 11, 15], "text": "That role's velocity as an envelope, 0V to 10V"},
+    {"ids": [16], "text": "The left side of the four roles panned apart by SPREAD, through the isolator and the drive, soft-clipped to ±5V"},
+    {"ids": [17], "text": "The right side of the four roles panned apart by SPREAD, through the isolator and the drive, soft-clipped to ±5V"},
+    {"ids": [18], "text": "All four roles on one sixteen-channel cable: four channels per role carrying audio, gate, pitch and velocity envelope in that order, ready for a Portal"}
+  ],
+  "notes": [
+    "nothing steps until a clock reaches CLOCK. Patterns are built as soon as the module is placed, so REGEN is for changing them rather than for starting.",
+    "each role runs two voices but has one audio output, which carries whichever of the two struck most recently. There is no way to hear them separately.",
+    "the second external audio input of every role is declared but has no jack on the panel, so only the first voice of a role can be fed from outside."
+  ],
+  "menu": [
+    "Clock PPQN — how many clock pulses make one beat: 1 PPQN (Quarter note), 2 PPQN (8th note) or 4 PPQN (16th note); the lower the figure, the more steps each clock advances",
+    "Random Exclusive — a submenu with a tick per role; a ticked role is left alone when the module is randomised"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "±5V · continuous · one channel only",
+      "8": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "21": "±10V · continuous · one channel only",
+      "23": "continuous",
+      "25": "continuous",
+      "27": "continuous"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "continuous",
+      "5": "stepped",
+      "6": "1V per octave · continuous",
+      "7": "0 to 10V",
+      "8": "continuous",
+      "9": "stepped",
+      "10": "1V per octave · continuous",
+      "11": "0 to 10V",
+      "12": "continuous",
+      "13": "stepped",
+      "14": "1V per octave · continuous",
+      "15": "0 to 10V",
+      "16": "±5V · continuous · one channel only",
+      "17": "±5V · continuous · one channel only",
+      "18": "polyphonic"
+    }
+  }
+}

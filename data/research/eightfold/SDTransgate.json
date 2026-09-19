@@ -1,0 +1,22 @@
+{
+  "plugin": "eightfold",
+  "module": "SDTransgate",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "why": "src/SDTransgate.cpp:104 tests getVoltage() against 0 with no channel index, and line 103 uses getChannels() only to decide whether this jack takes over from GATES"},
+      "8": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "why": "src/SDTransgate.cpp:105 reads getVoltage(i) per channel and line 97 takes the last channel's value as the fallback for channels past the end"},
+      "9": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "normal": "0V on every channel", "why": "src/SDTransgate.cpp:113 reads getVoltage(i) per channel and adds the knob divided by 12, which is a semitone at a volt per octave; line 93 supplies the last channel for channels past the end"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "why": "src/SDTransgate.cpp:118 calls setChannels(8) and line 115 writes one voltage per channel"}
+    }
+  },
+  "comment": "configSwitch at src/SDTransgate.cpp:60 gives ALL_ON_PARAM the choice names {\"On\", \"Off\"} in that order, so value 0 reads as On and value 1 as Off; process() at line 100 turns every gate on when the value is 1, the position the tooltip calls Off. The names are therefore the wrong way round and the switch's line says so. An individual gate jack takes priority through getChannels() rather than isConnected(), which is the same test. The transpose knobs are snapped to whole semitones (src/SDTransgate.cpp:65)."
+}

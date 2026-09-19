@@ -1,0 +1,54 @@
+{
+  "plugin": "LoudNumbers",
+  "module": "LoudNumbers",
+  "description": "Plays a column of numbers from a CSV file: each trigger steps to the next value in the column and puts it out as three voltages and a gate",
+  "params": [
+    {"ids": [0], "text": "Sets how many octaves the V/OCT output spans, 1 to 8; from 1 to 3 octaves the span rises from 0V, and from 4 octaves up the top of the span is fixed at +4V and the extra octaves are added below it"},
+    {"ids": [1], "text": "Sets how long the gate is held high for each value played, from 1ms to 1 second"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here plays the next value in the column, moving the three voltage outputs to it and firing a gate"},
+    {"ids": [1], "text": "A trigger here returns the playhead to the first value without playing it; the voltage outputs hold what they had, and the next trigger at TRIG plays that first value"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10ms trigger fired as the last value in the column plays; patched back to RESET it loops the data with no gap"},
+    {"ids": [1], "text": "The value played, scaled so that the smallest number in the column gives -5V and the largest gives +5V"},
+    {"ids": [2], "text": "The value played, scaled so that the smallest number in the column gives 0V and the largest gives 10V"},
+    {"ids": [3], "text": "The value played as a pitch, scaled across the octave span set by RANGE"},
+    {"ids": [4], "text": "A 10V gate for each value played, held for the time set by LENGTH; a missing value in the column fires no gate"}
+  ],
+  "notes": [
+    "a new module is loaded with a built-in series of 64 yearly global temperature figures, so it plays something before any file is chosen",
+    "to play your own numbers, right-click and choose Load CSV, then right-click again and choose a column from the list at the foot of the menu",
+    "the file needs one header row of column names, and only columns with at least one number in them can be chosen; the rest are greyed out in the menu",
+    "a blank or non-numeric cell becomes a gap: that step fires no gate and the voltage outputs hold their last value, so it is heard as a silence",
+    "nothing advances without a trigger at TRIG; the module has no clock of its own",
+    "hovering the chart highlights the value under the cursor, and a left-click cues it, so the next trigger plays that value and play carries on from there",
+    "a right-click on the chart opens the module's menu rather than cueing anything",
+    "a hollow circle on the chart marks the value cued to play next, and a filled circle marks the one most recently played",
+    "with no reset patched the circle disappears once the playhead has run past the last value, and nothing plays until a reset arrives",
+    "the chosen column is saved inside the patch, up to 10000 values, so the patch plays even where the file has been moved or deleted",
+    "while the patch is playing that saved copy, the column list and the delimiter choice cannot be changed until a reload from disk succeeds",
+    "the chart prints CSV file not found where the file has gone, and Invalid CSV where the file is there but cannot be read as data; while either is shown the module produces nothing at all"
+  ],
+  "menu": [
+    "Load CSV — opens a file browser for a csv, tsv or txt file and selects the first column in it that holds numbers",
+    "Reload CSV from disk — reads the file again, keeping the chosen column by matching its name, so an edit to the file is picked up; it is offered once a file has been loaded",
+    "Delimiter: Detect automatically, Comma, Tab, Semicolon, Custom — sets the character that separates the columns and reads the file again with it, which gives a different set of columns",
+    "Detect automatically — counts commas, tabs, semicolons and pipes in the first line of the file and takes the commonest as the separator; it is in the Delimiter submenu",
+    "Custom character, then Enter: — a box in the Delimiter submenu taking any single character as the separator, applied when you press Enter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±5V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

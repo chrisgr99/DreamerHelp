@@ -1,0 +1,31 @@
+{
+  "plugin": "MADZINE",
+  "module": "WeiiiDocumenta",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/weiiidocumenta.cpp:788, a single getVoltage() written into the recording buffer"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "normal": "the left input", "why": "src/weiiidocumenta.cpp:789-790, unpatched, inputR is set to inputL"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:841-847, scanValue += getVoltage()/10 * atten, then clamp(0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:595-601, thresholdValue += getVoltage()*atten, then clamp(0, 10)"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:610-616, feedbackValue += getVoltage()/10 * atten, then clamp(0, 1)"},
+      "5": {"family": "cv", "poly": false, "sumRange": "±8V", "step": "continuous", "negative": "swings", "why": "src/weiiidocumenta.cpp:907-911, playbackSpeed += getVoltage(), then clamp(-8, 8)"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:660-664, polyValue += getVoltage()/10 * 7, then clamp(1, 8) and round"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:1196-1201, shGain += getVoltage()*0.5*atten, then clamp(0, 5)"},
+      "8": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "why": "src/weiiidocumenta.cpp:1161-1166, the log2 rate += getVoltage()*atten, then clamped, so one volt doubles the rate"},
+      "9": {"family": "audio", "poly": false, "range": "±10V", "why": "src/weiiidocumenta.cpp:1109-1115, the left signal ahead of the equaliser is put out at SEND L and, while this jack is patched, replaced by what arrives here, inside the feedback path"},
+      "10": {"family": "audio", "poly": false, "range": "±10V", "why": "src/weiiidocumenta.cpp:1110-1118, the right signal ahead of the equaliser is put out at SEND R and, while this jack is patched, replaced by what arrives here, inside the feedback path"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/weiiidocumenta.cpp:624, the jack voltage is added to the button and read by a SchmittTrigger at Rack's defaults"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/weiiidocumenta.cpp:643-645, the jack voltage is added to the button and read by a SchmittTrigger"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/weiiidocumenta.cpp:717-722, the jack voltage is added to the button and tested against 0.5V, held rather than edge-triggered"},
+      "14": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/weiiidocumenta.cpp:1245, getVoltage() >= 1.0f, a level rather than an edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/weiiidocumenta.cpp:1238, the output after the equaliser, with no clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "why": "src/weiiidocumenta.cpp:1206-1213, the held value times the gain, clamped to ±10"},
+      "3": {"family": "audio", "poly": false, "why": "src/weiiidocumenta.cpp:1109, the output before the return and the equaliser, with no clamp"},
+      "4": {"family": "audio"}
+    }
+  },
+  "comment": "Parameter 4, Loop End Point, has no ParamWidget: it is the blue line on the waveform display and is dragged there (src/weiiidocumenta.cpp:2140-2175), so it gets no line, no tag and no props and is covered by a Note. The threshold attenuverter parameter is not an attenuverter at all: it is named 'Min Slice Time' and sets the minimum gap between slice points, 1ms to 1 second, while the panel prints 'min slice time' under it (src/weiiidocumenta.cpp:389). The maker's tooltip name for it, Min Slice Time, matches what it does; the enum name THRESHOLD_CV_ATTEN_PARAM does not. The threshold CV jack therefore has no attenuator of its own and goes in at one volt of threshold per volt. The STOP button and its jack are held rather than edge-triggered: two seconds of hold empties the buffer. The CHAOS button and its gate jack both morph while held and release when let go. The send jacks carry the signal before the equaliser, and a cable in a return jack replaces that side outright rather than mixing, which makes the pair an insert. The sample-and-hold is fed from the module's own feedback signal rather than from any jack. The panel prints REC, PLAY/LOOP, STOP with '(2Sec for Clear)' under it, HIGH, MID, LOW, SEND, RETURN, THRSH, 'min slice time', SCAN, FDBK, CHAOS, SLEW, AMT, RATE, S&H, I/L, I/R, SPEED, POLY, O/L and O/R. Lettering is drawn in code at src/weiiidocumenta.cpp:2291-2445."
+}

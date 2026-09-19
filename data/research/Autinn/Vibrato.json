@@ -1,0 +1,16 @@
+{
+  "plugin": "Autinn",
+  "module": "Vibrato",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "Vibrato.cpp:89 takes getChannels() on this input and Vibrato.cpp:116 reads channel c with getPolyVoltage"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Vibrato.cpp:113 reads channel c of this input with getPolyVoltage when it carries more than one channel; Vibrato.cpp:119 clamps the knob-plus-input total to 0.001 to 0.020 seconds"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Vibrato.cpp:112 reads channel c of this input with getPolyVoltage when it carries more than one channel; Vibrato.cpp:118 clamps the knob-plus-input total to 1 to 20Hz"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Vibrato.cpp:114 reads channel c of this input with getPolyVoltage when it carries more than one channel; Vibrato.cpp:120 clamps the knob-plus-input total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Vibrato.cpp:90 sets this output's channel count from the audio input"}
+    }
+  },
+  "comment": "The three attenuators each span 0 to 0.2 and are multiplied by the full parameter range (Vibrato.cpp:96 to :98), which is why 5V covers the whole range at maximum in all three cases. The delay is read from a 16384-sample ring buffer with third-order B-spline interpolation (Vibrato.cpp:174 to :178) and the tap runs from 4 samples to twice the depth plus 4 (Vibrato.cpp:145). The output is the delayed sample plus the input times the flanger amount, with no feedback (Vibrato.cpp:180)."
+}

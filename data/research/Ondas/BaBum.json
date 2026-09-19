@@ -1,0 +1,26 @@
+{
+  "plugin": "Ondas",
+  "module": "BaBum",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "BaBum.cpp BaBum::process: read twice with getVoltage() and no channel argument, as clamp(getVoltage() / 10.f, 0.f, 1.f) added to the kick tune knob, and unclamped as `params[TUNEHH_PARAM] + inputs[TUNEBD_INPUT].getVoltage() * 1000` for the hi-hat filter cutoff, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "sumRange": "0 to 1V", "why": "BaBum.cpp BaBum::process: clamp(getVoltage() / 10.f, 0.f, 1.f) added to the snare tune knob and the total clamped to 0 to 1, with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "2": {"why": "BaBum.cpp: TUNEHH_INPUT has an enum entry, a configInput name and a panel jack, but process() never reads inputs[TUNEHH_INPUT], commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "sumRange": "0 to 1V", "why": "BaBum.cpp BaBum::process: clamp(getVoltage() / 10.f, 0.f, 1.f) added to the FX tune knob and the total clamped to 0 to 1, with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "BaBum.cpp BaBum::process: setVoltage(mix * 10.f * pgenState) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "BaBum.cpp BaBum::process: setVoltage(mix * 10.f * pgenState) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "BaBum.cpp BaBum::process: setVoltage(mix * 10.f * pgenState) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "BaBum.cpp BaBum::process: setVoltage(mix * 10.f * pgenState) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "why": "BaBum.cpp BaBum::process: setVoltage(mix * 10.f * pgenState) with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "5": {"family": "audio"}
+    }
+  },
+  "comment": "The jack the panel puts in the hi-hat column is dead: TUNEHH_INPUT is never read. The hi-hat highpass cutoff is instead `params[TUNEHH_PARAM].getValue() + inputs[TUNEBD_INPUT].getVoltage() * 1000`, so the kick's tune jack moves it. PARAMHH_PARAM is declared but never configured and has no widget, so there is no hi-hat drive knob. The FX drive knob is configured 1 to 49 but clamped to 1 to 10 in use. LENGTHS_PARAM maps both hi-hat parts to LENGTHHH_PARAM, so one knob sets both. The manual trigger buttons are rate-limited to sampleRate / 4 while held; CV triggers are not rate-limited, because the guard tests the button's own previous value. The mix output is the sum of the parts divided by the sum of the mix knobs, times 1.5, so it is an average rather than a sum."
+}

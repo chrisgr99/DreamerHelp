@@ -1,0 +1,25 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "SigMod",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "SEQMod.cpp:188 reads this input with getVoltage() and no channel loop; SEQMod.cpp:188 puts it through a Schmitt trigger at its default 1V threshold"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "SEQMod.cpp:179 reads this input with getVoltage() and no channel loop; SEQMod.cpp:179 puts it through a Schmitt trigger at its default 1V threshold"},
+      "2": {"poly": false, "why": "SEQMod.cpp:100 reads this input with getVoltage() and no channel loop"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:155 reads this input with getVoltage() and no channel loop; SEQMod.cpp:155 uses it as a value"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:158 reads this input with getVoltage() and no channel loop; SEQMod.cpp:158 uses it as a value"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:161 reads this input with getVoltage() and no channel loop; SEQMod.cpp:161 uses it as a value"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:164 reads this input with getVoltage() and no channel loop; SEQMod.cpp:164 uses it as a value"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:167 reads this input with getVoltage() and no channel loop; SEQMod.cpp:167 uses it as a value"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:170 reads this input with getVoltage() and no channel loop; SEQMod.cpp:170 uses it as a value"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:173 reads this input with getVoltage() and no channel loop; SEQMod.cpp:173 uses it as a value"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:176 reads this input with getVoltage() and no channel loop; SEQMod.cpp:176 uses it as a value"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "why": "SEQMod.cpp:152 reads this input with getVoltage() and no channel loop; SEQMod.cpp:152 uses it as a value"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "SEQMod.cpp:183 writes this output with setVoltage() and it never calls setChannels(), so it carries one channel"},
+      "1": {"family": "cv", "poly": true, "why": "SEQMod.cpp:202 sets this output's channel count"}
+    }
+  },
+  "comment": "The README writes the decision as !(v1<Cmp1 XOR v2<Cmp2) XOR v3<Cmp3 and describes the menu as inverting a 'less than' test; the installed code compares with 'at or above' and takes !(b1 XOR b2) XOR b3 from those results, which is the same shape with the sense of each test turned around. The README does not mention the Mod/SR/Seq switch, the PosO knob or the SR output, which are all in this build. The In jack carries whatever signal you patch, so it has no family. The CV output carries one channel. SEQMod.cpp:183 writes sixteen channels of it in a loop but the module never calls setChannels() on it, so only the first reaches a cable."
+}

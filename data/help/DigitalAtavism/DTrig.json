@@ -1,0 +1,30 @@
+{
+  "plugin": "DigitalAtavism",
+  "module": "DTrig",
+  "description": "Takes a trigger in and puts one out again after a delay, as a gate of its own length",
+  "params": [
+    {"ids": [0], "text": "Sets how long after the incoming trigger the output fires, from 1.5ms to 2 seconds"},
+    {"ids": [1], "text": "Sets how long the output gate stays high, from 1ms to 1000ms; the panel prints TIME while the maker's tooltip calls it Gate time"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Doubles the delay set by the DLAY knob per volt and halves it per volt below zero, up to a ceiling of 5 seconds"},
+    {"ids": [1], "text": "Starts the delay when it rises past 2V, and has to fall back below 0.1V before it will start another"},
+    {"ids": [2], "text": "Doubles the gate length set by the TIME knob per volt and halves it per volt below zero, held between 1ms and 5 seconds"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Goes to 10V when the delay runs out and stays there for the gate length, then returns to 0V"}
+  ],
+  "notes": [
+    "Retriggering during a delay can only lengthen it: a new delay is written in only when it is longer than the time left to run, and the gate length works the same."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "unipolar · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "plugin": "BlackNoiseModular",
+  "module": "Cosmos",
+  "description": "An analogue logic module: it takes two voltages and puts out their maximum, minimum, through-zero clip, mean and difference, each also inverted, and a gate and a trigger for each logic pair",
+  "params": [
+    {"ids": [0], "text": "Feeds the X side with a voltage while the pad is held, more of it nearer the middle of the pad; the maximum is the Pad max presssure slider on the context menu, 5V until changed"},
+    {"ids": [1], "text": "Feeds the Y side with a voltage while the pad is held, more of it nearer the middle of the pad; the maximum is the Pad max presssure slider on the context menu, 5V until changed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The X side of every function on the panel, and it takes over from the X pad as soon as a cable is patched"},
+    {"ids": [1], "text": "The Y side of every function on the panel, and it takes over from the Y pad as soon as a cable is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while X and Y are further apart than the gate threshold and 0V otherwise, the gate that the through-zero clipper makes"},
+    {"ids": [1], "text": "A 1ms pulse at 10V each time the XOR gate goes high"},
+    {"ids": [2], "text": "The through-zero clipper: X clipped to the size of Y, then turned upside down while Y is positive"},
+    {"ids": [3], "text": "10V while the larger of X and Y is above the gate threshold, and 0V otherwise"},
+    {"ids": [4], "text": "10V while the smaller of X and Y is above the gate threshold, and 0V otherwise"},
+    {"ids": [5], "text": "Whichever of X and Y is larger at each instant, which is the analogue OR"},
+    {"ids": [6], "text": "Whichever of X and Y is smaller at each instant, which is the analogue AND"},
+    {"ids": [7], "text": "The mean of X and Y, that is half their sum"},
+    {"ids": [8], "text": "A 1ms pulse at 10V each time the OR gate goes high"},
+    {"ids": [9], "text": "Carries X itself, whether it came from the X input or the X pad"},
+    {"ids": [10], "text": "Carries Y itself, whether it came from the Y input or the Y pad"},
+    {"ids": [11], "text": "A 1ms pulse at 10V each time the AND gate goes high"},
+    {"ids": [12], "text": "A 1ms pulse at 10V each time the NOR gate goes high, which is each time the OR gate falls"},
+    {"ids": [13], "text": "Carries X with its sign turned round"},
+    {"ids": [14], "text": "Carries Y with its sign turned round"},
+    {"ids": [15], "text": "A 1ms pulse at 10V each time the NAND gate goes high, which is each time the AND gate falls"},
+    {"ids": [16], "text": "Half the difference between X and Y, positive while X is the larger"},
+    {"ids": [17], "text": "Whichever of X and Y is larger, with its sign turned round"},
+    {"ids": [18], "text": "Whichever of X and Y is smaller, with its sign turned round"},
+    {"ids": [19], "text": "0V while the larger of X and Y is above the gate threshold, and 10V otherwise"},
+    {"ids": [20], "text": "0V while the smaller of X and Y is above the gate threshold, and 10V otherwise"},
+    {"ids": [21], "text": "The through-zero clipper with its sign turned round"},
+    {"ids": [22], "text": "0V while X and Y are further apart than the gate threshold, and 10V otherwise"},
+    {"ids": [23], "text": "A 1ms pulse at 10V each time the XNOR gate goes high, which is each time the XOR gate falls"}
+  ],
+  "notes": [
+    "with nothing patched to X or Y those sides read 0V, so the whole panel reads 0V until a cable arrives or a pad is pressed",
+    "the number of polyphonic channels comes from whichever of X and Y carries more, and every output carries that many; past one channel the panel lights turn blue instead of showing a voltage"
+  ],
+  "menu": [
+    "Oversampling — a submenu holding the oversampling rate and three switches saying which groups of outputs it is applied to",
+    "Oversampling rate: Off, x2, x4, x8 — runs the logic at this multiple of the sample rate and filters the result back down, which reduces aliasing at audio rates; inside Oversampling",
+    "Oversample logic outputs — applies the oversampling to the maximum, minimum and clipper outputs and the three inverted copies of them; inside Oversampling",
+    "Oversample logic gate outputs — applies the oversampling to the six gate outputs as well, and switching it on switches the logic outputs on too; inside Oversampling",
+    "Oversample logic trigger outputs — applies the oversampling to the six trigger outputs as well, and switching it on switches the gate and logic outputs on too; inside Oversampling",
+    "Clip at ±10V — holds the maximum, minimum and clipper outputs inside the rails, which the hardware does and the software need not",
+    "Gate/trigger threshold — a slider setting the voltage the gate outputs compare against, 0V to 2V and 1V until you move it",
+    "Pad max presssure — a slider setting the voltage a pad puts out when pressed dead centre, 0V to 10V and 5V until you move it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads the X pad.",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads the Y pad."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic",
+      "8": "0 to 10V · stepped · polyphonic",
+      "11": "0 to 10V · stepped · polyphonic",
+      "12": "0 to 10V · stepped · polyphonic",
+      "15": "0 to 10V · stepped · polyphonic",
+      "19": "0 to 10V · stepped · polyphonic",
+      "20": "0 to 10V · stepped · polyphonic",
+      "22": "0 to 10V · stepped · polyphonic",
+      "23": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

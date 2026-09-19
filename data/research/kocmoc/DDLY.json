@@ -1,0 +1,18 @@
+{
+  "plugin": "kocmoc",
+  "module": "DDLY",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "DDLY.cpp:139 getVoltage(); :148 time += attenuverter * (cv / 5); :151 the total clipped to 0 through 0.9985", "sumRange": "0 to 1V"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "DDLY.cpp:140 getVoltage(); :161 feedback += attenuverter * (cv / 5); :164 the total clipped to plus or minus one"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "why": "DDLY.cpp:143 getVoltage(); :172 isConnected() gates the whole clock branch; :174 a rising crossing of 0.0f measures the period"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "normal": "the input plus the feedback signal", "why": "DDLY.cpp:316 isConnected() writes ret into the buffer instead of input + feedback * delay"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "why": "DDLY.cpp:145 getVoltageSum() adds every channel of the cable into one value"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "DDLY.cpp:324 setVoltage() with no channel index and no setChannels call"},
+      "1": {"family": "audio", "poly": false, "why": "DDLY.cpp:327 setVoltage() with no channel index and no setChannels call"}
+    }
+  },
+  "comment": "The buffer is DDLY_MAX_DELAY_TIME, defined as 3, times the sample rate, reallocated in onAdd. The time knob is cubed at DDLY.cpp:250 and elsewhere and floored at 0.0004 of the buffer. The write head at DDLY.cpp:355 computes hp - hp_input, which is the negative of the high-passed signal, so the buffer holds an inverted copy; it looks like a sign slip rather than a design choice, and it is described in the lines as what it does rather than as a fault. The clock ratio table is the sixteen values 0.125 to 2.0 at DDLY.cpp:185. The two CV jacks in the left column carry no printed label on the panel; their tooltips are Time CV and Feedback CV. sumRange on the time CV is the clip at DDLY.cpp:151, a normalised 0 to 1 of the buffer rather than a voltage; it is spelled in the only form the field allows."
+}

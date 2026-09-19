@@ -1,0 +1,19 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Scalaria",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V, or 2V for the oscillator pitch", "why": "scalaria.cpp:148 reads this input with getNormalVoltage(5, channel), scalaria.cpp:153 divides it by 5, scalaria.cpp:155 multiplies by the knob and scalaria.cpp:160 clamps the total to 0..1; scalaria.cpp:170 reads it again with getNormalVoltage(2, channel) into the oscillator note"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V", "why": "scalaria.cpp:149 reads this input with getNormalVoltage(5, channel), scalaria.cpp:153 divides it by 5, scalaria.cpp:155 multiplies by the knob and scalaria.cpp:160 clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "scalaria.cpp:150 reads this input with getVoltage(channel), scalaria.cpp:153 divides it by 5, scalaria.cpp:155 multiplies by the attenuverter, scalaria.cpp:157 adds the knob and scalaria.cpp:160 clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "scalaria.cpp:151 reads this input with getVoltage(channel), scalaria.cpp:153 divides it by 5, scalaria.cpp:155 multiplies by the attenuverter, scalaria.cpp:158 adds the knob and scalaria.cpp:160 clamps the total to 0..1"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "scalaria.cpp:184 reads this input four channels at a time, divides by 8 into a 16-bit sample and clamps it; scalaria.cpp:125 takes part of the module's channel count from its getChannels()"},
+      "5": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "scalaria.cpp:185 reads this input four channels at a time, divides by 8 into a 16-bit sample and clamps it; scalaria.cpp:125 takes part of the module's channel count from its getChannels()"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "scalaria.cpp:223 writes the filter's 16-bit sample scaled by 5, four channels at a time, and scalaria.cpp:227 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "scalaria.cpp:224 writes the pre-filter sum scaled by 5, four channels at a time, and scalaria.cpp:228 sets the channel count"}
+    }
+  },
+  "comment": "The filter is the low-pass ladder from the Symbiote firmware for Warps, lifted out into a module of its own; src/scalaria.cpp is the whole of it, running one filter per polyphonic channel. The maker cites the improved virtual analogue Moog ladder model of D'Angelo and Välimäki. The cutoff input is not volt-per-octave: scalaria.cpp:150 divides it by 5 and adds it to a normalised 0-to-1 cutoff, so it is a plain control voltage. The level jacks carry two normals each in effect: scalaria.cpp:148 reads the first with getNormalVoltage(5) for the gain and scalaria.cpp:170 reads the same jack again with getNormalVoltage(2) for the internal oscillator's pitch. THERE IS A BUG IN THE OUTPUT: scalaria.cpp:209 and scalaria.cpp:215 index the output frame buffer with the channel number instead of that channel's frame counter — outputFrames[currentChannel][currentChannel] where every neighbouring line writes outputFrames[currentChannel][frames[currentChannel]]. It affects the 1 + 2 output on the third and fourth channel of each group of four, so polyphonic channels 3, 4, 7, 8, 11, 12, 15 and 16 read a stale sample there. The AUX output on those channels is indexed correctly, and the block size of 60 keeps the wrong index inside the buffer, so this is a wrong sample rather than a crash. Nothing in the entry's lines depends on it, but somebody should check it against the running module."
+}

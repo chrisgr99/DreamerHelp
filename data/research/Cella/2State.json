@@ -1,0 +1,17 @@
+{
+  "plugin": "Cella",
+  "module": "2State",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "2State.cpp:118 reads this input with getVoltage(), which is channel 1 alone, and compares it against 2V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "normal": "Gate 1", "why": "2State.cpp:118 reads this input with getVoltage() and compares it against 2V; 2State.cpp:133 falls back to the sections above when it is unconnected"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "normal": "Gate 2 or Gate 1", "why": "2State.cpp:118 reads this input with getVoltage() and compares it against 2V; 2State.cpp:133 falls back to the sections above when it is unconnected"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "2State.cpp:152 writes channel 1 alone, at a voltage the menu range caps at 10V"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "2State.cpp:152 writes channel 1 alone, at a voltage the menu range caps at 10V"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "why": "2State.cpp:152 writes channel 1 alone, at a voltage the menu range caps at 10V"}
+    }
+  },
+  "comment": "Read from src/2State.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1, alongside docs/Cella_Manual.md written for 2.11.0. The manual's account matches the code. The cascade at 2State.cpp:130 walks upward through every earlier section rather than only the one immediately above, and it takes either a patched gate or a pressed button, which is what makes one gate in the top section reach all three. The Default mode menu only takes effect on an initialise (2State.cpp:88); moving the menu does not move the latch switches that are already set."
+}

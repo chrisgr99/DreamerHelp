@@ -1,0 +1,13 @@
+{
+  "plugin": "MML",
+  "module": "LogQnt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "ignored", "why": "src/LogQnt.cpp line 34 reads inputs[INPUT].getVoltage(), with no getChannels or getPolyVoltage anywhere in the file; MMLFQFunction at line 59 returns 0 for any voltage below 0, and line 63 splits the voltage into floorf(vIn) and floorf(12 * fraction)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/LogQnt.cpp line 40 calls outputs[OUTPUT].setVoltage, and line 45 writes 0 when the input jack is not connected; the returned value adds floorf(vIn) to a fraction of an octave, so whole volts pass through as octaves"}
+    }
+  },
+  "comment": "Open source, read at commit b3a4be0, whose plugin.json is byte-identical to the installed 2.1.0 build and whose res/LOG_QNT.svg matches the installed panel. The output is floor(v) - 1 + log2(log2(4 + floor(12 * fraction))). The twelve steps are far from equal: the first step of each octave is over two semitones wide and the steps narrow steadily, the twelfth landing just under a full octave. No figure from that arithmetic is quoted in the lines, since only the formula is in the source. The panel prints V/OCT over the input and OUT over the output, while the maker's tooltips read V/IN and V/OUT. The module has one global float, logV, shared by every instance, but it is written and read within a single process call so it causes no cross-talk."
+}

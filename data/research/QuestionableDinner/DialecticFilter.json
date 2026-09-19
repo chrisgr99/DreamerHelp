@@ -1,0 +1,18 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "DialecticFilter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "why": "src/DialecticFilter.cpp:82 takes the channel count from this jack's getChannels(); line 85 reads getVoltage(i)"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the size of the audio input", "why": "src/DialecticFilter.cpp:87 reads getNormalVoltage(abs(audio), i), scales it by the attenuverter and adds it to the exponent of a power of two"},
+      "2": {"family": "cv", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the size of the audio input", "why": "src/DialecticFilter.cpp:90-93 reads getNormalVoltage(abs(audio), i) into the exponent of a power of two"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "the size of the audio input", "sumRange": "0 to 1V", "why": "src/DialecticFilter.cpp:95 reads getNormalVoltage(abs(audio), i), divides by 10, adds the knob and clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the size of the audio input", "why": "src/DialecticFilter.cpp:97 reads getNormalVoltage(abs(audio), i), scales it by the attenuverter and adds it to the Bias knob with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/DialecticFilter.cpp:83 setChannels from the audio input; line 124 sets softClip(out,10,0.5) per channel"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/DialecticFilter.cpp:84 setChannels from the audio input; line 125 sets lerp*10 per channel"}
+    }
+  },
+  "comment": "The panel calls this module DEAD MEAT; the slug is DialecticFilter and the widget loads res/panels/DeadMeat.svg. The panel prints FREQ, BITE, RESO, BIAS, A/B for the mode switch and NORMALLED CV IN across the jack block; the flip output is lettered O and the maker names it Flips. The Bias control voltage is added to the knob at full scale with no division and no clamp, where the resonance voltage is divided by ten first. Bypassing the module passes the audio input to the audio output."
+}

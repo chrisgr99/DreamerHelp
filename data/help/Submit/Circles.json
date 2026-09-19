@@ -1,0 +1,74 @@
+{
+  "plugin": "Submit",
+  "module": "Circles",
+  "description": "An eight-step sequencer laid out in a circle, always quantized, with a chain of up to four scales and a separate slower track for a bass line",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets the note for that step, quantized into the scale in play and spread over the octaves set by RANGE"},
+    {"ids": [8], "text": "Sets the root note of the scales, C through B"},
+    {"ids": [9], "text": "Sets how many octaves the step knobs are spread over, 1 to 4"},
+    {"ids": [10], "text": "Sets the gate length as a fraction of the step, and of one bar for the sub track's gate; a short gap is always left at the end so envelopes retrigger"},
+    {"ids": [11], "text": "Sets which of the eight steps the sub track takes its note from, for the scale slot chosen by SCALE"},
+    {"ids": [12, 13, 14, 15], "text": "Chooses the scale held in that slot: Minor, Dorian, Phrygian, Minor pentatonic, Harmonic minor, Major, Fifths or Octaves"},
+    {"ids": [17], "text": "Sets how many bars the chain stays on each scale before moving on, 1 to 8"},
+    {"ids": [18], "text": "Chooses which scale slot's sub source step the STEP knob edits; each slot keeps its own"},
+    {"ids": [19], "text": "Sets how many bars pass between one sub note and the next, 1 to 8"},
+    {"ids": [20], "text": "Sets which of the sixteen grid positions in the bar a sub note starts on"},
+    {"ids": [21, 22, 23, 24], "text": "Takes that scale slot in or out of the chain; the last slot left in cannot be taken out"},
+    {"ids": [25], "text": "Chooses the step order: Forward, Reverse, Pendulum, Drunk or Random"},
+    {"ids": [26], "text": "Sets how often the sequence advances: on quarter, eighth, sixteenth or thirty-second notes"},
+    {"ids": [27], "text": "Writes a fresh set of eight step notes; the new notes take over after the sequence has finished a full eight-step cycle"},
+    {"ids": [28, 29, 30, 31, 32, 33, 34, 35], "text": "Turns that step into a rest: the sequence moves through it as usual, but no trigger or gate comes out"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the whole module runs from, one pulse per quarter note unless the menu says otherwise"},
+    {"ids": [1], "text": "A rising edge puts the sequence back to the beginning, back to the first enabled scale, and clears the measured tempo"},
+    {"ids": [2], "text": "Transposes both pitch outputs, rounded to the nearest semitone"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Offsets that step's knob, 10V covering the knob's full travel; the voltage is read at the moment the step comes round"},
+    {"ids": [11], "text": "While patched it replaces the FLOW knob: 2.5V per position across the five orders"},
+    {"ids": [12], "text": "A rising edge moves the chain on to the next enabled scale slot and restarts its bar count"},
+    {"ids": [13], "text": "A rising edge writes a fresh set of eight step notes, taking over after a full eight-step cycle"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the current step, quantized and transposed"},
+    {"ids": [1], "text": "A 10V pulse 1ms long on each step that is not a rest"},
+    {"ids": [2], "text": "A 10V gate on each step that is not a rest, its length set by the GATE knob"},
+    {"ids": [3], "text": "A 10V gate on steps 1 and 5, for as long as that step's gate lasts"},
+    {"ids": [5], "text": "The sub track's pitch: the note of its source step, two octaves down, held for the whole sub note"},
+    {"ids": [6], "text": "A 10V gate at the start of each sub note, its length set by the GATE knob against one bar"}
+  ],
+  "notes": [
+    "nothing moves until a clock arrives at CLOCK, and two pulses are needed before the tempo is known. If the clock stops for longer than one and a half pulses, every output is cleared",
+    "the accent output is fixed to steps 1 and 5 and cannot be set per step",
+    "each scale slot holds its own sub source step. Pick the slot with SCALE first, then set STEP; turning SCALE moves the STEP knob to that slot's stored value"
+  ],
+  "menu": [
+    "Clock input rate: 1 PPQN (Submit standard), 4 PPQN (compatibility) — sets how many pulses at CLOCK make one quarter note",
+    "Dice character: Subtle, Musical, Wild — sets how far DICE moves the notes: Subtle nudges by a degree, Musical anchors steps 1 and 5 and walks in small moves, Wild anchors and leaps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "1V per octave · stepped · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "8": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "9": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "10": "0 to 10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "11": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "12": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "high above 1V · stepped · one channel only"
+    }
+  }
+}

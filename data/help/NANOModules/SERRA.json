@@ -1,0 +1,47 @@
+{
+  "plugin": "NANOModules",
+  "module": "SERRA",
+  "description": "ADSR envelope generator with a slider and a control voltage input for each stage, and a separate signal path through an attenuverter and an offset",
+  "params": [
+    {"ids": [0], "text": "Attenuates and inverts the signal on its way to the OUT jack"},
+    {"ids": [1], "text": "Adds a voltage between -5V and 5V to the signal on its way to the OUT jack"},
+    {"ids": [2], "text": "Sets the attack time, the climb from zero to the maximum level"},
+    {"ids": [3], "text": "Sets the decay time, the fall from the maximum level to the sustain level"},
+    {"ids": [4], "text": "Sets the sustain level the envelope holds while the gate stays high"},
+    {"ids": [5], "text": "Sets the release time, the fall to zero once the gate goes low"},
+    {"ids": [6], "text": "Raises the gate by hand for as long as the button is held"},
+    {"ids": [7], "text": "Picks the range of every stage time: FAST runs from 1ms to 4 seconds, SLOW from 8ms to 40 seconds"},
+    {"ids": [8], "text": "In NORM the voltage at the A CV input is passed on to the D and R inputs as well, so one cable controls the whole timing; in INDEP each control voltage input reaches only its own stage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "While this input is high the envelope runs through attack and decay and holds at the sustain level; when it goes low the release begins"},
+    {"ids": [1], "text": "A trigger here sends the envelope through attack and decay again while the gate is high; with nothing patched it takes the GATE input"},
+    {"ids": [2], "text": "The signal into the attenuverter and offset; with nothing patched the ENV output is fed to it"},
+    {"ids": [3], "text": "Modulates the attack time, summed with the A slider; voltages below 0V and above 5V reach beyond the slider's own range"},
+    {"ids": [4], "text": "Modulates the decay time, summed with the D slider; voltages below 0V and above 5V reach beyond the slider's own range"},
+    {"ids": [5], "text": "Modulates the sustain level, summed with the S slider; voltages below 0V and above 5V reach beyond the slider's own range"},
+    {"ids": [6], "text": "Modulates the release time, summed with the R slider; voltages below 0V and above 5V reach beyond the slider's own range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope itself"},
+    {"ids": [1], "text": "High whenever the envelope is in none of its stages, so it goes high once the envelope has finished and stays high until the next trigger"},
+    {"ids": [2], "text": "The signal from the SIG input after the attenuverter and the offset"}
+  ],
+  "notes": [
+    "the envelope stays at zero until a gate arrives at the GATE input or the gate button is held down."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only\n\nunpatched it reads the gate input.",
+      "2": "continuous · one channel only\n\nunpatched it reads the envelope output.",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "PhoturiElectronics",
+  "module": "Cricketter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "negative": "swings", "normal": "0V, giving C4", "why": "Cricketter.cpp:39-42 reads it with a plain getVoltage, clamps it to -4V and 4V and raises two to that power times the C4 constant"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Cricketter.cpp:58-60 writes five times the sum of two sines, each of which reaches 1, with a plain setVoltage"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The chirp is sin(2*pi*(300 + m)*phase) where phase is the running phase of the V/OCT oscillator and m is sin(2*pi*knob*phase), so the upper partial sits at three hundred times the fundamental and is swept one multiple wide at the knob's rate (Cricketter.cpp:46-49). At 0V on V/OCT that partial is at about 78kHz, so nearly all of what is heard is aliasing; this is what the module is rather than a fault to correct, and it is why the panel's own description calls it a cricket sound. There is a pitch knob in the source, commented out in both the module and the widget, so the jack is the only pitch control. No menu items beyond Rack's own."
+}

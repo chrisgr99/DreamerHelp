@@ -1,0 +1,49 @@
+{
+  "plugin": "ChaoticInstruments",
+  "module": "FFTF",
+  "description": "An FFT freeze: it holds the spectrum of what is coming in at the moment you freeze it and plays that back as a sustained pad, and passes the input through untouched the rest of the time",
+  "params": [
+    {"ids": [0], "text": "Freezes the spectrum and holds it; on the Toggle setting each press switches the freeze on or off, and on the Momentary setting the freeze lasts only while the button is held"},
+    {"ids": [1], "text": "Sets how much of the frozen spectrum is heard against the dry input, and is read only while the freeze is on, so with the freeze off the output is the input alone"},
+    {"ids": [2], "text": "Sets the length of the analysis window, from 128 samples up to about one second; with a clock at CLK it instead snaps to note lengths from a sixty-fourth up to a whole note"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at the WINDOW input before it is added to the WINDOW knob"},
+    {"ids": [4], "text": "Sets how far the analysis frames overlap, a hop of half the window at the counter-clockwise end and an eighth of it at the clockwise end, which smears the sound across time"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the SHAPE input before it is added to the SHAPE knob"},
+    {"ids": [6], "text": "Reads the clock as straight, triplet or dotted note lengths, which changes the set of window lengths the WINDOW knob can reach"},
+    {"ids": [7], "text": "Sets how long the analysis window takes to move to a new length, from an immediate jump at the counter-clockwise end to one whole window length at the clockwise end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, and the signal the right channel uses as well while IN R is empty"},
+    {"ids": [1], "text": "The right audio input; with nothing patched here it takes whatever is at IN L"},
+    {"ids": [2], "text": "Freezes the spectrum: on the Toggle setting each rising edge above 1V switches the freeze on or off, and on the Momentary setting the freeze holds while this reads above 0.1V"},
+    {"ids": [3], "text": "Moves the analysis window length, scaled by its attenuverter, with 5V covering the whole of the WINDOW knob's travel"},
+    {"ids": [4], "text": "Moves the frame overlap, scaled by its attenuverter, with 5V covering the whole of the SHAPE knob's travel"},
+    {"ids": [5], "text": "A clock here makes the window lengths note values of that clock; the rate is taken from the time between rising edges above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output: the left input while the freeze is off, and that input mixed with the frozen spectrum while it is on"},
+    {"ids": [1], "text": "The right output: the right input while the freeze is off, and that input mixed with the frozen spectrum while it is on"}
+  ],
+  "notes": [
+    "nothing is held until the freeze is switched on, by the button or by a gate at the FREEZE input; until then the module passes its input straight through and the MIX knob does nothing",
+    "the display draws the spectrum the module is analysing"
+  ],
+  "menu": [
+    "Freeze behavior: Momentary (hold gate), Toggle (on/off) — chooses whether the button and the gate hold the freeze while they are down or switch it on and off; the module starts on Toggle",
+    "Clock rate: 1 PPQ (1/4 note), 2 PPQ (1/8 note), 4 PPQ (1/16 note), 24 PPQ — tells the module how many pulses the clock sends per beat, which sets what the window lengths are measured against"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

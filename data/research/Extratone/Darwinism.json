@@ -1,0 +1,24 @@
+{
+  "plugin": "Extratone",
+  "module": "Darwinism",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): saveTrigger[id].process(params[SAVE_PARAM].getValue()+inputs[SAVE_INPUT].getVoltage(id)) inside for(id=0;id<16;id++)"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): loadTrigger[id].process(params[LOAD_PARAM].getValue()+inputs[LOAD_INPUT].getVoltage(id)) inside for(id=0;id<16;id++)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): clearTrigger.process(params[ZERO_PARAM].getValue()+inputs[ZERO_INPUT].getVoltage()) — one getVoltage(), no channel loop"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): resetTrigger.process(params[RESET_PARAM].getValue()+inputs[RESET_INPUT].getVoltage())"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): randomTrigger.process(params[RANDOM_PARAM].getValue()+inputs[RANDOM_INPUT].getVoltage())"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): mutateTrigger.process(params[MUTATE_PARAM].getValue()+inputs[MUTATE_INPUT].getVoltage())"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): stepTrigger.process(inputs[CLOCK_INPUT].getVoltage())"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Darwinism.cpp process(): snhTrigger.process(inputs[SNH_INPUT].getVoltage())"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Darwinism.cpp process(): outputs[STEP_OUTPUT].setVoltage(10.f*step/(params[STEPS_PARAM].getValue()-1.f))"},
+      "1": {"family": "trigger"},
+      "2": {"family": "pitch", "poly": false, "range": "0 to 8V", "why": "src/Darwinism.cpp process(): outputs[NOTE_OUTPUT].setVoltage(range*params[NOTE_PARAM+step].getValue()) with RANGE_PARAM configured 0..8 and the note stored 0..1"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"}
+    }
+  },
+  "comment": "Pressing SAVE adds 1.0 to every channel of saveTrigger, so all sixteen memories are written with the same pattern; pressing LOAD likewise fires every loadTrigger in ascending order, so the pattern that survives is memory fifteen's. Only a polyphonic cable reaches one memory at a time. snhTrigger.process() is called twice per frame on the same voltage (lines 103 and 203); the second call can never fire because the first has already taken the state high, so the duplicate block is dead. The module sets up rightExpander producer and consumer messages but never reads or writes them, and res/HalluciMemory.svg ships with no model behind it. Of the 557 parameters only twelve have a ParamWidget; the 16 note values, the 16 on-or-off flags and the 512 memory slots are parameters with no widget, so they are saved with the patch but can never be clicked."
+}

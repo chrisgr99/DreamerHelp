@@ -1,0 +1,18 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-harmony1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "composites/Harmony.h:370 reads getVoltage(0) only, then ScaleQuantizer::run"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1.6V", "step": "stepped", "negative": "ignored", "why": "composites/Harmony.h:364 GateDelay::process(input, 1) then GateTrigger; util/Constants.h:6-11 cGateHi 1.6V, cGateLow 0.1V"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "composites/Harmony.h:256-281 needs 12 channels; under 4V not in scale, under 9V in scale, above that root"}
+    },
+    "outputs": {
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "composites/Harmony.h:191-207 the first port in the loop always gets setChannels(1) because debt is zero"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "composites/Harmony.h:196 setChannels(1 + debt), debt counting the unpatched jacks below it"},
+      "3": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "composites/Harmony.h:196 setChannels(1 + debt), debt counting the unpatched jacks below it"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "composites/Harmony.h:196 setChannels(1 + debt), debt counting the unpatched jacks below it"}
+    }
+  },
+  "comment": "The switch printed C sets Style::Ranges directly from the param value (composites/Harmony.h:237), where the enum is ENCOURAGE_CENTER, VOCAL_RANGE, WIDE_RANGE in that order, but configSwitch names the three positions 'None (wide)', 'Encourage Center', 'Narrow (vocal range)' (src/Harmony1Module.h:52). The tooltip therefore names the outer two positions the wrong way round; the line describes the code. Output 0 is a quantizer output that was never given a widget, so no click can reach it. Params 0, 1, 2, 8, 9, 11 and 12 carry menu settings and hidden state and have no widget. Trigger delay and Retrig. on notes and CV both default on; Repetition avoidance defaults to off."
+}

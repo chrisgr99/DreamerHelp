@@ -1,0 +1,37 @@
+{
+  "plugin": "HolonicSystems-Free",
+  "module": "HolonicSystems-HolonicSource",
+  "description": "Turns OSC messages from the Holon.ist iOS app, or from any OSC sender on the network, into eight control voltages",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Attenuates the value arriving on that channel, from nothing through to full level"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Fully counter-clockwise the channel passes each arriving value at once; turning clockwise smooths the jump from one value to the next"},
+    {"ids": [16], "text": "Picks which of the eight OSC buses, A to H, this module reads; a second copy set to another bus gives another eight channels"},
+    {"ids": [17], "text": "Multiplies arriving CV values by ten, so a value sent in the range -1 to 1 becomes -10V to 10V; gates, triggers and the app's own LFO shapes are unchanged by it"},
+    {"ids": [18, 19, 20, 21, 22, 23, 24, 25], "text": "On, that channel's output is renewed only on a rising edge at the clock input; with nothing patched to that input the output follows the incoming values continuously"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge renews every output whose s/h switch is on; outputs with the switch off are unaffected"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The voltage for that channel, clipped to -10V to 10V, with its lamp green for positive and red for negative"}
+  ],
+  "notes": [
+    "OSC arrives on UDP port 9000, and the module advertises itself over Bonjour so that Holon.ist finds it; the app also sends the channel names printed against the outputs",
+    "The outputs stay at 0V until an OSC sender reaches the module and sends on the bus the bus knob has selected; the lamp beside a channel flashes when a value arrives on it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped"
+    },
+    "outputs": {
+      "0": "±10V",
+      "1": "±10V",
+      "2": "±10V",
+      "3": "±10V",
+      "4": "±10V",
+      "5": "±10V",
+      "6": "±10V",
+      "7": "±10V"
+    }
+  }
+}

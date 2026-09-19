@@ -1,0 +1,45 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "CrossFadeSwitch4to1",
+  "description": "Up to four inputs switched or blended into one output, in 2HP, driven by a knob, a voltage or a stream of triggers",
+  "params": [
+    {"ids": [0], "text": "Picks which input reaches the output, running from the first to the last of the ports in use across its travel"},
+    {"ids": [1], "text": "Attenuates and inverts the selection CV between -100% and +100%, and is ignored while the jack is in trigger mode"},
+    {"ids": [2], "text": "Turns on blending while it is green, so the selection crosses smoothly from one input to the next instead of jumping"},
+    {"ids": [3], "text": "Chooses how the jack beside it is read: green takes its voltage as the selection, red takes each trigger as a step to the next port"},
+    {"ids": [4], "text": "Limits the switch to the first two, three or four ports"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the selection, 10V covering the knob's full travel at full trim, or steps it on each trigger in trigger mode"},
+    {"ids": [1], "text": "A rising edge sends the selection back to the first port, and works only while the selection jack is in trigger mode"},
+    {"ids": [2, 3, 4, 5], "text": "One of the four signals to be selected; an empty jack carries the voltage set for it on the menu, 0V unless you change it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the selected input, or a blend of two neighbours while blending is on"}
+  ],
+  "notes": [
+    "the selection jack and the reset jack read channel 1 only, so every channel of a polyphonic signal is switched together",
+    "with nothing patched into the four inputs the module switches between the four voltages set on the menu, which makes it a stepped voltage source"
+  ],
+  "menu": [
+    "Trigger-order: Next, Prev, Ping-pong, Random, Random Diff — sets how each trigger moves the selection, and is used only while the CV jack is in trigger mode",
+    "CV-1 normalized input, CV-2 normalized input, CV-3 normalized input, CV-4 normalized input — sets the voltage that input carries when its jack is empty",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "polyphonic\n\nunpatched it reads a voltage set on the menu, 0V by default.",
+      "3": "polyphonic\n\nunpatched it reads a voltage set on the menu, 0V by default.",
+      "4": "polyphonic\n\nunpatched it reads a voltage set on the menu, 0V by default.",
+      "5": "polyphonic\n\nunpatched it reads a voltage set on the menu, 0V by default."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

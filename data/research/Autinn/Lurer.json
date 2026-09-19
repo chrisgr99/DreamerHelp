@@ -1,0 +1,14 @@
+{
+  "plugin": "Autinn",
+  "module": "Lurer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Snare.cpp:111 takes getChannels() on this input and the output takes its channel count from it; Snare.cpp:146 reads channel c with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Snare.cpp:177 reads channel c of this input with getPolyVoltage; Snare.cpp:179 raises 2 to that power, unclamped, so a negative voltage lowers the drum"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Snare.cpp:112 sets this output's channel count from the trigger input"}
+    }
+  },
+  "comment": "The body is a sine plus a fifth as much of its third harmonic (Snare.cpp:187). The wires are white noise through a bandpass at 2500Hz with a Q of 1, reset on every hit (Snare.cpp:155 to :158). The sweep knob is multiplied by 200 and added in hertz rather than as an exponent (Snare.cpp:120, :179), which is where the last Note comes from. The noise envelope coefficient uses half the rate of the body's (Snare.cpp:128, :130). The module is registered under the slug Lurer while its class and panel file are named Snare."
+}

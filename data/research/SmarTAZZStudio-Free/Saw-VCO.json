@@ -1,0 +1,16 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Saw-VCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Sawtooth-VCO.cpp: getChannels() on this jack sets the output channel count and the loop bound, and freq = pitch_param * pow(2.f, getVoltage(idx)) per channel, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sawtooth-VCO.cpp: freq_mod = getVoltage() with no channel argument, used as freq + freq * freq_mod * attn * 0.5f and then held to 10Hz to 20000Hz, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sawtooth-VCO.cpp: phase_mod = getVoltage() with no channel argument, used as phase_param + phase_mod * attn * 0.1f, with 1.0 added back if the total goes negative, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sawtooth-VCO.cpp: volume_mod = getVoltage() with no channel argument, used as volume_param + volume_mod * attn * 0.1f with no clamp, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "Sawtooth-VCO.cpp: setChannels then setVoltage(volume_out * wave, idx), the wave table being filled to ±5V, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "Four tables are held: band-unlimited and band-limited, each in an up and a down ramp. The band-limited ramp is the sum of sin(j * x) / j for j from 1 to the harmonic count, then scaled so its peak is 5V. Changing the Harmonics menu rebuilds the tables inside process(). The pitch knob is linear in Hz. volume_out is never clamped."
+}

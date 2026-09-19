@@ -1,0 +1,45 @@
+{
+  "plugin": "FrozenWasteland",
+  "module": "PhasedLockedLoop",
+  "description": "Phase locked loop: a square wave oscillator, a phase comparator against an incoming signal, and a low pass filter that steers the oscillator.",
+  "params": [
+    {"ids": [0], "text": "Sets the oscillator frequency in semitones either side of C4 at 261.63Hz, 54 semitones each way."},
+    {"ids": [1], "text": "Sets the pulse width of the oscillator, 1% to 100%; the default is 50%."},
+    {"ids": [2], "text": "Scales the voltage arriving at the PWM input, 0 to 100%; at zero that input does nothing."},
+    {"ids": [3], "text": "Sets the cutoff of the four pole low pass filter, 15Hz to 8400Hz; low settings warble and high settings run wild."},
+    {"ids": [4], "text": "Puts out 5V while exactly one of the two signals is above 0V and -5V otherwise."},
+    {"ids": [5], "text": "Runs the two signals into a D type flip-flop built from four nand gates, and puts out 5V or -5V from its state."},
+    {"ids": [6], "text": "Puts out 5V while the signal is ahead, -5V while the square wave is ahead, and 0V while they agree."},
+    {"ids": [7], "text": "Takes the larger of the two input voltages less the smaller, a fuzzy logic exclusive-or after Lotfi Zadeh."},
+    {"ids": [8], "text": "Takes a fuzzy exclusive-or built on hyperbolic parabolas, so the output bends rather than stepping."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the oscillator frequency at a volt per octave; with nothing patched here the filter output steers the oscillator instead."},
+    {"ids": [1], "text": "Moves the pulse width of the oscillator, scaled by the PWM CV knob."},
+    {"ids": [2], "text": "Replaces the internal square wave going into the phase comparator; the oscillator itself keeps running."},
+    {"ids": [3], "text": "The signal the comparator measures against the square wave; a square-ish wave works best."},
+    {"ids": [4], "text": "Moves the filter cutoff, 5V covering its whole range."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The square wave from the internal oscillator, swinging between -5V and 5V."},
+    {"ids": [1], "text": "The output of whichever comparator is selected."},
+    {"ids": [2], "text": "The filtered comparator output; with nothing patched to the oscillator's FM input, this is what steers the oscillator."}
+  ],
+  "notes": [
+    "the filter output is normalled to the oscillator's FM input, which is what closes the loop; patching anything into that FM input breaks the loop open."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 0V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "one channel only"
+    }
+  }
+}

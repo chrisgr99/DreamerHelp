@@ -1,0 +1,17 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorDivMult",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorDivMult.cpp:140 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorDivMult.cpp:134 sums it with the button into a Rack SchmittTrigger, which fires above 1V"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorDivMult.cpp:135 sums it with the button into a Rack SchmittTrigger, which fires above 1V"},
+      "3": {"poly": true, "step": "continuous", "why": "PhasorDivMult.cpp:126 raises two to the knob plus this CV, with no clamp on the jack"},
+      "4": {"poly": true, "step": "continuous", "why": "PhasorDivMult.cpp:129 raises two to the knob plus this CV, with no clamp on the jack"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorDivMult.cpp:110 and 152 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor times HCV_PHZ_UPSCALE; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorDivMult.cpp:150 and 153 write HCV_PHZ_GATESCALE or 0V per channel; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"}
+    }
+  }
+}

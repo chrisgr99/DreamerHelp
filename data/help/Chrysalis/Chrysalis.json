@@ -1,0 +1,48 @@
+{
+  "plugin": "Chrysalis",
+  "module": "Chrysalis",
+  "description": "Runs a ChucK program inside Rack: it compiles a .ck file you choose and hands that program four inputs, four outputs and four knobs",
+  "params": [
+    {"ids": [0], "text": "Sets the ChucK global float named Chrysalis_1, from 0 to 1; it does nothing unless the loaded program declares that variable and reads it"},
+    {"ids": [1], "text": "Sets the ChucK global float named Chrysalis_2, from 0 to 1; it does nothing unless the loaded program declares that variable and reads it"},
+    {"ids": [2], "text": "Sets the ChucK global float named Chrysalis_3, from 0 to 1; it does nothing unless the loaded program declares that variable and reads it"},
+    {"ids": [3], "text": "Sets the ChucK global float named Chrysalis_4, from 0 to 1; it does nothing unless the loaded program declares that variable and reads it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Feeds channel 1 of the ChucK program's adc, divided by five on the way in, so 5V arrives as ChucK's full scale of 1.0"},
+    {"ids": [1], "text": "Feeds channel 2 of the ChucK program's adc, divided by five on the way in, so 5V arrives as ChucK's full scale of 1.0"},
+    {"ids": [2], "text": "Feeds channel 3 of the ChucK program's adc, divided by five on the way in, so 5V arrives as ChucK's full scale of 1.0"},
+    {"ids": [3], "text": "Feeds channel 4 of the ChucK program's adc, divided by five on the way in, so 5V arrives as ChucK's full scale of 1.0"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries channel 1 of the ChucK program's dac, one volt per unit and clamped to ±10V, so ChucK's full scale of 1.0 leaves as 1V"},
+    {"ids": [1], "text": "Carries channel 2 of the ChucK program's dac, one volt per unit and clamped to ±10V, so ChucK's full scale of 1.0 leaves as 1V"},
+    {"ids": [2], "text": "Carries channel 3 of the ChucK program's dac, one volt per unit and clamped to ±10V, so ChucK's full scale of 1.0 leaves as 1V"},
+    {"ids": [3], "text": "Carries channel 4 of the ChucK program's dac, one volt per unit and clamped to ±10V, so ChucK's full scale of 1.0 leaves as 1V"}
+  ],
+  "notes": [
+    "the module does nothing until a ChucK program is compiled into it. The + .ck button opens a file chooser and compiles the file you pick; the = button recompiles the one already chosen.",
+    "a fresh module is not empty: it compiles test.ck from the plugin's own folder, named in autoload.txt beside it. That program runs the first input through a reverb and a feedback delay.",
+    "the outputs are scaled one volt per ChucK unit, a fifth of the ±5V a Rack module normally swings, so a program meant to be heard should multiply its output by five.",
+    "the small lamp shows green once a file has compiled without error and red when the last compile failed.",
+    "the text under the buttons reports the ChucK virtual machine's current time, the id of the last shred it started, and the last message ChucK printed. It is refreshed once in every 60 frames.",
+    "the two buttons, the file name and the status text are plain widgets rather than Rack parameters, so none of them can be clicked for help.",
+    "every copy of the module builds its own ChucK virtual machine. Two of them share no globals and no shreds, and the sample rate of each follows Rack's.",
+    "the path of the loaded file is saved in the patch and recompiled from that path when the patch is opened. The file itself is not saved, so moving or editing it changes what the patch does.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only",
+      "3": "±10V · continuous · one channel only"
+    }
+  }
+}

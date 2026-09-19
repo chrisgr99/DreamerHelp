@@ -1,0 +1,46 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "LFSR16Poly",
+  "description": "Sequencer running a sixteen-bit linear feedback shift register that can be split into two independently clocked registers, with gate and CV outputs for each",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Switches one feedback coefficient on or off; the register bits whose coefficient is on are combined to make the bit shifted in"},
+    {"ids": [16], "text": "Sets all sixteen feedback coefficients at once, as a whole number from 0 to 65535 read as sixteen bits"},
+    {"ids": [17], "text": "Sets how many of the sixteen bits belong to the first register, 0 to 16, the rest forming the second register"},
+    {"ids": [18], "text": "Makes the first register feed back the inverted bit, an XNOR rather than an XOR"},
+    {"ids": [19], "text": "Makes the second register feed back the inverted bit, an XNOR rather than an XOR"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets all sixteen feedback coefficients from a voltage, 0-10V covering 0 to 65535, and overrides the COEF knob"},
+    {"ids": [1], "text": "Sets how many bits belong to the first register from a voltage, 0-10V covering 0 to 16, and overrides the SPLT knob"},
+    {"ids": [2], "text": "A rising edge shifts the first register one place, reading high above 2V and low below 0.1V"},
+    {"ids": [3], "text": "A rising edge shifts the second register one place, reading high above 2V and low below 0.1V"},
+    {"ids": [4], "text": "A voltage above 0V makes the first register feed back the inverted bit, and moves the NOT1 button with it"},
+    {"ids": [5], "text": "A voltage above 0V makes the second register feed back the inverted bit, and moves the NOT2 button with it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "One channel per bit of the first register, carrying 10V while that bit is set"},
+    {"ids": [1], "text": "One channel per bit of the second register, carrying 10V while that bit is set"},
+    {"ids": [2], "text": "Eight channels taken from the sixteen bits read as a four by four grid: the first four carry 10V when a row holds an odd number of set bits, the last four when a column does"},
+    {"ids": [3], "text": "The bits of the first register read as a binary number and scaled to 0-10V"},
+    {"ids": [4], "text": "The bits of the second register read as a binary number and scaled to 0-10V"},
+    {"ids": [5], "text": "Eight channels from the sixteen bits read as a four by four grid: the first four read a row as a four-bit number scaled to 0-10V, the last four come from a column but not as plain binary"}
+  ],
+  "notes": [
+    "each square light shows one register bit: in the first register a set bit is bright and a clear bit dim, and in the second register a set bit is dark and a clear bit dim",
+    "the first register is shifted only by a rising edge at CLK1 and the second only by one at CLK2; with nothing patched there the outputs never change",
+    "every feedback coefficient starts switched off, so a register shifts in zeros and falls silent within a few clocks; switch at least one coefficient on for a repeating sequence"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "high above 2V · stepped",
+      "3": "high above 2V · stepped",
+      "4": "stepped",
+      "5": "stepped"
+    },
+    "outputs": {
+      "3": "0 to 10V",
+      "4": "0 to 10V",
+      "5": "0 to 10V"
+    }
+  }
+}

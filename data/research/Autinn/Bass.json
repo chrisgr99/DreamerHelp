@@ -1,0 +1,19 @@
+{
+  "plugin": "Autinn",
+  "module": "Bass",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Bass.cpp:388 reads this input with getVoltage and Bass.cpp:396 puts it through a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Bass.cpp:387 reads this input with getVoltage and clamps it to 0 to 1, and Bass.cpp:402 tests it against 1, so anything below 0V reads as no accent"},
+      "2": {"family": "audio", "poly": false, "why": "Bass.cpp:381 reads this input with getVoltage, which is channel 0 only"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Bass.cpp:383 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Bass.cpp:382 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 1.25"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Bass.cpp:386 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0.2 to 2 seconds"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Bass.cpp:385 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Bass.cpp:463 writes channel 0 of this output and never sets a channel count, so it carries one channel"}
+    }
+  },
+  "comment": "The filter is the same four-pole transistor ladder used in Retri, run at twice or four times the sample rate. The cutoff knob spans 40Hz to 4500Hz (Bass.cpp:43, :44) and the envelope's sweep is applied on top of it, with 31.37 per cent of the envelope below the resting frequency (Bass.cpp:39, :443); the result is clamped to 16Hz to 18000Hz (Bass.cpp:45, :46, :451). The ENVMOD menu item changes both the arithmetic and the parameter's own unit and multiplier at Bass.cpp:570 to :587, so the tooltip reads octaves or hertz to match; the setting is saved with the patch and an older patch loads with it off (Bass.cpp:286). Four more options are written and commented out of the menu: tuned resonance, first pole an octave up, passband compensation. The output is hard clipped at ±12V after a DC blocker that stands for the 303's output capacitor (Bass.cpp:461, :462). The accent is handled by extending the filter and amplitude envelopes rather than by a separate envelope; the maker's own comment at Bass.cpp:591 says the unused accent_env function was dropped for that reason."
+}

@@ -1,0 +1,20 @@
+{
+  "plugin": "rchoices",
+  "module": "uchoice",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "1": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "2": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "3": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "4": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "5": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "6": {"poly": false, "why": "uchoice.cpp:125 reads inputs[current].getVoltage(), which is channel 0 only, and there is no getChannels anywhere in the file"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "uchoice.cpp:114 rescales getVoltage() from the 0.1 to 2 window onto 0 to 1 and feeds it to a dsp::SchmittTrigger, whose default thresholds fire at 1 and reset at 0"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "uchoice.cpp:125 and 127 write one value with setVoltage and never call setChannels"}
+    }
+  },
+  "comment": "Source read at commit 0a84df9, the only commit whose plugin.json carries the installed 2.0.0; it is also the repository head, so nothing had to be settled. The installed res folder is byte-identical to the repository's. The seven jacks and the seven buttons are in panel order, top to bottom, which is unusual for this maker: gchoice in the same plugin wires its jacks bottom up. Nothing in this module is given a name: every configParam is called with only an id, a range and a default, and there is no configInput or configOutput at all, so Rack's hover tooltips are blank throughout. Two faults in the code. First, dataFromJson at line 88 reads the saved selection with json_is_true on a value written as json_integer, which is false for any integer, so current is restored as 0 whatever was saved; the button states beside it are written as json_boolean and do restore correctly. Second, when the chooser is handed an empty list — every input switched out — utility.cpp returns 0, so a trigger in that state lights the first input's lamp even though that input is out of the draw; the output is separately forced to 0V by line 127. Neither the inputs nor the output is given a family, because a mult of this kind carries whatever is patched into it."
+}

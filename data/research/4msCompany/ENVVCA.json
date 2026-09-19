@@ -1,0 +1,19 @@
+{
+  "plugin": "4msCompany",
+  "module": "ENVVCA",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "ENVVCACore.cc:65-67 scale this jack and pass it through both attenuverter knobs, and ENVVCACore.cc:70-71 add the result to the slider settings in either direction"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "ENVVCACore.cc:94 passes this jack through the flip-flop declared at ENVVCACore.cc:201, which has a 1V low and a 2V high; ENVVCACore.cc:43 takes the envelope channel count from it"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0.5V", "why": "ENVVCACore.cc:87 passes this jack to CVToBool at quantization.h:6, which compares against 0.5V, and exclusive-ors the result with the button"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "why": "ENVVCACore.cc:90-92 call setTargetVoltage(followInput.process(this jack)) while FOLLOW is patched, so the envelope slews to this voltage instead of running to its own top; TriangleOscillator.h:38-45 reads anything at or below 0.1V as 0V"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "why": "ENVVCACore.cc:44 takes the audio channel count from this jack and ENVVCACore.cc:147 reads it per channel"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVVCACore.cc:106 doubles the oscillator's 0V to 5V swing, set at TriangleOscillator.h:153-154, and scales it by the ENV LEVEL slider; ENVVCACore.cc:45 sets the channel count from the trigger jack"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 8V", "why": "ENVVCACore.cc:104 puts out 8V while the envelope is falling; ENVVCACore.cc:46 sets the channel count from the trigger jack"},
+      "2": {"family": "audio", "poly": true, "why": "ENVVCACore.cc:148 passes the audio input through the VCA; ENVVCACore.cc:47 sets the channel count from the audio input"}
+    }
+  },
+  "comment": "The module is modelled at circuit level: the sliders, the range switches and the CV are combined through simulated resistor networks (ENVVCACore.cc:65-84 and ENVVCACore.cc:174-195), so the rise and fall times are not a plain mapping from the slider position and no millisecond figures are stated here. The VCA's maximum gain is set by a constant the source says was tuned by hand to about 0dB (ENVVCACore.cc:134-137). The CYCLE jack does not simply switch cycling on: ENVVCACore.cc:87 exclusive-ors it with the button."
+}

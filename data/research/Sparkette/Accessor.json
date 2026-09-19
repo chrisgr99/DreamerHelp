@@ -1,0 +1,16 @@
+{
+  "plugin": "Sparkette",
+  "module": "Accessor",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "normal": "cell 0", "why": "src/Accessor.cpp:141 takes this jack's channel count and :166 hands its voltages to fillAddressArray (src/Utility.cpp:82), where :88 truncates the voltage over ten times the matrix width into the column, or :91 over ten times the whole cell count while Y is unpatched"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "normal": "cell 0", "why": "src/Accessor.cpp:142 takes this jack's channel count and :166 hands its voltages to fillAddressArray (src/Utility.cpp:82), where :86 truncates the voltage over ten times the matrix height into the row; leaving it unpatched switches X at :91 to addressing the whole matrix"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the data trimpot", "why": "src/Accessor.cpp lines 97-104, the trimpot is the value when no data channel reaches that address, otherwise the jack times the trimpot over 10"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "no write happens", "why": "src/Accessor.cpp lines 75-95, write_voltages[i] > 0.5f, or a SchmittTrigger on it in trigger mode, or ignored in always mode"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "src/Accessor.cpp lines 112-116, setChannels(addr_count) then the stored values written back out unchanged"}
+    }
+  },
+  "comment": "src/Accessor.cpp at commit b90cd69, with the expander protocol in src/DMA.hpp. As with DMA-FX the host is taken from rightExpander (DMA.hpp line 267), so this module sits to the LEFT of the module it reaches into. The data output carries whatever was stored, so it has no range of its own; on a memory of true and false values it reads 1V and 0V. Trigger mode was added in commit c280fab, before the 2.8.1 version bump, so it is in the installed build. The write switch's own choices are named 'when gate active', 'always' and 'on trigger' in the source; the panel prints only Write. The channel knob runs to 16 while no host yet offers that many channels, so values above the host's count light the lamp red and stop the module working. The panel prints CHANNEL, Address, Data and Write."
+}

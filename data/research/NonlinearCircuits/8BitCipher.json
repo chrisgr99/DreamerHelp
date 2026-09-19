@@ -1,0 +1,28 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "8BitCipher",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "8BitCipher.cpp:81 reads this input with getVoltage; NLCShared.hpp:32 raises the trigger when it reaches 1V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "8BitCipher.cpp:93 reads this input with getVoltage and tests it against 1V"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "8BitCipher.cpp:97 reads this input with getVoltage and tests it against 1V; 8BitCipher.cpp:95 branches on isConnected"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "8BitCipher.cpp:105 reads this input with getVoltage and tests it against 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "8BitCipher.cpp:172 sets this output to 5V or 0V"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "8BitCipher.cpp:118-162 add weights totalling under 1 and 8BitCipher.cpp:159 multiplies by 5"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "8BitCipher.cpp:118-162 add weights totalling under 1 and 8BitCipher.cpp:160 multiplies by 5"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "8BitCipher.cpp:118-162 add weights totalling under 1 and 8BitCipher.cpp:161 multiplies by 5"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "8BitCipher.cpp:118-162 add weights totalling under 1 and 8BitCipher.cpp:162 multiplies by 5"}
+    }
+  },
+  "comment": "The panel prints the eight stage outputs as binary numbers 000 to 111; those are stage numbers, not the register's contents. Each CV output is fed by four of the eight stages and each stage feeds two CV outputs (8BitCipher.cpp:118-157), so the four CV outputs move together but never alike. The maker's own summary in plugin.json calls this a dual sequencer and clock divider, which is the 4Seq text repeated; the panel subtitle, Random Voltage Source, matches what the code does."
+}

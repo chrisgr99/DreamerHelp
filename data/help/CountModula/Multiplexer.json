@@ -1,0 +1,47 @@
+{
+  "plugin": "CountModula",
+  "module": "Multiplexer",
+  "description": "Two linked clocked switches: a router stepping one input across eight sends, and a selector stepping eight receives into one output",
+  "params": [
+    {"ids": [0], "text": "Sets how many router steps are used, from 2 to 8"},
+    {"ids": [1], "text": "Sets how many selector steps are used, from 2 to 8, or LINK to take the number from the router"},
+    {"ids": [2], "text": "Chooses what a SENDS jack does: S&H samples the input as the step begins and holds it, → passes the input through then drops to 0V at the end of the step, T&H holds the value it had at the end"},
+    {"ids": [3], "text": "Chooses what the OUTPUT carries when the receive jack for the current step has no cable: IN the router's input, 0V zero volts, A the matching SENDS value, M the SENDS value the router is on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the router to its next send, and advances the selector as well while the selector has no clock of its own patched"},
+    {"ids": [1], "text": "A rising edge advances the selector to its next receive; with nothing patched the selector is clocked by the router's CLOCK input"},
+    {"ids": [2], "text": "Held stopped while this is high, with every SENDS jack at 0V; the router takes its first step on the next clock after this falls low"},
+    {"ids": [3], "text": "Held stopped while this is high, with the selector returned to its start; with nothing patched it follows the router's RESET input"},
+    {"ids": [4], "text": "Sets how many router steps are used, from 2 to 8 across 0-10V, and overrides the router's LENGTH knob while a cable is patched"},
+    {"ids": [5], "text": "Sets how many selector steps are used, from 2 to 8 across 0-10V, and overrides the selector's LENGTH knob while a cable is patched"},
+    {"ids": [6], "text": "The signal fed to the router, passed on to whichever SENDS jack the router has stepped to"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13, 14], "text": "Sent to the OUTPUT jack while the selector is on that step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries whichever receive jack the selector has stepped to"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Carries the router's input while the router is on that step; what it does between visits is set by the router's MODE switch"}
+  ],
+  "notes": [
+    "this module is monophonic: only the first channel of a polyphonic cable is read, and every output carries a single channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only",
+      "6": "one channel only",
+      "7": "one channel only",
+      "8": "one channel only",
+      "9": "one channel only",
+      "10": "one channel only",
+      "11": "one channel only",
+      "12": "one channel only",
+      "13": "one channel only",
+      "14": "one channel only"
+    }
+  }
+}

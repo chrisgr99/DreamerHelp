@@ -1,0 +1,13 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "FlickX",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Flick.cpp:75 reads it as exp2_taylor5(voltage) and divides the decay time by the result"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "10V", "why": "src/Flick.cpp:77 reads it with getNormalVoltage(10.f), divides by 10 and multiplies the output by the result, with no clamp"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Flick.cpp:76 reads it as exp2_taylor5(voltage) and divides the decay time by the result"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "10V", "why": "src/Flick.cpp:78 reads it with getNormalVoltage(10.f), divides by 10 and multiplies the output by the result, with no clamp"}
+    }
+  },
+  "comment": "Index order is not panel order here: the Level jack for each half sits above its V/Oct jack, so the top jack of the upper pair is input 1 and the one below it is input 0. Nothing in this module's own source reads its jacks; src/Flick.cpp:73-78 reaches into them through getLeftExpander(). The level is not clamped, so a negative voltage inverts that half's output."
+}

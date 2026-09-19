@@ -1,0 +1,47 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "SN76489",
+  "description": "The three square wave tones and the noise generator of the Texas Instruments SN76489, the sound chip of the Sega Master System",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that tone, two and a half octaves either side of C4"},
+    {"ids": [3], "text": "Sets what the noise runs at: fully anticlockwise it follows tone 3's frequency, and the three settings above that are fixed periods rising in pitch"},
+    {"ids": [4, 5, 6], "text": "Attenuates the voltage at that tone's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [7], "text": "Picks the noise flavour: one position gives white noise, the other the chip's periodic noise, which is pitched and buzzy"},
+    {"ids": [8, 9, 10, 11], "text": "Sets the level of that voice, 0 to 15"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that tone by a volt per octave; unpatched it reads the VOCT jack of the tone before it, and the first tone reads 0V"},
+    {"ids": [3], "text": "Moves the noise setting, each 2V raising it by one step, and does nothing until a cable is patched"},
+    {"ids": [4, 5, 6], "text": "Modulates the pitch of that tone, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the tone before it, and the first tone reads 5V"},
+    {"ids": [7], "text": "Flips the noise flavour set by the LFSR switch while it is above 2V"},
+    {"ids": [8, 9, 10, 11], "text": "Scales that voice's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the voice before it, and the first tone reads 10V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries that voice's audio, hard clipped at 5V, with the audio of any earlier voice whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the four outputs are chained: a voice whose output is left unpatched is summed into the next output along, so patching only NOISE gives a mix of all four"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "7": "high above 2V · stepped · polyphonic",
+      "8": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

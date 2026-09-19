@@ -1,0 +1,21 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Rings",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Rings.cpp:155 divides this input by 5, multiplies it by 3.3 times its squared attenuverter and adds the BRIGHTNESS knob; the total is clamped at 0"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "normal": "1V", "why": "Rings.cpp:168 reads this input with getNormalVoltage(1.0), divides by 5 and scales it by 48 times 3.3 times the quartic FM knob, clamped to plus or minus four octaves"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Rings.cpp:156 divides this input by 5, multiplies it by 3.3 times its squared attenuverter and adds the DAMPING knob; the total is clamped at 0"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "Rings.cpp:153 divides this input by 5, multiplies it by 3.3 times its squared attenuverter and adds the STRUCTURE knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Rings.cpp:157 divides this input by 5, multiplies it by 3.3 times its squared attenuverter and adds the POSITION knob; the total is clamped at 0"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Rings.cpp:112 tests this input against 1V with getVoltage() alone; Rings.cpp:171 also turns off the internal strummer whenever a cable is present"},
+      "6": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "normal": "1/12V", "why": "Rings.cpp:161 reads this input with getNormalVoltage(1/12.0) and multiplies it by 12 into the note in semitones"},
+      "7": {"family": "audio", "poly": false, "step": "continuous", "why": "Rings.cpp:107 divides this input by 5 into the exciter audio; Rings.cpp:170 also turns off the internal exciter whenever a cable is present"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "Strummer::Process decides the internal strum: a V/OCT cable makes a note change of more than 0.4 semitones the strum; failing that, an audio cable makes an onset in that signal the strum; with neither patched the firmware sets strum to false and comments that nothing is connected."
+}

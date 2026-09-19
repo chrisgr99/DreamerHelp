@@ -1,0 +1,57 @@
+{
+  "plugin": "NYSTHI",
+  "module": "metaAARDVARK",
+  "description": "A clock, LFO, sample and hold and noise source in one, after the RVG cell in Warren Burt's Aardvark IV. A simulated R-2R converter of 1 to 10 bits picks values out of 10V",
+  "params": [
+    {"ids": [2], "text": "How much of the voltage at the CLK FM input moves the clock rate"},
+    {"ids": [6], "text": "How much of the voltage at the offset CV input reaches the offset"},
+    {"ids": [8], "text": "How much of the voltage at the portamento CV input reaches the portamento"},
+    {"ids": [11], "text": "How much of the voltage at the gain CV input reaches the gain"},
+    {"ids": [12], "text": "The threshold the stepped value is measured against, 0.01V to 9.99V, default 5.00V"},
+    {"ids": [13], "text": "Resyncs the clock by hand"}
+  ],
+  "inputs": [
+    {"ids": [2], "text": "A clock here takes over from the internal clock and is copied to the clock outputs, so several of these can be run from one clock"},
+    {"ids": [3], "text": "A voltage moving the clock rate"},
+    {"ids": [5], "text": "A voltage moving the offset added to the stepped and smooth outputs, read up to 15V either way"},
+    {"ids": [6], "text": "A voltage moving the portamento"},
+    {"ids": [8], "text": "A voltage moving the gain, 1.00x per 5V and clamped to -2.00x and +2.00x"},
+    {"ids": [9], "text": "A pulse resyncs the clock"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse at the clock rate"},
+    {"ids": [1], "text": "A square wave at the clock rate, high for half of each cycle"},
+    {"ids": [2], "text": "A ramp rising over each clock cycle"},
+    {"ids": [3], "text": "A ramp falling over each clock cycle"},
+    {"ids": [4], "text": "The value picked by the converter, multiplied by the gain with the offset added"},
+    {"ids": [5], "text": "The stepped value with portamento applied to it"},
+    {"ids": [6], "text": "Sends a 1ms pulse each time the clock arrives while the stepped value is above the comparator threshold"},
+    {"ids": [7], "text": "Sends a pulse when the clock is resynced, for passing the sync on to another of these"}
+  ],
+  "notes": [
+    "a red display is set by dragging it, and the further left the drag starts the faster the value moves; the green display beside one shows the value actually in use once modulation is added",
+    "the clock runs from 0.01Hz to 8kHz, default 10.00Hz, and aliases badly above about 20Hz, so it suits modulation rather than audio",
+    "the offset display runs from -15V to +15V, default 0.00V, and the gain display from -2.00x to +2.00x, default 1.00x",
+    "BITS sets the resolution of the converter from 1 to 10 bits and NUM VALUES shows how many values that gives, from 2 to 1024",
+    "DEV % sets the tolerance of the resistors in the simulated converter, 0 to 20 percent, default 2 percent; the tolerances are worked out again each time it is changed",
+    "portamento runs from 0.00 to 1.00, default 0.50, and acts only on the smooth output; settings above 0.90 slow it a great deal",
+    "a clock patched into the clock input takes over from the internal clock and is copied to the clock outputs, so several of these can be chained from one clock",
+    "the sync output passes a resync on in the same way as the clock outputs pass the clock on"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped · one channel only",
+      "3": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "6": "stepped",
+      "7": "stepped"
+    }
+  }
+}

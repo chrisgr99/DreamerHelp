@@ -1,0 +1,56 @@
+{
+  "plugin": "noobhour",
+  "module": "baseliner",
+  "description": "Four columns, each passing a HIGH signal or a LOW signal under a gate, with a probability on the choice and an attenuverter and an offset on each of the two signals",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Adds a fixed voltage to that column's HIGH signal, -5V to 5V. With nothing patched into the HIGH input this knob alone sets the HIGH voltage"},
+    {"ids": [4, 5, 6, 7], "text": "Attenuverts that column's HIGH input, -1 to 1, before the HIGH offset knob is added to it"},
+    {"ids": [8, 9, 10, 11], "text": "Adds a fixed voltage to that column's LOW signal, -5V to 5V. With nothing patched into the LOW input this knob alone sets the LOW voltage"},
+    {"ids": [12, 13, 14, 15], "text": "Attenuverts that column's LOW input, -1 to 1, before the LOW offset knob is added to it"},
+    {"ids": [16, 17, 18, 19], "text": "Chooses gate, where HIGH is passed while the gate is above 1V; latch, where each gate trigger sets the output to HIGH or to LOW; or toggle, where each gate trigger flips between them"},
+    {"ids": [20, 21, 22, 23], "text": "Sets the probability of the choice coming out HIGH, 0 at the counter-clockwise end and 1 at the clockwise end; in toggle mode it is the probability of flipping at a trigger"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "The signal that column passes while HIGH is chosen; the number of channels here sets the number of channels the column puts out while HIGH is chosen"},
+    {"ids": [4, 5, 6, 7], "text": "The signal that column passes while LOW is chosen; the number of channels here sets the number of channels the column puts out while LOW is chosen"},
+    {"ids": [8, 9, 10, 11], "text": "The gate for that column. Left empty it takes the gate from the nearest patched GATE jack to its left, and with no patched GATE jack to its left it reads 0V"},
+    {"ids": [12, 13, 14, 15], "text": "Adds to that column's p knob, 0.1 of probability per volt, and the sum is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The chosen signal of that column, added to every column to its left whose own output jack is empty. Each column is clamped to -10V to 10V before the addition"}
+  ],
+  "notes": [
+    "with nothing patched into a column's HIGH and LOW inputs both read 0V, so that column puts out its two offset knobs alone, switched by the gate.",
+    "every column comes up in gate mode with its p knob at 1, which passes the HIGH signal whenever the gate is above 1V and the LOW signal otherwise.",
+    "a gate is counted as a trigger when it rises above 2V and is released below 0.1V, while the level test in gate mode passes HIGH whenever the gate is above 1V.",
+    "each column has two lamps: the upper one lights green while that column is passing HIGH and the lower one lights green while it is passing LOW.",
+    "a column carrying one channel is added to every channel of a polyphonic column beside it, and where two polyphonic columns differ in length the shorter contributes 0V to the channels it lacks.",
+    "none of the sixteen inputs and none of the four outputs was given a name in the code, so hovering one of them shows no description of what it carries."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "2": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "3": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "4": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "5": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "6": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "7": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "high above 2V · stepped · one channel only\n\nunpatched it reads the nearest patched GATE jack to its left; a negative voltage does nothing here.",
+      "10": "high above 2V · stepped · one channel only\n\nunpatched it reads the nearest patched GATE jack to its left; a negative voltage does nothing here.",
+      "11": "high above 2V · stepped · one channel only\n\nunpatched it reads the nearest patched GATE jack to its left; a negative voltage does nothing here.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "13": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "14": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "15": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

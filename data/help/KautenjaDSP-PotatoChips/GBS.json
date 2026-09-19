@@ -1,0 +1,56 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "GBS",
+  "description": "The four voices of the Nintendo Game Boy sound chip: two pulses, a drawable wavetable and a noise generator",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that voice, two and a half octaves either side of C4"},
+    {"ids": [3], "text": "Sets the pitch of the noise, 0 to 7, with the highest setting giving the shortest period and so the brightest hiss"},
+    {"ids": [4, 5, 6], "text": "Attenuates the voltage at that voice's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [7], "text": "Picks the noise flavour: one position gives the long fifteen-bit sequence, which sounds like hiss, the other the short seven-bit sequence, which sounds metallic and pitched"},
+    {"ids": [8, 9], "text": "Picks the duty cycle of that pulse, 0 to 3, giving an eighth, a quarter, a half or three quarters"},
+    {"ids": [10], "text": "Morphs between the five drawn waveforms, 1 to 5, interpolating sample by sample between neighbouring pairs"},
+    {"ids": [11, 12, 14], "text": "Sets the level of that voice, 0 to 15"},
+    {"ids": [13], "text": "Sets the level of the wavetable voice in four steps: silent, a quarter, a half and full"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that voice by a volt per octave; unpatched it reads the VOCT jack of the voice before it, and the first pulse reads 0V"},
+    {"ids": [3], "text": "Moves the noise pitch, each 2V raising it by one step, and does nothing until a cable is patched"},
+    {"ids": [4, 5, 6], "text": "Modulates the pitch of that voice, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the voice before it, and the first pulse reads 5V"},
+    {"ids": [7], "text": "Flips the noise flavour set by the LFSR switch while it is above 2V"},
+    {"ids": [8, 9], "text": "Moves the duty cycle of that pulse through 0 to 7V; unpatched it reads the PW jack of the first pulse, which itself reads 0V"},
+    {"ids": [10], "text": "Moves the waveform morph, 7V spanning all five waveforms; unpatched it reads the second pulse's PW jack"},
+    {"ids": [11, 12, 13, 14], "text": "Scales that voice's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the voice before it, and the first pulse reads 10V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries that voice's audio, hard clipped at 5V, with the audio of any earlier voice whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the five waveform displays are drawn on with the mouse: drag across one to reshape it. The WAVE knob morphs between them in the order red, green, blue, yellow, white",
+    "the four outputs are chained: a voice whose output is left unpatched is summed into the next output along, so patching only NOISE gives a mix of all four"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "7": "high above 2V · stepped · polyphonic",
+      "8": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "10": "0 to 7V · continuous · polyphonic\n\nunpatched it reads the second pulse's PW jack.",
+      "11": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "12": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "13": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "14": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

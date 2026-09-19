@@ -1,0 +1,35 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "TactG",
+  "description": "A single-channel touch controller with a gate output and two offsets: dragging the pad sets a level, and the output slides to that level at a rate you choose",
+  "params": [
+    {"ids": [0], "text": "Drag to set the level, 0V at the bottom and 10V at the top, which the output then slides to at the rate set by RATE"},
+    {"ids": [1], "text": "An attenuverter setting the range of the CV output: at full right the pad gives 0-10V, at full left 0 to -10V"},
+    {"ids": [2], "text": "Transition time of the CV, from 0 for an instant jump to 4 seconds per volt; turning it during a transition changes the rate of the transition under way"},
+    {"ids": [3], "text": "In the top position a slide is exponential, in the bottom position linear"},
+    {"ids": [4], "text": "An offset of -10V to 10V added to the CV output after the attenuverter"},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, on the OFST2 input before it is added to the CV output"},
+    {"ids": [6], "text": "Triples the rate knob, taking it to 12 seconds per volt for slower transitions"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage at or above 1V holds the gate output high, which is how several of these modules are chained"},
+    {"ids": [1], "text": "A voltage added to the CV output through the OFST2 attenuverter, for offsetting the level from another source"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The control voltage set by the pad, after the attenuverter and both offsets, clamped to -10V to 10V"},
+    {"ids": [1], "text": "10V while the pad is being held with the mouse, or while the chain input is at or above 1V, and 0V otherwise"}
+  ],
+  "menu": [
+    "Rate knob x3 (max 12 s/V) — stretches the rate knob to 12 seconds per volt, matching the x3 switch",
+    "Auto-return — sends the level back to a chosen percentage of the pad's range when the mouse button is released; Off (default) leaves the level where it was put"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · one channel only"
+    },
+    "outputs": {
+      "1": "high above 1V · stepped"
+    }
+  }
+}

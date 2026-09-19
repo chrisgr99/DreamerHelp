@@ -1,0 +1,13 @@
+{
+  "plugin": "VitaocyThings",
+  "module": "SCLQNT",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "src/SCLRNG.cpp lines 295 to 298: the channel count is taken from getChannels() and each channel read with getVoltage(c); the octave is taken with a floor, so negative voltages quantize the same way positive ones do"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/SCLRNG.cpp lines 316, 320 and 323: a voltage per channel followed by setChannels with the input's channel count"}
+    }
+  },
+  "comment": "Written from the maker's published source at https://github.com/Vitaocy/VitaocyThings, commit 6f49f84, which the installed plugin.json matches byte for byte. The installed manifest gives no sourceUrl.\n\nThe model slug is SCLQNT and the source file, the struct and the panel art are all named SCLRNG.\n\nThree behaviours a reader would not find by clicking anything. (1) The dice icon between the arrows is a plain Widget with only a draw method (src/SCLRNG.cpp), so it takes no mouse input at all. (2) The per-interval on and off state is written by SCLToneButton::onDragStart but never serialised: dataToJson stores only the history and the index, and loadScale reassigns enabled to all ones. (3) The nearest-interval search in process runs over the intervals of one octave only, so the top of the octave never rounds up to the next octave's root.\n\nWith every interval switched off the module passes the input through unquantized rather than falling silent — the bestIdx < 0 branch in process.\n\nThe module has no configParam calls. The census has an empty paramPos, so only the two jacks can be clicked for help.\n\nThe module declares configBypass from the pitch input to the pitch output.\n\nThe file count of 5401 was taken by counting the .scl files in the installed plugin folder, not from any figure in the source."
+}

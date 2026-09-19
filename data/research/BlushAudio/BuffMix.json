@@ -1,0 +1,19 @@
+{
+  "plugin": "BlushAudio",
+  "module": "BuffMix",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "BuffMix.cpp:72-74 and 104-105 read this port with getVoltageSimd<float_4>(ch) inside a loop bounded by the channel count gathered at lines 41-59"},
+      "1": {"poly": true, "why": "BuffMix.cpp:72-74 and 104-105 read this port with getVoltageSimd<float_4>(ch) inside a loop bounded by the channel count gathered at lines 41-59"},
+      "2": {"poly": true, "why": "BuffMix.cpp:72-74 and 104-105 read this port with getVoltageSimd<float_4>(ch) inside a loop bounded by the channel count gathered at lines 41-59"},
+      "3": {"poly": true, "why": "BuffMix.cpp:86-88 and 105 read this port with getVoltageSimd<float_4>(ch) inside the same channel loop"},
+      "4": {"poly": true, "why": "BuffMix.cpp:86-88 and 105 read this port with getVoltageSimd<float_4>(ch) inside the same channel loop"},
+      "5": {"poly": true, "why": "BuffMix.cpp:86-88 and 105 read this port with getVoltageSimd<float_4>(ch) inside the same channel loop"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "BuffMix.cpp:80 and 118 write with setVoltageSimd across the channel loop and then call setChannels"},
+      "1": {"poly": true, "why": "BuffMix.cpp:81 and 119 write with setVoltageSimd across the channel loop and then call setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit e5f0e3d, the only commit carrying version 2.2.0. No family is given to any jack: this is a plain summer and a colour would claim more than the code says. Two faults in the routing arithmetic are real and are written into the notes lines. At BuffMix.cpp:47-52, the branch taken when both outputs are patched gathers the channel count from inputs 4 to 6 (IN_INPUTS + (i + 3)) while counting connected cables from inputs 1 to 3 (IN_INPUTS + i); the loop index is the same i in both statements, so one of the two must be wrong, and the effect is a divisor that ignores the lower bank and a channel count that ignores the upper one. The gain is 1 divided by the number of connected inputs, with a floor of 1, at lines 62-63. When OUTPUT 1 is not patched the code still writes 0V into it, which no one can hear. Every configured port is read; nothing is configured twice. The module has no parameters and no lights."
+}

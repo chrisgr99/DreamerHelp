@@ -1,0 +1,56 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorBurstGen",
+  "description": "Phasor generator that runs a set number of 0-10V cycles after a reset and then stops, for bursts",
+  "params": [
+    {"ids": [0], "text": "Sets how fast one cycle of the burst runs; with a clock patched it becomes a multiply or divide of that clock instead"},
+    {"ids": [1], "text": "Attenuverts the frequency CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the width of the gates at the Pulses output, from 0% to 100% of a cycle, with 50% at centre"},
+    {"ids": [3], "text": "Attenuverts the pulse width CV input, -1 to +1"},
+    {"ids": [4], "text": "Sets how many cycles one burst runs for, 1 to 64 in whole numbers"},
+    {"ids": [5], "text": "Attenuverts the repeats CV input, -1 to +1; 5V at full depth covers the whole 1 to 64 range"},
+    {"ids": [6], "text": "Slow gives an LFO range; Fast lifts the whole frequency range into the audio band"},
+    {"ids": [7], "text": "Force restarts the burst on every reset; Pass restarts it only once the burst has finished, and sends any earlier reset out of the Pass output instead"},
+    {"ids": [8], "text": "Press to start the burst again from its first cycle"},
+    {"ids": [9], "text": "Press to stop the burst and hold the phasor and pulse outputs at 0V"},
+    {"ids": [10], "text": "Toggles endless running, where the generator loops one cycle at a time and the Repeats setting is ignored; the lamp is lit while that is on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the cycle rate, scaled by its attenuverter"},
+    {"ids": [1], "text": "Modulates the pulse width"},
+    {"ids": [2], "text": "Modulates the number of repeats"},
+    {"ids": [3], "text": "Adds to the cycle rate at a volt per octave, with no attenuverter on it"},
+    {"ids": [4], "text": "Patching a clock here locks the burst's cycle rate to it"},
+    {"ids": [5], "text": "A rising edge starts the burst again from its first cycle"},
+    {"ids": [6], "text": "A rising edge stops the burst and holds the phasor and pulse outputs at 0V"},
+    {"ids": [8], "text": "Holding this at 1V or above inverts the endless-running setting for as long as it is high"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The ramp itself, rising from 0V to 10V on each cycle of the burst, and 0V once the burst has run out"},
+    {"ids": [1], "text": "A 10V gate once per cycle at the set width, and 0V once the burst has run out"},
+    {"ids": [2], "text": "With the switch on Pass, a 10V trigger whenever a reset arrives during a running burst"},
+    {"ids": [3], "text": "10V for as long as the burst has run out, dropping to 0V when a new burst starts"}
+  ],
+  "notes": [
+    "the generator comes up stopped, with the phasor and pulse outputs at 0V and the finished output high; press Reset, send a trigger to the Reset input, or switch Cycle on to start a burst."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "0 to 5V · continuous · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "high above 1V · stepped · polyphonic",
+      "5": "high above 1V · stepped · polyphonic",
+      "6": "high above 1V · stepped · polyphonic",
+      "7": "high above 1V · stepped · polyphonic",
+      "8": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · polyphonic"
+    }
+  }
+}

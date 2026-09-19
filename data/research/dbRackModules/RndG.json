@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndG",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "RndG.cpp:111 sets the channel count from this input and RndG.cpp:113 reads it per channel; RndG.cpp:105 passes it to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "RndG.cpp:94 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "0V", "why": "RndG.cpp:97 reads it with getVoltage() and no channel loop and divides it by 10 to make the seed; RndG.cpp:95 leaves the seed at 0 when nothing is patched"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "RndG.cpp:49 and RndG.cpp:66 clamp this jack to -5..5 and read it per channel with getNormalPolyVoltage(0,k)"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "RndG.cpp:93 sets this output's channel count; RndG.cpp:52 and RndG.cpp:57 write 10V or 0V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "RndG.cpp:91 sets this output's channel count; RndG.cpp:127 writes 10V or 0V"},
+      "2": {"family": "trigger", "poly": true, "why": "RndG.cpp:92 sets this output's channel count; RndG.cpp:125 writes the clock voltage or 0V"}
+    }
+  },
+  "comment": "The fourth input, Prob, is the one the maker never named, so its tooltip is blank. The Trig output pulses only when a channel's gate turns on, not when it turns off: RndG.cpp:53 and RndG.cpp:78 sit inside the branch taken when the draw came up. The channel-count disagreement in the last note is at RndG.cpp:91-93, which run before the multi-mode branch at RndG.cpp:111 replaces the channel count with the clock's."
+}

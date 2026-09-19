@@ -1,0 +1,19 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "SquidAxon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "SquidAxon.cpp:74 sums this input's voltage with the other mixer inputs as a float on each clock edge; SquidAxon.cpp:92 clamps that total to -10V to 10V, and nothing rounds it"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "SquidAxon.cpp:74 sums this input's voltage with the other mixer inputs as a float on each clock edge; SquidAxon.cpp:92 clamps that total to -10V to 10V, and nothing rounds it"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "sumRange": "±10V", "normal": "the OUT 4 voltage", "why": "SquidAxon.cpp:71-82 branch on isConnected and read this input with getVoltage, falling back to OUT 4; SquidAxon.cpp:92 clamps the total"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "SquidAxon.cpp:69 clockIn.process reads this jack; NLCShared.hpp:32 returns true where the voltage rises to 1V, with no hysteresis, and SquidAxon.cpp:96-99 shifts each stage's value into the next"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "SquidAxon.cpp:92 clamps the value every output eventually carries to -10V to 10V"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "SquidAxon.cpp:92 clamps the value every output eventually carries to -10V to 10V"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "why": "SquidAxon.cpp:92 clamps the value every output eventually carries to -10V to 10V"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "why": "SquidAxon.cpp:92 clamps the value every output eventually carries to -10V to 10V"}
+    }
+  },
+  "comment": "OUT 1 is the mixer, not a register stage: it is written only when the internal stage counter is at zero, which is every fourth clock (SquidAxon.cpp:72-93), and the maker's README makes the same point. The nonlinear feedback is OUT 4 times the knob, through a squared diode model, clamped to -9V to 9V and then multiplied by -0.7 before being added to the mix (SquidAxon.cpp:85-90). The three inputs are only read at a clock, so anything patched into them is sampled rather than followed."
+}

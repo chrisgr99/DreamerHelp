@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "AUX",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "AX.cpp:46 takes the channel count from this input and AX.cpp:56 reads it per channel"},
+      "1": {"family": "audio", "poly": true, "why": "AX.cpp:46 takes the channel count from this input and AX.cpp:57 reads it per channel"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "full level", "why": "AX.cpp:53 reads it per channel with getVoltage(k), clamps this jack to 0..10 and multiplies the channel knob by a tenth of it"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "full level", "why": "AX.cpp:63 reads it with getVoltage() and no channel loop, clamps this jack to 0..10 and multiplies the Main knob by a tenth of it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "AX.cpp:68 writes one voltage and no channel count is ever set"},
+      "1": {"family": "audio", "poly": false, "why": "AX.cpp:69 writes one voltage and no channel count is ever set"}
+    }
+  },
+  "comment": "Both level jacks are read through a slew limiter whose time is the menu slider, AX.cpp:51-53 and AX.cpp:61-63, which is why a 10V gate patched there works as a mute without clicking. The lamp thresholds are 0, -3, -6, -12, -24, -36, -48 and -60dB, AX.cpp:77-84."
+}

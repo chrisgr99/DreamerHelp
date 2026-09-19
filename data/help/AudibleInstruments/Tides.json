@@ -1,0 +1,56 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Tides",
+  "description": "Shape generator that runs as an LFO, an audio oscillator or a one-shot AD or AR envelope, with the wave adjustable in curvature, rise-to-fall balance and harmonic content",
+  "params": [
+    {"ids": [0], "text": "Cycles the generator between a one-shot AD envelope, free-running cycles and a one-shot AR envelope"},
+    {"ids": [1], "text": "Cycles the frequency range between low, medium and high, the high range using waveshapes and a slope response chosen for audio rates"},
+    {"ids": [2], "text": "Sets the rate, four octaves either side of the middle of the chosen range"},
+    {"ids": [3], "text": "Attenuverts the FM input; with nothing patched there that input reads a constant 0.1V, so the knob works as a fine frequency control"},
+    {"ids": [4], "text": "Sets the curvature of the rising and falling segments, stepping through a set of paired shapes"},
+    {"ids": [5], "text": "Sets the split between rise and fall time: fully counter-clockwise the rise is instant, at noon they are equal, fully clockwise the fall is instant"},
+    {"ids": [6], "text": "Low-pass filters the wave counter-clockwise of noon and wavefolds it clockwise of noon"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the SHAPE knob, 5V covering the whole knob range"},
+    {"ids": [1], "text": "Adds to the SLOPE knob, 5V covering the whole knob range"},
+    {"ids": [2], "text": "Adds to the SMOOTHNESS knob, 5V covering the whole knob range"},
+    {"ids": [3], "text": "A voltage of 0.7V or more starts the envelope in AD or AR mode, and resets the phase in cyclic mode"},
+    {"ids": [4], "text": "A voltage of 0.7V or more stops the wave where it is until the voltage falls again"},
+    {"ids": [5], "text": "Sets the rate, one volt per octave"},
+    {"ids": [6], "text": "Shifts the rate, scaled by the FM attenuverter"},
+    {"ids": [7], "text": "Scales the UNI and BI outputs like a VCA, 8V giving full level; with nothing patched it reads 8V"},
+    {"ids": [8], "text": "Locks the rate to an external clock whenever a cable is patched here, not on a held range switch as the manual has it; FREQUENCY then sets the ratio between clock and output. It reads high at 0.7V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V while the wave is rising and 0V from the end of the rise until the cycle starts again, where the manual has it going high at the end of the rise and staying high"},
+    {"ids": [1], "text": "Carries 5V until the fall has finished, then 0V until the next cycle or trigger, where the manual has it going high at the end of the fall and staying high"},
+    {"ids": [2], "text": "The wave as a unipolar signal, 0-8V"},
+    {"ids": [3], "text": "The wave as a bipolar signal, -5V to 5V, with a positive and a negative bump in each cycle rather than a shifted copy of the unipolar wave"}
+  ],
+  "notes": [
+    "the Sheep firmware changes what the panel says as well as what the module does, and the CLOCK input is ignored while it runs."
+  ],
+  "menu": [
+    "Wavetable firmware (Sheep) — replaces the generator with the Sheep firmware, which scans wavetables, and swaps the panel artwork for the Sheep panel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "1": "continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "2": "continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "3": "high above 0.7V · stepped · one channel only",
+      "4": "high above 0.7V · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "continuous · one channel only\n\nunpatched it reads 0.1V.",
+      "7": "0 to 8V · continuous · one channel only\n\nunpatched it reads 8V; a negative voltage does nothing here.",
+      "8": "high above 0.7V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "0 to 8V",
+      "3": "±5V"
+    }
+  }
+}

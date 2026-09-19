@@ -1,0 +1,19 @@
+{
+  "plugin": "forsitan",
+  "module": "cartilago",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/cartilago.cpp:393-398, getChannels() sets the output count and getPolyVoltage(c) reads each"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/cartilago.cpp:346, the voltage is added to the rate in octaves"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/cartilago.cpp:357, knob + getVoltage()*0.1, clamped to 0..1.25"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/cartilago.cpp:359, knob + getVoltage()*0.2, clamped to -1..1"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/cartilago.cpp:360, getVoltage()*0.2 added to the oscillator's own output"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/cartilago.cpp:351, syncTrigger.process(getVoltage(), 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/cartilago.cpp:394, setChannels from the audio input, with no stated clamp"},
+      "1": {"family": "cv", "poly": false, "why": "src/cartilago.cpp, one setVoltage of the oscillator, one for the whole module"}
+    }
+  },
+  "comment": "The audio path is polyphonic, one attenuator and one filter per channel, but there is a single oscillator shared by all of them. Rate is configured -6 to +7 with a display base of 2 from 1Hz, which is a sixty-fourth of a hertz to 128Hz. Depth runs to 1.25 so the modulation deliberately overshoots both ends of the control. configBypass passes the input to the output. The maker credits Roy Gwinn's Gristleizer, published in Electronics Today International in the mid-1970s, and Chris Carter's modified version of it. The panel prints cartilago, wave, rate, vca/vcf, depth, bias, shape, drive, res, level, in, v/oct, depth, bias, mod, sync, lfo and out."
+}

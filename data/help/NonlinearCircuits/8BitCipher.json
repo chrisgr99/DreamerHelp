@@ -1,0 +1,43 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "8BitCipher",
+  "description": "An eight-stage shift register with a gate output for every stage, a serial output and four voltages mixed from the stage pattern",
+  "inputs": [
+    {"ids": [0], "text": "Shifts the register along one stage on each rise above 1V, and works out the four CV voltages afresh"},
+    {"ids": [1], "text": "Puts a 1 into the first stage if it is above 1V at the moment of a clock"},
+    {"ids": [2], "text": "Puts a 1 into the first stage if it is above 1V at the moment of a clock; while a cable is here the register's own feedback is switched out"},
+    {"ids": [3], "text": "Freezes the eight stage outputs and the four CV outputs while the voltage here is above 1V, although the register keeps shifting underneath"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V while the first stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [1], "text": "5V while the second stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [2], "text": "5V while the third stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [3], "text": "5V while the fourth stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [4], "text": "5V while the fifth stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [5], "text": "5V while the sixth stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [6], "text": "5V while the seventh stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [7], "text": "5V while the eighth stage of the shift register holds a 1, and 0V while it holds a 0"},
+    {"ids": [8], "text": "5V while the bit leaving the end of the register is a 1; it keeps following the register while STR is high, which the eight stage outputs do not"},
+    {"ids": [9, 10, 11, 12], "text": "A stepped voltage, 0V when the four stages feeding it are all low and a little under 5V when they are all high; each of those four stages adds its own fixed weight"}
+  ],
+  "notes": [
+    "with only a clock patched the register feeds itself: a 1 goes in whenever the bit at the end differs from the bit at the start, so the pattern keeps changing and never settles.",
+    "the register comes up with a 1 in the first stage and 0 in the other seven, so one stage output is already at 5V before any clock arrives.",
+    "STR freezes the outputs while it is high, which is the opposite way round from a sample-and-hold trigger; leave it unpatched and the outputs follow every clock."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "8": "0 to 5V · stepped · one channel only",
+      "9": "0 to 5V · one channel only",
+      "10": "0 to 5V · one channel only",
+      "11": "0 to 5V · one channel only",
+      "12": "0 to 5V · one channel only"
+    }
+  }
+}

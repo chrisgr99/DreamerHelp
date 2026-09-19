@@ -1,0 +1,29 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "UnoE",
+  "description": "Expander that plays the step voltages, probabilities, glides and resets of the Uno to its left on its own clock; it goes immediately to the right of Uno, and another UnoE can be chained to its right",
+  "params": [
+    {"ids": [0], "text": "Picks the order for this sequence: forwards, backwards or pendulum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on, skipping any step the probabilities of the module to the left skip over"},
+    {"ids": [1], "text": "A rising edge restarts this sequence, reseeds its random generator from the Seed input and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Sets the seed the random generator takes on a reset, so the same run of skips comes back; the seed is the voltage divided by ten and zero gives a fresh run"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the step this sequence has reached, taken from the CV knobs of the module to the left"},
+    {"ids": [1], "text": "Follows the clock while the step is playing, and stays high while a step with Glide on is playing"},
+    {"ids": [2], "text": "Carries 10V on the channel of the step this sequence has reached while its gate is high, eight channels wide"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

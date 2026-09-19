@@ -1,0 +1,18 @@
+{
+  "plugin": "Autinn",
+  "module": "Retri",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Flora.cpp:272 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Flora.cpp:245 reads this input with getVoltage, multiplies it by the attenuator and raises 2 to that power, so a negative voltage lowers the corner; Flora.cpp:246 clamps the result to 20Hz to 18000Hz"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Flora.cpp:244 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Flora.cpp:242 reads this input with getVoltage, scales it by the attenuator and clamps the knob-plus-input sum to 0 to 4"},
+      "4": {"family": "audio", "poly": false, "why": "Flora.cpp:337 reads this input with getVoltage, which is channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Flora.cpp:333 writes this output with setVoltage and no channel index, so it carries one channel"},
+      "1": {"family": "audio", "poly": false, "why": "Flora.cpp:399 writes this output with setVoltage and no channel index, so it carries one channel"}
+    }
+  },
+  "comment": "The model works in Moog volts: the input is scaled by 0.18 and then by 0.05 into the first capacitor and the output is divided back out (Flora.cpp:27, :28, :257). The tuning coefficient g and the resonance compensation Gres are polynomials in the cutoff, fitted by the maker (Flora.cpp:253, :254), and the feedback is taken a sample and a half back to put the phase shift near 180 degrees at the corner (Flora.cpp:285). Auto level divides by the drive clamped to a floor of 0.1 (Flora.cpp:257), and the setting is saved with the patch. Fauna is the same filter rebuilt with zero-delay feedback and a 20000Hz ceiling."
+}

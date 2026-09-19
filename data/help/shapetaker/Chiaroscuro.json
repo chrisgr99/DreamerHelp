@@ -1,0 +1,65 @@
+{
+  "plugin": "shapetaker",
+  "module": "Chiaroscuro",
+  "description": "A polyphonic stereo amplifier in front of a five-algorithm distortion engine, with level-matching between the clean and distorted paths and a sidechain input that can open, duck or drive the dirt",
+  "params": [
+    {"ids": [0], "text": "Sets the clean signal level, from silence to unity, before the distortion engine"},
+    {"ids": [1], "text": "Chooses the distortion algorithm: hard clip, tube sat, wave fold, bit crush or ring mod, crossfaded over 12ms when it changes"},
+    {"ids": [2], "text": "Opens the chosen algorithm and sets how far it goes, which is the fold count, the bit depth and hold, or the ring modulator's carrier depending on the algorithm"},
+    {"ids": [3, 5, 7], "text": "Attenuates and inverts the jack below it before it is added to the control it belongs to"},
+    {"ids": [4], "text": "Adds gain into the distorted path alone, setting how hard the amplified signal strikes the chosen circuit"},
+    {"ids": [6], "text": "Crossfades from the clean amplified signal to the level-matched distorted one"},
+    {"ids": [8], "text": "Replaces the right input with the left, which matters when a right cable is patched and should be overridden"},
+    {"ids": [9], "text": "Chooses whether the amplifier's control is taken as it is or squared, the squared setting opening more sharply and reaching four times gain under voltage"},
+    {"ids": [10], "text": "Ties the distortion depth to how loud the signal already is: centred is off, one way dirties loud passages and leaves quiet ones clean, the other way reverses that, per voice"},
+    {"ids": [11], "text": "Splits the distortion depth between the two sides, centred being off and either direction making one side dirtier by up to half the distortion range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel in, which also feeds the right when the right jack is empty"},
+    {"ids": [1], "text": "The right channel in; with this patched and the left empty, nothing comes out"},
+    {"ids": [2], "text": "Sets the amplifier gain per voice, 10V adding one whole unit of gain, so one polyphonic envelope can articulate a chord"},
+    {"ids": [3], "text": "Detects how far a signal swings from zero and drives whichever sidechain behaviour the menu has chosen; a bipolar audio signal and a 0-10V envelope both reach the top of its range"},
+    {"ids": [4], "text": "Steps the distortion algorithm on, 0-10V running through the five types from the first and pinning at the last; only the first channel is read"},
+    {"ids": [5], "text": "Moves the distortion amount, scaled by the trimmer above it; only the first channel is read"},
+    {"ids": [6], "text": "Moves the drive, scaled by the trimmer above it; only the first channel is read"},
+    {"ids": [7], "text": "Moves the wet and dry blend, scaled by the trimmer above it; only the first channel is read"},
+    {"ids": [8], "text": "Moves the contrast setting over its whole bipolar span with no trimmer, so a bipolar source sweeps it end to end from the centre; only the first channel is read"},
+    {"ids": [9], "text": "Moves the stereo tilt over its whole bipolar span with no trimmer, so a bipolar source sweeps it end to end from the centre; only the first channel is read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel out"},
+    {"ids": [1], "text": "The right channel out"}
+  ],
+  "notes": [
+    "a new module comes up with the amplifier closed, so silence is what to expect until the gain knob is raised",
+    "with the distortion amount or the mix at zero the nonlinear engines are skipped entirely, which is where most of the processor cost goes at high voice counts",
+    "the distorted path is level-matched against the clean one before the mix, so moving from dry to ruined is not also a move from quiet to loud",
+    "the voice count is the wider of the two audio inputs, up to 16; control cables create no voices",
+    "the output is linear through ordinary levels and then enters a soft knee, approaching a ceiling rather than clipping abruptly"
+  ],
+  "menu": [
+    "Oversampling — sets the internal rate at 1, 2, 4 or 8 times; it is tonal as well as a processor cost, and the wave folder changes most",
+    "Enhancement (Trigger) — makes the sidechain scale the distortion and drive up from zero to their settings, holding the mix at 80% wet or above",
+    "Ducking (Inverse) — makes a hot sidechain cut the distortion and back off the drive",
+    "Direct Control — makes the sidechain replace the distortion amount and its CV, leaving drive and mix working as usual",
+    "Duck Level (classic) — makes a hot sidechain turn the amplifier down, to about a tenth at full, which also softens how hard the signal hits the distortion"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "continuous · polyphonic\n\nunpatched it reads the left audio jack.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

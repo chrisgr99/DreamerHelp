@@ -1,0 +1,19 @@
+{
+  "plugin": "wildergarden",
+  "module": "modmix",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/modmix.cpp:65,75 getVoltage() summed into mix with no clamp"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/modmix.cpp:66,75 getVoltage() summed into mix"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/modmix.cpp:67,75 getVoltage() summed into mix"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/modmix.cpp:78,82 tame() clamps to ±10, scaled by LOW_TRIM_PARAM and added to the knob"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/modmix.cpp:80,83 tame() clamps to ±10, scaled by HIGH_TRIM_PARAM and added to the knob"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "src/modmix.cpp:100,102 tame(knob + tame(voltage)), so the total is clamped to ±10"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "src/modmix.cpp:103,106 modMix*abs(level) plus half the level when it is negative, level itself clamped to ±10"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "src/modmix.cpp:105 modMix*(high-low)+low, with high and low each a ±10 knob plus a trimmed ±10 CV"}
+    }
+  },
+  "comment": "The fourth mixer channel is the knob inside the in box, not a jack, and it is what lets the module fold with nothing patched. The waveshape switch is named Saw/Square Waveshape selector by the maker; the code does not make a square of anything — below 0.5 it reflects the normalised mix back and forth, which is a triangle fold, and above 0.5 it takes the fractional part, which is a sawtooth wrap. The variable is called isTriangle at src/modmix.cpp:85. The low and high limits are not clamped against each other, so setting low above high inverts the fold; only a gap smaller than 0.001V is caught, and the mix output then sits at the low limit. Panel order and index order agree apart from the outputs, where the normalised output is index 0 on the left and the plain mix is index 1 on the right. The module widget adds no screws."
+}

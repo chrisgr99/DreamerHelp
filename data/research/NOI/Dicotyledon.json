@@ -1,0 +1,18 @@
+{
+  "plugin": "NOI",
+  "module": "Dicotyledon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the voltage knob", "why": "Dicotyledon.cpp:63 uses isConnected() to choose between getVoltage() and the knob, with no clamp on either"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the voltage knob", "why": "Dicotyledon.cpp:64 uses isConnected() to choose between getVoltage() and the knob, with no clamp on either"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the comparator output", "why": "Dicotyledon.cpp:71 falls back to compOut when the jack is unconnected, and line 77 tests the result against 0"},
+      "3": {"poly": false, "step": "continuous", "negative": "swings", "normal": "the comparator A input", "why": "Dicotyledon.cpp:72 falls back to compA when the jack is unconnected, and line 81 passes it through unchanged"},
+      "4": {"poly": false, "step": "continuous", "negative": "swings", "normal": "the comparator B input", "why": "Dicotyledon.cpp:73 falls back to compB when the jack is unconnected, and line 78 passes it through unchanged"}
+    },
+    "outputs": {
+      "0": {"poly": false, "step": "continuous", "why": "Dicotyledon.cpp:89 passes the chosen switch input through setVoltage with no clamp and no setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "step": "stepped", "why": "Dicotyledon.cpp:67-68 sets 5 or 0, written by setVoltage at line 88 with no setChannels"}
+    }
+  },
+  "comment": "Source read at commit 2b2ad81. Two faults here. Dicotyledon.cpp:77-83 sets switchOut to switchB when the control is above 0 and to switchA otherwise, which is the reverse of what the README states. In the same block the lamps are crossed with the signals: lightSwitchA is set to 1 in the branch that passes switch B. The switch inputs and the switch output carry whatever is patched into them, so they are given no family."
+}

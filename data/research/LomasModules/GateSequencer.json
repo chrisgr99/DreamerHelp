@@ -1,0 +1,14 @@
+{
+  "plugin": "LomasModules",
+  "module": "GateSequencer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/GateSequencer.cpp process(): clock_tiggrer_.process(inputs[CLOCK_INPUT].getVoltage()) on a dsp::SchmittTrigger with Rack 2's 0.1V and 1V defaults; the same jack is then read again as gate_in = inputs[CLOCK_INPUT].getVoltage() > .01f"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/GateSequencer.cpp process(): reset_trigger_.process(inputs[RESET_INPUT].getVoltage()) on a dsp::SchmittTrigger with Rack 2's 0.1V and 1V defaults"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/GateSequencer.cpp process(): outputs[GATE_OUTPUT].setVoltage(gate_out ? 10.0f : 0.0f), one call with no setChannels"}
+    }
+  },
+  "comment": "Two parameters are configured and have no widget, so no click can reach them and they get no line: KNOB_PARAM + 0, named \"Trigger prob\" with a 0 to 100 per cent display, and KNOB_PARAM + 3, named \"Pattern length\" over 0 to 63 steps. Neither is added by GateSequencerWidget and neither is read anywhere in process() or UpdateUI(), so they do nothing even from a script; the census accordingly has no paramPos for indices 4 to 7. KNOB_PARAM + 1 and + 2 are allocated by the ENUMS macro and never configured at all. The panel calls the top row EDIT PAGE, the grid PATTERN EDITOR and the bottom row PATTERN SELECT; the maker's parameter names are Page 1 to 4, Step and Pattern 1 to 4. Chaining is by Rack's expander messages and both sides are the same model: a module with a Gate Sequencer on its left reads beat counter, clock high state, queued pattern and playing pattern from it and skips its own CLOCK and RESET handling entirely. global_quatization_ is not written to dataToJson, so the Global quantization choice comes back at its default of 16 (1 Bar) whenever a patch is loaded; reset_mode_index_ is saved and defaults to 1, which is Instant. A long press is half a second: LongPressButton::step(value, delta_time) fires LONG_PRESS at pressedTime >= 0.5f. A clock pulse arriving within 1ms of a reset is ignored, from the reset_timer_.time > 1e-3f guard. onReset() clears the gates and sets every pattern length back to 15, meaning 16 steps, but leaves beat_counter_ where it was."
+}

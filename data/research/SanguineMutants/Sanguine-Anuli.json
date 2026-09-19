@@ -1,0 +1,22 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Anuli",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "anuli.cpp:297 reads this input with getVoltage(channel); anuli.cpp:302 divides it by 5 and multiplies by 3.3 and by the attenuverter, anuli.cpp:304 adds the knob and anuli.cpp:307 clamps the total to 0..1"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "a twelfth of a volt", "why": "anuli.cpp:334 reads this input with getNormalVoltage(1/12, channel), divides by 5 and multiplies by 48, by 3.3 and by the attenuverter, clamping the result to ±48 semitones"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "anuli.cpp:298 reads this input with getVoltage(channel); anuli.cpp:302 divides it by 5 and multiplies by 3.3 and by the attenuverter, anuli.cpp:304 adds the knob and anuli.cpp:308 clamps the total to 0..0.9995"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "anuli.cpp:296 reads this input with getVoltage(channel); anuli.cpp:302 divides it by 5 and multiplies by 3.3 and by the attenuverter, anuli.cpp:304 adds the knob and anuli.cpp:308 clamps the total to 0..0.9995"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "anuli.cpp:299 reads this input with getVoltage(channel); anuli.cpp:302 divides it by 5 and multiplies by 3.3 and by the attenuverter, anuli.cpp:304 adds the knob and anuli.cpp:308 clamps the total to 0..0.9995"},
+      "5": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "anuli.cpp:384 tests this input against 1V with getVoltage(channel), and anuli.cpp:170 takes part of the module's channel count from its getChannels()"},
+      "6": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "anuli.cpp:322 multiplies this input by 12 into the note in semitones, and anuli.cpp:170 takes part of the module's channel count from its getChannels()"},
+      "7": {"family": "audio", "poly": true, "step": "continuous", "range": "±5V", "why": "anuli.cpp:378 divides this input by 5 into the resampler, and anuli.cpp:170 takes part of the module's channel count from its getChannels()"},
+      "8": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 6V", "negative": "ignored", "why": "anuli.cpp:212 clamps this input to 0..6 and truncates it to a model index; anuli.cpp:221 instead multiplies it by 12 and rounds when the note reading is on"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "anuli.cpp:357 clamps the sample to ±1 and multiplies by 5, and anuli.cpp:241 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "anuli.cpp:358 clamps the sample to ±1 and multiplies by 5, and anuli.cpp:243 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is Émilie Gillet's Rings, vendored unchanged at eurorack/rings; src/anuli.cpp is the Rack wrapper, which runs one Rings part per polyphonic channel through its own resampler. Two of the hardware's normallings are marked TODO in the wrapper and are handed to the DSP as flags rather than implemented in Rack: internal_exciter, internal_strum and internal_note are set from each jack's connected state at anuli.cpp:337, so the behaviour comes from the Rings code itself. The frequency control voltage jack normals to one twelfth of a volt at anuli.cpp:334, which is what makes its attenuverter a fine tuning knob. The strum threshold is 1V, which the manual does not give. Every per-channel read uses getVoltage(channel) rather than getPolyVoltage(channel), so the five control voltage jacks, V/OCT, IN and STRUM all drive one channel per cable channel, with no spreading of a monophonic cable across the engines. The default tuning adds 1.501V to the pitch, selected by frequencyOffsets[1] in src/anuli.hpp; the Compatibility options menu selects the 0.0 entry instead."
+}

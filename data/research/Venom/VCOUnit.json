@@ -1,0 +1,23 @@
+{
+  "plugin": "Venom",
+  "module": "VCOUnit",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "VCOUnit.cpp:432 reads it per channel and adds it, through its depth, into the frequency exponent"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "VCOUnit.cpp:440 reads it per channel and adds it, through its depth, to the frequency in hertz"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "VCOUnit.cpp:420 divides this jack by 5 and clamps it to -1 to +1"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "VCOUnit.cpp:424 divides this jack by 5 and clamps it to -1 to +1"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "VCOUnit.cpp:427 reads it per channel and adds it straight into the frequency exponent, one octave per volt"},
+      "5": {"family": "trigger", "poly": true, "step": "stepped", "why": "VCOUnit.cpp:471 reads it per channel into a SchmittTrigger"},
+      "6": {"family": "trigger", "poly": true, "step": "stepped", "why": "VCOUnit.cpp:458 reads it per channel into a SchmittTrigger"},
+      "7": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "VCOUnit.cpp:516 scales this jack by a fifth through its depth knob onto the -1 to +1 shape"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "why": "VCOUnit.cpp:530 reads it per channel through a depth knob and shifts the phasor by it"},
+      "9": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "VCOUnit.cpp:737 clamps the knob plus this CV to plus or minus 5V"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "why": "VCOUnit.cpp:726 reads it per channel through a depth knob and the unity-voltage menu"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "VCOUnit.cpp:751 and 753 a per-channel SIMD write then setChannels(channels); the widest input sets the count"}
+    }
+  },
+  "comment": "The sync and soft-sync inputs trigger above 2V by default; a menu switches them to fire on a rising zero crossing instead, so those two jacks have no fixed threshold. The level input has a menu choosing whether 5V or 10V is unity."
+}

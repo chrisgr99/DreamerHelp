@@ -1,0 +1,15 @@
+{
+  "plugin": "NullSet",
+  "module": "PolyAutoPan",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "PolyAutoPan.cpp:57 takes this port's getChannels() as the voice count and 70 reads each channel in turn"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "PolyAutoPan.cpp:42-44 reads getVoltage() with no channel and computes 24.995 times it plus 250.05 as the tempo, in place of the knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "PolyAutoPan.cpp:80 writes one value with setVoltage and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "PolyAutoPan.cpp:79 writes one value with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "Source read at commit 21bfcbf, the commit whose plugin.json carries the installed 2.0.0. The Rate input replaces the knob rather than being added to it, and its law (24.995 V + 250.05, PolyAutoPan.cpp:44) is not clamped, so a voltage outside ±10V runs the sweep faster than 500 beats per minute or backwards. Output index 0 is the right side and index 1 the left, which is the reverse of the usual order."
+}

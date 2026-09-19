@@ -1,0 +1,71 @@
+{
+  "plugin": "Cella",
+  "module": "CognitiveShift",
+  "description": "Eight-bit shift register: each clock works out a new bit from the DATA, LOGIC and XOR jacks and pushes it in, with every bit on its own jack and four converters reading groups of them",
+  "params": [
+    {"ids": [0], "text": "Forces the bit going in to 1 on the next clock; in EDIT mode it pushes a 1 in straight away"},
+    {"ids": [1], "text": "Forces the bit going in to 0 on the next clock; in EDIT mode it pushes a 0 in straight away"},
+    {"ids": [2], "text": "Sets all eight bits to zero at once"},
+    {"ids": [3], "text": "Sets the voltage at which the DATA, LOGIC and XOR jacks count as high, 1V to 9V"},
+    {"ids": [4], "text": "Attenuates and inverts the THRES CV jack, -1 to 1, before that voltage is added to the THRES knob"},
+    {"ids": [5], "text": "Attenuates and inverts the four-bit converter reading bits 1 to 4, -1 to 1"},
+    {"ids": [6], "text": "Attenuates and inverts the four-bit converter reading bits 3 to 6, -1 to 1"},
+    {"ids": [7], "text": "Attenuates and inverts the four-bit converter reading bits 5 to 8, -1 to 1"},
+    {"ids": [8], "text": "Attenuates and inverts the eight-bit converter reading the whole register, -1 to 1"},
+    {"ids": [9], "text": "Hands the register over to the WRITE and ERASE buttons and stops the clock being read at all, so a pattern can be typed in by hand"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage read against the threshold to set the bit going in, unless a WRITE or ERASE button overrides it"},
+    {"ids": [1], "text": "A second voltage read against the threshold and combined with the DATA result by the logic operation the menu chooses; hovering the jack names the operation in use"},
+    {"ids": [2], "text": "A third voltage read against the threshold and exclusive-ORed with everything else to give the bit going in"},
+    {"ids": [3], "text": "Each rise past 1V works out the next bit and shifts the whole register along by one"},
+    {"ids": [4], "text": "A rise past 1V sets all eight bits to zero at once"},
+    {"ids": [5], "text": "Scaled by its attenuverter and added to the THRES knob, the total clamped to 1V and 9V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Bits 1 to 4 read as a four-bit number, 0V to 10V before its attenuverter"},
+    {"ids": [1], "text": "Bits 3 to 6 read as a four-bit number, 0V to 10V before its attenuverter"},
+    {"ids": [2], "text": "Bits 5 to 8 read as a four-bit number, 0V to 10V before its attenuverter"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Its own bit of the register, put out as a gate, a copy of the clock or a short trigger depending on the menu"},
+    {"ids": [11], "text": "All eight bits read as one number, -5V to 5V before its attenuverter, or 0V to 10V with the menu set to unipolar"}
+  ],
+  "notes": [
+    "with EDIT on the clock input is not read at all; the register only moves when WRITE or ERASE is pressed",
+    "a bit output patched back into DATA, LOGIC or XOR is handled specially: if that bit changed on the very clock being processed, its previous state is read, which keeps a feedback loop stable",
+    "that same handling means stacked cables into DATA, LOGIC or XOR are not read correctly; to merge sources, patch one into LOGIC and set the logic type to OR",
+    "a jack with no cable counts as low and takes no part in working out the next bit",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Bit output mode: Clocks, Gates, Triggers — Clocks passes the CLOCK voltage through while the bit is high, Gates holds a flat 10V, Triggers sends a 1 millisecond pulse per clock",
+    "Logic type: XOR, NAND, XNOR, OR, AND, NOR — chooses how the LOGIC jack combines with the DATA result",
+    "Input overrides: Data, Everything — Data lets LOGIC and XOR act on a WRITE or ERASE press as well, Everything makes the button the whole answer",
+    "8 Bit DAC output: Bipolar, Unipolar — sets whether the eight-bit converter runs -5V to 5V or 0V to 10V",
+    "Show DAC lights — turns the converter lamps on and off",
+    "Show bit lights — turns the per-bit lamps on and off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 1 to 9V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "±5V · one channel only"
+    }
+  }
+}

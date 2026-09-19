@@ -1,0 +1,74 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Meter",
+  "description": "A musical clock built around bars: a time signature, a tempo, and six subdivisions each with its own swing, put out both swung and on the grid",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo in quarter notes per minute, 30 to 300"},
+    {"ids": [1], "text": "Sets the top of the time signature, 1 to 16"},
+    {"ids": [2], "text": "Sets the bottom of the time signature: 1, 2, 4, 8, 16 or 32"},
+    {"ids": [3], "text": "Starts and stops the clock on each press"},
+    {"ids": [4], "text": "Returns the bar count and the position within the bar to the top on each press, and fires the reset output"},
+    {"ids": [6, 7, 8, 9, 10], "text": "Shifts that subdivision's off-beats late or early, -50 to 50 per cent; the setting is taken up at the end of each bar rather than mid-bar"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the tempo, added to the BPM knob at about 27 BPM per volt, or read as an absolute tempo at a hundredth of a volt per BPM when the menu says so"},
+    {"ids": [1], "text": "Changes the top of the time signature, added to the numerator knob; by default the change takes effect at the next bar line"},
+    {"ids": [2], "text": "Changes the bottom of the time signature, added to the denominator switch; by default the change takes effect at the next bar line"},
+    {"ids": [3], "text": "A high gate runs the clock, taking the run button's place"},
+    {"ids": [4], "text": "Takes the tempo from the time between pulses on this jack and phase-locks the whole grid to it; the pulses per quarter note are set on the menu, and MIDI clock is always 24"},
+    {"ids": [6, 7, 8, 9, 10], "text": "Changes that subdivision's swing, added to its trimmer; the setting is taken up at the end of each bar"},
+    {"ids": [11], "text": "A rise returns the bar count and the position within the bar to the top and is passed on to the reset output"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A trigger at the start of every bar, always on the grid because the bar has no swing"},
+    {"ids": [1], "text": "A trigger on each quarter note, with that subdivision's swing applied"},
+    {"ids": [2], "text": "A trigger on each eighth note, with that subdivision's swing applied"},
+    {"ids": [3], "text": "A trigger on each sixteenth note, with that subdivision's swing applied"},
+    {"ids": [4], "text": "A trigger three times per quarter note, with that subdivision's swing applied"},
+    {"ids": [5], "text": "A trigger three times per eighth note, with that subdivision's swing applied"},
+    {"ids": [6], "text": "A trigger whenever the reset button is pressed or the reset jack rises, for restarting sequencers together with the clock"},
+    {"ids": [7], "text": "A trigger on each quarter note at exact grid spacing, whatever the swing trimmer is set to"},
+    {"ids": [8], "text": "A trigger on each eighth note at exact grid spacing, whatever the swing trimmer is set to"},
+    {"ids": [9], "text": "A trigger on each sixteenth note at exact grid spacing, whatever the swing trimmer is set to"},
+    {"ids": [10], "text": "A trigger three times per quarter note at exact grid spacing, whatever the swing trimmer is set to"},
+    {"ids": [11], "text": "A trigger three times per eighth note at exact grid spacing, whatever the swing trimmer is set to"}
+  ],
+  "notes": [
+    "with an external clock patched, a mismatched pulses-per-quarter setting cannot be guessed: the readout turns orange and reads PPQN? while the module runs from its own BPM knob",
+    "placing a MeterX immediately to the right gives a 24-pulse clock, a run gate and bar-length triggers taken from this module"
+  ],
+  "menu": [
+    "External Clock PPQN — a label over the pulses-per-quarter choices below it, which say how the external clock jack is to be read",
+    "Behavior — a label over the three choices below it",
+    "Apply time signature changes immediately — takes a new time signature at once rather than waiting for the next bar boundary",
+    "Reset on play — makes the run button and the run gate restart the bar at the top, and passes a pulse out of the reset output so downstream sequencers restart too",
+    "BPM CV absolute (0.01V/BPM — for Arrange) — reads the BPM jack as an absolute tempo at a hundredth of a volt per beat per minute instead of adding to the knob",
+    "Outputs — a label over the pulse width choice below it",
+    "Gate/trigger width — sets how long each pulse lasts: a fixed 1, 2, 5 or 10ms, or a share of that output's own period at 12.5, 25, 50, 75 or 87.5 per cent"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "stepped · one channel only",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "plugin": "Venom",
+  "module": "WaveMangler",
+  "description": "Wave Mangler splits a bipolar input at a high and a low threshold and amplifies the three regions separately, summing them into a new wave",
+  "params": [
+    {"ids": [0], "text": "Switches a high pass filter into the wave input to strip DC bias from it; off by default, so the input is DC coupled"},
+    {"ids": [1], "text": "Sets oversampling against the aliasing wave shaping introduces: off by default, then x2, x4, x8, x16 or x32"},
+    {"ids": [2], "text": "Sets the clipping on the final output: off, hard clipping at 5V either way as the default, soft clipping at 5V either way, or soft clipping at 6V either way"},
+    {"ids": [3], "text": "Switches a high pass filter into the output to strip DC bias from it; off by default, so the output is DC coupled"},
+    {"ids": [4], "text": "Attenuates or inverts the input offset CV before it is summed with the INPUT OFFSET knob"},
+    {"ids": [5], "text": "Adds -5V to 5V to the wave input before any shaping, which is how a unipolar input is moved to bipolar"},
+    {"ids": [6], "text": "Attenuates or inverts the output offset CV before it is summed with the OUTPUT OFFSET knob"},
+    {"ids": [7], "text": "Adds -5V to 5V to the output after clipping and before any output DC blocking, which is how the bipolar output is moved to unipolar"},
+    {"ids": [8], "text": "Attenuates or inverts the high amplifier CV before it is summed with the HIGH AMPLIFIER knob"},
+    {"ids": [9], "text": "Sets the amplification of the high component, -10x to 10x: the amount by which the input rises above the high threshold is multiplied by it, and the component is zero otherwise"},
+    {"ids": [10], "text": "Attenuates or inverts the high threshold CV before it is summed with the HIGH THRESHOLD knob"},
+    {"ids": [11], "text": "Sets the voltage above which the input counts as the high region, -5V to 5V"},
+    {"ids": [12], "text": "Sets whether the middle component is hard clipped at the high and low thresholds: off, before amplification as the default, after amplification, or both"},
+    {"ids": [13], "text": "Attenuates or inverts the mid amplifier CV before it is summed with the MID AMPLIFIER knob"},
+    {"ids": [14], "text": "Sets the amplification of the middle component, -10x to 10x, by which the wave input is multiplied"},
+    {"ids": [15], "text": "Attenuates or inverts the low threshold CV before it is summed with the LOW THRESHOLD knob"},
+    {"ids": [16], "text": "Sets the voltage below which the input counts as the low region, -5V to 5V; if it works out above the high threshold the two are swapped internally"},
+    {"ids": [17], "text": "Attenuates or inverts the low amplifier CV before it is summed with the LOW AMPLIFIER knob"},
+    {"ids": [18], "text": "Sets the amplification of the low component, -10x to 10x: the amount by which the input falls below the low threshold is multiplied by it, and the component is zero otherwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Voltage control of the input offset; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [1], "text": "Voltage control of the output offset; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [2], "text": "Voltage control of the high amplifier; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [3], "text": "Voltage control of the high threshold; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [4], "text": "Voltage control of the mid amplifier; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [5], "text": "Voltage control of the low threshold; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [6], "text": "Voltage control of the low amplifier; the attenuated voltage is summed with the knob and the total can leave the knob range"},
+    {"ids": [7], "text": "The signal to be wave shaped, built for bipolar -5V to 5V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sum of the high, middle and low components, after clipping, output offset and DC blocking"}
+  ],
+  "menu": [
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

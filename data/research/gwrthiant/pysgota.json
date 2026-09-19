@@ -1,0 +1,18 @@
+{
+  "plugin": "gwrthiant",
+  "module": "pysgota",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the start knob", "why": "pysgota.cpp:74-76 takes the knob, then overwrites it with getVoltage() when the jack is connected; no clamp follows"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the end knob", "why": "pysgota.cpp:77-80 takes the knob, then overwrites it with getVoltage() when the jack is connected; no clamp follows"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the freq mult knob", "why": "pysgota.cpp:83-91 calls readVoltages() into a 16-element array when the cable is polyphonic, and fills all 16 with getVoltage() when it is not"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the offset knob", "why": "pysgota.cpp:95-98 takes the knob, then overwrites it with getVoltage() when the jack is connected; no clamp follows"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the scale knob", "why": "pysgota.cpp:99-102 takes the knob, then overwrites it with getVoltage() when the jack is connected; line 119 then skips the whole calculation when it is exactly 0"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the modulus knob", "why": "pysgota.cpp:105-113 calls readVoltages() into a 16-element array when the cable is polyphonic, and fills all 16 with getVoltage() when it is not; line 122 substitutes 0.001 for a modulus of 0"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "pysgota.cpp:124-125 calls setChannels(PORT_MAX_CHANNELS) then writeVoltages() with all 16 values"}
+    }
+  },
+  "comment": "Source read at commit c13145d, the last commit carrying version 2.0.2 with exactly the six installed models. SCALE at exactly 0 is a maker fault: pysgota.cpp:119 guards the whole loop with if (!(scale == 0)), so the local array range[16] at line 118 is left uninitialised and line 125 writes it to the output. The six jacks replace their knobs rather than summing with them, which the panel does not say."
+}

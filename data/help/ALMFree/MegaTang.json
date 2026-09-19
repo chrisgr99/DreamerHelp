@@ -1,0 +1,53 @@
+{
+  "plugin": "ALMFree",
+  "module": "MegaTang",
+  "description": "A copy of ALM's MEGA-TANG: four channels with level, pan, mute and an effects send, summed into a stereo mix, with a stereo return and two optional expanders",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets how much of that channel reaches the Send output, taken after its level and its mute; it comes up at nothing"},
+    {"ids": [4, 5, 6, 7], "text": "Places that channel between the left and right mix outputs and comes up at the centre"},
+    {"ids": [8, 9, 10, 11], "text": "Sets that channel's level from silence to unity and comes up fully open; while that channel's Levels CV jack is patched the knob stops setting the level and scales the jack's voltage instead"},
+    {"ids": [12, 13, 14, 15], "text": "Silences that channel in the stereo mix and in the send; the channel's own output jack goes on carrying it at full level"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "The signal that channel mixes"},
+    {"ids": [4, 5, 6, 7], "text": "Sets that channel's level, 0V for silence and the top of the chosen voltage range for the knob's full setting; a cable sitting at 0V therefore silences the channel"},
+    {"ids": [8], "text": "The left side of the effects return, added straight into the left mix output; nothing is copied to the right side, despite the (m) printed on the panel"},
+    {"ids": [9], "text": "The right side of the effects return, added straight into the right mix output"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That channel's signal after its level, with the mute ignored; putting a cable in here takes the channel out of the stereo mix and out of the send"},
+    {"ids": [4], "text": "The left side of the mix: every channel whose own output is empty, at its panned level, plus the left return"},
+    {"ids": [5], "text": "The right side of the mix: every channel whose own output is empty, at its panned level, plus the right return"},
+    {"ids": [6], "text": "The four channels at their send settings, after their levels and mutes, added together"}
+  ],
+  "notes": [
+    "the module is monophonic: every jack reads or writes one channel.",
+    "the four send knobs come up at nothing, so the Send output is silent until one is raised. The level knobs come up fully open and the pans at the centre.",
+    "a mute takes effect on the sample it is pressed, with no fade. ALM's page for the hardware describes soft-close mutes that avoid clicks; there is no smoothing in this port.",
+    "MT-EX1 and MT-EX2 attach immediately to the right of this module. Either one is inert anywhere else.",
+    "with an MT-EX1 attached, this module writes a line of debug text to standard output on every audio sample. It changes nothing about the sound but fills a log quickly."
+  ],
+  "menu": [
+    "Voltage Range: 10V, 5V — sets the voltage the four Levels CV jacks treat as a channel's full level"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads the knob alone.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous · one channel only",
+      "5": "continuous",
+      "6": "continuous · one channel only"
+    }
+  }
+}

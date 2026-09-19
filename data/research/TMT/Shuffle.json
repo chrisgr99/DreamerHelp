@@ -1,0 +1,16 @@
+{
+  "plugin": "TMT",
+  "module": "Shuffle",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "shuffle.cpp:99 trigger.process(getVoltage()) with Rack's default SchmittTrigger thresholds of 0V and 1V; channel 0 only"},
+      "1": {"poly": true, "step": "continuous", "normal": "a 12-channel chromatic scale", "why": "shuffle.cpp:83-91 getChannels() bounds the read loop; the else branch loads defaultVoltages"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "an unpredictable seed each trigger", "why": "shuffle.cpp:103 germ = (getVoltage() + 10) / 20, scaled to an int seed; shuffle.cpp:106 rd() when unpatched"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "all the input channels", "why": "shuffle.cpp:93-97 clamp(getVoltage(), 0, 10) then rescale to 1..inputChannels; else branch uses inputChannels"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "shuffle.cpp:162 setChannels(FinalSize), the lesser of the input count and the requested count"}
+    }
+  },
+  "comment": "The re-shuffle that follows a change in channel count or in the alt mode switch calls rng.seed(seed) with the member `seed`, which is left uninitialised until the first trigger arrives with a cable in the Seed jack (shuffle.cpp:74, :130). The Seed voltage is not clamped before being scaled, so voltages outside ±10V are still accepted and give distinct seeds."
+}

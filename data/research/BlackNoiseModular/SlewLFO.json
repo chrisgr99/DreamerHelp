@@ -1,0 +1,15 @@
+{
+  "plugin": "BlackNoiseModular",
+  "module": "SlewLFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "-5 to 10V", "step": "continuous", "negative": "subtracts", "why": "SlewLFO.cpp lines 220 to 227, clamp(getPolyVoltage(c), -5, 10) added to the knob"},
+      "1": {"family": "cv", "poly": true, "range": "-5 to 10V", "step": "continuous", "negative": "subtracts", "why": "SlewLFO.cpp lines 223 to 228, clamp(getPolyVoltage(c), -5, 10) added to the knob"},
+      "2": {"poly": true, "step": "continuous", "negative": "swings", "why": "SlewLFO.cpp line 210, getPolyVoltage(c) taken as the target the output chases"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "SlewLFO.cpp lines 252 and 260 hold the output between 0 and 10; line 181 shifts it down by 5 in fast LFO mode"}
+    }
+  },
+  "comment": "Read from the repository at commit c3db83a, whose plugin.json carries the installed 2.0.2. The rise and fall times come from getMinMaxSlewRates at line 105: in the slow range 8 seconds down to 8ms for a 10V move, in the fast range 200ms down to 200 microseconds, with the two capacitor settings replacing both ends. The maker's own comment on line 117 says the fast range reaches 120 microseconds where the code on line 119 sets 200e-6, so the comment is wrong and the line above follows the code. The rise and fall CVs are clamped to -5V to 10V each but their sum with the knob is not clamped again, so the knob and a large CV together can push the time past either end of the nominal range; that is why no sumRange is given. The input jack is read only in Slew mode, at line 210, and in LFO mode the shape runs from a square wave generated internally. The panel's IN light is dark in LFO mode, which the README lists as a difference from the hardware, where it shows the input voltage whatever the mode."
+}

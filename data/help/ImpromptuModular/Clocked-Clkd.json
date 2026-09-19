@@ -1,0 +1,52 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Clocked-Clkd",
+  "description": "Master clock with three sub-clocks, each running at its own ratio of the master tempo; it can be chained with other clocks and locked to an external clock source",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Ratio of that clock to the master tempo: turned up it multiplies, turned down it divides, through whole numbers to 16 plus 1.5 and 2.5 and selected values on to 96; turning it shows that ratio"},
+    {"ids": [3], "text": "Sets the master tempo in whole BPM, 30 to 300"},
+    {"ids": [4], "text": "Restarts the time keeping of the master clock and of all three sub-clocks"},
+    {"ids": [5], "text": "Pause and play. The outputs hold their state while it is off, and the clock resumes where it stopped, so sub-clocks at different ratios stay in step"},
+    {"ids": [6], "text": "Steps back through the tempo modes, which are BPM CV and external sync at 24, 16, 12, 8, 4 or 2 pulses per step"},
+    {"ids": [7], "text": "Steps forward through the tempo modes, which are BPM CV and external sync at 2, 4, 8, 12, 16 or 24 pulses per step"},
+    {"ids": [8], "text": "Steps the display back through the four values it can show: the master tempo, then the ratio of each of the three sub-clocks"},
+    {"ids": [9], "text": "Steps the display forward through the four values it can show: the master tempo, then the ratio of each of the three sub-clocks"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here restarts the time keeping of the master clock and all three sub-clocks"},
+    {"ids": [1], "text": "A trigger here toggles between run and pause; the menu can make this input follow a gate level instead"},
+    {"ids": [2], "text": "In CV mode this sets the tempo, with 0V giving 120 BPM and each volt doubling it. In a sync mode the clock locks to the pulses arriving here, and with nothing patched the tempo comes from the BPM knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The master clock pulse, at the tempo set by the BPM knob or by the external clock"},
+    {"ids": [1, 2, 3], "text": "The pulse of that sub-clock, at its own ratio of the master tempo"},
+    {"ids": [4], "text": "A 10V pulse when the module is reset, for passing the reset on to sequencers or to another clock"},
+    {"ids": [5], "text": "A 10V pulse when run is switched on or off, for passing the run state on to sequencers or to another clock"},
+    {"ids": [6], "text": "Passes on the voltage at the BPM input when a cable is patched there; with nothing patched it gives the module's own tempo as a BPM CV"}
+  ],
+  "menu": [
+    "Outputs high on reset when not running — holds the clock outputs high while a stopped clock is reset, so a sequential switch reset at that moment is not stepped on",
+    "On Start — offers Do internal reset and Send reset pulse, so that switching run on restarts the clock and the sequencers it drives together",
+    "Run CV input is level sensitive — makes the RUN input follow a gate rather than a trigger; in a chain of clocks only the first should have it turned on",
+    "Send triggers (instead of gates) — switches an output from a pulse with a width to a short trigger, chosen for Master clk, Clock 1, Clock 2 and Clock 3 separately",
+    "Auto-patch — makes this the clock master and patches the reset, run and BPM inputs of the other Clocked and Clkd modules to it, leaving already-patched inputs alone",
+    "On Stop — offers Do internal reset and Send reset pulse, so that switching run off restarts the clock and the sequencers it drives together",
+    "BPM output is CV when ext sync — makes the BPM output carry the module's own tempo as a BPM CV rather than passing on the voltage at the BPM input",
+    "BPM Input when CV mode — two sliders, Scale and Offset, changing how the voltage at the BPM input is read as a tempo"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

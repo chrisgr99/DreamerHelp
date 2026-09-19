@@ -1,0 +1,63 @@
+{
+  "plugin": "PathSet-Rainbows",
+  "module": "Crossing",
+  "description": "Sequencer over a field of notes with an intersection between every four of them, each intersection steering, muting or ratcheting the playhead",
+  "params": [
+    {"ids": [0], "text": "Sets the chance that a ratchet intersection makes the playhead play the next few notes quickly"},
+    {"ids": [1], "text": "Attenuates and inverts the ratchet CV before it is added to the ratchet setting"},
+    {"ids": [2], "text": "Sets the chance that a mute intersection silences the next note; while a note is silent the gate output stays low and the CV output holds its previous value"},
+    {"ids": [3], "text": "Attenuates and inverts the mute CV before it is added to the mute setting"},
+    {"ids": [4], "text": "Sets how likely the playhead is to stay in a roundabout rather than leave it"},
+    {"ids": [5], "text": "Attenuates and inverts the roundabout CV before it is added to the roundabout setting"},
+    {"ids": [6], "text": "Sets the chance that the playhead does the opposite of the route an intersection sets for it"},
+    {"ids": [7], "text": "Attenuates and inverts the opposite chance CV before it is added to that setting"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43], "text": "Clicking steps that note through the chosen scale; right-clicking opens a menu for setting any note, randomizing, and changing the scale or root"},
+    {"ids": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68], "text": "Clicking steps that intersection through its effects: none, mute, ratchet, horizontal, vertical, cross up, cross down and roundabout; right-clicking sets the effect directly"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence one step on each rising edge"},
+    {"ids": [1], "text": "Returns the sequence to its first step and returns every setting to the state last chosen by hand"},
+    {"ids": [2], "text": "Raises or lowers the ratchet setting through its attenuverter"},
+    {"ids": [3], "text": "Raises or lowers the mute setting through its attenuverter"},
+    {"ids": [4], "text": "Raises or lowers the roundabout setting through its attenuverter"},
+    {"ids": [5], "text": "Raises or lowers the opposite chance through its attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the gate of the note being played"},
+    {"ids": [1], "text": "Carries the pitch of the note being played, and holds its last value while a note is muted"},
+    {"ids": [2], "text": "Carries a gate on the first step after the sequence reaches its end"},
+    {"ids": [3], "text": "Carries a gate while the sequence is ratcheting"},
+    {"ids": [4], "text": "Carries a gate while a note is muted"}
+  ],
+  "notes": [
+    "Bypassing this module connects the clock input to the gate output",
+    "The sequence moves only on a rising edge at the clock input, so with nothing patched there the module holds its first note"
+  ],
+  "menu": [
+    "Set Scale — picks the scale the notes come from and randomizes every note on the module",
+    "Root Note — changes the root and shifts every entered note by the interval between the old root and the new one",
+    "Range — sets how many octaves the notes span, centred on the fifth above the root",
+    "Ratchet Speed — sets how fast a ratchet plays: whole notes match the clock, half notes twice per clock, quarter notes four times",
+    "Randomize Notes — randomizes every note within the chosen scale, or shifts some of the notes an octave up or down",
+    "Active Cursor Color — picks the colour of the ring that marks the note being played",
+    "Add Expander — creates the play head expander, which adds three more playheads, or the randomizer expander, which adds buttons and triggers that randomize notes; each goes to the right",
+    "Crossings — initializes every intersection to no effect, or randomizes all of them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only"
+    }
+  }
+}

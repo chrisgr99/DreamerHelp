@@ -1,0 +1,74 @@
+{
+  "plugin": "Befaco",
+  "module": "Muxlicer",
+  "description": "Eight-step sequential switch, gate generator and step sequencer: one signal routed to or from eight jacks under a clock, with a gain and a gate on every step",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the sequence: pushed up it plays and a second push stops it, pushed down it resets and plays one cycle through"},
+    {"ids": [1], "text": "Picks which step the switch is on, one step per position; turned fully anti-clockwise to RUN, the step advances with the clock instead"},
+    {"ids": [2], "text": "Sets what the gate outputs do on each step: no gate, one gate filling the step, one gate at 50% duty, or between 2 and 8 gates spread through the step"},
+    {"ids": [3], "text": "Multiplies or divides the clock driving the sequence, from a sixteenth of the incoming rate up to sixteen times it"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "Attenuates the signal passing through the switch on that step, from silence to unity gain"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets how many gates each step carries, a volt per gate up to 10V, with the GATE MODE knob attenuating it"},
+    {"ids": [1], "text": "Selects the step, a volt per step, added to the ADDRESS knob"},
+    {"ids": [2], "text": "The clock driving the sequence, read high above 2V and low below 0.1V; with nothing patched an internal clock runs instead, set by tap tempo on the menu"},
+    {"ids": [3], "text": "A rising edge sends the playhead back to the start; from stopped it also plays one cycle through"},
+    {"ids": [4], "text": "In 1 input to 8 outputs mode, the signal routed out to whichever step is current"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "In 8 inputs to 1 output mode, this step's signal, passed to the COM output while the step is current and scaled by that step's gain slider"},
+    {"ids": [13], "text": "A signal normalled into every step jack that has no cable of its own; with nothing patched here it stands at 10V, which the menu can change to 1V or 5V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V clock, multiplied or divided from the incoming clock by its own setting on the menu"},
+    {"ids": [1], "text": "A 10V gate whenever the current step's gate is high, so it carries the gate pattern of every step in turn"},
+    {"ids": [2], "text": "A 1ms 10V pulse when the eighth step ends"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "A 10V gate on that step, following the pattern the GATE MODE knob sets, and silent while the sequence is stopped"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18], "text": "In 1 input to 8 outputs mode, the COM signal scaled by that step's gain slider while the step is current, and 0V the rest of the time"},
+    {"ids": [19], "text": "In 8 inputs to 1 output mode, the current step's input scaled by that step's gain slider"},
+    {"ids": [20], "text": "In 1 input to 8 outputs mode, the COM signal scaled by the current step's gain slider, carried here whenever that step's own output has no cable"}
+  ],
+  "notes": [
+    "the sequence comes up stopped. Push the PLAY switch up to start it, and turn the ADDRESS knob fully anti-clockwise to RUN, or the step will not advance with the clock."
+  ],
+  "menu": [
+    "1 input ▸ 8 outputs — makes the COM jack an input and the eight step jacks outputs; the jacks change colour to show it, and the cables on them are cleared",
+    "Input clock — multiplies or divides the incoming clock before the sequencer counts it",
+    "Quadratic only mode — limits the clock multiplications and divisions and the gate counts to powers of two; off by default",
+    "Output clock follows play/stop — silences the clock output whenever the sequence is stopped; off by default",
+    "8 inputs ▸ 1 output — makes the eight step jacks inputs and the COM jack an output; the jacks change colour to show it, and the cables on them are cleared",
+    "Output clock — multiplies or divides the clock sent to the clock output",
+    "Tap to set internal tempo... — sets the internal clock from the gaps between clicks, and appears only while nothing is patched into the clock input",
+    "All In Normalled Value — sets what the step jacks fall back to when the ALL input has no cable: 1V, 5V or 10V; it can only be reached in 8 inputs ▸ 1 output mode, and is greyed out otherwise"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic",
+      "12": "continuous · polyphonic",
+      "13": "polyphonic"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped"
+    }
+  }
+}

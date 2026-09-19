@@ -1,0 +1,50 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Bombe",
+  "description": "Shift-register chord looper: a loop of 2 to 16 chords, clocked round, whose head is replaced by a fresh chord at a set chance",
+  "params": [
+    {"ids": [0], "text": "Sets the key the chords are drawn from, C to B"},
+    {"ids": [1], "text": "Sets the mode the chords are drawn from, Ionian through Locrian"},
+    {"ids": [2], "text": "Sets how many chords are held in the loop, 2 to 16"},
+    {"ids": [3], "text": "Sets the chance that the chord reaching the head of the loop is kept as it was; fully clockwise the loop is frozen and the lamp shows red, and turning it down raises the chance of a new chord"},
+    {"ids": [4], "text": "Sets how far a replacement chord may stray from the rule in force: at its lowest the chords keep to the chosen key and stay plain, and raising it brings in outside roots and harsher chords"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge shifts the loop on by one place and the chord at the head is sent to the pitch outputs"},
+    {"ids": [1], "text": "A voltage here sets the key, in place of the ROOT knob; 0V to 10V spread across the twelve keys, or read as a 1V/octave pitch if the menu says so"},
+    {"ids": [2], "text": "A voltage here sets the mode, in place of the MODE knob; 0V to 10V spread across the seven modes"},
+    {"ids": [3], "text": "A voltage above zero freezes the loop so that no chord is replaced, whatever the X knob is set to"},
+    {"ids": [4], "text": "Adds to the Y knob, 10V covering the whole of the knob's range, and the sum is clamped to that range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowest note of the current chord as a 1V/octave pitch, and the same jack carries all six notes as a polyphonic cable"},
+    {"ids": [1, 2, 3, 4, 5], "text": "One note of the current chord as a 1V/octave pitch; a chord of three or four notes fills the remaining outputs by repeating its own notes from the root up, in the octave the menu chooses"}
+  ],
+  "notes": [
+    "the loop only moves when a clock is patched into CLOCK, and no chord is replaced until the first clock edge arrives.",
+    "the top line of the display names the chord now at the head of the loop, and the lines below it the chords that went before, fading as they get older."
+  ],
+  "menu": [
+    "Chord Selection — the rule a replacement chord follows: Random draws from the C major scale, Simple draws triads from the chosen key and mode, Galaxy follows the Galaxy module's rule",
+    "Repeat Notes — the octave of the notes repeated to fill six outputs from a three- or four-note chord: Lower, Repeat, Upper or Random",
+    "Allowed Chord Inversions — which inversions may be picked at random: Root only, Root and First, or Root, First and Second",
+    "Root Volt Scaling — how the ROOT input is read: V/Oct takes it as a 1V/octave pitch, Fourths and Fifths as the twelve keys spread across 0V to 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "stepped · one channel only\n\nunpatched it reads the ROOT knob's setting.",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads the MODE knob's setting.",
+      "3": "high above 0V · stepped · one channel only",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "1V per octave · continuous · one channel only"
+    }
+  }
+}

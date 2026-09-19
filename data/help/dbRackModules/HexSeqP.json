@@ -1,0 +1,53 @@
+{
+  "plugin": "dbRackModules",
+  "module": "HexSeqP",
+  "description": "A trigger sequencer of sixteen rows over sixteen patterns, each row a line of hexadecimal digits where every digit is four steps",
+  "params": [
+    {"ids": [0], "text": "Picks which of the sixteen patterns is played and edited"},
+    {"ids": [1], "text": "Copies the sixteen rows of the pattern being edited"},
+    {"ids": [2], "text": "Writes the copied rows into the pattern being edited"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each trigger here takes the sequence one step on"},
+    {"ids": [1], "text": "A trigger here puts every row back to its first step"},
+    {"ids": [2], "text": "Picks the pattern by cable: with Pattern Poly Select on, a trigger on a channel of this jack chooses the pattern of that number, and with it off the voltage chooses, 0.625V per pattern over 0-10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10ms trigger on the channel of each row whose step is a one bit"},
+    {"ids": [1], "text": "Carries 10V on the channel of each row whose step is a one bit, held until the next step"},
+    {"ids": [2], "text": "Passes the clock through on the channel of each row whose step is a one bit"},
+    {"ids": [3], "text": "A 10ms trigger on the channel of each row whose step is a zero bit"}
+  ],
+  "notes": [
+    "a row does nothing until digits are typed into its field and entered; the text is red while it is being edited and green once it counts",
+    "each digit is read as four steps from its four bits, so 8 is a step on the beat, 2 the usual hi-hat and 08 the usual snare",
+    "an asterisk in place of a digit is picked afresh at random every time it comes round",
+    "a row loops on its own length, four steps per digit, so rows of different lengths drift against each other",
+    "changing pattern, by knob or by cable, also puts the sequence back to its first step",
+    "in a field, p fills it at random, r and l roll the bits right and left, and h spreads each digit over two; adding shift enters the result at once",
+    "the maker marks this module as superseded and points to HexSeqP2 in another of his plugins"
+  ],
+  "menu": [
+    "Pattern Poly Select — chooses which way the Pat jack picks a pattern: on, a trigger on a channel of it; off, the voltage at it",
+    "ShowLights — turns the row of lamps above each field on or off; the lit lamp is the digit being played",
+    "Clock In Delay — holds each clock back by that many samples before the step is taken, 0 to 15, which is a way of letting a reset land first",
+    "Random — opens a slider setting how many bits a random fill switches on, 0 to 100 per cent",
+    "Random length from — sets the fewest digits a random fill writes, 1 to 16",
+    "Random length to — sets the most digits a random fill writes, 1 to 16",
+    "Randomize Pattern — fills every row of the pattern being edited at random, at that density and those lengths",
+    "Initialize Pattern — empties every row of the pattern being edited"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · stepped · polyphonic\n\nunpatched it reads the Pat knob; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

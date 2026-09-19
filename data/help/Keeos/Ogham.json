@@ -1,0 +1,77 @@
+{
+  "plugin": "Keeos",
+  "module": "Ogham",
+  "description": "A dual-voice bytebeat synthesiser running the Keeos Ogham hardware module's own firmware: each voice plays one of a hundred short integer formulas on a shared time base",
+  "params": [
+    {"ids": [2], "text": "Sets Parameter A, a number from 0 to 255 that both voices read; what it changes depends on the formula each voice is running"},
+    {"ids": [3], "text": "Sets Parameter B, a number from 0 to 255 that both voices read; what it changes depends on the formula each voice is running"},
+    {"ids": [4], "text": "Sets the playback rate: free running it goes from a sixty-fourth of speed at fully counter-clockwise through unity at noon to sixty-four times at fully clockwise"},
+    {"ids": [5], "text": "A lo-fi macro that is clean at the centre: turned down it filters and folds, turned up it crushes and adds resonance"},
+    {"ids": [6], "text": "Says what the Clk/VOct jack carries: at Clk it is a clock that drives the time base, and at VOct it is a pitch at a volt per octave"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the A knob, a fifth of the knob's travel per volt, with the total held between the ends; the CV to Tone field can take it away from A and point it at the Tone macro"},
+    {"ids": [1], "text": "Added to the B knob, a fifth of the knob's travel per volt, with the total held between the ends; the CV to Tone field can take it away from B and point it at the Tone macro"},
+    {"ids": [2], "text": "A rising edge above 1V puts the time base back to zero and plucks the low-pass gate, which is silent unless the LPG decay field is above zero"},
+    {"ids": [3], "text": "A clock the time base follows, or a pitch at a volt per octave, according to the Clk/VOct switch; in VOct mode no edges are taken from it at all"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Voice 1 after the tone macro, the effects chain and the low-pass gate, 5V at full scale and a little over on peaks"},
+    {"ids": [1], "text": "Voice 2 after the tone macro, the effects chain and the low-pass gate, 5V at full scale and a little over on peaks"},
+    {"ids": [2], "text": "An envelope follower on one of the two voices, or that voice's bytebeat straight out as a voltage, 0-10V; the CV Out mode field picks which of the four"},
+    {"ids": [3], "text": "A 10V gate following the tempo the module works out for itself from voice 1's rhythm"}
+  ],
+  "notes": [
+    "turning the Func encoder changes the function of the selected voice, a click swaps which voice is selected, and holding it about 0.6 seconds opens the Menu and leaves it",
+    "the Func encoder is not a Rack parameter, so clicking it cannot reach this help and Rack's MIDI mapper cannot reach the two function slots; the right-click menu lists every function by name",
+    "the scroll wheel turns the Func encoder only while Rack's own Scroll wheel knob adjustment preference is on, and a drag turns it unless Drag turns the encoder is switched off",
+    "the display reads the selected voice and its function as X-NN, and in the Menu the effect, field and value as T x. NN; the dot at the far right means the Tone macro is at its clean centre",
+    "with a clock patched into Clk the Rate knob snaps to a division or multiplication of it, a thirty-second up to thirty-two times; pulling the cable holds that rate until the knob moves",
+    "with the switch at VOct the Rate knob becomes a fine tune of one octave either way, added to the pitch input, and the formula is played faster or slower rather than restarted",
+    "the last function in the bank is a 440Hz reference tone, and while a voice is on it that voice runs at unity whatever the Rate knob, the clock or the pitch input say",
+    "the module is monophonic: every jack is read and written as a single channel"
+  ],
+  "menu": [
+    "Voice 1 function — picks voice 1's formula from the whole bank by name, grouped as Textural, Noise, Percussive, Rhythmic and Melodic, with the 440Hz reference at the end",
+    "Voice 2 function — picks voice 2's formula from the whole bank by name, grouped as Textural, Noise, Percussive, Rhythmic and Melodic, with the 440Hz reference at the end",
+    "Drag turns the encoder — lets a mouse drag over the Func encoder turn it; the setting is kept for this computer rather than in the patch",
+    "Open the Menu — does what holding the Func encoder does, and reads Leave the Menu while the Menu is open",
+    "Settings — shows all 22 Menu fields at once with their values, instead of walking them four digits at a time",
+    "FX chain: Off, On — switches the whole three-stage effects chain in and out",
+    "Chain topology: Serial, Parallel — wires the chorus, flanger and phaser one after another, or side by side",
+    "Chorus level — sets how much chorus is mixed in, 0 to 99, and 0 skips the stage entirely",
+    "Chorus type: Clean, Ensemble — one chorus voice, or three detuned ones",
+    "Chorus rate — sets how fast the chorus sweeps, 0 to 99",
+    "Chorus depth — sets how far the chorus sweeps, 0 to 99",
+    "Flanger level — sets how much flanger is mixed in, 0 to 99, and 0 skips the stage entirely",
+    "Flanger type: Clean, Barber-pole — a sweep that turns round at each end, or one that only ever climbs",
+    "Flanger rate — sets how fast the flanger sweeps, 0 to 99; 50 stops a barber-pole sweep",
+    "Flanger feedback — sets how much of the flanger's output goes back into it, 0 to 99",
+    "Phaser level — sets how much phaser is mixed in, 0 to 99, and 0 skips the stage entirely",
+    "Phaser type: Clean, Bi-phase — four poles, or eight poles with a second sweep",
+    "Phaser rate — sets how fast the phaser sweeps, 0 to 99",
+    "Phaser 2nd LFO — sets the second sweep's ratio to the first in Bi-phase, 0 to 99",
+    "CV Out mode: Envelope of Out 1, Envelope of Out 2, Out 1 as DC, Out 2 as DC — chooses what the CV Out jack carries",
+    "CV slew rise — slows how fast the CV Out can rise, from off up to about 5 seconds",
+    "CV slew fall — slows how fast the CV Out can fall, set apart from the rise",
+    "CV hold: Off, 2 ticks, 4, 8, 16, 32, 64, 128, 256 — samples the CV Out and holds it for that many ticks, in the two DC modes only",
+    "LPG decay — sets how long the low-pass gate takes to close after a Sync pluck, 0 switching it off and 1 to 99 running 2ms to 20 seconds",
+    "CV to Tone: Off, CV A, CV B — takes one of the two CV inputs off its parameter and uses it to modulate the Tone macro",
+    "Parameter smoothing: Off, 4, 8, 16, 32, 64, 128 — crossfades A and B across a grid of that many steps rather than changing them at once",
+    "Out 2 drone: Coupled, Frozen — freezes voice 2 at its current rate and parameters so it runs on independently of the knobs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

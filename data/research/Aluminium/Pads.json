@@ -1,0 +1,29 @@
+{
+  "plugin": "Aluminium",
+  "module": "Pads",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "src/Pads.cpp:135 getChannels() capped at 16 sets the loop bound, :145 getVoltage(c) turned into a note number"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "src/Pads.cpp:144 getVoltage(c) >= 1 per channel"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Pads.cpp:170 setChannels(1) and 10V or 0V on every cell"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"}
+    }
+  },
+  "comment": "Every one of the sixteen gate outputs is written by the same two lines (src/Pads.cpp:170-171), so one props entry covers them all. Where two channels carry the same note, the later channel is the one an expander follows (src/Pads.cpp:147). Latch toggles on the rising edge of the note match, not on the raw gate, so a latched cell does not retrigger while the note is held. The expander message carries the raw note match rather than the latched state, so a PadX on a velocity lane follows the physical note even where the gate output is latched on."
+}

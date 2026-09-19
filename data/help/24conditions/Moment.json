@@ -1,0 +1,41 @@
+{
+  "plugin": "24conditions",
+  "module": "Moment",
+  "description": "Delay that can be clocked, with a filter in the feedback path and a reverse that plays the buffer backwards",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time, 1ms at one end and 10 seconds at the other, halving and doubling as it moves"},
+    {"ids": [1], "text": "Sets how much of the delayed signal is fed back in, none at one end and all of it at the other"},
+    {"ids": [2], "text": "Sets the corner of the lowpass filter in the feedback path, 39Hz at one end and 11000Hz at the other"},
+    {"ids": [3], "text": "Crossfades the output between the dry signal and the delayed one"},
+    {"ids": [4], "text": "Each press switches the delay between playing forwards and backwards, and a voltage above 1V at the reverse input flips whatever the button is set to"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the delay time, 1V halving or doubling it"},
+    {"ids": [1], "text": "Raises the feedback, 10V covering the whole of the feedback knob's travel, with the total held inside it"},
+    {"ids": [2], "text": "Shifts the dry and delayed balance, 10V covering the whole of the mix knob's travel, with the total held inside it"},
+    {"ids": [3], "text": "Nothing in the module reads this jack; the filter corner comes from its knob alone"},
+    {"ids": [4], "text": "The signal fed into the delay"},
+    {"ids": [5], "text": "A rising edge past 2V sets the delay time from the gap between edges, and with nothing patched the delay runs at a fixed 2Hz base rate instead"},
+    {"ids": [6], "text": "A voltage above 1V flips the reverse the other way from the button, and lets it go when it falls back"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The dry and delayed signals mixed according to the mix knob"}
+  ],
+  "notes": [
+    "the delay time is the time knob divided by the clock: a clock at the clock input replaces the fixed 2Hz base rate, so the delay follows the tempo."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "one channel only",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "unipolar · stepped · one channel only\n\nunpatched it reads a fixed 2Hz; a negative voltage does nothing here.",
+      "6": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous"
+    }
+  }
+}

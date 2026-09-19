@@ -1,0 +1,17 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "M",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/M.cpp:116, added to the knob in octaves before two is raised to that power"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/M.cpp:118-119, added in octaves to the HIGH knob, two raised to that power times 21220Hz, clamped to half the sample rate; the running value is one local reused across channels, so each polyphonic channel compounds the one before it"},
+      "2": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/M.cpp:110 and 113, maxPoly then getPolyVoltage"},
+      "3": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/M.cpp:114 and 132-136, read per channel as the return signal, divided by the low gain and recombined with its own high passed part into OUT"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/M.cpp:143"},
+      "1": {"family": "audio", "poly": true, "why": "src/M.cpp:144"}
+    }
+  },
+  "comment": "The corner frequencies compound across polyphonic channels. src/M.cpp:105 and 107 read the two knobs once per sample, and lines 116 and 118 then overwrite those same variables inside the channel loop with a frequency in hertz; on the second channel that frequency is fed back into the exponent, so the result overflows and the clamps at lines 117 and 119 hold it at half the sample rate. Only channel 0 filters as the panel implies, which is why the third note says so. The two gains are ordinary decibels, ten to the power of a twentieth (src/M.cpp:86-88). The panel prints LOW, LOdB, HIGH, HIdB, LO, HI, IN, RTN, SND and OUT."
+}

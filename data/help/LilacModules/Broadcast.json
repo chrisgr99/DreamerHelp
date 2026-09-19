@@ -1,0 +1,41 @@
+{
+  "plugin": "LilacModules",
+  "module": "Broadcast",
+  "description": "A routing box for playing along with a recording: a stereo performance signal is passed out to the recording, and Audition takes it off the recording and folds it into what you monitor instead",
+  "params": [
+    {"ids": [0], "text": "Scales the Click input into both monitoring outputs, 0 for silent and 1 for the voltage as it arrives; it comes up at 1"},
+    {"ids": [1], "text": "Holds Audition at full while it is lit; the Audition input adds to it, and either setting is faded in and out over about 10ms"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "One side of the performance signal; Audition crossfades it from the Record Bus output on that side to the monitoring output on that side"},
+    {"ids": [2, 3], "text": "One side of the sound coming back from the recording chain, added to the monitoring output on that side at the voltage it arrives at"},
+    {"ids": [4], "text": "Raises Audition, 0V for none and 10V for full, added to whatever the Audition button is set to and held at full above that"},
+    {"ids": [5], "text": "A click track, added to both monitoring outputs at the level the Click knob sets, and never passed to the Record Bus"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "One side of what you monitor: the Record Monitor input on that side, plus the Click input at the Click knob's level, plus the performance signal on that side scaled by Audition"},
+    {"ids": [2, 3], "text": "One side of what reaches the recording: the performance signal on that side, faded down to silence as Audition comes up"}
+  ],
+  "notes": [
+    "the maker marks this module hidden in the plugin's manifest, so it does not appear in the module browser and reaches a patch only by being copied from one that already has it",
+    "every jack is monophonic; one voltage is read and one written on each, and a polyphonic cable is reduced to its first channel",
+    "bypassing the module passes each performance input straight to the Record Bus output on its side, and each Record Monitor input straight to the monitoring output on its side",
+    "the red lamp follows the faded Audition level, and the lamp in the button shows only whether the button itself is latched"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only"
+    }
+  }
+}

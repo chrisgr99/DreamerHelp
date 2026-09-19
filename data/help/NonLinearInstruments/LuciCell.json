@@ -1,0 +1,42 @@
+{
+  "plugin": "NonLinearInstruments",
+  "module": "LuciCell",
+  "description": "One cell of a Luci network: a ramp that runs from 0 to 1, fires a pulse on all four sides when it gets there and has its phase knocked about by pulses from its neighbours",
+  "params": [
+    {"ids": [0], "text": "Sends the ramp back to the start and fires the cell's pulse"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "A pulse here multiplies the cell's phase by the influence setting, which pulls the ramp back towards its start"},
+    {"ids": [4], "text": "Any voltage other than zero here throws the ramp to a random position and holds the audio output at 0V for that sample"},
+    {"ids": [5], "text": "Sets the cell's rate at a volt per octave from a base of about an eighth of a hertz; with nothing patched the ramp takes about eight seconds"},
+    {"ids": [6], "text": "Sets how much a neighbour's pulse moves this cell's phase, 0V leaving the phase at zero after a pulse and 10V leaving it almost untouched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the ramp itself, -5V to 5V, rising from the bottom to the top over one cycle"},
+    {"ids": [2, 3, 4, 5], "text": "Goes to 1V for one sample when the ramp reaches the top, for patching into a neighbouring cell"}
+  ],
+  "notes": [
+    "with nothing patched the cell runs on its own, putting out a rising ramp about once every eight seconds; the frequency, influence and randomize jacks are what the Luci control modules are for",
+    "the four side inputs are not edge detected: any voltage other than zero counts as a pulse, so a held high gate pulls the phase back on every sample",
+    "all four trigger outputs carry exactly the same pulse, and the pulse is 1V rather than the usual 10V, which is what the other Luci modules expect",
+    "the influence input comes up unpatched at 0V, which makes every incoming pulse reset the cell's phase to zero rather than nudge it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only",
+      "1": "high above 0V · stepped · one channel only",
+      "2": "high above 0V · stepped · one channel only",
+      "3": "high above 0V · stepped · one channel only",
+      "4": "high above 0V · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "2": "0 to 1V · stepped · one channel only",
+      "3": "0 to 1V · stepped · one channel only",
+      "4": "0 to 1V · stepped · one channel only",
+      "5": "0 to 1V · stepped · one channel only"
+    }
+  }
+}

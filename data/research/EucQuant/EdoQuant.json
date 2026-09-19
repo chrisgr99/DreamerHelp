@@ -1,0 +1,13 @@
+{
+  "plugin": "EucQuant",
+  "module": "EdoQuant",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "EdoQuant.cpp:33 reads getVoltage() with no channel; line 46 takes floor of it, which works the same way for negative voltages"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "why": "EdoQuant.cpp:45-50 builds the result from two floor operations and line 41 writes it with setVoltage, never calling setChannels"}
+    }
+  },
+  "comment": "Source read at commit 9b3250c, settled by comparing the installed plugin.json with each of the four commits: only 9b3250c matches byte for byte, and the installed res/EdoQuant.svg has the same MD5 as that commit's. The offset control is dead. EdoQuant.cpp:38 declares int offset = params[OFFSET_PARAM].getValue() while line 27 gives that parameter the range -0.5 to 0.5, so the conversion to int yields 0 for every position of the knob. The shipped build carries the same truncation. The three parameters and both ports were configured with empty names, so every tooltip in this module is blank; the panel prints input, edo, restrict and output. The offset control is also the third parameter and cannot be reached any other way, so it is given a line and a tag saying it does nothing rather than left to fall back on an empty tooltip."
+}

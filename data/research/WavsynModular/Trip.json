@@ -1,0 +1,31 @@
+{
+  "plugin": "WavsynModular",
+  "module": "Trip",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "negative": "ignored", "normal": "nothing; the module is idle", "why": "Trip.cpp:265 clockTrigger.process reads this jack with thresholds of 0.1V and 2V, and :270 sets the BPM from the samples counted between rises; :290-292 process returns early while nothing is patched here, so the module does nothing at all without a clock"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "negative": "ignored", "normal": "no reset", "why": "Trip.cpp:306 trigger.process reads this jack with thresholds of 0.1V and 2V and sets reset, which :318 uses to zero the step count; :304 skips it entirely while nothing is patched"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:378 writes the step's volts, which run -3V to 6V, plus the octave setting of -3 to 3"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:405 and 421 write 10V or 0V and line 408 sets the channel count to one"},
+      "2": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "3": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "4": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "5": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "6": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "7": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "8": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "9": {"family": "cv", "poly": false, "range": "-6 to 9V", "why": "Trip.cpp:377 writes that step's volts, which run -3V to 6V, plus the octave setting of -3 to 3, and only while that step is current"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "13": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "14": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "16": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"},
+      "17": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Trip.cpp:407 and 423 write 10V or 0V to that step's own gate jack while that step is current"}
+    }
+  },
+  "comment": "Trip.cpp:288-290 returns from process as soon as it finds the clock jack unconnected, so without a clock nothing at all is written. The bar count passed to spaceScale is not used by it (Trip.cpp:589-601): the button normalises the eight time-share knobs to a total of one whatever the bar count says, and the count is applied separately when each step's length is worked out. The automatic reduction of the octave setting only inspects steps whose time share is above zero, so with every share at zero the octave is left alone and the CV outputs can reach 9V."
+}

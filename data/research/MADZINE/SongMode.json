@@ -1,0 +1,23 @@
+{
+  "plugin": "MADZINE",
+  "module": "SongMode",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/SongMode.cpp:347, clockTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/SongMode.cpp:321, resetTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "2": {"poly": true, "why": "src/SongMode.cpp:438-447, getChannels() on the active row sets the output channel count and getVoltage(c) reads each"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "src/SongMode.cpp:445-463, setChannels from the active row, then setVoltage per channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SongMode.cpp:431-434, a 0.001f pulse at 10V"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"}
+    }
+  },
+  "comment": "The eight signal inputs get no family: the module passes whatever you give it. The sequence strip is a LedDisplayTextField, not a parameter (src/SongMode.cpp:47-70, 515-521), so it has no census position and is covered by a Note; the parser accepts digits 1 to 8, skips spaces, commas and tabs, and reads a hyphen between two digits as an inclusive range (src/SongMode.cpp:242-285). A learn button toggles: the first press starts counting clocks and the second writes the count into that row's length knob, clamped to 1 to 64 (src/SongMode.cpp:325-340). The fade starts early only where Fade Clock is above zero and Fade Time above zero and the next row differs (src/SongMode.cpp:359-377). The panel prints SONG MODE, CLK, RST, the digits 1 to 8 down the left, and Fade, Switch, Clock, Time and Out at the bottom; the length knobs, learn buttons and trigger jacks carry no lettering of their own. Layout is at src/SongMode.cpp:504-567."
+}

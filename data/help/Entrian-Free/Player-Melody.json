@@ -1,0 +1,49 @@
+{
+  "plugin": "Entrian-Free",
+  "module": "Player-Melody",
+  "description": "Play-only polyphonic melody sequencer: plays up to 25 named phrases of pitched notes, built in Entrian Melody and saved for the free plugin",
+  "params": [
+    {"ids": [0], "text": "Returns the playhead to the beginning, or to the start repeat marker with that option set on the menu"},
+    {"ids": [1], "text": "Starts and stops playback"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that drives playback, at four ticks per beat, which a clock module calls x4 or 1/16th"},
+    {"ids": [1], "text": "Chooses which of the 25 phrases plays, C3 selecting the first and the 25 semitones up to C5 the last; set to trigger on the menu it steps to the next non-empty phrase or picks one at random"},
+    {"ids": [2], "text": "A trigger returning the playhead to the beginning, or to the start repeat marker with that option set on the menu; playback carries on immediately if the sequencer is running"},
+    {"ids": [3], "text": "A trigger toggling between running and stopped; while stopped the gates are closed and clock ticks are ignored"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of every note sounding, as 1V/oct, one polyphonic channel per note"},
+    {"ids": [10], "text": "A gate held open for the length of every note sounding, one polyphonic channel per note"},
+    {"ids": [20], "text": "The velocity of every note sounding, one polyphonic channel per note"},
+    {"ids": [30], "text": "Carries a reset out of the sequencer each time its Reset button is pressed, on the panel or in the editor window, so a clock module can be reset from here"},
+    {"ids": [31], "text": "Carries the Run button out of the sequencer, pressed on the panel or in the editor window, so a clock module can be started and stopped from here"},
+    {"ids": [32], "text": "A trigger each time the playhead reaches the end of the phrase"}
+  ],
+  "notes": [
+    "the module is empty when it is added. It plays a patch saved out of Entrian Sequencers, or a MIDI file imported into the editor window, and until one of those arrives there is nothing to play",
+    "clicking the large display opens an editor window showing the notes. They cannot be recorded here, but a MIDI file can be imported into that window or dropped onto it",
+    "the playhead and the start and end repeat markers are drawn on the large display and can be moved by clicking and dragging there, without opening the editor window",
+    "the small display names the phrase now playing, and clicking it lists the 25 phrases to choose from",
+    "the Phrase CV/menu control in the editor window, not the panel menu, sets when a change of phrase takes effect: Instant at once, or End of phrase at the end of the current one"
+  ],
+  "menu": [
+    "Phrase selection input: — how the phrase input is read: Pitch, C3-C5; Trigger next non-empty phrase; Trigger random phrase (random but fair); or Trigger random phrase (truly random)",
+    "Shared playhead: — Don't share the playhead, Shared playhead leader or Shared playhead follower, which moves the playheads of all the linked Entrian sequencers together",
+    "Delay Clock/Reset/Run inputs — delays those three inputs by a whole number of samples, to offset the one-sample delay every Rack cable adds; Auto is the default and None the other choice",
+    "Set playhead to start marker on reset — a reset sends the playhead to the start repeat marker instead of to the beginning",
+    "Save patch to use Entrian Sequencers... — writes the patch out again with each Player module swapped for the Entrian Sequencers module it came from"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "10": "stepped",
+      "32": "stepped"
+    }
+  }
+}

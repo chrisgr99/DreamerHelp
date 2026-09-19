@@ -1,0 +1,17 @@
+{
+  "plugin": "Hugelton",
+  "module": "K104",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "1": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V, which halves the three times"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V, which halves the three times"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false},
+      "1": {"family": "cv", "poly": false}
+    }
+  },
+  "comment": "No source is published. Two findings. The polarity switch is configured with the choices Positive and Negative at values 0 and 1, and the code selects one minus the envelope when the parameter is BELOW 0.5 - so the choice named Positive, which is also the default, is the one that turns the envelope upside down. And the control CV jack is not an offset but a multiplier on the attack, decay and release parameters: quantizeCV maps the voltage to voltage times 0.05 plus 0.5, clamped to 0 to 1 and quantised to 256 steps, and that factor multiplies all three times before they reach the envelope. An unpatched jack reads 0V, which gives a factor of one half, so the module's real times are half the times its own tooltips display, and only at plus 10V do the two agree. The sustain parameter is not scaled. The times themselves are 0.001 seconds times 10000 to the power of the parameter, so 1ms to 10 seconds. The curve control is an exponent of two to the power of one minus twice the parameter, giving a squared curve at zero, a straight line at one half and a square root at one."
+}

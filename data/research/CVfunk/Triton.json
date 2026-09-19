@@ -1,0 +1,37 @@
+{
+  "plugin": "CVfunk",
+  "module": "Triton",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "Triton.cpp:394 takes getChannels() on every connected input for the voice count and Triton.cpp:652 reads each voice with getPolyVoltage"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the IN L jack", "why": "Triton.cpp:653 reads each voice with getPolyVoltage and falls back to the left input when this jack is empty"},
+      "2": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Triton.cpp:428 adds channel one to the centre knob for the base setting and Triton.cpp:505 reads each voice's own channel for its filter"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Triton.cpp:427 reads it through the centre trimmer and Triton.cpp:517 reads each voice with getPolyVoltage"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:429 scales it by a tenth through the trimmer and clamps the total to 0 to 1; Triton.cpp:518 reads each voice"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Triton.cpp:431 scales it by a fifth through the trimmer and clamps the total to -2 to 2; Triton.cpp:519 reads each voice"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:433 scales it by a tenth through the trimmer and clamps the total to 0 to 1; Triton.cpp:520 reads each voice"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:435 scales it by a tenth through the trimmer and clamps the total to 0 to 1; Triton.cpp:521 reads each voice"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:437 scales it by a tenth through the trimmer and clamps the total to 0 to 1; Triton.cpp:522 reads each voice"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:721 reads each voice with getPolyVoltage through the trimmer and clamps the total to 0 to 1"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:722 reads each voice with getPolyVoltage through the trimmer and clamps the total to 0 to 1"},
+      "11": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:723 reads each voice with getPolyVoltage through the trimmer and clamps the total to 0 to 1"},
+      "12": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Triton.cpp:724 reads each voice with getPolyVoltage through the trimmer and clamps the total to 0 to 1"},
+      "13": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Triton.cpp:439 scales it by a tenth through the trimmer and clamps the total to -1 to 1; Triton.cpp:523 reads each voice"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Triton.cpp:758 sets its channel count from the deepest connected input; Triton.cpp:731 clamps the band to -10 to 10V"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "cv", "poly": true, "why": "Triton.cpp:766 sets its channel count from the deepest connected input; Triton.cpp:744 writes the follower value, scaled by the band level when Scaled Envelopes is on"},
+      "8": {"family": "cv"},
+      "10": {"family": "cv"},
+      "12": {"family": "audio", "poly": true, "range": "±10V", "why": "Triton.cpp:764 sets its channel count from the deepest connected input; Triton.cpp:741 clamps the sum to -10 to 10V"},
+      "13": {"family": "audio"},
+      "14": {"family": "cv", "poly": true, "why": "Triton.cpp:769 sets its channel count from the deepest connected input; Triton.cpp:747 writes the follower value, scaled by the mix level when Scaled Envelopes is on"}
+    }
+  },
+  "comment": "Three outputs are declared with no port widget, LOW_INV, MID_INV and HIGH_INV at indices 7, 9 and 11 (Triton.cpp:130), so no click can reach them and they are left untagged. The centre knob reads in hertz on its tooltip through a custom quantity, C4 times two to the power of the knob value (Triton.cpp:72). The spread runs from half an octave to three octaves either side of the centre and the gap tilts each crossover's two corners up to two octaves apart (Triton.cpp:364)."
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoQuant",
+  "description": "A polyphonic quantizer with a keyboard of note buttons, named scales and thirty-two stored note sets",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Turns that note on or off in the working scale"},
+    {"ids": [12], "text": "Attenuates the incoming signal before it is quantized, 0% to 100%"},
+    {"ids": [13], "text": "Shifts the quantized note up or down by whole octaves, three either way"},
+    {"ids": [14], "text": "Applies the pending scale or program, and applies note-button edits made to a pending scale"},
+    {"ids": [15], "text": "Selects a named scale: the centre is chromatic, clockwise gives the major scales and anticlockwise the minor ones"},
+    {"ids": [16], "text": "Puts the scale the SCL knob shows into the working scale"},
+    {"ids": [17], "text": "Applies a scale or program change the moment it is made, instead of waiting for the SET button"},
+    {"ids": [18], "text": "Selects one of the thirty-two stored note sets, 0 to 31"},
+    {"ids": [19], "text": "Double-click to store the notes now shown into the selected program"},
+    {"ids": [20], "text": "Loads the selected program into the working scale"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the scale selection, ±10V added to the SCL knob"},
+    {"ids": [1], "text": "Selects the program by voltage, or steps to the next stored one on each trigger with Prog Input type set to Trig"},
+    {"ids": [2], "text": "A trigger here samples the input and holds the quantized note until the next trigger"},
+    {"ids": [3], "text": "The signal to be quantized; its channel count sets the output's"},
+    {"ids": [4], "text": "A voltage added to the signal before it is quantized"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized signal"}
+  ],
+  "notes": [
+    "with no notes turned on there is no quantization and nothing at the output, so at least one note button has to be lit.",
+    "a program is only saved by double-clicking STOR; editing the note buttons and moving on loses the changes.",
+    "the display shows the working scale in green and a pending one in red: C, C#, Dm and so on, 'chr' for chromatic, 'CST' for a custom set, 'N.Q' for none, P0 to P31 for a program."
+  ],
+  "menu": [
+    "Prog Input type: CV, Trig — chooses whether the PROG jack reads a voltage or steps to the next stored program on each trigger",
+    "Scan Last Prog — reads every program again and reports the highest one that holds anything",
+    "Load PROG preset — reads all thirty-two programs from a file",
+    "Save PROG preset — writes all thirty-two programs to a file that another sickoQuant can read",
+    "Erase ALL progs — clears every stored program, behind an 'Are you Sure?' submenu whose only item is ERASE!",
+    "Tips — a submenu that only prints a reminder to store programs with a double-click on STOR"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · stepped · one channel only",
+      "1": "±10V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

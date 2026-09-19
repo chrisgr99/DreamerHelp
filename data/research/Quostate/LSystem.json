@@ -1,0 +1,19 @@
+{
+  "plugin": "Quostate",
+  "module": "LSystem",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/LSystem.cpp:703 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V, and src/LSystem.cpp:702 gates the whole clock front end on isConnected"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/LSystem.cpp:663 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/LSystem.cpp:640 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "src/LSystem.cpp:537 and 653 ask this input for its channel count and read channels by index; src/LSystem.cpp:543 ignores any channel reading below -1V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/LSystem.cpp:766 sets this output's channel count from the polyphony menu and src/LSystem.cpp:778 writes each channel by index"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/LSystem.cpp:767 sets this output's channel count from the polyphony menu and src/LSystem.cpp:779 writes 10 or 0 per channel"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/LSystem.cpp:768 sets this output's channel count from the polyphony menu and src/LSystem.cpp:780 writes 10 or 0 per channel from a pulse generator"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/LSystem.cpp:769 sets this output's channel count and src/LSystem.cpp:578 builds the value as the rule row index times ten sixths of a volt"}
+    }
+  },
+  "comment": "Read from src/LSystem.cpp, src/LSystemEngine.hpp and LSystem_manual_EN.md at commit d2a810c, the commit that carries version 2.2.2; the only later commits touch the changelog and the module's display name. The rule fields and the two random pools are custom text widgets rather than parameters, so they have no position in the census and no click on them can reach this help; they are covered by module notes instead. The RESET button and the reset input are not the same: src/LSystem.cpp:665 makes the jump-to-selected-rule behaviour conditional on the reset arriving at the jack rather than the button, so the button always performs a plain reset. The RULE output's step is the rule row index times 10 divided by 6, at src/LSystem.cpp:578, which the manual gives as about 1.667V. Two menu names differ from the manual's wording: the manual calls the autoreset item Autoreset after steps where the code prints Autoreset after steps (each step = 1 beat), and it names the randomize styles Ambient and Complex Chaos where the code prints Ambient / Evolving and Complex L-System. The names used here are the code's."
+}

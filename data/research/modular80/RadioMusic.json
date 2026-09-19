@@ -1,0 +1,15 @@
+{
+  "plugin": "modular80",
+  "module": "RadioMusic",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/RadioMusic.cpp:1096 clamp(params[STATION_PARAM] + inputs[STATION_INPUT].getVoltage()/5, 0, 1)"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/RadioMusic.cpp:1072 and :1075 clamp(params[START_PARAM] + inputs[START_INPUT].getVoltage()/5, 0, 1)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/RadioMusic.cpp:1082 rstInputTrigger.process(inputs[RESET_INPUT].getVoltage())"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/RadioMusic.cpp:937 gain = 5/peak; :1182 setChannels(stereoOutputMode ? 2 : 1); :1196 two channels written in stereo mode"}
+    }
+  },
+  "comment": "The START input is scaled by a fifth of the knob's travel per volt in both modes; the source comment at src/RadioMusic.cpp:1074 says \"Start input follows 1V/Oct\" in pitch mode, but the same expression is used and the speed is then pow(2, 8*speed - 4), which comes to 1.6 octaves per volt. The START knob's tooltip renames itself Pitch while Pitch Mode is on, and its default changes with it. The four lamps and the lamp inside the reset button are lights, not parameters, so they cannot be clicked for help. Panel order and index order agree. The README notes that this port implements none of the hardware firmware; the hardware's settings file, and the hardware gesture of holding reset to reach bank select, are both replaced by the right-click menu."
+}

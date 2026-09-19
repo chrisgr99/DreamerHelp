@@ -1,0 +1,18 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-VCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "vco_base.cpp:97 channels() reads getChannels() here; :123 adds clamp(getVoltage(c),-5,5) as volts per octave"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 0.01V", "step": "stepped", "why": "vco_base.cpp:139 getPolyVoltage(c) into PositiveZeroCrossing, threshold 0.01f in dsp/signal.hpp:76"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "VCO.cpp:32 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "why": "vco_base.cpp:146 getPolyVoltage(c) multiplied by the FM depth; channels() at :97 can be set to read this input instead"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.cpp:45-46 setChannels(_channels) then a per-channel write at the 5V amplitude constant in vco_base.hpp:53; VCOBase::channels() takes the width from the V/OCT or FM input, whichever the Polyphony channels menu picks"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.cpp:47-48 setChannels(_channels) then a per-channel write at the 5V amplitude constant in vco_base.hpp:53; VCOBase::channels() takes the width from the V/OCT or FM input, whichever the Polyphony channels menu picks"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.cpp:49-50 setChannels(_channels) then a per-channel write at the 5V amplitude constant in vco_base.hpp:53; VCOBase::channels() takes the width from the V/OCT or FM input, whichever the Polyphony channels menu picks"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "why": "VCO.cpp:51-52 setChannels(_channels) then a per-channel write at the 5V amplitude constant in vco_base.hpp:53; VCOBase::channels() takes the width from the V/OCT or FM input, whichever the Polyphony channels menu picks"}
+    }
+  }
+}

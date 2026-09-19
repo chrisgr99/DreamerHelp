@@ -1,0 +1,15 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "C1EQ",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/C1EQ.cpp:1591 getVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "normal": "the left input", "why": "src/C1EQ.cpp:1592-1593 isConnected else inputL"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10.5V", "why": "src/C1EQ.cpp:1683 simd::clamp before setVoltage"},
+      "1": {"family": "audio", "poly": false, "range": "±10.5V", "why": "src/C1EQ.cpp:1684 simd::clamp before setVoltage"}
+    }
+  },
+  "comment": "The panel prints EQUALIZER; the module browser calls it C1-EQ. Both outer bands default to Cut (B1_MODE_PARAM and B4_MODE_PARAM default 2), and the mode-change branch fires on the first process() because lastB1Mode starts at -1, so a freshly added module has its LF frequency written to 20Hz and its HF frequency to 20kHz and both those GAIN knobs pinned at 0dB by setValue every sample (src/C1EQ.cpp:1230-1233, 1556-1586). Turning either GAIN knob while C is chosen does nothing, and the knob springs back. The param values run 0 Shelf, 1 Bell, 2 Cut, and are inverted again inside updateBandCoefficients as 2 - rawMode; the C, B, S lamps are wired to match the panel. LF and HF Q are hardcoded at 0.8 and 1.0 (src/C1EQ.cpp:1400-1404) and at 0.707 in cut mode. The oversampling factor is chosen from the sample rate rather than being fixed; the README's \"typically 4x\" is not a constant in the code. ANALYSER_ENABLE_PARAM has no ParamWidget and cannot be clicked for help."
+}

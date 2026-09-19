@@ -1,0 +1,14 @@
+{
+  "plugin": "wildergarden",
+  "module": "Dimit",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "src/dimit.cpp:42-43 params[GRITKNOB_PARAM] + inputs[GRITCV_INPUT].getVoltage(), clamped to 0..1"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/dimit.cpp:45 getVoltage(); :46 the envelope follows its absolute value"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/dimit.cpp:48,50 in /= 1 + overage, written with no clamp, so it never exceeds the input"}
+    }
+  },
+  "comment": "The grit knob runs 0 to 1 while the CV is added in volts, so a single volt covers the whole range and anything above 1V is clamped away. The rise and fall of the envelope follower go from 1000 and 10 at grit 0 to 11000 and 1010 at grit 1 (src/dimit.cpp:44). The module has a red light declared and placed on the panel, PATH10_LIGHT, whose only setBrightnessSmooth call is inside a commented-out block at :52-60, so it is permanently dark. The manual describes the threshold and grit as inputs where the panel has a knob and a jack for grit and only a knob for threshold. Panel order and index order agree."
+}

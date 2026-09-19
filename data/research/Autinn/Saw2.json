@@ -1,0 +1,15 @@
+{
+  "plugin": "Autinn",
+  "module": "Saw2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Saw2.cpp:179 takes getChannels() on this input and Saw2.cpp:215 reads channel c with getPolyVoltage; Saw2.cpp:216 clamps the knob-plus-input sum to -4 to 6"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Saw2.cpp:173 reads this input with getVoltage and adds it to the button before a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Saw2.cpp:193 takes getChannels() on this input and reads channel c with getPolyVoltage; Saw2.cpp:194 multiplies it by 4 and Saw2.cpp:197 clamps the knob-plus-input sum to 0 to 60, so a negative voltage reduces the age to a floor of new"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Saw2.cpp:180 sets this output's channel count from the pitch input"}
+    }
+  },
+  "comment": "Age sets two high-pass corners, 30Hz plus 9Hz a year and 0.5Hz plus 4Hz a year (Saw2.cpp:200, :203), and a make-up gain of 1 plus a tenth a year (Saw2.cpp:212). The output is multiplied by 2.75 at Saw2.cpp:245. The TYPE button and its trigger input are summed into one Schmitt trigger at Saw2.cpp:173, so holding the button down while a trigger arrives does nothing extra."
+}

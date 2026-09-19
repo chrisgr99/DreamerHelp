@@ -1,0 +1,54 @@
+{
+  "plugin": "StochasticTelegraph",
+  "module": "Venn",
+  "description": "Up to sixteen circles drawn on a surface with one point moving among them; each circle drives its own channel of five polyphonic outputs according to where the point falls inside it",
+  "params": [
+    {"ids": [0], "text": "Sets how DISTANCE climbs from 0V at a circle's edge to 10V at its centre, -1 to 1: at -1 it rises steeply then slows, at 0 it rises in a straight line, at 1 it stays low until close to the centre"},
+    {"ids": [1], "text": "Attenuates and inverts the lower X input before it is added to the X position of the point, -100% to 100%"},
+    {"ids": [2], "text": "Attenuates and inverts the lower Y input before it is added to the Y position of the point, -100% to 100%"},
+    {"ids": [3], "text": "Set, WITHIN carries 10V while the point is outside a circle and 0V while it is inside"},
+    {"ids": [4], "text": "Set, the X output climbs as the point travels from the right of a circle to the left"},
+    {"ids": [5], "text": "Set, the Y output climbs as the point travels from the top of a circle to the bottom"},
+    {"ids": [6], "text": "Set, 5V is added to the X output, giving 0V to 10V in place of -5V to 5V"},
+    {"ids": [7], "text": "Set, 5V is added to the Y output, giving 0V to 10V in place of -5V to 5V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the X position of the point; with no cable patched the last position clicked on the surface is kept"},
+    {"ids": [1], "text": "Sets the Y position of the point; with no cable patched the last position clicked on the surface is kept"},
+    {"ids": [2], "text": "Multiplied by its attenuverter and added to the X position of the point"},
+    {"ids": [3], "text": "Multiplied by its attenuverter and added to the Y position of the point"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Polyphonic, one channel per circle: 0V while the point is outside that circle, climbing to 10V at its centre along the curve set by the shape knob"},
+    {"ids": [1], "text": "Polyphonic, one channel per circle: a 10V gate while the point is inside that circle, and 0V while it is outside"},
+    {"ids": [2], "text": "Polyphonic, one channel per circle: 0V while the point is outside that circle, and inside it the horizontal distance of the point from the centre divided by the radius and multiplied by 5"},
+    {"ids": [3], "text": "Polyphonic, one channel per circle: 0V while the point is outside that circle, and inside it the vertical distance of the point from the centre divided by the radius and multiplied by 5"},
+    {"ids": [4], "text": "The X coordinate of the point itself, -5V to 5V, or 0V to 10V if the menu sets that range; useful for recording a gesture"},
+    {"ids": [5], "text": "The Y coordinate of the point itself, -5V to 5V, or 0V to 10V if the menu sets that range; useful for recording a gesture"},
+    {"ids": [6], "text": "Polyphonic, one channel per circle, carrying the result of that circle's MATH1 formula"}
+  ],
+  "notes": [
+    "a new Venn holds no circles and every output stays at 0V; press F with the mouse pointer over the surface to make one, or load one of the two shipped presets",
+    "the keys reach the circles only while the surface has been clicked, and clicking elsewhere in the patch turns them off; the keyboard diagram on the surface shows whether they are active",
+    "F makes a circle where the mouse pointer is, W, A, S and D move the selected one, Q shrinks it and E enlarges it, and X deletes it",
+    "C and Z step through the circles, and R solos the selected one so that every other circle reads zero in the outputs until R is typed again",
+    "the two text fields hold the name and the MATH1 formula of the selected circle, and the lit word beside the formula reads Good when it has compiled or Fix when it has not",
+    "hovering over the Fix word beside the MATH1 field describes the error found in the formula",
+    "a MATH1 formula can use pointx and pointy, the circle's own distance, within, x and y, the edge values leftx, rightx, topy and bottomy, note names such as c4, and functions such as scale",
+    "a circle with an empty name shows its MATH1 formula on the surface instead, and a newline typed into a name breaks it across lines",
+    "right-clicking either text field gives Cut, Copy, Paste and Select all; the module's own menu is on the panel around them"
+  ],
+  "menu": [
+    "Only Compute MATH1 for a circle when inside it — holds MATH1 at zero for a circle the point is outside, which costs less CPU",
+    "Point position X ranges from 0-10 instead of -5 - 5 — moves the X input and the X point output into that range, and there is a matching Y item",
+    "Point position Y ranges from 0-10 instead of -5 - 5 — moves the Y input and the Y point output into that range",
+    "Show Keyboard Commands — draws the full editing diagram on the surface; unset, a small mark takes its place, which shows whether the keys are active",
+    "MATH Cheat Sheet — a submenu listing the variables and functions a MATH1 formula can use",
+    "Randomize — replaces the circles with a new random set, each with a generated name and MATH1 formula"
+  ],
+  "expects": {
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

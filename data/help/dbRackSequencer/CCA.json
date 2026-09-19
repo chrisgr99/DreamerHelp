@@ -1,0 +1,50 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "CCA",
+  "description": "Continuous cellular automaton sequencer: 32 starting values are run through a rule 32 times, and the picture that makes is read by up to sixteen play heads",
+  "params": [
+    {"ids": [0], "text": "The number the rule works with, 0 to 1; every change recalculates the whole picture"},
+    {"ids": [1], "text": "Moves the play head across the generations"},
+    {"ids": [2], "text": "Moves the play head across the cells"},
+    {"ids": [3], "text": "Multiplies the cell value, which runs from 0 to 1, before it reaches the output, 0 to 10"},
+    {"ids": [4], "text": "Shifts the output voltage, -5V to 5V"},
+    {"ids": [5], "text": "Picks the rule applied to the average of each cell and its two neighbours, one of five arithmetic functions of that average and the Param knob; its first two positions are swapped against the panel"},
+    {"ids": [6], "text": "The cell value a gate needs to reach, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the first sixteen starting values, one channel per value, 0-10V read as 0 to 1"},
+    {"ids": [1], "text": "Sets the last sixteen starting values, one channel per value, 0-10V read as 0 to 1"},
+    {"ids": [2], "text": "Places a play head on a generation for each of its channels, the 32 generations spread over 0-10V, added to the CvX knob and wrapped around"},
+    {"ids": [3], "text": "Places a play head on a cell for each of its channels, the 32 cells spread over 0-10V, added to the CvY knob and wrapped around"},
+    {"ids": [4], "text": "Adds to the scale, one channel per play head, one for one in volts"},
+    {"ids": [5], "text": "Adds to the offset, one channel per play head, one for one in volts"},
+    {"ids": [6], "text": "Selects the rule, 0-10V across the five, and overrides the Func knob while patched"},
+    {"ids": [7], "text": "Sets that number, 0-10V across the whole range, and overrides the Param knob while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The cell value under the play head, multiplied by the scale and shifted by the offset, one channel per play head"},
+    {"ids": [1], "text": "Carries 10V on a play head's channel while the cell under it is at or above the threshold"}
+  ],
+  "notes": [
+    "the 32 starting values can only be set from the 0-15 and 16-31 inputs; with neither of them patched every starting value stays at zero"
+  ],
+  "menu": [
+    "Color Mode — draws the picture in Grey, Palette 1, Palette 2 or Palette 3"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "stepped · polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

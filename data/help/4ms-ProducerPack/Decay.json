@@ -1,0 +1,33 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "Decay",
+  "description": "Decay envelope with a VCA built in: a trigger restarts the fall, and the envelope opens the audio path",
+  "params": [
+    {"ids": [0], "text": "Sets the decay length as a fraction of whatever the range switch allows, with a floor of 1ms"},
+    {"ids": [1], "text": "Picks the longest decay the knob can reach: 30ms, 200ms or 5 seconds"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the decay length, a fifth of the knob's travel per volt, added to the knob and clamped at each end"},
+    {"ids": [1], "text": "A rising edge above 1V restarts the envelope at its 5V peak"},
+    {"ids": [2], "text": "The signal the envelope opens; it passes at full level while the envelope is at 5V and is silent once the envelope has fallen away"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, jumping to 5V at each trigger and falling exponentially towards 0V"},
+    {"ids": [1], "text": "The audio input multiplied by the envelope"}
+  ],
+  "notes": [
+    "the lamp beside the range switch follows the height of the envelope.",
+    "the knob sets one time constant, so the envelope falls to about a third of its height in that time, and it is cut to 0V once it drops below 1mV."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

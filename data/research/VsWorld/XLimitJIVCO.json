@@ -1,0 +1,18 @@
+{
+  "plugin": "VsWorld",
+  "module": "XLimitJIVCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "swings", "why": "src/XLimitJIVCO.cpp:145-160 getChannels() branches mono against poly, getPolyVoltage(ii) per channel; the test is a non-zero value after a sample below 0.5V"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/XLimitJIVCO.cpp:171 getPolyVoltage(c) added to the V/Oct input at :172"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/XLimitJIVCO.cpp:163 getChannels() sets the loop bound; :173 exp2(voltage)*FREQ_C4"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/XLimitJIVCO.cpp:60 5*sin(2*pi*phase); :165 setChannels"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "src/XLimitJIVCO.cpp:64 5 - 20*abs(phase-0.5); :166 setChannels"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "src/XLimitJIVCO.cpp:70 5*readWavetable of the sawtooth table; :167 setChannels"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "why": "src/XLimitJIVCO.cpp:76 5*readWavetable of the square table; :168 setChannels"}
+    }
+  },
+  "comment": "The module has no parameters at all, so every line here is a jack. Two faults in the code worth knowing: the phase store is std::array<double,8> at src/XLimitJIVCO.cpp:131 while the process loop runs to inputs[VOCT_INPUT].getChannels(), which Rack allows up to 16, so a nine-channel or wider input writes past the end of it; and the sync test at :148 is `syncVal && !syncState`, where syncState is only set true at 0.5V or more, so a steady voltage between zero and 0.5V restarts the waveform on every sample rather than once. The README says only that the module is a wavetable VCO to reduce floating point inaccuracies; it documents none of the jacks."
+}

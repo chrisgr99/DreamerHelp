@@ -1,0 +1,16 @@
+{
+  "plugin": "DogmanDevices",
+  "module": "TripLFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "TripLFO.cpp:62 and 74 take the channel count from this jack and read each channel with getVoltage(i)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "TripLFO.cpp:66-97 sets the channel count from the rate jack and writes each channel"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "TripLFO.cpp:67-102 sets the channel count from the rate jack and writes each channel"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "TripLFO.cpp:68-107 sets the channel count from the rate jack and writes each channel"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "TripLFO.cpp:113 calls setChannels(3) and writes the three sines"}
+    }
+  },
+  "comment": "The phase offsets are written as std::sin(radianPhase - 120) and (radianPhase - 240) at TripLFO.cpp:100 and 105. Those constants are radians, not degrees, so the spacing is 120 and 240 radians reduced into a cycle: roughly a tenth and a fifth of a cycle rather than the third and two-thirds the panel prints. The polyphonic output writes channels i, i+1 and i+2 inside the per-channel loop (TripLFO.cpp:114-116) while declaring three channels, so with a polyphonic rate cable the channels overwrite each other; with a monophonic rate jack it is correct."
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "FreezerLabs",
+  "module": "InteractiveRhythmComposer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "normal": "the internal clock", "why": "James.cpp:673 uses isConnected() to choose between this jack and the internal clock; the step advances where the previous voltage was 0 and this one is not, so any non-zero voltage counts, negative included"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "normal": "0V", "why": "James.cpp:702-707 compares the previous voltage against 0 and resets on any change away from it, so a negative voltage resets too"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "swings", "normal": "0V", "why": "James.cpp:719-727 compares the previous voltage against 0 and regenerates the pattern on any change away from it"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:817 and 833 write 10.0 or 0.0 for this row in trigger and continuous mode, and setChannels is never called"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "James.cpp:675-683 passes the external clock voltage through when one is patched, otherwise writes the internal 1ms pulse built by getInternalClockVoltage at James.cpp:610-624"}
+    }
+  },
+  "comment": "Source read at commit 903f513. Every recent commit says version 2.0.0, so the installed files settled it: plugin.json and both panel SVGs match commits 903f513, 4182b18, 6b77cfe, a559ac6 and cc650ea, and the installed build calls the ShiftArrowButtonLeft and ShiftArrowButtonRight constructors six times each, which rules out the three commits where only the first row used those widgets. That leaves 903f513 and 4182b18, whose James.cpp is identical. Three faults. First, James.cpp:731 tests if (prob <= 0.f || random::uniform() < prob), so the 0% choice on the step probability menu makes the step fire every time; the readme says 0% never triggers. Second, there is no dataToJson or dataFromJson anywhere in the module, so the 96 step probabilities and the selected genre are lost when a patch is saved. Third, gateProbabilities is default-initialised to zero at James.cpp:595, so a fresh module is in that 0% state throughout, and ProbableGateSwitch::draw paints a dark circle over the lamp of every switch whose probability is below 1, which blanks the whole grid's lamps until Random or Clear all probabilities has been used. The six rush knobs are configured with the minimum above the maximum, 15 down to -15, and the value is negated again at James.cpp:606, so the anticlockwise end is the early offset. The maker named the six gate outputs Row 1 gate to Row 6 gate; the panel prints KICK, SNARE, HH CL, HH OP, PERC 1 and PERC 2, and the lines follow the panel."
+}

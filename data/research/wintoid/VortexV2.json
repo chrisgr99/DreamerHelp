@@ -1,0 +1,28 @@
+{
+  "plugin": "wintoid",
+  "module": "VortexV2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/VortexV2/VortexV2.cpp:222 reads it per lane through readBroadcast and line 176 takes the module's voice count from its getChannels()"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "src/VortexV2/VortexV2.cpp:229 multiplies the corner by vortex::voct_to_mult of this voltage times the attenuverter, which is two raised to the volts"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/VortexV2/VortexV2.cpp:238 scales it by the attenuverter and 0.2, subtracts it from the damping and clamps the damping to 0.01..0.707"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "subtracts", "sumRange": "0 to 1V", "why": "src/VortexV2/VortexV2.cpp:246 scales it by the attenuverter and a tenth, adds it to the drive knob and clamps the total to 0..1"},
+      "4": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "src/VortexV2/VortexV2.cpp:225 scales it by the attenuverter and passes it to vortex_v2::cutoff_with_voct, which multiplies the corner by two raised to the volts"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "1": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "2": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "3": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "4": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "5": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "6": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "7": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "8": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "9": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "10": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"},
+      "11": {"family": "audio", "poly": true, "why": "src/VortexV2/VortexV2.cpp:191 calls setChannels on every connected output with the voice count taken from the audio input"}
+    }
+  },
+  "comment": "The cutoff CV jack is scaled exactly as the V/OCT jack is, by two raised to the volts, so both are marked as pitch. The difference is the attenuverter default: V/OCT comes up at full positive and the cutoff CV attenuverter at zero. The corner is clamped to 20Hz..20000Hz after both are applied."
+}

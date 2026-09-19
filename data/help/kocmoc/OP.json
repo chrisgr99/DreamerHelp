@@ -1,0 +1,33 @@
+{
+  "plugin": "kocmoc",
+  "module": "OP",
+  "description": "A phase-modulation operator: one sine oscillator whose phase can be pushed by another signal, running sixteen polyphonic channels",
+  "params": [
+    {"ids": [0], "text": "Sets how many semitones of pitch one volt at V/OCT gives, 1 to 48; at 12 the oscillator tracks an octave per volt"},
+    {"ids": [1], "text": "Transposes the oscillator by a fixed amount before the scaling is applied, 0 to 128 semitones"},
+    {"ids": [2], "text": "Scales what the PM input does to the phase, from fully inverted through nothing to fully positive; the dial's travel is cubed and the result reaches 32 radians per volt"},
+    {"ids": [3], "text": "Adds a fixed offset to the oscillator's phase, from minus pi to plus pi radians"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the oscillator's phase in proportion to its voltage, by the amount the modulation index sets"},
+    {"ids": [1], "text": "A rising crossing through 0V here restarts the oscillator's cycle from phase zero"},
+    {"ids": [2], "text": "Sets the pitch; the number of channels patched here is the number of channels the module runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A sine wave taken from the oscillator's phase, swinging 10V either way"}
+  ],
+  "notes": [
+    "the scaled pitch is clipped at zero, so once the offset and scale bring the total down to nothing the frequency stops falling however negative the voltage at V/OCT goes",
+    "the lowest frequency the oscillator reaches is 440Hz divided by 128, and every volt of scaled pitch doubles it from there"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "high above 0V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "2": "1V per octave · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic"
+    }
+  }
+}

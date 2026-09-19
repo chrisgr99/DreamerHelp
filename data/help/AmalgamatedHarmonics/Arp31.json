@@ -1,0 +1,44 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Arp31",
+  "description": "Arpeggiator that plays the pitches arriving on one polyphonic cable in a chosen order, one note per clock",
+  "params": [
+    {"ids": [0], "text": "Chooses the order the input pitches are played in: Straight-R, Straight-L, Straight-RL, Straight-LR, Crab-R, Crab-L, Crab-RL or Crab-LR, and the chosen name is shown on the display"},
+    {"ids": [1], "text": "Sets how many steps into the arpeggio playing starts, 0 to 10, wrapped round to the length of the arpeggio"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge moves the arpeggio on to its next note, and the module plays nothing until something is patched here"},
+    {"ids": [1], "text": "The polyphonic cable of 1V/octave pitches the arpeggio is built from, read afresh at the start of each pass; with nothing patched a single 0V pitch is used"},
+    {"ids": [2], "text": "A polyphonic gate cable choosing which channels of the V/OCT input are played: only channels at a positive voltage are used, and with nothing patched here every channel is used"},
+    {"ids": [3], "text": "A voltage here chooses the order the pitches are played in, in place of the ARPEGGIO knob; whole volts from 0V to 7V pick the eight orders"},
+    {"ids": [4], "text": "A positive voltage holds the arpeggio as it is and blocks changes to the order, while randomisation triggers are accepted; a negative voltage blocks randomisation as well"},
+    {"ids": [5], "text": "A trigger swaps two notes of the running arpeggio with each other, either of which may already have been played"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The 1V/octave pitch of the note being played, clamped to -10V to 10V"},
+    {"ids": [1], "text": "Carries 10V on each note of the arpeggio, as a 1ms trigger, a retrigger or a continuous gate according to the menu"},
+    {"ids": [2], "text": "A 1ms trigger on the clock edge that follows the last note of the arpeggio"}
+  ],
+  "notes": [
+    "the module has no clock of its own, so nothing plays until a clock is patched into CLOCK."
+  ],
+  "menu": [
+    "Gate Mode — what the GATE output carries: Trigger, a 1ms trigger on each note; Retrigger, a gate dropping low for 1ms between notes; Continuous, a gate held high while the arpeggio runs",
+    "Play last note in cyclical arpeggios — Play last note sounds the note at the turn of a Straight-RL or Straight-LR arpeggio twice; Omit last note leaves that repeat out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "high above 0V · stepped · polyphonic",
+      "3": "0 to 7V · stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

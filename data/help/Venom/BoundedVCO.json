@@ -1,0 +1,45 @@
+{
+  "plugin": "Venom",
+  "module": "BoundedVCO",
+  "description": "Bounded VCO: an oscillator whose triangle climbs to a ceiling voltage, turns and falls to a floor voltage, with separate control of the two slopes, after Peter Blasser's Bound/Bounce circuits",
+  "params": [
+    {"ids": [0], "text": "Switches the FREQ knob between audio rates of about 8Hz to 8372Hz, 261.63Hz at noon, and low frequency rates of 0.0625Hz to 64Hz, 2Hz at noon"},
+    {"ids": [1], "text": "Cycles the oversampling applied against aliasing: off, then x2, x4, x8, x16 and x32"},
+    {"ids": [2], "text": "Turned on, the floor and the ceiling are exchanged whenever the floor is the higher of the two; turned off the triangle follows the floor upward instead"},
+    {"ids": [3], "text": "Sets the rate of the triangle, marked for a 10V gap between floor and ceiling; a narrower gap raises the rate and a wider one lowers it"},
+    {"ids": [4], "text": "Sets the share of the cycle spent rising, 1% for a falling ramp, 50% for a symmetrical triangle and 99% for a rising ramp"},
+    {"ids": [5], "text": "Attenuates and inverts the FREQ CV input, and at 100% that input is scaled a volt per octave"},
+    {"ids": [6], "text": "Attenuates and inverts the SKEW CV input, and at 100% each volt moves the rising share by 10%"},
+    {"ids": [7], "text": "Sets the voltage the triangle falls to, -10V to 10V and starting at -5V, summed with the FLOOR CV input and clamped between -12V and 12V"},
+    {"ids": [8], "text": "Sets the voltage the triangle climbs to, -10V to 10V and starting at 5V, summed with the CEILING CV input and clamped between -12V and 12V"},
+    {"ids": [9], "text": "Attenuates and inverts the FLOOR CV input"},
+    {"ids": [10], "text": "Attenuates and inverts the CEILING CV input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Raises and lowers the rate, added to the FREQ knob through the attenuverter beneath that knob, and it can drive the rate past the knob's own range"},
+    {"ids": [1], "text": "Moves the rising share of the cycle, added to the SKEW knob through the attenuverter beneath that knob; the total is held between 1% and 99%"},
+    {"ids": [2], "text": "Moves the floor voltage, added to the FLOOR knob through the attenuverter beneath that knob"},
+    {"ids": [3], "text": "Moves the ceiling voltage, added to the CEILING knob through the attenuverter beneath that knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V while the triangle is rising and -5V while it is falling"},
+    {"ids": [1], "text": "The triangle itself, running between the floor and the ceiling, so its amplitude is the gap between them and it can be unipolar or bipolar; brief excursions past a bound do occur"}
+  ],
+  "notes": [
+    "every input takes polyphony, and the outputs carry as many channels as the widest input; a monophonic input is copied to every channel",
+    "a polyphonic input with too few channels reads 0V for the channels it lacks",
+    "all four CV inputs can be driven at audio rates"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±12V.",
+      "3": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±12V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

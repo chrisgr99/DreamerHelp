@@ -1,0 +1,28 @@
+{
+  "plugin": "VectorModular",
+  "module": "baseTrigs",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/baseTrigs.cpp:344-370 reads one channel with getVoltage only while the jack is connected, multiplies it by the 0 to 1 attenuator, then multiplies the tempo by (1 + mod) for positive values and divides by (1 - mod) for negative ones; the resulting tempo is clamped at :369"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1.5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/baseTrigs.cpp:333 compares one channel against 1.5V and feeds a SchmittTrigger at :339 with thresholds of 0.1V and 1.5V; the reset button is folded into the same comparison, so either one resets"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1.5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "baseTrigs.cpp:255 passes this jack to a SchmittTrigger with thresholds of 0.1V and 1.5V, so only the rise counts; :262-263 turns the measured gap into 60/seconds beats per minute, and :314 restores the knob's tempo whenever the jack is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/baseTrigs.cpp:432-436 writes 10V while the 1ms pulse generator is running and 0V otherwise, one channel, with setVoltage"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/baseTrigs.cpp:448-452 writes 10V while the 1ms pulse generator is running and 0V otherwise, one channel, with setVoltage"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/baseTrigs.cpp:457-464 retriggers the pulse every sample that the sixteenth counter is odd, so the jack holds 10V for a whole sixteenth note before returning to 0V"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/baseTrigs.cpp:488-498 retriggers the pulse every sample that the sixteenth counter is 1, 5, 9 or 13, so the jack holds 10V for a whole sixteenth note before returning to 0V"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/baseTrigs.cpp:556-563 retriggers the pulse every sample that the sixteenth counter is 1, which it is for one sixteenth in every sixteen, so the jack holds 10V for that whole sixteenth"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"}
+    }
+  },
+  "comment": "Read at commit 6cda28c of vectormodular/VectorModular, the head of the repository. Five commits carry version 2.0.0 (a0432ef, 8dd63ca, 77ff008, 1161f47, 6cda28c) and `git diff a0432ef 6cda28c` touches only README.md and the plugin.json version line. The installed plugin.json is byte-identical to the blob at 6cda28c and all four installed res SVGs hash the same as their blobs there, so the head describes the installed build. The repository's earlier commits carry 2.1.0 — the maker dropped the version back to 2.0.0 for the library submission.\n\nThe gate length is the one real surprise on this module. Outputs 1/16, 1/8t and 1/4t are triggered once per interval crossing and give the 1ms pulse the maker's comment at :379 intends. The other eleven are driven by a test on the current sixteenth-note step, and that test is evaluated on every sample of process, so their PulseGenerator is retriggered continuously for as long as the step is current. Each of them therefore sits at 10V for a whole sixteenth note plus 1ms — at the default 115 BPM that is about 130ms. The maker's page does not state a length either way, so this contradicts the code's own comments rather than anything published.\n\nThe clock input is a tempo detector, not a sync. There is no phase lock: the module keeps its own sixteenth-note timer and only the measured beats-per-minute crosses over. A patch that needs the divisions aligned with an external clock has to send a reset.\n\nThe outputs are internally consistent about what offbeat means — 1/8off is displaced by one sixteenth from 1/8, 1/4off by two sixteenths from 1/4, and 1/2off by four — even though the naming makes the first of those look wrong at a glance.\n\nThe Reset and Tap buttons are configured with configParam over 0 to 2 rather than configButton, so their tooltips read as knobs. Both work: LEDButton is momentary and the code tests against 1.5.\n\nOne small startup artefact: resetOutputs leaves the sixteenth counter at 0, and 0 is even, so the 1/8 offbeat output is held high from a reset until the first sixteenth arrives.\n\nThere is no tap-tempo input jack, only the button, and no separate clock output — the 1/4 jack is what the maker names \"1/4t note nutput / Clock output\" in configOutput, a typo for 1/4. The panel prints 1/4 and rings that jack.\n\nprops are given for one output of each timing family rather than all fourteen, because the fourteen differ only in which step drives them; every one is 0V or 10V on a single channel."
+}

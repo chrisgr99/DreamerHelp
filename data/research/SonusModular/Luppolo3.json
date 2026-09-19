@@ -1,0 +1,32 @@
+{
+  "plugin": "SonusModular",
+  "module": "Luppolo3",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "luppolo3.cpp:132 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "luppolo3.cpp:133 reads this input with getVoltage, which is channel 0 only"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:137 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:146 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:247 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:247 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:172 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:264 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:264 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:365 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:187 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:280 reads this input with getVoltage and acts when it moves away from exactly 0V"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo3.cpp:280 reads this input with getVoltage and acts when it moves away from exactly 0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "luppolo3.cpp:334 writes this output with setVoltage and no channel index"},
+      "1": {"family": "audio", "poly": false, "why": "luppolo3.cpp:335 writes this output with setVoltage and no channel index"},
+      "2": {"family": "audio", "poly": false, "why": "luppolo3.cpp:339 writes this output with setVoltage and no channel index"},
+      "3": {"family": "audio", "poly": false, "why": "luppolo3.cpp:340 writes this output with setVoltage and no channel index"},
+      "4": {"family": "audio", "poly": false, "why": "luppolo3.cpp:341 writes this output with setVoltage and no channel index"},
+      "5": {"family": "audio", "poly": false, "why": "luppolo3.cpp:342 writes this output with setVoltage and no channel index"},
+      "6": {"family": "audio", "poly": false, "why": "luppolo3.cpp:343 writes this output with setVoltage and no channel index"},
+      "7": {"family": "audio", "poly": false, "why": "luppolo3.cpp:344 writes this output with setVoltage and no channel index"}
+    }
+  },
+  "comment": "The slave CLEAR condition at luppolo3.cpp:280 tests params[CLEAR_M] rather than params[CLEAR_M + t], so the two slave CLEAR buttons are never read and the master CLEAR button clears all three tracks; the CV jacks are indexed correctly and behave as labelled. That is why the two slave buttons get a line saying they do nothing. The master track is recorded by appending to a deque while the slaves are written in place at the master's current position (luppolo3.cpp:207 to :212, :296, :297), which is what keeps them the same length. Master CLEAR fills the master loop with zeros rather than emptying it (luppolo3.cpp:194), keeping the length. The per-track outputs are written only while the master loop exists (luppolo3.cpp:337). The main outputs add the live input while any track is recording (luppolo3.cpp:328 to :332). There is no dataToJson, so nothing survives a reload."
+}

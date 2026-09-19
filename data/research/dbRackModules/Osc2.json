@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Osc2.cpp:92 takes the channel count from this input and Osc2.cpp:102 adds it to the Freq knob"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "the V/Oct 1 jack", "why": "Osc2.cpp:104-106 read it four channels at a time when it is connected, in place of the first pitch"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the Phs knob alone", "why": "Osc2.cpp:134-137 read it four channels at a time, clamp this jack to -5..5, map it onto 0 to 1 and scale it by the Phs CV knob"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc2.cpp:111 and Osc2.cpp:113 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 2V", "normal": "0V", "why": "Osc2.cpp:128-130 read it four channels at a time into a Schmitt trigger with thresholds of 0.1V and 2V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Osc2.cpp sets this output's channel count from the V/Oct 1 jack"},
+      "1": {"family": "audio", "poly": true, "why": "Osc2.cpp sets this output's channel count from the V/Oct 1 jack"}
+    }
+  },
+  "comment": "Both oscillators take the same FM jack, Osc2.cpp:111-124, so frequency modulation moves them together. The Phs jack is mapped from -5V to 5V onto the whole of a cycle before the CV knob is applied, Osc2.cpp:134-137. Oversampling is off when the module is placed, unlike the other alias-suppressed oscillators in the plugin, and is the menu's only setting."
+}

@@ -1,0 +1,49 @@
+{
+  "plugin": "TinyTricks",
+  "module": "SNOSC",
+  "description": "An audio oscillator whose single cycle is read out of a field of simplex noise, with a small display of the wave it is producing.",
+  "params": [
+    {"ids": [0], "text": "Sets how much of the noise field one cycle covers, 0.5 at the left to 5.5 at the right, so higher settings give a busier waveform."},
+    {"ids": [1], "text": "Sets how many octaves of noise are summed into the waveform, 1 for a plain shape through to 8 for one full of fine wrinkles."},
+    {"ids": [2], "text": "Sets the pitch in volts, -3 to +3; 0V gives C4 at 261.63Hz."},
+    {"ids": [3], "text": "Shifts the pitch by up to half an octave either way."},
+    {"ids": [4], "text": "Moves the start of the read across the noise field, 0 to 5, which gives a different waveform at every setting."},
+    {"ids": [5], "text": "Moves the read to a different row of the noise field, 0 to 5, which gives an unrelated waveform at every setting."},
+    {"ids": [6], "text": "Toggles the waveform being mirrored at its halfway point, making each cycle symmetrical; the lamp is lit while mirroring is on and the setting is stored with the patch."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch at a volt per octave, added to FREQ; the number of channels patched here sets the oscillator's polyphony."},
+    {"ids": [1], "text": "Shifts the pitch by a fifth of an octave per volt, added to FINE."},
+    {"ids": [2], "text": "A rising edge restarts the waveform from the beginning of its cycle."},
+    {"ids": [3], "text": "Adds a quarter of its voltage to X, and the total is held inside the knob's own range."},
+    {"ids": [4], "text": "Adds a quarter of its voltage to Y, and the total is held inside the knob's own range."},
+    {"ids": [5], "text": "Adds a quarter of its voltage to SCALE, and the total is held inside the knob's own range."},
+    {"ids": [6], "text": "Adds 0.8 to DETAIL per volt, and the total is held inside the knob's own range."},
+    {"ids": [7], "text": "A rising edge toggles the mirroring from outside the module, with no need to press MIRROR."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The waveform, rescaled so that the loudest and quietest values it has produced lately reach -5V and +5V."},
+    {"ids": [1], "text": "A pulse one sample long at the end of each cycle: 11V with nothing patched to SYNC, and with SYNC patched 10V at a natural end of cycle and 11V on the sample a sync restarts the oscillator."}
+  ],
+  "notes": [
+    "The output is normalised against the highest and lowest values in the last 2048 samples, rechecked every 256 samples, so the level stays near ±5V as the waveform is changed.",
+    "An 11V pulse at the SYNC input restarts the display as well as the oscillator, which is what the 11V from this module's own EOC output is for; a 10V pulse restarts only the oscillator.",
+    "The pitch from the two knobs and the two pitch inputs together is limited to three and a half octaves either side of C4."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V.",
+      "1": "continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V.",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "0 to 11V · stepped · polyphonic"
+    }
+  }
+}

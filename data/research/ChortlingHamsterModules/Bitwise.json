@@ -1,0 +1,31 @@
+{
+  "plugin": "ChortlingHamsterModules",
+  "module": "Bitwise",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Bitwise.cpp:428 stores inputs[i].getVoltage(), a single-channel read, with no clamp"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Bitwise.cpp:428 stores inputs[i].getVoltage(), a single-channel read, with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Bitwise.cpp:428 stores inputs[i].getVoltage(), a single-channel read, with no clamp"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Bitwise.cpp:428 stores inputs[i].getVoltage(), a single-channel read, with no clamp"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 0.7V", "step": "stepped", "why": "src/Bitwise.cpp:414 divides the voltage by 0.7 before a dsp::SchmittTrigger whose default high threshold is 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0.7V", "step": "stepped", "why": "src/Bitwise.cpp:414 divides the voltage by 0.7 before a dsp::SchmittTrigger whose default high threshold is 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 0.7V", "step": "stepped", "why": "src/Bitwise.cpp:414 divides the voltage by 0.7 before a dsp::SchmittTrigger whose default high threshold is 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 0.7V", "step": "stepped", "why": "src/Bitwise.cpp:414 divides the voltage by 0.7 before a dsp::SchmittTrigger whose default high threshold is 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 0.7V", "step": "stepped", "why": "src/Bitwise.cpp:362 divides the voltage by 0.7 before a dsp::SchmittTrigger whose default high threshold is 1 (Rack-SDK include/dsp/digital.hpp:107)"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/Bitwise.cpp:311-326 reads it with getVoltage() only when connected, then setSelection at line 4 rescales cv*attenuator*16 from 0 to 160 into 0 to 16, adds the knob and clamps the total to 1 to 16"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "why": "src/Bitwise.cpp:336-351 reads it with getVoltage() only when connected, then setSelection at line 4 rescales cv*attenuator*8 from 0 to 80 into 0 to 8, adds the knob and clamps the total to 1 to 8"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "why": "src/Bitwise.cpp:440 writes the held voltage times the attenuator to channel 0 only, and it changes only when that column samples"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "why": "src/Bitwise.cpp:440 writes the held voltage times the attenuator to channel 0 only, and it changes only when that column samples"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "why": "src/Bitwise.cpp:440 writes the held voltage times the attenuator to channel 0 only, and it changes only when that column samples"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "why": "src/Bitwise.cpp:440 writes the held voltage times the attenuator to channel 0 only, and it changes only when that column samples"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Bitwise.cpp:448 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with 1e-3 seconds at line 431"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Bitwise.cpp:448 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with 1e-3 seconds at line 431"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Bitwise.cpp:448 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with 1e-3 seconds at line 431"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Bitwise.cpp:448 writes 10 or 0 to channel 0 only, gated by a dsp::PulseGenerator triggered with 1e-3 seconds at line 431"},
+      "8": {"family": "cv", "poly": true, "step": "stepped", "why": "src/Bitwise.cpp:444 writes each column's held voltage to its own channel and line 457 calls setChannels(4)"}
+    }
+  },
+  "comment": "Read from the repository at commit ed72dd1, the tip of the default branch and the last of the four commits carrying version 2.0.0 in plugin.json.\n\nThe README says the pulse outputs are \"only a hundredth of a second long\". The code disagrees twice over: src/Bitwise.cpp:431 triggers the pulse feeding the PULSE jacks with 1e-3 seconds, that is 1ms, and line 434 triggers a separate generator with 1e-1 seconds, 100ms, which drives the blue lamp under each PULSE jack and nothing else. Neither figure is a hundredth of a second, so the lines carry 1ms and name the disagreement.\n\nThe row and pattern seven-segment displays and the 64-lamp pattern grid are drawn by custom widgets with no ParamWidget behind them, so none of them can be clicked for help; what they show is in Note lines instead.\n\nThe row and pattern CV jacks are read only while a cable is connected (src/Bitwise.cpp:311 and 336 test isConnected first); with no cable the knob's own value is used without passing through the clamp.\n\nThe selection arithmetic truncates rather than rounds: setSelection returns (int) of the clamped float, so a CV that lands part way between two rows takes the lower one.\n\nBoth attenuator knobs default to 0, which is why a freshly patched CV cable appears to do nothing.\n\nBypass is declared for the four voltage inputs to the four voltage outputs only (src/Bitwise.cpp:301-303); the pulse outputs and the polyphonic output carry nothing while the module is bypassed."
+}

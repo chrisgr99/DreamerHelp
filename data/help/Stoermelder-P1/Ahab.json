@@ -1,0 +1,51 @@
+{
+  "plugin": "Stoermelder-P1",
+  "module": "Ahab",
+  "description": "A livecoding sequencer running the ORCA language: letters typed into the grid are operators that build patterns and send MIDI and CV as the frame counter advances.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed of the internal clock, 30 to 300 beats per minute, when nothing is patched to the clock input."},
+    {"ids": [1], "text": "Starts and stops the simulation; the space bar does the same."},
+    {"ids": [2], "text": "Advances the simulation by one frame on each press."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger advances the simulation by one frame, in place of the internal clock."},
+    {"ids": [1, 2, 3, 4], "text": "Read by the CV read operator: a numeric read maps 0-10V onto the values 0 to 35, and a pitch read gives the semitone of a volt-per-octave voltage."},
+    {"ids": [5], "text": "A trigger resets the frame counter to zero."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a trigger on every frame of the simulation."},
+    {"ids": [1, 2, 3, 4], "text": "Written by the CV write operator: a numeric write maps the values 0 to 35 onto 0-10V, and a pitch write gives a volt-per-octave voltage."}
+  ],
+  "notes": [
+    "a voltage written as a pitch can carry a gate length, after which it returns to 0V; without one it is held.",
+    "the grid is empty on a new instance and produces nothing until operators are typed into it or an example is loaded from the menu."
+  ],
+  "menu": [
+    "Examples — loads one of the embedded ORCΛ tutorial patterns straight into the grid.",
+    "MIDI — Driver enabled and Driver pick the MIDI output; Virtual driver enabled and Virtual choose the virtual port that other MIDI modules can then select.",
+    "Clear, Load from file, Inject file, Save to file and Save selection to file — read and write the grid as a text file; Ctrl with N, O, B and S do the same while the grid is selected.",
+    "Undo, Redo, Zoom in and Focus mode — Focus mode fills the screen with the grid, and Shift and Escape leaves it.",
+    "Terminal — sets the grid's size with the Rows and Cols sliders, and the spacing of its guide marks with Grid step cols and Grid step rows.",
+    "Randomize selection — Sparse (10%), Medium (30%) or Very dense (50%), filling the selected part of the grid with random operators.",
+    "UDP and OSC — set the address and port the ORCΛ send operators write to, taken up by Apply.",
+    "CC range 0-35, CC range 32-67, CC range 64-99 and CC range 96-127 — under MIDI, setting which control changes the CC operator writes to.",
+    "Help — Learn ORCΛ, ORCΛ cheat sheet, ORCΛ online manual and ORCΛ GitHub repository each open a page in a web browser."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "0 to 10V · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "0 to 10V",
+      "2": "0 to 10V",
+      "3": "0 to 10V",
+      "4": "0 to 10V"
+    }
+  }
+}

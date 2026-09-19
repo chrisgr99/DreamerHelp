@@ -1,0 +1,60 @@
+{
+  "plugin": "RareBreeds_Orbits",
+  "module": "RareBreeds_Orbits_Polygene",
+  "description": "Sixteen independent Euclidean rhythms in one module, each with its own length, density, shift and variation, clocked and sent out on the channels of one polyphonic cable",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the sixteen rhythms the LENGTH, HITS, SHIFT, VARIATION, reverse and invert controls edit, 1 to 16, and picks that rhythm out on the display"},
+    {"ids": [1], "text": "Sets how many beats the chosen channel's cycle runs for, 1 to 32"},
+    {"ids": [2], "text": "Sets how many of the chosen channel's beats are hits, from none at fully counter-clockwise to every beat at fully clockwise"},
+    {"ids": [3], "text": "Rotates the chosen channel's pattern around its cycle by up to 31 beats, wrapped to that channel's length"},
+    {"ids": [4], "text": "Moves the chosen channel's pattern away from the even Euclidean one a beat at a time; at 0 per cent it is the plain Euclidean pattern, and no setting repeats an earlier pattern"},
+    {"ids": [5], "text": "Switches the direction the clock walks the chosen channel's cycle, clockwise when off and anticlockwise when on; a cable in the reverse CV jack takes the switch out of use"},
+    {"ids": [6], "text": "Turns every hit into a rest and every rest into a hit on the chosen channel; a cable in the invert CV jack takes the switch out of use"},
+    {"ids": [7], "text": "Randomises the chosen channel's settings, limited to the controls ticked under Randomize Filter on the menu"},
+    {"ids": [8], "text": "Sets every channel back to the first beat of its cycle on each press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge on a channel plays that channel's current beat and moves it on; the channel count of the cable patched here sets how many rhythms run and how many channels both outputs carry"},
+    {"ids": [1], "text": "A rising edge sets that channel back to the first beat of its cycle; a monophonic cable reaches every channel unless Sync is ticked under Mono Input Behavior"},
+    {"ids": [2], "text": "Divided by 5, multiplied by 31 and added to that channel's length, then rounded and clamped to 1 and 32 beats, despite the manual saying it is multiplied by the length knob"},
+    {"ids": [3], "text": "Divided by 5 and added to that channel's density, then multiplied by the length and rounded to a whole number of hits, despite the manual saying it is multiplied by the hits knob"},
+    {"ids": [4], "text": "Divided by 5, multiplied by 31 and added to that channel's shift, then rounded and wrapped to that channel's length, despite the manual saying it is multiplied by the shift knob"},
+    {"ids": [5], "text": "Divided by 5 and added to that channel's variation, then spread across every pattern available at that length and hit count, despite the manual saying it is multiplied by the knob"},
+    {"ids": [6], "text": "While a cable is here it replaces the reverse switch on every channel: above 1V that channel's clock walks anticlockwise, and at 0V or below it walks clockwise again"},
+    {"ids": [7], "text": "While a cable is here it replaces the invert switch on every channel: above 1V that channel's hits and rests swap, and at 0V or below they go back"},
+    {"ids": [8], "text": "A rising edge on a channel randomises that channel's settings, limited to the controls ticked under Randomize Filter on the menu"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V on each hit of that channel, shaped as a pulse or a gate according to the Beat Mode menu item"},
+    {"ids": [1], "text": "A 10V pulse 1ms long when that channel starts a new cycle, at the beat the EOC Mode menu item picks"}
+  ],
+  "notes": [
+    "Nothing runs until a clock is patched into CLK. The channel count of that cable sets how many rhythms play, and channels with no clock are greyed out on the display.",
+    "The display draws all sixteen rhythms at once with the channel the knobs edit picked out. It cannot be clicked.",
+    "LENGTH, HITS, SHIFT and VARIATION change only the channel the channel knob selects, and they jump to that channel's stored settings when the channel is changed.",
+    "Bypassing the module passes the clock input straight through to the OUT jack."
+  ],
+  "menu": [
+    "Beat Mode: Pulse, Gate, Hold — sets the shape of the OUT jack: a 1ms pulse on each hit, a gate retriggered between successive hits, or a gate held across them",
+    "EOC Mode: On Repeat, First, Last — sets which beat raises the EOC jack: the first beat after a cycle has completed, the first beat of any cycle, or the last beat",
+    "Randomize Filter: Length, Hits, Shift, Variation, Reverse, Invert — ticks which settings change when a channel is randomised",
+    "Mono Input Behavior: Sync, Length, Hits, Shift, Variation, Random — ticks the jacks on which a monophonic cable reaches only the first channel instead of every channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "±5V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "3": "±5V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "4": "±5V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "5": "±5V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "6": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

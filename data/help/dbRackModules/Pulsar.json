@@ -1,0 +1,43 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pulsar",
+  "description": "A pulsar oscillator: a short waveform is played once per cycle and the rest of the cycle is silence, which sets the pitch apart from the colour",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -8 to 4 as a power of two around middle C, which is about 1Hz to 4186Hz"},
+    {"ids": [1], "text": "Shifts the pitch by up to a hundred cents either way"},
+    {"ids": [2], "text": "Sets how much of each cycle the waveform fills, 0 to 0.99; the shorter it is the higher the colour it gives the sound"},
+    {"ids": [3], "text": "Attenuates the voltage at the Duty jack before it is added to the Duty knob, 0 to 100 per cent"},
+    {"ids": [4], "text": "Sets how many pulses are packed into each cycle, 1 to 8"},
+    {"ids": [5], "text": "Sets the waveform played in each pulse, 0 to 3, moving smoothly from sine through triangle and square to saw"},
+    {"ids": [6], "text": "Attenuates the voltage at the Waveform jack before it is added to the Waveform knob, 0 to 100 per cent"},
+    {"ids": [7], "text": "Picks the envelope each pulse is shaped by: Rect, Ramp, Decay, Gauss or Triangle"},
+    {"ids": [8], "text": "Shapes the chosen envelope, 1 to 10; what it changes depends on which envelope is chosen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "Modulates the duty, a fifth per volt scaled by the D CV knob"},
+    {"ids": [2], "text": "Modulates the waveform, three tenths per volt scaled by the Waveform CV knob"},
+    {"ids": [3], "text": "Sets the number of pulses by voltage in place of the knob, 1V to 10V, and moves the knob while it is patched"},
+    {"ids": [4], "text": "Sets the envelope by voltage in place of the knob, one volt per setting from 0V for Rect to 4V for Triangle, and moves the knob while it is patched"},
+    {"ids": [5], "text": "Sets that shaping by voltage in place of the knob, 1V to 10V, and moves the knob while it is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave, -5V to 5V"}
+  ],
+  "notes": [
+    "the wave is worked out sixteen times over per sample and filtered, which keeps the short pulses from aliasing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1.99V.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 3V.",
+      "3": "1 to 10V · continuous · one channel only\n\nunpatched it reads the Cluster knob.",
+      "4": "0 to 4V · stepped · one channel only\n\nunpatched it reads the envelope knob; a negative voltage does nothing here.",
+      "5": "1 to 10V · continuous · one channel only\n\nunpatched it reads the envelope shaping knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "plugin": "wintoid",
+  "module": "FourMM",
+  "description": "Four-operator phase-modulation oscillator with eleven fixed routings, polyphonic to 16 voices, each operator carrying a continuous waveshape morph, a wavefolder and self-feedback",
+  "params": [
+    {"ids": [1], "text": "Sets how much of each operator's output reaches the operator it modulates, none at the left and full at the right; it does not touch the carriers, which reach the mix at their own Level"},
+    {"ids": [2], "text": "Detunes every operator together, -100 to +100 cents"},
+    {"ids": [3], "text": "Scales the finished mix, silent at the left and unchanged at the right"},
+    {"ids": [4, 5, 6, 7], "text": "Sets that operator's frequency: read as a ratio it steps from a quarter of the voice pitch to 31.5 times it, and read as a fixed frequency it sweeps from 1Hz to 9999Hz"},
+    {"ids": [8, 9, 10, 11], "text": "Detunes that operator on its own, -100 to +100 cents"},
+    {"ids": [12, 13, 14, 15], "text": "Sets that operator's output level, which is its share of the mix where the routing makes it a carrier and its modulation depth where the routing makes it a modulator"},
+    {"ids": [16, 17, 18, 19], "text": "Morphs that operator's waveform continuously from sine at the left through triangle and saw to pulse at the right, with the saw and pulse edges band-limited"},
+    {"ids": [20, 21, 22, 23], "text": "Wavefolds that operator's waveform, driving it from unchanged at the left to five times at the right into the folding curve chosen for that operator"},
+    {"ids": [24, 25, 26, 27], "text": "Feeds that operator's previous sample back into its own phase through a soft clip, none at the left and the full sample at the right"},
+    {"ids": [28], "text": "Scales the Mod CV input before it is added to XMod, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [29], "text": "Multiplied by the Ext PM input voltage to give the depth of external phase modulation, with the product held between 0 and 1; a negative product gives no modulation at all"},
+    {"ids": [30, 31, 32, 33], "text": "Scales that operator's Level CV input before it is added, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [34, 35, 36, 37], "text": "Scales that operator's Warp CV input before it is added, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [38, 39, 40, 41], "text": "Scales that operator's Fold CV input before it is added, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [42, 43, 44, 45], "text": "Scales that operator's Feedback CV input before it is added, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [46, 47, 48, 49], "text": "Chooses whether that operator's Coarse knob is read as a ratio to the voice pitch or as a fixed frequency in Hz"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of the whole voice at a volt per octave, 0V giving 261.63Hz, and its channel count sets how many voices the module runs"},
+    {"ids": [1], "text": "Phase-modulates the finished mix: the module reads its own output back as a sine, shifts that phase by this voltage times the depth, and takes the sine again"},
+    {"ids": [2], "text": "Adds a tenth of its voltage to XMod after the attenuverter beside it, and the total is held between 0 and 1"},
+    {"ids": [3, 4, 5, 6], "text": "Adds a tenth of its voltage to that operator's Level after the attenuverter beside it, and the total is held between 0 and 1"},
+    {"ids": [7, 8, 9, 10], "text": "Adds a tenth of its voltage to that operator's Warp after the attenuverter beside it, and the total is held between 0 and 1"},
+    {"ids": [11, 12, 13, 14], "text": "Adds a tenth of its voltage to that operator's Fold after the attenuverter beside it, and the total is held between 0 and 1"},
+    {"ids": [15, 16, 17, 18], "text": "Adds a tenth of its voltage to that operator's FB after the attenuverter beside it, and the total is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sum of the operators the routing marks as carriers, each at its own Level, multiplied by 5 after the VCA; one carrier at full scale reaches about ±5V and several added together reach more"}
+  ],
+  "notes": [
+    "the routing is picked on the algorithm display rather than by a knob: a left click steps to the next of the eleven and a right click opens a menu of them.",
+    "the algorithm display is drawn rather than being a parameter, so clicking it never reaches a help line.",
+    "each operator's folding curve is picked on the small box under its Fold knob: a left click steps through Sym, Asym and Soft.",
+    "a right click on an operator's fold box opens a menu naming Symmetric, Asymmetric and Soft Clip. The box is drawn rather than a parameter, so clicking it reaches no help line.",
+    "Op 1 comes up at full Level and the other three at zero, so a fresh module sounds only when the operators the routing feeds into Op 1 are turned up.",
+    "every voice runs at two times oversampling and the carrier mix passes a DC blocker before the VCA.",
+    "a mono cable, or one with fewer channels than V/OCT, is copied to every voice on all eighteen modulation inputs.",
+    "this module is kept so that patches already using it keep loading, and it is hidden from the module browser. FourV2 is the current one."
+  ],
+  "menu": [
+    "Algorithm — on the algorithm display rather than the panel: lists the eleven fixed routings and sets the one in use",
+    "Fold Type: Symmetric, Asymmetric, Soft Clip — on the small box under each operator's Fold knob rather than the panel: sets the folding curve for that operator"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "5": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "7": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "8": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "9": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "10": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "11": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "12": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "13": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "14": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "15": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "16": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "17": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "18": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

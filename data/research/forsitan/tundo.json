@@ -1,0 +1,23 @@
+{
+  "plugin": "forsitan",
+  "module": "tundo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:151 and 138, the pitch attenuverter defaults fully open and the jack is one volt per octave at that setting"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 244, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 harmonic knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 246, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 spread knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 248, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 morph knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 250, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 fold knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 253, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 attack knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/tundo.cpp:212-218 and 258, knobCv() adds getVoltage() times 0.2 times the attenuverter to the 0..1 decay knob, so ±5V at a fully open attenuverter covers the whole travel"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "ignored", "normal": "the mode switch", "why": "src/tundo.cpp:221-230 and 234, switchOrCv() ignores the mode switch entirely whenever the jack is patched and reads the voltage in three bands: 2 at 3.3333V and above, 1 at 1.6667V and above, 0 below that, so the control is used up by 3.33V"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "ignored", "normal": "the range switch", "why": "src/tundo.cpp:221-230 and 235, switchOrCv() ignores the range switch entirely whenever the jack is patched and reads the voltage in three bands: 2 at 3.3333V and above, 1 at 1.6667V and above, 0 below that, so the control is used up by 3.33V"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1.5V", "negative": "ignored", "why": "src/tundo.cpp:306, trigTrigger.process(getVoltage(), 0.1f, 1.5f) fires the voice on the rising edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/tundo.cpp:161, the voice at whichever output level the menu is set to, 5, 10 or 14 volts peak to peak"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/tundo.cpp:162, the maker's own port name records 0 to 10V"}
+    }
+  },
+  "comment": "Each of the seven knobs has its own attenuverter and CV jack directly below it, so the seven attenuverters share one line; the pitch attenuverter is the one configured fully open so a cable in the pitch jack tracks one volt per octave with nothing to set up. The mode and range CV jacks override their switches while patched rather than adding to them. The engine runs at the fundamental times the power of two nearest twice the host rate, re-chosen only when the fundamental moves more than a semitone, with a zero-order hold back down to the host rate; that is what keeps the aliasing tuned to the note. The panel prints tundo, pitch, harm, spread, morph, fold, attack, decay, mode, range, hit, cv twice, trig, audio and env."
+}

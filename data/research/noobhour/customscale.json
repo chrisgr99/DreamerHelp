@@ -1,0 +1,20 @@
+{
+  "plugin": "noobhour",
+  "module": "customscale",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Customscaler.cpp process(): channels = inputs[SIGNAL_INPUT].getChannels(), then selectedIndex from clamp(inp, 0.f, 10.f)/10.f, with 5.f added first when the bipolar input menu item is on"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Customscaler.cpp process(): the toggle block loops over inputs[TONE_INPUT].getChannels() and calls getTone(inputs[TONE_INPUT].getVoltage(c)), which is (int)(vOct*12) + 24"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Customscaler.cpp process(): gate = inputs[TOGGLE_TRIGGER_INPUT].getVoltage(c) per channel of TONE_INPUT, fed to gateTrigger[c].process(rescale(gate, 0.1f, 2.f, 0.f, 1.f))"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Customscaler.cpp process(): resetTrigger.process(rescale(inputs[RESET_TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)), one channel"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Customscaler.cpp process(): randomizeTrigger.process(rescale(inputs[RANDOMIZE_TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)), one channel"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Customscaler.cpp getP(): p_input = clamp(inputs[P_INPUT].getVoltage()/10.f, -10.f, 10.f), then clamp(p_input + knob, 0.f, 1.f), one channel"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Customscaler.cpp process(): baseTone += inputs[BASE_INPUT].getVoltage()/10.f*11.f, then clamp(baseTone, 0.f, 11.f) cast to int, one channel"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Customscaler.cpp process(): outputs[OUT_OUTPUT].setChannels(channels) from the in jack, and setVoltage(getVOct(finalTone), c)"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Customscaler.cpp process(): outputs[CHANGEGATE_OUTPUT].setChannels(channels) and setVoltage(changePulse[c].process(...) ? 10.f : 0.f, c), the pulse triggered for 0.001f"}
+    }
+  },
+  "comment": "Read from the maker's source at commit fd172d0, the installed 2.0.0. Every one of the sixty matrix buttons is a real LEDBezel parameter widget with its own position, so each is clickable and each has its own line; the lamp drawn over it is a light and is not clickable. Parameter index 0 is the C of octave -2 at the bottom of the left-hand column and index 59 is the B of octave 2 at the top of the right-hand column, so index order runs up each column and then across. The oct range and latch/toggle switches both name their positions in the order the code tests for, so neither is reversed. None of the seven inputs and neither output was given a name in the code. The p knob is configured with a per cent unit and no display multiplier, so its tooltip reads 0.5% where it means a probability of 0.5."
+}

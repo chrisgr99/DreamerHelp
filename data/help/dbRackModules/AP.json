@@ -1,0 +1,36 @@
+{
+  "plugin": "dbRackModules",
+  "module": "AP",
+  "description": "A polyphonic allpass filter with a delay in its loop, a building block for phasers and reverbs",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency the phase turns through, as a fraction of the sample rate, 0.001 to 0.49"},
+    {"ids": [1], "text": "Sets the delay in the loop in seconds, 0 to 1"},
+    {"ids": [2], "text": "Adds a delay in whole samples, 1 to 48"},
+    {"ids": [3], "text": "Attenuates the voltage at the Delay jack before it is added to the delay, 0 to 100 per cent"},
+    {"ids": [4], "text": "Attenuates the voltage at the Freq jack before it is added to the Freq knob, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be filtered, one per channel"},
+    {"ids": [1], "text": "Modulates that frequency, a twentieth of the sample rate per volt scaled by the Freq CV knob"},
+    {"ids": [2], "text": "Modulates the delay, a millisecond per volt, or ten milliseconds per volt with High CV on, scaled by the Delay CV knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered signal with its constant offset removed"}
+  ],
+  "notes": [
+    "the delay set in seconds is held to half a second at most, however far the Sec knob and the Delay jack push it; the Smp knob adds its samples on top of that"
+  ],
+  "menu": [
+    "High CV — reads the Delay jack at ten milliseconds per volt in place of one millisecond per volt"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads the Freq knob alone; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 0.5V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

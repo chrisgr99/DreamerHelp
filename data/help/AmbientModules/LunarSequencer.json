@@ -1,0 +1,36 @@
+{
+  "plugin": "AmbientModules",
+  "module": "LunarSequencer",
+  "description": "Sequential voltage source of three, four or five steps, each with its own level and its own gate, run from an internal pulser or an external clock",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4], "text": "Sets this step's level; the tooltip reads out the voltage it will put out in the range chosen on the menu"},
+    {"ids": [5, 6, 7, 8, 9], "text": "Switches this step's gate on and off; a step with its gate off plays its own level at the CV output all the same"},
+    {"ids": [10], "text": "Sets the sequence length; the switch reads 3, 5 and 4 from left to right, following the lever on the original hardware"},
+    {"ids": [11], "text": "Sets the rate of the internal pulser, which runs the sequence whenever nothing is patched to the clock input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "An external clock; while a cable is patched here it replaces the internal pulser, and a step is taken on each rising edge"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The level of the step the sequence has reached, in the range chosen on the menu"},
+    {"ids": [1], "text": "10V while the clock is high and the current step's gate button is lit, 0V otherwise, whatever shape the incoming clock has"},
+    {"ids": [2], "text": "The clock driving the sequence: the internal pulser, or a copy of the voltage at the clock input while one is patched"}
+  ],
+  "notes": [
+    "with nothing patched to the clock input the internal pulser runs the sequence on its own, as a clean square wave at half duty.",
+    "the lamp beside a step is lit while that step is playing, and steps past the chosen length never light."
+  ],
+  "menu": [
+    "CV Range: 0V to +5V, 0V to +10V, -5V to +5V, -10V to +10V — sets the range the step levels are spread across, and the voltage the step knobs read out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads the internal pulser."
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

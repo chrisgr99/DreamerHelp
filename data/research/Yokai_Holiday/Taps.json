@@ -1,0 +1,19 @@
+{
+  "plugin": "Yokai_Holiday",
+  "module": "Taps",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Taps.cpp:549 getVoltageSum adds every channel of the cable into the one sample that is written"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1.7V", "step": "stepped", "negative": "ignored", "normal": "the LENGTH knob sets the loop instead", "why": "Taps.cpp:249 compares the single voltage against 1.7; Taps.cpp:432 uses the knob's length only while this jack is unpatched"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Taps.cpp:371 multiplies the single voltage by the trimpot and adds it to the knob as seconds; Taps.cpp:375 holds the total between 0.5 and 10"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Taps.cpp:348 multiplies the single voltage by 0.1 and by the trimpot before adding it to the knob, and the total is held between 0 and 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Taps.cpp:487 multiplies the single voltage by 0.1 and by the trimpot before adding it to the knob, and the total is held between 0 and 1"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Taps.cpp:455 multiplies the single voltage by 0.1 and by the trimpot before adding it to the knob, and the total is held between 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Taps.cpp:721 setVoltage on one channel"},
+      "1": {"family": "audio", "poly": false, "why": "Taps.cpp:722 setVoltage on one channel"}
+    }
+  },
+  "comment": "The panel prints DISTANCE for the two tap position knobs while the maker's tooltip for both reads 'Location', and the two trimpots beside them share the tooltip 'Location Modulation'; the two LENGTH-row controls and the two FEEDBACK-row controls are named unambiguously. The loop buffer is fixed at 96000 samples per second times 10 seconds, so the full 10 seconds is only available up to a 96kHz sample rate. Feedback is taken from the reverse tap alone; the forward tap never returns to the loop. Taps.cpp:733 decrements the reverse light's brightness and then tests the buffer light's variable instead of its own, so the reverse brightness is never floored at zero; it is reset on each crossing, so the light still works. The LENGTH input is given no range field because the code applies no clamp to the jack itself, only to the sum, at one second per volt through the trimpot."
+}

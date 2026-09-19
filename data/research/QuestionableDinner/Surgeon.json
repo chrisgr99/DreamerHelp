@@ -1,0 +1,18 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Surgeon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Surgeon.cpp:258 fires when getVoltage() is above 0.1 and higher than the last sample; line 263 rearms below 0.1"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Surgeon.cpp:336 sets the fundamental to FREQ_C4 times two to the power of getVoltage()"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "1V", "why": "src/Surgeon.cpp:329 reads getNormalVoltage(1.0f) and multiplies it by the X knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "1V", "why": "src/Surgeon.cpp:330 reads getNormalVoltage(1.0f) and multiplies it by the Y knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "1V", "why": "src/Surgeon.cpp:331 reads getNormalVoltage(1.0f) and multiplies it by the Z knob"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Surgeon.cpp:254 adds getVoltage() to the freeze button and freezes when the total is above zero"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "src/Surgeon.cpp:322 sets one voltage with no channel argument and no clamp"}
+    }
+  },
+  "comment": "Four of the six jacks are unnamed in the source and show no tooltip: the X, Y and Z jacks and the freeze jack. The panel letters them X, Y, Z, a snowflake, V/OCT and TRIG. The default expressions on a fresh module are 0 for j, k, l and the time warp, 0.0039 for the attack, 0.5 for the decay, i*f for the pitch, 1/i*e for the amplitude and 1 for the phase; a phase expression of exactly 0 stops the phase being reset on a trigger. The seed knob is only acted on when it is above 1000, which is everywhere but its far left position. The X, Y and Z jacks and the pitch jack are only sampled on the slow tick, so they are not audio rate; the Quality menu item sets how often that tick happens."
+}

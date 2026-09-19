@@ -1,0 +1,36 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Notable",
+  "description": "Takes one pitch and gate pair, folds each note into a chosen voltage window, drops immediate repeats, and hands the surviving notes round a set number of polyphonic channels",
+  "params": [
+    {"ids": [0], "text": "Sets the bottom of the window notes are folded into, -5V to 5V"},
+    {"ids": [1], "text": "Sets the top of the window notes are folded into, -5V to 5V"},
+    {"ids": [2], "text": "Chooses what happens to a note repeating the one before it: down, the previous pitch is played instead, so repeats alternate between two remembered pitches; up, the note is dropped"},
+    {"ids": [3], "text": "Sets how many polyphonic channels the two output jacks carry, 1 to 16; each new note is given to whichever channel has been quiet longest"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be folded and passed on; the voltage taken is that of the channel whose gate has risen"},
+    {"ids": [1], "text": "The gate that says a note has arrived; a rise on any channel takes that channel's pitch in"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The folded, de-duplicated pitches, one per channel"},
+    {"ids": [1], "text": "10V on a channel that is holding a note and 0V on one that is not"},
+    {"ids": [2], "text": "A one millisecond trigger each time a repeated note is thrown away, which happens only with the switch in its upper position"}
+  ],
+  "notes": [
+    "The fold step is not an octave. It is the gap between the two window knobs rounded down to a whole number of volts, with a floor of 1V, so the default -1.5V and 1.5V move a note by 3V",
+    "Two notes count as the same when they are within a quarter tone of each other, so a pitch that drifts by less than that is treated as a repeat",
+    "Bypassing the module passes the pitch input to the pitch output and the gate input to the gate output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 0V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

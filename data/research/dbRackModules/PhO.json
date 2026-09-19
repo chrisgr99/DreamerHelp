@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "PhO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "PhO.cpp:48 takes the channel count from this input and PhO.cpp:63 reads it four channels at a time, scaling it by pi over five into radians"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "the fundamental alone", "why": "PhO.cpp:55-57 read channels 0 to 15 of this input and divide each by 10 for the strength of that harmonic"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the Dmp knob", "why": "PhO.cpp:52 reads it with getVoltage() and no channel loop, clamps this jack to 0..10 and writes it into the Dmp knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "PhO.cpp:75 sets this output's channel count from the Phs jack; PhO.cpp:73 writes five times the summed wave"}
+    }
+  },
+  "comment": "The phase input is read as a voltage rather than as a pitch, PhO.cpp:63: minus five to five volts is one turn, so a saw at audio rate makes it an oscillator and a slow saw makes it a wavetable reader. The damping is an exponential curve over the harmonic number, PhO.cpp:59, and is applied only to harmonics whose strength is above zero. Only the first sixteen channels of Pts are read."
+}

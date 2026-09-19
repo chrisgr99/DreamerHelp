@@ -1,0 +1,33 @@
+{
+  "plugin": "Sulamith",
+  "module": "GTSeq",
+  "description": "Six gate lengths played one per clock pulse, so each pulse opens a gate of its own duration",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "Sets how long the gate for its own step stays open, 0.1 to 10 seconds on the knob"},
+    {"ids": [6], "text": "Chooses whether the sequence runs forwards, backwards or jumps to a random step"},
+    {"ids": [7], "text": "Sets the chance that an incoming clock pulse is acted on at all, 0 to 1"},
+    {"ids": [8], "text": "Sets how many of the six steps are used, 1 to 6"},
+    {"ids": [9], "text": "Steps the sequence once, as a rising edge at the clock jack does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge steps the sequence on by one and opens that step's gate"},
+    {"ids": [1], "text": "With a monophonic cable, a rising edge sends the sequence back to the start and shuts the gate; with a polyphonic cable, a button press copies that cable's channels into the six length knobs instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the gate at 10V for the length of the step the sequence is on, and 0V between steps"}
+  ],
+  "notes": [
+    "a clock pulse arriving during an open gate is thrown away, so the sequence moves no faster than its longest gate allows",
+    "the gate runs for half the time its knob reads, because the source advances the gate generator twice in each sample; a knob at 10 seconds gives a gate of five",
+    "the copying from a polyphonic reset cable works from the button only; the source reads the clock jack's edge before it reaches that test, so a clock pulse steps the sequence rather than copying"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

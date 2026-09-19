@@ -1,0 +1,41 @@
+{
+  "plugin": "CVfunk",
+  "module": "Clpy",
+  "description": "A stereo waveshaper that folds a signal and then holds it at a chosen level, with separate fold targets for the two sides",
+  "params": [
+    {"ids": [0], "text": "Sets how hard the signal is driven into the shaper, silence to ten times"},
+    {"ids": [1], "text": "Attenuverts the gain CV before it is added to the gain knob"},
+    {"ids": [2], "text": "Sets the level the folded signal settles at once it is driven past the fold, -5V to 5V for both sides together"},
+    {"ids": [3], "text": "Attenuverts both clip CVs before they are added to the clip knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the drive, added to the gain knob through its attenuverter and clamped to 0 to 10"},
+    {"ids": [1], "text": "Changes the settling level of the left side, added to the clip knob through its attenuverter; with only the right jack patched, that one feeds this side too"},
+    {"ids": [2], "text": "Changes the settling level of the right side, added to the clip knob through its attenuverter; with only the left jack patched, that one feeds this side too"},
+    {"ids": [3], "text": "The left signal to be shaped"},
+    {"ids": [4], "text": "The right signal to be shaped; with nothing patched it carries the left signal"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The shaped left signal, clamped to -10 to 10V"},
+    {"ids": [1], "text": "The shaped right signal, clamped to -10 to 10V"}
+  ],
+  "menu": [
+    "Clipping Mode: Convergent, Symmetric — Convergent settles both halves of the wave at the clip level; Symmetric settles the positive half there and the negative half at its mirror image",
+    "Supersampling — evaluates the shaper eight times per sample and averages the result, then filters it, which reduces the aliasing a hard fold produces",
+    "Bandlimit Filter — puts the shaped signal through a low-pass filter set by the cutoff slider below it",
+    "Filter Cutoff — a slider setting the corner of the bandlimit filter, shown in kilohertz against a 44.1kHz rate"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads the right clip jack.",
+      "2": "bipolar · continuous · polyphonic\n\nunpatched it reads the left clip jack.",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic\n\nunpatched it reads the left input."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic"
+    }
+  }
+}

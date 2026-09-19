@@ -1,0 +1,22 @@
+{
+  "plugin": "MADZINE",
+  "module": "theKICK",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "src/theKICK.cpp:607, triggerDetect.process(getVoltage(), 0.1f, 2.f)"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/theKICK.cpp:517-521, pitch *= pow(2, getVoltage())"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1000V", "why": "src/theKICK.cpp:523-528, sweep += getVoltage()*50, clamp(0, 1000); the clamp is in Hz, not volts"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:530-535, bend += getVoltage()*0.35, clamp(0.5, 4)"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:537-542, decayMs += getVoltage()*100, clamp(10, 2000)"},
+      "5": {"family": "cv", "poly": false, "sumRange": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:544-549, fold += getVoltage(), clamp(0, 10)"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:558-563, fb += getVoltage()*0.1, clamp(0, 1)"},
+      "7": {"family": "cv", "poly": false, "sumRange": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:565-570, toneKnob += getVoltage(), clamp(0, 10)"},
+      "8": {"family": "cv", "poly": false, "sumRange": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/theKICK.cpp:551-556, sampleMix += getVoltage(), clamp(0, 10)"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/theKICK.cpp:625-632, clamp(getVoltage()/10, 0, 1) read once on each trigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/theKICK.cpp:676, one setVoltage of the voice times the accent volume; the voice is scaled by 8 with no clamp"}
+    }
+  },
+  "comment": "sumRange on the sweep jack is written with a volt spelling because that is the only spelling the field takes; the figure is in Hz. BEND sets the pitch envelope time constant as 0.015 / bend seconds (src/theKICK.cpp:511), so a larger number is a shorter fall. TONE maps to 40 * 500 raised to tone/10 Hz (src/theKICK.cpp:574). DRIVE gives the saturator a gain of 1 + fold*0.5, up to six times, normalised by tanh of that gain (src/theKICK.cpp:598-601). The accent is read only at the moment of a trigger, not continuously. The FM mode button has a VCVButton at its position but an opaque overlay is drawn on top of it (src/theKICK.cpp:750-782); mouse clicks reach the overlay, which cycles the mode on a left click and offers PM, RM, AM and SYNC by name on a right click, and does neither while no sample is loaded. The load strip and the mode overlay are plain widgets with no census position, so they are covered by a Note. The panel prints PITCH, SWEEP, BEND, FEEDBACK, DECAY, TONE, DRIVE, TRIG, ACCENT and OUT; the sample knob, the sample CV jack, the load strip and the mode lamp carry no lettering. Lettering is drawn in code at src/theKICK.cpp:1160-1183."
+}

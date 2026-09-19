@@ -1,0 +1,18 @@
+{
+  "plugin": "acModules",
+  "module": "Pick6",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/Pick6.cpp process(): inTrigger.process(getVoltage(), 0.01f, 2.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/Pick6.cpp process(): inReset.process(getVoltage(), 0.01f, 2.f)"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "src/Pick6.cpp process(): clamp(rescale(getVoltage(), 0, 10, 1, 50), 1, 50), written back into the knob"},
+      "3": {"poly": true, "step": "continuous", "normal": "an open E chord", "why": "src/Pick6.cpp process(): getChannels() chooses the branch and getPolyVoltage(i) reads channels 0 to 11"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/Pick6.cpp process(): setVoltage(inCV), which is a note voltage from the poly input or the built-in E chord"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "src/Pick6.cpp process(): setVoltage(10.f, i) for six channels and setChannels(6)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pick6.cpp process(): monoPickOutput.trigger(1e-3f) and setVoltage(10.f)"}
+    }
+  },
+  "comment": "The polyphonic CV input is only read on two of the three possible cases: the code handles 12 or more channels (six notes plus six mutes) and fewer than 6 channels (the highest channel is copied up to fill the rest), but a cable carrying 6 to 11 channels matches neither branch and is not read at all, leaving the previous note values in place. The README describes the 12-channel and the fewer-than-six cases and does not mention the gap. The poly input's range is left blank because channels 1 to 6 carry pitch while 7 to 12 carry a 0V or 10V flag. The trigger thresholds are 0.01V low and 2V high rather than Rack's usual 0V and 1V. The pattern CV writes its value back into the knob, so the knob cannot be turned by hand while that jack is patched."
+}

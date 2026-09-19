@@ -1,0 +1,15 @@
+{
+  "plugin": "Sparkette",
+  "module": "VoltageRange",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/VoltageRange.cpp lines 45-46, isConnected then getVoltage() with no channel argument, times the start trimpot"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/VoltageRange.cpp lines 47-48, isConnected then getVoltage() with no channel argument, times the end trimpot"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "src/VoltageRange.cpp lines 50-51, (end-start)/(nchan-1) written with setVoltage"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "why": "src/VoltageRange.cpp lines 53-57, setChannels(nchan) then writeVoltages of start + increment*i"}
+    }
+  },
+  "comment": "src/VoltageRange.cpp at commit b90cd69. Both CV inputs are monophonic. The ranges given are the knob ranges; a CV can push the total past 10V, since nothing clamps the sum. The panel prints Channels, From, to, ΔVoltage and V. Range, and names neither trimpot."
+}

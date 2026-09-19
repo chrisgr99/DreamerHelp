@@ -1,0 +1,52 @@
+{
+  "plugin": "Sparkette",
+  "module": "Integrator",
+  "description": "Two ramps that move their outputs up or down over time at a speed a knob and a jack set between them, each held between a low and a high limit",
+  "params": [
+    {"ids": [0], "text": "Sets the low limit of the first ramp, -10V to 10V; with the low limit above the high one the two are swapped"},
+    {"ids": [1], "text": "Sets the high limit of the first ramp, -10V to 10V"},
+    {"ids": [2], "text": "Sets the speed of the first ramp, -10 to 10; that figure is volts per second with its delta jack empty, and volts per second per volt when a cable is patched there"},
+    {"ids": [3], "text": "Multiplies the speed of the first ramp by 50"},
+    {"ids": [4], "text": "Sets the first ramp back to 0V, or to whichever limit is nearer when 0V lies outside the pair"},
+    {"ids": [5], "text": "Sets the low limit of the second ramp, -10V to 10V; with the low limit above the high one the two are swapped"},
+    {"ids": [6], "text": "Sets the high limit of the second ramp, -10V to 10V"},
+    {"ids": [7], "text": "Sets the speed of the second ramp, -10 to 10; that figure is volts per second with its delta jack empty, and volts per second per volt when a cable is patched there"},
+    {"ids": [8], "text": "Multiplies the speed of the second ramp by 50"},
+    {"ids": [9], "text": "Sets the second ramp back to 0V, or to whichever limit is nearer when 0V lies outside the pair"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the speed of the first ramp: volts per second is this voltage times that ramp's speed trimpot, and patching a cable here also starts the ramp moving while its gate jack is empty"},
+    {"ids": [1], "text": "Lets the first ramp move while this reads 1V or more and holds it in place below that"},
+    {"ids": [2], "text": "Sets the first ramp back to 0V on each rising edge above 1V"},
+    {"ids": [3], "text": "Sets the speed of the second ramp: volts per second is this voltage times that ramp's speed trimpot, and patching a cable here also starts the ramp moving while its gate jack is empty"},
+    {"ids": [4], "text": "Lets the second ramp move while this reads 1V or more and holds it in place below that"},
+    {"ids": [5], "text": "Sets the second ramp back to 0V on each rising edge above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first ramp's present value in volts, which is also the number printed below it"},
+    {"ids": [1], "text": "The second ramp's present value in volts, which is also the number printed below it"}
+  ],
+  "notes": [
+    "a ramp moves only while its gate jack reads 1V or more, or, with that jack empty, while a cable is patched to its delta jack; with both jacks empty it does not move at all",
+    "this module passes a memory connection through: it takes the module immediately to its right as its host and adds its own two ramp values as an extra memory channel",
+    "the green lamp of a pair lights when that ramp is sitting at its high limit and the red one when it is at its low limit",
+    "the whole memory set, the host's channels and this module's two ramps, is offered to an Accessor or DMA-FX placed immediately to the left, which is what lets several be stacked side by side"
+  ],
+  "menu": [
+    "Wraparound — makes a ramp that reaches one limit carry on from the other instead of stopping, and lights both limit lamps at half brightness to say so"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 1V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the delta jack being patched; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 1V.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads the delta jack being patched; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only"
+    }
+  }
+}

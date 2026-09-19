@@ -1,0 +1,44 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Twelve-Key",
+  "description": "One-octave keyboard controller with pitch, gate and velocity outputs, which can be chained left to right to make a longer keyboard",
+  "params": [
+    {"ids": [0], "text": "Raises the base octave of the keyboard; it has no effect while a cable is patched to the OCT input"},
+    {"ids": [1], "text": "Lowers the base octave of the keyboard; it has no effect while a cable is patched to the OCT input"},
+    {"ids": [2], "text": "Steps the full-scale velocity voltage through 10V, 5V, 1V, two semitones and one semitone"},
+    {"ids": [3], "text": "Unipolar in the bottom position runs the velocity from 0V to the maximum; bipolar in the top position runs it from minus the maximum to plus the maximum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Gate from a keyboard up the chain, passed to the GATE output when the last key pressed was on that module"},
+    {"ids": [1], "text": "Pitch from a keyboard up the chain, passed to the CV output when the last key pressed was on that module"},
+    {"ids": [2], "text": "Sets the base octave from a voltage, 0V for octave 0 up to 9V for octave 9; voltages in between are floored and voltages outside the range are clamped"},
+    {"ids": [3], "text": "Velocity from a keyboard up the chain, passed to the VEL output when the last key pressed was on that module"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Gate of the key being held, on this keyboard or one up the chain"},
+    {"ids": [1], "text": "Pitch of the last key pressed, on this keyboard or one up the chain"},
+    {"ids": [2], "text": "The base octave of this keyboard plus one volt, for the OCT input of the next keyboard in the chain"},
+    {"ids": [3], "text": "Velocity of the last key pressed, set by how far down the key it was clicked and scaled by the MAX VEL and BIPOL settings"}
+  ],
+  "notes": [
+    "keyboards are chained with cables: patch the CV, GATE and VEL outputs of the keyboard on the left into the matching inputs here, and its OCT output into this module's OCT input"
+  ],
+  "menu": [
+    "Inverted velocity range — puts maximum velocity at the top of the keys instead of the bottom",
+    "Link velocity settings from left — copies the maximum velocity, the polarity and the inversion from the keyboard to the left; the panels must touch, with no gap between them",
+    "Tracer — keeps the last key pressed faintly lit",
+    "CV input viewer — stops the module responding to key presses and instead lights the key matching the CV input, turning a chain of keyboards into a note display"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "stepped · one channel only",
+      "3": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "continuous"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "plugin": "Coalescent",
+  "module": "Axon",
+  "description": "A spiking-neuron oscillator on the FitzHugh-Nagumo equations: at rest it fires a single spike per trigger, and across a middle band of current it free-runs as a relaxation oscillator.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed the simulation runs at, over ±4 octaves, with the centre giving C4 at 261.63Hz."},
+    {"ids": [1], "text": "Sets the injected current, -0.2 to 1.6, which is what puts the cell into one regime or the other: at rest at either end, oscillating across a middle band of roughly 0.33 to 1.42."},
+    {"ids": [2], "text": "Sets the ratio between the fast and the slow timescale, 0.01 to 0.30; small values sharpen the spike and large ones round it towards a sine."},
+    {"ids": [3], "text": "Sets the asymmetry of the waveform by moving the threshold position, 0.4 to 1.0."},
+    {"ids": [4], "text": "An attenuverter, -1 to +1, scaling the CV into the injected current."},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, scaling the CV into the timescale ratio."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the PITCH knob at 1V per octave, setting the speed the simulation runs at."},
+    {"ids": [1], "text": "Modulates the injected current, at a tenth per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the timescale ratio, at a tenth per volt through its attenuverter."},
+    {"ids": [3], "text": "A rising edge past 1V injects a short decaying current pulse: from rest that fires one spike, and inside the oscillating band it perturbs the phase."},
+    {"ids": [4], "text": "A rising edge past 1V re-seeds the cell at its rest point, which locks the cycle to a clock and gives hard-sync timbres against a swept pitch."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The membrane voltage, high-passed at 20Hz and soft-clipped to ±5V."},
+    {"ids": [1], "text": "A 10V pulse 1ms long on each upward threshold crossing of the membrane voltage, one per spike, with hysteresis so a noisy peak cannot fire twice."},
+    {"ids": [2], "text": "The recovery variable as a slow ±5V CV, not high-passed."}
+  ],
+  "notes": [
+    "The number of voices follows the V/OCT or TRIG cable, whichever carries more channels; the CV, SYNC and TRIG jacks are all read per channel.",
+    "The screen draws the phase portrait: the orbit in the membrane-voltage against recovery plane, with the two nullclines behind it."
+  ],
+  "menu": [
+    "Anti-aliasing: Off, ×2 oversampling, ×4 oversampling, ×8 oversampling — sets how many times the simulation is stepped per sample before decimation, and with it the pitch ceiling."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±5V · polyphonic"
+    }
+  }
+}

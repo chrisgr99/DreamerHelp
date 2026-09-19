@@ -1,0 +1,52 @@
+{
+  "plugin": "matrix-sequencer",
+  "module": "matrix-sequencer",
+  "description": "A four by four grid of knobs stepped through by a clock in one of three orders, with the voltage of the step now playing sent to a jack for its row, a jack for its column and a jack for the whole grid",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage that step of the grid sends when the sequence reaches it, -10V to 10V"},
+    {"ids": [16], "text": "Chooses the playback order: 0 runs left to right along each row in turn, 1 alternates between rows and columns on each pass through the grid, and 2 spirals inwards from the top left corner"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V moves the sequence on to the next step and sends that step's voltage to the outputs"},
+    {"ids": [1], "text": "Nothing in the module reads this jack. The flag it was meant to set is switched on when the module is made and is never changed again, so the sequence cannot be started or stopped from here."},
+    {"ids": [2], "text": "Any voltage other than exactly 0V returns the sequence to the top left step, and holds it there for as long as that voltage is present"},
+    {"ids": [3], "text": "Chooses the playback order while a cable is in, the Algorithm knob being ignored meanwhile: exactly 0V gives the row order, above 0V up to 1V the alternating order, and above 1V or below 0V the spiral"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the last step played in the first row, held until the sequence returns to that row"},
+    {"ids": [1], "text": "The voltage of the last step played in the second row, held until the sequence returns to that row"},
+    {"ids": [2], "text": "The voltage of the last step played in the third row, held until the sequence returns to that row"},
+    {"ids": [3], "text": "The voltage of the last step played in the fourth row or in the first column, held until one of those is reached again; the first column arrives here because the column jacks are numbered low by one"},
+    {"ids": [4], "text": "The voltage of the last step played in the second column, despite the panel printing X1"},
+    {"ids": [5], "text": "The voltage of the last step played in the third column, despite the panel printing X2"},
+    {"ids": [6], "text": "The voltage of the last step played in the fourth column, despite the panel printing X3"},
+    {"ids": [7], "text": "Nothing in the module ever writes to this jack, so it stays at 0V; the first column's voltage goes to the Y4 jack instead"},
+    {"ids": [8], "text": "The voltage of the step now playing, whichever step that is, held until the next clock edge"}
+  ],
+  "notes": [
+    "nothing happens until a clock reaches CLK. All nine outputs stay at 0V until the first rising edge arrives.",
+    "an output holds its last voltage between visits rather than falling to 0V, so a row or column jack keeps the value of the last step played there.",
+    "the lamp under a knob is lit while that step is the one playing.",
+    "every output carries one channel, and every input is read on its first channel only.",
+    "a reset moves the position back to the top left but leaves the spiral order's own bounds where they were, so a reset part way through a spiral leaves the two out of step until it finishes."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "one channel only",
+      "2": "bipolar · one channel only",
+      "3": "0 to 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "±10V · one channel only",
+      "2": "±10V · one channel only",
+      "3": "±10V · one channel only",
+      "4": "±10V · one channel only",
+      "5": "±10V · one channel only",
+      "6": "±10V · one channel only",
+      "7": "one channel only",
+      "8": "±10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "SickoCV",
+  "module": "SlewerMini",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SlewerMini.cpp:210 getVoltage() added straight to the rise time in seconds, floored at the 1ms minimum at :212-213"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SlewerMini.cpp:230 getVoltage() added straight to the fall time in seconds, floored at the 1ms minimum at :232-233"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SlewerMini.cpp reads this jack with getVoltage() and adds it to the curve knob"},
+      "3": {"poly": true, "step": "continuous", "why": "SlewerMini.cpp takes getChannels() from this jack as the loop bound and reads getVoltage(c) inside it"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "SlewerMini.cpp sets the channel count from the signal input and writes setVoltage(value, c) per channel"}
+    }
+  },
+  "comment": "The three attenuverters that slewer has are commented out here (SlewerMini.cpp:122, :126, :130), so the CV jacks are added to their knobs unscaled: one volt at the attack or decay jack adds one second. There are no ATT and DEC gate outputs on this version. The IN and OUT jacks carry whatever is patched, so they get no family."
+}

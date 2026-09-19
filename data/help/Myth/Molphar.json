@@ -1,0 +1,64 @@
+{
+  "plugin": "Myth",
+  "module": "Molphar",
+  "description": "Three rows of eight steps sharing one probability per step: each clock advances a step, a random draw against that probability sets whether it plays, and all three rows put out a voltage",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock, 15 to 960 bpm, which drives the sequence whenever the clock jack is empty"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Sets the voltage this step puts on the 1 output when the step plays, -10V to 10V"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15, 16], "text": "Sets the voltage this step puts on the 2 output when the step plays, -10V to 10V"},
+    {"ids": [17, 18, 19, 20, 21, 22, 23, 24], "text": "Sets the voltage this step puts on the 3 output when the step plays, -10V to 10V"},
+    {"ids": [26, 27, 28, 29, 30, 31, 32, 33], "text": "Sets the chance that this step plays, 0 to 100 per cent, and it applies to all three rows at once; a cable in the jack below replaces the knob entirely"},
+    {"ids": [34], "text": "Chooses which row reaches the out jack: below 1 the first row, from 1 up to below 2 the second, at 2 the third"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the sequence by one step, and the level has to reach 2V for a single step; with nothing patched the internal clock is used instead"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Replaces the probability knob above it for that step, 0V to 1V, with anything outside that range clamped into it"},
+    {"ids": [10], "text": "Replaces the track knob, 0V to 2V: below 1V the first row reaches the out jack, 1V up to below 2V the second, exactly 2V the third"},
+    {"ids": [11], "text": "Any voltage above 0V restarts the sequence, so that the next clock plays the first step"}
+  ],
+  "outputs": [
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "10V while its own step is the current one and that step played, and 0V at all other times"},
+    {"ids": [9], "text": "10V for about a hundred samples each time a step plays, whatever the row and whatever the step"},
+    {"ids": [10], "text": "The first row's voltage from the last step that played, held until another step plays"},
+    {"ids": [11], "text": "The second row's voltage from the last step that played, held until another step plays"},
+    {"ids": [12], "text": "The third row's voltage from the last step that played, held until another step plays"},
+    {"ids": [13], "text": "The voltage of whichever row the track control selects, taken from the last step that played"}
+  ],
+  "notes": [
+    "The internal clock runs from the moment the module is placed, so the sequence advances with nothing patched at all.",
+    "An external clock must reach 2V. Between 1V and 2V the module advances a step on every sample, because it subtracts one volt from the value it compares against.",
+    "A step that does not play leaves all four voltage outputs holding what the last step that played put there, and turns that step's indicator red rather than green.",
+    "The trigger output is about a hundred samples long however the module is clocked, so it shortens in time as the sample rate rises.",
+    "The module has no menu of its own beyond Rack's."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads the internal clock at the tempo setting; a negative voltage does nothing here.",
+      "2": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "3": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "4": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "5": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "6": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "7": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "8": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "9": "0 to 1V · continuous · one channel only\n\nunpatched it reads the probability knob for that step; a negative voltage does nothing here.",
+      "10": "0 to 2V · stepped · one channel only\n\nunpatched it reads the track knob; a negative voltage does nothing here.",
+      "11": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 10V · one channel only",
+      "10": "±10V · one channel only",
+      "11": "±10V · one channel only",
+      "12": "±10V · one channel only",
+      "13": "±10V · one channel only"
+    }
+  }
+}

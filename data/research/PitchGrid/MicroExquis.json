@@ -1,0 +1,15 @@
+{
+  "plugin": "PitchGrid",
+  "module": "MicroExquis",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "stepped", "why": "MicroExquis.cpp:424-431 sets the channel count from getChannels and reads getPolyVoltageSimd; exquis.hpp:356-359 turns the voltage into a MIDI note number by rounding twelve times the voltage plus five octaves"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "MicroExquis.cpp:432-442 writes one voltage per channel with setVoltageSimd and sets the channel count from the V/OCT input; the voltage is the base-two logarithm of the frequency ratio"},
+      "1": {"poly": false, "why": "MicroExquis.cpp:493 hands the jack to a DataSender, which at datalink.cpp:43-53 writes the bytes of each number as a single voltage in turn"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "TDAT is a data link, not a signal: datalink.cpp reinterprets the bytes of a float as a voltage and sends a marked message one sample at a time, so the jack has no family and the voltages on it mean nothing as audio or CV. The module declares eleven parameters and puts only two of them on the panel; the tuning, pitch-angle, scale-step and colouring parameters have their addParam calls commented out at MicroExquis.cpp:833-838, and the two storage parameters behind the buttons have no widget either, so none of them can be clicked and none gets a line. The output jack's own tooltip reads Microtonal Interface to the Exquis by Intuitive Instruments, which is the module's description rather than a description of the jack (MicroExquis.cpp:152). There is no context menu beyond Rack's own. The V/OCT input is quantised to MIDI note numbers and the cast is to an unsigned byte, so voltages outside roughly -5V to 5V wrap round to unrelated notes."
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "Quostate",
+  "module": "MorphfastMini",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MorphfastMini.cpp:178 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MorphfastMini.cpp:179 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MorphfastMini.cpp:180 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MorphfastMini.cpp:263 and 266 write 10 or 0 to this output with setVoltage(), for the 10e-3 second window set at src/MorphfastMini.cpp:83"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "why": "src/MorphfastMini.cpp:260 writes the transition voltage with setVoltage(), interpolated between the Init and Target knobs, which are each configured -10 to 10"}
+    }
+  },
+  "comment": "Read from src/MorphfastMini.cpp and MorphFastMini_manual_EN.md at commit d2a810c, the commit that carries version 2.2.2. The Ease in and Ease out parameters, indices 7 and 8, have no widget on the panel at all: they are reached only through the module menu, where src/MorphfastMini.cpp:446 to 453 attach their parameter quantities to two sliders. They therefore get no line and no tag, and are covered by menu lines instead. The easing is a single quadratic, at src/MorphfastMini.cpp:117 to 119, whose coefficients are one minus ease-in plus ease-out and ease-in minus ease-out, which is why equal settings cancel to the linear shape. The duration ceiling at src/MorphfastMini.cpp:138 is 64 minus the delay in pulses, so a long delay shortens the longest transition available. Everything the manual states about ranges, curve behaviour, the 10ms end-of-transition trigger and the same-step window matched the source."
+}

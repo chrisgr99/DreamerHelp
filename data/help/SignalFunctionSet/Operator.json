@@ -1,0 +1,58 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Operator",
+  "description": "A six-operator frequency modulation voice in the Yamaha DX7 line, playing patches read from DX7 cartridge files, polyphonic to sixteen voices",
+  "params": [
+    {"ids": [0], "text": "Picks the patch within the current bank, 0 to 31"},
+    {"ids": [1], "text": "Picks which loaded bank the patch comes from"},
+    {"ids": [2], "text": "Steps back one patch on each press"},
+    {"ids": [3], "text": "Steps on one patch on each press"},
+    {"ids": [4], "text": "Transposes the voice, -12 to 12 semitones"},
+    {"ids": [5], "text": "Tilts the whole timbre darker or brighter by scaling how hard the modulating operators drive the ones they feed, -100 to 100 per cent"},
+    {"ids": [6], "text": "Shifts the patch's own feedback amount, -7 to 7, which adds or takes away the buzz the feedback operator contributes"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch as a volt per octave; the number of channels here is what sets the module's polyphony"},
+    {"ids": [1], "text": "A rise starts a note and a fall releases it, one channel per voice; short triggers work as well as held gates"},
+    {"ids": [2], "text": "Sets how hard each note is struck, 0-10V, sampled as the note starts and applied through the patch's own velocity sensitivity"},
+    {"ids": [3], "text": "Picks the patch, 0-10V across the thirty-two slots, added to the voice knob"},
+    {"ids": [4], "text": "Picks the bank, one volt per bank, added to the bank knob"},
+    {"ids": [5], "text": "Transposes the voice a volt per octave, added to the tune knob"},
+    {"ids": [6], "text": "Tilts the timbre, ±5V across the whole brightness range"},
+    {"ids": [7], "text": "Shifts the feedback amount, ±5V across the whole feedback range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voice with its own DX7 envelope applied, ready to be heard without an external amplifier"},
+    {"ids": [1], "text": "The raw tone with no envelope applied, sounding for as long as a voice is held, for shaping with an envelope of your own"},
+    {"ids": [2], "text": "Follows the loudness of the voice, 0-10V per channel, for ducking or for driving other modulation from how loud a note is"}
+  ],
+  "notes": [
+    "the module ships with four DX7 patches already loaded, so it makes sound as soon as a gate arrives; further banks are loaded from the menu",
+    "the display has two tabs: one draws the six operators in the patch's routing, where clicking an operator silences it, and the other draws the envelope with a moving trace over it",
+    "placing an OP MORPH immediately to the right turns the fixed routing into a field that can be travelled across"
+  ],
+  "menu": [
+    "Algorithm morph — a label over the morph items below it",
+    "Morph toward — a submenu of the thirty-two DX7 algorithms, picking the routing the patch is blended toward",
+    "Banks — a label over the bank items below it",
+    "Load bank (.syx)… — reads a thirty-two voice DX7 cartridge file, which is then kept with the patch",
+    "Remove current bank — drops the selected bank; it appears only once more than one bank is loaded"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads velocity 100 of 127; a negative voltage does nothing here.",
+      "3": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "±5V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · polyphonic"
+    }
+  }
+}

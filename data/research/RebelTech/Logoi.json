@@ -1,0 +1,19 @@
+{
+  "plugin": "RebelTech",
+  "module": "Logoi",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Logoi.cpp:424-427 clamps the attenuator times the jack voltage to ±10V, divides by ten and adds it to the knob, the sum held between 0 and 1; read at voltages[0] with no channel loop"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Logoi.cpp:424-427 clamps the attenuator times the jack voltage to ±10V, divides by ten and adds it to the knob, the sum held between 0 and 1; read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logoi.cpp:440 resetDetector.process(inputs[RESET_INPUT].getVoltage()) with rack's default SchmittTrigger thresholds, so a rising edge is detected once the jack passes 1V and is armed again below 0V; read at voltages[0] with no channel loop"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Logoi.cpp:459 clockDetector.process(inputs[CLOCK_INPUT].getVoltage()) with rack's default SchmittTrigger thresholds, so a rising edge is detected once the jack passes 1V and is armed again below 0V; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Logoi.cpp:84-90 setVoltage on the division output with no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "why": "Logoi.cpp:38-41 and 137-140 setVoltage on the count-or-delay output with no setChannels anywhere in the file"},
+      "2": {"family": "trigger", "poly": false, "why": "Logoi.cpp:155-158, 178-182 and 474-500 setVoltage on the combined output with no setChannels anywhere in the file"},
+      "3": {"family": "trigger", "poly": false, "why": "Logoi.cpp:463 setVoltage on the clock thru output with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Logoi's clock and reset jacks use rack's default Schmitt thresholds of 1V and 0V, not the 2V and 0.1V that Stoicheia, Klasmata and Phoreo use. The division knob maps to 1 or any even number from 2 to 64 through divisionFromParamUser at line 367; the division output is a toggle, so a setting of 2 flips it on alternate clocks, while the setting of 1 is a special case that passes the clock gate straight through. The mode switch is configSwitch(MODE_PARAM, 0, 2, 0, \"Mode\", {\"Count\", \"Delay\", \"Off\"}), and the maker's own comments at lines 347-348 say Count is the switch down and Delay the switch middle. The panel prints no name beside that switch. The delay clocks are ticked once every 64 samples (updateClocksFrequency, line 233)."
+}

@@ -1,0 +1,42 @@
+{
+  "plugin": "modular80",
+  "module": "Nosering",
+  "description": "An eight-stage shift register fed by white noise through two comparators, after Grant Richter's Noisering: one settles whether a fresh bit goes in, the other whether it is a nought or a one.",
+  "params": [
+    {"ids": [0], "text": "Sets the odds that a fresh bit is fed in rather than the old one recycled: fully anticlockwise is always fresh, fully clockwise sends the same eight bits round and round."},
+    {"ids": [1], "text": "Sets the odds that a fresh bit is a nought or a one: fully anticlockwise gives noughts, fully clockwise gives ones."},
+    {"ids": [2], "text": "Sets the internal clock, 1Hz at the bottom of the travel up to a ceiling of 10000Hz; nothing reads it while a cable is in EXT CLOCK, and the tooltip prints the exponent rather than the rate."},
+    {"ids": [3], "text": "Inverts the bit leaving the end of the register before it goes back in, which also switches off the check that stops the register filling with all noughts or all ones."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the CHANGE knob, one unit of its travel per volt, the two together held between -10 and +10."},
+    {"ids": [1], "text": "Adds to the CHANCE knob, one unit of its travel per volt, the two together held between -10 and +10."},
+    {"ids": [2], "text": "One rising edge shifts the register one place, and a cable here takes the place of the internal clock."},
+    {"ids": [3], "text": "Replaces the internal white noise at the comparator that picks a nought or a one; the comparator picking fresh against old keeps the internal noise, where the README says this jack feeds both."},
+    {"ids": [4], "text": "Above 2V the bit leaving the end of the register is inverted before it goes back in, which the switch does too."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The count of ones in the register at 1.28V each, giving nine levels from 0V to 10V."},
+    {"ids": [1], "text": "The register read as a binary number, 5V for the newest bit down to 0.0390625V for the oldest, giving 256 levels from 0V to a little under 10V."},
+    {"ids": [2], "text": "The module's own white noise, a fresh value every sample, ±10V."}
+  ],
+  "notes": [
+    "The register comes up holding all noughts and both knobs come up fully anticlockwise, so the module feeds noughts in until the stale check pushes a one through.",
+    "Unless the old bit is being inverted, a register holding all noughts or all ones forces the opposite bit in, so the outputs never settle on one steady voltage.",
+    "The panel prints INV OUT over the switch where the maker's tooltip and README both call it Invert Old Data."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V.",
+      "1": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "±10V · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "±10V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "4msCompany",
+  "module": "Prob8",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.5V", "why": "Prob8Core.cc:49 hands this jack to cp.updateClock, whose SchmittTrigger at clockPhase.h:58 goes high at 1.5V and low at 0.5V; each rising edge steps the count that Prob8Core.cc:24 reads modulo 8 to pick the step. Prob8Core.cc:10 derives from CoreProcessor, which reads channel one only"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.5V", "why": "Prob8Core.cc:52 hands this jack to cp.updateReset, whose SchmittTrigger at clockPhase.h:60 goes high at 1.5V and low at 0.5V; clockPhase.h:26-27 zero wholeCount on a rising edge, returning the sequence to the first step"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 8V", "why": "Prob8Core.cc:65 scales the inverted gate by MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 8V", "why": "Prob8Core.cc:62 scales the gate by MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"}
+    }
+  },
+  "comment": "The random number is drawn between 0 and 0.99 (Prob8Core.cc:26), so a knob at the top always fires. The maker's manual says the gates are 0-8v with a fixed 50% pulse width, which Prob8Core.cc:28 and Prob8Core.cc:62 bear out."
+}

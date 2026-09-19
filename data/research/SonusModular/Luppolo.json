@@ -1,0 +1,16 @@
+{
+  "plugin": "SonusModular",
+  "module": "Luppolo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "luppolo.cpp:68 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo.cpp:71 fires when this input differs from its own previous value and that previous value was exactly 0V, so any voltage counts as an edge"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo.cpp:90 fires when this input differs from its own previous value and that previous value was exactly 0V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "luppolo.cpp:104 clears while this input is anything other than exactly 0V, with no edge detection at all"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "luppolo.cpp:140 writes this output with setVoltage and no channel index"}
+    }
+  },
+  "comment": "The edge tests at luppolo.cpp:71 and :90 compare against the jack's own previous sample and require that previous sample to be exactly 0V, so a negative pulse triggers as readily as a positive one and a gate held above zero never re-triggers. The clear at luppolo.cpp:104 is a level rather than an edge. The loop is a std::vector grown one sample at a time with no cap (luppolo.cpp:116) and there is no dataToJson, so nothing survives a patch reload."
+}

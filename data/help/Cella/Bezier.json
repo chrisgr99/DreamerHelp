@@ -1,0 +1,49 @@
+{
+  "plugin": "Cella",
+  "module": "Bezier",
+  "description": "Smooth random voltage generator: a new random value every so often, joined to the last one by a Bezier curve whose shape runs from spiked through straight to rounded",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new value is drawn, a fraction of a hertz up to 50Hz"},
+    {"ids": [1], "text": "Attenuates the curve, 0 to 1, before the offset is added"},
+    {"ids": [2], "text": "Shapes the join between one value and the next: spiked at fully counter-clockwise, a straight line at the centre, rounded at fully clockwise"},
+    {"ids": [3], "text": "Adds a fixed voltage to the curve, -5V to 5V, which is also the point the inverted output is mirrored around"},
+    {"ids": [4], "text": "Attenuates and inverts the FM jack, -1 to 1, and multiplies it by 1.5 before it is added to the FREQ knob in octaves"},
+    {"ids": [5], "text": "Attenuates and inverts the LEVEL jack, -1 to 1, before that voltage is added to the LEVEL knob"},
+    {"ids": [6], "text": "Chooses what happens when the offset pushes the curve past 5V: CLIP holds it at the limit, FOLD turns it back from there, WRAP jumps it to the opposite limit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Replaces the random draw with whatever is patched here, sampled at the moment each new value is due, so the module becomes a sample and hold with a curved slew"},
+    {"ids": [1], "text": "Divided into octaves by the attenuverter and added to the FREQ knob; by default it is sampled only when a new value is drawn"},
+    {"ids": [2], "text": "Divided by 5, clamped to -2 and 2, scaled by its attenuverter and added to the LEVEL knob; by default it is sampled only when a new value is drawn"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The curve, 0V to 5V either side of the offset, limited in the way the switch sets"},
+    {"ids": [1], "text": "The curve subtracted from the offset rather than added to it, limited in the way the switch sets"},
+    {"ids": [2], "text": "A 10V pulse 1 millisecond long each time a new random value is drawn"},
+    {"ids": [3], "text": "10V while the curve is above the offset and 0V while it is below it"}
+  ],
+  "notes": [
+    "the rate cannot be synchronised to an outside clock; the FREQ knob and its jack are the only way to set it",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Continuous Frequency Modulation — reads the FM jack every sample instead of only when a new value is drawn",
+    "Continuous Level Modulation — reads the LEVEL jack every sample instead of only when a new value is drawn, and applies it after the curve rather than before",
+    "Assymetric Curve — makes the join start smooth and end spiked, or the other way about, instead of being the same at both ends",
+    "Distribution: Uniform, Normal — chooses between any value being equally likely and values near the middle being more likely",
+    "Post-Modulation Level Clip: 0..100%, 0..200%, -100..100%, -200..200% — sets how far the LEVEL jack may take the level past the knob's own range"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads a new random value.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

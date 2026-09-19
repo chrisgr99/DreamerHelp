@@ -1,0 +1,46 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhaseDrivenSequencer",
+  "description": "Sixteen-step sequencer driven by an incoming phasor rather than a clock, with a voltage knob and a gate button for each step",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the 16 steps the cycle runs through, 1 to 16 in whole numbers"},
+    {"ids": [1], "text": "Attenuverts the steps CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the width of the step gates, from 0% to 100% of a step, with 50% at centre"},
+    {"ids": [3], "text": "Attenuverts the gate width CV input, -1 to +1"},
+    {"ids": [4], "text": "Raw compares the phasor against the gate width directly; Smart mutes the output when the phasor stops and flips the comparison when it runs backwards, keeping reverse phasors in time"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], "text": "Sets the voltage this step sends to the Steps output, -5V to 5V"},
+    {"ids": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], "text": "Turns this step's gate on or off; the lamp shows green when the step is on, blue while it plays, and red when the step is beyond the Steps setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor that drives the sequence; each 0-10V cycle is divided into the steps"},
+    {"ids": [1], "text": "Modulates the number of steps"},
+    {"ids": [2], "text": "Modulates the gate width"},
+    {"ids": [3], "text": "Holds the sequence at the first step below 1V and lets it run at 1V or above; unpatched, the sequence always runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the step playing at that moment"},
+    {"ids": [1], "text": "The step voltages with a straight line drawn between them, gliding from one step's voltage to the next across the step"},
+    {"ids": [2], "text": "The step voltage captured by the most recent gate, held until the next gate fires"},
+    {"ids": [3], "text": "A 10V gate on every step whose gate button is on, at the set width"},
+    {"ids": [4], "text": "A 10V trigger at the start of each of those gates"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in.",
+    "every step gate starts switched off, so no gates or triggers come out until you switch at least one step on; the step voltage outputs follow the phasor either way."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

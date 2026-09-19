@@ -1,0 +1,19 @@
+{
+  "plugin": "Bidoo",
+  "module": "liMonADe",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "LIMONADE.cpp:765 takes the channel count from this input, 775 reads it per channel, and 856 sets the output to that width"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "LIMONADE.cpp:777 reads it with getPolyVoltageSimd and multiplies it by the FM knob before it is added to the pitch"},
+      "2": {"family": "trigger", "poly": true, "why": "LIMONADE.cpp:781 reads it with getPolyVoltageSimd as the oscillator sync"},
+      "3": {"family": "trigger"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "polarity": "unipolar", "why": "LIMONADE.cpp:766 multiplies this voltage by 0.1 and the attenuator into a table index that runs 0 to 1, with getVoltage"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "why": "LIMONADE.cpp:742 multiplies this voltage by 0.1 into the recording buffer, with getVoltage"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "LIMONADE.cpp:767 rescales 0 to 10V to a detune of 0 to 0.02, with getVoltage"}
+    },
+    "outputs": {
+      "0": {"family": "audio"}
+    }
+  },
+  "comment": "The jack beside the sync input, declared as the sync mode input, is never read by the module: nothing in LIMONADE.cpp mentions it after the widget is created."
+}

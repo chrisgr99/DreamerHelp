@@ -1,0 +1,38 @@
+{
+  "plugin": "Alikins",
+  "module": "IdleSwitch",
+  "description": "Raises a gate once no trigger has arrived at its input for a set time, and drops it again as soon as one does",
+  "params": [
+    {"ids": [0], "text": "Sets how long with no event before the module goes idle, from 0 to 10 seconds"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each trigger here ends the idle gate and restarts the timer; when nothing arrives for the time set, the module goes idle"},
+    {"ids": [1], "text": "A trigger here restarts the timer without ending an idle gate that is already up"},
+    {"ids": [2], "text": "Adds to the knob to set how long with no event before the module goes idle, one volt per second, with its own voltage clamped to 0-10V"},
+    {"ids": [3], "text": "Patching a clock here takes the idle time from the gap between pulses; a pulse arriving with no event since the last one counts as idle, and the knob and time input are ignored"},
+    {"ids": [4], "text": "Any signal patched here goes to the when idle output while the module is idle and to the off idle output the rest of the time; it need have nothing to do with the event input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V from the moment the module goes idle until the next trigger at the event input"},
+    {"ids": [1], "text": "Carries the time before idle as a voltage, one volt per second and no higher than 10V; patch it to another Idle Switch's time input to give both the same setting"},
+    {"ids": [2], "text": "Sends a 10ms trigger at 10V at the moment the module goes idle"},
+    {"ids": [3], "text": "Sends a 10ms trigger at 10V at the moment the idle gate drops, which is when a trigger reaches the event input"},
+    {"ids": [5], "text": "Carries the switched input while the module is idle, and 0V otherwise"},
+    {"ids": [6], "text": "Carries the switched input while the module is not idle, and 0V while it is"}
+  ],
+  "notes": [
+    "the Time before idle display shows that time in ms and the Time remaining display counts down to going idle; with a clock patched, Time remaining stays at 0."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

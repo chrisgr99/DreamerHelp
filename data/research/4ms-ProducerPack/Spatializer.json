@@ -1,0 +1,24 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "Spatializer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Spatializer.cpp:88 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Spatializer.cpp:101 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Spatializer.cpp:108 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "Spatializer.cpp:84 getVoltage(), channel 0 only"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left input", "why": "Spatializer.cpp:86 isConnected() ? getVoltage() : inL, and :85 the same flag picks the mono or stereo path"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left send", "why": "Spatializer.cpp:142 isConnected() ? getVoltage() : wetL"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "normal": "the mid send", "why": "Spatializer.cpp:144 isConnected() ? getVoltage() : the dry sum"},
+      "7": {"family": "audio", "poly": false, "step": "continuous", "normal": "the right send", "why": "Spatializer.cpp:143 isConnected() ? getVoltage() : wetR"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Spatializer.cpp:137 setVoltage with no channel argument"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"}
+    }
+  },
+  "comment": "delaySamples is computed inside the branch that runs only when the time control or the range switch changes, and it is computed from slewedTime, which is updated afterwards (Spatializer.cpp:90-100 and :111). The delay therefore tracks the knob only while the knob is actually moving, and settles wherever the slew had reached when the movement stopped. The buffer holds 2880 samples (Spatializer.cpp:58), more than the 30ms or 50 samples the controls can ask for at ordinary sample rates."
+}

@@ -1,0 +1,38 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "I",
+  "description": "Three clock dividers that keep their phase together, with the first clock after a reset split off as a separate downbeat",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets that divider's ratio, a whole number from 1 to 16"},
+    {"ids": [3, 4, 5], "text": "Sets which step of that divider's count the output falls on, 0 to 100 per cent of the ratio"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances all three dividers on each rising edge above 2V, and sets how many polyphonic channels the divided outputs carry"},
+    {"ids": [1], "text": "Holds the count at zero while it reads above 2V and marks the next clock as the downbeat; every channel of a cable here is summed first, so any channel high resets"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V for the first clock pulse after a reset and 0V for every clock pulse after that"},
+    {"ids": [1], "text": "10V for every clock pulse except the first one after a reset"},
+    {"ids": [2, 3, 4], "text": "10V while the clock is high and the count has reached that divider's step, and 0V the rest of the time"},
+    {"ids": [5], "text": "10V while an odd number of the three divided outputs are high, and 0V otherwise"}
+  ],
+  "notes": [
+    "the divided outputs follow the clock's own high time: they are the clock gated by the division rather than pulses of a length the module sets",
+    "nothing comes out of the divided outputs until a clock is patched to CLK; the outputs take their channel count from that cable and carry none without it",
+    "on a polyphonic clock each channel hands its pattern on to the next channel on that channel's own rising edge, so the channels run as a shift register down the cable"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

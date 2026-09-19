@@ -1,0 +1,21 @@
+{
+  "plugin": "SickoCV",
+  "module": "TogglerCompact",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "TogglerCompact.cpp:139 getVoltage() compared against 1V as a gate or as a rising edge depending on the MODE switch"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "TogglerCompact.cpp:150 getVoltage() taken as a rising edge at 1V, inside the Toggle-mode branch only"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "TogglerCompact.cpp:256 getChannels() becomes the loop bound, :260 reads getVoltage(c); with the jack empty :263 sends 10V times the envelope"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "TogglerCompact.cpp:267 getChannels() becomes the loop bound, :271 reads getVoltage(c); with the jack empty :274 sends 10V times the envelope"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "TogglerCompact.cpp:195 getVoltage() added to the knob as a time in seconds, capped at 10 seconds"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "TogglerCompact.cpp:132 getVoltage() added straight to the knob as a level, the sum clamped to 0-1 at :133-136, so 1V is the whole range"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "TogglerCompact.cpp:216 getVoltage() added to the knob as a time in seconds, capped at 10 seconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "TogglerCompact.cpp:260 setVoltage(value, c) and :261 setChannels(chan)"},
+      "1": {"family": "audio", "poly": true, "why": "TogglerCompact.cpp:271 setVoltage(value, c) and :272 setChannels(chan)"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "10V written while the envelope is open and 0V when it closes; no setChannels on this port"}
+    }
+  },
+  "comment": "This version has no attenuverters, so the three CV inputs are added to their knobs unscaled: the A and R jacks add seconds, and the S jack adds level, where 1V is the whole 0 to 100% span. Both the sustain sumRange and its range are levels rather than voltages in that sense. The RESET jack is read only in Toggle mode."
+}

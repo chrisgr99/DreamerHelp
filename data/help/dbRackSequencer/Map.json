@@ -1,0 +1,34 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "Map",
+  "description": "Polyphonic source of chaotic sequences from four iterated maps: logistic, tent, circle and sawtooth",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the map iterates while nothing is patched into Clk, -10V to 6V read as one octave per volt"},
+    {"ids": [1], "text": "The parameter of the map, 0 to 1, which is where the map moves between order and chaos"},
+    {"ids": [2], "text": "Attenuates the parameter input, 0 to 100%"},
+    {"ids": [3], "text": "The starting value each sequence takes on a reset, 0.1 to 0.9"},
+    {"ids": [4], "text": "Picks the map: logistic, tent, circle or sawtooth"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Raises the iteration rate by one octave per volt, and its channel count sets how many sequences run side by side while Clk is unpatched"},
+    {"ids": [1], "text": "Modulates the map parameter, 10V moving it by half its range when the attenuator beside it is fully up"},
+    {"ids": [2], "text": "Each rising edge iterates the map once; the channel count here sets how many sequences run side by side, and no interpolation is done between clocks"},
+    {"ids": [3], "text": "A rising edge sets every sequence back to its X0 starting value, which makes the sequence repeat"},
+    {"ids": [4], "text": "Adds to the starting value on a reset, one channel per sequence, one for one in volts, clamped to the range 0 to 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sequence, -5V to 5V, one channel per sequence"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · polyphonic"
+    }
+  }
+}

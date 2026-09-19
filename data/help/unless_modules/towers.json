@@ -1,0 +1,44 @@
+{
+  "plugin": "unless_modules",
+  "module": "towers",
+  "description": "Two banks of sixteen faders putting out steady voltages on a polyphonic cable, each bank with its own modulation input and a way of sampling values from a cable",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets the voltage on this channel of its bank, 0-10V, or -5V to 5V where the bank is switched to bipolar"},
+    {"ids": [32, 33], "text": "Switches this bank between putting out 0-10V and putting out -5V to 5V"},
+    {"ids": [34, 35], "text": "Scales this bank's modulation input, -1 to 1, so that a negative setting inverts it; with nothing patched to IN, it sets how far a sample randomises the faders"},
+    {"ids": [36, 37], "text": "Copies the IN voltages into this bank's faders; with nothing patched to IN it randomises them instead"},
+    {"ids": [38, 39], "text": "Sets how many channels this bank puts out, 1 to 16; the faders past that count are left out"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The voltage added to this bank's faders, one channel per fader; a cable with fewer channels than the bank is wrapped round from the first channel again"},
+    {"ids": [2, 3], "text": "A further modulation for this bank, multiplied into the IN voltage channel by channel before the mod-scaling knob is applied"},
+    {"ids": [4, 5], "text": "A rising edge copies the IN voltages into this bank's faders; with a polyphonic cable here, each channel triggers its own fader"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "This bank's faders as a polyphonic cable, one channel per fader in use"}
+  ],
+  "notes": [
+    "hold Alt while dragging across the faders to set several of them in one movement.",
+    "the menu carries a separate SAMPLE mode, POLY channel and view setting for each of the two banks, under the headings A and B."
+  ],
+  "menu": [
+    "update cycle — sets how many samples pass between one recalculation and the next, 1 to 1024",
+    "SAMPLE mode: IN absolute (default), IN relative (with MODS) — chooses whether a sample copies the IN voltages as they arrive or copies the faders as they stand after modulation",
+    "set POLY channels by: POLY button (default), IN port (auto), IN port (on SAMPLE trigger) — chooses whether the channel count follows the POLY button or the channels arriving at IN",
+    "view mode: faders (default), staves in C, Psilocybe Omrinsis, windows — chooses how the bank is drawn"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "±10V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "4": "high above 0.1V · stepped · polyphonic",
+      "5": "high above 0.1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

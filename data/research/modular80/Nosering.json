@@ -1,0 +1,19 @@
+{
+  "plugin": "modular80",
+  "module": "Nosering",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "src/Nosering.cpp:83 clamp(params[CHANGE_PARAM] + inputs[CHANGE_INPUT].getVoltage(), -10, 10)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "src/Nosering.cpp:84 clamp(params[CHANCE_PARAM] + inputs[CHANCE_INPUT].getVoltage(), -10, 10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Nosering.cpp:99 clkTrigger.process(inputs[EXT_RATE_INPUT].getVoltage()), a SchmittTrigger"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/Nosering.cpp:92 sample = inputs[EXT_CHANCE_INPUT].getVoltage(), compared at :122 against the chance value, which is clamped to ±10"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Nosering.cpp:126 inputs[INV_OUT_INPUT].getVoltage() > 2.0f"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Nosering.cpp:168,173 sum of eight bits times 1.28, clamped 0..10"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Nosering.cpp:10,169,174 DAC_MULT2 weights 5 down to 0.0390625, clamped 0..10"},
+      "2": {"family": "audio", "poly": false, "range": "±10V", "why": "src/Nosering.cpp:87,175 random::uniform()*20-10 written straight out"}
+    }
+  },
+  "comment": "The panel prints INV OUT where the parameter is named Invert Old Data and the README calls it INV OLD; all three are the same switch, and the code inverts the bit shifted out of the last stage before it re-enters the first. The README says the EXT CHANCE input replaces the internal noise for both the Chance and the Change comparators; the code uses it only for Chance, with the comment \"Always compare against White Noise\" on the Change comparison at src/Nosering.cpp:120. The INT_RATE knob is configured with a \" Hz\" suffix and no display base, so its tooltip reads 0 Hz to 14 Hz for a clock of 1Hz to 16384Hz, itself capped at 10000Hz. Index order is not panel order in either direction: the clock input is index 2 at the top and the noise output is index 2 above the two register outputs. Every port has a jack, and all three outputs are written every sample whether or not anything is patched."
+}

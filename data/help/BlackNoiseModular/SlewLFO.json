@@ -1,0 +1,39 @@
+{
+  "plugin": "BlackNoiseModular",
+  "module": "SlewLFO",
+  "description": "A slew limiter with separate rise and fall times that becomes a looping envelope when the mode switch is moved, after Black Noise Modular's Slew/LFO",
+  "params": [
+    {"ids": [0], "text": "Bends the rise and fall shapes: fully clockwise each segment is a straight line, and turning it back rounds them into an exponential curve"},
+    {"ids": [1], "text": "Sets how long the output takes to climb, slowest fully clockwise; with the rate switch slow and no capacitor chosen that runs from 8ms to reach 10V up to 8 seconds"},
+    {"ids": [2], "text": "Sets how long the output takes to fall, slowest fully clockwise; with the rate switch slow and no capacitor chosen that runs from 8ms to fall 10V up to 8 seconds"},
+    {"ids": [3], "text": "Switches between LFO, where the output cycles between 0V and 10V on its own, and Slew, where the output chases the voltage at the input jack"},
+    {"ids": [4], "text": "Switches between the slow range and the fast range; fast shortens every time by a factor of forty, reaching 200 microseconds for 10V and running the LFO up to audio rates"},
+    {"ids": [5], "text": "Stands in for a capacitor added to the hardware: none, about 10 microfarads for times of 1.2 seconds to 20 minutes, or about 100 microfarads for 2 minutes to 33 hours"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the RISE knob, and a negative voltage here shortens the rise; the jack reads from -5V to 10V and anything outside that is clamped"},
+    {"ids": [1], "text": "Adds to the FALL knob, and a negative voltage here shortens the fall; the jack reads from -5V to 10V and anything outside that is clamped"},
+    {"ids": [2], "text": "The voltage the output chases while the mode switch is set to Slew; in LFO mode nothing patched here is read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The slewed or cycling voltage, 0V to 10V, except in LFO mode with the rate switch fast, where it is shifted down to -5V to 5V unless the centring menu item is switched off"}
+  ],
+  "notes": [
+    "in LFO mode the input jack is ignored and the output runs on its own; in Slew mode the output stays where it is until a voltage arrives at the input",
+    "the number of polyphonic channels is taken from whichever of the three inputs carries most, and the output carries that many"
+  ],
+  "menu": [
+    "Oversampling (fast mode only): Off, x2, x4, x8, x16 — runs the shape at this multiple of the sample rate and filters the result back down, and it is applied only while the rate switch is fast",
+    "Centre waveform at audio rates — moves the LFO output down to -5V to 5V while the rate switch is fast, so an audio-rate waveform carries no direct voltage; switching it off leaves 0V to 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "-5 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "1": "-5 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "bipolar · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic"
+    }
+  }
+}

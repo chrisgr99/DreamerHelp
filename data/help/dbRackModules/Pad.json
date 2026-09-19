@@ -1,0 +1,37 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pad",
+  "description": "A pad voice built by the PadSynth method: a spectrum is drawn, turned into a long wavetable by an inverse FFT, and read back at pitch",
+  "params": [
+    {"ids": [0], "text": "Sets how wide each partial is spread in the spectrum, 0.5 to 60; wider partials give the chorused, breathing quality of a pad"},
+    {"ids": [1], "text": "Sets how much that width grows towards the higher partials, 0.5 to 4"},
+    {"ids": [2], "text": "Sets the seed the partial strengths are drawn from, 0 to 1; every setting gives a different sound of the same character"},
+    {"ids": [3], "text": "Picks how the partial strengths are drawn: Harmonic Min, Even Min, Odd Min, Harmonic Weibull, Even Weibull, Odd Weibull, Voice or Static"},
+    {"ids": [5], "text": "Sets the level of the first partial on its own, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch the wavetable is read at, 1V per octave, one channel per voice"},
+    {"ids": [1], "text": "A trigger here builds the wavetable again, which is how a change made from outside, such as by a mapping module, is taken up"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the wave"},
+    {"ids": [1], "text": "The right side of the wave, which is the same table read half a cycle away, so the two sides differ"}
+  ],
+  "notes": [
+    "every knob change builds the wavetable again in a background thread, which the patch carries on playing through; the new table is faded in over the time set in the menu",
+    "with the Static method the Seed knob is not a seed but a shape: at 0.5 every partial is present and the wave is saw-like, at 0 the odd partials alone give a pulse, and at 1 the even ones alone"
+  ],
+  "menu": [
+    "Fade Time — sets how long the module takes to cross from the old wavetable to a new one, which keeps a knob change from clicking"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

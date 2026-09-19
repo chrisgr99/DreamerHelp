@@ -1,0 +1,14 @@
+{
+  "plugin": "Venom",
+  "module": "MixSend",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "Mix4.cpp:154 is read per channel and mixed back in as a value"},
+      "1": {"poly": true, "why": "Mix4Stereo.cpp:235 is read per channel and mixed back in as a value"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "MixSend.cpp writes no voltage itself; the mixer it is attached to drives this jack at Mix4.cpp:165-175 or Mix4Stereo.cpp:246-265, a per-channel SIMD write then setChannels(channels)"},
+      "1": {"poly": true, "why": "MixSend.cpp writes no voltage itself; a stereo mixer drives this jack at Mix4Stereo.cpp:255-266 with a per-channel SIMD write then setChannels(channels), while a mono MIX 4 sets it to one channel of 0V at Mix4.cpp:176-177"}
+    }
+  }
+}

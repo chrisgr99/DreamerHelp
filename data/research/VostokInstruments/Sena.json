@@ -1,0 +1,27 @@
+{
+  "plugin": "VostokInstruments",
+  "module": "Sena",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "0V", "why": "src/Sena.cpp:560-564 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Sena.cpp:560-564 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Sena.cpp:560-564 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "3": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Sena.cpp:560-564 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±10V", "sumRange": "0 to 1V", "why": "src/Sena.cpp:585-592 reads each mod input with getVoltage, divides by 10, clamps to ±1, adds the knob and clamps the result to 0-1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±10V", "sumRange": "0 to 1V", "why": "src/Sena.cpp:585-592 reads each mod input with getVoltage, divides by 10, clamps to ±1, adds the knob and clamps the result to 0-1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±10V", "sumRange": "0 to 1V", "why": "src/Sena.cpp:585-592 reads each mod input with getVoltage, divides by 10, clamps to ±1, adds the knob and clamps the result to 0-1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±10V", "sumRange": "0 to 1V", "why": "src/Sena.cpp:585-592 reads each mod input with getVoltage, divides by 10, clamps to ±1, adds the knob and clamps the result to 0-1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Sena.cpp:451-461 writes each oscillator output with setVoltage, five times a waveform bounded at ±1"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Sena.cpp:451-461 writes each oscillator output with setVoltage, five times a waveform bounded at ±1"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Sena.cpp:451-461 writes each oscillator output with setVoltage, five times a waveform bounded at ±1"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Sena.cpp:451-461 writes each oscillator output with setVoltage, five times a waveform bounded at ±1"},
+      "4": {"family": "audio", "poly": false, "why": "src/Sena.cpp:484-511 writes each noise output with setVoltage from random::normal, and only while the jack is connected"},
+      "5": {"family": "audio", "poly": false, "why": "src/Sena.cpp:484-511 writes each noise output with setVoltage from random::normal, and only while the jack is connected"},
+      "6": {"family": "audio", "poly": false, "why": "src/Sena.cpp:484-511 writes each noise output with setVoltage from random::normal, and only while the jack is connected"},
+      "7": {"family": "audio", "poly": false, "why": "src/Sena.cpp:484-511 writes each noise output with setVoltage from random::normal, and only while the jack is connected"}
+    }
+  },
+  "comment": "The frequency ranges are literals in the source: VCO coarse 15Hz to 1000Hz, LFO coarse 0.15Hz to 10Hz, and both fine ranges a twelfth of a semitone either side of C0 at 16.352Hz (src/Sena.cpp:210-221). Linear FM adds 120 times the input voltage in hertz and is DC blocked. Switching a channel to fine tuning resets its frequency knob to the middle of that range (src/Sena.cpp:525-528), which is a real jump in pitch and is not documented by the maker. The channel 4 mod input behaves differently from the other three: the PWM knob scales the incoming CV rather than offsetting it (src/Sena.cpp:586-587). sumRange on the mod inputs is written as a voltage range because the field takes only those four spellings; the quantity clamped is the 0-to-1 shaping amount. The noise generators use random::normal rather than a bounded uniform, so their peaks are not hard limited."
+}

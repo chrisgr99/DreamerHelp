@@ -1,0 +1,17 @@
+{
+  "plugin": "Mental",
+  "module": "MentalGateMaker",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalGateMaker.cpp:136 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing adds one to the count that the delay, gate length and tail are measured in"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalGateMaker.cpp:127 a dsp::SchmittTrigger at its default thresholds of 0 and 1, which zeroes the count and both the gate and finished outputs; the same trigger object processes the reset button immediately before the jack on that line, so its state is cleared each sample and a held gate resets continuously rather than only on the edge"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalGateMaker.cpp:118 a dsp::SchmittTrigger at its default thresholds of 0 and 1, which zeroes the count and starts one pass of the gate; the same trigger object processes the trigger button immediately before the jack on that line, so its state is cleared each sample and a held gate restarts the pass continuously rather than only on the edge"},
+      "3": {"family": "trigger", "poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalGateMaker.cpp:99, tested for being non-zero rather than for being above a threshold"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalGateMaker.cpp:140-141"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalGateMaker.cpp:147, set to 10 and never cleared until a reset"}
+    }
+  },
+  "comment": "Four controls on this panel are dead and each is given a line rather than being left to fall back on the maker's tooltip. The Count, Delay and Tail CV inputs (indices 4, 5 and 6) are never read: src/MentalGateMaker.cpp:110-114 takes all three values from the knobs alone and the jacks appear nowhere else in the file. Output 2, the Trig Out jack, is never written anywhere in the module. The panel lettering is also misplaced: measured off the rendered SVG, Gate Out, Trig Out and End Out sit at about 137, 167 and 197 in panel units while the three output jacks are placed at 110, 140 and 170 (src/MentalGateMaker.cpp:248-250), so each label is drawn beside the next jack down. The third knob, the tail, carries no lettering of its own, and the Clk In lettering sits nearer that knob than the clock jack. The end output latches: it is set to 10V when the count passes its limit and is only ever written again by a trigger, a reset or the cycle button (lines 95-96, 123-124, 131-132, 147). The cycle state is not saved with the patch, so a module always reopens free running. The panel prints Count+Delay, Count, Delay, Clk In, Rst, Trigger, Cycle, Gate Out, Trig Out and End Out."
+}

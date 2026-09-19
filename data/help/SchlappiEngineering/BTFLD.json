@@ -1,0 +1,43 @@
+{
+  "plugin": "SchlappiEngineering",
+  "module": "BTFLD",
+  "description": "A four bit analogue to digital converter used as a wavefolder and distortion: the signal is gain staged, read as a number from 0 to 15, and the bits, the steps and the folded remainder each get a jack",
+  "params": [
+    {"ids": [0], "text": "Sets the gain applied to the signal at IN before it reaches the converter, from silence at the left, through unity at the centre, to twice the signal at the right"},
+    {"ids": [1], "text": "Attenuates the voltage at the CV input before it is added to the GAIN setting; at full turn 10V at that jack adds one to the gain"},
+    {"ids": [2], "text": "Picks the voltage range. At +10 the signal reaches the converter unchanged and every output runs 0V up. At ±5 a 5V offset is added first, the bit outputs swing -5V to +5V, and the rest is AC coupled"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal read by the converter, multiplied by the gain; with nothing patched it reads 0V, despite the hardware manual saying 10V is normalled here"},
+    {"ids": [1], "text": "Voltage over the gain, scaled by the CV knob beside it; with nothing patched the folded output is fed back into this jack, so the module modulates its own gain"},
+    {"ids": [2], "text": "Added to the signal after the gain stage and before the converter, at full level and with no attenuation of its own"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The remainder left when the stepped number is subtracted from the converter's input, amplified to a 0 to 10V sawtooth that restarts at every step"},
+    {"ids": [1], "text": "The ones bit of the converted number as a gate, high while the converter reads an odd number"},
+    {"ids": [2], "text": "The twos bit of the converted number as a gate, high while the converter reads 2, 3, 6, 7, 10, 11, 14 or 15"},
+    {"ids": [3], "text": "The fours bit of the converted number as a gate, high while the converter reads 4 to 7 or 12 to 15"},
+    {"ids": [4], "text": "The eights bit of the converted number as a gate, high while the converter reads 8 or more"},
+    {"ids": [5], "text": "The converted number as a staircase of sixteen evenly spaced levels starting at 0V, the top one a sixteenth short of 10V, with any part of the signal above that top step added on top of it"}
+  ],
+  "notes": [
+    "The lamp drawn beside the stepped output is never lit: the module sets every other indicator each sample and never sets this one.",
+    "The column of eight lamps shows the converter's input level in sixteen steps, two to a lamp. At +10 they fill from the bottom; at ±5 the lower four invert and read out from the middle.",
+    "Every jack is read on one channel only, so a polyphonic cable is used at its first channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 11.7V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads the folded output.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 11.7V."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only"
+    }
+  }
+}

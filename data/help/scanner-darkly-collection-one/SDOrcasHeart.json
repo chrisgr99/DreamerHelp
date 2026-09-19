@@ -1,0 +1,87 @@
+{
+  "plugin": "scanner-darkly-collection-one",
+  "module": "SDOrcasHeart",
+  "description": "A four-voice sequence generator built on four internal tracks clocked at different divisions, after Orca, the alternative firmware for monome's White Whale",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the sequence runs before returning to its first step, 1 to 32"},
+    {"ids": [1], "text": "Sets the rate of the internal clock in BPM, 20 to 2000, and sets the beat that GATE LEN multiplies to give the length of a note gate"},
+    {"ids": [2], "text": "Sets the clock division and starting count of each of the four internal tracks, 0 to 127, and so the polyrhythm the whole sequence is built from"},
+    {"ids": [3], "text": "Sets how notes and gates are drawn from the four internal tracks, 0 to 127: the upper bits choose which tracks add to a note value and which of sixteen gate patterns is used"},
+    {"ids": [4], "text": "Moves the sequence up the scale by this many notes, 0 to 12; above 6 each note output is moved one further step than the one before it"},
+    {"ids": [5], "text": "Chooses one of sixteen patterns of silenced steps, 0 to 15, holding the note gates at 0V on the steps that pattern covers"},
+    {"ids": [6], "text": "Adds to every note CV output, -2V to 2V, moving the sequence up or down by as much as two octaves"},
+    {"ids": [7], "text": "Sets how long a note gate stays open, as a multiple of one beat of SPEED from 0.1 to 4"},
+    {"ids": [8], "text": "Switches between the two scales, A and B, on each press; the A and B lamps show which one is in use"},
+    {"ids": [9], "text": "Raises the note CV outputs by one octave while scale A is the one in use, and comes up pressed on a new module"},
+    {"ids": [10], "text": "Raises the note CV outputs by one octave while scale B is the one in use, and comes up unpressed on a new module"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22], "text": "Switches that note in or out of scale A; the sequence takes its pitches only from the notes switched in"},
+    {"ids": [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], "text": "Switches that note in or out of scale B; the sequence takes its pitches only from the notes switched in"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the LENGTH knob, 10V covering the whole of its travel, with the total held between 1 and 32 steps"},
+    {"ids": [1], "text": "Adds to the SPEED knob, 10V covering the whole of its travel, with the total held between 20 and 2000 BPM"},
+    {"ids": [2], "text": "Adds to the ALGO X knob, 10V covering the whole of its travel, with the total held between 0 and 127"},
+    {"ids": [3], "text": "Adds to the ALGO Y knob, 10V covering the whole of its travel, with the total held between 0 and 127"},
+    {"ids": [4], "text": "Adds to the SHIFT knob, 10V covering the whole of its travel, with the total held between 0 and 12 notes"},
+    {"ids": [5], "text": "Adds to the SPACE knob, 10V covering the whole of its travel, with the total held between 0 and 15"},
+    {"ids": [6], "text": "Adds to the TRANSPOSE knob at 2.5V per octave, with the total held between -2V and 2V"},
+    {"ids": [7], "text": "Adds to the GATE LEN knob, 10V covering the whole of its travel, with the total held between 0.1 and 4"},
+    {"ids": [8], "text": "Switches between scale A and scale B on each rising edge above 2V"},
+    {"ids": [9], "text": "Raises the note CV outputs by one octave while scale A is in use and this reads any voltage above 0V; a negative voltage here cancels the + OCTAVE A button"},
+    {"ids": [10], "text": "Raises the note CV outputs by one octave while scale B is in use and this reads any voltage above 0V; a negative voltage here cancels the +OCTAVE B button"},
+    {"ids": [11], "text": "Steps the sequence on each rising edge above 2V, and patching a cable here stops the internal clock"},
+    {"ids": [12], "text": "Returns the sequence to its first step on a rising edge above 2V, and fires the RESET output"},
+    {"ids": [13], "text": "Nothing in the module reads this jack; the maker configures it as Expansion 1 (unused) and left it for a future expander"},
+    {"ids": [14], "text": "Nothing in the module reads this jack; the maker configures it as Expansion 2 (unused) and left it for a future expander"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V pulse on each step of the sequence, whether the step came from the internal clock or from the CLOCK input"},
+    {"ids": [1], "text": "A 1ms 10V pulse each time the sequence returns to its first step, either after LENGTH steps or from a trigger at the RESET input"},
+    {"ids": [2, 3, 4, 5], "text": "The pitch of that voice, 1V per octave: the scale note the algorithm chose for it, plus its octave, plus TRANSPOSE and the octave button of the scale in use"},
+    {"ids": [6, 7, 8, 9], "text": "Carries 10V while that voice's note is sounding and 0V otherwise; the gate reopens only when the note changes, and is held at 0V on the steps SPACE silences"},
+    {"ids": [10, 11, 12, 13], "text": "One of four stepped voltages worked out from which internal tracks are on, 0V to 10V in eight steps, changing on each step of the sequence"},
+    {"ids": [14, 15, 16, 17], "text": "Carries 10V while its internal track is on and 0V while that track is off, changing on each step of the sequence"}
+  ],
+  "notes": [
+    "with nothing patched to CLOCK the sequence runs from an internal clock at the rate SPEED sets; patching a cable there stops that clock and steps the sequence on each rising edge instead",
+    "a scale with no notes switched in produces nothing: every note CV output reads 0V and every note gate stays at 0V. Scale A comes up with C, D and E switched in and scale B comes up empty",
+    "the screen reads out the eight main parameters as numbers, including the values the CV inputs have added, so it shows what the sequence is actually running on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±2V.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "10": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "11": "high above 2V · stepped · one channel only\n\nunpatched it reads the internal clock; a negative voltage does nothing here.",
+      "12": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "1V per octave · stepped · one channel only",
+      "3": "1V per octave · stepped · one channel only",
+      "4": "1V per octave · stepped · one channel only",
+      "5": "1V per octave · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · stepped · one channel only",
+      "15": "0 to 10V · stepped · one channel only",
+      "16": "0 to 10V · stepped · one channel only",
+      "17": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "DialecticFilter",
+  "description": "A phase distortion: the audio is run through an allpass filter and the module flips back and forth between the filtered and unfiltered copies according to which of the two is larger at that instant",
+  "params": [
+    {"ids": [0], "text": "Sets the corner frequency of the allpass filter, 4Hz at the far left to about 20kHz at the far right"},
+    {"ids": [1], "text": "Sets how abruptly the module flips between the two copies, from a smeared blend at the far left to a hard switch at the far right"},
+    {"ids": [2], "text": "Feeds a highpassed copy of the output back into the input, none at the far left and almost total at the far right"},
+    {"ids": [3], "text": "Offsets one copy against the other before they are compared, -5V to 5V, which makes the flips sparser and coarser"},
+    {"ids": [4], "text": "In its upper position the flip rate is tied to the allpass corner frequency instead of being set on its own, which gives a steadier, more filter-like character"},
+    {"ids": [5], "text": "Shifts the allpass corner frequency by one octave per volt at the far ends of its travel, and by nothing at centre"},
+    {"ids": [6], "text": "Shifts the flip rate, and by nothing at centre"},
+    {"ids": [7], "text": "Shifts the resonance, and by nothing at centre"},
+    {"ids": [8], "text": "Shifts the bias, and by nothing at centre"},
+    {"ids": [9], "text": "Swaps which side of the comparison selects the filtered copy, so the same settings give the opposite texture"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be distorted"},
+    {"ids": [1], "text": "The control voltage for the allpass corner frequency; with nothing patched this jack reads the size of the incoming audio, so the filter tracks the sound's own loudness"},
+    {"ids": [2], "text": "The control voltage for the flip rate; with nothing patched this jack reads the size of the incoming audio"},
+    {"ids": [3], "text": "The control voltage for the resonance; with nothing patched this jack reads the size of the incoming audio"},
+    {"ids": [4], "text": "The control voltage for the bias; with nothing patched this jack reads the size of the incoming audio"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The distorted audio, soft clipped at 10V"},
+    {"ids": [1], "text": "The flip signal itself, smoothed by the same filter that softens the flips, 0V on one copy and 10V on the other"}
+  ],
+  "notes": [
+    "All four control voltage jacks are normalled to the size of the incoming audio, which is what NORMALLED CV IN means; an attenuverter turned up with nothing patched modulates from the sound",
+    "Everything follows the channel count of the audio input, so nothing runs with that jack empty"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the size of the audio input.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the size of the audio input.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads the size of the audio input; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads the size of the audio input; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Band",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "band.cpp:201 reads it with getVoltage, so only channel 1, and adds it to the tune knob against C4"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "band.cpp:212 reads it with getVoltage, so only channel 1, and scales it by a fifth into the width value"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "band.cpp:216 reads it with getVoltage, so only channel 1, and adds it to every band's harmonic number"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "band.cpp:218 reads it with getVoltage, so only channel 1, as the signal to be filtered"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "band.cpp:231 reads it with getVoltage, so only channel 1, and adds it to that band's harmonic knob at one harmonic per volt"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "0V", "why": "band.cpp:236 reads it with getVoltage, so only channel 1, and scales it by a tenth into that band's level"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "band.cpp:226 reads it with getVoltage, so only channel 1, and takes anything at or above 1V as the band being on, replacing the button while the cable is there"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±12V", "why": "band.cpp:264 writes one channel with setVoltage, clamped to -12 to 12V"},
+      "1": {"family": "audio", "poly": true, "why": "band.cpp:263 sets four channels on this output and band.cpp:261 writes one band per channel"}
+    }
+  },
+  "comment": "An enable gate jack replaces its band's button while a cable is present rather than being summed with it (band.cpp:225), so the button has no effect at all until the cable is pulled. With the menu following the input pitch, the TUNE knob and the V/OCT jack are both ignored (band.cpp:204). The display is a spectrum of the input drawn on a harmonic axis, with each band drawn as a coloured bell on its own harmonic."
+}

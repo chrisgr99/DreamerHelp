@@ -1,0 +1,23 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "U",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/U.cpp:155-156, getPolyVoltage rescaled from 0.1 to 2 and put through a dsp::SchmittTrigger"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/U.cpp:155-156, getPolyVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger which at :157 samples and holds that lane's signal; one trigger and one held value serve the whole lane rather than one per channel"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/U.cpp:155-156, getPolyVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger which at :157 samples and holds that lane's signal; one trigger and one held value serve the whole lane rather than one per channel"},
+      "3": {"family": "cv", "poly": true, "negative": "swings", "normal": "nothing is read; the lane is skipped", "why": "src/U.cpp:53-57 and 148, getChannels on this jack sets the lane's channel count and getPolyVoltage reads it; unpatched it returns zero channels, so the loop at :145 never runs and the lane's noise fallback at :151 is unreachable"},
+      "4": {"family": "cv", "poly": true, "negative": "swings", "normal": "nothing is read; the lane is skipped", "why": "src/U.cpp:53-57 and 148, getChannels on this jack sets the lane's channel count and getPolyVoltage reads it; unpatched it returns zero channels, so the loop at :145 never runs and the lane's noise fallback at :151 is unreachable"},
+      "5": {"family": "cv", "poly": true, "negative": "swings", "normal": "nothing is read; the lane is skipped", "why": "src/U.cpp:53-57 and 148, getChannels on this jack sets the lane's channel count and getPolyVoltage reads it; unpatched it returns zero channels, so the loop at :145 never runs and the lane's noise fallback at :151 is unreachable"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"},
+      "1": {"family": "cv", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"},
+      "2": {"family": "cv", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"},
+      "3": {"family": "pitch", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"},
+      "4": {"family": "pitch", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"},
+      "5": {"family": "pitch", "poly": true, "why": "src/U.cpp:55-56, the channel count copied from that section's signal input"}
+    }
+  },
+  "comment": "The noise knob is dead. src/U.cpp:145 bounds the channel loop with maxPolySpecial, which returns the signal input's channel count, and an unpatched input reports zero channels; the noise branch at lines 149-154 only runs when that same input is not connected, so it can never be reached and the filter frequency the knob sets is never used. The knob is on the panel and can be clicked, so it gets a line saying so rather than falling back on the maker's tooltip. The README describes the noise as what the module produces when no input is patched; the code does not do that, and this is the one place where the manual and the code disagree outright. The quantiser takes half a step off the held value and then truncates toward zero (src/U.cpp:92-97 and 159), so the step boundaries fall differently above and below 0V. The panel prints QUNT, NSE, CLK, IN, OUT and QOUT, the last four repeated for each of the three sections."
+}

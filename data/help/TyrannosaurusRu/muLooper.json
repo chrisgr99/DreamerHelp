@@ -1,0 +1,50 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "muLooper",
+  "description": "Records up to 65536 samples of a signal, splits the recording into chunks and plays one chunk back with feedback overdubbing and a dry and wet mix",
+  "params": [
+    {"ids": [0], "text": "Starts filling the buffer with the incoming signal, and releases itself once 65536 samples have been written"},
+    {"ids": [1], "text": "Divides the 65536-sample buffer into 1 to 16 chunks, each of them 65536 divided by that number of samples long"},
+    {"ids": [2], "text": "Picks which chunk plays, 0 at the first and 1 at the last, fading from one chunk to the next in between"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at the SCN input before it is added to the chunk selection"},
+    {"ids": [4], "text": "Sets the playback speed in samples per sample, -4 to 4, with negative values playing the recording backwards"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the SPD input before it is added to the playback speed"},
+    {"ids": [6], "text": "Sets how much of what is playing is mixed into the signal being recorded, 0 to 100%"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the FBK input before it is added to the feedback amount"},
+    {"ids": [8], "text": "Crossfades the outputs between the incoming signal and the recording, 0% for the incoming signal alone and 100% for the recording alone"},
+    {"ids": [9], "text": "Attenuates and inverts the voltage at the WET input before it is added to the dry and wet mix"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal written into the buffer, summed to one channel if it is polyphonic, and the dry side of the WET mix"},
+    {"ids": [1], "text": "A voltage above 0V starts filling the buffer with the incoming signal"},
+    {"ids": [2], "text": "Sets the number of chunks the buffer is divided into, 0-10V covering 1 to 16, and overrides the SPLT knob"},
+    {"ids": [3], "text": "A voltage moving the chunk selection, scaled by the slider for SCN, with 10V covering the whole set of chunks at the slider's full setting"},
+    {"ids": [4], "text": "A voltage added to the feedback amount, scaled by the slider for FBK, with 10V covering the whole range at the slider's full setting"},
+    {"ids": [5], "text": "A voltage added to the playback speed, scaled by the slider for SPD, with 5V adding one sample per sample at the slider's full setting"},
+    {"ids": [6], "text": "A voltage added to the dry and wet mix, scaled by the slider for WET, with 10V covering the whole range at the slider's full setting"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The chunk picked by SCN, mixed with the incoming signal by WET"},
+    {"ids": [1], "text": "One chunk per channel, as many channels as SPLT sets, counting up from the chunk picked by SCN, each channel mixed with the incoming signal by WET"},
+    {"ids": [2], "text": "Rises to 10V when a recording reaches the end of the buffer and holds there until the next recording starts"}
+  ],
+  "notes": [
+    "the readout gives the number of chunks the buffer is split into and the length of one chunk in samples",
+    "the playback buffer starts empty and WET starts at 100%, so the outputs are silent until a recording has been made",
+    "press REC, or raise the REC input above 0V, and leave it until all 65536 samples have been written; the button releases itself at that point",
+    "the recording is copied into the playback buffer at the start of the next play cycle after the buffer fills, so the loop changes a moment after the recording ends"
+  ],
+  "menu": [
+    "Scale speed — divides the playback speed by the number of chunks set by SPLT"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "high above 0V · stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

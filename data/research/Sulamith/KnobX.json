@@ -1,0 +1,16 @@
+{
+  "plugin": "Sulamith",
+  "module": "KnobX",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "KnobX.cpp KnobX::process: clockTrigger.process(clk, 0.1, 1.0) with the thresholds given explicitly, clk being getVoltage() with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"poly": true, "step": "continuous", "why": "KnobX.cpp KnobX::process: isPolyphonic() and getChannels() on this jack choose the copying branch and getVoltage(ct) reads up to eight channels into the knobs; the same jack is read as getVoltage() with no channel argument for resetTrigger, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "KnobX.cpp KnobX::process: setVoltage(outTRG ? 10.f : 0.f) from a PulseGenerator triggered for 1e-3f, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "stepped", "why": "KnobX.cpp KnobX::process: setChannels(chan) then setVoltage(knob, c) for each of the chosen number of knobs, the knobs running to ±10V at the widest range setting, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "why": "KnobX.cpp KnobX::process: setVoltage of the current step's knob with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "clockTrigger.process is called in two places in the same sample: first in the poly-copy condition, which is only reached when the reset jack holds a polyphonic cable, and then in the sequencing condition. A Rack SchmittTrigger returns true only on the first call after an edge, so with a polyphonic cable in the reset jack the copy consumes the clock and the sequence does not advance. The range switch rewrites minValue and maxValue on the eight knob quantities and then re-sets each knob, so knobs outside the new span are pulled in. The reset jack's meaning depends on the cable, so it has no family."
+}

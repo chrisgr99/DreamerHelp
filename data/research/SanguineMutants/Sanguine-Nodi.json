@@ -1,0 +1,18 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Nodi",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "nodi.cpp:249 tests this input against 1V with getVoltage(channel), and nodi.cpp:208 takes part of the module's channel count from its getChannels()"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "nodi.cpp:321 adds this input to the coarse and fine knobs and nodi.cpp:330 turns the sum into a pitch at twelve semitones per volt"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "nodi.cpp:288 multiplies this input by the FM knob and nodi.cpp:323 adds the result to the pitch in volts"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "nodi.cpp:310 divides this input by 5 and multiplies it by the MOD knob before adding the TIMBRE knob; nodi.cpp:316 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "nodi.cpp:311 divides this input by 5 and adds the COLOR knob with no attenuverter; nodi.cpp:317 clamps the total to 0..1"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "range": "±10V", "negative": "subtracts", "why": "nodi.cpp:295 divides this input by 10, multiplies by the number of models, rounds it and adds the knob's model, clamping the total at nodi.cpp:299"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "nodi.cpp:427 multiplies the oscillator's sample by 5 and nodi.cpp:431 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is Émilie Gillet's Braids, vendored unchanged at eurorack/braids, with the sub-oscillator shapes of the unreleased 1.9 firmware; src/nodi.cpp is the Rack wrapper, running one macro oscillator per polyphonic channel. The model count is 47: the model parameter tops out at MACRO_OSC_SHAPE_LAST_ACCESSIBLE_FROM_META, and the morse-code shape beyond it is reachable only through the MORS button. There is a twenty-sixth parameter, PARAM_META at index 19, kept only so that older patches still load; it has no widget on the panel, is read nowhere in the module, and cannot be clicked. Every per-channel read uses getVoltage(channel) rather than getPolyVoltage(channel), so a monophonic cable patched to META, TIMBRE, COLOR or FM drives the first channel alone while the rest keep their knob values. The trigger threshold is 1V."
+}

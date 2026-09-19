@@ -1,0 +1,16 @@
+{
+  "plugin": "3HR",
+  "module": "GLTCH3HR",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "GLTCH3HR.cpp:93 reads getVoltage() with no channel into the record buffer"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GLTCH3HR.cpp:79 reads getVoltage() with no channel, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0.01 and 1"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GLTCH3HR.cpp:78 reads getVoltage() with no channel, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "normal": "0V", "why": "GLTCH3HR.cpp:77 reads getVoltage() with no channel and compares it against the threshold knob at lines 82 and 96"}
+    },
+    "outputs": {
+      "0": {"poly": false, "range": "±10V", "why": "GLTCH3HR.cpp:208 writes one clamped value with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. The input and output get no family: the README says the module works with both CV and audio, so no colour would be true of them. The buffer is half a second at the engine's sample rate (GLTCH3HR.cpp:71), and the START and END knobs are fractions of it rather than times, so changing the sample rate changes what a given setting means in seconds. The threshold input is not normalled to anything, so with nothing patched it reads 0V and the module stays idle whatever the threshold knob is set to, except at a knob setting of exactly 0 where 0V is not above it either."
+}

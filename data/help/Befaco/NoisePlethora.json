@@ -1,0 +1,62 @@
+{
+  "plugin": "Befaco",
+  "module": "NoisePlethora",
+  "description": "Two digital noise generators running one algorithm each from a library of banks, with a resonant filter on each, plus a third section of grit and white noise",
+  "params": [
+    {"ids": [0, 7], "text": "Moves the first of the two parameters the current algorithm exposes; what it changes depends on which algorithm is loaded"},
+    {"ids": [1, 8], "text": "Moves the second of the two parameters the current algorithm exposes; what it changes depends on which algorithm is loaded"},
+    {"ids": [2, 9], "text": "Sets the cutoff of that section's filter, from 5.8Hz to 11800Hz"},
+    {"ids": [3, 10], "text": "Sets the resonance of that section's filter, raising its Q from 0.7 up to about 11"},
+    {"ids": [4, 11, 16], "text": "Attenuates the cutoff CV for that section, squared so the bottom of the travel is fine-grained"},
+    {"ids": [5, 12, 17], "text": "Picks that section's filter type: lowpass, bandpass or highpass"},
+    {"ids": [6], "text": "Turning it steps through the algorithms of the current bank; a click swaps which of the two sections it edits, and a hold of half a second switches it to stepping through banks instead"},
+    {"ids": [13], "text": "Sets the density of the gritty noise, from 0.1 events per second up to 20000"},
+    {"ids": [14], "text": "Sets the resonance of the filter on the noise section, raising its Q from 0.5 up to about 20"},
+    {"ids": [15], "text": "Sets the cutoff of the filter on the noise section, from 8.2Hz to 22050Hz"},
+    {"ids": [18], "text": "Picks which noise the filter takes: the gritty noise or the white noise"}
+  ],
+  "inputs": [
+    {"ids": [0, 6], "text": "Moves the first algorithm parameter for that section, -10V to 10V covering the whole range, and is added to the X knob"},
+    {"ids": [1, 7], "text": "Moves the second algorithm parameter for that section, -10V to 10V covering the whole range, and is added to the Y knob"},
+    {"ids": [2, 5], "text": "Shifts that section's filter cutoff, scaled by that section's cutoff CV attenuator"},
+    {"ids": [3, 4], "text": "Steps through the programs of the current bank for that section, half a volt per program, counted on from the program already chosen"},
+    {"ids": [8], "text": "Shifts the density of the gritty noise, -10V to 10V covering the whole range, and is added to the grit knob"},
+    {"ids": [9], "text": "Shifts the cutoff of the filter on the noise section, scaled by that section's cutoff CV attenuator"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "That section's noise algorithm through its filter, soft-clipped and reaching 10V peak to peak"},
+    {"ids": [2], "text": "Sparse random impulses whose density the grit knob sets, reaching 10V peak to peak"},
+    {"ids": [3], "text": "Either the gritty noise or the white noise through a resonant filter, with an asymmetric saturation adding even harmonics"},
+    {"ids": [4], "text": "White noise, reaching 10V peak to peak"}
+  ],
+  "notes": [
+    "some algorithm names in the Program A and Program B menus are greyed out and cannot be chosen: those algorithms are listed in the banks but not implemented here."
+  ],
+  "menu": [
+    "Program A — picks the algorithm the A section runs, by name, from Bank 1: Textures, Bank 2: HH Clusters, Bank 3: Harsh & Wild or Bank 4: Test",
+    "Remove DC — takes the DC offset out of all three outputs; on by default",
+    "Program B — picks the algorithm the B section runs, by name, from Bank 1: Textures, Bank 2: HH Clusters, Bank 3: Harsh & Wild or Bank 4: Test",
+    "Bypass Filters — passes the raw noise with no filtering; off by default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "one channel only",
+      "6": "one channel only",
+      "7": "one channel only",
+      "8": "±10V · continuous · one channel only",
+      "9": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous"
+    }
+  }
+}

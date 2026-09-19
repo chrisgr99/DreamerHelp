@@ -1,0 +1,36 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-visualizer",
+  "description": "Chord recogniser: it names the chord arriving on its polyphonic pitch input, draws it in standard notation and puts the chord's root out as a pitch",
+  "params": [
+    {"ids": [4], "text": "Sets the root of the key signature the notation is written in, and leans the spelling of note and chord names towards that key; chord recognition is not changed by it"},
+    {"ids": [5], "text": "Sets the mode of the key signature the notation is written in, one of the seven diatonic modes; chord recognition is not changed by it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The notes to identify, at 1V per octave, one per channel of a polyphonic cable; the octave a note is in and any doubling of it make no difference to the chord that is named"},
+    {"ids": [1], "text": "Restricts the reading to those pitch channels whose gate here is above 5V; unpatched, every channel of the pitch input is read"},
+    {"ids": [2], "text": "Sets the key signature from a twelve-channel Poly External Scale cable: under 4V a note outside the scale, under 9V a note in it, above that the root"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The key signature as a twelve-channel Poly External Scale cable: 0V for a note outside it, 8V for a note in it and 10V for the root"},
+    {"ids": [1], "text": "The root of the recognised chord at 1V per octave, holding the last root it found while the input is not a chord it recognises"},
+    {"ids": [2], "text": "10V while the input is a recognised chord, 0V when it is not"}
+  ],
+  "notes": [
+    "the chords recognised are the major, minor, diminished, augmented, sus2 and sus4 triads, four sevenths and four ninths, each in any inversion; anything else is named as unrecognised",
+    "the staff and the chord name are a display; nothing has to be patched to the outputs for them to work",
+    "the red lamp beside the PES input lights when that cable has fewer than twelve channels or carries a scale the module does not recognise"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 5V · stepped · polyphonic\n\nunpatched it reads every pitch channel read.",
+      "2": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "PitchGrid",
+  "module": "MicroVOctMapper",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "stepped", "why": "MicroVOctMapper.cpp:164-177 sets the channel count from getChannels, reads getPolyVoltageSimd and takes a ceiling and a floor of the voltage, so it lands on whole keys"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "MicroVOctMapper.cpp:185-197 writes one voltage per channel with setVoltageSimd and sets the channel count from the input; the voltage is the base-two logarithm of the frequency ratio"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The module turns the input voltage into a pair of whole numbers, a count of the tuning's two generating intervals, then gives each interval the size the chosen tuning gives it (MicroVOctMapper.cpp:29-40 and 167-190). In the two Cleantone tunings the octave is not a two to one ratio, so a scale octave is not 1V: the 5-limit setting builds the octave from a 5/4 and a 3/2, which comes to about 2.01 rather than 2. The black key mapping is part of the arithmetic, shifting the boundary between sharps and flats (the r term at line 173). Two parameters are declared, Sub Freq and Sub3 Freq, and the widget adds no control for either, so neither can be clicked and neither gets a line; nothing in process reads them. The panel's keyboard drawing and tuning name are plain widgets."
+}

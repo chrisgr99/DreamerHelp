@@ -1,0 +1,52 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorEuclidean",
+  "description": "Turns a phasor into a Euclidean rhythm set by steps, fill and rotation, with gates on the filled steps, a clock on every step and a ramp across each Euclidean beat",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the pattern has, 1 to 64, 16 when new"},
+    {"ids": [1], "text": "Attenuverts the steps CV, -1 to +1; at full depth 5V adds 64 steps"},
+    {"ids": [2], "text": "Sets how many steps are filled, 0 to 64, 4 when new; the filled steps are spread as evenly as the step count allows"},
+    {"ids": [3], "text": "Attenuverts the fill CV, -1 to +1; at full depth 5V adds 64 to the fill"},
+    {"ids": [4], "text": "Rotates the filled steps through the pattern, a whole turn either way at the extremes"},
+    {"ids": [5], "text": "Attenuverts the rotation CV, -1 to +1"},
+    {"ids": [6], "text": "Sets the width of the gate and clock pulses, from no pulse at -5V through 50% at the centre to a gate that never drops at +5V"},
+    {"ids": [7], "text": "Attenuverts the pulse width CV, -1 to +1"},
+    {"ids": [8], "text": "Picks what happens when fill passes the step count: clamp it, swap fill and steps, wrap it, fold it, ratchet, or read fill as a density across the steps"},
+    {"ids": [9], "text": "Nothing in the module reads this control; the fill mode CV is scaled by the fill attenuverter instead"},
+    {"ids": [10], "text": "Free lets the step count take fractional values; Quant. holds steps and rotation to whole numbers"},
+    {"ids": [11], "text": "Free lets fill take fractional values; Quant. holds fill to whole numbers"},
+    {"ids": [12], "text": "Instant applies knob and CV changes at once; the other position holds a change back until the next step begins"},
+    {"ids": [13], "text": "Raw compares the phasor against the width setting directly; Smart mutes the outputs when the phasor is not moving and mirrors the pulses when it runs backwards"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor read as the pattern, 0-10V"},
+    {"ids": [1], "text": "Adds to the step count, scaled by the steps attenuverter"},
+    {"ids": [2], "text": "Adds to the fill, scaled by the fill attenuverter"},
+    {"ids": [3], "text": "Adds to the rotation, scaled by the rotation attenuverter"},
+    {"ids": [4], "text": "Adds to the pulse width, scaled by the pulse width attenuverter"},
+    {"ids": [5], "text": "Adds to the fill limit mode selection, scaled by the fill attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 0-10V ramp across the current Euclidean beat, so a long gap between filled steps gives a long ramp"},
+    {"ids": [1], "text": "A 10V gate on each filled step of the pattern"},
+    {"ids": [2], "text": "A 10V pulse on every step, filled or not"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · polyphonic",
+      "5": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

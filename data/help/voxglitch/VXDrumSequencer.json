@@ -1,0 +1,52 @@
+{
+  "plugin": "voxglitch",
+  "module": "VXDrumSequencer",
+  "description": "VX Drum Sequencer: a 16-step drum pattern sequencer with six voice lanes and an accent lane, sixteen pattern memories, and a polyphonic trigger output built to drive VX Drums",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Chooses the memory that plays and that the grid edits; the lit button is the one playing, and while a cable is in MEM the buttons are locked and presses ignored"},
+    {"ids": [16], "text": "Cancels any hits waiting to fire and rewinds the pattern, so the next clock plays step 1, which is what a pulse at RST does"},
+    {"ids": [17], "text": "Writes a new beat into the memory playing now, each lane given a part that suits its instrument, a few ratchets sprinkled in and the memory's length kept"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the pattern one step per rising edge, reading high at 2V and needing a fall to 0.1V before the next edge counts; there is no clock inside, so feed it sixteenths"},
+    {"ids": [1], "text": "A rising edge cancels hits waiting to fire and rewinds the pattern, so the next clock plays step 1; a clock arriving on the same sample plays step 1 at once"},
+    {"ids": [2], "text": "Picks the memory, 0V for memory 1 up to 10V for memory 16 in steps of 0.625V; while a cable is here the memory buttons are locked and the lit one follows this voltage"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries one voice per channel, 1 bass drum, 2 snare, 3 clap, 4 percussion, 5 closed hat, 6 open hat; every hit is a 10V pulse, 1ms long to start with, and a muted lane's channel stays silent"},
+    {"ids": [1], "text": "Carries a 10V pulse of the same length on every accented step, on the same sample as that step's hits and again with each ratchet repeat; an accented step with no hits pulses here too"}
+  ],
+  "notes": [
+    "nothing plays until a clock pulse arrives at CLK, and unplugging the clock leaves the pattern where it stopped",
+    "click a pad in the grid to place or remove a hit, and drag across pads to paint them the way the first one went; the pads are one display widget, so none of them can be clicked for help",
+    "shift-click a lit voice pad to step its ratchet through x2, x3, x4 and back to a single hit, splitting the step into that many evenly spaced hits at the same strength",
+    "click a lamp in the row above the grid to set the memory's length; pads past the length keep their hits and draw dimmed, and each memory has its own length",
+    "click a lane label at the left of the grid to mute that lane; a muted lane neither sounds nor pulses at TRIG, and mutes are kept across a memory change",
+    "the AC lane at the bottom of the grid makes every voice on that step hit harder through the kit, and makes no sound of its own",
+    "two or more of these placed side by side and touching play one after another as one longer pattern; the leftmost takes the clock and reset, and every one of them carries the whole chain's hits",
+    "sound design belongs to VX Drums: a memory holds the seven lanes of hits with each hit's ratchet and chance, and its length, and nothing else"
+  ],
+  "menu": [
+    "Chain: head of N, or Chain: member M of N — shown only while this sequencer is part of a chain, and says which place in it this one holds; it changes nothing",
+    "Trigger length — the length of the pulses at TRIG and ACC: 1ms, 2ms, 5ms, 10ms, 20ms, 50ms, 100ms or 200ms, and every hit gets its own rising edge whichever is chosen",
+    "Randomize settings — ticks which of the seven lanes the RND button rewrites, with All and None at the bottom; an unticked lane keeps every hit it has",
+    "Chance mode — draws every lit pad as a bar whose height is its chance and lets you drag a pad up or down to set it, the top of the pad being 100% and the bottom 0%",
+    "Export pattern… — writes the memory playing now to a JSON file",
+    "Import pattern… — replaces the memory playing now with one read from a JSON file",
+    "Clear pattern — empties the memory playing now and puts its length back to 16",
+    "Ratchet ×2, Ratchet ×3, Ratchet ×4, Single, in a lit voice pad's own right-click menu — splits that step into that many evenly spaced hits, or returns it to one",
+    "Chance, in a lit pad's own right-click menu — the odds that the pad plays each time its step comes round: 100%, 75%, 50%, 25%, 10% or 0%",
+    "Copy, Paste, Clear, in a memory button's own right-click menu — puts that memory on the system clipboard, writes the clipboard into it, or empties it and sets its length back to 16"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

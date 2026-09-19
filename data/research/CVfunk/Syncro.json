@@ -1,0 +1,45 @@
+{
+  "plugin": "CVfunk",
+  "module": "Syncro",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Syncro.cpp:279 reads it with getVoltage, so only channel 1, and scales it by 10 BPM per volt through the attenuverter; Syncro.cpp:275 reads it as a volt per octave instead when Clock CV as V/oct is on"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±99V", "why": "Syncro.cpp:239 reads it with getVoltage, so only channel 1, and scales it by 10 through the attenuverter; Syncro.cpp:240 clamps the total to -99 to 99"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Syncro.cpp:347 reads it with getVoltage, so only channel 1, adds it to the fill knob through the attenuverter and rounds the total"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 1V", "why": "Syncro.cpp:241 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter; Syncro.cpp:242 clamps the total to 0.001 to 0.999"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Syncro.cpp:243 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter; Syncro.cpp:244 turns the total into a whole number of channels of rotation"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "Syncro.cpp:248 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "Syncro.cpp:305 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "why": "Syncro.cpp:335 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "negative": "ignored", "normal": "0V", "why": "Syncro.cpp:325 reads it with getVoltage, so only channel 1, and treats anything above 0.1V as a fill on that channel"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Syncro.cpp:480 writes one channel with setVoltage, 10V or 0V"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Syncro.cpp:481 writes one channel with setVoltage, 10V or 0V"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Syncro.cpp:480 writes one channel with setVoltage, 10V or 0V, or a 0-10V ramp at Syncro.cpp:468 in phasor mode"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Syncro.cpp:481 writes one channel with setVoltage, 10V or 0V, or a shifted 0-10V ramp at Syncro.cpp:469 in phasor mode"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"},
+      "16": {"family": "trigger"},
+      "17": {"family": "trigger"}
+    }
+  },
+  "comment": "Every channel's multiplier and divisor are read through the rotation offset (Syncro.cpp:423), so the knob at one row can be driving a different row's output once ROTATE is turned. A channel whose multiplier is 0 holds its upright output at 0V and its inverted output at 10V (Syncro.cpp:483). The tempo is clamped so that the fastest channel stays below the Nyquist frequency, which at 44.1kHz caps the master at about 10336 BPM (Syncro.cpp:329)."
+}

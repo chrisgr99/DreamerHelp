@@ -1,0 +1,17 @@
+{
+  "plugin": "ChowDSP",
+  "module": "Werner",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Werner.cpp process(): float x = inputs[AUDIO_IN].getVoltage(), no channel argument"},
+      "1": {"family": "pitch", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V, so the knob alone", "sumRange": "0 to 1V", "why": "Werner.cpp cookParams(): the knob plus getVoltage() times the attenuverter over ten, clamped to 0 and 1, then used as the exponent of the 20Hz to 20000Hz sweep"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V, so the knob alone", "sumRange": "0 to 1V", "why": "Werner.cpp cookParams(): the feedback knob plus getVoltage() times the attenuverter over ten, clamped to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V, so the knob alone", "why": "Werner.cpp cookParams(): the damping knob plus getVoltage() times the attenuverter over ten, clamped to 0.25 and 1.25"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V, so the knob alone", "sumRange": "0 to 1V", "why": "Werner.cpp cookParams(): the drive knob plus getVoltage() times the attenuverter over ten, clamped to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "setVoltage with no channel argument in Werner.cpp"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 7dc3dab and doc/manual.md in the same tree. Frequency is a 0 to 1 knob used as 1000 raised to that power times 20Hz, so its default of 0.5 is about 632Hz. Feedback is 0 to 0.95 and is clamped to 1 after the CV; damping is 0.25 to 1.25 and clamped there; drive is a 0 to 1 knob mapped to 0.1 to 10 by raising 100 to the power of the knob to the 0.33 and multiplying by 0.1, with a makeup gain of the drive to the power of 0.75. The nonlinearity is a hyperbolic tangent on three of the filter's four state variables."
+}

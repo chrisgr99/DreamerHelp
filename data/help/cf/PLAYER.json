@@ -1,0 +1,51 @@
+{
+  "plugin": "cf",
+  "module": "PLAYER",
+  "description": "A sample player: it reads a .wav file from disk and plays it on a gate or a trigger, with control over the start point and the speed",
+  "params": [
+    {"ids": [0], "text": "Sets the point in the sample that playing starts from, 0 for the beginning and 10 for the end"},
+    {"ids": [1], "text": "Shifts the playing rate, -5 to +5; at the centre the sample plays at its own rate, and far enough down it plays backwards"},
+    {"ids": [2], "text": "An attenuverter, -1 to +1, setting how far the voltage at the start input moves the start point"},
+    {"ids": [3], "text": "An attenuverter, -1 to +1, setting how far the voltage at the speed input changes the playing rate"},
+    {"ids": [4], "text": "Loads the next .wav file in the same folder"},
+    {"ids": [5], "text": "Loads the previous .wav file in the same folder"},
+    {"ids": [6], "text": "Plays the sample round and round without stopping, so that it can be used as an oscillator; a rise at TRIG restarts it from the beginning"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The sample plays while the voltage here is above 0V, starting from the point set by START; with a cable in TRIG this jack is not used"},
+    {"ids": [1], "text": "Moves the start point away from the setting of the START knob, by as much as the trimmer beside it allows"},
+    {"ids": [2], "text": "Changes the playing rate, by as much as the trimmer beside it allows"},
+    {"ids": [3], "text": "A rise here loads the previous .wav file in the same folder"},
+    {"ids": [4], "text": "A rise here loads the next .wav file in the same folder"},
+    {"ids": [5], "text": "A rise here plays the sample once from the point set by START"},
+    {"ids": [6], "text": "Doubles the playing rate for every volt here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the sample, or the only channel of a mono file, full scale coming out as 5V"},
+    {"ids": [1], "text": "The right channel of the sample, or the only channel of a mono file, full scale coming out as 5V"}
+  ],
+  "notes": [
+    "nothing is played until a .wav file is loaded: right-click the panel and choose Load Sample. Until then the display reads right click to load .wav sample",
+    "a file that cannot be read leaves the module with no sample and the display back on that message; the maker reports that some high-resolution and compressed files will not open",
+    "the path of the loaded file is kept in the patch and the file is read from disk again when the patch is opened, so moving or renaming it leaves the module with no sample",
+    "the plugin ships eleven short .wav files beside its own files, in a folder called playeroscs: eight named osc, one saw and two noises, for loading into this module"
+  ],
+  "menu": [
+    "Load Sample — opens a file browser for choosing the .wav file to play"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

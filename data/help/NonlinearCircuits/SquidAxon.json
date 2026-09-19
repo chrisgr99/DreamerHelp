@@ -1,0 +1,39 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "SquidAxon",
+  "description": "A three-input mixer feeding a four-stage shift register, with two feedback paths from the last stage back into the mixer",
+  "params": [
+    {"ids": [0], "text": "Scales OUT 4 into a modelled diode before that feedback reaches the mixer, 0 to 4; the diode squares its input, so the effect grows far faster than the knob turns"},
+    {"ids": [1], "text": "Scales whatever arrives at IN 3 into the mixer, passing nothing fully anticlockwise and full level fully clockwise; with IN 3 empty it scales OUT 4 back into the mixer instead"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Added into the mixer at full level"},
+    {"ids": [2], "text": "Added into the mixer through the IN 3 knob; with nothing patched, that knob feeds OUT 4 back into the mixer instead"},
+    {"ids": [3], "text": "Moves the register on one stage at each rise above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The mixer's total clamped to -10V to 10V, taken afresh on every fourth clock and held between times"},
+    {"ids": [1], "text": "The value OUT 1 took, copied here one clock later"},
+    {"ids": [2], "text": "The value OUT 1 took, copied here two clocks later"},
+    {"ids": [3], "text": "The value OUT 1 took, copied here three clocks later, and the one both feedback controls read"}
+  ],
+  "notes": [
+    "nothing moves without a clock: patch one into CLOCK and the four outputs fill in turn, OUT 1 taking a new mixer value on every fourth clock.",
+    "both feedback knobs come up fully anticlockwise, so with nothing patched all four outputs stay at 0V however fast the clock runs.",
+    "the linear feedback path is the IN 3 knob and it is only there while IN 3 is empty; the nonlinear path through the diode is always in circuit and is subtracted rather than added."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V.",
+      "1": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads the OUT 4 voltage; the knob and this input are summed and the total held to ±10V.",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "±10V · one channel only",
+      "2": "±10V · one channel only",
+      "3": "±10V · one channel only"
+    }
+  }
+}

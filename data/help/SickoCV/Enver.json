@@ -1,0 +1,70 @@
+{
+  "plugin": "SickoCV",
+  "module": "Enver",
+  "description": "An envelope generator with a shape control, end-of-stage triggers, an inverted output and a built-in stereo amplifier",
+  "params": [
+    {"ids": [0], "text": "Opens the envelope by hand, working as the G/T jack does in whichever mode the module is in"},
+    {"ids": [1], "text": "Chooses how the envelope runs: ENV holds at sustain while the gate is high, FN runs attack then decay from a trigger, LP repeats attack and decay until a second trigger sends it to release"},
+    {"ids": [2], "text": "Bends the envelope curve between exponential, gentle, linear and logarithmic, with the mid positions falling between them"},
+    {"ids": [3], "text": "Scales the shape CV, -100% to +100%"},
+    {"ids": [4], "text": "Sets how long the rise takes, 1ms to 10 seconds"},
+    {"ids": [5], "text": "Scales the attack CV, -100% to +100%"},
+    {"ids": [6], "text": "Sets how long the fall from full to the sustain level takes, 1ms to 10 seconds"},
+    {"ids": [7], "text": "Scales the decay CV, -100% to +100%"},
+    {"ids": [8], "text": "Sets the level the envelope holds at, 0% to 100%"},
+    {"ids": [9], "text": "Scales the sustain CV, -100% to +100%"},
+    {"ids": [10], "text": "Sets how long the fall to silence takes, 1ms to 10 seconds"},
+    {"ids": [11], "text": "Scales the release CV, -100% to +100%"},
+    {"ids": [12], "text": "Sets how far the INV output drops when the envelope rises, 0% to 100%; at 0% that output stays at 10V"},
+    {"ids": [13], "text": "Sets the level of the built-in amplifier, 0% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Opens the envelope: held high in ENV mode, or a trigger in FN and LP modes; its channel count sets the polyphony of the envelope outputs"},
+    {"ids": [1], "text": "A trigger here restarts the attack from wherever the envelope has reached, during decay or sustain"},
+    {"ids": [2], "text": "Bends the envelope curve, a tenth of its voltage scaled by the trimpot beside it and added to the shape knob"},
+    {"ids": [3], "text": "Lengthens the attack, one second per volt at full attenuverter, added to the ATT knob and floored at 1ms"},
+    {"ids": [4], "text": "Lengthens the decay, one second per volt at full attenuverter, added to the DEC knob and floored at 1ms"},
+    {"ids": [5], "text": "Shifts the sustain level, a tenth of its voltage scaled by the trimpot above it and added to the SUS knob"},
+    {"ids": [6], "text": "Lengthens the release, one second per volt at full attenuverter, added to the REL knob and floored at 1ms"},
+    {"ids": [7], "text": "The left signal for the built-in amplifier"},
+    {"ids": [8], "text": "The right signal for the built-in amplifier"},
+    {"ids": [9], "text": "Sets the amplifier level: with a monophonic envelope it multiplies the LVL knob, 10V giving the knob's own setting, and with a polyphonic envelope a tenth of its voltage is added to the knob instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse when the attack stage ends"},
+    {"ids": [1], "text": "A 1ms pulse when the decay stage ends"},
+    {"ids": [2], "text": "A 1ms pulse when the sustain stage ends"},
+    {"ids": [3], "text": "A 1ms pulse when the release stage ends"},
+    {"ids": [4], "text": "The envelope, 0V to 10V"},
+    {"ids": [5], "text": "The envelope turned upside down: 10V at rest, falling as the envelope rises, by as much as the INV knob allows"},
+    {"ids": [6], "text": "The left signal at the envelope's level, scaled by the amplifier level and clamped to ±10V"},
+    {"ids": [7], "text": "The right signal at the envelope's level, scaled by the amplifier level and clamped to ±10V"}
+  ],
+  "notes": [
+    "with the LVL knob at zero and a voltage at the LVL jack, the amplifier is silent, because on a monophonic envelope the jack multiplies the knob rather than adding to it."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · polyphonic",
+      "5": "0 to 10V · polyphonic",
+      "6": "±10V · continuous · polyphonic",
+      "7": "±10V · continuous · polyphonic"
+    }
+  }
+}

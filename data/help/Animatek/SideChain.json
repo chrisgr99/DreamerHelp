@@ -1,0 +1,52 @@
+{
+  "plugin": "Animatek",
+  "module": "SideChain",
+  "description": "Ducking VCA: every trigger drops the gain fast, holds it down and brings it back, with an envelope and end-of-cycle output of its own",
+  "params": [
+    {"ids": [0], "text": "Sets how long the gain takes to come back, 40ms to 1 second, on an exponential scale that spreads the short times out"},
+    {"ids": [1], "text": "Sets how far the gain falls at the bottom of a duck, 0% for no ducking at all and 100% for silence"},
+    {"ids": [2], "text": "Sets how much each hit varies from the last, 0% to 100%, as a random walk over recovery time, depth and curve rather than unrelated noise on each hit"},
+    {"ids": [3], "text": "Sets the gain ceiling the audio rests at, 0% to 100%; it scales the audio at rest as well as during a duck"},
+    {"ids": [4], "text": "Fires a duck on every current envelope channel without a trigger patched; it acts on the press rather than repeating while held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V starts a duck, and the signal has to fall below 0.1V before another can fire, so a held gate ducks once; how many channels are patched here sets the envelope polyphony"},
+    {"ids": [1], "text": "Adds to the depth knob, 10V for 100 percentage points, sampled at the moment the channel triggers"},
+    {"ids": [2], "text": "Left or mono audio in"},
+    {"ids": [3], "text": "Right audio in; with this jack empty the left input feeds the right path as well"},
+    {"ids": [4], "text": "Scales the gain the level knob sets, 0V closing the VCA and 10V passing the full ceiling; with nothing patched it takes nothing away"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The ducking gain as a control voltage: 10V at rest, dipping on each trigger and recovering"},
+    {"ids": [1], "text": "The left audio at the ducked gain; with no audio patched this output carries no channels"},
+    {"ids": [2], "text": "The right audio at the ducked gain; with no audio patched this output carries no channels"},
+    {"ids": [3], "text": "A 10V, 1ms pulse when a recovery reaches its natural end; a trigger arriving before that cancels the pulse for that cycle"}
+  ],
+  "notes": [
+    "each duck is a fixed 2ms fall and a 12ms hold before the recovery starts, and a new trigger during a cycle starts a fresh fall from wherever the gain has reached.",
+    "the bar behind the level slider shows the gain being applied rather than the audio, so it moves with the duck even in silence; the white marker is the ceiling the slider sets.",
+    "with no audio patched the module works as an envelope generator, and patching the end-of-cycle output back into the trigger jack makes it cycle on its own."
+  ],
+  "menu": [
+    "Recovery curve: Exponential, Linear, Logarithmic — the shape the gain takes coming back from a duck",
+    "Freeze jitter — stops the random walks advancing, so every hit reuses the current variation",
+    "Per-channel envelopes — gives each polyphonic channel its own envelope and jitter, instead of one envelope shared by all of them",
+    "Level attenuates ENV — makes the level control scale the envelope output as well as the audio, including its resting voltage",
+    "Reset jitter seed — draws a new random seed and restarts every channel's random walk, without firing an envelope"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic\n\nunpatched it reads the left input.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the full ceiling; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

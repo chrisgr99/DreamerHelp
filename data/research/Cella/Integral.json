@@ -1,0 +1,17 @@
+{
+  "plugin": "Cella",
+  "module": "Integral",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "why": "Integral.cpp:201 reads this input with getVoltageSum, which adds every channel of a polyphonic cable together"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "normal": "always integrating", "why": "Integral.cpp:243 reads this input with getVoltage(), which is channel 1 alone, and Integral.cpp:244 to 248 compare it against 0V; Integral.cpp:242 only applies the test while a cable is present"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "0V", "why": "Integral.cpp:221 reads this input with getVoltage(), multiplies it by the attenuverter and divides by 2 before adding it to the knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Integral.cpp:227 reads this input with getVoltage(), multiplies it by the attenuverter and divides by 10; Integral.cpp:228 clamps the total to 0 and 1"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Integral.cpp:212 reads this input with getVoltage() and passes it to a Schmitt trigger at Rack's default 1V threshold"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "Integral.cpp:268 writes channel 1 alone; Integral.cpp:256 sets the limit at 5V or 10V from the menu"}
+    }
+  },
+  "comment": "Read from src/Integral.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1, alongside docs/Cella_Manual.md written for 2.11.0. Two places where the manual and the code differ. The manual says the INIT knob sets a voltage from 0V to 10V; Integral.cpp:154 configures it from -10V to 10V, so it can subtract as well. And the manual gives the gate modes as low meaning 0V and high meaning above 0V, which is right, but the low test is an exact comparison with zero (Integral.cpp:246), so any small offset on the gate counts as high. On the FOLD setting the fold is applied to the output only and the internal total is left alone (Integral.cpp:265 against 260), unlike CLIP and RESET which act on the total itself. The rate figures come from the base time constants of 5s, 0.25s and 0.00125s at Integral.cpp:87 with the knob as a power of two."
+}

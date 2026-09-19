@@ -1,0 +1,13 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "XenScribe",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "XenScribe.cpp:77 reads getVoltage() with no channel argument and multiplies it by 1200 to get cents"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "XenScribe.cpp:97 writes one value with setVoltage, dividing cents by 1200, and setChannels is never called"}
+    }
+  },
+  "comment": "Read from the maker's source at commit b9d77ec, the only commit carrying version 2.1.0. The panel has no lettering above the jacks because a multiline ui::TextField is placed over the whole of it at XenScribe.cpp:146-152; it is added with addChild and is not a ParamWidget, so it has no index in the census and no click on it can reach this help. The default scaleText at line 32 is the 12-TET octave. parseScale at line 47 takes each line through std::stof inside a try, so unparseable lines are dropped, and it only replaces the working scale when at least two values parsed and the last is above zero. The quantizer starts from an implicit root at 0 cents and also considers the last value, which is the period, so a pitch near the top of a period snaps up to the next period's root. The module has no parameters at all, so there is nothing that could be configured twice; the one input is read and the one output is written."
+}

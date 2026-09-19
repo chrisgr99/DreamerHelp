@@ -1,0 +1,42 @@
+{
+  "plugin": "ZZC",
+  "module": "Divider",
+  "description": "Rescales a phase ramp by a ratio of two whole numbers, and adds swing to the result.",
+  "params": [
+    {"ids": [0], "text": "Sets the first number of the ratio, 1 to 99; raising it slows the output down."},
+    {"ids": [1], "text": "Sets the second number of the ratio, 1 to 99; raising it speeds the output up."},
+    {"ids": [2], "text": "Moves the beat away from the middle of the output cycle, 1 to 99, stretching the first part of the output ramp and squeezing the rest."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "0-10V here sweeps the first number of the ratio between 1 and the number set by its knob, rounded to a whole number."},
+    {"ids": [1], "text": "0-10V here sweeps the second number of the ratio between 1 and the number set by its knob, rounded to a whole number."},
+    {"ids": [2], "text": "Bends the swing away from its knob setting, reaching 1 at -5V and 99 at +5V."},
+    {"ids": [3], "text": "The phase ramp to rescale, 0-10V per cycle."},
+    {"ids": [4], "text": "A trigger here sends the output phase to 0 and fires a pulse from the CLK output."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V trigger at the swung beat of each output cycle, or a square held high through the first half of it when Gate Mode is on."},
+    {"ids": [1], "text": "The rescaled phase ramp, 0V to 10V per cycle, with the swing already applied."}
+  ],
+  "notes": [
+    "Nothing happens until a phase ramp is patched to the PHASE input; this module never takes a phase from the module beside it.",
+    "What it does with its neighbours is pass the ZZC clock connection along and add its own phase to it, for a Div (Expander) further down the row to pick up."
+  ],
+  "menu": [
+    "Gate Mode — replaces the 1ms trigger at the CLK output with a square held high through the first half of each output cycle",
+    "Tick on Start — fires an extra pulse at the moment the output cycle restarts, as well as at the swung beat"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob setting alone; a negative voltage does nothing here.",
+      "1": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob setting alone; a negative voltage does nothing here.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads the SWING knob alone.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads no phase, and no output movement.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads no reset; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

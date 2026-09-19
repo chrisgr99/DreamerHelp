@@ -1,0 +1,68 @@
+{
+  "plugin": "DanTSynth",
+  "module": "Bend",
+  "description": "Polyphonic V/Oct processor that bends incoming pitches on a trigger, for portamento, glides, pitch envelopes and pitch bends, with every control repeated as a CV input",
+  "params": [
+    {"ids": [0], "text": "Sets the bend length as a division or multiple of the clock patched into the clock input, from a 1/32 note through to eight beats; it has no effect while that input is empty"},
+    {"ids": [1], "text": "Sets the bend length in seconds, 0 to 10, and is what the module uses whenever nothing is patched into the clock input"},
+    {"ids": [2], "text": "Stops every bend in progress and returns each channel to the pitch arriving at the input"},
+    {"ids": [3], "text": "Starts a bend on every channel; its position is added to the bend trigger input, so holding it down also holds a bend open under the Gate-Bends method"},
+    {"ids": [4], "text": "Toward starts the bend a full Amount away from the incoming pitch and travels to it; Away starts at the incoming pitch and travels a full Amount from it"},
+    {"ids": [5], "text": "The up arrow bends above the incoming pitch, the down arrow below it"},
+    {"ids": [6], "text": "Sets how far the bend travels, 0 to 24 semitones in whole semitone steps"},
+    {"ids": [7], "text": "Curves the bend: centred at 0 it is a straight line, anticlockwise gives a logarithmic curve that moves fast then slow, and clockwise an exponential one that moves slow then fast"},
+    {"ids": [8], "text": "Hold keeps the pitch at the end of the bend until something releases it; Rtrn ends the bend once its duration runs out"},
+    {"ids": [9], "text": "Cont adds the bend to whatever pitch is arriving now, so a new note part way through a bend carries the bend with it; Smpl adds it to the pitch captured at the trigger instead"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 1V; the gap between the last two edges is taken as one beat, and patching anything here switches the duration from the seconds knob to the beats knob"},
+    {"ids": [1], "text": "Added to the clocked duration knob at one notch per volt, the total then rounded to the nearest notch"},
+    {"ids": [2], "text": "Added to the timed duration knob at 1 second per volt, the total held at 0 or above; it can take the bend well past the knob's own 10 second limit"},
+    {"ids": [3], "text": "A rising edge through 1V stops the bend and returns the pitch; a monophonic cable stops every channel, a polyphonic cable stops only the channel the edge arrived on"},
+    {"ids": [4], "text": "A rising edge through 1V starts a bend, re-arming once the voltage falls to 0V or below; a monophonic cable starts every channel at once, a polyphonic cable starts only the channel the edge arrived on"},
+    {"ids": [5], "text": "The pitches to be bent, read as 1V per octave; the number of channels patched here is the number the module runs and the number leaving the output"},
+    {"ids": [6], "text": "Overrides the Away and Toward switch: any negative voltage forces Away, any positive voltage forces Toward, and 0V leaves the switch setting alone"},
+    {"ids": [7], "text": "Overrides the up and down switch: any negative voltage bends down, any positive voltage bends up, and 0V leaves the switch setting alone"},
+    {"ids": [8], "text": "Added to the Amount knob at 12 semitones per volt, unquantised and with no ceiling, so it can push the bend far past the knob's 24 semitones; the total is held at 0 or above"},
+    {"ids": [9], "text": "Added to the Shape knob one unit per volt and the total clamped to -1 to +1, so 1V by itself covers the whole curve from straight line to fully exponential"},
+    {"ids": [10], "text": "Overrides the Hold and Rtrn switch: any negative voltage forces Rtrn, any positive voltage forces Hold, and 0V leaves the switch setting alone"},
+    {"ids": [11], "text": "Overrides the Cont and Smpl switch: any negative voltage forces Smpl, any positive voltage forces Cont, and 0V leaves the switch setting alone"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The incoming pitches with the current bend offset added to each, one channel for each channel arriving at the input"}
+  ],
+  "notes": [
+    "nothing happens until a V/Oct signal is patched into the input. With it empty the module runs no channels, no trigger has any effect, and the output carries nothing.",
+    "the row of lamps below the trigger button shows how far each polyphonic channel's bend has travelled, and which way it is going. It cannot be clicked.",
+    "clocked mode needs two clock pulses before a beat length is known; until the second pulse arrives the module falls back to the seconds knob."
+  ],
+  "menu": [
+    "Unbend Envelope — in the Unbend submenu; the end of a bend glides back to the base pitch instead of snapping back to it",
+    "Inverse Shape — in the Unbend submenu; mirrors the Shape curve in time for the return glide, so a bend that moved fast then slow comes back slow then fast",
+    "Unbend Duration — in the Unbend submenu; sets the return glide's length as a percentage of the bend's own duration, 0% to 200%, and starts at 10%",
+    "Indefinite — in the Hold Method submenu; a held bend stays where it is until a reset arrives",
+    "Auto-Unhold — in the Hold Method submenu; a held bend ends once the incoming pitch differs from the pitch captured at the trigger by more than the Threshold setting",
+    "Threshold — in the Hold Method submenu; the pitch change that releases an Auto-Unhold bend, 1 to 100 cents",
+    "Gate-Bends — in the Hold Method submenu; the bend is held for as long as the trigger stays high and ends when it falls to 0V or below",
+    "Toggle Triggers — in the Hold Method submenu; each trigger alternates between starting a bend and ending one, and a reset always leaves it ended"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "4": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "5": "1V per octave · continuous · polyphonic",
+      "6": "stepped · polyphonic\n\nunpatched it reads 0V.",
+      "7": "stepped · polyphonic\n\nunpatched it reads 0V.",
+      "8": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "9": "±1V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V.",
+      "10": "stepped · polyphonic\n\nunpatched it reads 0V.",
+      "11": "stepped · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

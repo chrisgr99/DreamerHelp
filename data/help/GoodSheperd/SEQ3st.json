@@ -1,0 +1,61 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "SEQ3st",
+  "description": "An eight-step, three-row sequencer whose row voltages are read a second time as gate probabilities, giving each row a gate output that fires at random in proportion to the step's value",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, its value from -2 to 6 read as two to that power in hertz"},
+    {"ids": [1], "text": "Starts and stops the sequence; it comes up running"},
+    {"ids": [2], "text": "Sends the sequence back to the first step"},
+    {"ids": [3], "text": "Sets how many steps are played before the sequence returns to the first, 1 to 8"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27], "text": "Sets the voltage this row's output carries while the sequence is on this step, 0-10V, and at the same time the chance that the row's P Gate output fires on it, none at 0 and certain at 10"},
+    {"ids": [28, 29, 30, 31, 32, 33, 34, 35], "text": "Turns this step's gate on or off; the Gate output and this step's own Gate Out jack stay at 0V on a step turned off, while the row outputs carry their voltages either way"},
+    {"ids": [36], "text": "Bends the random number the row values are tested against: at -5 the draw collapses to the middle, at +5 it goes to one end or the other, at 0 it is even; the value is rounded to whole numbers"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Clock knob before the rate is worked out, so one volt doubles the rate"},
+    {"ids": [1], "text": "Takes over the clock; each rising edge above 1V advances one step, and the Clock knob and Clock input are ignored while a cable is here"},
+    {"ids": [2], "text": "Added to the Reset button, and a total above 1V sends the sequence back to the first step"},
+    {"ids": [3], "text": "Added to the Steps knob at one step per volt, the total rounded and held between 1 and 8"},
+    {"ids": [4], "text": "Added to the Shape knob at one unit per volt, the total rounded and held between -5 and 5"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the clock is high on a step whose gate button is on, and 0V otherwise"},
+    {"ids": [1], "text": "The voltage set by the first row's knob on the current step, 0-10V, held until the step changes"},
+    {"ids": [2], "text": "The voltage set by the second row's knob on the current step, 0-10V, held until the step changes"},
+    {"ids": [3], "text": "The voltage set by the third row's knob on the current step, 0-10V, held until the step changes"},
+    {"ids": [4, 5, 6], "text": "10V for as long as the clock is high when this row's knob on the current step beats a fresh random draw, and 0V when it loses"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13, 14], "text": "10V while the clock is high and the sequence is on this step with its gate button on, and 0V otherwise"}
+  ],
+  "notes": [
+    "the sequence runs on its own clock as soon as the module is added; patch a clock to Ext Clk to take it over.",
+    "each P Gate output draws its own random number at every step, so the three rows fire independently of one another.",
+    "the draw happens once, at the moment the step changes; the P Gate output then stays at whatever it took until the clock goes low.",
+    "the gate buttons are toggles and their pattern is saved with the patch; randomising the module sets that pattern at random and leaves the knobs alone."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

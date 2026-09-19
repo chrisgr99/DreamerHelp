@@ -1,0 +1,23 @@
+{
+  "plugin": "vanTies",
+  "module": "Adje",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "why": "Adje.cpp:142-143 adds getVoltage() to the rounded octave knob; no channel loop anywhere in the file", "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "1": {"family": "cv", "poly": false, "why": "Adje.cpp:145-147 adds 0.4 times the attenuverter times getVoltage() to the stretch knob", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "2": {"family": "cv", "poly": false, "why": "Adje.cpp:170-171 adds 1.4 times the attenuverter times getVoltage() to the number of partials knob, and line 191 flips the stretch when the sum goes negative", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "3": {"family": "cv", "poly": false, "why": "Adje.cpp:172-173 adds 0.2 times the attenuverter times getVoltage() to the tilt knob", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "4": {"family": "cv", "poly": false, "why": "Adje.cpp:174-175 adds 0.2 times the attenuverter times getVoltage() to the sieve knob", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V"},
+      "5": {"family": "cv", "poly": false, "why": "Adje.cpp pushes getVoltage() into the buffer and uses isConnected() to switch the amplitude section on", "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "nothing recorded"},
+      "6": {"family": "cv", "poly": false, "why": "Adje.cpp:176-177 adds 0.1 times getVoltage() to the amp delay knob, with no attenuator", "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V"},
+      "7": {"family": "trigger", "poly": false, "why": "Adje.cpp sets the clock from getVoltage() > 2.5f, a level test against 2.5V rather than a Schmitt trigger", "range": "high above 2.5V", "step": "stepped", "negative": "ignored", "normal": "unclocked, the delay read as a time"},
+      "8": {"family": "trigger", "poly": false, "why": "Adje.cpp:150-151 resets on getVoltage() > 2.5f, a level test against 2.5V rather than a Schmitt trigger", "range": "high above 2.5V", "step": "stepped", "negative": "ignored", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "Adje.cpp:133 setChannels from the module's channel count, which the Channels menu item sets"},
+      "1": {"family": "cv", "poly": true, "why": "Adje.cpp:134 setChannels from the module's channel count, which the Channels menu item sets"},
+      "2": {"family": "cv", "poly": true, "why": "Adje.cpp:135 setChannels from the module's channel count, which the Channels menu item sets"}
+    }
+  },
+  "comment": "Adje reads every input with getVoltage() rather than getPolyVoltage, which the maker's manual states plainly: the CV inputs are monophonic and the polyphony is only on the outputs, where the channel count comes from the Channels menu item rather than from any jack. The octave knob is rounded unconditionally at Adje.cpp:141, so unlike Ad's pitch knob there is no continuous option for it. The number-of-partials CV is scaled 1.4 per volt against Ad's 0.7, and pushing the total below zero flips the sign of the stretch (line 191), which has no equivalent on Ad."
+}

@@ -1,0 +1,47 @@
+{
+  "plugin": "acModules",
+  "module": "Ov3rCross",
+  "description": "A three-way router driven by voltage: the control CV picks one of three zones, and the CV and any incoming trigger are sent to that zone's pair of jacks.",
+  "params": [
+    {"ids": [0], "text": "Sets the boundary between the middle and the high zone, -5V to +10V; it cannot be taken below the LOW knob."},
+    {"ids": [1], "text": "Sets the boundary between the low and the middle zone, -5V to +10V; it cannot be taken above the HIGH knob."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The control voltage that picks the zone, clamped to -5V through +10V; with nothing patched here a trigger generates a random voltage instead."},
+    {"ids": [1], "text": "A rising edge sends a 1ms trigger out of whichever zone the control voltage is in, and with no control CV patched it also rolls a fresh random voltage."},
+    {"ids": [2], "text": "A signal to route instead of the control voltage; the zone is chosen by the control voltage, and this is what comes out of that zone."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the routed voltage while the control voltage is at or above the high cutoff."},
+    {"ids": [1], "text": "A 10V trigger 1ms long when a trigger arrives while the control voltage is at or above the high cutoff."},
+    {"ids": [2], "text": "Carries the routed voltage while the control voltage is between the two cutoffs."},
+    {"ids": [3], "text": "A 10V trigger 1ms long when a trigger arrives while the control voltage is between the two cutoffs."},
+    {"ids": [4], "text": "Carries the routed voltage while the control voltage is at or below the low cutoff."},
+    {"ids": [5], "text": "A 10V trigger 1ms long when a trigger arrives while the control voltage is at or below the low cutoff."}
+  ],
+  "notes": [
+    "A zone's CV output keeps the last voltage that was sent to it, so two of the three always hold an old value unless the menu's mute item is on.",
+    "With a trigger patched and no control CV, the module becomes a three-way random trigger, and the two cutoff knobs set how likely each zone is."
+  ],
+  "menu": [
+    "Sample and Hold Control CV — makes the zone follow the control voltage only at the moment a trigger arrives, rather than tracking it continuously; it needs a trigger patched to do anything.",
+    "Mute Non-Active Outputs To 0V — ramps the two inactive CV outputs down to 0V instead of leaving them at their last voltage.",
+    "Random CV Range: -5V to 10V, -5V to 5V, 0V to 10V, 0V to 5V — sets the span of the random voltage generated on a trigger when no control CV is patched.",
+    "Output Trigger on CV Zone Change — fires a zone's trigger output when the control voltage moves into that zone; it does nothing while the sample and hold item is on."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "-5 to 10V · continuous · one channel only",
+      "1": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    }
+  }
+}

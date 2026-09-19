@@ -1,0 +1,14 @@
+{
+  "plugin": "Extratone",
+  "module": "Modulo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Modulo.cpp process(): pitch[i]=inputs[PITCH_INPUT].getVoltage(i) inside for(i=0;i<16;i++), and outputs[MODULO_OUTPUT].channels=inputs[PITCH_INPUT].channels"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the OFFSET knob", "why": "src/Modulo.cpp process(): if(inputs[OFF_INPUT].isConnected()){off = inputs[OFF_INPUT].getVoltage()/5;} — one voltage read, no channel loop, and it overwrites off rather than adding"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "src/Modulo.cpp process(): outputs[MODULO_OUTPUT].setVoltage(pitch[i],i) for i<16 with channels copied from the input"}
+    }
+  },
+  "comment": "The OFFSET jack does not add to the OFFSET knob, it replaces it: with a cable in and 0V on it the offset is zero and the knob is dead. The knob's offset is scaled by RANGE (off = knob * mod) while the jack's is not (off = V/5), so the two do not agree about what a given offset means. The fold loop runs a fixed 16 times whatever the input channel count, so unpatched channels are computed and discarded."
+}

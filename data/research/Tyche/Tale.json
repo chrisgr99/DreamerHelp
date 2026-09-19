@@ -1,0 +1,15 @@
+{
+  "plugin": "Tyche",
+  "module": "Tale",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the slider's own position", "why": "Tale.cpp:79-81 rescales the jack from -5V and +5V to 0 to 1 and multiplies the slider by it, so the jack can only scale the slider down; read at voltages[0] with no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "nothing held, the noise runs on", "why": "Tale.cpp:66-70 sampleAndHoldTrigger.process on the jack with rack's default SchmittTrigger thresholds, so a rising edge is detected past 1V and the jack is armed again below 0V, and isConnected() at line 65 decides whether the output is held at all; read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Tale.cpp:57 resetTrigger.process(getInput(RESET_INPUT).getVoltage()) with rack's default SchmittTrigger thresholds, so a rising edge is detected past 1V and the jack is armed again below 0V; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "Tale.cpp:76 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The pace law at Tale.cpp:82 is minSpeed times (maxSpeed/minSpeed) raised to the slider position, with minSpeed 0.001 and maxSpeed dsp::FREQ_A4, which is 440. The noise is OpenSimplex, evaluated at the variant number and the running phase (line 73), so it is smooth rather than white. The variant knob is only read every 16384 samples (line 47), so a sweep of it steps rather than glides."
+}

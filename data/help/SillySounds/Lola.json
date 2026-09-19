@@ -1,0 +1,36 @@
+{
+  "plugin": "SillySounds",
+  "module": "Lola",
+  "description": "A recorder in the signal path: it copies its input to its output until you capture a stretch of that input and play the capture back instead",
+  "params": [
+    {"ids": [0], "text": "rec button — press to start a capture and press again to end it; starting one throws away the previous capture and stops playback"},
+    {"ids": [1], "text": "play button — press to play the capture from its beginning; pressing during playback restarts it, and with no capture stored it does nothing"},
+    {"ids": [2], "text": "Press to end playback, after which out returns to copying the input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal captured and played back, and the signal copied to out at every moment when no capture is playing"},
+    {"ids": [1], "text": "rec input — a rise above 1V starts a capture and the next one ends it; starting a capture throws away the previous one and stops playback"},
+    {"ids": [2], "text": "play input — a rise above 1V plays the capture from its beginning, and a second rise part way through restarts it; with no capture stored it does nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The capture while it is playing, and a copy of the input at every other moment; when the capture runs out playback ends and the copy resumes"}
+  ],
+  "notes": [
+    "the module holds no capture when it is added to a patch, and play does nothing until one exists. Start a capture with the rec button or a rise on the rec input, and end it the same way.",
+    "a capture holds 192000 samples. That is four seconds at a 48kHz sample rate, two at 96kHz, and the capture ends by itself on reaching the limit.",
+    "playback advances by one stored sample for each sample of the engine, so a capture made at one sample rate plays back faster or slower after the rate is changed.",
+    "the capture is held in memory only. It is not written into the patch file and is gone when the patch is closed.",
+    "the output takes its channel count from the input jack rather than from the capture, so a polyphonic capture played back with the input unplugged produces no channels at all.",
+    "the three red lamps show, from the top, that a capture is running, that playback is running, and that the stop button is held down."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "plugin": "CountModula",
+  "module": "SampleAndHold2",
+  "description": "Polyphonic sample and hold with track and hold and pass and hold modes, an internal noise source, and probability, level and offset controls",
+  "params": [
+    {"ids": [0], "text": "S samples the input on each rising trigger edge and holds it; T follows the input while the trigger is high and holds when it falls; P follows while the trigger is low and holds while it is high"},
+    {"ids": [1], "text": "Sets how likely a trigger is to take a sample, 0% to 100%"},
+    {"ids": [2], "text": "Attenuverts the voltage at the probability CV input, -100% to +100%, before it is added to the PROB. setting"},
+    {"ids": [3], "text": "Attenuates the input before it is sampled, 0% to 100%, across every channel"},
+    {"ids": [4], "text": "Adds a constant to the signal before the sample is taken, -10V to +10V; with a cable in the offset CV input it attenuverts that voltage instead"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal that is sampled and held; with nothing patched, an internal noise source running from -5V to +5V is used instead"},
+    {"ids": [1], "text": "Drives the sampling, counting anything crossing 2V as high; nothing is produced until a cable is patched here, and the greater of this jack's channel count and INPUT's sets the output count"},
+    {"ids": [2], "text": "Picks the hold mode by voltage for every channel at once and takes the MODE switch out of circuit: under 2V gives S, 2V to 4V gives T, 4V and over gives P"},
+    {"ids": [3], "text": "Shifts how likely a trigger is to take a sample, added to the PROB. setting; a single channel here applies to every trigger channel"},
+    {"ids": [4], "text": "Shifts the signal before the sample is taken, scaled by the OFFSET knob; a single channel here applies to every output channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the held value, limited to -12V to +12V"},
+    {"ids": [1], "text": "Carries the held value with its sign flipped"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±12V · polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

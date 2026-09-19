@@ -1,0 +1,72 @@
+{
+  "plugin": "TriggerFish-Elements",
+  "module": "Tf4072VoiceCore",
+  "description": "4072 Voice Core: the ARP 4072 low-pass filter, two envelopes and the 4019 amplifier, taking its audio from an oscillator",
+  "params": [
+    {"ids": [0], "text": "Sets the filter cutoff, 10Hz to 20000Hz"},
+    {"ids": [1], "text": "Sets the resonance, 0 to 100%"},
+    {"ids": [2], "text": "Sets the drive into the filter, -60dB to 24dB; fully down mutes the input"},
+    {"ids": [3], "text": "Scales how far the filter envelope moves the cutoff, -100 to +100%"},
+    {"ids": [4], "text": "Attenuverts the cutoff modulation input"},
+    {"ids": [5], "text": "Attenuverts the resonance modulation input"},
+    {"ids": [6], "text": "Sets the gain the amplifier holds with no control applied"},
+    {"ids": [7], "text": "Scales how far the amplifier envelope opens the amplifier"},
+    {"ids": [8], "text": "Scales the VCA modulation input"},
+    {"ids": [9], "text": "Sets the attack of the filter envelope, 1.4ms to 5 seconds"},
+    {"ids": [10], "text": "Sets the decay of the filter envelope, 6.4ms to 6 seconds"},
+    {"ids": [11], "text": "Sets the level the filter envelope holds while the gate stays high"},
+    {"ids": [12], "text": "Sets the release of the filter envelope, 0.52ms to 6 seconds"},
+    {"ids": [13], "text": "Chooses ADSR, AD or AR for the filter envelope"},
+    {"ids": [14], "text": "Changes the curvature of both envelopes without changing their stage times, -100 to +100%"},
+    {"ids": [15], "text": "Sets the attack of the amplifier envelope, 1.4ms to 5 seconds"},
+    {"ids": [16], "text": "Sets the decay of the amplifier envelope, 6.4ms to 6 seconds"},
+    {"ids": [17], "text": "Sets the level the amplifier envelope holds while the gate stays high"},
+    {"ids": [18], "text": "Sets the release of the amplifier envelope, 0.52ms to 6 seconds"},
+    {"ids": [19], "text": "Chooses ADSR, AD or AR for the amplifier envelope"},
+    {"ids": [20], "text": "Chooses whether a patched cutoff modulation adds to the filter envelope or replaces it, marked + and EXT"},
+    {"ids": [21], "text": "Chooses whether a patched VCA modulation adds to the amplifier envelope or replaces it, marked + and EXT"},
+    {"ids": [22], "text": "Reads the cutoff modulation as linear frequency at 200Hz per volt or as exponential pitch, marked LIN and EXP"},
+    {"ids": [23], "text": "Reads the VCA modulation as linear gain or as exponential gain, marked LIN and EXP"},
+    {"ids": [24], "text": "Reads the amplifier envelope as linear gain or as exponential gain, marked LIN and EXP"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio into the filter"},
+    {"ids": [1], "text": "Audio into the amplifier in place of the filter output"},
+    {"ids": [2], "text": "Moves the cutoff, one octave per volt"},
+    {"ids": [3], "text": "Modulates the cutoff, scaled by its attenuverter"},
+    {"ids": [4], "text": "Modulates the resonance, scaled by its attenuverter"},
+    {"ids": [5], "text": "Modulates the amplifier gain, scaled by its knob"},
+    {"ids": [6], "text": "Starts and holds both envelopes; it rises at 1V and releases below 0.1V"},
+    {"ids": [7], "text": "Retriggers both envelopes at 1V; with nothing patched, the gate does the retriggering"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered audio, taken before the amplifier"},
+    {"ids": [1], "text": "The amplifier output"},
+    {"ids": [2], "text": "The filter envelope, 0 to 10V"},
+    {"ids": [3], "text": "The amplifier envelope, 0 to 10V"}
+  ],
+  "notes": [
+    "nothing comes out of the amplifier until a gate is patched: both envelopes rest at zero, and the amplifier is closed unless VCA INIT is raised"
+  ],
+  "menu": [
+    "Oversampling — chooses 2x (lower CPU) or 4x (default)"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "continuous · polyphonic\n\nunpatched it reads the filter output.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "6": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "7": "high above 1V · stepped · polyphonic\n\nunpatched it reads the gate input."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "0 to 10V",
+      "3": "0 to 10V"
+    }
+  }
+}

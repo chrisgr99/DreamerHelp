@@ -1,0 +1,36 @@
+{
+  "plugin": "WavsynModular",
+  "module": "Pleats",
+  "description": "A threshold shaper on the positive side of a signal: once the input plus BIAS rises past SET, the sample is replaced by the level AMT sets, and below that it passes straight through",
+  "params": [
+    {"ids": [0], "text": "Adds 0 to 5V to the input before it is compared with SET, and reaches the output no other way"},
+    {"ids": [1], "text": "Sets the level, 0 to 10V, that the input plus BIAS has to pass for the sample to be replaced"},
+    {"ids": [2], "text": "Sets the level a passing sample is replaced by, 0V fully left to 6V fully right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be processed, of which only the first channel is read"},
+    {"ids": [1], "text": "Replaces the SET knob with this voltage for as long as it is patched"},
+    {"ids": [2], "text": "Replaces the AMT knob for as long as it is patched: the size of the voltage, divided by 10 and multiplied by 6, becomes the replacement level"},
+    {"ids": [3], "text": "Replaces the BIAS knob with this voltage for as long as it is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The processed signal, always one channel"}
+  ],
+  "notes": [
+    "each of the three CV jacks replaces its knob outright rather than adding to it, so patching one takes that knob out of use entirely",
+    "only the positive side is treated: a sample whose total stays below the threshold passes through untouched, and the negative half of a waveform is never touched at all",
+    "with AMT at zero a passing sample is set to 0.1V rather than to zero",
+    "the module browser calls this a wavefolder, but the code replaces the sample with a level rather than reflecting it back, so what comes out is a flat step rather than a fold"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads the SET knob.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads the AMT knob.",
+      "3": "0 to 5V · continuous · one channel only\n\nunpatched it reads the BIAS knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

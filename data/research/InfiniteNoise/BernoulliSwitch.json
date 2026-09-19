@@ -1,0 +1,19 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "BernoulliSwitch",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "BernoulliSwitch.cpp:286 divides getVoltage() by 10 and applies the trim knob before adding it to the probability knob"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the internal clock", "why": "BernoulliSwitch.cpp:270 reads getVoltage() as the clock, and the internal oscillator supplies the edge when the jack is empty"},
+      "2": {"poly": true, "normal": "10V unless changed on the menu", "why": "BernoulliSwitch.cpp:308 reads getPolyVoltage(c) from the chosen jack and BernoulliSwitch.cpp:224 raises the upper output to the larger input"},
+      "3": {"poly": true, "normal": "0V unless changed on the menu", "why": "BernoulliSwitch.cpp:308 reads getPolyVoltage(c) from the chosen jack and BernoulliSwitch.cpp:226 raises the upper output to the larger input"},
+      "4": {"poly": true, "normal": "the clock input", "why": "BernoulliSwitch.cpp:231 takes the lower section's channel count from this jack, falling back to the clock jack at BernoulliSwitch.cpp:233"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "BernoulliSwitch.cpp:227 sets the upper output to the larger of the two upper input channel counts"},
+      "1": {"poly": true, "why": "BernoulliSwitch.cpp:235 sets both lower outputs to the lower section's channel count"},
+      "2": {"poly": true, "why": "BernoulliSwitch.cpp:235 sets both lower outputs to the lower section's channel count"}
+    }
+  },
+  "comment": "The panel prints Prob., Clock, A/B-> for the upper section and ->A/B for the lower. Last-value mode on the unselected lower output is tracked per polyphonic channel."
+}

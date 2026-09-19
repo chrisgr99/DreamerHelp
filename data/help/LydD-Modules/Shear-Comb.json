@@ -1,0 +1,52 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Shear-Comb",
+  "description": "Stereo comb filter built from twelve parallel bandpass filters, with a feedback path that can be sent out to another effect and brought back",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency of the lowest of the twelve bands, -3 to 3 octaves around 130.8125Hz, the eleven above it landing at whole multiples of it"},
+    {"ids": [1], "text": "Sets the sharpness of all twelve bands together, 0 to 0.99, which becomes a filter Q of 4 up to about 48; it also lifts the output level to make up for what the filtering takes away"},
+    {"ids": [2], "text": "Sets how much of the comb's own output goes back into its input, 0 to 1, halved before it is applied"},
+    {"ids": [3], "text": "Fades the even-numbered bands against the odd-numbered ones, -1 to 1: one end leaves only the odd bands, the other only the even, and the centre passes both at half level"},
+    {"ids": [4], "text": "Pushes the eleven upper bands off the whole multiples of the lowest one, -1 to 1, which takes the comb out of tune and makes it more percussive"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, divided by 2.5 before the filters; with no cable this channel is silent and its feedback path carries nothing"},
+    {"ids": [1], "text": "The right audio input, divided by 2.5 before the filters; with no cable the right channel takes the left input, feedback and all"},
+    {"ids": [2], "text": "Clamped to -3V and 3V and added to the Cutoff knob at one volt per octave"},
+    {"ids": [3], "text": "The absolute value of the voltage divided by 10, clamped to 0.9, multiplies the Resonance knob; with no cable the knob is used on its own"},
+    {"ids": [4], "text": "Multiplies the Feedback knob; with no cable the knob is used on its own, and the voltage is not clamped, so a few volts here push the loop far past what the knob alone reaches"},
+    {"ids": [5], "text": "The return of the left feedback loop, added to the left input alongside the internal feedback; it is read only while the left Send jack also has a cable"},
+    {"ids": [6], "text": "The return of the right feedback loop, added to the right input alongside the internal feedback; it is read only while the right Send jack also has a cable"},
+    {"ids": [7], "text": "Divided by 5, clamped to -1 and 1, and multiplied by the Odd/Even knob; with no cable the knob is used on its own"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left comb sum after the drive stage, clamped to -5V and 5V"},
+    {"ids": [1], "text": "The right comb sum after the drive stage, clamped to -5V and 5V"},
+    {"ids": [2], "text": "The left comb sum before the drive stage, at 5V for full scale, meant to feed an effect whose output comes back to the left Return jack"},
+    {"ids": [3], "text": "The right comb sum before the drive stage, at 5V for full scale, meant to feed an effect whose output comes back to the right Return jack"}
+  ],
+  "notes": [
+    "twelve bandpass filters run in parallel, the lowest one at the Cutoff frequency and the other eleven at multiples of it that the Skew knob can pull off true",
+    "the send and return path only runs when both the Send jack and the Return jack of that channel have cables; either one on its own does nothing",
+    "the internal feedback is added to the audio input, so with no cable in that channel's Input jack the filters cannot ring on their own",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads Audio Left.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads a multiplier of 1.",
+      "4": "continuous · one channel only\n\nunpatched it reads a multiplier of 1.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads a multiplier of 1."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only"
+    }
+  }
+}

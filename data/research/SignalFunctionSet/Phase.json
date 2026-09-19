@@ -1,0 +1,31 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Phase",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "phase.cpp declares this as that loop's drift CV; the manual and the code scale it at 50ms per volt into the drift knob"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "phase.cpp:0 declares this as that loop's transient jump clock, read as a rising edge"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "why": "phase.cpp declares this as the sync trigger, which returns both loops to their start"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "phase.cpp declares this as the play gate, high at or above 1V, which takes the play button's place"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "phase.cpp declares this as the loop start, 0-10V across the whole sample"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "phase.cpp declares this as the loop length, 0-10V across the rest of the sample after the start"},
+      "12": {"family": "cv"},
+      "13": {"family": "cv"},
+      "14": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "phase.cpp:1520 reads it with getVoltage, so only channel 1; :851 processRecording divides by 5 before writing the buffer, so ±5V is full scale, and :1521 normals the jack to REC B IN"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "phase.cpp:1528 ORs getVoltage() >= 1V with the armed REC A button rather than replacing it, and :1535 normals the same jack to REC B's gate"},
+      "16": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "the A record input", "why": "phase.cpp declares this input as normalled from the first loop's record audio input"},
+      "17": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "the A record gate", "why": "phase.cpp declares this input as normalled from the first loop's record gate"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "phase.cpp writes one channel with setVoltage from the panned mix of the two loops"},
+      "1": {"family": "audio", "poly": false, "why": "phase.cpp writes one channel with setVoltage from the panned mix of the two loops"}
+    }
+  },
+  "comment": "Recording replaces the buffer rather than overdubbing, and is capped at sixty seconds; it stops of its own accord when the buffer fills. Transients are found by energy onset detection when a sample is loaded, unless the WAV carries cue points, in which case those are used instead. In rotate mode the drift is a small speed offset rather than a gap, which also shifts the pitch a little: ten milliseconds over five seconds is about three and a half cents."
+}

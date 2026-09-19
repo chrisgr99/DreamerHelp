@@ -1,0 +1,53 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "Uno",
+  "description": "Eight step sequencer where every step carries a probability of being skipped, with glide and reset per step",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets the voltage its step puts out, within the range picked in the menu"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "The chance that its step plays rather than being skipped, 0 to 100%"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "While on, its step holds the gate high instead of passing the clock, which glides into the next step"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31], "text": "While on, reaching its step sends the sequence back to the beginning, or to the end when it is running backwards"},
+    {"ids": [32], "text": "Picks the order: forwards, backwards or pendulum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on, skipping any step the probabilities skip over"},
+    {"ids": [1], "text": "A rising edge restarts the sequence, reseeds the random generator from the Seed input and blocks the clock for 1ms"},
+    {"ids": [2], "text": "A rising edge restarts this sequencer and every UnoE chained to its right at the same moment"},
+    {"ids": [3], "text": "Sets its CV knob from the voltage on the matching channel, one channel per step, while a cable is patched"},
+    {"ids": [4], "text": "Sets the step chances, one channel per step, 0V for a step that is always skipped through to 1V for a step that always plays"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "A rising edge jumps the sequence straight to its step on the next clock"},
+    {"ids": [13], "text": "Sets the seed the random generator takes on a reset, so the same run of skips comes back; the seed is the voltage divided by ten and zero gives a fresh run; the tooltip on this jack reads Direction"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the step the sequence has reached"},
+    {"ids": [1], "text": "Follows the clock while the step is playing, and stays high while a step with Glide on is playing"},
+    {"ids": [2], "text": "Carries 10V on the channel of the step the sequence has reached while its gate is high, eight channels wide"}
+  ],
+  "menu": [
+    "Range — sets the span of the CV knobs; the choices run -3V to 3V, -2V to 2V, -1V to 1V, 0V to 1V and 0V to 2V, and it starts at -2V to 2V",
+    "Quantize — rounds every step voltage to the nearest semitone",
+    "Output step address — turns the Step jack into one channel carrying the step number at 0.3125V per step"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only",
+      "11": "high above 1V · stepped · one channel only",
+      "12": "high above 1V · stepped · one channel only",
+      "13": "continuous · one channel only"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

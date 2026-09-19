@@ -1,0 +1,26 @@
+{
+  "plugin": "Biset",
+  "module": "Biset-Segfault",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Segfault.cpp:59 reads the channel count with getChannels and line 65 reads each channel with getVoltage; lines 66-69 take the fraction of a volt as the pitch class"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 5V", "negative": "ignored", "normal": "the pitch alone counts as held", "why": "Segfault.cpp:71 reads each channel with getVoltage and line 73 treats anything above 5V as held; line 90 is the branch taken when the jack is unpatched"}
+    },
+    "outputs": {
+      "1": {"family": "trigger", "poly": true, "why": "Segfault.cpp:60 sets the channel count from the pitch input and line 79 passes the gate voltage through unchanged"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "11": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "12": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"},
+      "13": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Segfault.cpp:77 writes 10V and line 62 clears it to 0V at the top of every frame"}
+    }
+  },
+  "comment": "The module declares a Pitch output at index 0 that no code ever writes and that has no widget on the panel, so it cannot be clicked and gets no line. The panel prints the black keys as C# / Db and so on; the lines spell them out for the voice. Note that the twelve key gates are written before the switch is consulted (Segfault.cpp:75-77), so a switched-off note still raises its own key gate and is only stopped from reaching the GATE output. Nothing at all is written while the pitch input is unpatched, which leaves stale voltages on every jack."
+}

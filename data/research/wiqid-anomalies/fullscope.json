@@ -1,0 +1,14 @@
+{
+  "plugin": "wiqid-anomalies",
+  "module": "fullscope",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "fullscope.cpp:97 reads this input with getVoltage into the buffer"},
+      "1": {"poly": false, "why": "fullscope.cpp:98 reads this input with getVoltage into the buffer"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 6V", "step": "continuous", "normal": "the maker's orange trace", "why": "fullscope.cpp:252-253 divides this jack's voltage by 6 into a hue and strokes the trace with it; nothing clamps, so above 6V the hue wraps round the circle again"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "fullscope.cpp:90 adds this input to the negated time knob in the exponent of a power of two"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "fullscope.cpp:172 adds this input to the rotation knob before rescaling"}
+    }
+  },
+  "comment": "The enum lists TIME_INPUT before ROTATION_INPUT but the widget adds the rotation jack first (fullscope.cpp:328-329), so down the panel strip the fourth hole is input 4 and the fifth is input 3; tagging from the enum order would have swapped the two lines. LISSAJOUS_PARAM, TRIG_PARAM and EXTERNAL_PARAM are declared but never configured and have no widget, so parameters 5, 6 and 7 cannot be reached; the trigger threshold line that would have used TRIG_PARAM is commented out (fullscope.cpp:122). The x and y jacks are left without a family because a scope carries whatever is patched to it."
+}

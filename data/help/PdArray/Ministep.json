@@ -1,0 +1,37 @@
+{
+  "plugin": "PdArray",
+  "module": "Ministep",
+  "description": "Counter that steps a voltage up or down on triggers and wraps round at the top, for stepping through an Array like a sequencer",
+  "inputs": [
+    {"ids": [0], "text": "A rising edge sets the counter back to its first step; it reads high above 2V"},
+    {"ids": [1], "text": "A rising edge moves the counter up by the step size, wrapping round to the first step after the last; it reads high above 2V"},
+    {"ids": [2], "text": "A rising edge moves the counter down by the step size, wrapping round to the last step after the first; it reads high above 2V"},
+    {"ids": [3], "text": "Sets how many steps the counter moves at each trigger, rounded towards zero; 10V is the whole count of steps, or one step per volt when the scale mode is changed, and a negative voltage reverses it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the counter as a voltage: the steps spread evenly from 0V up to 10V, or one volt per step when the output mode is changed"}
+  ],
+  "notes": [
+    "the number under MAX is how many steps the counter runs before it wraps; click it and type a new one, up to 999",
+    "the counter moves only on triggers, so nothing changes until INC or DEC is patched",
+    "with nothing patched into SCL the step size is 1, and patching a cable holding 0V there sets the step size to zero and stops the counter moving",
+    "a polyphonic cable in INC, DEC or RST gives one counter per channel, and a monophonic cable in any of them acts on every counter at once",
+    "a trigger at INC and one at DEC in the same sample leave the counter where it is"
+  ],
+  "menu": [
+    "Scale mode: 10V = max, 1V per step — chooses how SCL is read, either the whole count of steps across 10V or one step per volt",
+    "Output mode: max = 10V, 1V per step — chooses what the OUT jack carries, either the steps spread evenly from 0V up to 10V or one volt per step counting from 0V",
+    "Offset output by half step — raises the output by half a step, so each step lands in the middle of its share of the range rather than at the bottom"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "1": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "2": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "3": "bipolar · stepped · polyphonic\n\nunpatched it reads a step size of 1."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

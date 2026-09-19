@@ -1,0 +1,26 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "Quadro360",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Quadro360.cpp:75 getChannels bounds the loop"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Quadro360.cpp:79 getVoltage(c) inside the channel loop"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Quadro360.cpp:80 getVoltage(c), fmax against 0"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Quadro360.cpp:81 getVoltage(c), fmax against 0"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Quadro360.cpp:99 setChannels from the widest input"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"}
+    }
+  },
+  "comment": "None of the eleven inputs or four outputs is named in configInput or configOutput, so Rack's own tooltips are blank on all of them. The eight signal inputs are placed on the panel at angles that run the opposite way round from the angles the DSP gives them (widget loop at src/Quadro360.cpp:132-137 uses (2-i)*pi/4, process at line 82-83 uses i*0.785), so the drawn ring and the computed ring rotate in opposite directions; nothing on screen shows this. The constructor fills a 32769-float sqrts table but writes only sqrts[0], and the table is never read. Each output's gain is (128 - distance)/128, which is about 0.29 with both radius knobs at 100, and goes negative once the distance passes 128, which is reachable with the radius CVs."
+}

@@ -1,0 +1,37 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndG",
+  "description": "Draws random gates on a clock from a seedable random source, with the chance of a gate set by voltage",
+  "params": [
+    {"ids": [0], "text": "While on, every channel draws its own gate on each clock; while off, one channel of the set is given the gate on each clock, chosen with the channels weighted by their Prob voltages"},
+    {"ids": [1], "text": "Sets how many channels the outputs carry, 1 to 16"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that draws a new set of gates; with Mlt on, a polyphonic cable here draws one gate per channel of the cable"},
+    {"ids": [1], "text": "A trigger here reseeds the random source from the voltage at Seed, so the same run of gates is drawn again"},
+    {"ids": [2], "text": "Sets the seed, 0-10V across the seed range, read only at the instant a trigger arrives at Rst; at 0V, and with nothing patched, the seed is taken from the computer's clock instead"},
+    {"ids": [3], "text": "Sets the chance of a gate, -5V to 5V with 0V an even chance and more voltage giving more gates; one channel per output channel, and unpatched it reads 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V on a channel whose draw came up and 0V on the rest, held until the next clock"},
+    {"ids": [1], "text": "A 10ms trigger on a channel at the moment its gate turns on"},
+    {"ids": [2], "text": "Passes the voltage at Clk through on channels whose gate is high, and 0V on the rest"}
+  ],
+  "notes": [
+    "no gate is drawn until a cable is patched into Clk; with Clk empty the outputs hold whatever they last carried",
+    "with Mlt on and a polyphonic clock, the outputs are given the channel count from the Chn knob before the gates are drawn for the clock's channels, so the two can disagree"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "stepped · polyphonic"
+    }
+  }
+}

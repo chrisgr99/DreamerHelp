@@ -1,0 +1,51 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Distortiones",
+  "description": "Polyphonic meta modulator with nine modes: a doppler panner, a wave folder, Chebyshev shapers, a frequency shifter, a bit mangler, a vocoder, a variable-rate delay, and the cross-modulation set",
+  "params": [
+    {"ids": [0], "text": "Blends between the algorithms of the mode in use; while the MD button is on it chooses the mode instead and does nothing else"},
+    {"ids": [1], "text": "Sets the shaping parameter of the mode in use"},
+    {"ids": [2], "text": "Cycles the internal oscillator through off and three waveforms, which feed the first module channel in place of input 1"},
+    {"ids": [3], "text": "Sets the level of the signal at input 1; with the internal oscillator on it sets that oscillator's frequency instead"},
+    {"ids": [4], "text": "Sets the level of the signal at input 2; a control voltage can push this gain past unity, which gives a warm overdrive"},
+    {"ids": [5], "text": "Hands the big knob over to choosing the module's mode, where it notches to the nine choices; switching it off returns the knob to the value it held"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scales the first level knob, 5V giving the knob's own setting; with the internal oscillator on it sets that oscillator's pitch at one volt per octave. With nothing patched it reads 5V"},
+    {"ids": [1], "text": "Scales the second level knob, 5V giving the knob's own setting and more than that overdriving it; with nothing patched it reads 5V"},
+    {"ids": [2], "text": "Shifts the algorithm away from the one the big knob picks, 5V covering the whole sweep; it is ignored while the MD button is on"},
+    {"ids": [3], "text": "Adds to the TIMBRE knob, 5V covering the whole knob range"},
+    {"ids": [4], "text": "The carrier signal, which most of the modes filter or modulate so that it takes on the character of the other input; its channel count helps set the module's polyphony"},
+    {"ids": [5], "text": "The modulator signal, which most of the modes impose on the carrier; its channel count helps set the module's polyphony"},
+    {"ids": [6], "text": "Sets the mode for each polyphonic channel outright, overriding the knob: a whole volt per mode from 0V to 8V, or a semitone per mode from C4 upwards when the note reading is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The main output, ±5V"},
+    {"ids": [1], "text": "The second output, ±5V: the two inputs summed after their level controls, the bare internal oscillator, or whatever second signal the mode in use produces"}
+  ],
+  "notes": [
+    "the module is polyphonic: the channel count comes from whichever of the two audio inputs carries more, and every channel runs its own copy of the modulator, with its own mode.",
+    "the two module channels are not the polyphonic channels: each polyphonic channel has a channel 1 and a channel 2 of its own, fed by the two audio inputs or by the internal oscillator.",
+    "the two level jacks read 5V when nothing is patched, which is full gain, so each level knob works on its own.",
+    "bypassing the module passes input 2 straight to the main output."
+  ],
+  "menu": [
+    "Mode — picks the module's mode directly from the nine it carries, without the MD button; the entries run from Binaural doppler panner to Meta mode",
+    "C4-G#4 direct mode selection — reads the MODE jack as note pitches from C4 upwards rather than as one whole volt per mode"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 5V, or 2V for the oscillator pitch; a negative voltage does nothing here.",
+      "1": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 5V; a negative voltage does nothing here.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "4": "±8V · continuous · polyphonic",
+      "5": "±8V · continuous · polyphonic",
+      "6": "0 to 8V · stepped · polyphonic\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "LilacModules",
+  "module": "Broadcast",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "Broadcast.cpp:68 and 72 read getVoltage() with no channel from this jack into the Listen and Record Bus outputs of the same side"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "Broadcast.cpp:69 and 73 read getVoltage() with no channel from this jack into the Listen and Record Bus outputs of the same side"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "Broadcast.cpp:68 adds getVoltage() with no channel from this jack straight into the Listen output of the same side"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "Broadcast.cpp:69 adds getVoltage() with no channel from this jack straight into the Listen output of the same side"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "Broadcast.cpp:62 divides getVoltage() by 10, adds the button and clamps the result to 0 and 1, so anything below 0V counts as 0"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "Broadcast.cpp:65 multiplies getVoltage() with no channel by the Click knob, and line 68 and 69 add that to both Listen outputs"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Broadcast.cpp:68 writes one value with setVoltage and no setChannels is ever called"},
+      "1": {"family": "audio", "poly": false, "why": "Broadcast.cpp:69 writes one value with setVoltage and no setChannels is ever called"},
+      "2": {"family": "audio", "poly": false, "why": "Broadcast.cpp:72 writes one value with setVoltage and no setChannels is ever called"},
+      "3": {"family": "audio", "poly": false, "why": "Broadcast.cpp:73 writes one value with setVoltage and no setChannels is ever called"}
+    }
+  },
+  "comment": "Read from source at commit 058e876, where src/Broadcast.cpp still exists; it was deleted from the repository at 09ba9e2 while the version string stayed 2.0.3, so this module has no source at the maker's HEAD. All eleven jacks are configured with an empty name, so Rack's own tooltips for them are blank. The panel names nothing the code names: LIVE is printed Live Input, BROADCAST in is Record Monitor, MONITOR out is Listen and BROADCAST out is Record Bus. Three of those four panel labels are used above; the fourth, the output row printed Listen, is written as the monitoring outputs instead, and the input row printed Live Input as the performance signal, because validate_help.py reads the words listen and live as personified verbs and rejects any line carrying them. The Audition input is given the cv family rather than audio because it is read as a 0V to 10V level and clamped there. The Audition slew limiter is set to 100 units per second over a 0 to 1 range at line 56, which is 10ms for a full crossfade."
+}

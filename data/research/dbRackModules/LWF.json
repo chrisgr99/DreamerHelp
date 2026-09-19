@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "LWF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "LWF.cpp:196 takes the channel count from this input and LWF.cpp:198 reads it four channels at a time"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "LWF.cpp:199 reads it four channels at a time, scales it by a tenth and the Input gain CV knob, adds the In-Gain knob and clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "LWF.cpp:200 reads it four channels at a time, scales it by the Offset CV knob, adds the Offset knob and clamps the total to -5..5"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "LWF.cpp:201 reads it four channels at a time, scales it by 5000 and the Resistor CV knob, adds the Resistor knob and clamps the total to 10000..100000 ohms"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "LWF.cpp:202 reads it four channels at a time, scales it by 500 and the Load resistor CV knob, adds the Load Resistor knob and clamps the total to 1000..10000 ohms"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "LWF.cpp:203 reads it four channels at a time, scales it by a tenth and the Output gain CV knob, adds the Out-Gain knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "LWF.cpp:214 sets this output's channel count from the In jack"}
+    }
+  },
+  "comment": "The two resistance sums are clamped in ohms rather than volts, LWF.cpp:201-202, so no range field is given for those jacks. The folded signal is soft clipped at LWF.cpp:211 before the output gain and the DC blocker. This is a port of the Lockhart Wavefolder from the JE plugin for Rack v1. The module also configures a bypass from input to output."
+}

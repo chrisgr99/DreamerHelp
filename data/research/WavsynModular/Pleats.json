@@ -1,0 +1,16 @@
+{
+  "plugin": "WavsynModular",
+  "module": "Pleats",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Pleats.cpp:72 reads channel one only with getVoltage(0) and the voltage is used unchanged"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "the SET knob", "why": "Pleats.cpp:79 uses this voltage in place of the Setpoint knob whenever the jack is connected"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "the AMT knob", "why": "Pleats.cpp:84 takes the size of this voltage, divides by 10 and multiplies by 6 in place of the Amount knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "swings", "normal": "the BIAS knob", "why": "Pleats.cpp:81 REPLACES the BIAS knob with this jack's raw voltage while a cable is in, unclamped, and :95 adds it to the audio before the fold threshold is compared; the 0 to 5V is the knob's own configParam range at :56"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Pleats.cpp:108-109 writes one voltage and sets the channel count to one"}
+    }
+  },
+  "comment": "The folding arithmetic reduces to a replacement rather than a fold: Pleats.cpp:92-103 computes delta as the sample minus the fold amount and then subtracts delta from the sample, which leaves the fold amount itself. The maker's own comment on line 104 asks what about the negative half, and nothing in the code treats it. The Amount CV jack takes the absolute value of its voltage, so it cannot drive the level below zero."
+}

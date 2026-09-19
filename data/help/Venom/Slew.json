@@ -1,0 +1,52 @@
+{
+  "plugin": "Venom",
+  "module": "Slew",
+  "description": "Polyphonic slew limiter that caps how fast the input can change, with separate rise and fall times and shapes, plus gates reporting the slope",
+  "params": [
+    {"ids": [0], "text": "Switches the rise and fall time knobs to a much faster range, suited to slewing audio rate inputs"},
+    {"ids": [1], "text": "Sets oversampling to off, x2, x4, x8, x16 or x32, which matters when the input is audio"},
+    {"ids": [2], "text": "Sets the milliseconds taken to rise 10V: 7.8125ms fully counter-clockwise, 250ms at noon, 8000ms fully clockwise, or 0.060223ms to 61.155ms with FAST on"},
+    {"ids": [3], "text": "Sets the milliseconds taken to fall 10V: 7.8125ms fully counter-clockwise, 250ms at noon, 8000ms fully clockwise, or 0.060223ms to 61.155ms with FAST on"},
+    {"ids": [4], "text": "Inverts and attenuates the rise time CV, -100% to 100%, at 0% by default"},
+    {"ids": [5], "text": "Inverts and attenuates the fall time CV, -100% to 100%, at 0% by default"},
+    {"ids": [6], "text": "Sets how curved the rise is, linear fully counter-clockwise and 100% curve fully clockwise; a curved rise moves large changes faster than small ones"},
+    {"ids": [7], "text": "Sets how curved the fall is, linear fully counter-clockwise and 100% curve fully clockwise; a curved fall moves large changes faster than small ones"},
+    {"ids": [8], "text": "Inverts and attenuates the rise shape CV, -100% to 100%"},
+    {"ids": [9], "text": "Inverts and attenuates the fall shape CV, -100% to 100%"},
+    {"ids": [10], "text": "Switches the rise, fall and flat gate outputs between 0-10V and -5V to +5V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the rise time through its attenuverter; each volt doubles the time and each negative volt halves it"},
+    {"ids": [1], "text": "Modulates the fall time through its attenuverter; each volt doubles the time and each negative volt halves it"},
+    {"ids": [2], "text": "Modulates the rise curve through its attenuverter at 10% curve per volt, summed with the knob"},
+    {"ids": [3], "text": "Modulates the fall curve through its attenuverter at 10% curve per volt, summed with the knob"},
+    {"ids": [4], "text": "The raw signal to be slewed"},
+    {"ids": [5], "text": "Scales both the rise and fall times with pitch: each volt halves them and each negative volt doubles them"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A gate that goes high while the slewed output is rising and low the rest of the time"},
+    {"ids": [1], "text": "A gate that goes high while the slewed output is falling and low the rest of the time"},
+    {"ids": [2], "text": "A gate that goes high while the slewed output is steady and low the rest of the time"},
+    {"ids": [3], "text": "The slewed signal"}
+  ],
+  "menu": [
+    "Oversampled slope sensitivity (min delta) — the smallest voltage change per sample the gate outputs will count: 10mV, 1mV, 0.1mV, 0.01mV or 0.001mV, to trim gate noise on audio",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "stepped · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

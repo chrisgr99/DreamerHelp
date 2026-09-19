@@ -1,0 +1,30 @@
+{
+  "plugin": "wildergarden",
+  "module": "Pascal",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Pascal.cpp:165 clockTrigger.process(voltage, 0.1f, 1.f); :186 the step happens on the falling edge"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Pascal.cpp:205 insertTrigger.process(insertVolt, 0.1f, 1.f)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Pascal.cpp:160 inputs[FREEZE_CV_INPUT].getVoltage() > 1.0f"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/Pascal.cpp:174 round(knob + voltage*32/10) then clamped to 1..32"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/Pascal.cpp:180 round(knob + voltage*32/10) then clamped to 1..32"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/Pascal.cpp:180, same loop"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/Pascal.cpp:180, same loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:242 setVoltage(trig1 ? 10 : 0)"},
+      "1": {"family": "pitch", "poly": false, "range": "0 to 10V", "why": "src/Pascal.cpp:217,271 (val%div - 1)*10/div"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:253 setVoltage(trig3 ? 10 : 0)"},
+      "3": {"family": "pitch", "poly": false, "range": "0 to 10V", "why": "src/Pascal.cpp:217,273 (val%div - 1)*10/div"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:248 setVoltage(trig2 ? 10 : 0)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:254 trig3 && val%div3 == 1"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:255 trig3 && val%div3 == 2"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:256 trig3 && val%div3 == 3"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:257 trig3 && val%div3 == 4"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:258 trig3 && val%div3 == 5"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Pascal.cpp:259 trig3 && val%div3 == 6"},
+      "11": {"family": "pitch", "poly": false, "range": "0 to 10V", "why": "src/Pascal.cpp:217,272 (val%div - 1)*10/div"}
+    }
+  },
+  "comment": "The manual says the pitch outputs range between 0 and 5V. The code computes (val % divisions - 1) * 10 / divisions at src/Pascal.cpp:217, which reaches 9.375V at a modulus of 32, so the range is 0V to just under 10V and the pitch line here says 10V. The manual also calls the triggers triggers; they are gates, held high for as long as the clock is high. Index order is nothing like panel order: the three counters are laid out 1, 3, 2 down the panel while their parameters are indexed 4, 5, 6 as 1, 3, 2, and output 11 (pitch 2) sits at the bottom left while outputs 5 to 10 are the six individual triggers on the right. The maker's output name for index 11 is misspelt \"Pitch 2 outut\". COUNTER3_INDICATOR1_LIGHT is written twice at :262 and :263, the first write testing for a remainder of 6 and being overwritten at once, which has no effect on any jack. The 384 grid lights, the five binary lamps under each knob and the counter indicator lamps are all lights, so none of them carries a parameter."
+}

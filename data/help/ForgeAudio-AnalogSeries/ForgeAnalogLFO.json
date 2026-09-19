@@ -1,0 +1,52 @@
+{
+  "plugin": "ForgeAudio-AnalogSeries",
+  "module": "ForgeAnalogLFO",
+  "description": "An LFO with one output, sweeping continuously from sine through to narrow pulse, with modelled analog character and drift, and a clock input that locks its rate to a ratio of the tempo.",
+  "params": [
+    {"ids": [0], "text": "Sweeps the waveform in four equal quarters, sine to triangle to saw to square to pulse; over the last quarter the pulse narrows from 50% duty to 5%."},
+    {"ids": [1], "text": "Crossfades each shape from clean to a modelled analog one and bleeds in the neighbouring shapes; the effect is the square of the setting, so half way gives about a quarter of it."},
+    {"ids": [2], "text": "Scales a bundle of analog imperfections together: slow pitch wander, cycle-to-cycle timing jitter, a wandering offset on the output, and a lag on frequency changes; it is eased back while clocked."},
+    {"ids": [3], "text": "Sets the frequency free-running, 0.01Hz to 20Hz. With a clock patched it snaps instead to one of 15 ratios of the clock, from 16 times slower to 16 times faster, with the centre at x1."},
+    {"ids": [4], "text": "Attenuates the MORPH input, 0 to 100%; at 100% 5V covers the whole of the MORPH knob's travel. It comes up at 0%, passing nothing."},
+    {"ids": [5], "text": "Attenuates the CHAR input, 0 to 100%; at 100% 5V covers the whole of the CHARACTER knob's travel. It comes up at 0%, passing nothing."},
+    {"ids": [6], "text": "Attenuates the DRIFT input, 0 to 100%; at 100% 5V covers the whole of the DRIFT knob's travel. It comes up at 0%, passing nothing."},
+    {"ids": [7], "text": "Shifts where in the cycle the output is read, 0 to 360 degrees, without moving the cycle itself."},
+    {"ids": [8], "text": "Attenuates the PHASE input, 0 to 100%; at 100% 5V covers the full 360 degrees. It comes up at 0%, and does nothing at all unless a cable is in the PHASE input."},
+    {"ids": [9], "text": "Attenuates the FM input, 0 to 100%; at 100% a volt shifts the rate by six tenths of an octave free-running and half an octave while clocked. It comes up at 0%, passing nothing."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the MORPH knob through the trim above it, a fifth of the knob's travel per volt at 100%, with the total held between 0 and 100%."},
+    {"ids": [1], "text": "Adds to the DRIFT knob through the trim above it, a fifth of the knob's travel per volt at 100%, with the total held between 0 and 100%."},
+    {"ids": [2], "text": "Adds to the CHARACTER knob through the trim above it, a fifth of the knob's travel per volt at 100%, with the total held between 0 and 100%."},
+    {"ids": [3], "text": "Locks the rate to the incoming tempo, registering above 1V and re-arming below 0.1V; the first pulse restarts the cycle and the lock settles after four steady pulses."},
+    {"ids": [4], "text": "Restarts the cycle at its beginning on a rising edge above 1V, crossfading over 3ms so there is no click."},
+    {"ids": [5], "text": "Adds to the PHASE knob through the trim above it, 72 degrees per volt at 100%, with the total held between 0 and 360 degrees."},
+    {"ids": [6], "text": "Modulates the rate exponentially through the FM trim; at 100% a volt shifts it by six tenths of an octave free-running and half an octave while clocked."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The waveform, ±5V, with the wandering offset from DRIFT added on top of it."}
+  ],
+  "notes": [
+    "Every CV trim comes up at 0%. A cable in MORPH, CHAR, DRIFT, FM or PHASE does nothing at all until the trim directly above that jack is raised.",
+    "With CLK empty the module free-runs and RATE sets the frequency in Hz. With a clock patched RATE picks a ratio instead, and the display changes to the ratio and the tempo.",
+    "A tempo that changes for several pulses in a row is followed, while a single early or late pulse is discarded, so one stray edge does not throw the lock off.",
+    "The display shows the waveform, a dot at the current phase, and either the rate in Hz or the ratio, the tempo and a SYNC badge. Nothing on it can be clicked."
+  ],
+  "menu": [
+    "Swing: Straight 50%, Light 54%, Medium 58%, Triplet 66%, Heavy 71%, Max 75% — sets how far through the cycle its midpoint falls; it has no effect while free-running."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads nothing; the LFO free-runs from RATE; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads nothing; only a clock edge restarts the cycle; a negative voltage does nothing here.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads nothing; the PHASE trim is skipped; a negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads nothing; the FM trim has no effect."
+    },
+    "outputs": {
+      "0": "±5V · one channel only"
+    }
+  }
+}

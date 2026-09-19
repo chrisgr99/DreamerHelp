@@ -1,0 +1,17 @@
+{
+  "plugin": "PdArray",
+  "module": "Ministep",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "why": "Ministep.cpp:142-144 reads it with getPolyVoltage(c) inside a loop bounded by the channel count taken at line 132, rescaling 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "why": "Ministep.cpp:145-147 reads it with getPolyVoltage(c) inside a loop bounded by the channel count taken at line 132, rescaling 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "why": "Ministep.cpp:148-150 reads it with getPolyVoltage(c) inside a loop bounded by the channel count taken at line 132, rescaling 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "a step size of 1", "why": "Ministep.cpp:152-160 reads it with getPolyVoltage(c) and truncates to an integer, taking 1 when the jack is unpatched; a negative value is kept and reverses the direction"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 10V", "why": "Ministep.cpp:176-178 writes one voltage per channel and line 180 sets the channel count; the value is the step number scaled to 10V, or the step number itself in the other output mode"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The output range in the default output mode runs from 0V to just under 10V: the last step is one step short of 10V because the step number is divided by the whole count (Ministep.cpp:176-178). In the 1V per step mode the top voltage is one less than the count of steps. The MAX box is a plain text widget rather than a parameter, so no click on it reaches this help; it is covered by a note. SCL is read per channel but its own channel count is not part of the counter's channel count, so a polyphonic SCL against a monophonic INC gives one counter scaled by the first SCL channel."
+}

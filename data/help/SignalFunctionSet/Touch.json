@@ -1,0 +1,62 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Touch",
+  "description": "Shapes how each note of a melody is reached rather than which note it is — picked fresh, slid into, hammered, pedalled or left out — and passes the melody on with that applied",
+  "params": [
+    {"ids": [0], "text": "Picks the first of the two playing traditions the morph knob blends between, from ten ordered by how much sliding they use"},
+    {"ids": [1], "text": "Picks the second of the two playing traditions the morph knob blends between, from the same ten"},
+    {"ids": [2], "text": "Blends between the two chosen traditions, from the first fully anticlockwise to the second fully clockwise"},
+    {"ids": [3], "text": "Leans the decision toward or away from sliding, -3 to 3, on top of whatever the traditions say"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The melody's pitch as a volt per octave, one note at a time"},
+    {"ids": [1], "text": "A rise starts a note and a fall ends it"},
+    {"ids": [2], "text": "A rise forces the next note to be struck fresh rather than slid into"},
+    {"ids": [3], "text": "Sets how hard each note is struck, 0-10V, which is passed on and also weighs on the decision"},
+    {"ids": [4], "text": "Sets the beat strength that weighs on the decision, and gives the glide a deadline to arrive by"},
+    {"ids": [5], "text": "A rise marks the start of a phrase, which weighs on the decision"},
+    {"ids": [6], "text": "A rise clears the run of past decisions so the next note starts a fresh phrase"},
+    {"ids": [7], "text": "Sets the root the scale-degree tests are measured against, a volt per octave"},
+    {"ids": [8], "text": "Blends between the two traditions, ±5V added to the morph knob"},
+    {"ids": [9], "text": "Leans the decision toward or away from sliding, ±5V added to the bias knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The melody with the glide and any vibrato applied, ready for a voice's pitch input"},
+    {"ids": [1], "text": "A trigger only on a note that is struck fresh, so a note slid into does not retrigger the voice"},
+    {"ids": [2], "text": "A gate that stays high across a slide rather than dropping between the two notes"},
+    {"ids": [3], "text": "The velocity of the current note, passed on from the velocity input"},
+    {"ids": [4], "text": "A 0-10V rise while a glide is in flight, for driving whatever the voice does during a slide"},
+    {"ids": [5], "text": "The pitch, moving only when the decision is a pedalled note, for a voice that treats pedalling separately"}
+  ],
+  "notes": [
+    "the module makes no sound: it takes a melody in and puts the same melody out with the playing decisions applied, so its outputs go to a voice's pitch, gate and velocity inputs",
+    "a decision that is physically impossible is refused whatever the knobs say: a slide that cannot reach the next note inside the time the clock allows is never chosen",
+    "the ten traditions are ordered by how much sliding they use, so the morph knob moves smoothly across them; the underlying figures are deliberately not shown anywhere"
+  ],
+  "menu": [
+    "Temperature — hedging, not commitment — a slider from 0.05 to 4 setting how firmly a decision is made; raising it turns committed slides into hedged ones and into rests",
+    "Re-seed — draws a fresh random seed, so the same melody is played with a different set of decisions"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 5V; a negative voltage does nothing here.",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "1V per octave · continuous · one channel only"
+    }
+  }
+}

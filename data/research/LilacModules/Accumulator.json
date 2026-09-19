@@ -1,0 +1,17 @@
+{
+  "plugin": "LilacModules",
+  "module": "Accumulator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Accumulator.cpp:96 takes getChannels() from this jack as the channel count and line 107 adds getVoltage(c) times sampleTime into the total, so a negative voltage counts down"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 0V", "why": "Accumulator.cpp:112 clears all sixteen channels on a mono rise above 0V, and line 121 loops to getChannels() so a poly cable clears one channel each"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Accumulator.cpp:96 takes getChannels() from this jack as the channel count and line 107 adds getVoltage(c) times sampleTime into the total, so a negative voltage counts down"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 0V", "why": "Accumulator.cpp:112 clears all sixteen channels on a mono rise above 0V, and line 121 loops to getChannels() so a poly cable clears one channel each"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Accumulator.cpp:104 calls setChannels with the RATE input's channel count and line 108 writes one total per channel"},
+      "1": {"family": "cv", "poly": true, "why": "Accumulator.cpp:104 calls setChannels with the RATE input's channel count and line 108 writes one total per channel"}
+    }
+  },
+  "comment": "Read from source at commit 058e876, the commit whose plugin.json carries the installed 2.0.3 with these three models and no others; every later commit labelled 2.0.3 adds a fourth or fifth model that this build does not have. A FAULT IN THE SHIPPED CODE. Accumulator.cpp:101 is a return rather than a continue inside the two-section loop, so when the first section's channel count is zero the whole process function exits and the second section is never reached. The channel count only ever rises from the first section's RATE input (line 96) or from a saved patch, and drops to zero on a reset there, so on a new module the lower half is silent until something is patched to the upper half's RATE input. The maker's README describes the two sections as identical and independent and does not mention it."
+}

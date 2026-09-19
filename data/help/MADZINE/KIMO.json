@@ -1,0 +1,50 @@
+{
+  "plugin": "MADZINE",
+  "module": "KIMO",
+  "description": "Kick drum voice with its own sixteen-step Euclidean pattern and an accent envelope that has to open before anything is heard",
+  "params": [
+    {"ids": [0], "text": "Sets what share of the sixteen steps carry a kick, 0% to 100%"},
+    {"ids": [1], "text": "Chooses which of every four clocks fires the accent envelope, counting from 1 to 7 round the four"},
+    {"ids": [2], "text": "Sets how long the accent envelope takes to fall, 10ms to 2 seconds"},
+    {"ids": [3], "text": "Sets the pitch of the sine oscillator, 24Hz to 500Hz"},
+    {"ids": [4], "text": "Sets how far the pitch envelope sweeps the oscillator, up to twenty octaves above the TUNE setting at the top of its travel"},
+    {"ids": [5], "text": "Drives the sine into a saturator, leaving it alone at the bottom of its travel and folding it towards a square at the top"},
+    {"ids": [6], "text": "Sets how long both of the kick's envelopes take to fall, 10ms to 2 seconds"},
+    {"ids": [7], "text": "Bends the fall of the pitch envelope: at the bottom of its travel it collapses almost at once, at the top it falls close to a straight line"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V advances the sixteen-step pattern and the four-step accent count"},
+    {"ids": [1], "text": "Added to the TUNE knob, one volt per octave; the pitch is held between 24Hz and 500Hz"},
+    {"ids": [2], "text": "Added to the FM knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [3], "text": "Added to the PUNCH knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [4], "text": "Added to the DECAY knob, a tenth of a second per volt; the total is held between 10ms and 2 seconds"},
+    {"ids": [5], "text": "Added to the FILL knob, 10% per volt; the total is held between 0% and 100%"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The kick's amplitude envelope, 0V to 10V, rising in 1ms and falling in the time set by DECAY"},
+    {"ids": [1], "text": "The pitch envelope, 0V to 10V, bent by SHAPE"},
+    {"ids": [2], "text": "The accent envelope, 0V to 10V"},
+    {"ids": [3], "text": "The kick itself, the saturated sine through both the amplitude envelope and the accent envelope"}
+  ],
+  "notes": [
+    "the audio output is multiplied by the accent envelope as well as by the amplitude envelope, so a step is only heard where it falls inside the accent envelope's fall.",
+    "a short DELAY setting therefore silences most of the pattern, however dense FILL is made.",
+    "nothing steps and no envelope fires until a clock reaches CLK."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "stepped · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "continuous"
+    }
+  }
+}

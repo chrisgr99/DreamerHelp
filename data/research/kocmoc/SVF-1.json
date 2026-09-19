@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "SVF-1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SVF.cpp:106 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "SVF.cpp:117 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "SVF.cpp:74 getChannels() here sets the loop bound; SVF.cpp:127 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SVF.cpp:133 setVoltage(..., ii) per channel, SVF.cpp:137 setChannels(channels)"}
+    }
+  },
+  "comment": "The panel prints SVF; the model slug is SVF-1. The plugin README says the filters use an IIR or FIR antialiasing filter, but fir.cpp is never referenced by any filter core in this version — only IIRLowpass is instantiated, so the decimation is always IIR. Cutoff is held as a normalised integration rate rather than a frequency (SVF.cpp:90 maps the knob to 0.001 to 2.251, svfilter.cpp:171 scales it by 44100 over the working rate), so no cutoff in hertz can be quoted from the source. The resonance sign flip is svfilter.cpp:223, fb = 1 - 3.5 * Resonance."
+}

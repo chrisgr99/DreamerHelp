@@ -1,0 +1,60 @@
+{
+  "plugin": "LilacLoop",
+  "module": "LooperTwo",
+  "description": "Unfinished module the maker marks as work in progress: a wider Looper carrying the feedback control, the send and return, an arm input and clock and phase outputs on its own panel",
+  "params": [
+    {"ids": [0], "text": "Records on the first press, closes the loop and starts it playing on the second, and afterwards each press moves between playing and overdubbing"},
+    {"ids": [1], "text": "Clears the loop memory so a new loop can be recorded, and the cleared audio cannot be brought back"},
+    {"ids": [3], "text": "Stops recording and playback, and leaves the loop ready to play again from its beginning"},
+    {"ids": [4], "text": "Scales how much of the loop is written back on each pass, 0% to 100%, and the whole loop is written back whatever this reads while the looper is stopped"},
+    {"ids": [5], "text": "Nothing in the module reads this button except the lamp it toggles; audio at RETURN is written into the loop whenever a cable is patched there and the looper is not stopped"},
+    {"ids": [7], "text": "Balances the incoming signal against the loop: fully anticlockwise gives the incoming signal alone, the centre gives both at full level, fully clockwise gives the loop alone"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 0V moves the looper to its next state in the order the large button follows: recording, then playing, then overdubbing"},
+    {"ids": [1], "text": "A rising edge above 0V stops recording and playback, and leaves the loop ready to play again from its beginning"},
+    {"ids": [2], "text": "A rising edge above 0V clears the whole loop memory; with a polyphonic cable each channel clears only the track of the same number"},
+    {"ids": [3], "text": "The left signal recorded into the loop and passed through to the left output; the number of channels here sets how many tracks the left side records"},
+    {"ids": [4], "text": "The right signal recorded into the loop and passed through to the right output; the number of channels here sets how many tracks the right side records"},
+    {"ids": [5], "text": "Moves the mix a fifth of its travel per volt and is added to the MIX knob"},
+    {"ids": [6], "text": "Nothing in the module reads this input except the lamp it lights, which stays lit until the next press of the large button"},
+    {"ids": [8], "text": "The left signal written into the loop in place of the loop's own audio, taken whenever a cable is patched here and the looper is not stopped"},
+    {"ids": [9], "text": "The right signal written into the loop in place of the loop's own audio, taken whenever a cable is patched here and the looper is not stopped"},
+    {"ids": [10], "text": "Adds a tenth of the feedback range per volt to the FEEDBACK knob, and the total is clamped between 0% and 100%"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the loop mixed with the left input at the balance set by MIX, despite the tooltip naming it Clock"},
+    {"ids": [1], "text": "The right side of the loop mixed with the right input at the balance set by MIX, despite the tooltip naming it Phase"},
+    {"ids": [2], "text": "The left side of the loop as it is read out, before anything is written back, for feeding an effect"},
+    {"ids": [3], "text": "The right side of the loop as it is read out, before anything is written back, for feeding an effect"},
+    {"ids": [4], "text": "A 10V pulse each time the loop returns to its start"},
+    {"ids": [5], "text": "The position inside the loop, 0V at its start rising to 10V at its end"}
+  ],
+  "notes": [
+    "there is no loop to play until one has been recorded. With the loop memory empty the large button starts recording, and ERASE puts the module back into that state"
+  ],
+  "menu": [
+    "Switching order — what the second press of the large button does: Record then Play then Overdub, or Record then Overdub then Play",
+    "Save audio with patch — On writes the loop memory to a file whenever the patch is saved, so the loop is there when the patch is opened again; Off leaves it unsaved",
+    "File settings — how an exported file is written: Format WAV or AIFF, Bit depth 16 bit or 24 bit, and Polyphony Sum or Multi-track",
+    "Export audio file — writes the loop memory to a file you name, and refuses while the loop memory is empty or while the looper is recording"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "high above 0V · stepped",
+      "2": "high above 0V · stepped",
+      "3": "continuous",
+      "4": "continuous",
+      "8": "continuous",
+      "9": "continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "stepped"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "ComparingCounter",
+  "description": "A comparator feeding a pulse counter: A minus B is weighed against a threshold, and each time that comparison goes high the count climbs one whole-tone step until it passes its limit",
+  "params": [
+    {"ids": [0], "text": "Sets the threshold the difference between the two signal inputs has to beat, -5V to +5V"},
+    {"ids": [1], "text": "Sets how far the count climbs before it drops back to zero, 1 to 31 steps"},
+    {"ids": [2], "text": "Scales the A input before B is subtracted from it, from silence to the whole signal"},
+    {"ids": [3], "text": "Scales the MAX CV input, -1 to +1, before it is added to the counter limit knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One side of the comparison, scaled by its attenuator before B is taken away from it"},
+    {"ids": [1], "text": "Moves the counter limit, added to the limit knob through its attenuverter"},
+    {"ids": [2], "text": "The other side of the comparison, subtracted from the scaled A input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V while the scaled A input minus B is above the threshold, and 0V otherwise"},
+    {"ids": [1], "text": "5V at the moment the count drops back to zero while the comparator is high, and 0V otherwise"},
+    {"ids": [2], "text": "The count as a voltage, 0V to 5.17V in steps of 0.166V, which is a whole tone a step when it is patched as a pitch"}
+  ],
+  "notes": [
+    "the counter limit knob starts fully down, where the count is cleared as soon as it moves, so VALUE stays at 0V and END repeats the comparator until the limit is turned up",
+    "the A attenuator also starts fully down, so a fresh module ignores whatever is patched into A",
+    "patching the A-B>T output back into B and setting the threshold negative makes the comparator flip every sample, which turns the module into an oscillator with the counter as its divider"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · one channel only"
+    }
+  }
+}

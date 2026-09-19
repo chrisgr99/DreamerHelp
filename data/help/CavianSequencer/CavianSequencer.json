@@ -1,0 +1,56 @@
+{
+  "plugin": "CavianSequencer",
+  "module": "CavianSequencer",
+  "description": "An eight-channel step sequencer whose whole pattern is edited on an eight by eight grid: eight groups, each holding eight presets, each holding eight channels of eight steps",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock, 1 to 400 beats per minute, taking one step every sixteenth note; a cable in the clock input takes over and this knob is then ignored"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence one step on each rising edge past 1V, in place of the internal clock, and stops the BPM knob having any effect while a cable is patched here"},
+    {"ids": [1], "text": "Sets the sequence back so that the next step is step 1 and drops all eight channel outputs to 0V, on a rising edge past 1V, whether the sequencer is running or stopped"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 2ms pulse at 10V on every step the sequencer takes"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "That channel's step: 10V for 10ms where the step is set to a trigger, 10V for the whole step where it is set to a gate, and 0V where the step is empty or the channel is muted"}
+  ],
+  "notes": [
+    "nothing comes out until the sequencer is started. It comes up stopped: click START at the top right of the panel, or press the space bar with the pointer over the module.",
+    "the grid is one widget rather than 64 separate buttons, so no cell of it can be clicked for help.",
+    "clicking a step cell cycles it from empty to a trigger to a gate and back, and dragging across cells paints the value the drag started with.",
+    "the round button below the grid cycles it between three layouts, and the V key does the same: VERT, 8x8 and 1x64.",
+    "VERT puts the navigation in the grid's own columns, 8x8 shows eight channels against eight steps, and 1x64 shows eight presets of one channel against eight steps.",
+    "in VERT the grid's first five columns are the controls: the first picks the group, the second the preset, the third holds the eight steps, the fourth picks the channel and the fifth mutes it.",
+    "in VERT, clicking the preset already chosen turns on cascade, in which editing a step writes it into all eight presets of the group at once; clicking a different preset turns cascade off.",
+    "in VERT the grid's top right corner holds seven toggles: group loop, set loop and preset loop on the first row, copy, paste and clear on the second, and random on the third.",
+    "copy, paste, clear and random are armed by one click and take effect on the next: click one, then click a group, preset or channel cell, and it acts on that one.",
+    "group loop steps to the next group marked in set loop mode each time the pattern comes round, and preset loop does the same for presets inside the group.",
+    "with the pointer over the module the space bar starts and stops it, V cycles the view, and the number keys 1 to 8 mute a channel.",
+    "with the pointer over the module, holding G, P or C and pressing a number key from 1 to 8 picks the group, the preset or the channel.",
+    "swing is built into this version but has no control on the panel, and the per-channel swing values are only set by loading a saved pattern, so a pattern built here plays without swing.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "menu": [
+    "Random Weighting — a slider setting how likely each step is to be filled when the grid's random toggle is used",
+    "Enable Hardware Sync — turns on talking over the network to a Cavian hardware unit, and adds items for loading and saving that unit's patterns",
+    "Save Pattern To... — writes the whole pattern, all eight groups, into one of 64 named slots in a folder Rack keeps for this module",
+    "Load Pattern From... — reads a whole pattern back out of one of those 64 slots, replacing everything in the module",
+    "Manage Patterns — a submenu holding Rename Current Pattern and Clear Slot"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

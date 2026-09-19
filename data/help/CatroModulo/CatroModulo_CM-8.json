@@ -1,0 +1,67 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-8",
+  "description": "Two thresholds and two signals, giving comparisons between the signals, each signal clipped and folded between the thresholds, and gates saying where each signal is relative to them",
+  "params": [
+    {"ids": [0], "text": "Sets the lower threshold, -10V to +10V"},
+    {"ids": [1], "text": "Sets the upper threshold, -10V to +10V, or in the additive position of the three-way switch the distance above the lower threshold"},
+    {"ids": [2], "text": "Chooses how the two thresholds combine: centred collapses both to their midpoint when they cross, inversing swaps them, and additive reads the upper knob as a distance above the lower"},
+    {"ids": [3], "text": "Rounds both signals to 0V or 10V before the comparisons and the two waveshapers, so they are judged as bits; the six gates that test against the thresholds keep reading the unrounded signals"},
+    {"ids": [4], "text": "Rescales the clipped and folded outputs so that the span between the two thresholds comes out as ±5V however narrow that span is"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Multiplies the lower threshold knob by a tenth of this voltage, so 10V gives the knob's own setting and a patched cable at 0V puts the threshold at 0V"},
+    {"ids": [1], "text": "Multiplies the upper threshold knob by a tenth of this voltage, so 10V gives the knob's own setting and a patched cable at 0V puts it at 0V"},
+    {"ids": [2, 3], "text": "One of the two signals compared and shaped here; with its own jack empty the module puts a fresh random voltage there every sample, within ±5V of the other signal or ±10V if that one is empty too"},
+    {"ids": [4], "text": "Freezes both signals at the values they held on the last rising edge here, so the outputs step rather than glide; with nothing patched both signals run free"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lower threshold as the module is using it; in the centred position of the three-way switch it becomes the midpoint of the two knobs whenever the lower would be above the upper"},
+    {"ids": [1], "text": "The upper threshold as the module is using it; in the additive position of the three-way switch it is the lower threshold plus the upper knob"},
+    {"ids": [2], "text": "10V while the A signal is above the B signal, 0V otherwise"},
+    {"ids": [3], "text": "10V while the A signal is below the B signal, 0V otherwise"},
+    {"ids": [4], "text": "10V while the two signals are exactly equal, 0V otherwise, which two free-running voltages almost never are unless binary mode is on"},
+    {"ids": [5], "text": "10V while the two signals differ, 0V otherwise"},
+    {"ids": [6], "text": "The A signal with everything outside the two thresholds flattened onto the nearer one"},
+    {"ids": [7], "text": "The B signal with everything outside the two thresholds flattened onto the nearer one"},
+    {"ids": [8], "text": "The A signal folded back between the two thresholds, reflected at each one until it is inside, up to fifty reflections"},
+    {"ids": [9], "text": "The B signal folded back between the two thresholds, reflected at each one until it is inside, up to fifty reflections"},
+    {"ids": [10], "text": "10V while the A signal is below the lower threshold, 0V otherwise"},
+    {"ids": [11], "text": "10V while the B signal is below the lower threshold, 0V otherwise"},
+    {"ids": [12], "text": "10V while the A signal is above the upper threshold, 0V otherwise"},
+    {"ids": [13], "text": "10V while the B signal is above the upper threshold, 0V otherwise"},
+    {"ids": [14], "text": "10V while the A signal is between the two thresholds, the thresholds themselves counted as inside"},
+    {"ids": [15], "text": "10V while the B signal is between the two thresholds, the thresholds themselves counted as inside"}
+  ],
+  "notes": [
+    "both threshold knobs come up at 0V, which leaves no span between them, so the clipped and folded outputs read 0V until a knob is moved",
+    "leave the A or B jack empty and the module fills it with a fresh random voltage on every sample, which makes it a noise source; a trigger at the s&h input turns that into stepped random values"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads a fresh random voltage each sample.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads a fresh random voltage each sample.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "one channel only",
+      "11": "one channel only",
+      "12": "one channel only",
+      "13": "one channel only",
+      "14": "one channel only",
+      "15": "one channel only"
+    }
+  }
+}

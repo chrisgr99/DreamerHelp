@@ -1,0 +1,28 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Fugue",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "fugue.cpp:467 getClockVoltage returns this jack for voice A, and for B and C while theirs are unpatched; :655 voice.clockTrigger.process crosses 1V to advance that voice one step"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "normal": "the clock above it", "why": "fugue.cpp names Clock B normalled to Clock A"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "normal": "the clock above it", "why": "fugue.cpp names Clock C normalled to Clock B"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "fugue.cpp:632 resetTrigger.process crosses 1V, zeroes every voice's currentStep and stepCounter and re-reads each voice's step"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "fugue.cpp:553 adds round(getVoltage()) to the root knob — one volt per SEMITONE, not per octave — and :555 wraps the total mod 12; no range spelling fits a per-semitone law, so the field is dropped"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "fugue.cpp declares the scale CV at one volt per scale; the shared scale bus carries a whole scale over the extra channels of the same jack"},
+      "6": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "fugue.cpp declares the steps CV at one volt per step, summed with the steps knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "fugue.cpp:572 adds getVoltage()/5 to the slew knob and :574 clamps the total to 0 to 1, so ±5V covers the whole travel"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "fugue.cpp declares that voice's wander CV, ±5V summed with its slider"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "fugue.cpp declares voice A's quantized pitch output"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "fugue.cpp declares voice A's gate output"},
+      "2": {"family": "pitch"},
+      "3": {"family": "trigger"},
+      "4": {"family": "pitch"},
+      "5": {"family": "trigger"}
+    }
+  },
+  "comment": "The wander is tiered rather than random: at low settings a voice reaches only for notes near the harmonic centre of the scale, and the more distant intervals appear only as the slider is raised. With Harmonic Lock on, each voice generates three candidate notes and takes whichever is most consonant with what the other two are playing, which is what keeps three straying voices agreeing. The slew time is measured against the gap to that voice's next gate, so a glide always resolves before the next note arrives however fast the clock is."
+}

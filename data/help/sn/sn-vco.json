@@ -1,0 +1,56 @@
+{
+  "plugin": "sn",
+  "module": "sn-vco",
+  "description": "An oscillator built on the sn generator function, whose waveshape morphs between sine, square, triangle and sawtooth and everything in between",
+  "params": [
+    {"ids": [0], "text": "Sets the eccentricity of the generator function, -1 to +1, which is what carries the wave from a sine towards a square, a spike or a sawtooth"},
+    {"ids": [1], "text": "Multiplies the eccentricity before it is taken through a hyperbolic tangent, 0 to 5, so it is the fine adjustment on the shape"},
+    {"ids": [2], "text": "Rotates the generator function, -90 degrees to +90 degrees"},
+    {"ids": [3], "text": "Sets the amplitude of the waveform, 0 at the bottom of its travel and 1 at the top"},
+    {"ids": [4], "text": "Shifts the generator function sideways, -1 to +1"},
+    {"ids": [5], "text": "Shifts the generator function vertically, -1 to +1"},
+    {"ids": [7], "text": "Multiplies the base frequency by a whole number from 1 to 5"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the eccentricity knob, 5V covering its whole range, with the total held between -1 and +1"},
+    {"ids": [1], "text": "Added to the sensitivity knob, 5V covering its whole range, with the total held between 0 and 5"},
+    {"ids": [2], "text": "Added to the rotation knob, 5V covering 90 degrees, with the total held inside 89.95 degrees either way, despite the maker's tooltip naming this jack Φ"},
+    {"ids": [3], "text": "Added to the amplitude knob, 5V covering its whole range, with the total held between 0 and 1"},
+    {"ids": [4], "text": "Added to the horizontal shift knob, 5V covering its whole range, with the total held between -1 and +1"},
+    {"ids": [5], "text": "Added to the vertical shift knob, 5V covering its whole range, with the total held between -1 and +1"},
+    {"ids": [6], "text": "The pitch, 1V per octave with 0V giving C4; the number of poly channels on this cable is the number of voices the module runs"},
+    {"ids": [7], "text": "Scales each voice's output level, 10V leaving it at full; with nothing patched every voice runs at full level"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 25Hz copy of the waveshape for a scope, at ±5V, carrying this module's own wave, the sum of the whole stack, or both, according to the menu"},
+    {"ids": [1], "text": "A 10V pulse 1ms long at the start of each cycle of the AUX waveform, to trigger a scope"},
+    {"ids": [2], "text": "The oscillator itself, ±5V scaled by velocity, one poly channel per voice"}
+  ],
+  "notes": [
+    "Each of the six jacks down the left is added to the knob beside it, 5V covering that knob's whole range, and the total is held inside the knob's own limits",
+    "It is the base of a stack: sn-vcox expanders placed directly against its left or right edge add harmonics to it, and the lamps in the top corners light when one is attached",
+    "AUX is not the oscillator. It is a fixed 25Hz copy of the same waveshape meant for a scope, so the shape can be looked at whatever the pitch is doing"
+  ],
+  "menu": [
+    "k-rate — sets how often the knobs and CV are read to rebuild the waveshape: every sample, or once every 64, 128 or 256 samples",
+    "aux-mode: OSC, SUM, POLY — chooses whether AUX carries this module's own monitor wave, the summed wave of the whole stack, or the first on channel 1 and the second on channel 2",
+    "aux-gain: 1, ½, ⅓, ¼, ⅕ — scales the summed monitor wave down so a tall stack fits on a scope"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±1V.",
+      "1": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 5V.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "4": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±1V.",
+      "5": "±5V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±1V.",
+      "6": "1V per octave · continuous · polyphonic",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V, full level; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

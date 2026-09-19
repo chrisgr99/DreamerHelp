@@ -1,0 +1,22 @@
+{
+  "plugin": "Mental",
+  "module": "MentalPitchShift",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/MentalPitchShift.cpp:65, added whole to the rounded shift"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/MentalPitchShift.cpp:66 added to the rounded octave knob and to the rounded first octave CV, the sum sent out at :71"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/MentalPitchShift.cpp:67 added to the rounded semitone knob and CV, each scaled by a twelfth, the sum sent out at :72"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/MentalPitchShift.cpp:68 added to the rounded semitone knob and CV, each scaled by a twelfth, the sum sent out at :73"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalPitchShift.cpp:65 and 66, halved and rounded, and read by both octave sections"},
+      "6": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalPitchShift.cpp:67, halved, rounded and scaled by a twelfth"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalPitchShift.cpp:68 halved, rounded and scaled by a twelfth, then added to that section's knob"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "why": "src/MentalPitchShift.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "1": {"family": "pitch", "poly": false, "why": "src/MentalPitchShift.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "2": {"family": "pitch", "poly": false, "why": "src/MentalPitchShift.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "3": {"family": "pitch", "poly": false, "why": "src/MentalPitchShift.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"}
+    }
+  },
+  "comment": "Input 5 is the second octave section's CV jack and is dead: src/MentalPitchShift.cpp:66 reads OCTAVE_SHIFT_1_CVINPUT where OCTAVE_SHIFT_2_CVINPUT was plainly meant, so the first octave CV jack drives both sections and this one is never read anywhere in the module. It is on the panel and can be clicked, so it gets a line saying so rather than being left to fall back on the maker's tooltip. It is given no family and no props because nothing reads it. The knob ranges are -4.5 to 4.5 octaves and -6.5 to 6.5 semitones (src/MentalPitchShift.cpp:48-51) and the value is rounded, so the outermost step is reached only at the exact end of the travel; that is why the lines say four up and four down across the travel with five at the ends. No range is given for the CV inputs because none of them is clamped. The panel prints Octaves, CV, In, Out and Semitones."
+}

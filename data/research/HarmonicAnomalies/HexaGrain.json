@@ -1,0 +1,13 @@
+{
+  "plugin": "HarmonicAnomalies",
+  "module": "HexaGrain",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "why": "HexNut.cpp line 135, inputs[INPUT_INPUT].getVoltage() taken straight into GrainHex::setVoltage with no scaling or clamp"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "HexNut.cpp line 139, setVoltage of whatever the grain plays back, with no scaling"}
+    }
+  },
+  "comment": "Read from the repository at commit 9f2eacb, whose plugin.json carries the installed 2.0.2. HexaGrain is HexNut with a radius of 16 instead of 86 and a whole grain in each cell instead of one sample, so the grid holds 721 grains, which is the maker's own figure in Hex.hpp line 97. Grain lengths run from 44 samples to 4410, set in GrainHex.hpp lines 3 and 4, which at the usual sample rate is 1ms to 100ms. The extra SIZE knob writes its length into the grain under the write head alone, at GrainHex.hpp line 110, so the grid ends up holding grains of several different lengths. The heads only step when the grain they are on wraps back to its start, at GrainHex.hpp lines 92 and 103, which is why the grain size changes how fast the loop runs. The picture on the panel shows each grain's average level rather than a sample. The input and the output carry no family, and both are single channel. The panel prints CLIP where the parameter is named Crop and SPREAD where it is named Read Ring Radius."
+}

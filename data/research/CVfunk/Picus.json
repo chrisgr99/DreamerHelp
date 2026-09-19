@@ -1,0 +1,17 @@
+{
+  "plugin": "CVfunk",
+  "module": "Picus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "Picus.cpp:288 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises; Picus.cpp:292 also tests it against the three chaining levels"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "Picus.cpp:494 reads it with getVoltage, so only channel 1, into a Schmitt trigger offset by 0.1V"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "sumRange": "1 to 10V", "why": "Picus.cpp:359 reads it with getVoltage, so only channel 1, adds it to the pattern knob through the attenuverter; Picus.cpp:362 rounds up and clamps the total to 1 to 10"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Picus.cpp:483 writes one channel with setVoltage, 10V for a one-millisecond pulse"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Picus.cpp:484 writes one channel with setVoltage, 10V for a one-millisecond pulse"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Picus.cpp:489 writes one channel with setVoltage, 10V for a one-millisecond pulse"}
+    }
+  },
+  "comment": "The beat and cycle counts are module state rather than parameters (Picus.cpp:88), so Rack's own reset and randomize are handled by the module: a reset sets every count to one, and a randomize draws a beat count of 0 to 12 and a cycle count of 1 to 9 (Picus.cpp:264). The first stage's cycle count is clamped to at least one so that stage can never be skipped (Picus.cpp:384). The last sub-beat of each stage is left out because the stage advance fires its own trigger in that slot (Picus.cpp:455)."
+}

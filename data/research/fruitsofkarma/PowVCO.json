@@ -1,0 +1,18 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "PowVCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/PowVCO.cpp:123-128 getChannels and getPolyVoltage"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/PowVCO.cpp:101 getVoltage, one channel only"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/PowVCO.cpp:102 getVoltage, one channel only"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/PowVCO.cpp:103 getVoltage, one channel only"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/PowVCO.cpp:104 getVoltage, one channel only"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/PowVCO.cpp:112 isConnected and getVoltage >= 1, a level test"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/PowVCO.cpp:124 setChannels from the V/OCT input"}
+    }
+  },
+  "comment": "None of the six inputs or the output is named in configInput or configOutput, so Rack's tooltips are blank on all of them. RESET is tested as a level, not an edge, and it zeroes every one of the 16 channel phases at once even in polyphonic use. The module has two separate code paths: with V/OCT patched it runs a per-channel loop, and with V/OCT unpatched it runs a single-voice path. In the single-voice path the envelope's end-of-run setVoltage(0) at line 163 is overwritten by the unconditional setVoltage at line 178, so the output there holds the last computed sample instead of being forced to zero; with the default POW4 that value is 0V anyway, but with a negative POW4 and CLIP up it rests at 10V. In the polyphonic path the zero stands. The POW jacks add to their knobs with no clamp on the sum, so exponents outside -10 to +10 are reachable."
+}

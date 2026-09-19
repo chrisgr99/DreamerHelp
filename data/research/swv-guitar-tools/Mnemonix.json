@@ -1,0 +1,37 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "Mnemonix",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "src/Mnemonix.cpp:207 getChannels() sets the engine count, :268 getPolyVoltage(inputChannel) per channel"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 1V", "why": "src/Mnemonix.cpp:183-185 through applyCv at :15, which adds voltage over 5 times the trimpot and clamps the total to 0 and 1"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 1V", "why": "src/Mnemonix.cpp:186-188 through applyCv at :15, clamped to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 1V", "why": "src/Mnemonix.cpp:189-191 through applyCv at :15, clamped to 0 and 1"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 1V", "why": "src/Mnemonix.cpp:192-199 voltage over 5 times the trimpot added to the knob or to the synced time, clamped to 0 and 1"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 1V", "why": "src/Mnemonix.cpp:200-202 through applyCv at :15, clamped to 0 and 1"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the CH/VB switch", "why": "src/Mnemonix.cpp:167-169 getVoltage() >= 1 when isConnected, otherwise the param"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the TRI/SQ switch", "why": "src/Mnemonix.cpp:170-172 getVoltage() >= 1 when isConnected, otherwise the param"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the BYPASS switch", "why": "src/Mnemonix.cpp:176-178 getVoltage() >= 1 when isConnected, otherwise the param"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the RANGE switch", "why": "src/Mnemonix.cpp:173-175 getVoltage() >= 1 when isConnected, otherwise the param"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "src/Mnemonix.cpp:158 SchmittTrigger::process(v, 0.1, 2) and a tap window of 0.08 to 4 seconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/Mnemonix.cpp:211 setChannels to the input count, or 2 when a mono input is spread"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "src/Mnemonix.cpp:213 setChannels to the same count when connected"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "src/Mnemonix.cpp:216 setChannels to the same count when connected"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:294 outputControlVoltage, which clamps to 0 and 1 and multiplies by 10, on channel 0"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:295 outputControlVoltage on channel 0"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:296 outputControlVoltage on channel 0"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:297 outputControlVoltage on channel 0"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:298 outputControlVoltage on channel 0"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:299 10V or 0V on channel 0"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "why": "src/Mnemonix.cpp:300 the LFO value times 5, clamped to ±5V, on channel 0"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:301 10V or 0V on channel 0"},
+      "11": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:302 10V or 0V on channel 0"},
+      "12": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:303 10V or 0V from bit 5 of the clock counter, src/dsp/MnemonixDSP.h:790"},
+      "13": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:304 10V or 0V from bit 8 of the clock counter, src/dsp/MnemonixDSP.h:791"},
+      "14": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Mnemonix.cpp:305 outputControlVoltage of the compander envelope, on channel 0"}
+    }
+  },
+  "comment": "The delay figures come from the clock constants at src/dsp/MnemonixDSP.h:280-283: 4096 bucket-brigade stages at a clock period of 8 to 100 microseconds, or 8 to 200 in the long range, giving 32.768ms to 409.6ms and 819.2ms. The LFO, clock and envelope outputs are taken from the first channel only, even when the audio is polyphonic (src/Mnemonix.cpp:285-291). The four gate outputs and the five control-value outputs are written only while something is patched to them. The panel prints BYPASS beside the engage switch, while the switch's own tooltip reads Effect with positions Bypassed and Engaged, and the upper position is Engaged."
+}

@@ -1,0 +1,22 @@
+{
+  "plugin": "bikeshed",
+  "module": "EntropyPuddle",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "EntropyBase.cpp:179 reads the single voltage through a Schmitt trigger with Rack's default thresholds of 0V and 1V, stepping the index"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "EntropyBase.cpp:152 reads the single voltage through a Schmitt trigger with Rack's default thresholds of 0V and 1V, toggling the run parameter"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "EntropyBase.cpp:198 reads the single voltage through a Schmitt trigger with Rack's default thresholds of 0V and 1V, returning the index to the start of the range"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "EntropyBase.cpp:165 reads the single voltage through a Schmitt trigger with Rack's default thresholds of 0V and 1V, drawing a new seed and refilling the values"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "EntropyBase.cpp:130 divides the single voltage by 10 and multiplies it by the attenuverter before scaling by the bank size and adding it to the start knob"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "EntropyBase.cpp:134 divides the single voltage by 10 and multiplies it by the attenuverter before scaling by the bank size and adding it to the length knob"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "EntropyBase.cpp:112 divides the single voltage by 10 and multiplies it by the attenuverter before adding it to the filter knob and clamping the total to -1 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "EntropyBase.cpp:208 setVoltage of 10 or 0 on one channel, from a 1ms pulse set at EntropyBase.cpp:186"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "EntropyBase.cpp:212 setVoltage of 10 or 0 on one channel, from a 1ms pulse set at EntropyBase.cpp:190"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "EntropyBase.cpp:243 setVoltage of 10 or 0 on one channel, held for the time set at EntropyBase.cpp:233"},
+      "3": {"family": "cv", "poly": false, "why": "EntropyBase.cpp:215 setVoltage on one channel, of the value scaled at EntropyBase.cpp:257"}
+    }
+  },
+  "comment": "The bank holds 96 values. The rnd button and its input are in the code and on the panel but appear nowhere in the maker's manual, which documents only clock, run, reset, start, filter and length. The panel letters the three large knobs with a left bracket, a dot and a right bracket rather than with words; the maker's tooltips call them Start index, Filter and Length, and the manual calls the third one Sequence length. The 240-square and 96-square value displays are a single custom widget with no ParamWidget per square, so the squares carry no parameter positions and cannot be reached for help even though they can be dragged, clicked and muted. Every output is silenced while run is off, the cv output included, so a patch that goes quiet has usually had its run toggled."
+}

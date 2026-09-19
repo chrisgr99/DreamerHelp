@@ -1,0 +1,21 @@
+{
+  "plugin": "Submit",
+  "module": "Impact",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "Impact.cpp:236 reads getVoltage; Impact.cpp:239 puts it through a Schmitt trigger set to 0.1V and 2V"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Impact.cpp:259 uses isConnected; Impact.cpp:261 multiplies the PITCH knob by 2 to the power of getVoltage, clamped to 10Hz to 2000Hz"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 5V", "why": "Impact.cpp:266 uses isConnected, divides getVoltage by 5, multiplies by the attenuverter and clamps the total to the knob range"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 5V", "why": "Impact.cpp:270 uses isConnected, divides getVoltage by 5, multiplies by the attenuverter and clamps the total to the knob range"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 5V", "why": "Impact.cpp:292 uses isConnected, divides getVoltage by 5, multiplies by the attenuverter and clamps the total to the knob range"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 5V", "why": "Impact.cpp:303 uses isConnected, divides getVoltage by 5, multiplies by the attenuverter and clamps the total to the knob range"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "0 to 5V", "why": "Impact.cpp:297 uses isConnected, divides getVoltage by 5, multiplies by the attenuverter and clamps the total to the knob range"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Impact.cpp:239 samples it only on a trigger; Impact.cpp:241 uses isConnected and compares getVoltage against 1V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Impact.cpp:417 clamps the sum to -10V to 10V and sets one channel"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "Impact.cpp:418 clamps the sum to -10V to 10V and sets one channel"}
+    }
+  },
+  "comment": "The fifth attenuverter and CV jack are marked NOISE on the panel, and both are wired to the Noise Length parameter, whose knob the panel prints as TAIL (Impact.cpp:303, widget order at Impact.cpp:459-467 and 493-501). The NOISE knob itself has no CV input at all. The manual repeats the panel's grouping — 'Each of Decay, Punch, Morph, Noise and Fold has an attenuverter for its CV input' — which is wrong for the Noise pair.\n\nThe panel prints DRUM over the engine switch and harsh beneath it; the manual and the maker's tooltip both call it Mode. The manual lists the noise types as Rumble, Crunch and Dust without saying which way up they sit: value 0, the bottom position, is Rumble (Impact.cpp:140, 305).\n\nIn Harsh mode the carrier is wavefolded twice — once at Impact.cpp:354 and again at Impact.cpp:401 when the body is folded — so FOLD bites harder there than in Pure mode.\n\nThe drum stops of its own accord ten seconds after a trigger (Impact.cpp:407) and both outputs are held at 0V until the next one."
+}

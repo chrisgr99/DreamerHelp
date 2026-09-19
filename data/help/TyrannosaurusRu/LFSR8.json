@@ -1,0 +1,50 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "LFSR8",
+  "description": "Sequencer running an eight-bit linear feedback shift register, with a gate output for every register bit and four CV outputs summed from weighted bits, superseded by LFSR8 Poly",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Switches one feedback coefficient on or off; the register bits whose coefficient is on are combined to make the bit shifted in"},
+    {"ids": [8], "text": "Feeds the inverse of the combined bit back into the register, making it an XNOR register rather than an XOR one"},
+    {"ids": [9], "text": "Sets how many of the eight register bits are used, 1 to 8"},
+    {"ids": [10, 11, 12, 13], "text": "Sets one of the four weights the CV outputs are summed from, 0 to 1; every set register bit adds one of the four weights, and each CV output starts the rotation of weights at a different knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge shifts the register one place, reading high above 2V and low below 0.1V"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "A voltage above 0V switches that feedback coefficient on and a lower one switches it off, and the button for it moves with the voltage"},
+    {"ids": [9], "text": "A voltage above 0V makes the register feed back the inverted bit, and moves the not button with it"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries 10V while that register bit is set and the clock is high, and 0V otherwise"},
+    {"ids": [8, 9, 10, 11], "text": "A voltage summed from the set register bits, each weighted by one of the four V/OCT knobs, reaching 8V with every bit set and every weight at maximum"}
+  ],
+  "notes": [
+    "the round lights give the register bits, bright for a set bit and dim for a clear one",
+    "the register is shifted only by a rising edge at CLK; with nothing patched there the outputs never change",
+    "every feedback coefficient starts switched off, so the register shifts in zeros and falls silent within a few clocks; switch at least one coefficient on for a repeating sequence",
+    "the maker marks this module deprecated and points to LFSR8 Poly instead, so it is left out of the module browser unless the browser is set to show deprecated modules"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped"
+    }
+  }
+}

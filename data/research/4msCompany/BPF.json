@@ -1,0 +1,14 @@
+{
+  "plugin": "4msCompany",
+  "module": "BPF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "BPFCore.cc:34 divides this jack by 5V and BPFCore.cc:35 clamps the knob-plus-jack total between -1 and 1 before setPitchMultiple at math.hh:252 raises 2 to five times it, which is one octave per volt in both directions"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "BPFCore.cc:21 takes the voice count from this jack and BPFCore.cc:39 filters it per voice"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "BPFCore.cc:24 sets this output's channel count from the audio input"}
+    }
+  },
+  "comment": "The knob is configured over 261 to 1046 Hz (BPF_info.hh:19) and the maker's manual gives '261hz - 1041hz', but BPFCore.cc:51 turns the parameter into -1 to +1 and BPFCore.cc:35 multiplies 523.25Hz by two raised to five times it, which is 16.35Hz to 16744Hz. The manual has the two modes as Korg-style Standard and Oberheim, which the switch labels at BPF_info.hh:21 confirm."
+}

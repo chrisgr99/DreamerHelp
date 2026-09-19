@@ -1,0 +1,101 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Marmora",
+  "description": "Random sampler: a jittery clock with two streams of random gates, three clocked random voltages with controllable distribution and quantisation, a slow fourth voltage, and a loop that can lock it all",
+  "params": [
+    {"ids": [0], "text": "Lets the Deja Vu section reach the t generator; with it off that generator makes a fresh random decision every time"},
+    {"ids": [1], "text": "Lets the Deja Vu section reach the X generator; with it off that generator makes a fresh random decision every time"},
+    {"ids": [2], "text": "Sets the chance that a random decision is taken from the loop instead of made fresh: none at the far counter-clockwise end, a locked loop at noon, and random jumps within the loop past noon"},
+    {"ids": [3], "text": "Sets the clock rate, 120 beats per minute at noon; with a cable at the t external clock input it divides or multiplies that clock instead"},
+    {"ids": [4], "text": "Sets how the random voltages are spread across the range: a steady voltage at the far counter-clockwise end, a bell curve at noon, flat at two o'clock, and the extremes alone at the far clockwise end"},
+    {"ids": [5], "text": "Steps through the seven ways the clock is split between t1 and t3: a complementary coin toss, clusters, drum patterns, independent tosses, a fixed divider, three states, and a Markov generator"},
+    {"ids": [6], "text": "Steps through how the three X outputs relate: all three following the panel, the outer two opposing the middle one, or the first opposing the third with the second held in the middle"},
+    {"ids": [7], "text": "Sets how many values the loop holds, with 5, 7, 10 and 14 reachable between the printed marks; it is how many values each decision cycles over, not a pattern length in beats"},
+    {"ids": [8], "text": "Skews the split between the t1 and t3 outputs; what it changes follows the t mode, from the fairness of the coin toss to the division ratio"},
+    {"ids": [9], "text": "Skews the random voltages towards the bottom or the top of the range; it changes which values are likely rather than shifting the values themselves"},
+    {"ids": [10], "text": "Steps the clock range between a quarter of the rate, the rate itself, and four times it"},
+    {"ids": [11], "text": "Steps the range of the three X outputs between 0V to 2V, 0V to 5V and -5V to 5V"},
+    {"ids": [12], "text": "Switches the X generator to sampling the voltage at the X spread input instead of its own random source; X bias then transposes those voltages and X spread sets how far"},
+    {"ids": [13], "text": "Sets how far the clock's timing wanders, from perfectly steady to chaos; it applies to an external clock as well as to the internal one"},
+    {"ids": [14], "text": "Sets the shape of the random voltages: smooth curves and ramps counter-clockwise of noon, a sample and hold at noon, and quantising past it, with fewer notes of the scale left as it goes"},
+    {"ids": [15], "text": "Sets how far the Y output is divided down from the clock of X2, from a sixty-fourth of it to the whole of it"},
+    {"ids": [16], "text": "Sets the amplitude of the voltage at the Y output"},
+    {"ids": [17], "text": "Skews the voltage at the Y output towards negative or towards positive values"},
+    {"ids": [18], "text": "Sets the shape of the voltage at the Y output"},
+    {"ids": [19], "text": "Sets the length of the gates at t1 and t3, from 1% to 99% of the interval"},
+    {"ids": [20], "text": "Sets how much the length of each gate at t1 and t3 varies at random"},
+    {"ids": [21], "text": "Steps through the six scales the X outputs quantise to: major, minor, pentatonic, gamelan, Raag Bhairav That and Raag Shri"},
+    {"ids": [22], "text": "Chooses which t outputs clock the X outputs while nothing is patched to the X external clock: each t output to its own X output, or one of the three clocking all of them"},
+    {"ids": [23], "text": "Locks the t generator's loop outright, as though the DEJA VU knob were at noon, whatever that knob and the t deja vu button say"},
+    {"ids": [24], "text": "Locks the X generator's loop outright, as though the DEJA VU knob were at noon, whatever that knob and the X deja vu button say"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the t BIAS knob, 5V covering the whole knob range"},
+    {"ids": [1], "text": "Adds to the X BIAS knob, 5V covering the whole knob range"},
+    {"ids": [2], "text": "A voltage of 1.7V or more clocks the t generator, taking the place of its internal clock"},
+    {"ids": [3], "text": "Adds to the t RATE knob, 5V covering the whole knob range"},
+    {"ids": [4], "text": "Adds to the t JITTER knob, 5V covering the whole knob range"},
+    {"ids": [5], "text": "Adds to the DEJA VU knob, 5V covering the whole knob range"},
+    {"ids": [6], "text": "Adds to the X STEPS knob, 5V covering the whole knob range"},
+    {"ids": [7], "text": "Adds to the X SPREAD knob, 5V covering the whole knob range; with external processing on, or while a scale is being taught, this is the jack the module samples voltages from"},
+    {"ids": [8], "text": "A voltage of 1.7V or more clocks all three X outputs, taking the place of whichever t output would otherwise clock them"},
+    {"ids": [9], "text": "A rising edge past 1V resets the t generator's counters, dividers and patterns, and reseeds its random source"},
+    {"ids": [10], "text": "A rising edge past 1V resets the X generator's counters, dividers and patterns"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "One of the two streams of random gates derived from the clock, 10V"},
+    {"ids": [1], "text": "The clock itself, as 10V pulses, with the jitter applied"},
+    {"ids": [2], "text": "The other of the two streams of random gates derived from the clock, 10V"},
+    {"ids": [3], "text": "The slow random voltage, -5V to 5V, clocked from a division of the X2 clock"},
+    {"ids": [4, 5, 6], "text": "One of the three random voltages, in the range the X range button sets"}
+  ],
+  "notes": [
+    "the module is monophonic: every jack reads or writes a single channel.",
+    "the t generator resets itself when the external clock stops: a gap of three seconds, or of four times the last interval between two ticks, whichever is longer, counts as a stop.",
+    "a reset of the t generator reaches the X generator as well, unless a cable is patched to the X external clock.",
+    "a scale is taught rather than typed: patch a keyboard pitch to the X spread jack and its gate to the X external clock jack, turn Edit current on, play fifty notes or more, then turn it off.",
+    "while a scale is being taught, every X output holds the last note played and the gates at the X external clock jack are copied to all three t outputs, so you can hear what you are teaching."
+  ],
+  "menu": [
+    "t generator — the submenu holding the t generator's mode, range and reset",
+    "Mode: Complementary Bernoulli, Clusters, Drums, Independent Bernoulli, Divider, Three states, Markov — sets how the clock is split between t1 and t3. It is on the t generator submenu",
+    "Range: 1/4x, 1x, 4x — sets the clock range. It is on the t generator submenu",
+    "Reset/reseed — resets the t generator and gives its random source a new seed. It is on the t generator submenu",
+    "X generator — the submenu holding the X generator's mode, range, clock source and reset",
+    "Mode: Identical, Bump, Tilt — sets how the three X outputs relate to one another. It is on the X generator submenu",
+    "Range: Narrow (0V - 2V), Positive (0V - +5V), Full (-5V - +5V) — sets the range of the X outputs. It is on the X generator submenu",
+    "Internal clock source — chooses which t outputs clock the X outputs, and is ignored while a cable is patched to the X external clock. It is on the X generator submenu",
+    "Reset — resets the X generator. It is on the X generator submenu",
+    "Module seed — the submenu holding the seed the module's random source works from",
+    "Reseed rng — gives the random source a new seed chosen by the module. It is on the Module seed submenu",
+    "User — takes a seed typed into a text field, from 1 to 4294967295, entered with the return key. It is on the Module seed submenu",
+    "Scales — the submenu holding the scale choice, the scale editor and the scale reset",
+    "Select active: Major, Minor, Pentatonic, Gamelan (Pelog), Raag Bhairav That, Raag Shri — picks the scale the X outputs quantise to. It is on the Scales submenu",
+    "Edit current — turns scale learning on and off; what you play while it is on overwrites the active scale. It is on the Scales submenu",
+    "Reset current — puts the factory version of the active scale back. It is on the Scales submenu"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "2": "high above 1.7V · stepped · one channel only",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "8": "high above 1.7V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "±5V · one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only"
+    }
+  }
+}

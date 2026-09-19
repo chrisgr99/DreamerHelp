@@ -1,0 +1,57 @@
+{
+  "plugin": "Geodesics",
+  "module": "Entropia",
+  "description": "An eight-step sequencer holding a blue and a yellow value at every step, playing one of the two by chance, or both added together",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the sequence"},
+    {"ids": [1], "text": "Advances the sequence by one step for each press, whether or not it is running"},
+    {"ids": [2], "text": "Returns the sequence to its first step"},
+    {"ids": [3], "text": "Returns the sequence to its first step whenever run is switched on"},
+    {"ids": [4], "text": "Each press shortens the sequence by one step, from eight down to one and then back to eight"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "Sets the blue value of that step: a voltage within the blue range with fixed CV chosen, the span of the blue random draw with random chosen, or the gain on the blue external signal"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20], "text": "Sets the yellow value of that step: a voltage within the yellow range with fixed CV chosen, the span of the yellow random draw with random chosen, or the gain on the yellow external signal"},
+    {"ids": [21, 22, 23, 24, 25, 26, 27, 28], "text": "Sets the chance that this step plays its blue value rather than its yellow one, always yellow fully anticlockwise and always blue fully clockwise"},
+    {"ids": [29, 30], "text": "Steps the voltage that colour's step knobs cover: 0-1V, minus 1V to 2V or minus 2V to 3V while its Planck constant is on, and plus or minus 1V, 5V or 10V while it is off"},
+    {"ids": [31, 32], "text": "Quantizes that colour's fixed voltages to semitones, and narrows the voltage its range covers"},
+    {"ids": [33], "text": "Flips the step now playing to the other colour"},
+    {"ids": [34], "text": "Switches between playing one of the two values at each step and always playing the blue value with the yellow one added on the steps that came out yellow"},
+    {"ids": [35, 36], "text": "Makes that colour's step knobs set a fixed voltage within the range chosen for that colour"},
+    {"ids": [37, 38], "text": "Makes that colour take the signal at its external input, scaled by the step knob of the step being played"},
+    {"ids": [39, 40], "text": "Makes that colour a fresh random draw on each step, the step knob setting the span it covers, from minus 5V fully anticlockwise to 5V fully clockwise"},
+    {"ids": [41], "text": "Shifts the blue chance of every step, clockwise towards yellow and anticlockwise towards blue, across the whole span of the step knobs"},
+    {"ids": [42], "text": "Steps through taking both clock inputs, the certain clock alone, and the uncertain clock alone"},
+    {"ids": [43, 44], "text": "Sets how that colour's step knobs treat its external input: as an attenuverter from minus 100% to 100%, or as a gain from 0 to 200%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here advances the sequence by one step, while the clock sources button takes this input"},
+    {"ids": [1], "text": "A rising edge here advances the sequence by a weighted random 1 to 8 steps, while the clock sources button takes this input"},
+    {"ids": [2], "text": "Sets the number of steps and overrides the length button, eight steps at 0V falling to one step at 10V"},
+    {"ids": [3], "text": "A trigger here starts and stops the sequence"},
+    {"ids": [4], "text": "A rising edge here returns the sequence to its first step"},
+    {"ids": [5], "text": "A trigger here flips the step now playing to the other colour"},
+    {"ids": [6], "text": "A trigger here switches between playing one of the two values at each step and adding the two together"},
+    {"ids": [7, 8], "text": "Sets the range of that colour and overrides its button: 1V and above the widest, minus 1V and below the narrowest, and between them the middle one"},
+    {"ids": [9, 10], "text": "The signal that colour plays while its external source is chosen, scaled by the step knob of the step being played"},
+    {"ids": [13], "text": "Shifts the blue chance of every step at a fifth of that span per volt, positive voltages pushing towards yellow, and adds to the global probability knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The value of the step now playing, blue or yellow according to that step's chance, or the two added together in the adding macrostate mode"}
+  ],
+  "notes": [
+    "the sequence does not advance until a clock arrives; the module comes up running, and the run button stops and starts it",
+    "with a colour's source set to its external input and that input read as audio, the module crossfades briefly between steps to stop clicks",
+    "to pass an external signal at the level it arrives, turn that colour's step knobs fully clockwise",
+    "the step button advances the sequence whether or not it is running, which is how the two values of each step are set and heard one at a time while it is stopped",
+    "a way in: set both colours to fixed CV, edit the values while stopped with the step and invert buttons, turn the global probability fully to blue, start it, then sweep that knob to yellow"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

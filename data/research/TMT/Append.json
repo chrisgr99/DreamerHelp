@@ -1,0 +1,15 @@
+{
+  "plugin": "TMT",
+  "module": "Append",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "append.cpp:84-87 every channel of every signal jack is pushed into the buffer, bounded by getChannels()"},
+      "16": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "10V", "why": "append.cpp:101 clamp(getVoltage(), 0, 10), 10V when unpatched; :104 rescale to 1..buffer size, capped at 16"},
+      "17": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "append.cpp:102 clamp(getVoltage(), 0, 10), 0V when unpatched; :107 rescale to 0..buffer size - 1"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "append.cpp:114 setChannels(output_channels)"}
+    }
+  },
+  "comment": "Signal jacks 2 to 16 share one line with jack 1 because the code treats them identically (append.cpp:84). With no signal patched, Width is read through a different expression (append.cpp:93) that rescales 0-10V onto 1..17 before clamping, so the top of the range is reached slightly early."
+}

@@ -1,0 +1,53 @@
+{
+  "plugin": "GP",
+  "module": "StereoChorus",
+  "description": "A stereo chorus built from up to four modulated delay voices, each with its left and right sides a quarter cycle apart",
+  "params": [
+    {"ids": [0], "text": "Sets the speed of the internal LFOs from 1Hz to 10Hz; turned fully down the LFOs stop and the readout reads External Modulation Only"},
+    {"ids": [1], "text": "Sets how far the delay is swept, reaching about a semitone of pitch change at 100%"},
+    {"ids": [2], "text": "Filters the wet signal: turned left a lowpass falls from 22000Hz to 500Hz, turned right a highpass rises from 30Hz to 1000Hz, and in the centre neither is in the way"},
+    {"ids": [3], "text": "Chooses how many of the four voices run, 1 to 4; above one, the internal LFOs are detuned a few per cent against each other"},
+    {"ids": [4], "text": "Crossfades dry against wet on a constant-power curve, 0% to 100%"},
+    {"ids": [5], "text": "Scales the RATE control voltage, -100% to 100%, before it is added to the RATE knob; at zero the RATE input is out of circuit"},
+    {"ids": [6], "text": "Scales the DEPTH control voltage, -100% to 100%, before it is added to the DEPTH knob; at zero the DEPTH input is out of circuit"},
+    {"ids": [7], "text": "Scales the TONE control voltage, -100% to 100%, before it is added to the TONE knob; at zero the TONE input is out of circuit"},
+    {"ids": [8], "text": "Scales the WET control voltage, -100% to 100%, before it is added to the WET knob; at zero the WET input is out of circuit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, with polyphonic channels summed to one; patched alone it feeds both sides 4.5dB down"},
+    {"ids": [1], "text": "The right audio input, with polyphonic channels summed to one; patched alone it feeds both sides 4.5dB down"},
+    {"ids": [2], "text": "External modulation of the first voice, 10V either way for the full sweep; a cable of eight or more channels here instead drives all eight circuits, channels 1 to 4 the left sides and 5 to 8 the right"},
+    {"ids": [3, 4, 5], "text": "External modulation of one voice, 10V either way for the full sweep; a second channel on the same cable modulates the right side of that voice on its own"},
+    {"ids": [6], "text": "Added to the RATE knob through the RATE attenuverter; 0 to 10V at 100% covers the whole knob, and the External Modulation Only position cannot be reached this way"},
+    {"ids": [7], "text": "Added to the DEPTH knob through the DEPTH attenuverter; 0 to 10V at 100% covers the whole 1% to 100% range"},
+    {"ids": [8], "text": "Added to the TONE knob through the TONE attenuverter, centred on 5V, so 0V and 10V reach the two ends at 100%"},
+    {"ids": [9], "text": "Added to the WET knob through the WET attenuverter; 0 to 10V at 100% covers the whole 0% to 100% range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output, one channel; with both outputs patched the two sides are modulated a quarter cycle apart, and with one alone the chorus runs mono"},
+    {"ids": [1], "text": "The right output, one channel; with both outputs patched the two sides are modulated a quarter cycle apart, and with one alone the chorus runs mono"}
+  ],
+  "notes": [
+    "the audio path inside is one channel per side: polyphonic cables into the audio inputs are summed before processing and both outputs carry a single channel",
+    "while the internal LFOs run, external modulation is halved and added to them; with RATE turned fully down the MODULATION inputs are the only thing moving the delays",
+    "moving RATE in or out of the External Modulation Only position jumps the delay and can click, so it is not a good target for automation"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "±10V · continuous · polyphonic",
+      "3": "±10V · continuous · polyphonic",
+      "4": "±10V · continuous · polyphonic",
+      "5": "±10V · continuous · polyphonic",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

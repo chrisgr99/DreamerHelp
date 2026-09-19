@@ -1,0 +1,16 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Sine-VCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Sine-VCO.cpp: getChannels() on this jack sets the output channel count and the loop bound, and freq = pitch_param * pow(2.f, getVoltage(idx)) per channel, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sine-VCO.cpp: freq_mod = getVoltage() with no channel argument, used as freq + freq * freq_mod * attn * 0.5f and then held to 10Hz to 20000Hz, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sine-VCO.cpp: phase_mod = getVoltage() with no channel argument, used as phase_param + phase_mod * attn * 0.1f, with 1.0 added back if the total goes negative, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Sine-VCO.cpp: volume_mod = getVoltage() with no channel argument, used as volume_param + volume_mod * attn * 0.1f with no clamp, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "Sine-VCO.cpp: setChannels then setVoltage(volume_out * wave, idx), the wave table being filled to ±5V, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The pitch knob is configured 10 to 20000 with a linear mapping, so it is a frequency knob rather than a note knob. The wave table is a single sine cycle scaled to ±5V, 1000 points, with no band limiting. volume_out is never clamped."
+}

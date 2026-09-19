@@ -1,0 +1,19 @@
+{
+  "plugin": "FartSynthson",
+  "module": "FartSynthson",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:242-246 maps the voltage onto 0 to 100 and writes it into the Age parameter with setDisplayValue; the CV term computed on line 246 is then always 0"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:249-253 maps the voltage onto 0 to 1 and writes it into the Urgency parameter with setDisplayValue; the CV term computed on line 253 is then always 0"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:256-260 maps the voltage onto 0 to 1 and writes it into the Retention parameter with setDisplayValue; the CV term computed on line 260 is then always 0"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:263-267 maps the voltage onto 0 to 1 and writes it into the Shame parameter with setDisplayValue; the CV term computed on line 267 is then always 0"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:270-274 maps the voltage onto 0 to 1 and writes it into the Surprise parameter with setDisplayValue; the CV term computed on line 274 is then always 0"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own position", "why": "module.hpp:277-281 maps the voltage onto 0 to 1 and writes it into the Food parameter with setDisplayValue; the CV term computed on line 281 is then always 0"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "module.hpp:131-138 tests getVoltage() > 1.f and resets the envelope only on the rise, with no channel read"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5.2V", "step": "continuous", "why": "module.hpp:227-228 passes the mix through fastTanh, which is bounded to 1, and multiplies by 5.2 before setVoltage; setChannels is never called"}
+    }
+  },
+  "comment": "Source read at commit 5c6f38d. Every one of the nineteen commits says version 2.0.0, so the installed art settled it: res/layout.svg matches only the last three commits (6f28461, eeaa2ec, 5c6f38d), and the differences between those three are an include, the spelling of pi and a Makefile flag, so all three behave alike. The six CV inputs are not summed with their knobs: module.hpp:242-283 calls setDisplayValue on the parameter and then subtracts the parameter's new value from the same figure, so the offset added in process is always zero and the CV works only by moving the knob, which it also saves into the patch. BUTTON_INPUT, input index 7, is read at module.hpp:133 but was never given a configInput or a PortWidget, so it has no name and no jack. The button carries no printed name on the panel; the maker's tooltip calls it Let it out."
+}

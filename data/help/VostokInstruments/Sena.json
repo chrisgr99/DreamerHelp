@@ -1,0 +1,58 @@
+{
+  "plugin": "VostokInstruments",
+  "module": "Sena",
+  "description": "Four oscillators — a sine, a triangle, a saw and a square — each with its own waveshaping control and its own rate range, plus a bank of four noise colours",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets that channel's frequency: 15Hz to 1000Hz in VCO mode with coarse tuning, 0.15Hz to 10Hz in LFO mode with coarse tuning, and a twelfth of a semitone either side of C0 in fine tuning"},
+    {"ids": [4], "text": "Folds the sine wave back on itself, adding harmonics as it is turned up"},
+    {"ids": [5], "text": "Hardens the triangle towards a squarer shape by clipping it at a rising gain"},
+    {"ids": [6], "text": "Offsets a copy of the saw and subtracts a tenth of it, which thins and phases the waveform"},
+    {"ids": [7], "text": "Sets the width of the square wave, from half at fully counter-clockwise down to a twentieth at fully clockwise"},
+    {"ids": [8, 9, 10, 11], "text": "Switched to VCO that channel runs at audio rates, switched to LFO at modulation rates"},
+    {"ids": [12, 13, 14, 15], "text": "Switched to V/OCT that channel's frequency input is read as a volt-per-octave pitch; switched to FM it is read as linear frequency modulation, AC coupled and scaled at 120Hz per volt"},
+    {"ids": [16, 17, 18, 19], "text": "Switched to FINE that channel's frequency knob covers a twelfth of a semitone either side of C0 instead of its full range, and the knob jumps to the centre of that range as you switch"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Sets that channel's pitch or modulates its frequency, according to that channel's FM type switch; leave it unpatched and the channel takes whatever reached the input above it"},
+    {"ids": [4, 5, 6, 7], "text": "Modulates that channel's waveshaping control; a tenth of a volt moves it a hundredth of the way, and the result is added to the knob and held inside its range"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That channel's waveform at ±5V"},
+    {"ids": [4], "text": "White noise, a flat spectrum"},
+    {"ids": [5], "text": "Pink noise, falling at -3dB per octave"},
+    {"ids": [6], "text": "Blue noise, rising at +3dB per octave"},
+    {"ids": [7], "text": "Brown noise, falling at -6dB per octave, with its very low end filtered out"}
+  ],
+  "notes": [
+    "the four frequency inputs cascade: a channel with nothing patched reads the channel above it, and channel 1 with nothing patched reads 0V. Patch one and every channel below it follows.",
+    "switching a channel to FINE moves its frequency knob to the middle of the fine range, so the pitch it had at coarse tuning is not kept.",
+    "the noise outputs are only computed while something is patched to them, so an unpatched noise jack costs nothing."
+  ],
+  "menu": [
+    "Oversampling: Off, x2, x4, x8 — runs the oscillators above the sample rate to cut aliasing; x2 by default, and found on the Anti-aliasing submenu",
+    "Use ADAA — turns on antiderivative antialiasing in the waveshapers; on by default, and found on the Anti-aliasing submenu",
+    "Remove Pulse DC Offset — takes the DC offset out of the square output when its width is away from half; on by default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads the jack above it.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads the jack above it.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads the jack above it.",
+      "4": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "5": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "6": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "7": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only"
+    }
+  }
+}

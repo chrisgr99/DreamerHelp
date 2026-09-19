@@ -1,0 +1,58 @@
+{
+  "plugin": "FehlerFabrik-Suite",
+  "module": "PSIOP",
+  "description": "Four-operator FM percussion voice; every knob and CV is read at the instant a trigger arrives and held for the whole hit",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch the hit starts at, 1V per octave over four octaves either side of C4 at 261.63Hz"},
+    {"ids": [1], "text": "Shifts the starting pitch by up to a fifth of a volt either way, about two semitones"},
+    {"ids": [2], "text": "Sets the pitch the hit sweeps to, 1V per octave over four octaves either side of C4 at 261.63Hz"},
+    {"ids": [3], "text": "Picks one of 32 sets of frequency ratios for the four operators"},
+    {"ids": [4], "text": "Picks one of 64 combinations of wavetables for the four operators"},
+    {"ids": [5], "text": "Picks one of six FM algorithms, setting which operators modulate which and which ones reach the output"},
+    {"ids": [6], "text": "Feeds operator 1 back into its own wavetable position, none of it at the bottom of its travel and all of it at the top"},
+    {"ids": [7], "text": "Sets how long operators 1 and 3 take to fade out after a trigger, 1ms at the bottom of its travel and doubling with every five per cent of the way up"},
+    {"ids": [8], "text": "Sets how long operators 2 and 4 take to fade out after a trigger, 1ms at the bottom of its travel and doubling with every five per cent of the way up"},
+    {"ids": [9], "text": "Sets how fast the pitch sweeps from the start pitch to the end pitch; below a fifth of its travel there is no sweep and the pitch stays where it starts"},
+    {"ids": [10], "text": "Attenuates and inverts the CV for the release of operators 2 and 4"},
+    {"ids": [11], "text": "Attenuates and inverts the CV for the wave combination"},
+    {"ids": [12], "text": "Attenuates and inverts the CV for the FM ratios"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the starting pitch at 1V per octave, with the total clamped to four octaves either side of C4"},
+    {"ids": [1], "text": "Adds to the end pitch at 1V per octave, with the total clamped to four octaves either side of C4"},
+    {"ids": [2], "text": "Steps through the 32 ratio sets, one set per volt with its attenuverter fully up"},
+    {"ids": [3], "text": "Steps through the 64 wave combinations, one combination per volt with its attenuverter fully up"},
+    {"ids": [4], "text": "Steps through the six algorithms, one algorithm per volt"},
+    {"ids": [5], "text": "Adds to the feedback on operator 1, a fifth of the knob's range per volt"},
+    {"ids": [6], "text": "Adds to the release of operators 1 and 3, a fifth of the knob's range per volt"},
+    {"ids": [7], "text": "Adds to the release of operators 2 and 4 through its attenuverter, a fifth of the knob's range per volt at full"},
+    {"ids": [8], "text": "Adds to the pitch envelope speed, a fifth of the knob's range per volt"},
+    {"ids": [9], "text": "A rising edge fires the voice and freezes every knob and CV reading for that hit; it reads high above 2V and low below 0.4V"},
+    {"ids": [10], "text": "A trigger arriving on the same sample as the main trigger makes that hit louder and its modulation deeper"},
+    {"ids": [11], "text": "A rising edge silences the voice at once, dropping both amplitude envelopes to 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voice, reaching about 3.5V, or about 6.3V on an accented hit"}
+  ],
+  "notes": [
+    "The voice is silent until a rising edge reaches Trig: both amplitude envelopes rest at 0V, and every knob and CV is read at that instant and held for the whole hit."
+  ],
+  "menu": [
+    "DC Filter — removes any DC offset from the output; it is ticked until it is turned off",
+    "Speed Ramp Looping — repeats the pitch envelope instead of running it once per trigger",
+    "Trigger mods index — scales the depth of the FM by the height of the trigger voltage",
+    "Operators sync on trigger — resets the phase of all four operators on every trigger"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    },
+    "outputs": {
+      "0": "continuous"
+    }
+  }
+}

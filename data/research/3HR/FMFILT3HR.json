@@ -1,0 +1,21 @@
+{
+  "plugin": "3HR",
+  "module": "FMFILT3HR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp reads it with getPolyVoltageSimd in ConfigCollect, scales it by 0.1 times the CV knob and adds it to the cutoff knob before a clamp to 0.014032 and 0.95"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "FMFILT3HR.cpp ConfigCollect reads it with getNormalPolyVoltageSimd, scales it by 0.2 and clamps to ±1, then adds its product with the FM A amount and the cutoff to the cutoff"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "FMFILT3HR.cpp ConfigCollect reads it with getNormalPolyVoltageSimd, scales it by 0.3 and clamps to ±1, then multiplies the cutoff by it through the FM B amount"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp ConfigCollect reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp ConfigCollect reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp ConfigCollect reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp ConfigCollect reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to -1 and 1"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FMFILT3HR.cpp ConfigCollect reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "8": {"family": "audio", "poly": true, "why": "FMFILT3HR.cpp process takes this port's getChannels() as the module's channel count and reads it with getPolyVoltageSimd"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "FMFILT3HR.cpp process sets this port's channel count from the audio input and writes it with setVoltageSimd"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. The panel letters the additive modulation FM A and the multiplicative one FM B, which the maker's README calls Additive and Multiplicative; the parameter and port names follow the README. The cutoff CV amount parameter is configured with the range 0.014032 to 0.95 (FMFILT3HR.cpp:149), which are the cutoff clamp limits pasted into the wrong place, so that trim knob cannot be turned fully down or fully up. The cutoff itself is squared before use, so the lower part of the knob's travel covers a small part of the range."
+}

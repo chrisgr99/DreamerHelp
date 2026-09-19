@@ -1,0 +1,83 @@
+{
+  "plugin": "forsitan",
+  "module": "caligo",
+  "description": "A long echo with a dense allpass diffuser inside its feedback loop, so every repeat comes back smeared further than the last, with the loop broken out to a send and return",
+  "params": [
+    {"ids": [0], "text": "Sets the long delay, 10ms to 16 seconds; with a clock patched it becomes a ratio of that clock instead"},
+    {"ids": [1], "text": "Scales all twenty-four diffuser delays together, half to four times; below one the network is short and metallic, above two the diffuser itself rings for a couple of hundred milliseconds"},
+    {"ids": [2], "text": "Sets the allpass rotation angle: fully anticlockwise the diffuser collapses to twenty-four delays in series with silence between repeats, and the densest smear is nearer three fifths than the top"},
+    {"ids": [3], "text": "Sets the loop gain, 0% to 120%; at 100% it sustains indefinitely and past that the saturator is what holds it, so the top fifth is a drive control"},
+    {"ids": [4], "text": "Sets how much top end each pass loses, 0% to 99%, with the damping frequency held steady across sample rates"},
+    {"ids": [5], "text": "Sets the depth of the quadrature modulation on the delay inside the loop, cosine on the left and sine on the right, ±2.5ms at full; it decorrelates the repeats rather than chorusing them"},
+    {"ids": [6], "text": "Sets the rate of that modulation, 0.02Hz to 10Hz; the lamp above it blinks at that rate"},
+    {"ids": [7], "text": "Crossfades the dry and treated signals at equal power"},
+    {"ids": [8], "text": "Sets the channel rotator angle: fully anticlockwise the two channels never meet and give two independent mono echoes, and fully clockwise they are swapped at every level and trade material"},
+    {"ids": [9], "text": "Sets a slow bounded random walk on the size, nothing fully anticlockwise and ±45% over steps of half a second to four seconds fully clockwise"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "Attenuates and inverts the voltage at the jack beside it before it is added to the knob above, -100% to +100%"},
+    {"ids": [20], "text": "Latches the loop frozen: the feedback goes to exactly one, the input is shut out of it, damping is bypassed and the delay time is held, crossfaded in over about 10ms"},
+    {"ids": [21], "text": "Reseeds the scattering network, giving a different room reached through the same controls; it slides into the new arrangement over about a quarter of a second rather than jumping"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal to treat"},
+    {"ids": [1], "text": "The right side of the signal to treat; with nothing patched here the left jack feeds both sides"},
+    {"ids": [2], "text": "While a clock is patched here, the time knob snaps to ratios of it, from a twelfth up to twelve times, with 1 to 1 at noon, and a change lands on the next clock edge"},
+    {"ids": [3], "text": "Above its threshold the loop is frozen, and releasing it thaws; it overrides the button while it is high"},
+    {"ids": [4], "text": "A rising edge reseeds the scattering network"},
+    {"ids": [5], "text": "The left side of what comes back from whatever the send jacks were patched into; unpatched, the send is fed straight through"},
+    {"ids": [6], "text": "The right side of what comes back; unpatched it takes the left return, and with neither patched the send is fed straight through"},
+    {"ids": [7], "text": "Added to the time knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [8], "text": "Added to the size knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [9], "text": "Added to the diff knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [10], "text": "Added to the feedback knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [11], "text": "Added to the damp knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [12], "text": "Added to the mod knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [13], "text": "Added to the rate knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [14], "text": "Added to the mix knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [15], "text": "Added to the spin knob through the attenuverter beside it, ±5V for the knob's whole range"},
+    {"ids": [16], "text": "Added to the drift knob through the attenuverter beside it, ±5V for the knob's whole range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the feedback loop, tapped after the long delay and before the feedback gain"},
+    {"ids": [1], "text": "The right side of the feedback loop, tapped after the long delay and before the feedback gain"},
+    {"ids": [2], "text": "The left side of the treated signal crossfaded with the dry one"},
+    {"ids": [3], "text": "The right side of the treated signal crossfaded with the dry one"}
+  ],
+  "notes": [
+    "whatever is patched between send and return is inside the loop, so it colours every repeat and its effect compounds pass after pass.",
+    "the diffuser has a length of its own, about 70ms at a size of one, so the shortest repeat interval reachable is the time setting plus that."
+  ],
+  "menu": [
+    "Time change — what happens when the delay time moves: Dissolve (crossfade, as the original) or Tape (pitch-bending)",
+    "Clock sync target — what the clock jack governs: Time, or Time + rate",
+    "Freeze bypasses damping — keeps the damping out of the loop while frozen, which is what the original does",
+    "Input to loop when frozen — Muted (true freeze) or Open (feed the frozen cloud)",
+    "Reset scattering to the original — puts the prime-index scales back to the values the original algorithm uses"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "high above 1.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads the send, fed straight through.",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads the left return.",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only",
+      "9": "±5V · continuous · one channel only",
+      "10": "±5V · continuous · one channel only",
+      "11": "±5V · continuous · one channel only",
+      "12": "±5V · continuous · one channel only",
+      "13": "±5V · continuous · one channel only",
+      "14": "±5V · continuous · one channel only",
+      "15": "±5V · continuous · one channel only",
+      "16": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous · one channel only",
+      "3": "continuous"
+    }
+  }
+}

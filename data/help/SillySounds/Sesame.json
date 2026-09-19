@@ -1,0 +1,40 @@
+{
+  "plugin": "SillySounds",
+  "module": "Sesame",
+  "description": "A clock shaper: it bunches alternate beats of an incoming clock into pairs to make a swing, and can divide a beat into as many as eight even pulses when a trigger arrives",
+  "params": [
+    {"ids": [0], "text": "Sets the swing as a percentage, 0 to 100 in whole steps; it shortens the active part of each beat by that share of the clock period and delays the first beat of each pair by the same amount"},
+    {"ids": [1], "text": "swing mod — an attenuverter, -1 to +1, scaling how much the swing mod input moves the swing; at +1, 10V there covers the whole travel of %gap"},
+    {"ids": [2], "text": "Sets how many evenly spaced pulses one clock beat is divided into, 1 to 8 in whole steps"},
+    {"ids": [3], "text": "dupe mod — an attenuverter, -1 to +1, scaling how much the dupe mod input moves the number of pulses; at +1, 10V there shifts the count by the full eight"},
+    {"ids": [4], "text": "A momentary button; each press moves the swing onto the other beat of the pair, so the beats that were pushed apart are pushed together instead"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock this module reshapes; each rise above 1V is timed against the one before it, and that period is what the swing and the division work on"},
+    {"ids": [1], "text": "swing mod input — divided by 10V, scaled by the swing mod knob and added to the %gap knob, with the total held between no swing and full swing"},
+    {"ids": [2], "text": "Each rise above 1V divides the beat in progress into the number of pulses set by mult; the division is cleared at the next clock rise, so a fresh rise is needed for every beat"},
+    {"ids": [3], "text": "dupe mod input — read at the moment trig rises and added to the mult knob, 10V scaled by the dupe mod knob shifting the count by eight; the total is held between 1 and 8 and rounded down"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The reshaped clock, 0V or 10V, carrying as many channels as the wider of trig and the dupe mod input, and never fewer than one"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched to clock. With that jack empty the module skips all of its processing and holds the output at 0V.",
+    "%gap at 100 leaves no active part of the beat at all, and the output stops.",
+    "the red lamp above mult is lit from the moment a division is triggered until the next clock rise. The red lamp above %gap follows the output voltage.",
+    "the swing is worked out once for the whole module and is the same on every channel. Only the division count is per channel.",
+    "holding a constant 10V on trig, as the maker's README advises, divides the first beat only: trig reacts to a rise, and the division is cleared at every clock rise. Patch the clock into trig.",
+    "one Schmitt trigger is shared across all channels of trig, so a polyphonic cable there does not give each channel its own edge detection."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "2": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 1 to 8V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

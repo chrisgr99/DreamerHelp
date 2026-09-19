@@ -1,0 +1,20 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "NoteLoop",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "NoteLoop.cpp:393 reads the matching channel of this input as the pitch of the note it stores"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "NoteLoop.cpp:323 takes getChannels() on this input for the outputs, and :376-378 reads each channel into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "NoteLoop.cpp:394 reads the matching channel of this input as the second CV of the note it stores"},
+      "3": {"family": "trigger", "poly": false, "why": "NoteLoop.cpp:308 and :342 reads channel one of this input only (getVoltage with no channel), and read it either as a clock edge or, with the BPM CV option on, as a tempo of two to the power of volts"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "NoteLoop.cpp:337 reads channel one of this input only (getVoltage with no channel) into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171) together with the CLEAR button"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "NoteLoop.cpp:295 reads channel one of this input only (getVoltage with no channel) into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171) together with the LOOP button"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "why": "NoteLoop.cpp:326-332 sets the channel count of this output from the gate input, or to one in mono mode"},
+      "1": {"family": "trigger", "poly": true, "why": "NoteLoop.cpp:326-332 sets the channel count of this output from the gate input, or to one in mono mode"},
+      "2": {"family": "cv", "poly": true, "why": "NoteLoop.cpp:326-332 sets the channel count of this output from the gate input, or to one in mono mode"}
+    }
+  },
+  "comment": "The tempo input is read as a clock edge, or as a tempo CV of two to the power of volts when the BPM CV option is on (NoteLoop.cpp:307-308), so what it expects depends on that setting."
+}

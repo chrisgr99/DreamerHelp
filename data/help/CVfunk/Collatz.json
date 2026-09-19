@@ -1,0 +1,43 @@
+{
+  "plugin": "CVfunk",
+  "module": "Collatz",
+  "description": "A burst generator driven by the Collatz conjecture: a whole number is halved when even and tripled plus one when odd, and each number in the chain becomes a count of triggers filling one clock beat",
+  "params": [
+    {"ids": [0], "text": "Sets the whole number the chain starts from, 2 to 1000"},
+    {"ids": [1], "text": "Attenuverts the number CV, which is scaled so that one volt moves the starting number by a hundred"},
+    {"ids": [2], "text": "Returns the chain to its start on each press and silences both trigger outputs"},
+    {"ids": [3], "text": "Sets the number the chain is taken modulo, 1 to 100, which is what turns each number in the chain into a trigger count"},
+    {"ids": [4], "text": "Attenuverts the modulus CV, which is scaled so that one volt moves the modulus by ten"},
+    {"ids": [5], "text": "Arms the chain on each press; it begins on the next clock pulse"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the chain by one number, and the triggers for that number are spread evenly across the time until the next rise"},
+    {"ids": [1], "text": "Shifts the starting number, scaled by a hundred and added to the number knob through its attenuverter; the total is taken as a whole number without its sign"},
+    {"ids": [2], "text": "Shifts the modulus, scaled by ten and added to the modulus knob through its attenuverter; the total is taken as a whole number without its sign"},
+    {"ids": [3], "text": "A rise returns the chain to its start; while a cable is in START, the chain then restarts straight away if that jack is above 0V"},
+    {"ids": [4], "text": "A rise arms the chain, which begins on the next clock pulse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a burst of 10V triggers evenly spaced across one clock beat, as many as the current number modulo the modulus, each lasting half its own spacing"},
+    {"ids": [1], "text": "Carries a second burst of 10V triggers across one clock beat, as many as the current number divided by the first count and taken modulo the modulus"},
+    {"ids": [2], "text": "Carries 10V while no chain is running and 0V while one is, so it goes high when a chain reaches 1 and stops"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched and the chain is started, by the START button or a rise at the START jack; the two trigger outputs are forced to 0V whenever the clock jack is empty",
+    "the chain always ends: every Collatz chain reaches 1, and the module stops there and raises the END output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "stepped · one channel only",
+      "4": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "C42",
+  "description": "Sequencer built on a grid of cells that are on or off running Conway-style cellular automaton rules, read by up to sixteen play heads that count the cells that are on around them",
+  "params": [
+    {"ids": [0], "text": "Moves the play head across the columns; a right click on the grid sets it to the column clicked"},
+    {"ids": [1], "text": "Moves the play head across the rows; a right click on the grid sets it to the row clicked"},
+    {"ids": [2], "text": "Runs one generation of the automaton"},
+    {"ids": [3], "text": "Lets the Gen input run generations; while it is off only the Gen button does"},
+    {"ids": [4], "text": "Winds the grid back to how it stood at the last edit"},
+    {"ids": [5], "text": "The share of cells a random fill switches on, 0 to 1"},
+    {"ids": [6], "text": "Fills the grid at random, at the share set by Dens"},
+    {"ids": [7], "text": "The voltage one counted cell is worth at the CV outputs, 0.01V to 2V; at one twelfth of a volt each counted cell is a semitone"},
+    {"ids": [8], "text": "Lets the CvX input place the play heads; while it is off the CvX knob alone sets the column"},
+    {"ids": [9], "text": "Lets the CvY input place the play heads; while it is off the CvY knob alone sets the row"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Places a play head on a column for each of its channels, the grid width spread over 0-10V, added to the CvX knob and wrapped around the grid"},
+    {"ids": [1], "text": "Places a play head on a row for each of its channels, the grid height spread over 0-10V, added to the CvY knob and wrapped around the grid"},
+    {"ids": [2], "text": "A rising edge runs one generation while On is lit"},
+    {"ids": [3], "text": "A rising edge winds the grid back to how it stood at the last edit"},
+    {"ids": [4], "text": "Switches the On button on above 1V and off below"},
+    {"ids": [5], "text": "Sets the random density, 0-10V across the whole range, and overrides the Dens knob while patched"},
+    {"ids": [6], "text": "Sets the level, 0-10V across the whole range, and overrides the Lvl knob while patched"},
+    {"ids": [7], "text": "Fills the grid at random while the voltage here is above 1V"},
+    {"ids": [8], "text": "Switches the CvX On button on above 1V and off below"},
+    {"ids": [9], "text": "Switches the CvY On button on above 1V and off below"},
+    {"ids": [10], "text": "Sets which neighbour counts switch a cell that is off on, one channel per count from none to eight, above 0V for a count that gives birth; it is read only while the survive input is patched as well"},
+    {"ids": [11], "text": "Sets which neighbour counts keep a cell that is on switched on, one channel per count from none to eight, above 0V for a count that survives; it is read only while the birth input is patched as well"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10ms trigger on a play head's channel when the head moves onto a cell that is on, or when the cell under it is switched on"},
+    {"ids": [1], "text": "Counts the cells that are on in the row left of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [2], "text": "Counts the cells that are on in the row right of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [3], "text": "Counts the cells that are on in the column above the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [4], "text": "Counts the cells that are on in the column below the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [5], "text": "Counts the cells that are on on the diagonal above and left of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [6], "text": "Counts the cells that are on on the diagonal above and right of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [7], "text": "Counts the cells that are on on the diagonal below and left of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [8], "text": "Counts the cells that are on on the diagonal below and right of the play head and multiplies that count by the level, one channel per play head"},
+    {"ids": [9], "text": "Carries the level voltage while the play head is on a cell that is on and 0V while it is not, one channel per play head"},
+    {"ids": [10], "text": "Carries 10V on a play head's channel while that head is on a cell that is on"},
+    {"ids": [11], "text": "Passes the Gen input through on a play head's channel while that head is on a cell that is on and On is lit"}
+  ],
+  "notes": [
+    "the grid comes up with every cell off, so the counts are all zero and no gate fires: click cells on, press Rnd for a random fill, or paste a pattern in from the clipboard",
+    "clicking a cell in the grid switches it on or off, and right clicking moves the play head to that cell"
+  ],
+  "menu": [
+    "size — sets the width and height of the grid, any value from 8 to 32",
+    "Clear — empties the grid",
+    "Paste RLE from Clipboard — reads a run length encoded pattern from the system clipboard and writes it in at the play head",
+    "Rule — picks the automaton rule: B3/S23, B34/S34, B234/S, B2/S, B1/S1, B36/S125, B345/S5, B2/S2 or B2/S1, each run on a torus so the edges wrap around"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 0V · stepped · polyphonic",
+      "11": "high above 0V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "stepped · polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic",
+      "10": "polyphonic",
+      "11": "polyphonic"
+    }
+  }
+}

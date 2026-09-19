@@ -1,0 +1,24 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoLooper1Exp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "The manual says polyphonic sources are summed into one audio signal per channel, and that the left input is duplicated to the right when the right jack is empty"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the jack to its left", "why": "SickoLooper1Exp.cpp:1748 getVoltageSum sums every channel of this jack into one value, scales it by that track's SOURCE knob and clamps it to ±10V; :1754 substitutes the left jack's value when this one is empty, and :1762 copies this one onto the left channel when the left jack is empty"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoLooper1Exp.cpp takes this jack as a rising edge at 1V, the same path as the REC button"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoLooper1Exp.cpp takes this jack as a rising edge at 1V, the same path as the PLAY button"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoLooper1Exp.cpp takes this jack as a rising edge at 1V, the same path as the STOP button"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoLooper1Exp.cpp takes this jack as a rising edge at 1V and erases the loop"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "The manual describes this jack as a v/oct input for playing the loop at a different speed, with C4 as the unchanged pitch"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "SickoLooper1Exp.cpp takes this jack as a rising edge at 1V, the same path as the REV button"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "the PAN knob alone", "why": "SickoLooper1Exp.cpp:3333-3338 adds this input to the PAN knob and clamps the sum to -1 to 1 — the voltage over 5 less 1 in the shipped 0/10v mode, the voltage over 5 in +/-5v, over 10 in +/-10v; :3330 leaves the knob alone when nothing is patched"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "SickoLooper1Exp.cpp reads this jack as an attenuation on the track volume"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "The manual describes the track outputs as a stereo audio pair; SickoLooper1Exp.cpp writes them with setVoltage() and there is no setChannels in the file"},
+      "1": {"family": "audio", "poly": false, "why": "The manual describes the track outputs as a stereo audio pair; SickoLooper1Exp.cpp writes them with setVoltage() and there is no setChannels in the file"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "The manual says the EoL output sends a 1ms trigger at the end of the loop"}
+    }
+  },
+  "comment": "Input index 2 is SOURCELVL_INPUT, declared but never given a widget, so it cannot be clicked and gets no line, no tag and no props. The PAN CV range is given as ±5V because that is the middle of the three the menu offers. The track menu has no 'Detect tempo and set bpm' item here, which the manual says is on sickoLooper1 only. The bar display is a custom widget with no ParamWidget, so the track menu it carries cannot be reached by clicking it for help; the same items are on the module's own menu under Track settings."
+}

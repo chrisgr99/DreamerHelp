@@ -1,0 +1,24 @@
+{
+  "plugin": "Valley",
+  "module": "Feline",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "normal": "the RIGHT jack", "why": "Feline.cpp:76 reads this input with getVoltage() alone and Feline.cpp:79 takes the RIGHT jack instead when only that one is patched"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the LEFT jack", "why": "Feline.cpp:77 reads this input with getVoltage() alone and Feline.cpp:82 takes the LEFT jack instead when only that one is patched"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:43 multiplies this input by its attenuverter and adds it to the cutoff knob; VecOTAFilter.cpp:92 clamps the total to 0..10V and VecOTAFilter.cpp:148 takes 440Hz times 2 to the power of that voltage minus 5"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:47 multiplies this input by its attenuverter and adds it to the resonance knob, and VecOTAFilter.cpp:135 clamps the total to 0..10V"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:69 multiplies this input by a tenth of its attenuverter and Feline.cpp:72 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±10V", "why": "Feline.cpp:51 multiplies this input by a tenth of its attenuverter and Feline.cpp:53 clamps the knob-plus-input total to -1..1, the span a tenth of ±10V covers"},
+      "7": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:44 multiplies this input by its attenuverter and adds it to the cutoff knob; VecOTAFilter.cpp:92 clamps the total to 0..10V and VecOTAFilter.cpp:148 takes 440Hz times 2 to the power of that voltage minus 5"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:48 multiplies this input by its attenuverter and adds it to the resonance knob, and VecOTAFilter.cpp:135 clamps the total to 0..10V"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Feline.cpp:70 multiplies this input by a tenth of its attenuverter and Feline.cpp:72 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±10V", "why": "Feline.cpp:52 multiplies this input by a tenth of its attenuverter and Feline.cpp:53 clamps the knob-plus-input total to -1..1, the span a tenth of ±10V covers"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"}
+    }
+  },
+  "comment": "The Trgt CV jacks and their two attenuverters (params 11 and 16, inputs 6 and 11) are never read in Feline::step in 2.4.5; the spacing target comes from the slider alone."
+}

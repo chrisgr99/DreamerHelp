@@ -1,0 +1,52 @@
+{
+  "plugin": "Geodesics",
+  "module": "DarkEnergy",
+  "description": "A two-oscillator complex voice combining cross modulation, self modulation and ring modulation, with a ring output and one output per oscillator",
+  "params": [
+    {"ids": [0, 1], "text": "Steps that oscillator's pitch knob through a free sweep, fifths and octaves, and a 10V drop that takes it down to LFO range"},
+    {"ids": [2, 3], "text": "Sets the pitch of that oscillator across plus or minus 3 octaves, added to the 1V/oct input and to the centre pitch knob"},
+    {"ids": [4], "text": "Shifts the pitch of both oscillators together across plus or minus 3 octaves"},
+    {"ids": [5], "text": "Attenuverts the cross modulation CV before it is added to both cross modulation amounts, or to one of them when the CV mode button splits them"},
+    {"ids": [6, 7], "text": "Sets how much the other oscillator modulates this one's frequency, from none to full"},
+    {"ids": [8], "text": "Attenuverts the self modulation CV before it is added to both self modulation amounts, or to one of them when the CV mode button splits them"},
+    {"ids": [9, 10], "text": "Sets how much of that oscillator's own output is fed back into its own frequency, from none to full"},
+    {"ids": [11], "text": "Chooses, for cross modulation and again for self modulation, whether its CV moves both oscillators together, or a positive CV moves C alone and a negative CV moves M alone"},
+    {"ids": [12], "text": "Makes the extra modulation envelope set the level of the energy output and the C output; with it off both stay at full"},
+    {"ids": [13], "text": "Sets how long the extra modulation envelope takes to fall, 2ms to 2 seconds"},
+    {"ids": [14], "text": "Steps through where the extra modulation envelope is sent: nowhere, the cross modulation CV, the self modulation CV, or both of them"},
+    {"ids": [15], "text": "Restarts the phase of both oscillators"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Adds to the pitch of that oscillator at one volt per octave"},
+    {"ids": [2], "text": "Sets the pitch of both oscillators at one volt per octave, and the number of channels here sets the polyphony"},
+    {"ids": [3], "text": "A 0V to 10V signal shaped by a 2.5ms rise and the decay knob into the extra modulation envelope; with nothing patched here that envelope is fired by every change at the 1V/oct input"},
+    {"ids": [4], "text": "Lengthens the extra modulation decay, the whole 2ms to 2 seconds span across 0V to 10V, added to the decay knob"},
+    {"ids": [5], "text": "Modulates the cross modulation amount by a tenth of full per volt, after the centre cross modulation knob attenuverts it"},
+    {"ids": [6], "text": "Modulates the self modulation amount by a tenth of full per volt, after the centre self modulation knob attenuverts it"},
+    {"ids": [7, 8], "text": "A rising edge here restarts the phase of that oscillator"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The M sine multiplied by the square of the C sine and inverted, scaled by the extra modulation envelope while the amp button is on"},
+    {"ids": [1], "text": "The M oscillator's sine on its own"},
+    {"ids": [2], "text": "The square of the C oscillator's sine, scaled by the extra modulation envelope while the amp button is on"}
+  ],
+  "notes": [
+    "the C output is a sine multiplied by itself, so it never goes below 0V",
+    "a trigger at a phase reset input starts that oscillator's cycle again, which makes an LFO shape repeatable and works like oscillator sync at audio rate",
+    "the amp button and a modulation destination together make the extra modulation envelope move timbre and level at once, in the manner of a lowpass gate"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "7": "stepped",
+      "8": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "NoSuchDevice",
+  "module": "TrigGate",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/TrigGate.cpp:46 getVoltage(), :48 rescale(v, 0.1, 2.0, 0, 1) into a SchmittTrigger left at Rack's default 0 and 1 thresholds, so 2V rising and 0.1V falling"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/TrigGate.cpp:47 getVoltage(), :52 rescale(v, 0.1, 2.0, 0, 1) into a SchmittTrigger left at Rack's default 0 and 1 thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/TrigGate.cpp:59 setVoltage(10.0f) and :64 setVoltage(0.0f); no other write to this port"}
+    }
+  },
+  "comment": "Both trigger inputs are pushed through rescale(v, 0.1f, 2.0f, 0.f, 1.f) before a SchmittTrigger whose thresholds are left at Rack's defaults, so the real thresholds are 2V rising and 0.1V falling rather than the 1V/0.1V a reader would expect from a Rack module. The output is written only on a transition, so it holds its last value across a sample-rate change. No port reads getChannels or getPolyVoltage anywhere in the plugin, so nothing here is polyphonic."
+}

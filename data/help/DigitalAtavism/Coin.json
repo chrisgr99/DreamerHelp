@@ -1,0 +1,45 @@
+{
+  "plugin": "DigitalAtavism",
+  "module": "Coin",
+  "description": "An 8-bit coin-pickup voice: a square wave that jumps to a second pitch part-way through the note, shaped by a hold-and-release envelope",
+  "params": [
+    {"ids": [0], "text": "Sets the starting pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it"},
+    {"ids": [1], "text": "Sets how far the pitch jumps when the note reaches the time set by TIME, from 24 semitones down to 24 semitones up"},
+    {"ids": [2], "text": "Sets how long after the trigger the pitch jumps, from 0ms to 400ms"},
+    {"ids": [3], "text": "Adds a burst of extra level at the start of the note which fades away across the hold stage; the knob starts at 100%, above the 60% maximum it is configured with"},
+    {"ids": [4], "text": "Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms"},
+    {"ids": [5], "text": "Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the starting pitch set by FREQ at one volt per octave, read at the moment the trigger arrives"},
+    {"ids": [1], "text": "Adds to the pitch jump set by FMOD at one volt per octave, read at the moment the jump happens"},
+    {"ids": [2], "text": "Doubles the time set by TIME per volt and halves it per volt below zero, up to a ceiling of 800ms, read at the moment the trigger arrives"},
+    {"ids": [3], "text": "Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [4], "text": "Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [5], "text": "Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start"}
+  ],
+  "outputs": [
+    {"ids": [1], "text": "A 1ms pulse at 10V at the moment the pitch jumps"},
+    {"ids": [2], "text": "The envelope as a voltage from 0V to 10V, quantised to 127 steps"},
+    {"ids": [3], "text": "The voice, quantised to 127 steps and clipped at 5V either way"}
+  ],
+  "notes": [
+    "With nothing patched into the TRIG input the envelope is held wide open and the square wave drones. It only shapes the sound once a trigger cable is in.",
+    "The starting pitch, the jump time, the hold, the release and the punch are read once, at the moment the trigger fires; the pitch jump itself is read when the jump happens."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "1": "stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "stepped · one channel only"
+    }
+  }
+}

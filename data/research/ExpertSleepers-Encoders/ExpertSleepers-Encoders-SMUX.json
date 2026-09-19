@@ -1,0 +1,17 @@
+{
+  "plugin": "ExpertSleepers-Encoders",
+  "module": "ExpertSleepers-Encoders-SMUX",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "why": "SMUX.cpp:72-73 reads getVoltage() with no channel on every second process call, into one of the two left slots"},
+      "1": {"poly": false, "step": "continuous", "negative": "swings", "why": "SMUX.cpp:72-73 reads getVoltage() with no channel on every second process call, into one of the two left slots"},
+      "2": {"poly": false, "step": "continuous", "negative": "swings", "why": "SMUX.cpp:74-75 reads getVoltage() with no channel on every second process call, into one of the two right slots"},
+      "3": {"poly": false, "step": "continuous", "negative": "swings", "why": "SMUX.cpp:74-75 reads getVoltage() with no channel on every second process call, into one of the two right slots"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "SMUX.cpp:78 writes one of the two stored left values with setVoltage() and no channel, choosing by the alternating parity"},
+      "1": {"poly": false, "why": "SMUX.cpp:79 writes one of the two stored right values with setVoltage() and no channel, choosing by the alternating parity"}
+    }
+  },
+  "comment": "Source read at commit 95496e8, HEAD of the maker's repository; its plugin.json is byte-for-byte the installed 2.1.0 manifest. All four inputs are read only on the even half of the parity (SMUX.cpp:70-76), so each is effectively sampled at half the engine rate; the two outputs then replay the stored pair one value per sample. Flip is implemented as an index offset — inputs[m_flipL] and inputs[1-m_flipL] — so it exchanges which of the two left inputs is written into the first slot, and the same for the right. The buttons are momentary LEDButtons feeding SchmittTriggers, so each press toggles the stored flip rather than holding it. No family is given for any jack: the inputs carry whatever is sent to the hardware and the outputs carry an interleaved stream. The panel prints the inputs 1 to 4, the buttons Flip L and Flip R, and the outputs L and R."
+}

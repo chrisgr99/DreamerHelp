@@ -1,0 +1,20 @@
+{
+  "plugin": "RebelTech",
+  "module": "Phoreo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Phoreo.cpp:239-241 clockTriggers[0].process(voltage, 0.1f, 2.f) restarts the pulse width stage, read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Phoreo.cpp:222-223 scales the clamped ±10V by the attenuator, divides by ten and adds it to the pulse width knob over 100, the sum held between 0 and 1; read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "the clock at the pulse width input", "why": "Phoreo.cpp:245-247 clockTriggers[1].process(getNormalVoltage(durClock), 0.1f, 2.f) drives the multiplier, read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Phoreo.cpp:226-229 scales the clamped ±10V by the attenuator, divides by ten, multiplies by 16 and adds it to the multiplier knob, the sum held between 1 and 16; read at voltages[0] with no channel loop"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "the clock the multiplier is using", "why": "Phoreo.cpp:251-253 clockTriggers[2].process(getNormalVoltage(mulClock), 0.1f, 2.f) fires the repeater, read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Phoreo.cpp:232-235 scales the clamped ±10V by the attenuator, divides by ten, multiplies by 16 and adds it to the repeat knob, the sum held between 1 and 16; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Phoreo.cpp:263 setVoltage with no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "why": "Phoreo.cpp:264 setVoltage with no setChannels anywhere in the file"},
+      "2": {"family": "trigger", "poly": false, "why": "Phoreo.cpp:265 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The pulse width set by the MOD knob is used by all three stages: ClockDuration::duration is read by ClockMultiplier::rise at Phoreo.cpp:92 and ClockRepeater::rise at line 141 as well as by the pulse width stage itself. The maker's input names carry the normalling: \"Multiplied clock (normalled to above clock)\" and \"Trigger repetitions clock (normalled to above clocks)\". The commit that raised the version to 2.0.1 is titled \"Prep for poly phoreo\", but no polyphony was added: every jack in the module is read at voltages[0]."
+}

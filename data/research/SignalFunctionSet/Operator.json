@@ -1,0 +1,22 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Operator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "bell.cpp:176 names this input polyphonic and the manual states that its channel count sets the module's polyphony, up to sixteen voices"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "why": "bell.cpp:253 getChannels sizes the voice count and :267 reads each channel with getVoltage(ch); a rise past 1V latches that channel's note and velocity and a fall below 0.1V releases it"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "velocity 100 of 127", "why": "bell.cpp:272 reads it per channel with getVoltage(ch) at the gate's rising edge only, scaling 0 to 10V to 1 to 127; unpatched the note takes a fixed 100 of 127"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "bell.cpp:179 names it the voice select CV, whose scale is set on the menu"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "bell.cpp:180 names it the bank select CV, whose scale is set on the menu"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "bell.cpp:181 names it a volt per octave added to the tune knob"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "bell.cpp:310 adds getVoltage()/5 to the brightness knob and clamps the total to -1 to 1, so ±5V covers the whole travel; read once per 64-sample block"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "bell.cpp:338 adds getVoltage()/5*7 to the feedback knob, rounds the total to a whole number and clamps it to -7 to 7, so ±5V covers the whole travel in whole steps"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "bell.cpp:189 names this output polyphonic; it carries one channel per sounding voice"},
+      "1": {"family": "audio", "poly": true, "why": "bell.cpp:190 names this output polyphonic; it carries one channel per sounding voice"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "bell.cpp:191 names this output polyphonic and 0-10V, following the audio amplitude"}
+    }
+  },
+  "comment": "Two parameters and two inputs belonging to the algorithm morph are declared but never given a widget on this panel: the morph amount and its target algorithm, with a CV jack each (bell.cpp:183). They are reached from the menu and from the OP MORPH expander instead, so no click on the panel can get at them. The engine is Google's music-synthesizer-for-android DX7 core, reading the packed cartridge format exactly as the hardware stores it."
+}

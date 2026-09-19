@@ -1,0 +1,40 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "DivineCMOS",
+  "description": "Two binary clock dividers whose matching stages are exclusive-ORed together, the four results coming out as gates and as one mixed voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets how much that division adds into the OUT and SLEW jacks, 0V to 5V; it changes nothing at the division's own gate output"},
+    {"ids": [4], "text": "Sets the rate limit on the SLEW output, from about 18000 volts per second fully anticlockwise down to 1 volt per second fully clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps the first divider on each rise above 1V"},
+    {"ids": [1], "text": "Steps the second divider on each rise above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V while the two dividers disagree at their first stage, which with one input patched is a plain division of that clock by two"},
+    {"ids": [1], "text": "5V while the two dividers disagree at their second stage, which with one input patched is a plain division of that clock by four"},
+    {"ids": [2], "text": "5V while the two dividers disagree at their third stage, which with one input patched is a plain division of that clock by eight"},
+    {"ids": [3], "text": "5V while the two dividers disagree at their fourth stage, which with one input patched is a plain division of that clock by sixteen"},
+    {"ids": [4], "text": "The gain knobs of whichever divisions are high at that moment, added together, so it steps between 0V and 20V and never goes negative"},
+    {"ids": [5], "text": "The OUT voltage passed through a rate limiter set by the SLEW knob"}
+  ],
+  "notes": [
+    "with one input patched the gate outputs are a binary divider of that clock; with both patched each is the exclusive-OR of the two dividers, a one-bit ring modulator.",
+    "every output is unipolar, so a patch treating OUT as audio needs a DC blocker or a high-pass filter after it.",
+    "the four gain knobs come up fully anticlockwise, so OUT and SLEW stay at 0V until one of them is raised, even with a clock running."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only",
+      "4": "0 to 20V · one channel only",
+      "5": "0 to 20V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "plugin": "SanguineMonsters",
+  "module": "Sanguine-Monsters-Sphinx",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "sphinx.cpp:249 reads this input with getVoltage, divides it by 9 and adds the STEPS knob, then clamps the total to 0-1"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "range": "±10V", "why": "sphinx.cpp:265 rescales this input's getVoltage over -10V to 0V into -31 to 0 steps and adds it to the LENGTH knob, clamped to 1-32"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "sphinx.cpp:247 reads this input with getVoltage, divides it by 9 and adds the ROT knob, then clamps the total to 0-1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "sphinx.cpp:276 reads this input with getVoltage, divides it by 9 and adds the ACC ROT knob, then clamps the total to 0-1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "sphinx.cpp:250 reads this input with getVoltage, divides it by 9 and adds the ACC knob, then clamps the total to 0-1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "sphinx.cpp:246 reads this input with getVoltage, divides it by 9 and adds the PAD knob, then clamps the total to 0-1"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "sphinx.cpp:172 reads this input through a dsp::SchmittTrigger at its default 1V threshold"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "sphinx.cpp:161 reads this input through a dsp::SchmittTrigger at its default 1V threshold"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "sphinx.cpp:239 writes gateVoltage times 10 to this output"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "sphinx.cpp:241 writes accentVoltage times 10 to this output"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "sphinx.cpp:243 writes a pulse generator times 10 to this output"}
+    }
+  },
+  "comment": "The reverse button is parameter 8 and is never passed to configButton or configSwitch, so it carries no name and no tooltip; the code reads it at sphinx.cpp:165 and sphinx.cpp:179. The LENGTH CV is the only one of the six that is not divided by 9: it is rescaled so that a full 10V swing covers 31 steps."
+}

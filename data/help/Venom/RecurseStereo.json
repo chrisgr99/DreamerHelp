@@ -1,0 +1,41 @@
+{
+  "plugin": "Venom",
+  "module": "RecurseStereo",
+  "description": "Recurse Stereo: passes a stereo pair out and back through an effect up to 16 times in one go, giving each pass its own polyphony channel",
+  "params": [
+    {"ids": [0], "text": "Sets how many times each input channel goes round the send and return loop, 1 to 16, alike on both sides. Its display is yellow while every channel fits within 16 and red while channels are dropped"},
+    {"ids": [1], "text": "Multiplied with the SCALE input to give the factor both sides are multiplied by, so the loop can ring modulate"},
+    {"ids": [2], "text": "Added to the OFFSET input to give the voltage added to both sides"},
+    {"ids": [3], "text": "Sets when the scale and offset are applied on both sides: 1Pre once before the first send, nPre before every send, nPost after every return, 1Post once after the last return"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Multiplied with the SCALE knob to give the factor both sides are multiplied by; channels beyond those at the left input are ignored"},
+    {"ids": [1], "text": "Added to the OFFSET knob to give the voltage added to both sides; channels beyond those at the left input are ignored"},
+    {"ids": [2, 3], "text": "Takes the processed passes of its own side back in, channel for channel with the send on that side; unpatched it takes that send itself"},
+    {"ids": [4], "text": "The left signal to be processed. Its channel count sets the polyphony for both sides, and that count multiplied by the recursion count must be 16 or less"},
+    {"ids": [5], "text": "The right signal to be processed; unpatched it takes the left input, and any channels beyond the left input's count are ignored"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries every pass of every channel of the input on its own side, the input channel count multiplied by the recursion count, with the passes of one channel consecutive"},
+    {"ids": [2, 3], "text": "The signal of its own side after its last return, with the same channels as the left input apart from any that were dropped"}
+  ],
+  "menu": [
+    "Order of operation — Scale before offset or Offset before scale, and a small lamp glows yellow beside whichever of the two comes first"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

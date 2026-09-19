@@ -1,0 +1,37 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Overtone",
+  "description": "An additive oscillator: a sine fundamental with eight switchable overtones above it at harmonics two to nine, each at one over its harmonic number",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Switches that overtone in or out of the sum; the lamp above it shows whether it is actually sounding once the filter and the mask CV have had their say"},
+    {"ids": [8], "text": "Keeps all the harmonics, only the odd-numbered ones, or only the even-numbered ones"},
+    {"ids": [9], "text": "Sets the pitch, four octaves either side of 261.63Hz, shown in hertz on the tooltip"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch as a volt per octave, added to the frequency knob; the result is held between 8Hz and 20000Hz"},
+    {"ids": [1], "text": "Picks the set of overtones directly and takes the eight switches out of the picture: 0-10V is read as an eight-bit pattern by default, or as a count of harmonics from the bottom up on the menu setting"},
+    {"ids": [2], "text": "Picks the harmonic filter: below 1.67V all the harmonics, below 3.33V the odd ones only, and above that the even ones only, taking the panel switch out of the picture"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sum of the fundamental and whichever overtones are sounding, normalised to ±5V so that switching harmonics changes the timbre and not the level"}
+  ],
+  "notes": [
+    "the fundamental is always present and cannot be switched out; the eight switches control the overtones above it",
+    "an overtone is switched in or out at its own next zero crossing rather than at once, and the level normalisation is slewed over about 5ms, so changes do not click"
+  ],
+  "menu": [
+    "Mask CV Mode — a label over the two choices below it, setting how the mask input is read",
+    "Binary (8-bit pattern) — reads the mask input as an eight-bit number, the lowest bit being the second harmonic and the highest the ninth, so each step of about 0.039V gives a different set",
+    "Sweep (0-8 harmonics) — reads the mask input as a count of overtones switched in from the bottom up, so a rising voltage brightens the tone smoothly"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 5V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

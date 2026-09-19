@@ -1,0 +1,18 @@
+{
+  "plugin": "Cella",
+  "module": "Bytebeat",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Bytebeat.cpp:139 reads this input with getVoltage(), which is channel 1 alone, divides it by 10, multiplies by 128 and the attenuator, and clamps the knob-plus-jack total to 0 and 128"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Bytebeat.cpp:139 reads this input with getVoltage(), divides it by 10, multiplies by 128 and the attenuator, and clamps the knob-plus-jack total to 0 and 128"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Bytebeat.cpp:139 reads this input with getVoltage(), divides it by 10, multiplies by 128 and the attenuator, and clamps the knob-plus-jack total to 0 and 128"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Bytebeat.cpp:146 reads this input with getVoltage() and passes it to a Schmitt trigger rising at 2V and falling at 0.1V"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Bytebeat.cpp:152 reads this input with getVoltage() and passes it to a Schmitt trigger rising at 2V and falling at 0.1V"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "normal": "2Hz", "why": "Bytebeat.cpp:159 reads this input with getVoltage() and passes it to a Schmitt trigger rising at 2V and falling at 0.1V; Bytebeat.cpp:168 uses 2Hz when the jack is empty"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Bytebeat.cpp:211 writes channel 1 alone; Bytebeat.cpp:195 scales the result onto one of four ranges, the widest of which is -5V to 5V"}
+    }
+  },
+  "comment": "Read from src/Bytebeat.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1, alongside docs/Cella_Manual.md written for 2.11.0. The manual calls the second menu item Multiline with an on and off state; the code's item is Submit/New Line with the choices Enter/Shift+Enter and Shift+Enter/Enter (Bytebeat.cpp:437). The three CV knobs are attenuators from 0 to 1 rather than attenuverters (Bytebeat.cpp:127 to 129), so a jack cannot be inverted. The clock rate is measured between rises and clamped to between 0.001Hz and 1000Hz (Bytebeat.cpp:163); the FREQ knob then multiplies half that figure by two to the power of the knob, which is why the hover text changes from hertz to a multiplier when a clock is patched. The expression editor is a LedDisplayTextField, not a parameter, so it has no census position and no click on it can reach a help line."
+}

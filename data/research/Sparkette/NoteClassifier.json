@@ -1,0 +1,25 @@
+{
+  "plugin": "Sparkette",
+  "module": "NoteClassifier",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/NoteClassifier.cpp lines 70-71 and 86-87: readVoltages into a getChannels loop, fmod(10+voct,1) then rounded to the nearest twelfth"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "every note let through", "why": "src/NoteClassifier.cpp:74 sets ignoreGate when nothing is patched, or when a one-channel cable reads 1V or more; otherwise :88 lets channel i's note through only where gate[i] is 1V or more"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"},
+      "11": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/NoteClassifier.cpp line 100, setVoltage(note_states[i]==3 ? 10.0f : 0.0f) with no channel argument"}
+    }
+  },
+  "comment": "Written from src/NoteClassifier.cpp at commit b90cd69. The outputs are declared from B down to C but the lookup table note_outputs at line 105 maps note 0 to the C jack and note 11 to the B jack, so the tags follow that table rather than the enum order; the panel draws them as a piano keyboard running from C at the bottom to B at the top. A fault worth knowing: when the enable jack carries exactly one channel reading below 1V, the code skips readVoltages for that port (line 77) but still tests gate[i] for every channel of the pitch input, so channels past the first are compared against uninitialised stack memory. A monophonic gate is therefore only dependable with a monophonic pitch input; give the gate as many channels as the pitch."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "Animatek",
+  "module": "ATEK303SEQ",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Atek303Seq.cpp:487 runs clockTrig.process(getVoltage(), 0.1f, 1.f), so a rising edge past 1V advances the sequencer one step"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Atek303Seq.cpp:479 runs resetTrig.process(getVoltage(), 0.1f, 1.f), so a rising edge past 1V restarts the pattern"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Atek303Seq.cpp:444 runs genTrig.process(getVoltage(), 0.1f, 1.f), so a rising edge past 1V generates a fresh pattern"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "monophonic pitch, the scale degree plus root and base octave, per the manual's V/OCT section"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "10V while the note is active, per the manual's GATE section"},
+      "2": {"family": "cv"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "a 10V, 1ms pulse at step 1, per the manual's EOC section"}
+    }
+  },
+  "comment": "The installed build takes STEPS from 1 to 64 (Atek303Seq.cpp:132 with ACID_MAX_STEPS 64 in AcidGen.hpp:43) and carries a Mutation scope menu item; the manual at this commit is written for 2.5.5 and says 1 to 16 steps with no mutation scope. The pattern editor, the four page lamps, the sixteen step lamps and the acid sticker that generates are all drawn widgets rather than parameters, so none of them can be clicked for help."
+}

@@ -1,0 +1,38 @@
+{
+  "plugin": "Hutara",
+  "module": "Hutara_Random_CV",
+  "description": "A random voltage and a random gate, both drawn fresh each time the input jack crosses 1V",
+  "params": [
+    {"ids": [0], "text": "Sets the limit the sampled voltage is clamped to, 0.25V to 10V; in bipolar mode that limit applies either side of zero, in unipolar mode from zero upwards"},
+    {"ids": [1], "text": "Switches the sampled voltage between swinging either side of zero and running from zero upwards; past the halfway point of its travel it is bipolar"},
+    {"ids": [2], "text": "Multiplies the raw random draw before it is clamped, 1 to 10 in whole steps; above 1 most draws land on the clamp, so the sampled voltage arrives near the ends of its range"},
+    {"ids": [3], "text": "Multiplies the GATE LENGTH setting before each gate is decided: position 1 by 0.25, position 2 by 0.125, position 3 by 0.625, so the middle position makes a gate least likely"},
+    {"ids": [4], "text": "Biases the chance that each new sample gives a 10V gate rather than 0V, scaled by the three-position switch; it sets no duration, despite the panel printing GATE LENGTH"},
+    {"ids": [5], "text": "Nothing in the module reads this control. The value it feeds is computed into a gate-speed figure that is then discarded, so the incoming trigger is never divided."},
+    {"ids": [6], "text": "Added to the sampled voltage after the clamp, -5V to 5V, so it can push the S&H output past the Range setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A level of 1V or more takes a new random sample and a new gate; the level must fall back below 1V before another can be taken, and the module produces nothing at all until one arrives"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V or 0V, drawn at random each time the input triggers and held until the next trigger"},
+    {"ids": [1], "text": "The random voltage drawn at the last trigger, clamped to the Range setting and then shifted by the OFFSET slider"},
+    {"ids": [2], "text": "0V while the gate output is at 10V and 10V while it is at 0V, changing only at a trigger"}
+  ],
+  "notes": [
+    "Nothing here runs on its own. All three outputs change only when the input jack reaches 1V, and before the first trigger all three read 0V.",
+    "Because the outputs start at 0V, the inverted gate output reads 0V until the first trigger rather than the 10V its name implies.",
+    "The gate lasts until the next trigger arrives; there is no timer, so the pattern of gates depends entirely on how often the input is clocked.",
+    "The module has no menu of its own beyond Rack's."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "plugin": "HetrickCVGPL",
+  "module": "PhasorWavetable",
+  "description": "Wavetable oscillator read by a phasor rather than by its own pitch: the input voltage reads straight across one wave of a wavetable loaded from a WAV file",
+  "params": [
+    {"ids": [0], "text": "Sweeps through the waves of the loaded wavetable, from the first wave at 0% to the last at 100%, crossfading between neighbouring waves on the way"},
+    {"ids": [1], "text": "Scales the Position CV jack below, -100% to +100%, inverting it below 0; at 0 the jack has no effect at all"},
+    {"ids": [2], "text": "Unipolar lifts the output by 5V so it runs 0 to 10V; Bipolar leaves it running -5V to +5V"},
+    {"ids": [3], "text": "LFO reads the wavetable as it is, with no antialiasing; VCO picks a bandlimited copy of the wave to suit how fast the phasor is moving, which keeps aliasing down at audio rates"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A ramp from 0V to 10V reads once straight across the wave; the voltage is divided by 10 and wrapped, so anything outside 0 to 10V comes back round rather than stopping at the end"},
+    {"ids": [1], "text": "Added to the Position knob after the trimpot above it scales the voltage, with 10V covering the whole wavetable at a full trimpot; the total is held between the first and last wave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave read at the phasor's position, running -5V to +5V, or 0 to 10V with the Offset switch set to Unipolar"}
+  ],
+  "notes": [
+    "a phasor drives this, not a pitch: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO saw. With nothing patched in, the output holds a steady voltage.",
+    "the display shows the name of the loaded wavetable and the wave now being read. A WAV file dropped onto it is loaded straight away; the display itself cannot be clicked for help.",
+    "the module comes up with a built-in four-wave table called Basic.wav, holding a sine, a triangle, a sawtooth and a square. A loaded wavetable is saved into the patch and travels with it."
+  ],
+  "menu": [
+    "Mode: LFO (no antialiasing), VCO (antialiased) — the same choice as the Mode switch on the panel",
+    "Initialize wavetable — replaces whatever is loaded with the built-in sine, triangle, sawtooth and square",
+    "Load wavetable — opens a file dialogue for a WAV, AIFF or raw sample file to read as the wavetable",
+    "Save wavetable — writes the loaded wavetable out as a WAV file",
+    "Wave points: 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384 — sets how many samples make up one wave, and so where the loaded file is cut into separate waves"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 # Dreamer Help
 
-Option-click any jack, knob, switch or module title in VCV Rack, and a note says what it does.
+Option-click any jack, knob, switch, light or module title in VCV Rack, and a note says what it does.
 
-Drop the **Help** module anywhere in the patch and the gesture works on every module in the rack, not only on this one. The module has no inputs and no outputs; it does nothing to the sound. Its one switch turns the gesture off again, because Option-click is not ours — other plugins use it, and Rack uses Option-drag to pan.
+Drop the **Help** module anywhere in the patch and the gesture works on every module in the rack, not only on this one. The module has no inputs and no outputs; it does nothing to the sound. Its one switch turns the gesture off again, because Option-click is not ours — other plugins use it, and Rack uses Option-drag to pan. Another combination can be chosen in its right-click menu.
 
 The note says what a control does, what a jack expects, and what a module needs before it will do anything at all. That last one is the most useful thing in here: a module that comes up silent because a level defaults to zero, a jack that is dead until a file is loaded, an expander that must sit on a particular side.
 
@@ -16,9 +16,13 @@ Where a plugin publishes no source, voltage ranges are not given, and the plugin
 
 See [ABOUT.md](ABOUT.md) for what the project is, how the database was made, and how it is proposed to be maintained.
 
-## Contributing
+## Help files
 
-The database is in `data/plugins/`, one YAML file per VCV plugin, named after the plugin's slug — the same name as its folder under `Rack2/plugins-<platform>/`. Inside, each module is keyed by its own slug. Fix an entry, add a missing one, or fill in a range nobody could verify, and open a pull request.
+Help is read from JSON files, one per module. A maker can ship their own in their plugin, and a user can write one for a module whose maker has not; either comes before this plugin's database. [docs/help-files.md](docs/help-files.md) has the format, where the files go, and `tools/helpscan.py`, which writes them from `//?` comments in a plugin's source.
+
+## Contributing to the database
+
+Each module has two files, in folders named after the plugin's slug — the same name as its folder under `Rack2/plugins-<platform>/`: its help in `data/help/`, which ships, and the research behind it in `data/research/`, which does not. Fix an entry, add a missing one, or fill in a range nobody could verify, and open a pull request.
 
 [CONTRIBUTING.md](CONTRIBUTING.md) has the whole file format with an annotated example, how to find the file for a module you are looking at, what counts as a citation — including a test you ran yourself — and the one rule about quoting that will otherwise bite you.
 
@@ -30,10 +34,10 @@ Checks run automatically on every pull request: the file has to parse, match the
 make            build the plugin
 make install    build and install into Rack's user plugins folder
 make validate   check the database
-make helptext   regenerate the generated table by hand
+make helptext   bring each help file's expects up to date with its research
 ```
 
-`src/HelpText.cpp` is generated from the database and is committed, so a build needs nothing but the Rack SDK. Editing a YAML file makes it stale, and `make` regenerates it automatically — the dependency is declared in the Makefile.
+A build needs nothing but the Rack SDK. `make helptext` brings the one derived part of each help file — what each jack expects — up to date with its research, and a pull request where the two disagree fails its checks.
 
 ## Licence
 

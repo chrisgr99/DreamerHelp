@@ -1,0 +1,21 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Boxes",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Boxes.cpp:236 writes getVoltage() into the delay line with no channel argument and no channel loop anywhere in process"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "the send output", "why": "src/Boxes.cpp:234 reads getNormalVoltage(feedback), where feedback is the value just sent to the send jack"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Boxes.cpp:225 subtracts getVoltage() from the delay knob inside the exponent of a power of two"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "src/Boxes.cpp:226 divides getVoltage() by 10, adds the width knob and clamps the total to a floor of 0.02"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "src/Boxes.cpp:227 divides getVoltage() by 10, adds the height knob and clamps the total to a floor of 0.02"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "src/Boxes.cpp:232 divides getVoltage() by 10, adds the feedback knob and clamps the total to 0..1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Boxes.cpp:228 adds getVoltage() to the diffuse knob and scales the total into milliseconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "src/Boxes.cpp:249 sets one voltage with no channel argument"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "src/Boxes.cpp:250 sets one voltage with no channel argument"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "src/Boxes.cpp:233 sets one voltage with no channel argument"}
+    }
+  },
+  "comment": "This module was not built for the census, because constructing its widget outside a patch faults in PointList::addPointsToScreen, so its control positions could not be measured and nothing here was checked against a running module. Everything below comes from src/Boxes.cpp at commit 9307696 and from the rendered panel. Eight of the fifteen parameters are given widgets in BoxesWidget (delay, width, height, feedback, the two filters, diffuse and pull) and are tagged here; the six position parameters for the emitter and the two listeners are driven by the XYScreen display rather than by parameter widgets, so no click reaches them, and ALLPASS_BUTTON is configured at src/Boxes.cpp:75 but is given no widget and is never read in process, so it gets nothing. All seven inputs and all three outputs are given widgets. The panel prints DELAY, WIDTH, HEIGHT, FEEDBACK, HP, LP, DIFFUSE, PULL, SEND, RECIEVE, INPUT, A OUT and B OUT, with the control voltage jack for delay, width, height, feedback and diffuse sitting to the left of the knob it belongs to. The delay control voltage is subtracted from the knob rather than added (src/Boxes.cpp:225), so a rising voltage shortens the delay. Bypassing the module passes the input to both outputs."
+}

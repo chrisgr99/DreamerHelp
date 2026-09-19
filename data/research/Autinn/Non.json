@@ -1,0 +1,18 @@
+{
+  "plugin": "Autinn",
+  "module": "Non",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Non.cpp:411 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "audio", "poly": false, "why": "Non.cpp:412 reads this input with getVoltage, which is channel 0 only"},
+      "2": {"poly": false, "step": "continuous", "negative": "swings", "why": "Non.cpp:358 to :361 read this input with getVoltage, take the size of the voltage as a level in dB and write it into the threshold parameter, so a negative voltage acts as its positive twin"},
+      "3": {"family": "audio", "poly": false, "why": "Non.cpp:444 reads this input with getVoltage, which is channel 0 only"},
+      "4": {"family": "audio", "poly": false, "why": "Non.cpp:444 reads this input with getVoltage, which is channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Non.cpp:508 writes this output with setVoltage and no channel index; Non.cpp:479 clamps it to ±12V"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Non.cpp:509 writes this output with setVoltage and no channel index; Non.cpp:480 clamps it to ±12V"}
+    }
+  },
+  "comment": "Levels are measured against 5V as 0dB (Non.cpp:621 to :626). The threshold CV writes the parameter with setValue rather than being summed with it (Non.cpp:361), which is why it moves the knob and why it takes the knob over. Lookahead is fixed at 4ms (Non.cpp:45, :382) where the older Zod ties it to the averaging knob. The comment block at Non.cpp:315 to :327 lists what the maker changed from Zod: the compressor, expander and noise gate are cut, the threshold stops at -15dB, the limiter attack reaches down to 0.02ms, the lookahead is fixed and the hysteresis is rewritten. The meters are refreshed every 512 samples (Non.cpp:517). No range is given for the threshold jack because its scale is a level in volts rather than one of the four standard shapes; the entry's own line gives the mapping."
+}

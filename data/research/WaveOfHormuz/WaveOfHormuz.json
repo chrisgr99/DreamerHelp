@@ -1,0 +1,27 @@
+{
+  "plugin": "WaveOfHormuz",
+  "module": "WaveOfHormuz",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "WaveOfHormuz.cpp:236 reads getVoltage() with no channel and adds it to the Knot Speed knob in volts before line 240 raises 2 to that power"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "WaveOfHormuz.cpp:252 passes getVoltage() with no channel to a SchmittTrigger set to 0.1 and 2, which zeroes the phase on each rise"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "WaveOfHormuz.cpp:238 reads getVoltage() with no channel, multiplies it by 0.25 and adds it to the pitch exponent, so four volts is one octave"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:261 reads getVoltage() with no channel, multiplies it by 0.1 and line 262 clamps the knob-plus-jack total to 0 and 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:266 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:271 reads getVoltage() with no channel, multiplies it by 0.1 and line 272 clamps the knob-plus-jack total to 0 and 1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:276 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:307 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:322 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "WaveOfHormuz.cpp:281 reads getVoltage() with no channel, multiplies it by 0.2 and clamps the knob-plus-jack total to -1 and 1"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:332 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WaveOfHormuz.cpp:286 reads getVoltage() with no channel, multiplies it by 0.1 and clamps the knob-plus-jack total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "WaveOfHormuz.cpp:339 writes 10V for a 1ms pulse from a PulseGenerator and 0V otherwise, with setVoltage and no setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "WaveOfHormuz.cpp:340 writes 10V while the phase is inside the first window and 0V otherwise, with setVoltage and no setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "WaveOfHormuz.cpp:341 writes 10V while the phase is inside the second window and 0V otherwise, with setVoltage and no setChannels"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "WaveOfHormuz.cpp:334 multiplies the shaped wave by the Tanker knob and by 5, and line 342 writes it with setVoltage and no setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 83746f7, the head of main. Four commits carry the installed 2.2.0; the installed plugin.json is byte-identical to the one in e90eda5 and 83746f7 and differs from the two earlier ones, and those two later commits have identical source, so either is the build. It is not one of the earlier pair: the shipped build carries the isfinite guard on the scaled output that e90eda5 added. All twenty-six controls and jacks have widgets. Every input is read with a plain getVoltage and every output written with a plain setVoltage, so nothing here is polyphonic. The Oil Slick filter is bypassed rather than merely wide open below 0.001 on the knob, and the Choke Point drive the same, so those two knobs have a hard step at the counter-clockwise stop. The panel lettering is drawn from C++ rather than from the SVG, because the maker notes NanoSVG drops text elements; the CV jack labels open, jckt, lock, emgo, slck, chok, tilt and tnk are drawn behind their jacks and are mostly covered by them."
+}

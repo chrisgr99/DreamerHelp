@@ -11,6 +11,12 @@ thread beyond a parameter read.
 #include "plugin.hpp"
 #include "Help.hpp"
 
+#include <osdialog.h>
+#include <algorithm>
+#include <set>
+
+static void exportFor(plugin::Plugin* p);
+
 
 /** How many Help modules are in the patch, so the overlay goes in when the first one arrives
 and comes out when the last one leaves. Counted on the widgets rather than the modules, because
@@ -122,12 +128,21 @@ struct HelpWidget : ModuleWidget {
 		// WHITE, like the labels. It was grey while it read "option click anything" and was
 		// scenery; now that it says which three things answer, it is the instruction and wants
 		// reading. Four HP is about twelve characters a line at this size.
-		nvgFontSize(args.vg, 8.f);
+		// THE GESTURE CHOSEN IN THE MENU, which is not always option-click any more; a longer
+		// name is set smaller rather than run off the panel.
 		nvgFillColor(args.vg, nvgRGB(0xff, 0xff, 0xff));
-		const char* said[] = {"option click", "the module", "title or any",
-			"control or", "port for help"};
-		for (int i = 0; i < 5; i++)
-			nvgText(args.vg, mid, 78.f + i * 12.4f, said[i], NULL);
+		const char* gesture = helpGesture().name;
+		float size = 8.f;
+		for (;; size -= 0.5f) {
+			nvgFontSize(args.vg, size);
+			if (size <= 5.5f || nvgTextBounds(args.vg, 0.f, 0.f, gesture, NULL, NULL) <= box.size.x - 10.f)
+				break;
+		}
+		nvgText(args.vg, mid, 78.f, gesture, NULL);
+		nvgFontSize(args.vg, 8.f);
+		const char* said[] = {"the module", "title or any", "control or", "port for help"};
+		for (int i = 0; i < 4; i++)
+			nvgText(args.vg, mid, 78.f + (i + 1) * 12.4f, said[i], NULL);
 
 		// EACH LABEL IS PLACED OFF ITS OWN BUTTON, not off the panel. A label positioned
 		// independently drifts away from the thing it names the moment either one moves, which
@@ -208,6 +223,35 @@ struct HelpWidget : ModuleWidget {
 	an odd thing to ask of somebody who has just told you the text is too small to read. */
 	void appendContextMenu(Menu* menu) override {
 		menu->addChild(new MenuSeparator);
+		// THE GESTURE THAT ASKS. Every choice is offered, including ones Rack or another plugin
+		// also uses: whether that matters is for the person using it to decide. See HELP_GESTURES.
+		menu->addChild(createSubmenuItem("Ask for help with", helpGesture().name,
+			[=](Menu* sub) {
+				for (int i = 0; i < HELP_GESTURE_COUNT; i++) {
+					sub->addChild(createCheckMenuItem(HELP_GESTURES[i].name, "",
+						[=]() { return helpGestureIndex() == i; },
+						[=]() { helpSetGesture(i); }));
+				}
+			}));
+		// READ THE FILES AGAIN, for somebody editing one: a maker after installing their plugin,
+		// or a user after changing their own file.
+		menu->addChild(createMenuItem("Reload help files", "", []() { helpReload(); }));
+		// A STARTING FILE FOR EVERY MODULE OF A PLUGIN. The plugins offered are the ones with a
+		// module in this rack, which is where somebody about to describe one will have it.
+		menu->addChild(createSubmenuItem("Export help files for", "", [=](Menu* sub) {
+			std::set<plugin::Plugin*> seen;
+			std::vector<plugin::Plugin*> plugins;
+			for (app::ModuleWidget* mw : APP->scene->rack->getModules()) {
+				if (mw->model && mw->model->plugin && seen.insert(mw->model->plugin).second)
+					plugins.push_back(mw->model->plugin);
+			}
+			std::sort(plugins.begin(), plugins.end(), [](plugin::Plugin* a, plugin::Plugin* b) {
+				return a->name < b->name;
+			});
+			for (plugin::Plugin* p : plugins) {
+				sub->addChild(createMenuItem(p->name, "", [=]() { exportFor(p); }));
+			}
+		}));
 		menu->addChild(createSubmenuItem("Note text size", string::f("%.0f%%", helpScale() * 100.f),
 			[=](Menu* sub) {
 				static const float sizes[] = {0.8f, 1.f, 1.25f, 1.5f, 1.75f, 2.f, 2.5f};
@@ -220,5 +264,20 @@ struct HelpWidget : ModuleWidget {
 	}
 };
 
+
+/** ASKS WHERE, THEN WRITES. The folder offered first is the user's own help folder for that
+plugin, where the files take effect as soon as they are filled in; a maker chooses the `help`
+folder of their repository instead. */
+static void exportFor(plugin::Plugin* p) {
+	const std::string start = helpUserFolder(p->slug);
+	system::createDirectories(start);
+	char* chosen = osdialog_file(OSDIALOG_OPEN_DIR, start.c_str(), NULL, NULL);
+	if (!chosen)
+		return;
+	const std::string said = helpExport(p, chosen);
+	std::free(chosen);
+	helpReload();
+	osdialog_message(OSDIALOG_INFO, OSDIALOG_OK, said.c_str());
+}
 
 Model* modelHelp = createModel<Help, HelpWidget>("Help");

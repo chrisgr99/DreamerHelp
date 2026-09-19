@@ -1,0 +1,39 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "FME7",
+  "description": "The three square wave voices of the Sunsoft FME-7 cartridge chip",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that tone, four and a half octaves either side of C4"},
+    {"ids": [3, 4, 5], "text": "Attenuates the voltage at that tone's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [6, 7, 8], "text": "Sets the level of that tone, 0 to 15"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that tone by a volt per octave; unpatched it reads the VOCT jack of the tone before it, and the first tone reads 0V"},
+    {"ids": [3, 4, 5], "text": "Modulates the pitch of that tone, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the tone before it, and the first tone reads 5V"},
+    {"ids": [6, 7, 8], "text": "Scales that tone's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the tone before it, and the first tone reads 10V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "Carries that tone's audio, hard clipped at 5V, with the audio of any earlier tone whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the three outputs are chained: a tone whose output is left unpatched is summed into the next output along, so patching only TONE3 gives a mix of all three"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "8": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

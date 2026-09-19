@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "CLP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "CLP.cpp:36 takes the channel count from this input and CLP.cpp:41 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "normal": "the In1 jack", "why": "CLP.cpp:37 takes the channel count from this input when it is connected and CLP.cpp:49 reads it four channels at a time; CLP.cpp:45 copies the first signal to the second output when it is empty"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "CLP.cpp:42 reads it four channels at a time, scales it by the Drive CV knob, adds the Drv knob and clamps the total to 0..10"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "CLP.cpp:56 sets this output's channel count from the In1 jack"},
+      "1": {"family": "audio", "poly": true, "why": "CLP.cpp:57 sets this output's channel count from the In2 jack, or from In1 when In2 is empty"}
+    }
+  },
+  "comment": "The drive jack is the input the maker never named, so it carries a blank tooltip. The maker's README lists the last two curves as AAS then AAH; the panel selector and the code have them the other way round, CLP.cpp:67 and clipper.hpp:68, with AAH the anti-aliased hard clip. The selector's own tooltip names the nine curves differently again, as Tanh, Hard Clip, Sin, Overdrive, Exp, Sqr, Abs, AA Hard and AA Soft, CLP.cpp:29. Both inputs are configured as bypasses to their own outputs."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "SickoCV",
+  "module": "Modulator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Modulator.cpp:358 getVoltage() times the attenuverter times 10, added to the rate in hertz"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Modulator.cpp takes this jack as a rising edge at 1V and times the gaps between edges"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Modulator.cpp takes this jack as a rising edge at 1V and toggles the sync setting"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Modulator.cpp adds this jack's voltage to the SCALE knob as an attenuation"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Modulator.cpp takes this jack as a rising edge at 1V and restarts the cycle"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "Modulator.cpp writes 0 to 10V with the bipolar button off and shifts it down by 5V with it on; no setChannels in the file"}
+    }
+  },
+  "comment": "The rate law is exponential between the constants at Modulator.cpp:103-104, 0.01Hz to 100Hz, and the xRate law between :106-107, 0.047619 to 21, which is one twenty-first to twenty-one times. The RATE CV is scaled by ten, so at a full attenuverter one volt shifts the rate by ten hertz. With nothing patched at SYNC the SYNC button works as a sample and hold on the oscillator's output rather than as a sync switch."
+}

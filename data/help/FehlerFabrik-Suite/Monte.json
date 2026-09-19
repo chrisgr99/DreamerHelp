@@ -1,0 +1,41 @@
+{
+  "plugin": "FehlerFabrik-Suite",
+  "module": "Monte",
+  "description": "Probabilistic trigger sequencer: each step fires a gate only when it wins a random draw weighted by its own knob and CV",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock rate, 15 BPM at the bottom of its travel and 3840 BPM at the top"},
+    {"ids": [1], "text": "Sets how many steps the sequence runs for, 1 to 16"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Sets the chance that this step fires a gate, never at the bottom of its travel and always at the top"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every volt doubles the internal clock rate"},
+    {"ids": [1], "text": "A rising edge advances the sequence, and patching anything here stops the internal clock; a gate then lasts as long as the incoming pulse stays high"},
+    {"ids": [2], "text": "Adds one step to the sequence length per volt, to a limit of 32 steps"},
+    {"ids": [3], "text": "A rising edge sends the sequence back to its first step"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "Adds a tenth of the chance range per volt to that step's probability"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries a 10V gate while the clock is high on that step, and only when that step won its draw"},
+    {"ids": [8], "text": "Carries a 10V gate whenever a step fires, which is the eight step gates combined"}
+  ],
+  "notes": [
+    "with more than eight steps the sequence wraps around the eight gate outputs, so step 9 fires the same output as step 1"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped"
+    }
+  }
+}

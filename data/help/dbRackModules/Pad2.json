@@ -1,0 +1,49 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pad2",
+  "description": "A pad voice built by the PadSynth method, with a fader for each of 48 partials and every change smoothed as the wavetable is built again",
+  "params": [
+    {"ids": [0], "text": "Sets how wide each partial is spread in the spectrum, 0.5 to 60; wider partials give the chorused, breathing quality of a pad"},
+    {"ids": [1], "text": "Attenuates the voltage at the jack below the BW knob before it is added to that knob, 0 to 100 per cent"},
+    {"ids": [2], "text": "Sets how much that width grows towards the higher partials, 0.5 to 4"},
+    {"ids": [3], "text": "Attenuates the voltage at the jack below the Scl knob before it is added to that knob, 0 to 100 per cent"},
+    {"ids": [4], "text": "Sets the seed the phases of the partials are drawn from, 0 to 1, which changes the sound a little without changing the harmonics"},
+    {"ids": [5], "text": "Picks how a random fill draws the partial strengths: Harmonic Min, Even Min, Odd Min, Harmonic Weibull, Even Weibull or Odd Weibull"},
+    {"ids": [6], "text": "Fills all 48 faders at random by the chosen method"},
+    {"ids": [7], "text": "Sets the fundamental frequency the wavetable is built at, 16Hz to 2048Hz as a power of two; raising it helps when only high notes are played"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55], "text": "Sets the strength of that partial, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch the wavetable is read at, 1V per octave, one channel per voice"},
+    {"ids": [1], "text": "Modulates the bandwidth, three steps per volt scaled by the Bandwidth CV knob"},
+    {"ids": [2], "text": "Modulates that growth, a fifth per volt scaled by the Bandwidth Scale CV knob"},
+    {"ids": [3], "text": "Sets the strengths of the second to the seventeenth partials, one channel per partial, 0-10V for each, and moves those faders while it is patched"},
+    {"ids": [4], "text": "Sets the strengths of the eighteenth to the thirty-third partials, one channel per partial, and moves those faders while it is patched"},
+    {"ids": [5], "text": "Sets the strengths of the thirty-fourth to the forty-ninth partials, one channel per partial, and moves those faders while it is patched"},
+    {"ids": [6], "text": "A trigger here fills all 48 faders at random by the chosen method"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the wave"},
+    {"ids": [1], "text": "The right side of the wave, which is the same table read half a cycle away, so the two sides differ"}
+  ],
+  "notes": [
+    "every change builds the wavetable again in a background thread, so the knobs and faders can be moved while the sound plays; fast changes cost a good part of another processor",
+    "the first partial is fixed at full strength and has no fader; the 48 faders are the partials above it",
+    "with Faders placed immediately to the right, hovering over that module and pressing f fetches these 48 strengths into it, which is how a sound is carried across to a smaller Pad module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 60V.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 4V.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the faders; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the faders; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the faders; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

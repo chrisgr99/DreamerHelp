@@ -1,0 +1,44 @@
+{
+  "plugin": "LyraeModules",
+  "module": "Sheliak",
+  "description": "An eight-stage shift register clocked at a quarter of the incoming rate, with a three-stage register clocked at a third of it, and an XOR input for making pseudo-random patterns by self-patching",
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V advances an internal counter; the main register shifts on every fourth edge and the triplet register on every third"},
+    {"ids": [1], "text": "A rising edge clears both registers and the counter"},
+    {"ids": [2], "text": "The bit shifted into both registers, read as a one whenever it is above 1V"},
+    {"ids": [3], "text": "Exclusive-ORed with the data bit as it enters both registers, read as a one whenever it is above 1V; patching a later stage output back here makes a linear feedback shift register"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries 10V while that stage of the main eight-stage register holds a one, and 0V otherwise"},
+    {"ids": [8], "text": "The eleven stages as one polyphonic cable, the first eight channels carrying the main register and the last three the triplet register"},
+    {"ids": [9, 10, 11], "text": "Carries 10V while that stage of the three-stage triplet register holds a one, and 0V otherwise"}
+  ],
+  "notes": [
+    "feed it a clock at four times the rate the main outputs should move at, since the register shifts once every four clock pulses",
+    "nothing moves and nothing comes out until a clock is patched; the data input on its own changes nothing",
+    "the counter runs to twelve and wraps, so the main and triplet registers line up again every twelve clock pulses",
+    "the Beta expander goes immediately to the right of this module and turns the register into pitch voltages"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · polyphonic",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

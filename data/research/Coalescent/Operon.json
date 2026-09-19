@@ -1,0 +1,22 @@
+{
+  "plugin": "Coalescent",
+  "module": "Operon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Operon.cpp:219-220 pitchBase+getVoltage(), clamped to the pitch total range"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Operon.cpp:167 modulatedParam with ALPHA_CV_DEPTH 6.f, clamp(0, 80)"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Operon.cpp:169 HILL_CV_DEPTH 0.6f, clamp(1.01, 10)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Operon.cpp:171 BETA_CV_DEPTH 0.5f, clamp(0.05, 8)"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Operon.cpp:180-181 clamp(getVoltage(), -10, 10)*0.5 added to gene 1's transcription"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/dsp/operon_core.hpp:240 5.f*fastTanh(centered*OUT_GAIN)"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/dsp/operon_core.hpp:240"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/dsp/operon_core.hpp:240"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Operon.cpp:95 GATE_LEVEL 10.f, GATE_TIME 1e-3f; :253"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Operon.cpp:95, :253"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Operon.cpp:95, :253"}
+    }
+  },
+  "comment": "Every jack is read with getVoltage(), so the module is monophonic. The three protein outputs share one line and the three gate outputs share another: they carry the same quantity for a different gene and differ by number alone. The panel prints GATE, but the pulse is a fixed 1ms trigger rather than a gate that stays high for a phase of the cycle. The CV depths differ per destination (6, 0.6 and 0.5 units per volt) rather than the tenth-of-range used elsewhere in the plugin; the manual says only \"scale-appropriate depths\"."
+}

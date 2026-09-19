@@ -1,0 +1,15 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Cowbell",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Cowbell.hh:105 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Cowbell.hh:99 adds it to the DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Cowbell.hh:46 takes a rising edge from that voltage being greater than 0.5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Cowbell.hh:82 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "Both oscillators sound an octave above the figures in the code's comments and in the manual, because src/modules/Cowbell.hh:107 and :111 set the phase increment to frequency * rSampleRate * 2 while the square flips once per unit of phase at :61 and :66. The upper oscillator's frequency variable is 500 + control * 300 (:106) so it sounds 1000Hz to 1600Hz; the lower is that variable minus 260 (:110) so it sounds 520Hz below the upper, 480Hz to 1080Hz. The manual's 240-540Hz and 500-800Hz are the two variables, not what is heard. Only `phase` is reset on a trigger at :47; `phase_1` runs on undisturbed."
+}

@@ -1,0 +1,68 @@
+{
+  "plugin": "thereelpeet-seq",
+  "module": "thereelpeet-evo",
+  "description": "Single-lane sequencer holding four sixteen-step phrases that cross over and mutate as they play, with two optional built-in quantizers",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the sequencer; starting it generates a fresh random walk and derives all four phrases from it, and stopping it returns to the first step and clears the envelope"},
+    {"ids": [1], "text": "Sets how many steps a phrase plays before wrapping, 2 to 16; the number under the knob is the current setting"},
+    {"ids": [2], "text": "Each press moves to the next mutation engine and the lamp shows which is in force, Gaussian to Markov to Interval and round again; the maker's tooltip also offers AI, which this build does not have"},
+    {"ids": [3], "text": "Sets the attack time of the note envelope, 0 to 4 seconds; at 0 the envelope jumps straight to 10V"},
+    {"ids": [4], "text": "Sets the decay time of the note envelope, 0 to 4 seconds measured from 10V down to 0V"},
+    {"ids": [5, 6, 7, 8], "text": "Brings that phrase into the playing cycle or drops it out; switching it on re-seeds the phrase from the shared random walk, and the lamp pulses while that phrase is the one playing"},
+    {"ids": [9, 10, 11, 12], "text": "Sets how far that phrase mutates each round, how likely it is to keep the result, and how many rests and ties it carries; fully left is close to frozen and fully right drifts hardest"},
+    {"ids": [13], "text": "Turns C on or off in the left-hand scale"},
+    {"ids": [14], "text": "Turns C sharp on or off in the left-hand scale"},
+    {"ids": [15], "text": "Turns D on or off in the left-hand scale"},
+    {"ids": [16], "text": "Turns D sharp on or off in the left-hand scale"},
+    {"ids": [17], "text": "Turns E on or off in the left-hand scale"},
+    {"ids": [18], "text": "Turns F on or off in the left-hand scale"},
+    {"ids": [19], "text": "Turns F sharp on or off in the left-hand scale"},
+    {"ids": [20], "text": "Turns G on or off in the left-hand scale"},
+    {"ids": [21], "text": "Turns G sharp on or off in the left-hand scale"},
+    {"ids": [22], "text": "Turns A on or off in the left-hand scale"},
+    {"ids": [23], "text": "Turns A sharp on or off in the left-hand scale"},
+    {"ids": [24], "text": "Turns B on or off in the left-hand scale"},
+    {"ids": [25], "text": "Turns C on or off in the right-hand scale"},
+    {"ids": [26], "text": "Turns C sharp on or off in the right-hand scale"},
+    {"ids": [27], "text": "Turns D on or off in the right-hand scale"},
+    {"ids": [28], "text": "Turns D sharp on or off in the right-hand scale"},
+    {"ids": [29], "text": "Turns E on or off in the right-hand scale"},
+    {"ids": [30], "text": "Turns F on or off in the right-hand scale"},
+    {"ids": [31], "text": "Turns F sharp on or off in the right-hand scale"},
+    {"ids": [32], "text": "Turns G on or off in the right-hand scale"},
+    {"ids": [33], "text": "Turns G sharp on or off in the right-hand scale"},
+    {"ids": [34], "text": "Turns A on or off in the right-hand scale"},
+    {"ids": [35], "text": "Turns A sharp on or off in the right-hand scale"},
+    {"ids": [36], "text": "Turns B on or off in the right-hand scale"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence by one step on each rising edge above 1V; there is no internal clock, so the sequence moves only while pulses arrive here"},
+    {"ids": [1], "text": "Pulls each newly generated pitch a fifth of the way toward the voltage here, one volt per octave, typically taken from another instance's 1v/O output; with nothing patched no pull is applied"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current note as a pitch, between 0V and 5V, quantized to whichever scale governs the playing phrase and held until the next note; it is 0V while the sequencer is stopped"},
+    {"ids": [1], "text": "The note envelope, rising to 10V over the Rise time and falling over the Fall time, with a tied step freezing the fall so the note carries on, despite the panel printing Gate"}
+  ],
+  "notes": [
+    "nothing plays until three things are done: press Run, patch a clock into Clock, and switch at least one phrase's toggle on.",
+    "the quantizers are optional. The left one governs phrases 1 and 3 and the right one phrases 2 and 4, but where only one side has any note switched on, that side governs all four.",
+    "with every note switched off on both quantizers the pitch output is not quantized at all, and carries the raw generated voltages.",
+    "a new note fires only once the previous envelope has finished, so a Rise and Fall that together outlast the gap between clock pulses leave some steps silent.",
+    "the step count and the changes of phrase are driven by the clock alone, and run at the same rate whether or not a step was audible.",
+    "each phrase that is switched on plays four passes of the sequence before the next one takes over, and once every switched-on phrase has had its turn they all evolve.",
+    "a phrase that has drifted from its starting version has a one in four chance, each time its turn comes round, of playing that original version for one pass instead.",
+    "the Recall lamp is lit while a phrase is playing its original version rather than its evolved one.",
+    "the Drift lamp flashes at the start of a phrase's turn when that phrase's content changed since it last played, and fades over about 7 seconds.",
+    "generated pitches are pulled back toward 2.5V and pushed by whole octaves back inside 1.25V to 3.75V, so the melody stays within about two and a half octaves."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads no pull applied; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 5V · continuous · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "CellularAuto",
+  "description": "Sequencer that reads its steps off a 64 by 256 grid grown from a one-dimensional cellular automaton, through a movable window that a polyphonic clock splits into rows",
+  "params": [
+    {"ids": [0], "text": "Sets the left edge of the window into the grid, 0 to 64; the window is trimmed if it would run past the right-hand edge"},
+    {"ids": [1], "text": "Sets the top edge of the window into the grid, 0 to 256; the window is trimmed if it would run past the bottom"},
+    {"ids": [2], "text": "Sets how many cells wide the window is, 0 to 64; at 0 the module stops sending anything"},
+    {"ids": [3], "text": "Sets how many cells tall the window is, 0 to 256"},
+    {"ids": [4], "text": "Grows the grid again from the cells set on the top bar, using the current RULE and ITER settings, and replaces whatever was there"},
+    {"ids": [5], "text": "Chooses which of the 256 elementary automaton rules is used to grow the grid, 0 to 255; the number in use is printed at the right of the display"},
+    {"ids": [6], "text": "Puts every channel back to the first cell of its own slice of the window, and releases the four buttons"},
+    {"ids": [7], "text": "Sets how many extra passes of 256 rows are run before the grid that is kept, 0 to 1000, each one carrying on from where the last left off"},
+    {"ids": [8], "text": "Mirrors the whole grid left to right"},
+    {"ids": [9], "text": "Mirrors the whole grid top to bottom"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps that channel on by one cell on each rising edge, running left to right along a row and then on to the next"},
+    {"ids": [1], "text": "Puts every channel back to the first cell of its own slice on a rising edge above 1V"},
+    {"ids": [2], "text": "Mirrors the grid left to right on a rising edge above 1V"},
+    {"ids": [3], "text": "Mirrors the grid top to bottom on a rising edge above 1V"},
+    {"ids": [5], "text": "Shifts the left edge of the window, 6.4 cells per volt, added to the LEFT knob"},
+    {"ids": [6], "text": "Shifts the top edge of the window, 25.6 cells per volt, added to the TOP knob"},
+    {"ids": [7], "text": "Shifts the width of the window, 6.4 cells per volt, added to the WIDTH knob"},
+    {"ids": [8], "text": "Shifts the height of the window, 25.6 cells per volt, added to the HEIGHT knob"},
+    {"ids": [9], "text": "Grows the grid again on a rising edge above 1V, as the INIT button does"},
+    {"ids": [10], "text": "Shifts the rule number, 25.6 rules per volt, added to the RULE knob and never allowed below 0"},
+    {"ids": [11], "text": "Shifts the pass count, 100 passes per volt, added to the ITER knob and never allowed below 0"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V for one clock pulse when the first channel returns to the start of the window, and nothing at all on the other channels"},
+    {"ids": [1], "text": "5V while the clock is high and the cell under that channel is set, so it follows the shape of the clock pulse"},
+    {"ids": [2], "text": "5V for as long as that channel stands on a set cell, held until the clock moves it on"}
+  ],
+  "notes": [
+    "The module sends nothing until a clock is patched, and nothing until the grid has been grown: set some cells on the top bar of the display and press INIT.",
+    "Clicking a cell on the top bar of the display turns it on or off. The rightmost cell of that bar has a third state, drawn white, which takes the grid down to 63 cells across.",
+    "Clicking inside the zoomed view on the right of the display turns that cell of the grid on or off by hand.",
+    "A polyphonic clock splits the window into that many equal slices, one per channel, each read from its own starting cell: a 16 by 8 window is 128 steps on one channel and 8 rows of 16 on eight.",
+    "The window is drawn as a rectangle on the whole-grid view at the left of the display, with the cells inside it shown large at the right."
+  ],
+  "menu": [
+    "Clear Initial State — empties the top bar of the display, so the next INIT grows an empty grid"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "9": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "10": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "11": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · polyphonic",
+      "1": "0 to 5V · stepped · polyphonic",
+      "2": "0 to 5V · stepped · polyphonic"
+    }
+  }
+}

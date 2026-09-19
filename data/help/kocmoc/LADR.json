@@ -1,0 +1,48 @@
+{
+  "plugin": "kocmoc",
+  "module": "LADR",
+  "description": "A four-pole transistor ladder filter with lowpass, bandpass and highpass responses, running sixteen polyphonic channels",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff, with the dial's travel raised to the fourth power so most of the fine control falls at the low end"},
+    {"ids": [1], "text": "Sets the resonance, feeding as much as six times the last pole's output back into the filter input; the module raises the output level along with it to compensate"},
+    {"ids": [2], "text": "Drives the signal into the filter as the fourth power of the dial, reaching 3.2 times the input voltage at the top"},
+    {"ids": [3], "text": "Chooses which response reaches OUT: LP for lowpass, BP for bandpass, HP for highpass"},
+    {"ids": [4], "text": "Scales what the FM input does to the cutoff, from fully inverted through nothing to fully positive; the dial's travel is cubed"},
+    {"ids": [5], "text": "Scales what the V/OCT input does to the cutoff, from fully inverted through nothing to fully positive; the dial's travel is cubed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds a tenth of its voltage to the cutoff, scaled by its attenuverter"},
+    {"ids": [1], "text": "Multiplies the cutoff by two raised to its voltage, an octave per volt with its attenuverter fully positive"},
+    {"ids": [2], "text": "The signal into the filter; the number of channels patched here is the number of channels the module runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered signal, one channel for each channel patched into IN"}
+  ],
+  "notes": [
+    "the internal cutoff rate is clamped at zero, so a negative voltage at FM large enough to drive it there closes the filter",
+    "bypassing the module passes IN straight through to OUT"
+  ],
+  "menu": [
+    "Oversampling: off — runs the filter core once per sample and skips the decimation filter",
+    "Oversampling: x2 — runs the filter core twice per sample and decimates; the setting a new module starts with",
+    "Oversampling: x4 — runs the filter core four times per sample and decimates",
+    "Oversampling: x8 — runs the filter core eight times per sample and decimates",
+    "Decimator order: 8 — gives the Butterworth decimation filter eight poles",
+    "Decimator order: 16 — gives the Butterworth decimation filter sixteen poles; the setting a new module starts with",
+    "Decimator order: 32 — gives the Butterworth decimation filter thirty-two poles",
+    "Semi-implicit Euler w/ Full Tanh — integrates the ladder with a single Euler step and a tanh saturation at every pole",
+    "Predictor-Corrector w/ Full Tanh — integrates the ladder with a predict-then-correct step and a tanh saturation at every pole; the setting a new module starts with",
+    "Predictor-Corrector w/ Tanh Feedback — integrates the ladder with a predict-then-correct step and a tanh saturation only in the feedback path",
+    "Trapezoidal w/ Tanh Feedback — integrates the ladder with a trapezoidal step and a tanh saturation only in the feedback path"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

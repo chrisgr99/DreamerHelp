@@ -1,0 +1,20 @@
+{
+  "plugin": "MSM",
+  "module": "PAN-VCA",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "VCA.cpp:106 reads this jack as a signal"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "VCA.cpp:107 reads this jack as a signal"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "VCA.cpp:115 clamps this jack alone with clamp(v / 10.0f, 0.0f, 1.0f) and multiplies the level by it"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "VCA.cpp:126 clamps this jack alone with clamp(v / 10.0f, 0.0f, 1.0f) and multiplies the level by it"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "why": "VCA.cpp:69 and 80 take this jack straight into the pan law, with a separate branch for exactly 0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"}
+    }
+  },
+  "comment": "The panel prints SUM- and the manual calls it the difference of the two inputs, but the code computes 1V minus the sum of the two attenuated channels. The line follows the code. Input 2 and outputs 2 and 3 are declared in the code, are not placed on the panel and are never read. The pan CV is discontinuous at exactly 0V. VCA.cpp:69 and 80 test the voltage with if(cv), so at exactly zero the plain cosine and sine pan law is used, and at any other voltage — including a vanishingly small one — the gains are multiplied by 1+(cv+1)/5 on the left and 1-(cv-1)/5 on the right, which is a step change of a fifth as the voltage leaves zero."
+}

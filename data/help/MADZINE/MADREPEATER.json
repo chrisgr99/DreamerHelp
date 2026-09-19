@@ -1,0 +1,37 @@
+{
+  "plugin": "MADZINE",
+  "module": "MADREPEATER",
+  "description": "Envelope generator that makes one segment, a travel from one voltage to another over a set time, and grows more segments as F expanders are added to its right",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage this segment arrives at, 0V to 10V"},
+    {"ids": [1], "text": "Bends this segment between its two voltages: a straight line in the middle, clockwise for a slow start and fast finish, anticlockwise for a fast start and slow finish"},
+    {"ids": [2], "text": "Sets how long this segment takes, 1ms to 10 seconds with a tenfold change every quarter turn; with SYNC on it reads as a fraction or multiple of a beat, from a sixteenth to sixteen"},
+    {"ids": [3], "text": "Takes this segment's length from the clock at the TRIGGER jack rather than from the DURATION knob's seconds"},
+    {"ids": [4], "text": "Sets the voltage the envelope sets off from each time it is started, 0V to 10V"},
+    {"ids": [5], "text": "When it is on, the chain sets off again from the START voltage the moment the last segment finishes, and keeps going until it is switched off"},
+    {"ids": [6], "text": "Starts the envelope from the START voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 1V starts the envelope from the START voltage, and is also the clock a synced segment measures its beat from"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope; between runs it holds the voltage the last segment finished on"}
+  ],
+  "notes": [
+    "nothing comes out until a rising edge reaches TRIGGER or the MANUAL button is pressed. The output rests at 0V until the first run.",
+    "extra segments are F modules placed in an unbroken run to the right of this one, up to 64 of them; each adds one segment, in panel order left to right.",
+    "while any segment in the chain has SYNC on, an edge at TRIGGER arriving during a run is taken as a clock tick only and does not restart the envelope.",
+    "the clock is treated as gone if no edge arrives for four of its own periods, and synced segments fall back to the DURATION knob's seconds."
+  ],
+  "menu": [
+    "Sync PPQN — how many pulses at the TRIGGER jack make one beat for a synced segment: 1, 2, 4, 8, 12, 24 or 48"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

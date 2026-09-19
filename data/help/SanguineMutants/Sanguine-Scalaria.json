@@ -1,0 +1,46 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Scalaria",
+  "description": "Polyphonic Moog-style low-pass ladder filter with two inputs mixed into it, an internal oscillator, and a resonance that reaches self-oscillation",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff frequency of the filter; the numbered lamps report each polyphonic channel's cutoff as a colour, red at the low end and violet at the high one"},
+    {"ids": [1], "text": "Sets the resonance of the filter; turned high enough, the filter self-oscillates"},
+    {"ids": [2], "text": "Cycles the internal oscillator through off, triangle, sawtooth and square; while it runs, its wave takes the place of the input 1 signal going into the filter"},
+    {"ids": [3], "text": "Sets the level of the signal at input 1, clipping it at high settings; while the internal oscillator runs it sets that oscillator's frequency instead"},
+    {"ids": [4], "text": "Sets the level of the signal at input 2, clipping it at high settings"},
+    {"ids": [5], "text": "Attenuverts the cutoff frequency input"},
+    {"ids": [6], "text": "Attenuverts the resonance input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scales the FREQ / LVL 1 knob, 5V giving the knob's own setting; while the internal oscillator runs it sets that oscillator's pitch, one volt per octave. With nothing patched it reads 5V"},
+    {"ids": [1], "text": "Scales the LVL 2 knob, 5V giving the knob's own setting; with nothing patched it reads 5V"},
+    {"ids": [2], "text": "Shifts the cutoff frequency through its attenuverter, 5V covering the whole FREQ knob range"},
+    {"ids": [3], "text": "Shifts the resonance through its attenuverter, 5V covering the whole RESO knob range"},
+    {"ids": [4], "text": "The signal for module channel 1; while the internal oscillator runs it phase-modulates that oscillator instead of feeding the filter"},
+    {"ids": [5], "text": "The signal for module channel 2"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The two module channels summed and passed through the filter, ±5V"},
+    {"ids": [1], "text": "The two module channels summed before the filter, ±5V, or the bare internal oscillator while that runs"}
+  ],
+  "notes": [
+    "the module is polyphonic: the channel count comes from whichever of the two audio inputs carries more, and every channel runs its own filter.",
+    "the two module channels are not the polyphonic channels: each polyphonic channel has a channel 1 and a channel 2 of its own, fed by the two audio inputs or by the internal oscillator.",
+    "the two level jacks read 5V when nothing is patched, so each level knob works on its own.",
+    "bypassing the module passes input 1 straight to the 1 + 2 output."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 5V, or 2V for the oscillator pitch; a negative voltage does nothing here.",
+      "1": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 5V; a negative voltage does nothing here.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "4": "±8V · continuous · polyphonic",
+      "5": "±8V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

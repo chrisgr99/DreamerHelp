@@ -1,0 +1,64 @@
+{
+  "plugin": "Starling_Via",
+  "module": "GATESEQ",
+  "description": "Two gate sequencers driven from one clock, each choosing a rhythm from a bank of patterns, with a logic output combining them",
+  "params": [
+    {"ids": [0], "text": "Selects the pattern sequencer I plays from its current bank"},
+    {"ids": [1], "text": "Modulates pattern I in whatever way the pattern I mode button has chosen: an offset through the bank, a shuffle-to-swing amount, or a clock multiplier"},
+    {"ids": [2], "text": "Selects the pattern sequencer II plays from its current bank"},
+    {"ids": [3], "text": "Sets the voltage sequencer I's gates reach, -5V to +5V; patching the A input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the B input by -1 to +1 to set the voltage sequencer II's gates reach; with nothing patched to B the input reads 5V, so the knob alone gives -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the pattern I modulation input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the pattern II input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through what the A channel does at each of sequencer I's steps: Off, Sample and hold during gate, or Resample on rising edge"},
+    {"ids": [8], "text": "Steps through how sequencer I's gate shapes the A channel: Open, which passes it always, Gated, or Smooth Gate"},
+    {"ids": [9], "text": "Chooses which family of patterns sequencer I plays from: Length 16 Euclidean, 3 vs 2, Shuffle-Swing or Multiplier/Divider"},
+    {"ids": [10], "text": "Steps through what the B channel does at each of sequencer II's steps: Off, Sample and hold during gate, or Resample on rising edge"},
+    {"ids": [11], "text": "Steps through how sequencer II's gate shapes the B channel: Open, which passes it always, Gated, or Smooth Gate"},
+    {"ids": [12], "text": "Chooses which family of patterns sequencer II plays from: Length 16 Euclidean, Odd vs Even, 2 or 3 Gates, or Rhythmic Clock Division"},
+    {"ids": [13], "text": "Resets both sequencers to the start of their patterns"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage sequencer I's gates reach; patched here, it overrides the pattern I gate level knob"},
+    {"ids": [1], "text": "The voltage sequencer II's gates reach, multiplied by the B knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Selects pattern I, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Modulates pattern I, through the pattern I modulation CV amount knob"},
+    {"ids": [4], "text": "Selects pattern II, through the pattern II density CV amount knob"},
+    {"ids": [5], "text": "The clock both sequencers step on; each rising edge advances them one step"},
+    {"ids": [6], "text": "A rising edge here returns both sequencers to the start of their patterns"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The two gate channels added together, each at its own level"},
+    {"ids": [1], "text": "Sequencer I's gate output, 5V while its step is on"},
+    {"ids": [2], "text": "Sequencer II's gate output"},
+    {"ids": [3], "text": "The two sequencers combined by the And, Or, Xor or Nor chosen on the menu"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the B input is normalled to 5V and the pattern II gate level knob multiplies whatever arrives by -1 to +1. Unpatched it is a -5V to +5V source; patched it attenuverts the cable.",
+    "the A + B output carries the two gate channels at the levels set by the two level controls. Set both of those to 0V and that output stays silent however the sequencers are running.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it."
+  ],
+  "menu": [
+    "Drum signal out: And, Or, Xor, Nor — picks the logic the fourth output applies to the two sequencers",
+    "Stock presets: Euclidean, 2 vs 3, Shuffle Swing, Clock Multiplier/Divider, Logic Processing, Resample — sets all six buttons at once to a factory combination",
+    "Select Bank Set File — loads a pattern bank file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · stepped · one channel only",
+      "3": "0 to 5V · one channel only"
+    }
+  }
+}

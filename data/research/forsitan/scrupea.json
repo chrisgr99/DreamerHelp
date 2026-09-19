@@ -1,0 +1,21 @@
+{
+  "plugin": "forsitan",
+  "module": "scrupea",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/scrupea.cpp:263-268 and 317, macro() adds the attenuverter times getVoltage() times 0.1 to the 0..1 pitch mapping knob and clamps, so ±10V at a fully open attenuverter covers the whole travel"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/scrupea.cpp:263-268 and 318, macro() adds the attenuverter times getVoltage() times 0.1 to the 0..1 cutoff mapping knob and clamps, so ±10V at a fully open attenuverter covers the whole travel"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/scrupea.cpp:263-268 and 319, macro() adds the attenuverter times getVoltage() times 0.1 to the 0..1 delay mapping knob and clamps, so ±10V at a fully open attenuverter covers the whole travel"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/scrupea.cpp:263-268 and 320, macro() adds the attenuverter times getVoltage() times 0.1 to the 0..1 flow knob and clamps, so ±10V at a fully open attenuverter covers the whole travel"},
+      "4": {"family": "audio", "poly": false, "range": "±10V", "why": "src/scrupea.cpp:244, one getVoltage() injected into every loop"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "src/scrupea.cpp:398, randTrig.process(getVoltage(), 0.1f, 2.f) rerolls the channels on the rising edge, ORed with the panel button"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/scrupea.cpp:405, the voltage is compared against 1V at the control rate and ORed with the button, so the morph runs for as long as the gate is high"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/scrupea.cpp:247, the first oscillator of each voice summed through the output fader"},
+      "1": {"family": "audio", "poly": false, "why": "src/scrupea.cpp:248, the second oscillator of each voice summed through the output fader"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "why": "src/scrupea.cpp:249 and doc/scrupea.md, the sixteen levels summed with alternating sign and low-passed at 25Hz"}
+    }
+  },
+  "comment": "Parameters 0 to 63 are the eight values of each of the eight voices and have no ParamWidget: they are the bars in a custom edit area, so none of them appears in paramPos and no click on one can reach this help. They are real parameters all the same, saved with the patch and randomised with the module. Parameters 79 and 80, the two scope scales, likewise have no widget: the Lissajous is dragged instead. The maker's own port name for the audio input says eight loops while the documentation says sixteen; there are eight voices of two oscillators each, so both counts describe the same thing from different ends. The four mapping knobs are not offsets: three of them position a curve over the bars, from the fourth power fully anticlockwise through the identity at noon to the fourth root fully clockwise, so one knob opens and closes the spread of eight voices at once. The module is inspired by Skrewell from the REAKTOR factory library rather than ported from it, because that instrument's chaos lives inside filters that cannot be opened. configBypass passes the audio input to both outputs. The panel prints scrupea, function, topology, edit, level, rand, pitch, cutoff, delay, flow, in, rand, morph, time, cv, L and R."
+}

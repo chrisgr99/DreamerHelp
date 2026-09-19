@@ -1,0 +1,19 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Seq4",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp updateAllInputStates: getVoltage() >= 1.0f, then clockTriggerA.process()"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp length_a_cv_trigger.process(getVoltage()) toggles length_a_state"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp reverse_a_cv_trigger.process(getVoltage()) toggles reverse_a_state"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp updateAllInputStates: getVoltage() >= 1.0f, then clockTriggerB.process()"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp length_b_cv_trigger.process(getVoltage())"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Seq4.cpp reverse_b_cv_trigger.process(getVoltage())"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TL_Seq4.cpp process(): gatePulseA.trigger(1e-3f) and setVoltage(10.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TL_Seq4.cpp process(): gatePulseB.trigger(1e-3f) and setVoltage(10.f)"}
+    }
+  },
+  "comment": "The eight step latches of the upper sequencer share one line and the sixteen of the lower share another: within a sequencer they differ only by step number. The CV Steps and CV Reverse inputs write their result back into the panel parameter every sample, so those two switches cannot be moved by hand while a cable is toggling them faster than you can click. The clock input is a level compare at 1V feeding a Schmitt trigger on the resulting boolean, so an input that never falls below 1V never clocks again. Nothing in this plugin saves module state to the patch; only parameter positions come back. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

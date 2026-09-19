@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "FadersOne",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Faders.cpp:658 reads channel c of this input, scales it by the Mod CV Amount knob, adds the fader and clamps the total to the span"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 9.99V", "negative": "ignored", "normal": "the Preset Selection knob", "why": "Faders.cpp:614 reads it with getVoltage() and no channel loop, clamps this jack to 0..9.99 and maps it onto the hundred slots"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "normal": "the faders", "why": "Faders.cpp:646-650 read this input per channel and write each channel into the matching fader while that fader is enabled"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "normal": "the Enable button", "why": "Faders.cpp:620-638 read this input, taking one channel as all sixteen and a polyphonic cable as one switch per fader"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 9.99V", "negative": "ignored", "normal": "0V", "why": "Faders.cpp:662 reads it with getVoltage() and no channel loop, clamps this jack to 0..9.99 and maps it onto the hundred slots for the second output"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Faders.cpp:679 sets this output's channel count from the menu setting"},
+      "1": {"family": "cv", "poly": true, "why": "Faders.cpp:670 sets this output's channel count from the slot the Pattern Adr jack picks"}
+    }
+  },
+  "comment": "The two small buttons lettered + and - are the parameters the maker never named, so both carry blank tooltips; they insert and delete a slot. An output with no cable is not computed at all. The second output reads the faders of another slot through the same modulation and snapping as the first, Faders.cpp:664-668, which is what lets a whole bank be swept without the panel moving. With Use Adr for Prog on, the Program jack writes into the slot at the Pattern Adr jack and the faders on the panel are left alone, Faders.cpp:643-648."
+}

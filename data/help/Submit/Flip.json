@@ -1,0 +1,42 @@
+{
+  "plugin": "Submit",
+  "module": "Flip",
+  "description": "A clock-locked stereo reverse effect: it captures the incoming audio in beat-long cells and plays them back backwards on demand",
+  "params": [
+    {"ids": [0], "text": "Latches the reverse on and off; a press takes effect at the next quarter-note boundary rather than at once, so a drum hit is never cut in half"},
+    {"ids": [2], "text": "Latches the freeze on and off, repeating one captured cell; it makes the reverse audible whether or not FLIP is latched"},
+    {"ids": [3], "text": "Sets the length of the frozen cell: a half, a quarter or an eighth of a beat. It does nothing while FRZ is off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input"},
+    {"ids": [1], "text": "One pulse per quarter note. Every capture and every switch in the module is aligned to these edges"},
+    {"ids": [2], "text": "A rising edge turns the reverse on for the rest of the beat, without latching"},
+    {"ids": [3], "text": "The right audio input; it follows the left input when unpatched"},
+    {"ids": [4], "text": "Holds the freeze on while the voltage here is 1V or above"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output: the input while the reverse is off, the reversed capture while it is on"},
+    {"ids": [1], "text": "The right output: the input while the reverse is off, the reversed capture while it is on"}
+  ],
+  "notes": [
+    "with nothing patched to CLK there are no beat boundaries, so no capture is ever completed and the audio passes through untouched",
+    "the crossfade between the dry input and the reversed capture takes 4ms, and the capture buffer holds 8 seconds"
+  ],
+  "menu": [
+    "1 PPQN (Submit standard) — reads each pulse at CLK as one quarter note",
+    "4 PPQN (compatibility) — reads four pulses at CLK as one quarter note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads the IN L input.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

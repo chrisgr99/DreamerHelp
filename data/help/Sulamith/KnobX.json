@@ -1,0 +1,39 @@
+{
+  "plugin": "Sulamith",
+  "module": "KnobX",
+  "description": "Eight voltage knobs, put out together as one polyphonic cable and one at a time as a sequence",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets the voltage for its own step, over whatever span the range switch is set to"},
+    {"ids": [8], "text": "Sets how many of the eight knobs are used, both as the sequence length and as the number of polyphonic channels, 1 to 8"},
+    {"ids": [9], "text": "Sets the span the eight knobs cover: ±10V, ±5V, ±3V, ±2V, ±1V, 0 to 1V, 0 to 2V, 0 to 3V, 0 to 5V or 0 to 10V"},
+    {"ids": [10], "text": "Chooses whether the sequence runs forwards, backwards or jumps to a random step"},
+    {"ids": [11], "text": "Steps the sequence once, as a rising edge at the clock jack does"},
+    {"ids": [12], "text": "Sets the chance that an incoming clock pulse is acted on at all, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge steps the sequence on by one"},
+    {"ids": [1], "text": "With a monophonic cable, a rising edge sends the sequence back to its first step; with a polyphonic cable, a clock pulse or a button press copies that cable's channels into the eight knobs instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a 1ms pulse at 10V each time the sequence steps"},
+    {"ids": [1], "text": "Carries all the knobs at once as a polyphonic cable, one channel each, whatever the sequence is doing"},
+    {"ids": [2], "text": "Carries the voltage of the knob the sequence is on, held until it moves"}
+  ],
+  "notes": [
+    "the polyphonic output carries the knobs at all times and needs no clock; only the sequenced output and the trigger jack depend on one",
+    "with a polyphonic cable in the reset jack the clock pulse is used for copying and the sequence does not step; a monophonic cable there leaves the clock to the sequence and resets it",
+    "the range switch rewrites the eight knobs' own limits, so a knob set past the new span is pulled back to it",
+    "Rack's randomise command moves only the eight voltage knobs and leaves the length, range, mode and probability alone"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±10V · stepped · polyphonic",
+      "2": "±10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "plugin": "Entrian-Sequencers",
+  "module": "Drummer",
+  "description": "Drum trigger sequencer: up to 25 named phrases of drum notes across ten voices, with per-note velocity, accents, ratchets, flams and probability, edited in a popup piano roll",
+  "params": [
+    {"ids": [0], "text": "Returns the playhead to the beginning, or to the start repeat marker with that option set on the menu"},
+    {"ids": [1], "text": "Starts and stops playback"},
+    {"ids": [2], "text": "Starts and stops recording of the notes arriving at the record inputs into the current phrase"},
+    {"ids": [3], "text": "Clears every note out of the current phrase"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that drives playback, at four ticks per beat, which a clock module calls x4 or 1/16th"},
+    {"ids": [1], "text": "Chooses which of the 25 phrases plays, C3 selecting the first and the 25 semitones up to C5 the last; set to trigger on the menu it steps to the next non-empty phrase or picks one at random"},
+    {"ids": [2], "text": "A trigger returning the playhead to the beginning, or to the start repeat marker with that option set on the menu; playback carries on immediately if the sequencer is running"},
+    {"ids": [3], "text": "A trigger toggling between running and stopped; while stopped the gates are closed and clock ticks are ignored"},
+    {"ids": [4], "text": "Records drum notes from a keyboard, the ten white keys from C4 to E5 playing the ten voices"},
+    {"ids": [5], "text": "Records drum notes from a General MIDI drum kit, whose standard kit notes are mapped onto the ten voices"},
+    {"ids": [6], "text": "The note-on trigger for recording, taken from the gate output of a MIDI-CV module"},
+    {"ids": [7], "text": "Sets the velocity of each recorded note"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "text": "A trigger on each note played by that voice"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "A trigger on each note of that voice that is marked as an accent in the editor"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "text": "The velocity of the note being played by that voice"},
+    {"ids": [30], "text": "Carries a reset out of the sequencer each time its Reset button is pressed, on the panel or in the editor window, so a clock module can be reset from here"},
+    {"ids": [31], "text": "Carries the Run button out of the sequencer, pressed on the panel or in the editor window, so a clock module can be started and stopped from here"},
+    {"ids": [32], "text": "A trigger each time the playhead reaches the end of the phrase"}
+  ],
+  "notes": [
+    "the large display draws the phrase with the playhead as a vertical line, and clicking it opens an editor for adding, moving and deleting notes and setting velocity, accent and probability",
+    "the small display names the phrase now playing, and clicking it lists the 25 phrases to choose from",
+    "a MIDI file can be imported from the editor or dragged onto it from disk, and the sequence exported to a MIDI file from there",
+    "a swing pattern set in the editor offsets quarter, eighth or sixteenth notes forwards or backwards by a chosen fraction, and a pattern set on a narrower part overrides a broader one",
+    "with Record enabled and Run switched off, each note played at the record inputs is written at the playhead, which then steps on by the quantisation amount",
+    "there is no clock inside the module. Nothing plays until a clock giving four ticks per beat is patched in, which a clock module calls x4 or 1/16th, and the sequencer is running",
+    "the module holds no notes when it is added. They are drawn in the editor window opened by clicking the large display, played in at the record inputs, or brought in from a MIDI file",
+    "the playhead and the start and end repeat markers are drawn on the large display and can be moved by clicking and dragging there, without opening the editor window",
+    "the Phrase CV/menu control in the editor window, not the panel menu, sets when a change of phrase takes effect: Instant at once, or End of phrase at the end of the current one"
+  ],
+  "menu": [
+    "Phrase selection input: — how the phrase input is read: Pitch, C3-C5; Trigger next non-empty phrase; Trigger random phrase (random but fair); or Trigger random phrase (truly random)",
+    "Shared playhead: — Don't share the playhead, Shared playhead leader or Shared playhead follower, which moves the playheads of all the linked Entrian sequencers together",
+    "Delay Clock/Reset/Run inputs — delays those three inputs by a whole number of samples, to offset the one-sample delay every Rack cable adds; Auto is the default and None the other choice",
+    "Set playhead to start marker on reset — a reset sends the playhead to the start repeat marker instead of to the beginning",
+    "Stop recording at end of song — recording ends when the playhead reaches the end, without a second press of Record",
+    "Automatically add repeat markers when recording — a start marker is dropped where recording began and an end marker where it stopped, and the playhead then loops that section",
+    "Save patch to use the free Entrian Player... — writes the patch out again with every Entrian sequencer swapped for its play-only counterpart in the Entrian Free plugin"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped",
+      "32": "stepped"
+    }
+  }
+}

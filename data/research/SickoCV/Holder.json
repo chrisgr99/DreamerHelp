@@ -1,0 +1,18 @@
+{
+  "plugin": "SickoCV",
+  "module": "Holder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Holder.cpp:215 getChannels() on this jack chooses the monophonic or polyphonic path, :253 reads getVoltage(cT) per channel, and :220 takes the rising edge at 1V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Holder.cpp:202 getVoltage() * trimpot * 0.1 added to the knob, the sum clamped to 0-1 at :203-206"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Holder.cpp:226 getVoltage() * trimpot * 0.1 added to the SCALE knob"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "Holder.cpp:227 getVoltage() * trimpot added to the OFFSET knob without further scaling, so one volt here is one volt of offset"},
+      "4": {"poly": true, "step": "continuous", "normal": "a ±5V noise source", "why": "Holder.cpp:211 isConnected() test; :213 getChannels() becomes the loop bound and :225 reads getVoltage(c); with the jack empty :282 and :286 generate noise instead"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "±10V", "why": "Holder.cpp:228-235 clamps to ±10V, :234 setVoltage(out, c) and :243 setChannels()"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Holder.cpp:185 setChannels(1) on this port, and it carries a 1ms pulse or a held gate"}
+    }
+  },
+  "comment": "Nothing is calculated at all unless the OUT jack has a cable in it (Holder.cpp:200). The MODE switch is configured Track & Hold, Sample & Hold and comes up in the upper position, Sample & Hold, which is the opposite order to holder Compact's list although both come up the same way. The SCL CV is scaled by a tenth and the OFS CV is not, so the offset jack moves the output volt for volt. The PROB CV sumRange is a probability, not a voltage. The signal jacks carry whatever is patched, so the IN and OUT jacks get no family. With 'Gate Out instead Trig' ticked the 'Trig on start' and 'Trig on end' items are shown as plain labels and cannot be clicked."
+}

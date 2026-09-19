@@ -1,0 +1,19 @@
+{
+  "plugin": "Submit",
+  "module": "Orbit",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Orbit.cpp:404 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Orbit.cpp:405 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Orbit.cpp:397 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Orbit.cpp:393 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Orbit.cpp:160 triggers a 1ms pulse; Orbit.cpp:469 sets 10V while it runs"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Orbit.cpp:166 triggers a 1ms pulse; Orbit.cpp:470 sets 10V while it runs"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Orbit.cpp:171 triggers a 1ms pulse; Orbit.cpp:471 sets 10V while it runs"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Orbit.cpp:131 returns 10 times one minus the smoothed distance; Orbit.cpp:475 sets it"}
+    }
+  },
+  "comment": "A fifth output, Rhythmic distance CV, is configured at Orbit.cpp:87 and is written every sample at Orbit.cpp:473, but the widget deliberately adds no jack for it; the maker's comment at Orbit.cpp:541-542 says it is kept for old beta patches and is redundant with Tension. It cannot be patched or clicked.\n\nThe manual does not say which way the tension voltage runs. liveTensionVoltage at Orbit.cpp:131 returns ten times one minus the distance, so the voltage is highest when the two rhythms land together and falls to zero when they are a full Range apart.\n\nAlignment output is thinned: a pair of edges within a hundredth of the reference period is treated as an exact alignment and fires only on every second occurrence, and no two align pulses are allowed closer than a sixteenth of the reference period (Orbit.cpp:362-375).\n\nWindow does two jobs. It sets the alignment window as an eighth of a beat plus the square root of the knob times seven eighths (Orbit.cpp:357-359), and it sets the gap delay as half a beat minus three eighths of the knob (Orbit.cpp:439-441), so raising it widens alignment and shortens the wait for a gap.\n\nWith no clock patched, the reference period falls back to the average of the two measured rhythm periods, or to half a second if neither has been measured (Orbit.cpp:289-295)."
+}

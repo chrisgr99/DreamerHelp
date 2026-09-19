@@ -1,0 +1,94 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "Echo",
+  "description": "Multi-tap stereo and polyphonic delay, carrying one delay tap of its own along with the feedback, freeze, clear, clock and input gain shared by every tap in the chain",
+  "params": [
+    {"ids": [0], "text": "Adds an Echo Tap to the right, cloned from this tap's settings, shifting the rest of the chain over to make room"},
+    {"ids": [1], "text": "Sets the delay time of this tap, from 0.1 seconds to 10 seconds; right-clicking it chooses whether this tap runs free or follows the clock"},
+    {"ids": [2], "text": "Attenuates and inverts the delay time CV"},
+    {"ids": [3], "text": "Sets how much delayed audio is fed back: in serial mode from the last tap into the first, in parallel mode within each tap on its own"},
+    {"ids": [4], "text": "Attenuates and inverts the feedback CV"},
+    {"ids": [5], "text": "Places this tap in the stereo field; panning happens after the feedback path, so it moves where this tap lands without changing what flows to the next tap"},
+    {"ids": [6], "text": "Attenuates and inverts the panning CV"},
+    {"ids": [8], "text": "Snaps clock-synced delay times to musical divisions such as eighth notes, dotted eighths and triplets"},
+    {"ids": [9], "text": "Sets the volume of this tap, outside the feedback path, so it changes the tap's loudness without changing the audio flowing through the chain"},
+    {"ids": [10], "text": "Attenuates and inverts the level CV"},
+    {"ids": [11], "text": "Reverses playback of this tap; with a gate patched to the reverse input, pressing it inverts the sense of that gate. Clicking the REV label switches to FLP, which reverses inside the feedback path"},
+    {"ids": [12], "text": "Stops new audio being written into every tap's buffer while keeping what is already recorded; with a gate patched to the freeze input, pressing it inverts the sense of that gate"},
+    {"ids": [13], "text": "Empties the delay buffers of every tap in the chain at once"},
+    {"ids": [14], "text": "Sets the gain of this tap's envelope follower output"},
+    {"ids": [15], "text": "Turns clock sync on or off for every tap in the chain at once"},
+    {"ids": [16], "text": "Places the send and return before the delay, so processed audio flows on through the chain, or after it, so processed audio stays local to this tap"},
+    {"ids": [17], "text": "Resets every Echo, Echo Tap and Echo Out in the chain to default settings"},
+    {"ids": [18], "text": "Resets this tap to its default settings, leaving the other taps alone"},
+    {"ids": [19], "text": "Switches the send and final output ports between stereo and polyphonic; in polyphonic mode the left ports carry every channel and the right ports carry one channel of 0V"},
+    {"ids": [20], "text": "Silences this tap"},
+    {"ids": [21], "text": "Silences every tap in the chain except this one"},
+    {"ids": [23], "text": "Sets the level of audio entering Echo, from silence to a factor of 8, about +18dB, with 0dB leaving the input unchanged"},
+    {"ids": [24], "text": "Attenuates and inverts the input gain CV"},
+    {"ids": [25], "text": "Turns on a period of silence followed by a ramp in recording level after each clear or reset, in place of recording at once; both times are set by menu sliders"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Left audio into the delay; with the right input empty this one feeds both sides, and a cable of 1 to 16 channels here sets the channel count of the whole chain"},
+    {"ids": [1], "text": "Right audio into the delay"},
+    {"ids": [2], "text": "Scaled a volt per octave: each positive volt halves this tap's delay time and each negative volt doubles it"},
+    {"ids": [3], "text": "Varies the amount of feedback around the chain"},
+    {"ids": [4], "text": "Moves this tap's position in the stereo field"},
+    {"ids": [5], "text": "Varies the level of audio entering Echo"},
+    {"ids": [6], "text": "Varies the volume of this tap"},
+    {"ids": [7], "text": "Left audio returning into this tap; patching this port breaks the internal short from the send ports on both the left and the right side"},
+    {"ids": [8], "text": "Right audio returning into this tap"},
+    {"ids": [9], "text": "In gate mode a high level reverses this tap; in trigger mode each pulse toggles it. The symbol above the REV label is clicked to change between the two modes"},
+    {"ids": [10], "text": "In gate mode a high level freezes every buffer in the chain; in trigger mode each pulse toggles the freeze. Its channels are summed to one value applied across the whole chain"},
+    {"ids": [11], "text": "A trigger here empties every tap's delay buffer; its channels are summed to one value applied across the whole chain"},
+    {"ids": [12], "text": "Sets the base delay time from the interval between rising edges, read high above 1V and low below 0.1V, and each tap's TIME multiplies that base. Clicking the CLOCK label switches to RATE"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Left audio leaving this tap for outboard processing; it carries valid audio whether or not the return ports are patched"},
+    {"ids": [1], "text": "Right audio leaving this tap for outboard processing"},
+    {"ids": [2], "text": "Follows the amplitude of this tap, clamped to 0-10V through a bicubic limiter. Clicking the ENV label switches to DCK, where the voltage is 10V minus the envelope"}
+  ],
+  "notes": [
+    "in RATE mode the clock port is read a volt per octave with 0V meaning 1Hz, and the delay time stays clamped to 0.1 seconds to 10 seconds, about 3.322 volts either side of 0V",
+    "the chain's audio output is on Echo Out, at the right-hand end; one is added there automatically when Echo is taken from the module browser, and without it the delay has no way out."
+  ],
+  "menu": [
+    "DC reject cutoff — sets the frequency of the high-pass filter that strips DC from the input, 20Hz to 400Hz",
+    "Interpolator — chooses Linear (uses less CPU) or Sinc (cleaner audio) for reading the delay lines",
+    "Polyphonic envelope output — switches this tap's envelope follower between one channel and one per audio channel; it is on the panel menu and on the envelope output port's own menu",
+    "Initialize Echo expander chain — returns every Echo, Echo Tap and Echo Out in the chain to default settings",
+    "Signal routing — chooses Parallel, where every tap receives the input and plays back on its own, or Serial, where each tap feeds the next and the last feeds back into the first",
+    "Post-reset silence time — sets how long the taps record nothing after a clear or a reset, 0.1 seconds to 10 seconds, when the fader button is on",
+    "Post-reset ramp time — sets how long the recording level takes to rise from zero after that silence, 0.1 seconds to 10 seconds",
+    "Toggle all clock sync — turns clock sync on or off for every tap in the chain at once",
+    "Toggle polyphonic/mono on all envelope followers — switches every tap's envelope follower between one channel and one per audio channel",
+    "Tape speed slew rate — sets how quickly a tap's playback speed may change when its delay time moves, which trades pitch swoops against a lagging response",
+    "Freeze input port mode — chooses Gate or Trigger for the freeze input; it is on the panel menu and on the freeze input port's own menu",
+    "Reverse/flip input port mode — chooses Gate or Trigger for the reverse input; it is on the panel menu and on the reverse input port's own menu",
+    "Time mode — chooses Seconds or Clock sync for this tap, and is on the TIME knob's own menu rather than the panel menu",
+    "Toggle sensitivity on all attenuverters — divides the effect of every attenuverter on the panel by 10, or restores them all",
+    "Low sensitivity — on an attenuverter knob's own menu, not the panel menu: divides that knob's effect by 10 and marks the knob with an orange dot",
+    "Unipolar mode — on an attenuverter knob's own menu, not the panel menu: adds 5V to the CV on that control and clamps the result at zero"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads the left audio input.",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±10V.",
+      "4": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "5": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "6": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic\n\nunpatched it reads the left return input.",
+      "9": "high above 1V · stepped · polyphonic\n\nunpatched it reads the REV button.",
+      "10": "high above 1V · stepped · polyphonic\n\nunpatched it reads the FREEZE button.",
+      "11": "high above 1V · stepped · polyphonic",
+      "12": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

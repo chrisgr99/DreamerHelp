@@ -1,0 +1,33 @@
+{
+  "plugin": "4msCompany",
+  "module": "DLD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "DLDCore.cc:115 compares this jack against TriggerThresholdInVolt, set at 0.1V in DLDCore.cc:194; DLDCore.cc:12 derives from SmartCoreProcessor, which has no poly buffer"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "why": "DLDCore.cc:124 reads this jack and DLDChannel.hh:224 divides it by AudioInputFullScaleInVolt, set at 10V in DLDChannel.hh:239"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "why": "DLDChannel.hh:232 reads this jack and DLDChannel.hh:224 divides it by AudioInputFullScaleInVolt, set at 10V in DLDChannel.hh:239"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "DLDChannel.hh:162 compares this jack against TriggerThresholdInVolt, set at 0.1V in DLDChannel.hh:241"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "DLDChannel.hh:162 compares this jack against TriggerThresholdInVolt, set at 0.1V in DLDChannel.hh:241"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "why": "DLDChannel.hh:232 reads this jack and DLDChannel.hh:224 divides it by AudioInputFullScaleInVolt, set at 10V in DLDChannel.hh:239"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "normal": "the IN A jack", "why": "DLDCore.cc:125 falls back to channel A's input when this jack is unpatched; DLDChannel.hh:224 divides it by the 10V full scale at DLDChannel.hh:239"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "DLDChannel.hh:163 compares this jack against TriggerThresholdInVolt, set at 0.1V in DLDChannel.hh:241"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "DLDChannel.hh:163 compares this jack against TriggerThresholdInVolt, set at 0.1V in DLDChannel.hh:241"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "DLDChannel.hh:146 with DLDChannel.hh:121-124 maps this jack from -5V and +5V onto full scale and zero, so the voltage is read upside down"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "why": "DLDChannel.hh:147 with DLDChannel.hh:117-119 divides this jack by 5V and clamps it between 0 and full scale"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "why": "DLDChannel.hh:148 with DLDChannel.hh:117-119 divides this jack by 5V and clamps it between 0 and full scale"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "why": "DLDChannel.hh:148 with DLDChannel.hh:117-119 divides this jack by 5V and clamps it between 0 and full scale"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "why": "DLDChannel.hh:147 with DLDChannel.hh:117-119 divides this jack by 5V and clamps it between 0 and full scale"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "DLDChannel.hh:146 with DLDChannel.hh:121-124 maps this jack from -5V and +5V onto full scale and zero, so the voltage is read upside down"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DLDChannel.hh:169 scales the loop flag by TriggerOutputFullScaleInVolt, set at 5V in DLDChannel.hh:242"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DLDCore.cc:137 puts out ClockOuputFullScaleInVolt, set at 5V in DLDCore.cc:195"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DLDChannel.hh:169 scales the loop flag by TriggerOutputFullScaleInVolt, set at 5V in DLDChannel.hh:242"},
+      "3": {"family": "audio", "poly": false, "range": "±10V", "why": "DLDCore.cc:132-133 put out channel A alone when OUT B is patched and the two channels summed and halved when it is not; DLDChannel.hh:229 scales by AudioOutputFullScaleInVolt, set at 10V in DLDChannel.hh:240"},
+      "4": {"family": "audio", "poly": false, "range": "±10V", "why": "DLDChannel.hh:236 with DLDChannel.hh:229 scales by AudioOutputFullScaleInVolt, set at 10V in DLDChannel.hh:240"},
+      "5": {"family": "audio", "poly": false, "range": "±10V", "why": "DLDChannel.hh:236 with DLDChannel.hh:229 scales by AudioOutputFullScaleInVolt, set at 10V in DLDChannel.hh:240"},
+      "6": {"family": "audio", "poly": false, "range": "±10V", "why": "DLDCore.cc:131 puts out channel B; DLDChannel.hh:229 scales by AudioOutputFullScaleInVolt, set at 10V in DLDChannel.hh:240"}
+    }
+  },
+  "comment": "The TIME jacks are inverted: DLDChannel.hh:121-124 map -5V to full scale and +5V to zero, so a rising voltage shortens the delay. The CLOCK OUT jack carries channel B's clock only (DLDCore.cc:136-137), and the ping button's light follows channel B as well. OUT A is a mono sum when OUT B is unpatched (DLDCore.cc:132-133). The crossfade menu's millisecond labels come from sample counts at DLDChannel.hh:192-193, scaled for the running sample rate, and 1ms is in fact a single sample. Seventeen of the thirty-two parameters are alt parameters with no panel widget (DLD_info.hh:40-56), so they appear only on the right-click menu."
+}

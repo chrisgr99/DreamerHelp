@@ -1,0 +1,51 @@
+{
+  "plugin": "SickoCV",
+  "module": "Holder",
+  "description": "A sample and hold or track and hold with its own noise source, a chance of skipping the sample, and scale and offset on the output",
+  "params": [
+    {"ids": [0], "text": "Chooses whether a trigger takes one sample and holds it, or the input passes through for as long as the gate is high"},
+    {"ids": [1], "text": "Sets the chance that an incoming trigger takes a sample at all, 0% to 100%"},
+    {"ids": [2], "text": "Scales the PROB CV, -100% to +100%"},
+    {"ids": [3], "text": "Scales the held voltage before it leaves, -100% to +100%"},
+    {"ids": [4], "text": "Scales the SCL CV, -100% to +100%"},
+    {"ids": [5], "text": "Adds a fixed voltage to the held value, -10V to +10V"},
+    {"ids": [6], "text": "Scales the OFS CV, -100% to +100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes a sample on each rising edge in Sample & Hold, or opens the track for as long as it is high in Track & Hold"},
+    {"ids": [1], "text": "Shifts the chance of sampling, a tenth of its voltage scaled by the trimpot beside it and added to the PROB knob"},
+    {"ids": [2], "text": "Shifts the output scaling, a tenth of its voltage scaled by the trimpot above it and added to the SCL knob"},
+    {"ids": [3], "text": "Shifts the output offset, one volt per volt scaled by the trimpot above it and added to the OFS knob"},
+    {"ids": [4], "text": "The signal to be sampled; with nothing patched a ±5V noise source is sampled instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The held voltage, scaled and offset, clamped to ±10V"},
+    {"ids": [1], "text": "A 1ms pulse each time a sample is actually taken, or a gate while tracking with 'Gate Out instead Trig' ticked"}
+  ],
+  "notes": [
+    "with the IN jack empty the module samples its own white noise, which is how it doubles as a random voltage source.",
+    "a monophonic cable at TRIG samples every channel of a polyphonic IN at once; a polyphonic cable at TRIG samples each channel on its own trigger."
+  ],
+  "menu": [
+    "Full — makes the built-in noise an even spread of random voltages between -5V and +5V",
+    "Centered — weights the built-in noise towards the middle, and it can step outside ±5V now and then",
+    "Sample on HIGH Gate — turns Track & Hold round, so the signal passes while the gate is low and is held while it is high",
+    "Trig on start — sends a pulse from the TRIG output when tracking begins",
+    "Trig on end — sends a pulse from the TRIG output when tracking ends",
+    "Gate Out instead Trig — holds the TRIG output high while tracking instead of pulsing",
+    "Noise Generator preset — sets Track & Hold, Sample on HIGH Gate, scale at 100% and offset at 0V in one click, which turns the module into a plain white noise source"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · polyphonic\n\nunpatched it reads a ±5V noise source."
+    },
+    "outputs": {
+      "0": "±10V · polyphonic",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

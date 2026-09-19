@@ -1,0 +1,59 @@
+{
+  "plugin": "CVfunk",
+  "module": "StepWave",
+  "description": "An eight-stage sequencer whose stages are not flat: each has a value, a shape the value is drawn with, a number of beats, and a displacement pushing its boundary earlier or later",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets that stage's value, -5V to 5V, which the stage's shape is drawn against"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets how many beats that stage lasts, 0 to 10; at 0 the stage is skipped"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Morphs the shape that stage draws, 1 to 12, through a flat step, a square, a sawtooth, an inverted sawtooth, a triangle, a logarithmic ramp, a bell curve and a flat-topped ramp"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30], "text": "Pushes the boundary between those two stages earlier or later, -5V to 5V, without changing how many beats the pair takes together"},
+    {"ids": [31, 32, 33, 34, 35, 36, 37, 38], "text": "Jumps the sequence to that stage on the next clock beat"},
+    {"ids": [39], "text": "Sets how far the CV output slides toward each new value, the time scaled against the measured beat length"},
+    {"ids": [40], "text": "Starts the sequence on each press and stops it on the next"},
+    {"ids": [41], "text": "Returns the sequence to the first stage on each press"},
+    {"ids": [42], "text": "Makes each stage's beat count divide the stage rather than lengthen it, so the whole sequence keeps one length however the beats are set"},
+    {"ids": [43], "text": "Lets a stage's value CV keep moving the output through the stage, instead of the value being sampled once as the stage begins"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the sequence by one beat and sets the tempo the shapes are drawn against"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Replaces that stage's value knob, clamped to -5 to 5V; with the menu set to modulate shape it is added to that stage's shape knob instead"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15], "text": "Changes the displacement of that boundary, added to its knob and clamped to -5 to 5V"},
+    {"ids": [16], "text": "Changes the slew, scaled by a tenth and added to the slew knob, the total clamped to the knob's travel"},
+    {"ids": [17], "text": "A rise starts the sequence, and the next stops it"},
+    {"ids": [18], "text": "A rise returns the sequence to the first stage"},
+    {"ids": [19], "text": "A voltage above 0.05V flips the link setting from whatever the button has it at, rather than replacing it"},
+    {"ids": [20], "text": "A voltage above 0.05V flips the track setting from whatever the button has it at, rather than replacing it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sequence's voltage, the current stage's value drawn through its shape, slewed, and snapped to semitones on the menu setting"},
+    {"ids": [1], "text": "A 10V gate on the first half of every beat of the current stage, so a stage set to several beats puts out several gates"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Carries 10V while the sequence is on that stage and 0V otherwise, whether or not the sequence is running"}
+  ],
+  "notes": [
+    "nothing runs until a clock is patched and the sequence is started, by the ON/OFF button or a rise at the ON/OFF jack",
+    "the displacement controls move a boundary between two stages, so turning one makes one stage longer and its neighbour shorter by the same amount"
+  ],
+  "menu": [
+    "Stage Value CV Modulates Shape — sends each stage's value input to that stage's shape knob instead of its value, so a patched CV morphs the drawn shape",
+    "Quantize CV Out — snaps the CV output to whole semitones"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads the jack above it.",
+      "9": "±5V · continuous · polyphonic",
+      "10": "±5V · continuous · polyphonic\n\nunpatched it reads the jack above it.",
+      "16": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here; the knob and this input are summed and the total held to 0 to 1V.",
+      "17": "stepped · one channel only",
+      "18": "stepped · one channel only",
+      "19": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "20": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

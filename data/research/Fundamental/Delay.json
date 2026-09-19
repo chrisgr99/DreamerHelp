@@ -1,0 +1,19 @@
+{
+  "plugin": "Fundamental",
+  "module": "Delay",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "why": "Delay.cpp:123 reads this input with getVoltage; Delay.cpp:123 uses this input as a value"},
+      "1": {"poly": false, "step": "continuous", "why": "Delay.cpp:116 reads this input with getVoltage; Delay.cpp:116 uses this input as a value"},
+      "2": {"poly": false, "step": "continuous", "why": "Delay.cpp:166 reads this input with getVoltage; Delay.cpp:166 uses this input as a value"},
+      "3": {"poly": false, "step": "continuous", "why": "Delay.cpp:185 reads this input with getVoltage; Delay.cpp:185 uses this input as a value"},
+      "4": {"family": "audio", "poly": true, "why": "Delay.cpp:115 reads this input with getVoltageSum"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Delay.cpp:101 reads this input with getVoltage; Delay.cpp:101 puts this input through a Schmitt trigger whose high threshold is 2V"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "Mono only: process() reads the audio input with getVoltageSum() and never calls setChannels. No range is recorded for the Time input because it depends on a knob: the maker's port description reads \"1V/octave when Time CV is 100%\", and Delay.cpp:123 multiplies the jack by the Time CV knob before adding it to the pitch. The Audio input takes a polyphonic cable and sums every channel to one (Delay.cpp:115); the delay line itself is mono, which is why the maker does not tag the module Polyphonic."
+}

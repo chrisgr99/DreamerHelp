@@ -1,0 +1,36 @@
+{
+  "plugin": "Sulamith",
+  "module": "Compare",
+  "description": "Compares every channel of a polyphonic cable against a threshold and gives gates for above and below, plus the signal itself split the same way",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage each channel is compared against, -10V to 10V"},
+    {"ids": [1], "text": "Scales the threshold CV before it is added to the threshold knob, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the threshold knob after the attenuator, channel for channel, with the total held between -10V and 10V"},
+    {"ids": [1], "text": "The signal to be compared, one channel at a time; its channel count is passed to all four outputs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V on each channel whose input is above the threshold, and 0V on the rest"},
+    {"ids": [1], "text": "Carries 10V on each channel whose input is at or below the threshold, and 0V on the rest"},
+    {"ids": [2], "text": "Carries the input on each channel that is above the threshold, and 0V on the rest"},
+    {"ids": [3], "text": "Carries the input on each channel that is at or below the threshold, and 0V on the rest"}
+  ],
+  "notes": [
+    "the comparison is made afresh every sample with no smoothing, so this works at audio rate for hard splitting as well as at modulation rate",
+    "the threshold jack is read channel by channel, so a polyphonic cable there gives each channel its own threshold",
+    "the two lamps follow the last channel of the cable rather than the whole of it, so with more than one channel patched they do not show the state of the first"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±10V.",
+      "1": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic"
+    }
+  }
+}

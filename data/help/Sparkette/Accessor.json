@@ -1,0 +1,35 @@
+{
+  "plugin": "Sparkette",
+  "module": "Accessor",
+  "description": "An expander that reads and writes single cells of a neighbouring module's memory at addresses given as voltages, placed immediately to the left of the module it reaches into",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the host's memory channels to work on, 0 to 16; the lamp is green while that channel is there and red while it is not"},
+    {"ids": [1], "text": "Scales the data input, and sets the value written on its own while nothing is patched to the data jack, -10V to 10V"},
+    {"ids": [2], "text": "Chooses when a write happens: while the write jack reads above 0.5V, on every sample whatever it reads, or once on each rising edge at that jack"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the X part of the address, 0V to 10V across the width of the memory; every channel patched here is a separate address"},
+    {"ids": [1], "text": "Sets the Y part of the address, 0V to 10V down the height of the memory; every channel patched here is a separate address"},
+    {"ids": [2], "text": "The value to write, through the data trimpot; its channels are written to the addresses in turn, and the last channel is reused for any addresses beyond it"},
+    {"ids": [3], "text": "Says when to write, read in the way the write switch is set; a single channel here writes every address at once"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The values stored at the addresses being read, one channel for each address"}
+  ],
+  "notes": [
+    "this module does nothing on its own: it works on the memory of a DMA-compatible module placed immediately to its right, which means RAM-40964, Microcosm or Dual Integrator",
+    "nothing is read or written until the X or Y jack is patched: with both empty no address is worked out, the output carries no channels and no write takes place",
+    "on a memory of on-and-off cells a write of more than 0.5V turns a cell on and anything lower turns it off, and the output reads 1V for on and 0V for off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · polyphonic\n\nunpatched it reads cell 0; a negative voltage subtracts from the knob.",
+      "1": "0 to 10V · stepped · polyphonic\n\nunpatched it reads cell 0; a negative voltage subtracts from the knob.",
+      "2": "±10V · continuous · polyphonic\n\nunpatched it reads the data trimpot.",
+      "3": "high above 0.5V · stepped · polyphonic\n\nunpatched it reads no write happens; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

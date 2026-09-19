@@ -1,0 +1,30 @@
+{
+  "plugin": "MADZINE",
+  "module": "Portal",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "±10V", "why": "src/Portal.cpp:529-548, getVoltage(baseChannel + n) is read for sixteen channels across the four roles"},
+      "1": {"poly": true, "range": "±10V", "why": "src/Portal.cpp:525-549, for each of the four roles getVoltage() reads channels 4r to 4r+3 as audio, gate, pitch and velocity envelope, each multiplied by the crossfader's B gain and added to the same channel of deck A"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/Portal.cpp:506-510, xfaderPos += getVoltage()*0.1, then clamp(0, 1)"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "pitch"},
+      "5": {"family": "pitch"},
+      "6": {"family": "pitch"},
+      "7": {"family": "pitch"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Portal.cpp:566, tanh of the mix times 5"},
+      "13": {"family": "audio"},
+      "14": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Portal.cpp:590, tanh of the cue mix times 5"},
+      "15": {"family": "audio"}
+    }
+  },
+  "comment": "The deck inputs get no family because the two audio channels in each group of four sit alongside a gate, a pitch and an envelope; the cable carries all four kinds. The isolator and the drive are applied to the master only (src/Portal.cpp:556-564); the cue path is built separately and takes neither. The isolator's gain law is a squared taper below centre, reaching silence, and a straight line above it to a gain of four, which is +12dB, although a comment beside it at src/Portal.cpp:108 says +6dB. The crossfader is a custom horizontal slider at half sensitivity rather than a knob (src/Portal.cpp:333-376), and the cue control is a custom round button. The panel prints Timeline, Groove, Foundation, Lead, Gate, Pitch, Vel / Env, From UniRhythm Poly Out, Poly in A, Cross CV, Poly in B, LOW, MID, HIGH, DRIVE, A and B either side of the fader, Cue Out and Master Output. Lettering is drawn in code at src/Portal.cpp:629-766."
+}

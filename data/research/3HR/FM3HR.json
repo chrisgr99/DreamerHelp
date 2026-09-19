@@ -1,0 +1,27 @@
+{
+  "plugin": "3HR",
+  "module": "FM3HR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "±5V", "negative": "swings", "why": "FM3HR.cpp:254 reads it with getPolyVoltageSimd and adds it to the coarse knob, the sum clamped to -5 and 5 octaves"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "FM3HR.cpp:255 reads it with getPolyVoltageSimd, scales it by 0.02 and clamps the sum with the knob to -0.1 and 0.1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "FM3HR.cpp:256 reads it with getPolyVoltageSimd, scales it by 0.5 and clamps the sum with the knob to 0 and 5"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FM3HR.cpp:257 reads it with getPolyVoltageSimd, scales it by 0.1 and clamps the sum with the knob to 0 and 1"},
+      "4": {"family": "audio", "poly": true, "normal": "the stage's own carrier", "why": "FM3HR.cpp:62 reads it with getPolyVoltageSimd when connected and uses the oscillator output when not"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FM3HR.cpp:258 reads it with getPolyVoltageSimd, scales it by 0.1 and clamps the sum with the knob to 0 and 1"},
+      "6": {"family": "audio", "poly": true, "normal": "the stage's own carrier", "why": "FM3HR.cpp:67 reads it with getPolyVoltageSimd when connected and uses the first stage's output when not"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FM3HR.cpp:259 reads it with getPolyVoltageSimd, scales it by 0.1 and clamps the sum with the knob to 0 and 1"},
+      "8": {"family": "audio", "poly": true, "normal": "the stage's own carrier", "why": "FM3HR.cpp:71 reads it with getPolyVoltageSimd when connected and uses the second stage's output when not"},
+      "9": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "FM3HR.cpp:260 reads it with getPolyVoltageSimd, scales it by 0.1 and clamps the sum with the knob to 0 and 1"},
+      "10": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "FM3HR.cpp:219 takes this port's getChannels() as the module's channel count and 228 reads it with getPolyVoltageSimd as the exponent of two"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "FM3HR.cpp:220 sets this port's channel count from the 1V/OCT input and 231 writes it with setVoltageSimd"},
+      "1": {"family": "audio", "poly": true, "why": "FM3HR.cpp:221 sets this port's channel count from the 1V/OCT input and 232 writes it with setVoltageSimd"},
+      "2": {"family": "audio", "poly": true, "why": "FM3HR.cpp:222 sets this port's channel count from the 1V/OCT input and 233 writes it with setVoltageSimd"},
+      "3": {"family": "audio", "poly": true, "why": "FM3HR.cpp:223 sets this port's channel count from the 1V/OCT input and 234 writes it with setVoltageSimd"},
+      "4": {"family": "audio", "poly": true, "why": "FM3HR.cpp:224 sets this port's channel count from the 1V/OCT input and 235 writes it with setVoltageSimd"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. THE TOP QUARTER OF THE WAVEFORM KNOB IS INERT: FM3HR.cpp:56 calls Square(Phase, 0.5 - (Wave - 3) * 0.45, sqramnt) and Square() at line 116 is 'return blep;', so the pulse-width argument it computes is discarded and every setting from three to four gives the same square. Two more maker slips found in the same file and left out of the lines: the minBLEP branch at lines 31 to 35 tests 'WaveAmount <= 2' twice, so the second branch can never run and the saw gets no band-limiting; and parameter 3 is configured with the name 'Coarse CV Amount' at line 171 when it is the fine CV amount. The COARSE knob is passed through round() only when the 1V/OCT jack is connected (line 228), so it is continuous with nothing patched there and stepped in octaves with a cable in."
+}

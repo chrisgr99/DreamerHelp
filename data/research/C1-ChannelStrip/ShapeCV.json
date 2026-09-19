@@ -1,0 +1,13 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "ShapeCV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "-60 to 0V", "why": "src/ShapeCV.cpp:74 getVoltage, /10 then *60 dB at Shape.cpp:790, clamped at 797"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/ShapeCV.cpp:83 getVoltage, /10 then *300 ms at Shape.cpp:791"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/ShapeCV.cpp:92 getVoltage, /10 then *3.9 s at Shape.cpp:792"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/ShapeCV.cpp:101 getVoltage, compared > 1.0f at Shape.cpp:793"}
+    }
+  },
+  "comment": "These three CVs add to their knobs and the total is clamped, unlike CHI-X's filter CVs which replace the knob. The sumRange on the threshold jack is the dB scale the knob is marked in, not a voltage at the jack. SHAPE returns from process() before it reads the expander whenever its bypass button is on (src/Shape.cpp:768-778), so nothing here does anything in that state. The HARD GATE jack has no attenuverter."
+}

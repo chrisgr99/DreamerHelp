@@ -1,0 +1,17 @@
+{
+  "plugin": "4msCompany",
+  "module": "BWAVP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "BWAVPCore.cc:239-241 run this jack through play_jack, the SchmittTrigger at BWAVPCore.cc:437 with a 0.2V low and a 0.5V high, and just_went_high() starts, restarts, stops or pauses playback; BWAVPCore.cc:30 derives from SmartCoreProcessor, which reads channel one only"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "BWAVPCore.cc:329-332 run this jack through loop_jack, the SchmittTrigger at BWAVPCore.cc:440 with a 0.2V low and a 0.5V high, and invert loop_mode for as long as is_high() holds rather than on an edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "BWAVPCore.cc:92 scales the sample by 5; BWAVPCore.cc:31 derives from SmartCoreProcessor rather than the poly form"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "BWAVPCore.cc:93 scales the sample by 5; BWAVPCore.cc:31 derives from SmartCoreProcessor rather than the poly form"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "BWAVPCore.cc:68 puts out 5 while the state is Playing"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "BWAVPCore.cc:67 puts out 5 while the one-shot started at BWAVPCore.cc:83 is running, and BWAVPCore.cc:83 sets it to 0.010 seconds"}
+    }
+  },
+  "comment": "The LOOP jack is a level, not a trigger: BWAVPCore.cc:330-331 invert the button's setting for as long as the jack is high, so looping goes back to the button when the jack falls. The maker's manual says 'a trigger or rising edge of a gate on this jack toggles looping mode', which describes a different behaviour. The outputs are 5V peak (BWAVPCore.cc:92-93 and 67-68), not the 8V most of this plugin uses. Seven of the nine parameters are alt parameters with no panel widget (BWAVP_info.hh:22-28), so they appear only on the right-click menu."
+}

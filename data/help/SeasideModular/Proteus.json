@@ -1,0 +1,59 @@
+{
+  "plugin": "SeasideModular",
+  "module": "Proteus",
+  "description": "A generative sequencer: it invents a melody, loops it, changes it a little as it goes, and after a while throws it away and invents another",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps of the melody are played before it loops, 1 to 32; a full 32-step melody stays in memory whatever this is set to"},
+    {"ids": [1], "text": "Picks the scale new melodies are drawn from: Major, Natural Minor, Harmonic Minor, Major Pentatonic, Minor Pentatonic, Dorian, Mixolydian, Chromatic, Tuning, Bhairavi and Ahir Bhairav"},
+    {"ids": [2], "text": "Sets how many loops go by before a new melody becomes likely, 1 to 50; at that count the chance of a new melody each loop has reached 50%"},
+    {"ids": [3], "text": "Sets the gate length as a share of the average time between clocks, a twentieth of it at the far left and all of it at the far right"},
+    {"ids": [4], "text": "Sets what share of the steps carry a note rather than a rest, 0.5% to 100%"},
+    {"ids": [5], "text": "Sets the chance that the melody is moved by an octave between loops, 0 to 100%"},
+    {"ids": [6], "text": "Sets the chance that single notes are changed between loops, 0 to 100%"},
+    {"ids": [7], "text": "Throws away the current melody and generates a new one straight away"},
+    {"ids": [8], "text": "Chooses how much may change: new melodies and note changes, note changes with the melody held, or nothing at all"},
+    {"ids": [9], "text": "Sets how far an octave move may reach: no move, one octave either way, or two octaves either way"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the length knob, three steps per volt, the total held between 1 and 32"},
+    {"ids": [1], "text": "A rising edge past 2V moves the mode switch, in the way the Lock CV In Behavior menu item sets"},
+    {"ids": [2], "text": "Adds to the lambda knob, five loops per volt, counted in whole volts only"},
+    {"ids": [3], "text": "Adds to the gate knob, 10V covering the whole of its travel"},
+    {"ids": [4], "text": "Adds to the density knob, ten percentage points per volt"},
+    {"ids": [5], "text": "Adds to the octave chance knob, ten percentage points per volt"},
+    {"ids": [6], "text": "Adds to the note change knob, ten percentage points per volt"},
+    {"ids": [7], "text": "A rising edge past 2V throws away the current melody and generates a new one"},
+    {"ids": [8], "text": "Advances the sequence one step on each rising edge past 2V"},
+    {"ids": [9], "text": "A rising edge past 2V sends the sequence back to its first step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the step being played, a volt per octave"},
+    {"ids": [1], "text": "A 10V gate on every step that carries a note, its length set by the GATE knob"}
+  ],
+  "notes": [
+    "nothing plays until a clock is patched; the module has no clock of its own",
+    "the four lamps step along with the sequence and grow brighter as a new melody becomes more likely; the small lamp at the top right lights when a pX is placed immediately to the right"
+  ],
+  "menu": [
+    "Mutation can tranpose notes by octave: Off, On — lets a changed note be moved to a different octave as well, within the reach the RANGE switch sets",
+    "Lock CV In Behavior: 0-2, 0-1, 0-1-2, Hi/Low — sets what a trigger at LOCK does to the mode switch; Hi/Low holds everything locked while the jack is high"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

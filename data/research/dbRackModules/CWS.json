@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "CWS",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "CWS.cpp:68 takes the channel count from this input and CWS.cpp:71 reads it four channels at a time"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "a built-in set of seven strengths", "why": "CWS.cpp:35-36 read every channel of this input as the coefficients and CWS.cpp:49 divides each by 10; CWS.cpp:38-39 use the built-in set when it is empty"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "CWS.cpp:70 reads it four channels at a time, scales it by a tenth and the Lvl CV knob, adds the Lvl knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "CWS.cpp:80 sets this output's channel count from the In jack"}
+    }
+  },
+  "comment": "The built-in coefficients are 10, -5, 5, 2.5, -2.5, 1, -1 and 0, CWS.cpp:19. The soft clip at CWS.cpp:72 bends the scaled signal towards plus or minus one and holds it there beyond 1.5. The module also configures a bypass from input to output, CWS.cpp:28."
+}

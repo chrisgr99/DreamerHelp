@@ -1,0 +1,60 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "EchoTap",
+  "description": "Adds one more delay tap to a Sapphire Echo chain, and goes to the right of Echo or of another Echo Tap",
+  "params": [
+    {"ids": [0], "text": "Adds another Echo Tap to the right, cloned from this tap's settings; pressed on the last tap of a chain that has no Echo Out, it inserts an Echo Out instead"},
+    {"ids": [1], "text": "Sets the delay time of this tap, from 0.1 seconds to 10 seconds; right-clicking it chooses whether this tap runs free or follows the clock on Echo"},
+    {"ids": [2], "text": "Attenuates and inverts the delay time CV"},
+    {"ids": [3], "text": "Places this tap in the stereo field; panning happens after the feedback path, so it moves where this tap lands without changing what flows to the next tap"},
+    {"ids": [4], "text": "Attenuates and inverts the panning CV"},
+    {"ids": [5], "text": "Places the send and return before the delay, so processed audio flows on through the chain, or after it, so processed audio stays local to this tap"},
+    {"ids": [6], "text": "Removes this tap from the chain, shifting the modules to the right back to close the gap"},
+    {"ids": [7], "text": "Sets the volume of this tap, outside the feedback path, so it changes the tap's loudness without changing the audio flowing through the chain"},
+    {"ids": [8], "text": "Attenuates and inverts the level CV"},
+    {"ids": [9], "text": "Reverses playback of this tap; with a gate patched to the reverse input, pressing it inverts the sense of that gate. Clicking the REV label switches to FLP, which reverses inside the feedback path"},
+    {"ids": [10], "text": "Sets the gain of this tap's envelope follower output"},
+    {"ids": [12], "text": "Resets this tap to its default settings, leaving the other taps alone"},
+    {"ids": [13], "text": "Silences this tap"},
+    {"ids": [14], "text": "Silences every tap in the chain except this one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scaled a volt per octave: each positive volt halves this tap's delay time and each negative volt doubles it"},
+    {"ids": [1], "text": "Moves this tap's position in the stereo field"},
+    {"ids": [3], "text": "Varies the volume of this tap"},
+    {"ids": [4], "text": "Left audio returning into this tap; patching this port breaks the internal short from the send ports on both the left and the right side"},
+    {"ids": [5], "text": "Right audio returning into this tap"},
+    {"ids": [6], "text": "In gate mode a high level reverses this tap; in trigger mode each pulse toggles it. The symbol above the REV label is clicked to change between the two modes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Left audio leaving this tap for outboard processing; it carries valid audio whether or not the return ports are patched"},
+    {"ids": [1], "text": "Right audio leaving this tap for outboard processing"},
+    {"ids": [2], "text": "Follows the amplitude of this tap, clamped to 0-10V through a bicubic limiter. Clicking the ENV label switches to DCK, where the voltage is 10V minus the envelope"}
+  ],
+  "notes": [
+    "holding Shift while adding a tap gives the new tap default settings, and holding Command gives it a level of zero",
+    "this expander has no effect by itself: place it to the right of an Echo or of another Echo Tap, and it becomes one more tap of that chain."
+  ],
+  "menu": [
+    "Polyphonic envelope output — switches this tap's envelope follower between one channel and one per audio channel; it is on the panel menu and on the envelope output port's own menu",
+    "Reverse/flip input port mode — chooses Gate or Trigger for the reverse input; it is on the panel menu and on the reverse input port's own menu",
+    "Time mode — chooses Seconds or Clock sync for this tap, and is on the TIME knob's own menu rather than the panel menu",
+    "Toggle sensitivity on all attenuverters — divides the effect of every attenuverter on the panel by 10, or restores them all",
+    "Low sensitivity — on an attenuverter knob's own menu, not the panel menu: divides that knob's effect by 10 and marks the knob with an orange dot",
+    "Unipolar mode — on an attenuverter knob's own menu, not the panel menu: adds 5V to the CV on that control and clamps the result at zero"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic\n\nunpatched it reads the left return input.",
+      "6": "high above 1V · stepped · polyphonic\n\nunpatched it reads the REV button."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

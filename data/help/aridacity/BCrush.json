@@ -1,0 +1,48 @@
+{
+  "plugin": "aridacity",
+  "module": "BCrush",
+  "description": "A bit crusher that lowers the sample rate and the amplitude resolution of a signal, then runs bit operations on the quantised value",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new sample is taken, as a fraction of the engine's own sample rate; the rate is held at 100Hz at the counter-clockwise end"},
+    {"ids": [1], "text": "Sets the number of steps the amplitude is quantised to, 128 steps per 5V at the clockwise end and 1 step at the counter-clockwise end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be crushed; the number of channels on the cable here sets the number of channels at the output"},
+    {"ids": [1], "text": "Adds to the rate knob, a tenth of the engine sample rate per volt, and the total is held between 100Hz and the engine sample rate"},
+    {"ids": [2], "text": "A clock here takes over the timing: a new sample is taken each time this voltage rises above 1V, and the rate knob and the rate input are read no further"},
+    {"ids": [3], "text": "Adds to the resolution knob, 12.8 quantisation steps per volt"},
+    {"ids": [4], "text": "Multiplies the signal before it is quantised, at full level for 5V. With a cable here carrying 0V the output is silent; with nothing patched the signal passes at full level"},
+    {"ids": [5], "text": "Shifts the quantised number left by a count of this voltage divided by 100 and multiplied by the resolution, so 10V against a resolution of 128 shifts by 12 places. The sign is discarded"},
+    {"ids": [6], "text": "Shifts the quantised number right by a count of this voltage divided by 100 and multiplied by the resolution, so 10V against a resolution of 128 shifts by 12 places"},
+    {"ids": [7], "text": "Bitwise AND between the quantised number and this voltage scaled by a tenth of the resolution, so 10V gives a mask of the whole resolution"},
+    {"ids": [8], "text": "Bitwise OR between the quantised number and this voltage scaled by a tenth of the resolution, so 10V gives a mask of the whole resolution"},
+    {"ids": [9], "text": "Bitwise XOR between the quantised number and this voltage scaled by a tenth of the resolution, so 10V gives a mask of the whole resolution"},
+    {"ids": [10], "text": "Inverts every bit of the quantised number while this voltage is further than 1V from 0V, in either direction"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The crushed signal, carrying as many channels as the cable at the input"}
+  ],
+  "notes": [
+    "the bit operations run in the order printed down the panel: shift left, shift right, AND, OR, XOR, then NOT, each on the result of the last. One with nothing patched into it is skipped.",
+    "every bit operation is scaled by the resolution, so turning the resolution knob changes what all six of them do.",
+    "the rate input and the hold input are read from their first channel only and apply to the whole module; the audio, resolution, gain and bit operation inputs are read per channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "5": "unipolar · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "stepped · polyphonic\n\nunpatched it reads 0V.",
+      "7": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "8": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "9": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "10": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

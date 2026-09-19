@@ -1,0 +1,49 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Frames",
+  "description": "Four-channel VCA mixer whose four gains are stored in keyframes, the FRAME knob moving through the animation and interpolating between them",
+  "params": [
+    {"ids": [0], "text": "Sets the first channel's gain at the keyframe the FRAME knob is on, and does nothing between keyframes; in Poly LFO mode it sets the waveform of the four LFOs"},
+    {"ids": [1], "text": "Sets the second channel's gain at the keyframe the FRAME knob is on, and does nothing between keyframes; in Poly LFO mode it sets how much the waveform differs from one LFO to the next"},
+    {"ids": [2], "text": "Sets the third channel's gain at the keyframe the FRAME knob is on, and does nothing between keyframes; in Poly LFO mode it sets how far apart in frequency the four LFOs run"},
+    {"ids": [3], "text": "Sets the fourth channel's gain at the keyframe the FRAME knob is on, and does nothing between keyframes; in Poly LFO mode it sets how strongly the four LFOs pull each other into step"},
+    {"ids": [4], "text": "Stores a keyframe at the current position of the FRAME knob, holding the four gains as they stand"},
+    {"ids": [5], "text": "Removes the keyframe at the current position of the FRAME knob"},
+    {"ids": [6], "text": "Moves through the animation from its start to its end, the four gains following as it goes; in Poly LFO mode it sets the rate of the LFOs"},
+    {"ids": [7], "text": "Attenuverts the FRAME input, setting how far and in which direction a voltage moves the animation"},
+    {"ids": [8], "text": "Sends a constant 10V into the ALL input when nothing is patched there, which turns the four channels into CV sources"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Feeds every channel whose own input is unpatched"},
+    {"ids": [1, 2, 3, 4], "text": "The signal for that channel; with nothing patched it takes the ALL input"},
+    {"ids": [5], "text": "Moves through the animation through the MODULATION attenuverter, 10V covering the whole animation at full"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sum of the channels whose own outputs are unpatched, halved and clipped at 10V"},
+    {"ids": [1, 2, 3, 4], "text": "That channel after its VCA, and patching it takes that channel out of the MIX output"},
+    {"ids": [5], "text": "Nothing in the module writes to this output; it stays at 0V however the animation moves"}
+  ],
+  "notes": [
+    "a new Frames holds no keyframes, and until one is stored the four gain knobs set their channel gains directly and the FRAME knob does not move them.",
+    "the add button stores a keyframe at the FRAME knob's position, holding the four gains as they stand.",
+    "the four gain knobs come up at zero, so nothing reaches the outputs until one of them is raised.",
+    "the module is monophonic: on a polyphonic cable only the first channel is read."
+  ],
+  "menu": [
+    "Channel 1, Channel 2, Channel 3 and Channel 4 — each carries the Interpolation curve and Response curve settings for that channel",
+    "Interpolation curve, inside a channel's submenu — how that channel's gain travels between keyframes: Step, Linear, Accelerating, Decelerating, Departure/arrival or Bouncing",
+    "Response curve, inside a channel's submenu — sets that channel's VCA to Linear or Exponential",
+    "Clear keyframes — empties the animation and leaves the four knobs in direct control of the gains",
+    "Keyframer and Poly LFO — the two entries under Alternate modes, Poly LFO replacing the keyframer with four linked LFOs whose levels drive the four VCAs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the ALL jack.",
+      "2": "continuous · one channel only\n\nunpatched it reads the ALL jack.",
+      "3": "continuous · one channel only\n\nunpatched it reads the ALL jack.",
+      "4": "continuous · one channel only\n\nunpatched it reads the ALL jack.",
+      "5": "continuous · one channel only"
+    }
+  }
+}

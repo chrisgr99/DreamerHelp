@@ -1,0 +1,60 @@
+{
+  "plugin": "Extratone",
+  "module": "Darwinism",
+  "description": "A sixteen-step sequencer whose pattern is made by randomising and mutating rather than by setting steps one at a time, with sixteen memories to keep patterns in",
+  "params": [
+    {"ids": [0], "text": "The highest voltage a step's note can reach, a whole number of volts from 0 to 8"},
+    {"ids": [1], "text": "Copies the sequence into memory; pressing it writes the same pattern into all sixteen memories at once"},
+    {"ids": [2], "text": "Replaces the sequence with one from memory; pressing it brings back the sixteenth memory"},
+    {"ids": [3], "text": "Chooses what the sixteen lights show: at 0 the step now playing, at 1 which steps are switched on, at 2 the note voltage of each step as brightness"},
+    {"ids": [4], "text": "The chance that any one step is rerolled when MUTATE is pressed, none fully left and every step fully right"},
+    {"ids": [5], "text": "Rerolls the note voltage and the on-or-off state of each step separately, with the chance of any one step changing set by MUTATION RATE"},
+    {"ids": [7], "text": "How many steps the sequence runs before wrapping, 2 to 16"},
+    {"ids": [8], "text": "Draws a fresh random note voltage for all sixteen steps and switches each one on or off at the odds set by GATE/TRIG DENSITY"},
+    {"ids": [9], "text": "The chance that a step comes out switched on when the sequence is randomised, none fully left and all sixteen fully right"},
+    {"ids": [10], "text": "Sends the sequence back to its first step"},
+    {"ids": [11], "text": "Switches every step off and sets every note voltage to zero, leaving an empty sequence"},
+    {"ids": [556], "text": "Holds the NOTE output steady between steps, letting it change only when the sequence lands on a step that is switched on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V on a polyphonic channel copies the sequence into the memory of that number, so one cable can address all sixteen memories separately"},
+    {"ids": [1], "text": "A rising edge above 1V on a polyphonic channel replaces the sequence with the one in the memory of that number"},
+    {"ids": [2], "text": "A rising edge above 1V switches every step off and sets every note voltage to zero"},
+    {"ids": [3], "text": "A rising edge above 1V sends the sequence back to its first step"},
+    {"ids": [4], "text": "A rising edge above 1V draws a fresh random note for every step and rerolls which steps are switched on"},
+    {"ids": [5], "text": "A rising edge above 1V rerolls each step at the chance set by MUTATION RATE"},
+    {"ids": [6], "text": "A rising edge above 1V moves the sequence on by one step"},
+    {"ids": [7], "text": "A rising edge above 1V copies the current step's note to the NOTE output and holds it there"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The position in the sequence as a voltage, 0V on the first step and 10V on the last"},
+    {"ids": [1], "text": "A 1ms pulse each time the sequence wraps from its last step back to its first"},
+    {"ids": [2], "text": "The note voltage of the step now playing, from 0V to the NOTE RANGE setting"},
+    {"ids": [3], "text": "10V while the step now playing is switched on, and 0V while it is off"},
+    {"ids": [4], "text": "A 1ms pulse each time the sequence lands on a step that is switched on"}
+  ],
+  "notes": [
+    "the sixteen steps cannot be edited by hand: no knob or button exists for a step's note or its on-or-off state, and a pattern is built only with R'ND'M, MUTATE and ZERO.",
+    "a freshly added module has every step off and every note at zero, so it makes no sound at all until R'ND'M is pressed or a pattern is loaded from memory.",
+    "the SAVE and LOAD jacks are polyphonic and the channel number picks the memory; the panel buttons reach all sixteen at once, so they are worth one memory between them.",
+    "with AUTO S&H off and nothing patched to the S&H input, the NOTE output changes the instant the sequence steps, on steps that are switched off included."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "stepped",
+      "2": "0 to 8V · continuous · one channel only",
+      "4": "stepped"
+    }
+  }
+}

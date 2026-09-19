@@ -1,0 +1,51 @@
+{
+  "plugin": "NLS",
+  "module": "CrossSeq2",
+  "description": "Two LFOs whose rate, shape, amplitude, phase and duty cycle you set, with a trigger sent out each time their two outputs cross",
+  "params": [
+    {"ids": [0], "text": "Sets the master frequency both LFOs run from, 0 to 10; each LFO's rate knob multiplies this, so the pair hold their ratio as this moves, and the freq input adds to it"},
+    {"ids": [1, 2], "text": "Multiplies the master frequency to set this LFO's rate, 0 to 10: at 1 it runs at the master frequency and at 0.5 at half of it"},
+    {"ids": [3, 4], "text": "Sets this LFO's amplitude, 0 to 1, reaching ±5V at its output with the knob fully clockwise"},
+    {"ids": [5, 6], "text": "Sweeps this LFO's waveform through sine at 0, triangle at 1, sawtooth at 2 and rectangle at 3, blending between each neighbouring pair in between"},
+    {"ids": [7, 8], "text": "Offsets this LFO's phase by up to a whole cycle, 0 to 1"},
+    {"ids": [9, 10], "text": "Sets the duty cycle of the rectangle wave, 0 to 1 with 0.5 giving equal halves, and makes no difference to a shape setting below 2"},
+    {"ids": [11, 12], "text": "Scales the voltage at this row's rate input before it is added to the rate knob, -1 to 1: it inverts below zero and passes nothing at the centre"},
+    {"ids": [13, 14], "text": "Scales the voltage at this row's amt input before it is added to the amount knob, -1 to 1: it inverts below zero and passes nothing at the centre"},
+    {"ids": [15, 16], "text": "Scales the voltage at this row's shape input before it is added to the shape knob, -1 to 1: it inverts below zero and passes nothing at the centre"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added straight to the freq knob, one step of that knob's 0 to 10 range per volt, with no attenuator of its own"},
+    {"ids": [1, 2], "text": "Adds to this row's rate knob after the small knob on that row scales it; 10V through an attenuverter at 1 adds one step to the rate knob"},
+    {"ids": [3, 4], "text": "Adds to this row's shape knob after the small knob on that row scales it; 10V through an attenuverter at 1 moves the shape by one step"},
+    {"ids": [5, 6], "text": "Adds to this row's amount knob after the small knob on that row scales it, and the total is held between 0 and 1"},
+    {"ids": [7], "text": "Restarts both LFOs at the start of their cycle on each rising edge above 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse at 10V each time the two LFO outputs cross"},
+    {"ids": [1], "text": "The first LFO, ±5V with its amount knob fully clockwise"},
+    {"ids": [2], "text": "The second LFO, ±5V with its amount knob fully clockwise"},
+    {"ids": [3], "text": "The first LFO minus the second, ±10V at full amplitude, passing through 0V at the instant a trigger is sent"}
+  ],
+  "notes": [
+    "the knobs and the five CV inputs are read once every four samples, while the LFOs themselves run at every sample",
+    "an amount knob at zero holds that LFO flat at 0V, and crossings stop while it is there, so no triggers come out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±5V · one channel only",
+      "2": "±5V · one channel only",
+      "3": "±10V · one channel only"
+    }
+  }
+}

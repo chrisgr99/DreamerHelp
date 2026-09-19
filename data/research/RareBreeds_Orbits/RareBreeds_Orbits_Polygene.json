@@ -1,0 +1,22 @@
+{
+  "plugin": "RareBreeds_Orbits",
+  "module": "RareBreeds_Orbits_Polygene",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/PolygeneModule.cpp:145 reads this input per channel through a dsp::SchmittTrigger with Rack's default thresholds of 0V and 1V, and src/PolygeneModule.cpp:394 takes its channel count"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/PolygeneModule.cpp:437 reads this input per channel through a dsp::SchmittTrigger with Rack's default thresholds of 0V and 1V"},
+      "2": {"family": "cv", "poly": true, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/PolygeneModule.cpp:114 to 116 read this input per channel, divide by 5, multiply by 31, add the channel's length and round the total to a whole number of beats"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/PolygeneModule.cpp:121 to 123 read this input per channel, divide by 5, add the channel's density and round the total times the length to a whole number of hits"},
+      "4": {"family": "cv", "poly": true, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/PolygeneModule.cpp:128 to 130 read this input per channel, divide by 5, multiply by 31, add the channel's shift and round and wrap the total to the channel's length"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/PolygeneModule.cpp:135 to 138 read this input per channel, divide by 5, add the channel's variation and round the total across the pattern count for that length and hits"},
+      "6": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/PolygeneModule.cpp:82 reads this input with getPolyVoltage() into a per-channel dsp::SchmittTrigger, only while it is connected, with default thresholds of 0V and 1V"},
+      "7": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/PolygeneModule.cpp:95 reads this input with getPolyVoltage() into a per-channel dsp::SchmittTrigger, only while it is connected, with default thresholds of 0V and 1V"},
+      "8": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/PolygeneModule.cpp:428 reads this input per channel into a dsp::SchmittTrigger with Rack's default thresholds of 0V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/PolygeneModule.cpp:395 sets this output's channel count from the clock input's channel count and src/PolygeneModule.cpp:190 writes each channel by index"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/PolygeneModule.cpp:396 sets this output's channel count from the clock input's channel count, src/PolygeneModule.cpp:193 writes each channel, and src/OrbitsModule.cpp:65 sets the pulse length to 1e-3 seconds"}
+    }
+  },
+  "comment": "Read from src/PolygeneModule.cpp, src/PolygeneWidget.cpp, src/OrbitsModule.cpp and manual/docs/index.md at commit 71660d9, the commit that raised the version to 2.0.4. The manual is wrong about all four value CV jacks: it says each voltage is divided by 5 and multiplied by the matching knob setting, but src/PolygeneModule.cpp:113 to 138 divide by 5 and ADD the result to the channel's stored setting, scaling by 31 for length and shift and by the pattern count for variation. There is no CV gain knob on this module at all, which is the likely source of the confusion, since Eugene has three. All of the value jacks are stepped in effect rather than continuous: clampRounded at src/PolygeneModule.cpp:35 adds a half and truncates, so the total lands on a whole beat, hit or pattern. The reverse and invert CV jacks read getPolyVoltage at src/PolygeneModule.cpp:82 and 95, so a monophonic cable there reaches every channel and they are not listed under Mono Input Behavior. The clock input's channel count alone decides how many rhythms run and how many channels the outputs carry, at src/PolygeneModule.cpp:394 to 396. The plugin-wide Theme menu item is cosmetic and carries no line."
+}

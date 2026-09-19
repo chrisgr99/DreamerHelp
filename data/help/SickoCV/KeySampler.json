@@ -1,0 +1,103 @@
+{
+  "plugin": "SickoCV",
+  "module": "KeySampler",
+  "description": "An eight-slot sampler played from a keyboard, with a key zone and its own settings for each slot, routed to eight stereo outputs",
+  "params": [
+    {"ids": [0], "text": "Sets the level of the recording inputs, 0 to 200%"},
+    {"ids": [1], "text": "Starts and stops recording into the slot the SLOT knob has selected"},
+    {"ids": [2], "text": "Passes the recording inputs through to the outputs"},
+    {"ids": [3], "text": "Chooses which of the eight slots every control below it acts on, 1 to 8"},
+    {"ids": [4], "text": "Sets the MIDI note number, 0 to 127, for whichever part of the selected slot's key zone the KEY SELECT button has picked"},
+    {"ids": [5], "text": "Steps through which part of the selected slot's key zone the KEY knob sets: lowest note, highest note, reference note. Holding it about a second starts MIDI learn"},
+    {"ids": [6], "text": "Chooses which of the eight stereo outputs the selected slot is sent to, 1 to 8; more than one slot can share an output"},
+    {"ids": [7], "text": "Sets where the selected slot's playback begins and its attack starts, as a percentage of the sample"},
+    {"ids": [8], "text": "Sets where the selected slot's playback ends and its release starts, as a percentage of the sample"},
+    {"ids": [9], "text": "Sets where the selected slot's loop begins, as a percentage of the sample"},
+    {"ids": [10], "text": "Sets where the selected slot's loop ends, as a percentage of the sample"},
+    {"ids": [11], "text": "Plays the selected slot backwards, from its cue end towards its cue start"},
+    {"ids": [12], "text": "Sets the selected slot's crossfade at a loop join, the fade before the end of the sample, and the fade in and out of a recording, 1ms to 10 seconds"},
+    {"ids": [13], "text": "Plays the selected slot between its loop cursors over and over instead of stopping at the cue end"},
+    {"ids": [14], "text": "Reverses the selected slot's playback direction at the cursors instead of jumping back, so the sample runs forwards and backwards in turn"},
+    {"ids": [15], "text": "Chooses whether the selected slot is played for as long as the gate is held or started by a trigger"},
+    {"ids": [16], "text": "Chooses what a trigger does on the selected slot: Start/Stop alternates, Restart plays from the cue start every time"},
+    {"ids": [17], "text": "Lets the selected slot follow the PB input; with it off that slot keeps its pitch while others bend"},
+    {"ids": [18], "text": "Moves the selected slot's cue and loop cursors to the nearest zero crossings, which stops loop clicks; it should be off for one-cycle waveforms"},
+    {"ids": [19], "text": "Sets how long the selected slot's envelope takes to rise, 1ms to 10 seconds"},
+    {"ids": [20], "text": "Sets how long the selected slot's envelope takes to fall to its sustain level, 1ms to 10 seconds"},
+    {"ids": [21], "text": "Sets the level the selected slot's envelope holds at, 0% to 100%"},
+    {"ids": [22], "text": "Sets how long the selected slot's envelope takes to fall to silence, 1ms to 10 seconds"},
+    {"ids": [23], "text": "Bends the selected slot's envelope curve between exponential, linear and logarithmic"},
+    {"ids": [24], "text": "Lengthens or shortens the selected slot without changing its pitch, 1% to 999%, with 100% leaving it alone"},
+    {"ids": [25], "text": "Sets the length of the repeated cycle the selected slot's time-stretch is built from, 1ms to 99ms"},
+    {"ids": [26], "text": "Sets the selected slot's own level, 0% to 100%"},
+    {"ids": [27], "text": "Loads the previous file in the same folder into the selected slot"},
+    {"ids": [28], "text": "Loads the next file in the same folder into the selected slot"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel to be recorded; recording is only possible with a cable in here"},
+    {"ids": [1], "text": "The right channel to be recorded, which makes the recording stereo"},
+    {"ids": [2], "text": "Plays whichever slots the incoming note falls inside: held high in gate mode, or a trigger in trigger mode; its channel count sets the polyphony"},
+    {"ids": [3], "text": "The note to play, one octave per volt, matched against each slot's key zone and pitched from that slot's reference note"},
+    {"ids": [4], "text": "Sets the level of each note played, per channel of polyphony"},
+    {"ids": [5], "text": "Bends the pitch of the slots whose PB button is on, over the range chosen under Pitch Bend Range"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The left channel of whichever slots are routed to that output"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "The right channel of whichever slots are routed to that output"}
+  ],
+  "notes": [
+    "nothing plays until a sample is loaded or recorded into a slot: choose the slot with the SLOT knob, then right-click the panel and use Load Sample, or right-click the waveform display.",
+    "nothing plays either until the selected slot has a key zone that the incoming note falls inside; a zone may be a single note, for percussion.",
+    "every control below the SLOT knob acts on the one slot that knob has selected, so the panel shows one slot's settings at a time.",
+    "recording needs a cable in the left recording input; with that jack empty the REC button does nothing.",
+    "a key zone is three notes: the lowest and highest it answers to, and the reference note that is the sample's own recorded pitch."
+  ],
+  "menu": [
+    "Load Sample — opens a file chooser for the selected slot",
+    "Save FULL Sample — writes the selected slot's whole sample to a wav file",
+    "Save CUE Region — writes the part between the selected slot's cue cursors to a wav file",
+    "Save LOOP Region — writes the part between the selected slot's loop cursors to a wav file",
+    "Trim Sample after Save — keeps only the saved part in memory afterwards, instead of keeping the whole sample",
+    "Save Oversampled — writes the file at the module's internal rate, twice Rack's, for editing elsewhere",
+    "Select Samples Root — picks a folder, after which a Samples Browser submenu appears for loading",
+    "Quantize incoming v/Oct — rounds the V/Oct input to the nearest semitone, which stops an imprecise voltage giving a pitch between notes",
+    "Pitch Bend Range: 1 semitone to 11 semitones, 1 octave, 2 octaves, 3 octaves, 4 octaves — sets how far the PB input bends the pitch",
+    "Anti-aliasing filter — adds two-times oversampling and a 20kHz lowpass before the outputs",
+    "Polyphonic OUTs — carries the polyphony of the played notes through to the outputs; with it off the voices are summed into single-channel outputs",
+    "Polyphonic Master IN — lets the velocity jack take a polyphonic cable matching the gate channels",
+    "Auto Monitor Off — turns monitoring off by itself once a recording stops",
+    "Disable NAV Buttons — stops the panel navigation buttons from loading anything, so they cannot be pressed by accident",
+    "Reset cursors on Load — puts the selected slot's cue and loop cursors back to 0% and 100% whenever a new sample is loaded",
+    "Presets: Wavetable, Triggered Sample with Envelope, Drum Player — sets the selected slot's cursors, mode and envelope in one go for one of three common uses",
+    "Store Sample in Patch — saves the loaded samples inside the patch file, which can make it very large",
+    "Unlimited REC (risky) — lifts the memory ceiling on recording, at the risk of a crash on a recording the machine cannot hold"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic",
+      "5": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic",
+      "12": "continuous · polyphonic",
+      "13": "continuous · polyphonic",
+      "14": "continuous · polyphonic",
+      "15": "continuous · polyphonic"
+    }
+  }
+}

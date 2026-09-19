@@ -1,0 +1,17 @@
+{
+  "plugin": "Prism",
+  "module": "Droplet",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Droplet.cpp:84-85 multiplies a plain getVoltage by the attenuator and by 409.5 and clamps it to 0 and 4095"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "Droplet.cpp:89-90 multiplies a plain getVoltage by the attenuator, adds the frequency knob, clamps to plus or minus 10 and raises two to that times the C4 constant"},
+      "2": {"family": "audio", "poly": false, "normal": "nothing; the module stops processing", "why": "Droplet.cpp:78 wraps the whole of process in isConnected on this jack, and DropletAudio.cpp:34 reads channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "DropletAudio.cpp:75-76 sets one channel and writes the filtered sample"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Droplet.cpp:100-101 sets one channel and writes the envelope times 100 clamped to 0 and 10V"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The NOISE switch is dead. Droplet.cpp:78 runs the whole of process only while the audio input is connected, and the noise DropletAudio.cpp:16-33 generates is reached only when that same jack is NOT connected, so the switch's value is passed to the audio code and never used. That also means the module is inert with the audio jack empty: no output is written at all, so both jacks hold whatever they last carried. The frequency jack is a true 1V per octave input, unlike Rainbow's P. V/OCT, which is halved. The filter type switch offers only the two MaxQ filters; the BpRe filter Rainbow has is not here. Droplet's audio output has no limiter: DropletAudio.cpp:76 writes the sample with no clamp, where Rainbow clamps its output to plus or minus 5V."
+}

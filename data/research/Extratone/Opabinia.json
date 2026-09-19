@@ -1,0 +1,23 @@
+{
+  "plugin": "Extratone",
+  "module": "Opabinia",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Opabinia.cpp process(): fdecay = params[FDECAY_PARAM]+inputs[FDECAY_CV].getVoltage()*0.1*params[FDECAY_ATT], then clamped to 0..1; one getVoltage(), no channel loop"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Opabinia.cpp process(): adecay = params[ADECAY_PARAM]+inputs[ADECAY_CV].getVoltage()*0.1*params[ADECAY_ATT], then clamped to 0..1"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Opabinia.cpp process(): peakfreq=params[FREQ_PARAM]*std::pow(2.f,inputs[FREQ_CV].getVoltage()*params[FREQ_ATT])"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Opabinia.cpp process(): basefreq=params[BASEFREQ_PARAM]*std::pow(2.f,inputs[BASEFREQ_CV].getVoltage()*params[BASEFREQ_ATT])"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Opabinia.cpp process(): trigger.process(inputs[TRIGGER_INPUT].getVoltage()) with dsp::SchmittTrigger's default 0V/1V thresholds"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Opabinia.cpp process(): squareness=params[SQUARE_PARAM]+params[SQUARE_ATT]*inputs[SQUARE_CV].getVoltage()/10.f, then clamped to 0..1"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Opabinia.cpp process(): fold=params[FOLD_PARAM]+params[FOLD_ATT]*inputs[FOLD_CV].getVoltage()/10.f, then clamped to 0..1"},
+      "7": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Opabinia.cpp process(): sound[i]=inputs[SOUND_INPUT].getVoltage(i)/5.f inside for(i=0;i<16;i++), and outputs[SOUND_OUTPUT].channels=inputs[SOUND_INPUT].channels"}
+    },
+    "outputs": {
+      "0": {"family": "cv"},
+      "1": {"family": "cv"},
+      "2": {"family": "audio", "poly": false, "why": "src/Opabinia.cpp process(): outputs[DRUM_OUTPUT].setVoltage(5.f*amplitude*wave) — a single channel, never setChannels"},
+      "3": {"family": "audio", "poly": true, "why": "src/Opabinia.cpp process(): outputs[SOUND_OUTPUT].channels=inputs[SOUND_INPUT].channels with setVoltage(sound[i],i)"}
+    }
+  },
+  "comment": "The distortion path and the drum path are independent except that both run through distort(); DIST-IN never reaches DRUM-OUT and the envelopes never touch DIST-OUT. ENV(S) is 5*(freq-basefreq)/(peakfreq-basefreq): HIGH has a minimum of 100Hz and LOW a maximum of 100Hz, so the denominator can be made exactly zero from the panel. The wavefolder's inner reflection loop runs at most three times per pass, so a very high FOLD setting can leave a sample outside ±1 going into the clipper, where it is flattened."
+}

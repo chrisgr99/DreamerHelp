@@ -1,0 +1,44 @@
+{
+  "plugin": "alto777_LFSR",
+  "module": "Amuse",
+  "description": "An emulation of the Triadex MUSE: four INTERVAL sliders pick a note out of a counter and a 31-bit shift register, and four THEME sliders set what the register shifts in",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Picks the bit this slider feeds back: OFF, ON, a counter bit C 1/2 to C6, or a register bit B1 to B31; the four THEME sliders are combined into the bit shifted into the register at each step"},
+    {"ids": [4, 5, 6, 7], "text": "Picks the bit this slider adds to the note number: OFF, ON, a counter bit C 1/2 to C6, or a register bit B1 to B31; the four INTERVAL sliders make a four-bit degree of the major scale"},
+    {"ids": [8], "text": "Sets the internal clock from 0.25Hz to 8Hz; the machine takes a half step on each edge of that clock, so one clock cycle is two steps"},
+    {"ids": [9], "text": "Starts and stops the clock, and the lamp is lit while the machine runs"},
+    {"ids": [10], "text": "With the machine stopped, pressing this drives the clock high and releasing it drives the clock low, which is one half step of the machine each way"},
+    {"ids": [11], "text": "Clears the counters and the shift register, so a new slider setting is heard from the beginning of its sequence"},
+    {"ids": [12], "text": "Puts the trigger on the clock's rising edge at RISE, on its falling edge at FALL, or on both edges in the middle position"},
+    {"ids": [13], "text": "REST turns the lowest note of the scale into a silence, holding the note output at its last value and issuing no trigger; NORM plays that note like any other"},
+    {"ids": [14], "text": "ALL puts a trigger out on every step; DELTA puts one out only on the steps where the note changes"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every volt here doubles the rate of the internal clock"},
+    {"ids": [1], "text": "A clock patched here replaces the internal clock, and the machine takes a half step on each of its edges"},
+    {"ids": [2], "text": "A voltage above 0V here stops the machine and 0V or less runs it, overriding the RUN button for as long as a cable is patched"},
+    {"ids": [3], "text": "A rising edge clears the counters and the shift register"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note as a volt per octave pitch, a degree of the major scale over two octaves, from 0V to 1.917V"},
+    {"ids": [1], "text": "A 1ms pulse at 10V on each step that the trigger switches allow"},
+    {"ids": [2], "text": "The clock the machine is running on, 10V high, whether that is the internal clock or the one patched to EXT CLOCK"}
+  ],
+  "notes": [
+    "All eight sliders come up at OFF, so the OUT jack holds one note until they are moved",
+    "The maker's README gives C1 C2 C4 OFF on the four INTERVAL sliders, with the four THEME sliders at OFF, as a first setting to hear the counting section",
+    "Press RESET after changing the sliders to hear the new sequence from its beginning, as the maker's README instructs"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "plugin": "MrLumps",
+  "module": "SEQE",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "the internal clock at the BPM knob's tempo", "why": "SEQEuclid.cpp:222-236 — isConnected picks between the external clock and the internal timer, and line 224 passes getVoltage to a default dsp::SchmittTrigger, whose thresholds are 0V and 1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "subtracts", "why": "SEQEuclid.cpp:256 adds the reset button's value to getVoltage on this jack and passes the sum to a default dsp::SchmittTrigger, so a negative voltage here can hold the button off"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:335 and 351 — gateOr is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:336 and 352 — triggerOr is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:329-332 and 341-344 — each gate is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:329-332 and 341-344 — each gate is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:329-332 and 341-344 — each gate is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:329-332 and 341-344 — each gate is 10.0f or 0.0f and is written with setVoltage, one channel only"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:334 and 346-349 — each trigger is 10.0f only in the sample the step advances, written with setVoltage, one channel only"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:334 and 346-349 — each trigger is 10.0f only in the sample the step advances, written with setVoltage, one channel only"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:334 and 346-349 — each trigger is 10.0f only in the sample the step advances, written with setVoltage, one channel only"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "SEQEuclid.cpp:334 and 346-349 — each trigger is 10.0f only in the sample the step advances, written with setVoltage, one channel only"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The panel prints no words at all: every control is marked with a picture, so the lines here carry no labels. The gate length knob is scaled by timerLength (SEQEuclid.cpp:312-318), and timerLength is recomputed only in the branch taken when the clock input is EMPTY (line 230). With a cable in the clock input the gate length therefore divides the tempo the BPM knob last produced while that jack was empty, or 120 BPM if the cable was already there when the patch loaded; it does not follow the external clock. Each of the four channels has its own random generator seeded with the same constant, 738 (SEQEuclid.cpp:106 in Bank::Reset), and the generator is only drawn from when a channel's probability is below 100%, so identical channel settings drop identical beats. Fill at or above length bypasses the Euclidean table and plays every step (line 125 and its else). The trigger outputs are high for a single sample, so a downstream module that reads triggers at audio rate will see them and a display may not."
+}

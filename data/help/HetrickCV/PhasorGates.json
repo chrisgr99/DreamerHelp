@@ -1,0 +1,37 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorGates",
+  "description": "Divides an incoming phasor into as many as eight steps and fires a gate on whichever steps are switched on",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the eight steps the cycle is divided into, 1 to 8 in whole numbers"},
+    {"ids": [1], "text": "Attenuverts the steps CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the width of the step gates, from 0% to 100% of a step, with 50% at centre"},
+    {"ids": [3], "text": "Attenuverts the gate width CV input, -1 to +1"},
+    {"ids": [4], "text": "Raw compares the phasor against the gate width directly; Smart mutes the output when the phasor stops and flips the comparison when it runs backwards, keeping reverse phasors in time"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "Turns this step's gate on or off; the lamp shows green when the step is on, blue while it plays, and red when the step is beyond the Steps setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor that drives the steps; each 0-10V cycle is divided into them"},
+    {"ids": [1], "text": "Modulates the number of steps"},
+    {"ids": [2], "text": "Modulates the gate width"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate on every step whose gate button is on, at the set width"},
+    {"ids": [1], "text": "A 10V trigger at the start of each of those gates"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in.",
+    "every step gate starts switched off, so no gates or triggers come out until you switch at least one step on."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

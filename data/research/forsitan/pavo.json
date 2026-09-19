@@ -1,0 +1,16 @@
+{
+  "plugin": "forsitan",
+  "module": "pavo",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "src/pavo.cpp, getChannels() on the poly jack sets the layout and every channel is read"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/pavo.cpp:27 and the process block, the voltage is added to the 0..10 spread parameter"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/pavo.cpp:28 and the process block, the voltage is added to the -5..5 centre parameter"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/pavo.cpp, one summed voltage per side, level compensated for the channel count"},
+      "1": {"family": "audio", "poly": false, "why": "src/pavo.cpp, one summed voltage per side, level compensated for the channel count"}
+    }
+  },
+  "comment": "The poly input gets no family: it carries whatever is patched into it. The layout is the SuperCollider Splay arrangement: one channel centred, two hard apart, three at both ends and the centre, and so on, evenly spaced. Panning uses the square-root constant-power law and the sum is scaled down as the channel count rises. The spread knob is configured 0 to 10 and displayed as a percentage at ten per unit; the centre knob -5 to +5 at twenty per unit, which is why one volt at the centre jack is twenty per cent. The panel prints pavo, poly in, spread, center, L and R."
+}

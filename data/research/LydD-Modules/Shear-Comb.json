@@ -1,0 +1,23 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Shear-Comb",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "Shear.cpp:173 reads this input with getVoltage(0), which is channel 1 alone, and divides it by 2.5 before the filters"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "Audio Left", "why": "Shear.cpp:182 reads this input with getVoltage(0) and divides it by 2.5; Shear.cpp:190 uses the left channel in its place when unconnected"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Shear.cpp:123 reads this input with getVoltage(0), clamps it to -3V and 3V and adds it to the knob before VoltToFreq, which LydConversion.cpp:13 makes a doubling per volt from 130.8125"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "a multiplier of 1", "why": "Shear.cpp:129 reads this input with getVoltage(0), divides it by 10, takes the absolute value and clamps to 0.9 before multiplying the knob; 1 is used when unconnected"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "normal": "a multiplier of 1", "why": "Shear.cpp:149 reads this input with getVoltage(0) and multiplies the knob by it with no clamp of any kind; 1 is used when unconnected"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "0V", "why": "Shear.cpp:176 reads this input with getVoltage(0) and divides it by 2.5; Shear.cpp:153 only reads it when the matching Send output also has a cable"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "0V", "why": "Shear.cpp:185 reads this input with getVoltage(0) and divides it by 2.5; Shear.cpp:154 only reads it when the matching Send output also has a cable"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "a multiplier of 1", "why": "Shear.cpp:133 reads this input with getVoltage(0), divides it by 5 and clamps to -1 and 1 before multiplying the knob; 1 is used when unconnected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Shear.cpp:119 sets every output to one channel; Shear.cpp:223 writes the drive stage's output, which Shear.cpp:166 clamps to ±5V"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Shear.cpp:119 sets every output to one channel; Shear.cpp:224 writes the drive stage's output, which Shear.cpp:166 clamps to ±5V"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "Shear.cpp:119 sets every output to one channel; Shear.cpp:221 multiplies a value clamped to ±1 by 5V"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "Shear.cpp:119 sets every output to one channel; Shear.cpp:222 multiplies a value clamped to ±1 by 5V"}
+    }
+  },
+  "comment": "Read from src/Shear.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. The Feedback jack is the one input on the module with no clamp: Shear.cpp:149 multiplies the knob by the raw voltage, so 10V there makes the feedback ten times what the knob alone can reach, and the only thing holding the result in is the ±1 clamp on the comb sum. The Skew knob has no printed label. The README calls this a true twelve band IIR comb filter; what the code builds is twelve parallel biquad bandpass filters whose centre frequencies are multiples of the Cutoff, which is a comb by shape rather than by delay line. The send and return path is gated on both jacks being connected (lines 153 and 154), so patching only one of the pair does nothing. The panel-theme submenu is plugin-wide and cosmetic, so it has no line."
+}

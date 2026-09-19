@@ -1,0 +1,21 @@
+{
+  "plugin": "dbRackModules",
+  "module": "PPD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "PPD.cpp:161 reads this input with getVoltage() and no channel loop"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "-2 to 1V", "normal": "the BPM knob", "why": "PPD.cpp:141 reads it with getVoltage() and no channel loop, clamps this jack to -2..1, raises 2 to that power and writes 120 times the result into the BPM knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the Feedback knob", "why": "PPD.cpp:146 reads it with getVoltage() and no channel loop and writes a tenth of it into the Feedback knob, which is clamped to 0..1 at PPD.cpp:162"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the Dry/Wet knob", "why": "PPD.cpp:149 reads it with getVoltage() and no channel loop and writes a tenth of it into the Dry/Wet knob"},
+      "4": {"family": "audio", "poly": false, "why": "PPD.cpp:53 reads this input with getVoltage() and no channel loop, in place of the delayed signal"},
+      "5": {"family": "audio", "poly": false, "why": "PPD.cpp:53 reads this input with getVoltage() and no channel loop, in place of the delayed signal"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "PPD.cpp:168 writes one voltage and no channel count is ever set"},
+      "1": {"family": "audio", "poly": false, "why": "PPD.cpp:169 writes one voltage and no channel count is ever set"},
+      "2": {"family": "audio", "poly": false, "why": "PPD.cpp:52 writes one voltage and no channel count is ever set"},
+      "3": {"family": "audio", "poly": false, "why": "PPD.cpp:52 writes one voltage and no channel count is ever set"}
+    }
+  },
+  "comment": "The whole module is monophonic. A send is written only while both that side's send and its return carry cables, PPD.cpp:51-54; with the send patched and the return empty, the repeat goes to the output as usual and nothing comes out of the send. The note lengths are worked out at PPD.cpp:117-132, where the 1/32 dotted entry is set from the 1/16 row, so dotted 1/32 gives the same time as dotted 1/16. The delay time is clamped at 10 seconds, PPD.cpp:164."
+}

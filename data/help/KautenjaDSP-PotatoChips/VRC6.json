@@ -1,0 +1,47 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "VRC6",
+  "description": "The two pulse voices and the stepped saw of the Konami VRC6 cartridge chip",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that voice, two and a half octaves either side of C4"},
+    {"ids": [3, 4, 5], "text": "Attenuates the voltage at that voice's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [6, 7], "text": "Picks the duty cycle of that pulse, 0 to 7, from a sixteenth up to a full square"},
+    {"ids": [8, 9], "text": "Sets the level of that pulse, 0 to 15"},
+    {"ids": [10], "text": "Sets the level of the saw, 0 to 63"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that voice by a volt per octave; unpatched it reads the VOCT jack of the voice before it, and the first pulse reads 0V"},
+    {"ids": [3, 4, 5], "text": "Modulates the pitch of that voice, a full octave per 10V with the MOD knob wide open; unpatched it reads the MOD jack of the voice before it, and the first pulse reads 5V"},
+    {"ids": [6, 7], "text": "Moves the duty cycle of that pulse, one step per volt; unpatched it reads the PW jack of the first pulse, which itself reads 0V"},
+    {"ids": [8, 9, 10], "text": "Scales that voice's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the voice before it, and the first pulse reads 10V"},
+    {"ids": [11], "text": "Restarts the saw from the beginning of its cycle on each rise past 0.02V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "Carries that voice's audio, hard clipped at 5V, with the audio of any earlier voice whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the three outputs are chained: a voice whose output is left unpatched is summed into the next output along, so patching only SAW gives a mix of all three",
+    "the frequency knobs move the pitch by two and a half octaves either way, but their read-out in hertz is scaled in semitones, so the number shown while turning one is wrong"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "4": "±10V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±10V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "11": "high above 0.02V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

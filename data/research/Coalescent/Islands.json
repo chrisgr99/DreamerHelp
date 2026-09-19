@@ -1,0 +1,29 @@
+{
+  "plugin": "Coalescent",
+  "module": "Islands",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Islands.cpp:293-295 knob + inputVoltage(), clamp(3, 12) octaves, exp2"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Islands.cpp:297-302 SELECT_CV_DEPTH 0.05f, clamp(-0.25, 0.25)"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Islands.cpp:303-306 UNIT_CV_DEPTH 0.1f then mutationFromUnit()"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Islands.cpp:308-313 UNIT_CV_DEPTH 0.1f, clamp(0, 1)"},
+      "4": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Islands.cpp:318-324 knob + inputVoltage(), exp2, capped at log2(200)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Islands.cpp:745 stepTrigger.process(v, 0.1f, 1.f)"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Islands.cpp:746-747 founderInputTrigger.process(v, 0.1f, 1.f)"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Islands.cpp:750-751 resetInputTrigger.process(v, 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:329-330 clamp(frequency, 0, 1)*10.f"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:329-330"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:329-330"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:329-330"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:331 clamp(mean, 0, 1)*10.f"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Islands.cpp:332 clamp(diversity, 0, 1)*10.f"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Islands.cpp:782 metrics.fixA ? GATE_LEVEL 10.f : 0.f"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Islands.cpp:783"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Islands.cpp:784 lossPulse, PULSE_TIME 1e-3f, GATE_LEVEL 10.f"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Islands.cpp:785 sweepPulse, PULSE_TIME 1e-3f"}
+    }
+  },
+  "comment": "Every jack is read with getVoltage(), so the module is monophonic. The four island outputs share one line: they carry the same quantity for a different island and differ by number alone. FIX A and FIX B are steady levels rather than pulses, unlike the other four event outputs; the panel gives them no visual distinction. A reset arriving in the same sample as a founder or step trigger takes priority and the other two are discarded (Islands.cpp:757-766)."
+}

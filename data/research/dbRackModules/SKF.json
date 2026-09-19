@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SKF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "SKF.cpp:70 takes the channel count from this input and SKF.cpp:83 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "why": "SKF.cpp:71 takes the channel count from this input and SKF.cpp:98 reads it four channels at a time"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "the Freq knob alone", "why": "SKF.cpp:75-81 read it four channels at a time, scale it by the Freq CV knob, add the Freq knob, slew the total and raise 2 to that power"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "SKF.cpp:82 reads it four channels at a time, scales it by a tenth and the R CV knob, adds the R knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SKF.cpp:103 sets this output's channel count from the InL jack"},
+      "1": {"family": "audio", "poly": true, "why": "SKF.cpp:104 sets this output's channel count from the InR jack"}
+    }
+  },
+  "comment": "The filter is taken from Csound code by Victor Lazzarini, SKF.cpp:3. The R knob is turned into damping as two minus twice its value, SKF.cpp:10, so the knob reads as resonance. The menu item is lettered Level Input, SKF.cpp:660, which is the wording of the AUX module's level slider; the slider it opens is the cutoff slew, SKF.cpp:77-79, and its own label reads Slew. Both inputs are also configured as bypasses to their own outputs."
+}

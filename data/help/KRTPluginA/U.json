@@ -1,0 +1,39 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "U",
+  "description": "Three sample and hold channels, each with a second output that quantises the held value to a step in semitones",
+  "params": [
+    {"ids": [0], "text": "Sets the quantiser step in semitones, a whole number from 1 to 12"},
+    {"ids": [1], "text": "Nothing that can run reads this knob: it filters an internal noise source that the module's channel loop can never reach"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Samples that channel's input on each rising edge above 2V, reading low again below 0.1V"},
+    {"ids": [3, 4, 5], "text": "The signal that channel samples, and the jack that sets how many polyphonic channels that section carries"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "The last value sampled on that channel"},
+    {"ids": [3, 4, 5], "text": "The last value sampled on that channel, cut to a whole number of quantiser steps"}
+  ],
+  "notes": [
+    "a channel does nothing at all until a cable is patched to its IN jack: the loop that does the work is bounded by that jack's channel count, so with nothing patched the whole section is skipped",
+    "the held value and the edge detector are shared by every polyphonic channel of a section, so all the channels of an output carry the same sample"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "bipolar · polyphonic\n\nunpatched it reads nothing is read; the lane is skipped.",
+      "4": "bipolar · polyphonic\n\nunpatched it reads nothing is read; the lane is skipped.",
+      "5": "bipolar · polyphonic\n\nunpatched it reads nothing is read; the lane is skipped."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic"
+    }
+  }
+}

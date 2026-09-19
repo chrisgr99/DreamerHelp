@@ -1,0 +1,61 @@
+{
+  "plugin": "alefsbits",
+  "module": "slips",
+  "description": "A 64 step sequencer of randomly generated voltages, quantized to a root and scale, with random per-cycle offsets called slips and a second modulation sequence",
+  "params": [
+    {"ids": [0], "text": "Sets the root note the sequence is quantized to, C through B"},
+    {"ids": [1], "text": "Sets how many steps play before the sequence returns to its starting step, 1 to 64"},
+    {"ids": [2], "text": "Picks the scale the sequence is quantized to: chromatic, major, minor, major pentatonic, minor pentatonic, dorian, lydian, mixolydian, phrygian, locrian or blues"},
+    {"ids": [3], "text": "Sets the step the sequence starts and restarts from, 1 to 64"},
+    {"ids": [4], "text": "Draws a new random sequence of 64 values"},
+    {"ids": [5], "text": "Sets the chance that a step reaches the outputs, 0 to 100%; a skipped step repeats the last voltage and puts out no gate"},
+    {"ids": [6], "text": "Sets what share of the 64 steps are given a random offset, 0 to 100%, a fresh set of steps being chosen at the start of each cycle"},
+    {"ids": [7], "text": "Draws a new random modulation sequence"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances one step"},
+    {"ids": [1], "text": "0-10V sweeps the root across the twelve notes, or reads a pitch voltage with root input v/oct switched on in the menu"},
+    {"ids": [2], "text": "0-10V sets the number of steps over the whole 1 to 64 span, in place of the steps knob"},
+    {"ids": [3], "text": "A rising edge returns the sequence to its starting step"},
+    {"ids": [4], "text": "0-10V steps through the eleven scales, in place of the scale knob"},
+    {"ids": [5], "text": "0-10V sets the starting step over the whole 1 to 64 span, in place of the start knob"},
+    {"ids": [6], "text": "A rising edge draws a new random sequence of 64 values"},
+    {"ids": [7], "text": "0-10V sets the step chance over the whole 0 to 100% span, in place of the prob knob"},
+    {"ids": [9], "text": "0-10V sets the share of offset steps over the whole 0 to 100% span, in place of the slips knob"},
+    {"ids": [10], "text": "A rising edge draws a new random modulation sequence"}
+  ],
+  "outputs": [
+    {"ids": [1], "text": "The quantized voltage of the current step, with that step's random offset added where it has one"},
+    {"ids": [2], "text": "Carries the clock voltage while a step plays, and 0V while a step is skipped"},
+    {"ids": [3], "text": "Carries the clock voltage while a step that has a random offset plays, and 0V otherwise"},
+    {"ids": [4], "text": "A 100ms 10V trigger each time the sequence returns to its starting step"},
+    {"ids": [5], "text": "The voltage of the current step of the modulation sequence, over the range picked on the menu"}
+  ],
+  "menu": [
+    "root input v/oct — makes the root cv jack read a pitch voltage, the twelve semitones of each volt picking the root, in place of a 0-10V sweep",
+    "poly channels — sets how many channels the sequence and gate outputs carry, 1 to 16, each clock pulse moving to the next channel",
+    "poly mod output — carries the mod sequence output on the same channels as the sequence output; switched off it is monophonic",
+    "remap on generate — fits the random values to their ranges as a sequence is generated; switched off the fitting happens at playback, so a range change reshapes the sequence already generated",
+    "sequence range — sets the voltage span of the sequence output: twelve presets from +/-10V to 0V-1V, or custom for a minimum and maximum of your own",
+    "slip sequence range — sets the voltage span of the random offsets the slips add: twelve presets from +/-10V to 0V-1V, or custom for a minimum and maximum of your own",
+    "mod sequence range — sets the voltage span of the mod sequence output: twelve presets from +/-10V to 0V-1V, or custom for a minimum and maximum of your own",
+    "quantize mod sequence — an item in the mod sequence options submenu, quantizing the mod sequence to the same root and scale as the main sequence",
+    "apply slips to mod sequence — an item in the mod sequence options submenu, adding each cycle's random offsets to the mod sequence too",
+    "apply step probability to mod sequence — an item in the mod sequence options submenu, applying the step chance to the mod sequence too",
+    "add slipspander — places a slipspander expander against the right-hand edge of the module; with one already there the menu prints slipspander connected in place of this item"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "3": "stepped",
+      "6": "stepped",
+      "10": "stepped"
+    },
+    "outputs": {
+      "1": "continuous",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

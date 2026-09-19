@@ -1,0 +1,21 @@
+{
+  "plugin": "Submit",
+  "module": "Loop",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Loop.cpp:234 uses isConnected; Loop.cpp:314-315 watches getVoltage cross 1V upwards"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Loop.cpp:248-250 watches getVoltage cross 1V upwards"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Loop.cpp:354 divides getVoltage by 5 and reads it as octaves; Loop.cpp:356 clamps the total speed to 0.25 to 4 times"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Loop.cpp:343 uses isConnected; Loop.cpp:344 multiplies getVoltage by 2.4, adds it to the knob and clamps the total to 1 to 24; the BARS knob snaps to whole bars (Loop.cpp:100) but the sum is never rounded, and Loop.cpp:364 and 395 take it as a float into the loop duration and the frames per bar"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Loop.cpp:336 uses isConnected; Loop.cpp:337 multiplies getVoltage by 30, adds it to the knob and clamps the total to 0 to 300"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Loop.cpp:276 uses isConnected; Loop.cpp:277 multiplies getVoltage by 0.8, adds it to the knob and clamps the total to 1 to 8"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Loop.cpp:287-288 uses isConnected and inverts the switch while getVoltage is 1V or more"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Loop.cpp:389 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Loop.cpp:390 sets one channel with setVoltage"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "Loop.cpp:387 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "The manual says Loop 'derives BPM information when it is present in the file or filename'. The code looks at the filename only: Loop.cpp:176-187 scans the name for the letters bpm and reads the digits immediately before them. No chunk inside the WAV is parsed. The bar count is then derived from that tempo and the file length, and only accepted when it lands within 15% of a whole number of bars (Loop.cpp:189-198).\n\nThe manual says 'Bar Shift moves the playback window by bars'. Loop.cpp:426 divides the whole file into eight equal steps regardless of the Bars setting, so the shift is in eighths of the file, which only equals a bar when Bars is 8.\n\nThe Bars CV clamps the total to a minimum of 1 (Loop.cpp:344), so a patched Bars CV can never reach the knob's own 0 position and the automatic length cannot be selected by voltage.\n\nThe Reverse CV inverts the switch rather than setting it (Loop.cpp:287-288): with the switch already on, holding the input above 1V plays the sample forwards.\n\nThe panel prints CLK beside the sync switch and beside the clock jack; the maker's tooltip for the switch is Sync. The switch comes up on (Loop.cpp:99).\n\nThe waveform display and the text on it are one custom widget with no parameter behind them, so nothing there can be clicked for help."
+}

@@ -1,0 +1,50 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndH2",
+  "description": "Draws a random voltage on each clock from a seedable random source, with four outputs carrying four different distributions, a range and offset section and a slew limiter",
+  "params": [
+    {"ids": [0], "text": "While on, the values are drawn over -5V to 5V; while off, over 0-10V"},
+    {"ids": [1], "text": "Sets how many uniform draws each value is made from, 1 to 20; at 1 the Min, WB and Tri outputs carry a plain uniform distribution"},
+    {"ids": [2], "text": "Sets how many channels the outputs carry, 1 to 16, used only while the clock is monophonic or unpatched"},
+    {"ids": [3], "text": "Sets the seed, 0 to 1 across the seed range, cut to four decimal places; at 0 the seed comes from the clock of the computer instead and every reset gives a fresh run"},
+    {"ids": [4], "text": "Scales every drawn value before it reaches the outputs, 0 to 1"},
+    {"ids": [5], "text": "Attenuates the voltage at the jack above it before it is added to the Range knob, 0 to 1"},
+    {"ids": [6], "text": "Adds a fixed voltage to every drawn value, -5V to 5V"},
+    {"ids": [7], "text": "Attenuates the voltage at the jack above it before it is added to the Ofs knob, 0 to 1"},
+    {"ids": [8], "text": "Slews the outputs so they glide to each new value; at 0 the slew is off, and raising it lengthens the glide"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that draws a new set of values; a polyphonic cable here draws one value per channel of the cable and sets how many channels the outputs carry"},
+    {"ids": [1], "text": "A trigger here reseeds the random source from the Seed knob and draws a value at once, so the same run of values is drawn again"},
+    {"ids": [2], "text": "A trigger at Rst writes the voltage here into the Seed knob first, 0-10V mapped onto the knob's 0 to 1, so the seed can be set by cable"},
+    {"ids": [3], "text": "Sets the number of draws by voltage in place of the Strength knob, 0-10V mapped onto 1 to 20, one channel per output channel"},
+    {"ids": [4], "text": "Modulates the scaling, added to the Range knob at a tenth of a volt per volt through the attenuator below it"},
+    {"ids": [5], "text": "Modulates the added voltage, one volt per volt through the attenuator below it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The smallest of the draws, scaled by Range and shifted by Ofs, which crowds the values towards the bottom of the range as Strength is raised"},
+    {"ids": [1], "text": "A Weibull distribution with its density set by Strength, scaled by Range and shifted by Ofs"},
+    {"ids": [2], "text": "The average of the draws, scaled by Range and shifted by Ofs, which crowds the values towards the middle of the range as Strength is raised and approaches a normal distribution"},
+    {"ids": [3], "text": "A plain uniform distribution whatever Strength is set to, scaled by Range and shifted by Ofs"}
+  ],
+  "notes": [
+    "with nothing patched into Clk a new value is drawn every sample, giving noise at audio rate; the values are then bipolar whatever BiP is set to, and Range, Ofs and Slew are passed over",
+    "an output with no cable in it is never drawn and never written, so patching one later starts it from whatever the random source has reached"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Seed knob.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads half the Strength knob; a negative voltage does nothing here.",
+      "4": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "5": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

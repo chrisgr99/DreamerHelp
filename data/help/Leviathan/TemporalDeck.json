@@ -1,0 +1,69 @@
+{
+  "plugin": "Leviathan",
+  "module": "TemporalDeck",
+  "description": "A stereo turntable: it records what you play into a circular buffer and gives you a platter you can drag, freeze, reverse and slip, or loads a sound file to play instead",
+  "params": [
+    {"ids": [0], "text": "Sets how far back into the recording the playhead may travel, from none of it at the far left to the whole buffer at the far right; with a sample loaded it sets where the playback window ends"},
+    {"ids": [1], "text": "Sets the playback speed, half speed at the far left, normal speed at centre and double speed at the far right; a cable in the RATE jack takes this knob out of the calculation entirely"},
+    {"ids": [2], "text": "Scales how far a drag on the platter moves the playhead, half as far at the far left and twice as far at the far right"},
+    {"ids": [3], "text": "Crossfades the outputs between the signal arriving at IN L and IN R and the sound coming off the buffer, dry at the far left and buffer only at the far right"},
+    {"ids": [4], "text": "Mixes the output back into what is being written to the buffer, so material repeats and builds up; at the far left nothing is fed back"},
+    {"ids": [5], "text": "Stops the playhead and stops recording, holding whatever is in the buffer; with a cable in the FREEZE jack and Freeze CV set to Gated Control the state follows the cable and this button does nothing"},
+    {"ids": [6], "text": "Runs the playhead backwards; with a cable in the REV jack and Reverse CV set to Gated Control the direction follows the cable and this button does nothing"},
+    {"ids": [7], "text": "Keeps the recording running underneath while you move the platter, so releasing it returns the playhead to where the sound would have been; the menu sets how quickly it rejoins"},
+    {"ids": [8], "text": "Steps through the cartridge characters, which change the tone of the sound read off the platter"},
+    {"ids": [9], "text": "Adds a TD.Scope expander to the right of this module"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the playhead while the scratch gate is high, one second of recording per volt, positive voltage moving forward toward the newest sound in the buffer and negative deeper into the past"},
+    {"ids": [1], "text": "Sets the playback speed, half speed at -10V, normal speed at 0V and double speed at +10V; while a cable is in this jack the RATE knob is ignored, so a cable resting at 0V pins the speed to normal"},
+    {"ids": [2], "text": "The left channel of the signal written into the buffer"},
+    {"ids": [3], "text": "The right channel of the signal written into the buffer"},
+    {"ids": [4], "text": "A voltage above 1V hands the playhead to the POS jack for as long as it is held, and starts the scratch gesture that S.GATE and S.POS report"},
+    {"ids": [5], "text": "A voltage above 1V stops the playhead and stops recording; crossing below -1V instead sends the playhead back to the start of the buffer"},
+    {"ids": [6], "text": "A voltage above 1V runs the playhead backwards; in Gated Control it holds the direction for as long as it is high, in Pulsed Control each rising edge flips it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the mix of the input signal and the sound coming off the buffer, set by WET"},
+    {"ids": [1], "text": "10V for as long as a scratch gesture is running, whether it came from dragging the platter, dragging a TD.Scope waveform or the GATE jack, and 0V otherwise"},
+    {"ids": [2], "text": "The right channel of the mix of the input signal and the sound coming off the buffer, set by WET"},
+    {"ids": [3], "text": "How far the playhead has moved since the scratch gesture began, one volt per second, positive meaning toward the newest sound; it reads 0V whenever S.GATE is low"}
+  ],
+  "notes": [
+    "the round platter is a single drawn widget rather than a control: drag it to move the playhead, and nothing on it can be clicked for its own note",
+    "the module records whatever arrives at IN L and IN R from the moment it is placed, so with nothing patched in and no sample loaded there is nothing in the buffer to play",
+    "to play a sound file instead of the incoming signal, load it from the menu; the buffer, the platter and every transport control then work on the file"
+  ],
+  "menu": [
+    "Load sample... — opens a file chooser for a WAV, FLAC or MP3 to play in place of what the module records",
+    "Clear sample — discards the loaded file and returns the module to recording its inputs",
+    "Convert live -> sample — freezes what is currently in the buffer into a loaded sample, so it stops being overwritten",
+    "Save sample... — writes a sample made from the buffer to a WAV file",
+    "Sample info — shows the loaded file's name and length, and says so when it was cut short to fit the buffer",
+    "Buffer range: 10 s, 20 s, 1 min stereo, 2 min stereo, 10 min stereo, 10 min mono — sets how much recording is held, and so how much memory the module takes",
+    "Scratch interpolation: Cubic, 6-point Lagrange, Sinc (CPU heavy) — picks the arithmetic used to read between samples while scratching, trading tone for processor time",
+    "HQ rate interpolation — uses the better arithmetic for ordinary playback as well as for scratching",
+    "Gate+Pos mode: Module sync, Glide / inertia — sets whether the POS jack snaps the playhead to its voltage or glides toward it",
+    "Reverse CV: Gated Control, Pulsed Control — sets whether the REV jack holds the direction while high or flips it on each rising edge",
+    "Freeze CV: Gated Control, Pulsed Control — sets whether the FREEZE jack holds the freeze while high or toggles it on each rising edge",
+    "Slip return speed: None, Slow, Normal, Instant — sets how quickly the playhead rejoins the newest point in the recording after a slip, or turns slip off",
+    "Vinyl — chooses the artwork drawn on the platter and its brightness, and downloads the maker's library of platter art"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "continuous · one channel only",
+      "3": "±10V · one channel only"
+    }
+  }
+}

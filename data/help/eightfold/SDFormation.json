@@ -1,0 +1,45 @@
+{
+  "plugin": "eightfold",
+  "module": "SDFormation",
+  "description": "Turns one voltage into eight, fanned out from it by a spacing you set, with a tilt that bends the spacing and a random offset per voice",
+  "params": [
+    {"ids": [0], "text": "Chooses which way the eight fan out from the input voltage: downward from it, centred on it, or upward from it"},
+    {"ids": [1], "text": "Sets the gap between one voice and the next, -1.4V to +1.4V, with the eight voltages collapsing onto each other at zero"},
+    {"ids": [2], "text": "Scales the SPREAD CV input before it is added to the SPREAD knob, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [3], "text": "Bends the spacing so the gaps grow towards the ends or towards the middle, -1 to +1 with no bend at the centre; the bend is scaled by SPREAD"},
+    {"ids": [4], "text": "Scales the TILT CV input before it is added to the TILT knob, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [5], "text": "Sets how much of its own random offset each voice is given, -1 to +1; each voice keeps the number it was given until a new set is drawn"},
+    {"ids": [6], "text": "Scales the RANDOM CV input before it is added to the RANDOM knob, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [7], "text": "Adds a fixed offset of -10V to +10V after the gain, so the eight voltages can be produced with nothing patched in at all"},
+    {"ids": [8], "text": "Scales the input before anything else, from -1 through zero to +1, so a setting below zero inverts it; it comes up at +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves SPREAD after the attenuverter above it, 10V covering the knob's whole span, and the total is held inside the knob's range"},
+    {"ids": [1], "text": "Moves TILT after the attenuverter above it, 10V covering the knob's whole span, and the total is held inside the knob's range"},
+    {"ids": [2], "text": "A rising edge draws a fresh random number for every one of the eight voices; it reads high above 2V and low below 0.1V"},
+    {"ids": [3], "text": "Moves RANDOM after the attenuverter above it, 10V covering the knob's whole span, and the total is held inside the knob's range"},
+    {"ids": [4], "text": "The single voltage the eight are built from; only the first channel of a cable is read"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The eight voltages as an eight-channel polyphonic cable, voice one first"},
+    {"ids": [1], "text": "The same eight voltages as an eight-channel polyphonic cable, in the opposite order"}
+  ],
+  "notes": [
+    "the random numbers are held until a rising edge arrives at TRIG, and they are saved with the patch, so a patch reloads with the same fan-out it had.",
+    "fanning upward adds each voice's random offset, fanning downward subtracts it, and the centred setting spreads it either side of the voice.",
+    "with nothing patched into INPUT the module produces eight voltages anyway, built from the OFFSET knob alone."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

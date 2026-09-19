@@ -1,0 +1,24 @@
+{
+  "plugin": "Extratone",
+  "module": "Pureneura",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the BASE switch", "why": "src/Pureneura.cpp process(): if(inputs[BASE_INPUT].isConnected()){based=(inputs[BASE_INPUT].getVoltage()>=1.f);}else{based=params[BASE_PARAM].getValue();} — a level test that replaces the switch"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Pureneura.cpp process(): clockTrigger.process(inputs[CLOCK_INPUT].getVoltage())"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Pureneura.cpp process(): gate[i]=(!inputs[GATE_INPUT+i].isConnected()||inputs[GATE_INPUT+i].getVoltage()>=5.f)"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Pureneura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Pureneura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "normal": "high, the row runs", "why": "src/Pureneura.cpp process(): gate[i] level test at 5V, one getVoltage() per row"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "src/Pureneura.cpp process(): outputs[CLOCK_OUTPUT+i].setVoltage(outPulse[i].process(args.sampleTime)?10.f:0.f), a single channel"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger", "poly": false, "why": "src/Pureneura.cpp process(): outputs[PRODUCT_OUTPUT+p].setVoltage(prodPulse[p].process(args.sampleTime)?10.f:0.f), a single channel"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"}
+    }
+  },
+  "comment": "An eighth output is declared (PRODUCT_OUTPUT+3) and never given a PortWidget or a voltage, so there is no jack for it and it gets no tag. CLOCK_PARAM is declared, has no ParamWidget and is never read anywhere in process(); it is a leftover of Meganeura, from which this module was cut down. The BASE jack is a level test at 1V that replaces the BASE switch outright rather than adding to it, so a patched cable sitting at 0V forces every row back onto its own gate and the switch does nothing."
+}

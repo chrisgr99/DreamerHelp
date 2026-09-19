@@ -1,0 +1,13 @@
+{
+  "plugin": "gwrthiant",
+  "module": "graddfa",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V", "why": "graddfa.cpp:45-48 reads getVoltage() with no channel; line 51 clamps the result to a floor of 0, so any negative note voltage gives the same output as C4"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0.017 to 10V", "step": "continuous", "why": "graddfa.cpp:49 computes cv * 12 * (10/45) + (2/12)/10, clamped to 0 and 10 at lines 51-52, after setChannels(1) at line 54"}
+    }
+  },
+  "comment": "Source read at commit c13145d. The output is not rounded, so it rises smoothly between notes; C4 gives 0.0167V rather than 0V because of the fixed offset added at graddfa.cpp:49, which puts the value inside the first mode's band rather than on its boundary."
+}

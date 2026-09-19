@@ -1,0 +1,25 @@
+{
+  "plugin": "MADZINE",
+  "module": "EllenRipley",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/EllenRipley.cpp:585-590, getChannels() sets the channel count and getPolyVoltage(c) reads each"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "normal": "the left input", "why": "src/EllenRipley.cpp:639-645, unpatched, rightInput is set to leftInput"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:657-668, delayTimeL += cv*0.2, then clamp(0.001, 2)"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:670-681, delayTimeR += cv*0.2, then clamp(0.001, 2)"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:683-694, feedback += cv*0.1, then clamp(0, 0.95)"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:711-719, grainSize += cv*0.1, then clamp(0, 1)"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:721-729, grainDensity += cv*0.1, then clamp(0, 1)"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:731-739, grainPosition += cv*0.1, then clamp(0, 1)"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:741-749, reverbRoomSize += cv*0.1, then clamp(0, 1)"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:751-759, reverbDamping += cv*0.1, then clamp(0, 1)"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/EllenRipley.cpp:761-769, reverbDecay += cv*0.1, then clamp(0, 1)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/EllenRipley.cpp:589-591, setChannels from the audio inputs"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "src/EllenRipley.cpp:637, the chaos value clamped to ±1 and multiplied by 5"}
+    }
+  },
+  "comment": "The three stages are strictly in series and each dry-wet control takes what the stage before it produced, not the module's input (src/EllenRipley.cpp:778-800). The reverb also writes its own output back into the delay buffer at three tenths of the reverb DECAY setting (src/EllenRipley.cpp:803-805). The granular BREAK knob is passed to the reverb as its pre-delay as well as setting the grain rate (src/EllenRipley.cpp:794-796). The chaos generator is the Lorenz-style system in src/RipleyDSP.hpp; with SHAPE on, the rate runs 1 to 10 instead of 0.01 to 1 and the value is held between samples taken ten times per rate unit (src/EllenRipley.cpp:607-632). The three C latches and the SHAPE latch are light-latches, so each carries its own lamp. The panel prints DELAY, TIME L, TIME R, FDBK, C, GRATCH, SIZE, BREAK, SHIFT, C, REVERB, ROOM, TONE, DECAY, C, CHAOS, SHAPE, RATE, DELAY, GRATCH, REVERB, CHAOS OUT and AMOUNT; the four audio jacks carry no lettering. Lettering is drawn in code at src/EllenRipley.cpp:856-972."
+}

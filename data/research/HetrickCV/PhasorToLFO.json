@@ -1,0 +1,19 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorToLFO",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorToLFO.cpp:119 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorToLFO.cpp:104 clamps the knob plus this CV to plus or minus 5V"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorToLFO.cpp:108 clamps the knob plus this CV to plus or minus 5V"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorToLFO.cpp:112 clamps the knob plus this CV to plus or minus 5V"},
+      "4": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorToLFO.cpp:116 clamps the knob plus this CV to plus or minus 5V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "PhasorToLFO.cpp:86 and 122 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the wave times HCV_PHZ_UPSCALE; the bipolar switch at PhasorToLFO.cpp:97 offsets it by -5V, so it is 0 to 10V or ±5V"},
+      "1": {"poly": true, "why": "PhasorToLFO.cpp:123 writes the triangle times HCV_PHZ_UPSCALE per channel; the bipolar switch at PhasorToLFO.cpp:97 offsets it by -5V, so it is 0 to 10V or ±5V"},
+      "2": {"poly": true, "why": "PhasorToLFO.cpp:124 writes the pulse per channel; the bipolar switch at PhasorToLFO.cpp:97 offsets it by -5V, so it is 0 to 10V or ±5V"}
+    }
+  },
+  "comment": "The Phasor input is read with getVoltage per channel rather than getPolyVoltage, so a one-channel cable feeds channel one and leaves the rest of a polyphonic patch at 0V."
+}

@@ -1,0 +1,41 @@
+{
+  "plugin": "HarmonicAnomalies",
+  "module": "HexaGrain",
+  "description": "A looping buffer of 721 grains laid out on a hexagonal grid, with a write head and a read head that each move through it along three axes rather than in a line",
+  "params": [
+    {"ids": [0], "text": "Sets how the write head moves: in the first position it follows the write X, Y and Z knobs, in the second it walks a ring set by the write SIZE knob, in the third it spirals inside that ring"},
+    {"ids": [1], "text": "Sets how the read head moves: in the first position it follows the read X, Y and Z knobs, in the second it walks a ring set by the read SIZE knob, in the third it spirals inside that ring"},
+    {"ids": [2], "text": "Sets the radius of the ring the write head walks, from a single grain fully counter-clockwise to the full width of the grid fully clockwise, and it is read only in the second and third write modes"},
+    {"ids": [3], "text": "Sets the radius of the ring the read head walks, from a single grain fully counter-clockwise to the full width of the grid fully clockwise, and it is read only in the second and third read modes"},
+    {"ids": [4], "text": "Sets the length of the grain being written, 1ms fully counter-clockwise to 100ms fully clockwise; it changes only the grain under the write head, so grains keep the length they were given"},
+    {"ids": [5], "text": "Moves the write head along the grid's first axis by this much each grain written, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre it stays put on that axis"},
+    {"ids": [6], "text": "Moves the write head along the grid's second axis by this much each grain written, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre it stays put on that axis"},
+    {"ids": [7], "text": "Moves the write head along the grid's third axis by this much each grain written, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre it stays put on that axis"},
+    {"ids": [8], "text": "Moves the read head along the grid's first axis for this much every grain read, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre the head does not move on that axis"},
+    {"ids": [9], "text": "Moves the read head along the grid's second axis for this much every grain read, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre the head does not move on that axis"},
+    {"ids": [10], "text": "Moves the read head along the grid's third axis for this much every grain read, forwards clockwise of centre and backwards counter-clockwise of it; at dead centre the head does not move on that axis"},
+    {"ids": [11], "text": "Sets how much of what is written replaces what was already in the grain: fully clockwise it overwrites, fully counter-clockwise it writes nothing and the buffer loops untouched"},
+    {"ids": [12], "text": "Widens the read head into a ring of surrounding grains, from none up to a radius of 64; every grain on the ring is added to the one under the head and the sum divided by the root of their number"},
+    {"ids": [13], "text": "Shortens the buffer, so fewer grains are looped and the loop comes round sooner; fully clockwise the whole grid is used"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal written into the buffer, one sample at a time into whatever grain the write head is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal read out of the buffer, played from whatever grain the read head is on, or from a ring of grains around it when SPREAD is up"}
+  ],
+  "notes": [
+    "with all six X, Y and Z knobs at dead centre neither head moves, so one grain is written and the same grain played over and over; turn at least one of them off centre for anything to loop",
+    "a head only moves at the moment its grain comes round to its start, so shorter grains move the heads faster and changing the grain size changes the speed of reading as well",
+    "the panel's grid is a picture of the buffer, brightening where a grain holds a signal, with the write head marked in red and the read head in blue; it cannot be clicked or dragged",
+    "the HexNut CV Expander goes immediately to the right and adds voltage control of the six vector knobs, the two SIZE knobs and BLEND"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

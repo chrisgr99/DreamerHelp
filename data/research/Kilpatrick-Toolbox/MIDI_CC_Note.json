@@ -1,0 +1,13 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "MIDI_CC_Note",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "why": "MIDI_CC_Note.cpp:80 wraps this input in a CVMidi reader, which calls Port::getVoltage at utils/CVMidi.h:71 and so reads channel 1 only"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "MIDI_CC_Note.cpp:81 wraps this output in a CVMidi writer, which calls Port::setVoltage at utils/CVMidi.h:140 and so writes channel 1 only"}
+    }
+  },
+  "comment": "The README says the controller value must be 64 or more for a press and below 64 for a release. No such threshold is in the code: MIDI_CC_Note.cpp:165-176 turns every controller message that survives the repeat filter into a note on, with the velocity taken from the controller value scaled by the VELOCITY knob, so a value of 0 arrives as a note on at velocity 0, which is the MIDI convention for a release. The effect is close to what the README describes but the boundary is 0, not 64. The README also says the CC Base setting shifts events to start at note 60; that is true only of the 60 choice. The output channel is fixed: encodeNoteOnMessage is called with channel 0 at :172 and utils/MidiHelper.cpp:578 puts that in the low nibble, which is MIDI channel 1. The octave clamp is OCT_OFFSET_MIN and OCT_OFFSET_MAX, -6 to +6, at :55-56. The repeat filter is a MidiRepeater fixed at MODE_OFF at :83, with the 2-second history timeout from utils/MidiRepeater.h:46. Two parameters, OCT_OFFSET and CC_BASE, have no widget; they hold the octave shift and the menu choice. The panel prints OCT NORM where the parameter is named OCT NORMAL."
+}

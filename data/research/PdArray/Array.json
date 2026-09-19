@@ -1,0 +1,18 @@
+{
+  "plugin": "PdArray",
+  "module": "Array",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "Array.cpp:365-369 sets the output channel count from getChannels on this jack and reads getVoltage(chan) once per channel"},
+      "1": {"poly": false, "why": "Array.cpp:362 reads it with a plain getVoltage, so only the first channel is recorded"},
+      "2": {"poly": false, "step": "continuous", "why": "Array.cpp:350 reads it with a plain getVoltage, rescales it over the POS RANGE span and clamps it to the array"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "Array.cpp:352 rescales this jack from 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger, so it reads high above 2V and low below 0.1V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "Array.cpp:366 and 373 set the channel count from the POS input and write one voltage per channel"},
+      "1": {"poly": true, "why": "Array.cpp:367 and 419 set the channel count from the POS input and write one voltage per channel"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "No range is given for POS, REC POS, REC IN or the two outputs because the POS RANGE and I/O RANGE switches change them between 0 to 10V, ±5V and ±10V (Array.cpp:320-347). That also settles what a negative voltage does: on the ±5V and ±10V settings it is part of the span, and on the +10V setting it is clamped to the start of the array or the bottom of its value span (lines 350 and 369). No family is given for REC IN or the two outputs: the module stores and replays whatever voltage is given to it, so those jacks carry audio, CV or an envelope according to what is in the array. The SIZE box and the array display are plain widgets rather than parameters, so no click on them reaches this help; the drawing gesture and the SIZE box are covered by notes instead. Holding the platform modifier key while clicking the display leaves the array alone (Array.cpp:516-523). Arrays longer than 5000 values are saved beside the patch as a wav file rather than inside it."
+}

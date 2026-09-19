@@ -1,0 +1,82 @@
+{
+  "plugin": "LyraeModules",
+  "module": "Vega",
+  "description": "An ADSR envelope with a modulation input for each stage in four modulation modes, per-stage level and gate outputs, force-advance triggers and a sample-and-hold on the output",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Forces the envelope on to the next stage while it is held"},
+    {"ids": [3, 5, 6], "text": "Steps that stage's level output between the plain envelope and the envelope with its modulation, shown by a blue lamp for the modulated one"},
+    {"ids": [4], "text": "Steps the decay level output through the plain envelope, the envelope with its modulation, and the envelope with the sustain level subtracted, shown by a blue and then a green lamp"},
+    {"ids": [7, 8, 9, 10], "text": "Attenuates and inverts that stage's modulation input, from -0.2 to 0.2, before the modulation mode applies it"},
+    {"ids": [11], "text": "Sets the length of the attack, the phasor step being 0.000315 raised to this power, so turning it up makes the stage longer"},
+    {"ids": [12], "text": "Sets the length of the decay, the phasor step being 0.000315 raised to this power, so turning it up makes the stage longer"},
+    {"ids": [13], "text": "Sets the level the envelope holds at while the gate stays high, 0 to 1"},
+    {"ids": [14], "text": "Sets the length of the release, the phasor step being 0.000315 raised to this power, so turning it up makes the stage longer"},
+    {"ids": [15, 16, 18], "text": "Steps that stage's modulation mode on: Ring, Add, Add With Fade, or Inverse Envelope Addition, shown as red, green, blue and white on the lamp beside it"},
+    {"ids": [17], "text": "Steps the sustain stage's modulation mode between Ring and Add, shown as red and green on the lamp beside it"},
+    {"ids": [19], "text": "Bends the attack, the linear ramp being raised to this power, from 0.2 for a fast rise to 3 for a slow one"},
+    {"ids": [20], "text": "Bends the decay by moving the control point of a quadratic curve between the peak and the sustain level"},
+    {"ids": [21], "text": "Bends the release, the ramp being raised to this power, from 0.2 for a fast fall to 7.4 for a slow one"},
+    {"ids": [22], "text": "Attenuates the global ring input, from 0 to 0.2, before it is added to the offset knob around it"},
+    {"ids": [23], "text": "Scales both main outputs, from silence to full; with the global ring jack patched it becomes the offset added to the attenuated ring signal"},
+    {"ids": [24], "text": "Sets how much of each stage's modulation is crossfaded into the next, to keep the modulation from clicking at a stage boundary"},
+    {"ids": [25], "text": "Slews the main outputs towards the held value instead of stepping to it, which turns the sample-and-hold into a track-and-hold"},
+    {"ids": [26], "text": "Sets the rate of the internal sample-and-hold clock on the main outputs; at the fully clockwise setting of 40 the outputs update every sample and no holding happens"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "A voltage of 5V or more forces the envelope on to the next stage"},
+    {"ids": [3, 4, 5, 6], "text": "The modulation signal for that stage, which the stage's attenuator and mode apply to the envelope; an empty jack falls back to the nearest patched stage above it"},
+    {"ids": [7], "text": "A rising edge starts the envelope at the attack; the envelope falls into release when this goes low during sustain, and it reads high above 1V"},
+    {"ids": [8], "text": "Multiplies both main outputs after every other modulation, scaled by the small attenuator knob and added to the offset around it"},
+    {"ids": [9], "text": "A rising edge restarts the envelope at the attack without waiting for the gate to fall"},
+    {"ids": [10], "text": "Slows the internal sample-and-hold clock as its voltage rises, the rate being the knob setting times one minus a tenth of this voltage"},
+    {"ids": [11], "text": "Lowers the crossfade setting as its voltage rises, a tenth of the voltage being subtracted from the anger figure"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That stage's own envelope segment, 0-10V, plain or with its modulation according to the button beside it"},
+    {"ids": [4, 5, 6], "text": "Carries 10V while the envelope is in that stage and 0V otherwise"},
+    {"ids": [7], "text": "Carries 10V while the envelope is in the release, or a trigger at the moment the envelope finishes when the menu is set that way"},
+    {"ids": [8], "text": "The finished envelope, scaled by the offset knob and clipped to ±12V"},
+    {"ids": [9], "text": "The finished envelope inverted, scaled by the offset knob and clipped to ±12V, or the plain envelope when the menu is set that way"}
+  ],
+  "notes": [
+    "with only the gate patched and only the plus output taken, it behaves as an ordinary ADSR; everything else is modulation laid on top of that",
+    "going from attack to decay always starts the decay at 10V, and the release always starts from the sustain level, whether or not the sustain stage happened",
+    "the modulation inputs normal downwards, so a cable in the attack modulation jack feeds every stage below it that has no cable of its own",
+    "both main outputs are hard clipped at ±12V, and the offset knob is the way to pull a heavily modulated envelope back under that ceiling",
+    "turning a stage's attenuator knob gives it the value of the attenuator above it as its default, so a double-click sets a row to match the row above"
+  ],
+  "menu": [
+    "Negative Out Dry — makes the minus output carry the plain unmodulated envelope in place of the inverted modulated one",
+    "Release Gate → EOR Trig — makes the release gate output a single trigger when the envelope finishes, in place of a gate lasting the release",
+    "Decrease Time — takes 0.1 off the attack, decay and release time knobs together",
+    "Increase Time — adds 0.1 to the attack, decay and release time knobs together"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads the attack modulation jack.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads the decay modulation jack.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads the sustain modulation jack.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only",
+      "2": "0 to 10V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "±12V · continuous · one channel only",
+      "9": "±12V · continuous · one channel only"
+    }
+  }
+}

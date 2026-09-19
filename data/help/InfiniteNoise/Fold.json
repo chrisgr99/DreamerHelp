@@ -1,0 +1,41 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "Fold",
+  "description": "A signal driven past a voltage range and folded or wrapped back inside it, in 2HP",
+  "params": [
+    {"ids": [0], "text": "Amplifies the input, 1x fully counter-clockwise to 10x fully clockwise, which is what drives it past the range"},
+    {"ids": [1], "text": "Attenuates and inverts the gain CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [2], "text": "Leans the signal towards the lower or the upper half of the range, so the folding happens mostly on one side"},
+    {"ids": [3], "text": "Attenuates and inverts the bias CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [4], "text": "Switches what the Bias knob does: an offset applied to the signal, or a different gain on the upper and lower halves of the range"},
+    {"ids": [5], "text": "Chooses what happens past the range: Fld turns the excess back down from the limit, Wrp carries it round to the other limit"},
+    {"ids": [6], "text": "Sets the range the signal is held inside: -5V to 5V or 0V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the gain, 10V covering the knob's full travel at full trim"},
+    {"ids": [1], "text": "Moves the bias, 10V covering the knob's full travel at full trim"},
+    {"ids": [2], "text": "The signal to be folded"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the folded or wrapped signal, always inside the chosen range"}
+  ],
+  "notes": [
+    "with the gain at 1x and no bias, a signal already inside the range comes out unchanged; the module does nothing until something pushes past a limit",
+    "driving the signal far past the range folds or wraps it more than once, which is where the complicated shapes come from"
+  ],
+  "menu": [
+    "Oversampling: Single, 2x — runs the fold at twice the sample rate, which is worth it on audio and off unless you turn it on",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 1 to 10V.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V.",
+      "2": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

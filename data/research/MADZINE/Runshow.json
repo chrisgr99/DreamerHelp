@@ -1,0 +1,20 @@
+{
+  "plugin": "MADZINE",
+  "module": "Runshow",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Runshow.cpp:265-269, read only while the timer is running; a rising edge through 1V on a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds counts one beat and times the interval since the last edge"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Runshow.cpp:211-213, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds, in parallel with the RESET button; a rising edge zeroes the clock count, the bar and the elapsed time"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Runshow.cpp:214-224, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds, in parallel with the START/STOP button; each rising edge flips the timer between running and stopped"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Runshow.cpp:448 and 125-160, generateWaveform returns 0 to 10 and the output is 0V when the envelope is not running"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Runshow.cpp:452 and 125-160, the same generator"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"}
+    }
+  },
+  "comment": "Parameter 8, named Timer Max, has no ParamWidget on the panel, so no click can reach it and it gets no line, no tag and no props; nothing in process() reads it either. The shape knob snaps to five settings and the generator crossfades between adjacent shapes, so only the five named shapes are reachable from the panel (src/Runshow.cpp:125-165). A bar's envelope length is that bar's clock count times the measured gap between clocks, so it follows the tempo, while the two minute-based outputs are timed from std::chrono::steady_clock (src/Runshow.cpp:265). The panel prints the module name and a line crediting jan0ritter; the buttons, jacks and knobs carry no lettering of their own, and the large display shows the counts. Layout is at src/Runshow.cpp:935-977."
+}

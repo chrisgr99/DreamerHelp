@@ -1,0 +1,37 @@
+{
+  "plugin": "QualiaSense",
+  "module": "PhoneSensor",
+  "description": "Turns a smartphone's sensors into control voltage: the module polls the PhyPhox app over your local network a hundred times a second and puts what the chosen sensor reports out on three jacks",
+  "outputs": [
+    {"ids": [0], "text": "The first axis of the chosen sensor, scaled to the output range: the X axis for magnetic, acceleration and gyroscope, up and down for tilt, red for colour, and the single reading for light and sound."},
+    {"ids": [1], "text": "The second axis of the chosen sensor. Magnetic, acceleration and gyroscope give their Y axis, tilt gives left and right, and colour gives green; with light or sound chosen this jack is held at 0V."},
+    {"ids": [2], "text": "The third axis of the chosen sensor. Magnetic, acceleration and gyroscope give their Z axis and colour gives blue; with light, sound or tilt chosen this jack is held at 0V."}
+  ],
+  "notes": [
+    "This module does nothing on its own. It needs a phone on the same network running the PhyPhox app, an experiment open in it, remote access on, and that address typed into the IP & port item.",
+    "The lamp shows the connection: blue before the first reply, red when the phone cannot be reached, orange when the app answers but is not measuring, and green when readings are coming in.",
+    "Switching the sensor type does not always take effect at once. The maker's own instructions say to save the patch, quit Rack and reopen it if the new sensor does not start reporting.",
+    "PhyPhox serves one sensor at a time, so a second sensor means a second phone and a second copy of this module.",
+    "Each sensor type brings its own default minimum and maximum. Choosing a sensor resets those six limits, so any you have edited by hand are lost when you switch.",
+    "Only the three jacks on this panel can be clicked for help: the module has no knobs, no buttons and no inputs, and every setting is on the right-click menu."
+  ],
+  "menu": [
+    "IP & port — takes the address and port PhyPhox prints when you turn its remote access on, typed as one string and entered with the return key; it starts at a placeholder, not your phone",
+    "Sensor type: Magnetic, Acceleration, Light, Tilt, Sound intensity, Color (HSV converted to RGB), Gyroscope — picks which sensor is asked for, and has to match the experiment open in the app",
+    "Minimum X value — the raw sensor reading that maps to the bottom of the output range on the X jack; readings below it are clamped",
+    "Maximum X value — the raw sensor reading that maps to the top of the output range on the X jack; readings above it are clamped",
+    "Minimum Y value — the raw sensor reading that maps to the bottom of the output range on the Y jack; readings below it are clamped",
+    "Maximum Y value — the raw sensor reading that maps to the top of the output range on the Y jack; readings above it are clamped",
+    "Minimum Z value — the raw sensor reading that maps to the bottom of the output range on the Z jack; readings below it are clamped",
+    "Maximum Z value — the raw sensor reading that maps to the top of the output range on the Z jack; readings above it are clamped",
+    "Output voltage mode: Unipolar (0V => +10V), Bipolar (-5V => +5V) — sets the range the three jacks are scaled into",
+    "Debug Mode — prints the request numbers, the URL being polled and the sensor axis count to Rack's log; it comes up off"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

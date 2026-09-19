@@ -1,0 +1,38 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorStutter",
+  "description": "Divides an incoming phasor into steps and repeats a shortened ramp several times inside each step",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the incoming cycle is divided into, 1 to 64 in whole numbers"},
+    {"ids": [1], "text": "Attenuverts the steps CV input, -1 to +1; 5V at full depth covers the whole 1 to 64 range"},
+    {"ids": [2], "text": "Sets how many times the ramp repeats inside each step, 1 to 64 in whole numbers"},
+    {"ids": [3], "text": "Attenuverts the repeats CV input, -1 to +1; 5V at full depth covers the whole 1 to 64 range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor to stutter"},
+    {"ids": [1], "text": "Stuttering happens at 1V or above and the phasor passes through untouched below that; unpatched, stuttering is always on"},
+    {"ids": [2], "text": "Modulates the number of steps"},
+    {"ids": [3], "text": "Modulates the number of repeats"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The stuttered phasor, 0-10V, climbing across the whole cycle but repeating inside each step"},
+    {"ids": [1], "text": "A 10V gate over the first half of every repeat"},
+    {"ids": [2], "text": "A 0-10V ramp over each repeat on its own, restarting at every repeat"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · polyphonic"
+    }
+  }
+}

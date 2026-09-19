@@ -1,0 +1,48 @@
+{
+  "plugin": "cvly",
+  "module": "brst",
+  "description": "Burst generator: while a gate is held it fires bursts spaced by a randomised time and sends each one to one of eight step outputs",
+  "params": [
+    {"ids": [0], "text": "Steps through the three burst modes in turn; the lit lamp shows whether single, multi or seq is in force"},
+    {"ids": [1], "text": "Sets the base time between bursts, 0 to 10 seconds"},
+    {"ids": [2], "text": "Sets how far each gap strays from the base time, 0% to 100%; at 50% a gap falls anywhere between half and one and a half times the base"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "Sets this step's weight, 0 to 1: in single mode the chance the burst picks this step, in multi the chance it fires on its own, in seq the chance the burst moves on to it; at 0 the step is never used"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18], "text": "Switches this step's CV output between holding the voltage taken when its burst arrived and passing the CV input through for as long as the step fires"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Bursts are fired only while the voltage here is above 0V; taking it low stops them and clears the timer"},
+    {"ids": [1], "text": "The voltage the step CV outputs carry; every channel of a polyphonic cable is passed on"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries the CV input for this step: with sh off it follows the input while the step fires and drops to 0V otherwise, with sh on it holds the voltage taken at the last burst"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "10V while the burst is on this step, 0V otherwise"}
+  ],
+  "notes": [
+    "no burst is fired until the gate input is taken above 0V, and a step whose weight knob is at 0 is never chosen.",
+    "when the gate input goes low the step the module stopped on keeps its gate output at 10V until a later burst moves off it."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only",
+      "1": "polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "one channel only",
+      "9": "one channel only",
+      "10": "one channel only",
+      "11": "one channel only",
+      "12": "one channel only",
+      "13": "one channel only",
+      "14": "one channel only",
+      "15": "one channel only"
+    }
+  }
+}

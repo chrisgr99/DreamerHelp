@@ -1,0 +1,34 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "AuxSends",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "AuxSends.cpp:117 computeCVKnobSum divides the voltage by 5 and adds it to the 0-1 knob, then clamps"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "AuxSends.cpp:135 passes this jack to computeCVKnobSum at AuxSends.cpp:115-117, which divides it by 5 and clamps knob plus CV to 0 to 1 as that loop's return gain; AuxSends.cpp:134 reads it only while that loop's left return jack is patched"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "why": "AuxSends.cpp:132 the loop is read only when this jack is connected; :134 getVoltage()"},
+      "7": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left return of that loop", "why": "AuxSends.cpp:135 isConnected() ? getVoltage() * gain : returnL"},
+      "8": {"family": "audio"},
+      "9": {"family": "audio"},
+      "10": {"family": "audio"},
+      "11": {"family": "audio"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "why": "AuxSends.cpp:104 getVoltage(), channel 0 only"},
+      "13": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left input", "why": "AuxSends.cpp:105 isConnected() ? getVoltage() : rawInL"},
+      "14": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "AuxSends.cpp:108 clamp(getVoltage(), -5, 5) / 5 added to the 0-1 knob, then clamped"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "AuxSends.cpp:125 setVoltage with no channel argument"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio", "poly": false, "range": "±10V", "why": "AuxSends.cpp:198 clamp(outL, -10, 10)"},
+      "7": {"family": "audio"}
+    }
+  },
+  "comment": "The three loops are written out three times in the source with identical code, so one line covers each kind of control. Pre fader takes the signal before the dry level knob and post fader after it (AuxSends.cpp:122). The send CV, return CV and dry CV all divide by 5, so 5V covers a knob's whole range here."
+}

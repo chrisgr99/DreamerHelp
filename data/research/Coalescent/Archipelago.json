@@ -1,0 +1,26 @@
+{
+  "plugin": "Coalescent",
+  "module": "Archipelago",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Archipelago.cpp:516-519 knob + inputVoltage(), clamp(-12, 4), exp2"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Archipelago.cpp:283-286 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Archipelago.cpp:288-291 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Archipelago.cpp:293-296 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Archipelago.cpp:298-301 CV_DEPTH 0.1f, clamp(-0.85, 0.85)"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Archipelago.cpp:303-306 CV_DEPTH 0.1f, clamp(0, 1)"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Archipelago.cpp:308-310 CLIMATE_DEPTH 0.1f, clamp(-0.85, 0.85); no attenuverter"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Archipelago.cpp:494-495 resetInputTrigger.process(v, 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "±2V", "why": "src/Archipelago.cpp:535 setChannels(8); :326 trait*TRAIT_VOLTS 2.f clamped -2..2"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/Archipelago.cpp:536 setChannels(8); :328 mass*10 clamped 0..10"},
+      "2": {"family": "pitch", "poly": false, "range": "±2V", "why": "src/Archipelago.cpp:330-331 globalMean*2 clamped -2..2"},
+      "3": {"family": "cv", "poly": false, "range": "±4V", "why": "src/Archipelago.cpp:332-333 difference*2 clamped -4..4"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Archipelago.cpp:334-335 flux*10 clamped 0..10"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Archipelago.cpp:544-545 colonizePulse, 10V, about 1ms"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Archipelago.cpp:546-547 extinctPulse, 10V, about 1ms"}
+    }
+  },
+  "comment": "Every input jack is read with getVoltage(), so nothing here is polyphonic on the way in; TRAIT and MASS are the only polyphonic outputs and always carry exactly eight channels in habitat order. The TRAIT channels follow an occupancy latch rather than the raw local mean: a channel stops updating when its habitat's mass crosses the extinction threshold and picks up again from the newly established mean on colonisation, so a dying voice holds its pitch instead of falling to 0V. The panel numbers habitats 1 to 8 while the equations index them from zero, so the barrier the manual calls the 4-5 link is between the fourth and fifth panel habitats."
+}

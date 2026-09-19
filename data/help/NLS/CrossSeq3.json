@@ -1,0 +1,68 @@
+{
+  "plugin": "NLS",
+  "module": "CrossSeq3",
+  "description": "Three LFOs whose rate, shape, amplitude, phase and duty cycle you set, with a trigger sent out where each pair of them crosses and a gate where all three come together",
+  "params": [
+    {"ids": [0], "text": "Sets the master frequency all three LFOs run from, 0 to 10; each LFO's rate knob multiplies this, so the three hold their ratios as this moves, and the freq input adds to it"},
+    {"ids": [1, 2, 3], "text": "Multiplies the master frequency to set this LFO's rate, 0 to 10: at 1 it runs at the master frequency and at 0.5 at half of it"},
+    {"ids": [4, 5, 6], "text": "Scales the voltage at this column's rate input before it is added to the rate knob, -1 to 1: it inverts below zero and passes nothing at the centre"},
+    {"ids": [7, 8, 9], "text": "Sets this LFO's amplitude, 0 to 1, reaching ±5V at its output with the knob fully clockwise"},
+    {"ids": [10, 11, 12], "text": "Scales the voltage at this column's amt input before it is added to the amount knob, -1 to 1: it inverts below zero and passes nothing at the centre"},
+    {"ids": [13, 14, 15], "text": "Sweeps this LFO's waveform through sine at 0, triangle at 1, sawtooth at 2 and rectangle at 3, blending between each neighbouring pair in between"},
+    {"ids": [16, 17, 18], "text": "Scales the voltage at this column's shape input before it is added to the shape knob, -3 to 3, so 10V at a setting of 3 moves the shape across its whole range"},
+    {"ids": [19, 20, 21], "text": "Offsets this LFO's phase, 0 to 1, which covers half a cycle rather than a whole one"},
+    {"ids": [22, 23, 24], "text": "Sets the duty cycle of the rectangle wave, 0 to 1 with 0.5 giving equal halves, and makes no difference to a shape setting below 2"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added straight to the freq knob, one step of that knob's 0 to 10 range per volt, with no attenuator of its own"},
+    {"ids": [1, 2, 3], "text": "Adds to this column's rate knob after the small knob beside it scales the voltage; 10V through an attenuverter at 1 adds one step to the rate knob"},
+    {"ids": [4, 5, 6], "text": "Adds to this column's shape knob after the small knob beside it scales the voltage; 10V through an attenuverter at 3 moves the shape across its whole range"},
+    {"ids": [7, 8, 9], "text": "Adds to this column's amount knob after the small knob beside it scales the voltage, and the total is held between 0 and 1"},
+    {"ids": [10], "text": "Restarts all three LFOs at the start of their cycle on each rising edge above 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse at 10V each time the first and second LFO outputs cross"},
+    {"ids": [1], "text": "A 1ms pulse at 10V each time the first and third LFO outputs cross"},
+    {"ids": [2], "text": "A 1ms pulse at 10V each time the second and third LFO outputs cross"},
+    {"ids": [3], "text": "Carries 10V for as long as the three LFO outputs are close together, meaning the three differences between them add up to under 0.1 in the LFOs' own units; this is a gate of no fixed length"},
+    {"ids": [4], "text": "The first LFO, ±5V with its amount knob fully clockwise"},
+    {"ids": [5], "text": "The second LFO, ±5V with its amount knob fully clockwise"},
+    {"ids": [6], "text": "The third LFO, ±5V with its amount knob fully clockwise"},
+    {"ids": [7], "text": "The first LFO minus the second, ±10V at full amplitude, passing through 0V at the instant the 1x2 trigger is sent"},
+    {"ids": [8], "text": "The first LFO minus the third, ±10V at full amplitude, passing through 0V at the instant the 1x3 trigger is sent"},
+    {"ids": [9], "text": "The second LFO minus the third, ±10V at full amplitude, passing through 0V at the instant the 2x3 trigger is sent"},
+    {"ids": [10], "text": "The first LFO minus the second minus the third, reaching ±15V at full amplitude; it is not the measure the 1x2x3 output tests, and it does not reach 0V when that output goes high"}
+  ],
+  "notes": [
+    "the knobs and the ten CV inputs are read once every four samples, while the LFOs themselves run at every sample",
+    "an amount knob at zero holds that LFO flat at 0V, and crossings involving it stop while it is there"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "high above 0V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "±5V · one channel only",
+      "5": "±5V · one channel only",
+      "6": "±5V · one channel only",
+      "7": "±10V · one channel only",
+      "8": "±10V · one channel only",
+      "9": "±10V · one channel only",
+      "10": "±15V · one channel only"
+    }
+  }
+}

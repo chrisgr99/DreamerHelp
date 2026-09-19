@@ -1,0 +1,18 @@
+{
+  "plugin": "Submit",
+  "module": "Flip",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Flip.cpp:258 reads getVoltage"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Flip.cpp:191 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Flip.cpp:187 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the IN L input", "why": "Flip.cpp:259 uses isConnected to fall back to the left input"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Flip.cpp:190 compares getVoltage against 1V without checking isConnected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Flip.cpp:317 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "why": "Flip.cpp:319 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "The manual says 'Length selects 1/2, 1/4 or 1/8 rhythmic length' without saying when. flipGridDivision in FlipEngine.hpp:15-22 returns 1 whenever Freeze is off, so the knob has no effect at all on the live reverse — that always captures and plays one whole quarter note. The maker's own comment at FlipEngine.hpp:10-13 says this is deliberate.\n\nFreeze forces the reverse on: flipActive at Flip.cpp:310 is the OR of the Flip latch, an incoming gate and Freeze, so freezing while FLIP is off still makes the reversed audio audible. The manual does not mention that.\n\nA parameter named Legacy Dry/Wet is configured at Flip.cpp:74 and no widget is added for it, so it cannot be clicked; nothing in process() reads it either.\n\nThe Freeze gate input is tested without isConnected (Flip.cpp:190), which is harmless because an unpatched input reads 0V.\n\nThe capture buffers hold 8 seconds each (Flip.cpp:42-43) and the wet and dry are crossfaded over 4ms (Flip.cpp:122)."
+}

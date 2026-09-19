@@ -1,0 +1,66 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "VoltageSequencer",
+  "description": "An eight-stage sequencer with two knobs a stage, a gate output and a select input for each stage, and outputs for either row, their difference, the smaller, the larger and the stage as a pitch",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets the voltage row A gives at that stage, 0V to 5V"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage row B gives at that stage, 0V to 5V"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Jumps to that stage and holds it while it is pressed, and makes it the stage the PRESET input recalls"},
+    {"ids": [24], "text": "Switches the CLOCK input on and off; with it down the clock input does nothing"},
+    {"ids": [25], "text": "Switches the V.CLOCK input on and off; with it down the vertical clock does nothing"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Jumps to that stage and holds it while the voltage is above 1.8V, and makes it the stage the PRESET input recalls"},
+    {"ids": [8], "text": "Jumps to the first stage on each rise past 1.8V, ahead of every other way of choosing a stage"},
+    {"ids": [9], "text": "Jumps to the stage last chosen by a select button or select input, on each rise past 1.8V"},
+    {"ids": [10], "text": "Holds the current stage while the voltage is above 1.8V, so the clock is ignored"},
+    {"ids": [11], "text": "Reverses the direction the sequence steps in, on each rise past 1.8V"},
+    {"ids": [12], "text": "Advances one stage on each rise past 1.8V, while its enable switch is on"},
+    {"ids": [13], "text": "Moves the A or B output between the two rows on each rise past 1.8V, while its enable switch is on"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "5V while that stage is the current one, and 0V otherwise"},
+    {"ids": [8], "text": "5V while any stage is being held by a select button or select input, and 0V otherwise"},
+    {"ids": [9], "text": "Row A's knob for the current stage, 0V to 5V"},
+    {"ids": [10], "text": "Row B's knob for the current stage, 0V to 5V"},
+    {"ids": [11], "text": "Row A's voltage less row B's for the current stage, -5V to +5V"},
+    {"ids": [12], "text": "Whichever of the two rows is lower at the current stage, 0V to 5V"},
+    {"ids": [13], "text": "Whichever of the two rows is higher at the current stage, 0V to 5V"},
+    {"ids": [14], "text": "The stage number as a voltage, 0V to 1.34V in whole-tone steps, made to be patched as a pitch"},
+    {"ids": [15], "text": "Row A or row B for the current stage, whichever the vertical clock last chose"}
+  ],
+  "notes": [
+    "both enable switches come up off, so a fresh module ignores CLOCK and V.CLOCK until they are switched on",
+    "when more than one thing calls for a stage at once, RESET wins, then the select buttons, select inputs and PRESET together, then HOLD, and CLOCK last",
+    "with two select inputs high at the same time the lower-numbered stage wins",
+    "patch a stage gate output into RESET, PRESET, a select input, DIRECTION or V.CLOCK to make the eight stages into a shorter, longer or swinging sequence"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "8": "high above 1.8V · one channel only\n\na negative voltage does nothing here.",
+      "9": "high above 1.8V · one channel only\n\na negative voltage does nothing here.",
+      "10": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "high above 1.8V · one channel only\n\na negative voltage does nothing here.",
+      "12": "high above 1.8V · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 1.8V · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "8": "0 to 5V · one channel only",
+      "9": "0 to 5V · one channel only",
+      "10": "0 to 5V · one channel only",
+      "11": "±5V · one channel only",
+      "12": "0 to 5V · one channel only",
+      "13": "0 to 5V · one channel only",
+      "14": "0 to 5V · continuous · one channel only",
+      "15": "0 to 5V · one channel only"
+    }
+  }
+}

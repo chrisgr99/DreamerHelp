@@ -1,0 +1,47 @@
+{
+  "plugin": "voxglitch",
+  "module": "repeater",
+  "description": "Stuttering sample player: a fast clock restarts one of five loaded samples from a chosen position, so the sample skips and repeats",
+  "params": [
+    {"ids": [0], "text": "Sets how many clock pulses pass between restarts, none up to ten"},
+    {"ids": [1], "text": "Attenuates the DIV CV, from nothing through to its full range"},
+    {"ids": [2], "text": "Sets where in the sample each restart begins, from its start to its end"},
+    {"ids": [3], "text": "Attenuates the POS CV, from nothing through to its full range"},
+    {"ids": [4], "text": "Picks which of the five loaded samples plays"},
+    {"ids": [5], "text": "Attenuates the WAV selection CV, from nothing through to its full range"},
+    {"ids": [6], "text": "Shifts the playback speed by a volt per octave, from -2V to 2V, and below the point where the speed reverses the sample plays backwards"},
+    {"ids": [8], "text": "When on, the jump to a new position or a new sample is faded rather than cut, which removes the click"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the stutter count, and a restart happens when the count passes the division; with nothing patched here nothing is restarted"},
+    {"ids": [1], "text": "Adds to the restart position after its attenuator, 0-10V covering the whole sample"},
+    {"ids": [2], "text": "Adds to the clock division after its attenuator, 0-10V covering none to ten"},
+    {"ids": [3], "text": "Adds to the sample selection after its attenuator, 0-10V spanning the five samples"},
+    {"ids": [4], "text": "Adds to the playback speed, a volt per octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sample being played, taken from its left channel"},
+    {"ids": [1], "text": "A 10ms 10V trigger each time the sample is restarted"}
+  ],
+  "notes": [
+    "the output stays silent until a WAV file is loaded into at least one of the five slots under Samples in the right-click menu"
+  ],
+  "menu": [
+    "Samples — the five numbered items under this label each load a WAV file into that slot, and each prints the filename it holds",
+    "Retrigger — restarts the sample from its beginning once it has played to its end",
+    "Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "0 to 10V · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "stepped"
+    }
+  }
+}

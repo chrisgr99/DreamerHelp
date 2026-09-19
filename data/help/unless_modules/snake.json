@@ -1,0 +1,101 @@
+{
+  "plugin": "unless_modules",
+  "module": "snake",
+  "description": "A game of snake whose position, direction, length and collisions are all available as control voltage and gates",
+  "params": [
+    {"ids": [0], "text": "Sets how many columns wide the screen is, 3 to 64"},
+    {"ids": [1], "text": "Sets how many rows tall the screen is, 3 to 32"},
+    {"ids": [2], "text": "Switches the edges of the screen between solid walls that end the game and open edges the snake passes through"},
+    {"ids": [3], "text": "Steers the snake upwards, if it is not already travelling down"},
+    {"ids": [4], "text": "Steers the snake to the right, if it is not already travelling left"},
+    {"ids": [5], "text": "Steers the snake downwards, if it is not already travelling up"},
+    {"ids": [6], "text": "Steers the snake to the left, if it is not already travelling right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock: the game moves one frame on each rising edge"},
+    {"ids": [1], "text": "Sets the column a new piece of food appears in, 0-10V across the width of the screen; with nothing patched the column is random"},
+    {"ids": [2], "text": "Sets the row a new piece of food appears in, 0-10V from the top of the screen to the bottom; with nothing patched the row is random"},
+    {"ids": [6], "text": "A rising edge steers the snake upwards, if it is not already travelling down"},
+    {"ids": [7], "text": "A rising edge steers the snake to the right, if it is not already travelling left"},
+    {"ids": [8], "text": "A rising edge steers the snake downwards, if it is not already travelling up"},
+    {"ids": [9], "text": "A rising edge steers the snake to the left, if it is not already travelling right"},
+    {"ids": [10], "text": "A rising edge puts a new piece of food on the screen"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "How far to the snake's left the nearest wall or piece of its own body lies, 0-10V across the screen"},
+    {"ids": [1], "text": "How far ahead of the snake's head the nearest wall or piece of its own body lies, 0-10V across the screen"},
+    {"ids": [2], "text": "How far to the snake's right the nearest wall or piece of its own body lies, 0-10V across the screen"},
+    {"ids": [3], "text": "A gate that is high for the frame in which the snake eats a piece of food"},
+    {"ids": [4], "text": "The column the food is in, 0-10V across the width of the screen"},
+    {"ids": [5], "text": "The row the food is in, 0-10V from the top of the screen to the bottom"},
+    {"ids": [6], "text": "Which way the snake is travelling: 0V up, 2.5V right, 5V down, 7.5V left"},
+    {"ids": [7], "text": "The column the snake's head is in, 0-10V across the width of the screen"},
+    {"ids": [8], "text": "The row the snake's head is in, 0-10V from the top of the screen to the bottom"},
+    {"ids": [9], "text": "How long the snake is, 0-10V against the number of cells on the whole screen"},
+    {"ids": [10], "text": "The column the snake's last segment is in, 0-10V across the width of the screen"},
+    {"ids": [11], "text": "The row the snake's last segment is in, 0-10V from the top of the screen to the bottom"},
+    {"ids": [12], "text": "A gate that goes high when the game is over and low again when the next game starts"},
+    {"ids": [13], "text": "Where along the top edge the snake last crossed or struck, 0-10V"},
+    {"ids": [14], "text": "Where along the right edge the snake last crossed or struck, 0-10V"},
+    {"ids": [15], "text": "Where along the bottom edge the snake last crossed or struck, 0-10V"},
+    {"ids": [16], "text": "Where along the left edge the snake last crossed or struck, 0-10V"},
+    {"ids": [17], "text": "A gate that is high for the frame in which the snake crosses or strikes the top edge"},
+    {"ids": [18], "text": "A gate that is high for the frame in which the snake crosses or strikes the right edge"},
+    {"ids": [19], "text": "A gate that is high for the frame in which the snake crosses or strikes the bottom edge"},
+    {"ids": [20], "text": "A gate that is high for the frame in which the snake crosses or strikes the left edge"}
+  ],
+  "notes": [
+    "nothing happens until a clock is patched to the input at the centre of the direction buttons; the game moves one frame per rising edge.",
+    "with the mouse over the panel the arrow keys or W, A, S and D steer the snake.",
+    "the width and height knobs resize the screen while a game is running, which can leave the snake outside it."
+  ],
+  "menu": [
+    "start length — how many segments long the snake is at the start of a game",
+    "steps to wait after game over — how many clock steps pass between the game ending and the next one starting",
+    "< bouncer — turns the snake along the wall instead of ending the game when it would hit one",
+    "= lock snake length — keeps the snake the length it started at, whatever it eats",
+    "@ leave trail — leaves the path the snake has taken drawn on the screen",
+    "% relative turning — makes the four direction controls turn left and right from where the snake is heading rather than pointing at a compass direction",
+    "$ ghost snake — lets the snake pass through walls and through itself without dying",
+    "? random start row — starts each game on a random row rather than the bottom one",
+    "_ don't eat food — leaves the food where it is when the snake crosses it",
+    "* multiple foods — allows more than one piece of food on the screen at a time",
+    "+ keep foods (needs *) — leaves earlier pieces of food on the screen instead of clearing them",
+    "# show grid — draws the cell grid on the screen"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.1V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only\n\nunpatched it reads a random column.",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads a random row.",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "stepped · one channel only",
+      "10": "high above 0.1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "stepped · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 10V · one channel only",
+      "10": "0 to 10V · one channel only",
+      "11": "0 to 10V · one channel only",
+      "12": "stepped · one channel only",
+      "13": "0 to 10V · one channel only",
+      "14": "0 to 10V · one channel only",
+      "15": "0 to 10V · one channel only",
+      "16": "0 to 10V · one channel only",
+      "17": "stepped · one channel only",
+      "18": "stepped · one channel only",
+      "19": "stepped · one channel only",
+      "20": "stepped · one channel only"
+    }
+  }
+}

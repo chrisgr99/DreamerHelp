@@ -1,0 +1,49 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "ElasticTwins",
+  "description": "A delay holding two stacks of audio and moving samples between them: whatever is read out of one is written into the other, so the recording is cut apart rather than played back in order",
+  "params": [
+    {"ids": [0], "text": "Latches which stack is being read and which is being written. Out of the box the module reads the second stack and writes the first; pressing this swaps the two round"},
+    {"ids": [1], "text": "Latches recording on and off. With a gate at the record override jack the two are combined by exclusive or, so either one alone turns recording on and both together turn it off"},
+    {"ids": [2], "text": "Pressing it empties both stacks"},
+    {"ids": [3], "text": "Chooses which end of the first stack is read: the upper position takes the oldest sample first and plays it forward, the lower takes the newest and plays it backward"},
+    {"ids": [4], "text": "Chooses which end of the second stack is read: the upper position takes the oldest sample first and plays it forward, the lower takes the newest and plays it backward"},
+    {"ids": [5], "text": "Scales what is written back into the other stack each time a sample is read out, silent at the far left and unity at the far right"},
+    {"ids": [6], "text": "Sets how long the output is faded down and back up around a change of state, up to 20 milliseconds, which is what keeps the switches from clicking"},
+    {"ids": [8], "text": "Pressing it exchanges the contents of the two stacks"},
+    {"ids": [9], "text": "Sets the rate of the first internal clock, from a sixteenth of a hertz at the far left to a few thousand hertz at the far right; its gate is high for the first half of each cycle"},
+    {"ids": [10], "text": "Sets the rate of the second internal clock, over the same range"},
+    {"ids": [11], "text": "Chooses which of the two internal clocks swaps the stacks round, clock 1 in the upper position, clock 2 in the lower and neither in the middle"},
+    {"ids": [12], "text": "Chooses which of the two internal clocks drives recording, clock 1 in the upper position, clock 2 in the lower and neither in the middle"},
+    {"ids": [13], "text": "Chooses which of the two internal clocks empties the stacks, clock 1 in the upper position, clock 2 in the lower and neither in the middle"},
+    {"ids": [14], "text": "Chooses which of the two internal clocks exchanges the stacks, clock 1 in the upper position, clock 2 in the lower and neither in the middle"},
+    {"ids": [15], "text": "In its upper position the second clock is restarted every time the first one comes round, so the two stay locked together"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be recorded. Nothing at all happens while this jack is empty"},
+    {"ids": [1], "text": "A gate here swaps which stack is read and which is written; the select button inverts it. With nothing patched, this jack reads the internal clock chosen by the switch above it"},
+    {"ids": [2], "text": "A gate here turns recording on; the record button inverts it. With nothing patched, this jack reads the internal clock chosen by the switch above it"},
+    {"ids": [3], "text": "A rise here empties both stacks. With nothing patched, this jack reads the internal clock chosen by the switch above it"},
+    {"ids": [4], "text": "A rise here exchanges the contents of the two stacks. With nothing patched, this jack reads the internal clock chosen by the switch above it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sample read out of whichever stack is currently being read, faded by the smoothing window"}
+  ],
+  "notes": [
+    "The module does nothing whatever until audio is patched: the process routine gives up before touching the stacks when the audio jack is empty",
+    "There is no set delay time and no set buffer length. How far back a sample comes from depends on how much has been recorded and how often the two stacks have been swapped",
+    "The lamps in the record and select buttons read the second polyphonic channel rather than the first, so with a mono cable patched they stay dark whatever the buttons are doing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic",
+      "1": "high above 0.1V · stepped · polyphonic\n\nunpatched it reads the internal clock chosen beside it; a negative voltage does nothing here.",
+      "2": "high above 0.1V · stepped · polyphonic\n\nunpatched it reads the internal clock chosen beside it; a negative voltage does nothing here.",
+      "3": "bipolar · stepped · polyphonic\n\nunpatched it reads the internal clock chosen beside it.",
+      "4": "bipolar · stepped · polyphonic\n\nunpatched it reads the internal clock chosen beside it."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

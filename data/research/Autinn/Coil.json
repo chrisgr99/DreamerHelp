@@ -1,0 +1,22 @@
+{
+  "plugin": "Autinn",
+  "module": "Coil",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "the right input", "why": "Coil.cpp:335 reads this input with getVoltage and falls back to the right input when this one is unpatched"},
+      "1": {"family": "audio", "poly": false, "normal": "the left input", "why": "Coil.cpp:336 reads this input with getVoltage and falls back to the left input when this one is unpatched"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:304 reads this input with getVoltage, multiplies it by 0.3 and Coil.cpp:305 clamps the knob-plus-input sum to 0 to 3"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:307 reads this input with getVoltage, multiplies it by 0.12 and Coil.cpp:308 clamps the knob-plus-input sum to 0 to 1.2"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:310 reads this input with getVoltage, multiplies it by 0.1 and Coil.cpp:311 clamps the knob-plus-input sum to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:325 reads this input with getVoltage, multiplies it by 0.1 and Coil.cpp:326 clamps the knob-plus-input sum to 0.05 to 0.95"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:313 reads this input with getVoltage, multiplies it by 15 and Coil.cpp:314 clamps the knob-plus-input sum to 10 to 160 milliseconds"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Coil.cpp:317 reads this input with getVoltage and raises 2 to that power as a multiplier on the knob's frequency; Coil.cpp:318 clamps the result to 20Hz to 10000Hz, so a negative voltage lowers the damping corner"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Coil.cpp:323 reads this input with getVoltage, multiplies it by 0.4 and Coil.cpp:324 clamps the knob-plus-input sum to 0.05 to 4"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Coil.cpp:384 writes this output with setVoltage and no channel index, so it carries one channel"},
+      "1": {"family": "audio", "poly": false, "why": "Coil.cpp:385 writes this output with setVoltage and no channel index, so it carries one channel"}
+    }
+  },
+  "comment": "A third input exists in the code, a pluck trigger that fires a 10ms noise burst into both springs (Coil.cpp:344 to :356), but its jack and its lamp are commented out of the widget (Coil.cpp:495, :496) and it is never configured with a name, so no click can reach it and it gets no line; with no jack it can never be triggered and the burst is dead code. Each coil's delay is 1.5ms plus 0.47ms times its position times the spacing (Coil.cpp:68), and legacy mode sets all of them to zero (Coil.cpp:66). The right tank is offset by -0.02 in tension and +0.03 in length (Coil.cpp:237). The wet signal is multiplied by 5 before the mix (Coil.cpp:377, :378). A patch saved before the legacy flag existed loads with legacy mode on (Coil.cpp:257, :258)."
+}

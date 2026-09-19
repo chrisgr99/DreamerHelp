@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "SKF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SKF.cpp:107 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "SKF.cpp:118 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "SKF.cpp:74 getChannels() here sets the loop bound; SKF.cpp:128 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SKF.cpp:134 setVoltage(..., ii) per channel, SKF.cpp:138 setChannels(channels)"}
+    }
+  },
+  "comment": "SKF.cpp:68 calls configInput(OUTPUT_OUTPUT, \"Filter\") where configOutput was meant. OUTPUT_OUTPUT is zero, so the name lands on input 0 — the FM jack, whose own name from :65 is overwritten — and the OUT jack is left with no name at all. Rack therefore shows Filter when you hover FM and nothing when you hover OUT. Confirmed in the census: SKF is the only model in the plugin whose inputs[0] is named Filter and whose outputs[0] name is empty. Resonance is sallenkey.cpp:236, res = 4.0f * Resonance. The core also carries an SK_HIGHPASS_MODE and two further integration methods (SK_SEMI_IMPLICIT_EULER, SK_PREDICTOR_CORRECTOR) that the panel and menu never reach."
+}

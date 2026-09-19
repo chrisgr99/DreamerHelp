@@ -1,0 +1,18 @@
+{
+  "plugin": "Ahornberg",
+  "module": "XGlide",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "XGlide.cpp clamps this jack to 0 and 100 and takes getChannels() from it as the channel count of every output"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "XGlide.cpp clamps getVoltage(i) here to -100 and 100 and uses it as the note pitch"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "normal": "every note may join a glide", "why": "XGlide.cpp tests inputs[PEDAL_INPUT].getVoltage() > 0 with no channel, and only while the jack is connected"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±100V", "negative": "swings", "normal": "0V", "why": "XGlide.cpp clamps getVoltage(i) here to -100 and 100 and crossfades it like the pitch"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "setChannels(inputs[VOLUME_INPUT].getChannels()) on all three outputs in XGlide.cpp"},
+      "1": {"family": "pitch", "poly": true, "why": "setChannels(inputs[VOLUME_INPUT].getChannels()) on all three outputs in XGlide.cpp"},
+      "2": {"family": "cv", "poly": true, "why": "setChannels(inputs[VOLUME_INPUT].getChannels()) on all three outputs in XGlide.cpp"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3a9441f and manuals/README.md. The note knobs are snapped MIDI note numbers 0 to 127 displayed as note names C0 to G10, and the interval knobs are 1 to 127 semitones. Both ranges are compared in volts with a half-step of slack added at each end. How far a glide has travelled is the second note's volume over the sum of the two volumes, so it is the player's own pressure that moves it, not a clock. The manual is written for a LinnStrument and describes the left and right knob of each pair; the code treats the pair symmetrically and only cares which is the larger."
+}

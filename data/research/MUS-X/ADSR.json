@@ -1,0 +1,17 @@
+{
+  "plugin": "MUS-X",
+  "module": "ADSR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "ADSR.cpp:131 reads this input with getVoltageSimd per channel; ADSRBlock.hpp:95 clamps it to 0 and 10V"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "0V", "why": "ADSR.cpp:127 reads this input with getPolyVoltageSimd, multiplies it by 0.1 and by the Sus mod knob, and adds it to the sustain knob"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "ADSR.cpp:98 takes the module's channel count from this input; ADSR.cpp:132 reads it with getVoltageSimd and ADSRBlock.hpp:83 counts it high at 1V and above"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "ADSR.cpp:133 reads this input with getVoltageSimd; ADSRBlock.hpp:88 passes it to a Schmitt trigger at Rack's default 1V threshold"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "ADSR.cpp:106 sets this output's channel count from the gate input; ADSRBlock.hpp:100 writes 10V or 0V"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ADSR.cpp:107 sets this output's channel count from the gate input; ADSRBlock.hpp:124 multiplies the envelope by 10V"}
+    }
+  },
+  "comment": "Read from src/ADSR.cpp and src/blocks/ADSRBlock.hpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1; the last change to plugin.json was two commits earlier, so the tag rather than that commit is the release. The stage times run from 0.5ms to 20 seconds, from MIN_TIME and MAX_TIME at ADSR.cpp:48 and 49. The attack aims at 1.2 rather than 1 (ADSR.cpp:51), which is what makes the attack stage curve rather than crawl into its target. The README's account of the module matches the code."
+}

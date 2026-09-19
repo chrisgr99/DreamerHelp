@@ -1,0 +1,44 @@
+{
+  "plugin": "ALMFree",
+  "module": "MCO",
+  "description": "A copy of ALM's MCO: a digital wavetable oscillator giving a sub square, a gated pulse and the main wave at the same time",
+  "params": [
+    {"ids": [0], "text": "Chooses which wave is read out of the table, from the start of the table to the end of it; it comes up at the start"},
+    {"ids": [1], "text": "Sets the width of the Pulse output across its whole range; it comes up at nothing"},
+    {"ids": [2], "text": "Sets the pitch over five and a half octaves: the frequency is 165Hz multiplied by two to the power of this setting, and then by the fine trim"},
+    {"ids": [4], "text": "Multiplies the frequency by between 1 and 2, which is one octave across its travel; it comes up in the middle at 1.5"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the choice of wave, adding to the knob, with the voltage range chosen on the menu covering the knob's whole travel"},
+    {"ids": [1], "text": "Moves the pulse width, adding to the knob, with the voltage range chosen on the menu covering the knob's whole travel"},
+    {"ids": [2], "text": "Sets the pitch at one volt per octave, multiplying the frequency by two to the power of the voltage"},
+    {"ids": [3], "text": "Sets how many times the pulse pattern repeats inside one cycle of the wave, one to four across the chosen voltage range; there is no knob for this, so with nothing patched it stays at one"},
+    {"ids": [4], "text": "Restarts the wave from the beginning of the table whenever the voltage rises past 1V, and flips the sub square at the same moment"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A square wave one octave below the pitch, swinging between -7V and 7V, which flips at the end of every cycle"},
+    {"ids": [1], "text": "The wave gated into a pulse: 7V wherever the phase falls outside the width set by the PWM control, and the wave itself inside it"},
+    {"ids": [2], "text": "The wave read out of the table at the set pitch, reaching ±7V at full scale"}
+  ],
+  "notes": [
+    "the module is monophonic: every jack reads or writes one channel.",
+    "a new module runs near 247Hz. The frequency is 165Hz times two to the power of the coarse setting, times the fine trim."
+  ],
+  "menu": [
+    "Input CV Range: 10V, 5V — sets the voltage the Wave, PWM and Type inputs treat as a full sweep of their control"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "unipolar · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "±7V · continuous · one channel only"
+    }
+  }
+}

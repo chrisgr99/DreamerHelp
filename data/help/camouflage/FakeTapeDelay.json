@@ -1,0 +1,37 @@
+{
+  "plugin": "camouflage",
+  "module": "FakeTapeDelay",
+  "description": "A tape delay with a fixed length of tape and a variable playback speed, so changing the speed changes the delay time and bends the pitch of whatever is already recorded on the tape",
+  "params": [
+    {"ids": [0], "text": "Sets the tape speed, from 0.1 to 2 times real time; the delay time is the tape length divided by this, so 0.5 gives twice the tape length and 2 gives half of it"},
+    {"ids": [1], "text": "Scales the delayed signal where it is added to the input, from none to 100%; that sum both goes back onto the tape and leaves the Out jack, so at zero Out carries the dry signal alone"},
+    {"ids": [2], "text": "Attenuates the voltage at the Speed input before it is added to the tape speed, passing none of it at the counter-clockwise end and all of it at the clockwise end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal recorded onto the tape, added to the delayed signal before it is written"},
+    {"ids": [1], "text": "Adds to the tape speed after the Amount knob attenuates it, 10V adding 1 to the speed; the sum is clamped between 0.1 and 2, and the scaling is linear in speed rather than in octaves"},
+    {"ids": [2], "text": "Replaces the signal read off the tape; patch an effect from Send to here to treat the delay inside the feedback loop"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input added to the delayed signal scaled by Feedback, which is the same mix that is written back onto the tape"},
+    {"ids": [1], "text": "The signal read off the tape, before the Return jack can replace it and before the feedback mix"}
+  ],
+  "notes": [
+    "the tape is 100ms long until you pick another length from the module's menu, and nothing on the panel shows which length is in use",
+    "the signal written onto the tape passes a four-pole lowpass at the tape speed times half the sample rate, so it filters only below a speed of 1; the output has no filter and aliases above it"
+  ],
+  "menu": [
+    "Delay Buffer Size: 30 ms, 100 ms, 300 ms, 1 sec — sets the length of the tape, which is the delay time at a tape speed of 1"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads the signal read off the tape."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Write-Seq-32",
+  "description": "A three-channel 32-step sequencer whose notes are written in from a CV input, with a fourth channel for staging a sequence while the other three play. All channels share one length",
+  "params": [
+    {"ids": [0], "text": "Shows the black notes of the display as sharps or as flats"},
+    {"ids": [1, 2, 3, 4], "text": "Shows that group of 8 steps out of the 32 in the display and the gate buttons. No effect on channels 1 to 3 while the sequencer is running"},
+    {"ids": [5], "text": "When on, the voltage at CV IN is rounded to the nearest semitone as it is written. It acts on what is written, so some channels can hold quantized notes and others not"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13], "text": "Cycles the gate of that step of the shown window: a normal gate that follows the clock pulse width, a held gate that stays high for the whole step and ties into the next, or off"},
+    {"ids": [14], "text": "Steps on to the next channel for display and editing, through the three playing channels and the staging channel"},
+    {"ids": [15], "text": "Copies all 32 steps of the selected channel, pitches and gates, whatever the STEPS knob is set to. Pressing it again cancels a paste that is waiting"},
+    {"ids": [16], "text": "Pastes the copied channel into the selected channel, at the moment chosen by the PASTE SYNC switch"},
+    {"ids": [17], "text": "Starts and stops the sequencer. While it runs, the three playing channels follow the clock and the staging channel does not"},
+    {"ids": [18], "text": "Stores the voltage at CV IN into the current step of the selected channel"},
+    {"ids": [19], "text": "Moves the sequencer one step to the left. No effect on channels 1 to 3 while the sequencer is running"},
+    {"ids": [20], "text": "Which voltage the selected channel's CV output carries while the sequencer is stopped: in the SEQ position the voltage stored at that step, in the other the voltage at CV IN"},
+    {"ids": [21], "text": "Moves the sequencer one step to the right. No effect on channels 1 to 3 while the sequencer is running"},
+    {"ids": [22], "text": "The number of steps played before the sequence repeats, 1 to 32, shared by every channel"},
+    {"ids": [23], "text": "When on, a write advances the sequencer one step to the right"},
+    {"ids": [24], "text": "Whether a paste happens at once, on the next clock, or at the start of the next sequence. A paste into the staging channel always happens at once, whatever this is set to"}
+  ],
+  "inputs": [
+    {"ids": [1], "text": "The voltage written into the current step; anything from -10V to 10V is stored"},
+    {"ids": [2], "text": "Sets or clears the gate of the step being written; with nothing patched, the stored gate is left as it was. No effect on channels 1 to 3 while the sequencer is running"},
+    {"ids": [3], "text": "A rising edge above 1V stores the voltage at CV IN into the current step"},
+    {"ids": [4], "text": "A rising edge above 1V moves the sequencer one step to the left"},
+    {"ids": [5], "text": "A rising edge above 1V moves the sequencer one step to the right"},
+    {"ids": [6], "text": "Advances the sequencer one step on each rising edge"},
+    {"ids": [7], "text": "A rising edge above 1V returns every channel to its first step"},
+    {"ids": [8], "text": "A rising edge above 1V starts or stops the sequencer"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage stored at the step channel 1 is playing, 1V per octave when notes are stored"},
+    {"ids": [1], "text": "The voltage stored at the step channel 2 is playing, 1V per octave when notes are stored"},
+    {"ids": [2], "text": "The voltage stored at the step channel 3 is playing, 1V per octave when notes are stored"},
+    {"ids": [3], "text": "The gate of the step channel 1 is playing, 10V when high"},
+    {"ids": [4], "text": "The gate of the step channel 2 is playing, 10V when high"},
+    {"ids": [5], "text": "The gate of the step channel 3 is playing, 10V when high"}
+  ],
+  "notes": [
+    "The display shows the note nearest a stored voltage that was written without quantizing; octaves above 9 carry a top bar and those below 0 an underscore"
+  ],
+  "menu": [
+    "Arrow controls — sets whether the left and right buttons Step the sequencer or Rotate the contents of the selected channel",
+    "Reset on run — returns the play head to the start every time the sequencer is started",
+    "Retrigger gates on reset — holds the gate outputs low for 1ms after a reset so a trigger-sensitive target fires again; the choices are No, Yes, and Only when Run cable is unconnected",
+    "Portable sequence — holds Copy sequence and Paste sequence, which move the selected channel between this module and other sequencers that support the format"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "1V per octave · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

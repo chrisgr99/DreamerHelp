@@ -1,0 +1,64 @@
+{
+  "plugin": "Entrian-Sequencers",
+  "module": "CV",
+  "description": "Control voltage sequencer: up to 25 named phrases of drawn CV segments across 16 channels, played out as a polyphonic voltage with gate and velocity",
+  "params": [
+    {"ids": [0], "text": "Returns the playhead to the beginning, or to the start repeat marker with that option set on the menu"},
+    {"ids": [1], "text": "Starts and stops playback"},
+    {"ids": [2], "text": "Starts and stops recording of the voltage arriving at the record inputs into the armed channels"},
+    {"ids": [3], "text": "Clears every segment out of the armed channels"},
+    {"ids": [4], "text": "Arms one channel for recording; a click on a channel in the editor arms it, and mapped to a MIDI knob or a CV mapper the full sweep spans the channel list"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that drives playback, at four ticks per beat, which a clock module calls x4 or 1/16th"},
+    {"ids": [1], "text": "Chooses which of the 25 phrases plays, C3 selecting the first and the 25 semitones up to C5 the last; set to trigger on the menu it steps to the next non-empty phrase or picks one at random"},
+    {"ids": [2], "text": "A trigger returning the playhead to the beginning, or to the start repeat marker with that option set on the menu; playback carries on immediately if the sequencer is running"},
+    {"ids": [3], "text": "A trigger toggling between running and stopped; while stopped the gates are closed and clock ticks are ignored"},
+    {"ids": [4], "text": "Records the voltage arriving here into the armed channel; a polyphonic cable arms every channel it carries and records them all at once"},
+    {"ids": [6], "text": "With a cable patched here, recording happens only while this gate is open; with nothing patched, recording runs continuously and starts when the incoming voltage changes"},
+    {"ids": [7], "text": "Sets the velocity of each recorded note"},
+    {"ids": [8], "text": "A trigger clearing the armed channel; a polyphonic cable clears only the channels whose triggers fire"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of each channel at the playhead, one polyphonic channel per sequencer channel, over a range of -10V to 10V"},
+    {"ids": [10], "text": "A gate held open for the length of each segment, one polyphonic channel per sequencer channel"},
+    {"ids": [20], "text": "The velocity of each segment, one polyphonic channel per sequencer channel"},
+    {"ids": [30], "text": "Carries a reset out of the sequencer each time its Reset button is pressed, on the panel or in the editor window, so a clock module can be reset from here"},
+    {"ids": [31], "text": "Carries the Run button out of the sequencer, pressed on the panel or in the editor window, so a clock module can be started and stopped from here"},
+    {"ids": [32], "text": "A trigger each time the playhead reaches the end of the phrase"}
+  ],
+  "notes": [
+    "the large display draws the phrase with the playhead as a vertical line, and clicking it opens an editor where CV segments are drawn and shaped as plain, S-curved or J-curved lines",
+    "the small display names the phrase now playing, and clicking it lists the 25 phrases to choose from",
+    "a MIDI file can be imported from the editor or dragged onto it from disk, and the sequence exported to a MIDI file from there",
+    "a swing pattern set in the editor offsets quarter, eighth or sixteenth notes forwards or backwards by a chosen fraction, and a pattern set on a narrower part overrides a broader one",
+    "quantisation set in the editor fixes how often a new segment is written while recording, so two steps per beat at 120BPM writes one every quarter of a second",
+    "there is no clock inside the module. Nothing plays until a clock giving four ticks per beat is patched in, which a clock module calls x4 or 1/16th, and the sequencer is running",
+    "the module holds no notes when it is added. They are drawn in the editor window opened by clicking the large display, played in at the record inputs, or brought in from a MIDI file",
+    "the playhead and the start and end repeat markers are drawn on the large display and can be moved by clicking and dragging there, without opening the editor window",
+    "the Phrase CV/menu control in the editor window, not the panel menu, sets when a change of phrase takes effect: Instant at once, or End of phrase at the end of the current one"
+  ],
+  "menu": [
+    "Phrase selection input: — how the phrase input is read: Pitch, C3-C5; Trigger next non-empty phrase; Trigger random phrase (random but fair); or Trigger random phrase (truly random)",
+    "Shared playhead: — Don't share the playhead, Shared playhead leader or Shared playhead follower, which moves the playheads of all the linked Entrian sequencers together",
+    "Delay Clock/Reset/Run inputs — delays those three inputs by a whole number of samples, to offset the one-sample delay every Rack cable adds; Auto is the default and None the other choice",
+    "Set playhead to start marker on reset — a reset sends the playhead to the start repeat marker instead of to the beginning",
+    "Stop recording at end of song — recording ends when the playhead reaches the end, without a second press of Record",
+    "Automatically add repeat markers when recording — a start marker is dropped where recording began and an end marker where it stopped, and the playhead then loops that section",
+    "Save patch to use the free Entrian Player... — writes the patch out again with every Entrian sequencer swapped for its play-only counterpart in the Entrian Free plugin"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "6": "stepped",
+      "8": "stepped"
+    },
+    "outputs": {
+      "0": "±10V",
+      "10": "stepped",
+      "32": "stepped"
+    }
+  }
+}

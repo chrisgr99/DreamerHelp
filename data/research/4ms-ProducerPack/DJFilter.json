@@ -1,0 +1,17 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "DJFilter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "DJFilter.cpp:110 getVoltage(), channel 0 only"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "DJFilter.cpp:115 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left input", "why": "DJFilter.cpp:111 isConnected() ? getVoltage() : inL"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "DJFilter.cpp:119 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "DJFilter.cpp:196 clamp(outL, -10, 10)"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The tooltip and the manual both give the lowpass half of the sweep as 20Hz to 2000Hz. The display code does use 2000Hz (DJFilter.cpp:19) but the audio path rescales the same half onto 20Hz to 7000Hz (DJFilter.cpp:133), so the figure shown is wrong everywhere except at the bottom of the sweep. The lowpass output is taken from the last stage's lowpass and the highpass from its highpass, with the stages cascaded through their highpass outputs (DJFilter.cpp:160)."
+}

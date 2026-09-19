@@ -1,0 +1,54 @@
+{
+  "plugin": "halfagiraf",
+  "module": "Constellate",
+  "description": "A four channel event memory that learns which of its trigger inputs tend to follow one another, and how fast, then generates new trigger patterns from what it learned",
+  "params": [
+    {"ids": [0], "text": "Sets how many previous events are used as the context for the next choice, from one to four; a longer context keeps recognisable phrases and a shorter one wanders more"},
+    {"ids": [1], "text": "Sharpens the learned preferences: low settings flatten the choices towards even odds, high settings strongly favour the paths already seen"},
+    {"ids": [2], "text": "Blends the learned choices towards the ones never taken, so unexplored transitions start to appear"},
+    {"ids": [3], "text": "Sets how likely a generated event is on each clock edge, and how fast a free-running constellation moves"},
+    {"ids": [4], "text": "Moves from passing the four inputs through unaltered at the bottom of its travel to replacing them with learned choices at the DREAM end"},
+    {"ids": [5], "text": "Switches learning on and off, leaving what has already been learned in place"},
+    {"ids": [6], "text": "Freezes the learned constellation so it stops being updated, without changing the learn setting"},
+    {"ids": [7], "text": "Attenuates and inverts the morph CV, -1 to +1, before it is added to the MORPH knob; at full positive, 0 to 10V covers the knob's whole travel"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "A rising edge above 1V is an event on that channel: it is learned, and it is either passed through or replaced by a learned choice according to MORPH"},
+    {"ids": [4], "text": "A rising edge above 1V calls for a generated event, whose likelihood comes from MORPH and the density knob"},
+    {"ids": [5], "text": "A rising edge above 1V returns the playback context to the phrase most recently learned, without deleting anything"},
+    {"ids": [6], "text": "Added to the MORPH knob through the attenuverter beside it, a tenth of the knob's travel per volt, with the total held inside that travel"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 10V trigger whenever that channel fires, whether it was passed through or generated; its length is set in the menu"},
+    {"ids": [4], "text": "A voltage from 0V to 10V showing how well learned the most recent generated choice was, sliding smoothly to each new value; a passed-through or uncertain event reads low"}
+  ],
+  "notes": [
+    "Learning is on from the moment the module is added: patch related triggers into A to D and the constellation builds on the display before anything is generated",
+    "At the bottom of the MORPH knob's travel the four inputs pass straight through; turning it towards DREAM replaces more and more of the incoming events with ones chosen from the learned model",
+    "With every event input and the clock jack unpatched, a learned constellation free-runs at the pace it was recorded at, and the density knob stretches or compresses that pace",
+    "The display is the real transition table: a coloured line means one event has been observed following another, and its brightness and thickness show how likely that is"
+  ],
+  "menu": [
+    "Clear learned constellation — throws away everything learned and starts again empty",
+    "Reseed dream generator — restarts the random generator that picks between learned choices",
+    "Trigger length — sets how long the event output pulses last, from 1ms to 20ms"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "plugin": "LogicalAudio",
+  "module": "L-Rantics",
+  "description": "Two random voltage sources, each drawing a new value on the rising edge of its own clock input and holding it until the next one",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the base level that channel's values are built on, stepping from 1 to 9, with each new value the setting plus a random volt either way"},
+    {"ids": [2], "text": "Chooses whether the two outputs keep a randomly drawn sign, so a value can come out negative, or are always positive; the lamps either side of the switch show which position it is in"},
+    {"ids": [3], "text": "Chooses whether new values are fired by the two Tic inputs or by a clock inside the module that fires at random moments between 0.2 and 1 second apart"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A clock for the left channel: a rising edge to 1V or more draws a new value. With nothing patched into Tic 2, this jack drives both channels."},
+    {"ids": [1], "text": "A clock for the right channel: a rising edge to 1V or more draws a new value. With nothing patched into Tic 1, this jack drives both channels."},
+    {"ids": [2], "text": "Replaces the left LvL knob while a cable is here, -5V giving 1 and +5V giving 11; patching here also switches the right channel onto its own CV jack, whether or not that jack has a cable"},
+    {"ids": [3], "text": "Replaces the right LvL knob, but only while the left channel's CV jack also has a cable; on its own this jack changes nothing"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "That channel's random voltage, held until its clock fires again: the base level plus a random volt either way, signed or not as the polarity switch allows"}
+  ],
+  "notes": [
+    "with the tic switch set to the inputs and nothing patched into either Tic jack, both outputs stay at 0V and no values are drawn.",
+    "a value is the base level plus a random volt either way, so a setting of 9 reaches 10V and a CV of +5V reaches 12V. The maker's manual gives the range as -1V to +1V.",
+    "the right channel's level CV jack is tested against the left jack's cable rather than its own, so it does nothing alone, and patching only the left jack forces the right channel's level to 6.",
+    "the maker's manual says each level CV jack overrides its own channel's knob, which is not what the module does.",
+    "with the tic switch set to the internal clock, each channel is fired on about half of the clock's moments, independently of the other.",
+    "the internal clock's timer is shared by every copy of this module in a patch, so two of them set to the internal clock fire together.",
+    "this module is monophonic: only the first channel of a polyphonic cable is read, and each output carries one channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads the Tic 2 jack.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the Tic 1 jack.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only"
+    }
+  }
+}

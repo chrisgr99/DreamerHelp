@@ -1,0 +1,18 @@
+{
+  "plugin": "4ms-ROMplers",
+  "module": "OrchHits",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "range": "±10V", "negative": "subtracts", "normal": "0V", "why": "OrchHits.cpp:115 reads this input with getNormalVoltage(0) and line 132 passes it to indexed_cv_knob; cv_knob_utils.hh:79-88 divides it by 10, adds the knob, rounds and clamps to 0..15"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "sumRange": "±3V", "why": "OrchHits.cpp:118 reads this input with getNormalVoltage(0); line 138 adds it to the octave setting and clamps the total to ±3 octaves"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "negative": "subtracts", "normal": "0V", "why": "OrchHits.cpp:120 reads this input with getNormalVoltage(0); cv_knob_utils.hh:24-26 adds half of it to the knob and clamps the total to 0..1"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "OrchHits.cpp:88 reads this input with getVoltage; line 91 fires on a rise past 1V"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V", "why": "OrchHits.cpp:176 reads this input with getNormalVoltage(5) and clamps it to 0..5V"},
+      "5": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "subtracts", "normal": "0V", "why": "OrchHits.cpp:117 reads this input with getNormalVoltage(0); line 137 adds it to the knob, rounds the total and clamps it to the five switch positions"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "OrchHits.cpp:177 sets the output to the sample value, which sample.hh:16 scales to -1..1, multiplied by the 0 to 5V volume"}
+    }
+  },
+  "comment": "The Sample and Decay jacks carry no printing; the manual's opening section says every unlabelled jack is the CV input for the parameter beside it. Index order is not panel order: input 5, the Octave CV, is the left-hand jack of the pair below the Octave knob, and input 1, the 1V/Oct jack, is the right-hand one. The Decay knob is configured with a floor of 0.01 rather than 0 (OrchHits.cpp:73), so fully left gives a shade over the 100ms the mapping at line 148 starts from; 100ms and 5 seconds are the literals at lines 63 and 64. The decay coefficient is five time constants rather than one (line 149), so the knob reading is the time to near silence and not to a third of the level, which is what the one-shot modules use."
+}

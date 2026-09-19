@@ -1,0 +1,18 @@
+{
+  "plugin": "Sulamith",
+  "module": "BPMClk",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "BPMClk.cpp BPMClk::process: resetTrig.process(getVoltage()), a Rack SchmittTrigger at its default 0.1V and 1V thresholds, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "BPMClk.cpp BPMClk::process: boolTrig.process(getVoltage() ? true : false), a Rack BooleanTrigger on the test against exactly zero, so any non-zero voltage counts as high, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"poly": false, "step": "continuous", "why": "BPMClk.cpp BPMClk::process: clockFreq = 2.0 * pow(2.0, getVoltage()) in the CV mode, and bpmInputTrig.process(getVoltage()) counting pulses in the five PPQN modes, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "BPMClk.cpp BPMClk::process: setVoltage(divGT[i] ? 10.0 : 0.0) from a PulseGenerator triggered for 1e-3f, and an explicit 0.0 when the jack is unpatched, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "BPMClk.cpp BPMClk::process: setVoltage(divGT[i] ? 10.0 : 0.0) from a PulseGenerator triggered for 1e-3f, and an explicit 0.0 when the jack is unpatched, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "BPMClk.cpp BPMClk::process: setVoltage(divGT[i] ? 10.0 : 0.0) from a PulseGenerator triggered for 1e-3f, and an explicit 0.0 when the jack is unpatched, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "BPMClk.cpp BPMClk::process: setVoltage(divGT[i] ? 10.0 : 0.0) from a PulseGenerator triggered for 1e-3f, and an explicit 0.0 when the jack is unpatched, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The external clock jack has no family set, because the menu decides whether it wants a tempo voltage or a stream of clock pulses. The tempo knob is configured -2.0 to 2.32195 with a displayBase of 2 and a multiplier of 60, which is 15 to 300 BPM. The ON/OFF jack is read through a BooleanTrigger on `getVoltage() ? true : false`, so it has no threshold at all and flips on any departure from exactly 0V. The divider table has no /1 entry: index 11 is x1. This module is the maker's rework of ShaBang's Polyrhythm Clock."
+}

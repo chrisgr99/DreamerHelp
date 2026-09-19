@@ -1,0 +1,49 @@
+{
+  "plugin": "MSM",
+  "module": "ADSR",
+  "description": "Envelope generator with a slider for each of the four stages, a bendable curve on the attack, decay and release, and a gate output marking the end of each stage",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the attack stage, from 10ms to 1 second."},
+    {"ids": [1], "text": "Sets the length of the decay stage, from 10ms to 1 second."},
+    {"ids": [2], "text": "Sets the level the envelope holds while the gate stays high, 0V at the bottom of the travel and 10V at the top."},
+    {"ids": [3], "text": "Sets the length of the release stage, from 10ms to 1 second."},
+    {"ids": [4, 5, 6], "text": "Bends that stage's curve by raising its progress to this power, 0.1 to 4; at 1 the stage is a straight ramp, below 1 it moves quickly at the start, above 1 it moves slowly at the start."}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 3], "text": "Lengthens that stage by 0.1 second per volt, added to the stage's own slider, reading 0-10V."},
+    {"ids": [2], "text": "Raises the sustain level by 1V of envelope per volt, added to the S slider, reading 0-10V."},
+    {"ids": [4], "text": "A high gate runs the envelope through its attack and decay and holds it at the sustain level; when the gate falls the release begins. The jack reads high above 1V and low below 0V."},
+    {"ids": [5], "text": "While the voltage here is high the envelope is forced into its decay stage. The jack reads high above 1V and low below 0V."},
+    {"ids": [6], "text": "Raises the decay shape by 0.4 per volt, added to the decay shape knob and clamped to the same 0.1 to 4 range."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0V to 10V."},
+    {"ids": [1], "text": "The envelope subtracted from 10V, so it reads 10V while the envelope is at 0V and 0V at the envelope's peak."},
+    {"ids": [2], "text": "Holds 10V, dropping to 0V about 10ms into the attack stage and returning to 10V the moment the attack ends, not the trigger the panel's EOA and the maker's tooltip imply."},
+    {"ids": [3], "text": "Holds 10V, dropping to 0V about 10ms into the decay stage and returning to 10V the moment the decay ends, not the trigger the panel's EOD and the maker's tooltip imply."},
+    {"ids": [4], "text": "Holds 10V, dropping to 0V about 10ms into the sustain stage and returning to 10V the moment the sustain ends, not the trigger the panel's EOS and the maker's tooltip imply."},
+    {"ids": [5], "text": "Holds 10V, dropping to 0V about 10ms into the release stage and returning to 10V the moment the release ends, not the trigger the panel's EOR and the maker's tooltip imply."}
+  ],
+  "notes": [
+    "a lamp for each stage lights while the envelope is in that stage."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

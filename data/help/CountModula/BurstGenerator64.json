@@ -1,0 +1,56 @@
+{
+  "plugin": "CountModula",
+  "module": "BurstGenerator64",
+  "description": "Fires a burst of 1 to 64 pulses each time it is triggered, timed by its own jittering clock or by one you patch in",
+  "params": [
+    {"ids": [0], "text": "Sets how many pulses make up the burst, 1 to 64"},
+    {"ids": [1], "text": "Sets the rate of the internal clock: 1Hz to 32Hz with RANGE at S, and 16Hz to 1024Hz with RANGE at F"},
+    {"ids": [2], "text": "Sets how far the rate voltage moves the internal clock, and in which direction; at full travel each volt doubles or halves the rate"},
+    {"ids": [3], "text": "F runs the internal clock from 16Hz to 1024Hz, S from 1Hz to 32Hz"},
+    {"ids": [4], "text": "ON lets a new trigger interrupt a burst and start it again; OFF makes a trigger take effect only once the burst has finished"},
+    {"ids": [5], "text": "Sets how far the pulse count voltage moves the number of pulses, and in which direction; at full travel 10V covers the whole 1 to 64 range"},
+    {"ids": [6], "text": "Starts a burst as though a trigger had arrived"},
+    {"ids": [7], "text": "Sets the chance of each pulse in the burst firing, 100% fully clockwise; a pulse that does not fire is counted anyway, so the burst can end up with fewer pulses than the number set"},
+    {"ids": [8], "text": "Sets how far the pulse probability voltage moves the chance of a pulse firing, and in which direction, from -1 to +1"},
+    {"ids": [9], "text": "Shortens each internal clock cycle by a random amount, reaching up to 32 times the set rate at full travel; with a cable in the jitter input the knob attenuates that voltage instead"},
+    {"ids": [10], "text": "Sets the chance of each internal clock cycle reaching the pulse section, 100% fully clockwise; a cycle dropped here does not count, so the burst keeps its full number of pulses but spreads them out"},
+    {"ids": [11], "text": "Sets how far the clock probability voltage moves that chance, and in which direction, from -1 to +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes an outside clock in place of the internal one; the burst then starts on the next rising edge here rather than at the trigger, and jitter no longer applies"},
+    {"ids": [1], "text": "Moves the rate of the internal clock, by the amount and direction set on the rate attenuverter"},
+    {"ids": [2], "text": "A rising edge here starts a burst"},
+    {"ids": [3], "text": "Sets how far the pulse count voltage moves the number of pulses, and in which direction; at full travel 10V covers the whole 1 to 64 range"},
+    {"ids": [4], "text": "Moves the chance of each pulse firing, by the amount and direction set on the pulse probability attenuverter"},
+    {"ids": [5], "text": "Varies how much the internal clock cycles are shortened, 0-10V scaled by the jitter knob; an external clock is left alone"},
+    {"ids": [6], "text": "Moves the chance of a clock cycle reaching the pulse section, by the amount and direction set on the clock probability attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pulses of the burst at 10V, each one as wide as the clock pulse that produced it"},
+    {"ids": [1], "text": "A 1ms 10V trigger at the start of each burst"},
+    {"ids": [2], "text": "10V from the start of the burst until the end of its last pulse"},
+    {"ids": [3], "text": "A 1ms 10V trigger when a burst finishes"},
+    {"ids": [4], "text": "Carries the clock the burst is counted against at 10V: the internal clock with its jitter, or the external clock when one is patched"}
+  ],
+  "menu": [
+    "Bypass probability on clock output — sends every internal clock cycle to the CLOCK output whatever the clock probability knob is set to, leaving that probability applied to the pulse section"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only",
+      "6": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

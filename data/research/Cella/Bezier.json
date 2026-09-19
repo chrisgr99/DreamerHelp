@@ -1,0 +1,18 @@
+{
+  "plugin": "Cella",
+  "module": "Bezier",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "range": "±5V", "normal": "a new random value", "why": "Bezier.cpp:152 tests this input for a cable and Bezier.cpp:153 reads it with getVoltage(), which is channel 1 alone, in place of the random draw"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Bezier.cpp:162 reads this input with getVoltage() when a new value is drawn, or Bezier.cpp:141 every sample with the continuous option on; Bezier.cpp:144 adds it to the knob in octaves"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Bezier.cpp:134 reads this input with getVoltage(), divides it by 5 and clamps to -2 and 2; Bezier.cpp:136 scales it by the attenuverter and Bezier.cpp:138 clamps the total to the range the menu sets"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "Bezier.cpp:196 writes channel 1 alone and holds the result to -5V and 5V by clipping, folding or wrapping"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "Bezier.cpp:197 writes channel 1 alone and holds the result to -5V and 5V by clipping, folding or wrapping"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Bezier.cpp:211 writes channel 1 alone, 10V while a 1 millisecond pulse is high"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Bezier.cpp:214 writes channel 1 alone, 10V while the curve is above zero"}
+    }
+  },
+  "comment": "Read from src/Bezier.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1, alongside docs/Cella_Manual.md written for 2.11.0. The manual says the GATE output carries the maximum of zero and the curve; the code puts out a flat 10V or 0V depending on whether the curve is above zero (Bezier.cpp:214), and it tests the curve before the offset is added, so an offset does not move the point at which the gate opens. The manual spells the menu item Asymmetric Curve; the item itself prints Assymetric Curve. The SIGNAL input has no panel label of its own beyond IN and is not described in the manual at all: with a cable in it, the random draw is replaced by whatever voltage is present at that instant. The CLIP, FOLD and WRAP switch positions run top to bottom and the module comes up on CLIP. The Level jack is given no family because it and the FM jack both take plain modulation; the IN jack is given none because it carries whatever is patched."
+}

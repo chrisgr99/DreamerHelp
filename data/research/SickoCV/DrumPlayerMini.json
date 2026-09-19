@@ -1,0 +1,16 @@
+{
+  "plugin": "SickoCV",
+  "module": "DrumPlayerMini",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "DrumPlayerMini.cpp reads this jack with getVoltage() and takes a rising edge at 1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "DrumPlayerMini.cpp reads this jack with getVoltage() and compares it against 1V at the moment the trigger arrives"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "DrumPlayerMini.cpp:801 getVoltage() added to the decay time in seconds"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DrumPlayerMini.cpp:844-846 raises 2 to this jack's voltage and multiplies the playback speed by it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "DrumPlayerMini.cpp writes the output with setVoltage() and there is no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The TUNE knob is clamped to a speed factor between 0.25 and 4, which is the two octaves either way (DrumPlayerMini.cpp:833-841); the V/Oct jack is applied on top of that and is not clamped, so it can take the pitch further. The standard level knob is commented out at :165, leaving one LVL knob that the menu switches between standard and accented duty. The display is a custom widget with no ParamWidget, so its right-click menu cannot be reached by clicking it for help."
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "SequelSequencers",
+  "module": "Bend",
+  "description": "A polyphonic oscillator that bends the phase of its wave, with glide, an amplitude control, three modulation inputs, hard sync and a noise output",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, in semitones either side of middle C; in LFO mode the same knob is read as a power of two instead, reaching far below the audible range"},
+    {"ids": [1], "text": "Sets how long the pitch takes to slide from one note to the next; below about a fiftieth of its travel there is no slide at all, and it does nothing in LFO mode"},
+    {"ids": [2], "text": "Bends the phase of the wave, 0.02 to 0.98: on the sine and triangle it works towards a sawtooth, and on the square it works like pulse width"},
+    {"ids": [3], "text": "Sets how far the voltage at the BM jack moves the bend, from full inversion through nothing at the middle to full"},
+    {"ids": [4], "text": "Sets how far the voltage at the FM jack moves the frequency, from full inversion through nothing at the middle to full"},
+    {"ids": [5], "text": "Switches LFO mode on and off: the three wave outputs drop far below the audible range and swing 0-10V rather than either side of zero, and glide stops working"},
+    {"ids": [6], "text": "Sets the level of the three wave outputs, 0 to 1"},
+    {"ids": [7], "text": "Sets how far the voltage at the AM jack moves the level, from full inversion through nothing at the middle to full"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Restarts the wave from the beginning whenever the voltage here crosses, which is hard sync; the square output of another oscillator is the usual thing to patch"},
+    {"ids": [1], "text": "Sets the pitch, 1V per octave added to the frequency knob, and its channel count is what sets the polyphony of the whole module"},
+    {"ids": [2], "text": "Moves the bend away from the knob setting, a fifth per volt scaled by the BM knob, and the total is held between 0.02 and 0.98"},
+    {"ids": [3], "text": "Moves the frequency away from the knob setting, scaled by the FM knob; it is added to the frequency itself rather than to the pitch, which is linear frequency modulation"},
+    {"ids": [4], "text": "Moves the level away from the knob setting, a fifth per volt scaled by the AM knob, and the total is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The square wave, ±5V, or 0-10V in LFO mode; it is drawn from a softened table in oscillator mode and a hard-edged one in LFO mode"},
+    {"ids": [1], "text": "The sine wave, ±5V, or 0-10V in LFO mode"},
+    {"ids": [2], "text": "The triangle wave, ±5V, or 0-10V in LFO mode"},
+    {"ids": [3], "text": "White noise, one channel for each channel of the oscillator"}
+  ],
+  "notes": [
+    "the module is polyphonic and takes its channel count from the pitch input; with nothing patched there it runs one channel",
+    "in LFO mode the three wave outputs stop swinging either side of zero and run from 0V upwards instead",
+    "the frequency is held below half the sample rate, so heavy frequency modulation stops rather than folding back"
+  ],
+  "menu": [
+    "Interpolation mode: Linear, None — chooses whether the wavetable is read with interpolation between entries or by taking the nearest entry, which is rougher",
+    "Use DD cable color scheme - Light — replaces Rack's cable colour list with five colours of the maker's, after a confirmation step; the item ends in Dark under the Rack dark-panel setting"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

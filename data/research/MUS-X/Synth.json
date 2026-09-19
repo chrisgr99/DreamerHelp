@@ -1,0 +1,29 @@
+{
+  "plugin": "MUS-X",
+  "module": "Synth",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "Synth.cpp:912 takes the whole module's channel count from this input; Synth.cpp:1300 stops the module and writes 0V when that count is zero"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Synth.cpp:1430 reads this input with getPolyVoltageSimd and the envelope block at ADSRBlock.hpp:83 counts it high at 1V and above"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "this input is read as a modulation source and, where an envelope's velocity scaling uses it, ADSRBlock.hpp:95 clamps it to 0 and 10V"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "why": "this input is read only as a modulation source, scaled by whatever depth its assign button has set on each destination"},
+      "9": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "this jack is handed to both envelope blocks, and ADSRBlock.hpp:88 runs trigger.process on it as a float_4 at Rack's default 0V and 1V thresholds, so each voice restarts its envelope on a rising edge past 1V"},
+      "10": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "normal": "the signal before the amp", "why": "the README and the Ext knob's own behaviour: with no cable the mixer channel takes the mono signal from before the amp instead"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Synth.cpp:914 sets this output's channel count from the V/Oct input"},
+      "1": {"family": "cv", "poly": true, "why": "Synth.cpp:915 sets this output's channel count from the V/Oct input"},
+      "2": {"family": "cv", "poly": true, "why": "Synth.cpp:916 sets this output's channel count from the V/Oct input"},
+      "3": {"family": "cv", "poly": true, "why": "Synth.cpp:917 sets this output's channel count from the V/Oct input"},
+      "4": {"family": "cv", "poly": true, "why": "Synth.cpp:918 sets this output's channel count from the V/Oct input"},
+      "5": {"family": "audio", "poly": false, "why": "Synth.cpp:1303 writes channel 1 alone; the two audio outputs are the summed stereo voice rather than one channel per note"},
+      "6": {"family": "audio", "poly": false, "why": "Synth.cpp:1304 writes channel 1 alone; the two audio outputs are the summed stereo voice rather than one channel per note"}
+    }
+  },
+  "comment": "Read from src/Synth.cpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1, alongside the README. The module is switched off entirely when the V/Oct input has no cable: Synth.cpp:912 takes the channel count from that jack alone and Synth.cpp:1300 writes 0V to both audio outputs and returns. The README's caveats are the other thing a new user needs: with no modulations assigned nothing is heard, because V/Oct reaches the oscillators only through an assignment and the amp is opened only by one. Ranges are left out of most lines on purpose: the modulatable parameters are configured through one helper (Synth.cpp:880) whose bounds change with the destination, and quoting a figure for the wrong one would be worse than quoting none. The assign buttons carry a description listing their destinations, which is what Rack shows on hover. The five Individual modulation outputs are polyphonic while the two audio outputs are not."
+}

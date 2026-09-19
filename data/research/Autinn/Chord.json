@@ -1,0 +1,15 @@
+{
+  "plugin": "Autinn",
+  "module": "Chord",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "Chord.cpp:143 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Chord.cpp:133 reads this input with getVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Chord.cpp:146 sets this output to four channels and Chord.cpp:149 writes root plus the chord's semitones"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Chord.cpp:145 sets this output to four channels and Chord.cpp:148 writes 10V for a playing note and 0V for an unused one"}
+    }
+  },
+  "comment": "An unused chord note is stored as -24 semitones (Chord.cpp:25) rather than being skipped, so the pitch output carries the root two octaves down on those channels; the maker's own tooltip for the gate output calls that \"garbage\". A major seventh is present in the table but commented out with the note that it was too dissonant, which is why there are fourteen chords and not fifteen."
+}

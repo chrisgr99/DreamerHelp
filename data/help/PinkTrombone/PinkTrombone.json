@@ -1,0 +1,64 @@
+{
+  "plugin": "PinkTrombone",
+  "module": "PinkTrombone",
+  "description": "Physical model of a human vocal tract: a glottal source driving a tube shaped by the tongue, a throat constriction and a nasal branch, so it speaks vowels and consonants rather than playing waveforms",
+  "params": [
+    {"ids": [0], "text": "Moves the tongue along the tract from front to back, which is the movement that turns one vowel into another"},
+    {"ids": [1], "text": "Raises and lowers the tongue, closing and opening the tract where the tongue is placed"},
+    {"ids": [2], "text": "Sets how far along the tract the nasal branch joins it, 1 to 10 segments from the glottis, which changes how nasal the voice is"},
+    {"ids": [3], "text": "Places the throat constriction along the tract, near the glottis at the low end and near the lips at the high end"},
+    {"ids": [4], "text": "Opens and closes the throat constriction over a narrow range near closed, so a tighter setting turns more of the breath into noise"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the tongue X input, -1 to +1; at either end 10V moves the tongue across half the tract"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the tongue Y input, -1 to +1; at either end 10V moves the tongue through half its travel"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the throat X input, -1 to +1; at either end 10V moves the constriction across half the tract"},
+    {"ids": [8], "text": "Attenuates and inverts the voltage at the throat Y input, -1 to +1; at either end 10V moves the constriction through half its travel"},
+    {"ids": [9], "text": "Sets where the tip of the tongue begins, as the BLADE setting multiplied by 0 to 9"},
+    {"ids": [10], "text": "Sets where the blade of the tongue begins, 1 to 11 segments along the tract, and scales where the tip begins as well"},
+    {"ids": [11], "text": "Sets the centre frequency of the bandpass on the breath noise, 0 to 1000Hz, which is what separates one sibilant from another"},
+    {"ids": [12], "text": "Attenuates and inverts the voltage at the fricative frequency input, -1 to +1; at either end each volt moves that filter by 2000Hz"},
+    {"ids": [13], "text": "Sets the Q of the bandpass on the breath noise; turning it clockwise takes Q down from 1.2 to almost nothing, so the noise broadens as the knob rises"},
+    {"ids": [14], "text": "Attenuates and inverts the voltage at the fricative Q input, -1 to +1; at either end each volt moves Q by one"},
+    {"ids": [15], "text": "Sets the level of the voiced glottal source and the aspiration noise that rides on it, 0 to 1, despite the tooltip naming it a fricative level; the fricative noise itself runs at a fixed level"},
+    {"ids": [16], "text": "Attenuates and inverts the voltage at the fricative level input, -1 to +1; at either end 10V covers the whole travel of the level knob"},
+    {"ids": [17], "text": "Adds a share of the master pitch to the frequency of the breath-noise filter, none of it at the bottom and all of it at the top, so the noise follows the note being sung"},
+    {"ids": [18], "text": "Attenuates the voltage at the tenseness input, none of it at the bottom and all of it at the top; it never inverts, despite the tooltip calling it an attenuversion"},
+    {"ids": [19], "text": "Sets how tense the vocal folds are, 0 to 1, breathy and soft at the bottom and pressed and buzzy at the top"},
+    {"ids": [20], "text": "Attenuates the volt-per-octave input, 0 to 1; at 1 the pitch tracks a volt per octave exactly and at 0 that jack changes nothing"},
+    {"ids": [21], "text": "Sets the base pitch as a multiple of 261.63Hz, a tenth of it up to five times it, scaled in a straight line rather than in octaves, so the tooltip's Hz figure is right only at the 0 and 1 marks"},
+    {"ids": [22], "text": "Attenuates and inverts the voltage at the FM input, -1 to +1; at either end each volt adds 261.63Hz to the pitch"},
+    {"ids": [23], "text": "Attenuates the voltage at the vibrato input, none of it at the bottom and all of it at the top; it never inverts, despite the tooltip calling it an attenuversion"},
+    {"ids": [24], "text": "Sets the depth of a slow uneven wobble in the pitch, built from two noise sources around 2Hz and 4Hz, reaching about six percent of the pitch at the top"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the tongue along the tract, scaled by the tongue X attenuverter"},
+    {"ids": [1], "text": "Raises and lowers the tongue, scaled by the tongue Y attenuverter"},
+    {"ids": [2], "text": "Moves the throat constriction along the tract, scaled by the throat X attenuverter"},
+    {"ids": [3], "text": "Opens and closes the throat constriction, scaled by the throat Y attenuverter"},
+    {"ids": [4], "text": "Moves the centre frequency of the breath-noise filter, scaled by the fricative frequency attenuverter"},
+    {"ids": [5], "text": "Moves the Q of the breath-noise filter, scaled by the fricative Q attenuverter"},
+    {"ids": [6], "text": "Moves the level of the voiced source and its aspiration, scaled by the fricative level attenuverter"},
+    {"ids": [7], "text": "Moves the tenseness of the vocal folds, scaled by the tenseness attenuator"},
+    {"ids": [8], "text": "Sets the pitch at a volt per octave once the V/Oct attenuator is fully open, multiplying whatever the PITCH knob is set to"},
+    {"ids": [9], "text": "Adds to the pitch in hertz rather than in octaves, scaled by the FM attenuverter, at 261.63Hz per volt when that attenuverter is fully open"},
+    {"ids": [10], "text": "Moves the depth of the pitch wobble, scaled by the vibrato attenuator"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voice, clamped to -10V to 10V because the model can run away and produce very loud samples"}
+  ],
+  "notes": [
+    "each FILT knob carries its attenuverter at the same centre, the small knob over the large one, so the middle of the knob turns the attenuverter and the outer ring turns the large knob",
+    "the coloured lights report what the model is doing rather than setting anything: pitch, FM depth and vibrato, tongue and throat position, tenseness, lip and nose output, and the noise filter",
+    "the module sounds as soon as it is put in the rack, with no gate or trigger to start it: the voiced source runs continuously at the level set by FRICL",
+    "the breath noise runs at a fixed level whatever FRICL is set to, so turning that knob down does not give silence",
+    "the tract is shaped only by the knobs and jacks on the panel; this module draws no picture of it, so there is nothing to drag, unlike the web version the model comes from",
+    "the module is monophonic, and its right-click menu is Rack's standard one with nothing added"
+  ],
+  "expects": {
+    "inputs": {
+      "8": "1V per octave · continuous"
+    },
+    "outputs": {
+      "0": "±10V · continuous"
+    }
+  }
+}

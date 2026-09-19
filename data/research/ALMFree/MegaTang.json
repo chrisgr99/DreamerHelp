@@ -1,0 +1,28 @@
+{
+  "plugin": "ALMFree",
+  "module": "MegaTang",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "the knob alone"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "9": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio", "poly": false, "step": "continuous"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio", "poly": false, "step": "continuous"}
+    }
+  },
+  "comment": "The return is not mono-normalled. The panel prints (m) beside the left Return jack, which is ALM's mark for a jack that feeds both sides when used alone, and MFD in this same plugin does exactly that. MegaTang::process reads the two return jacks with no channel-count test anywhere, so patching only the left return leaves the right side of the mix without it. The left return's own line carries a clause saying so.\n\nThe mute does not reach the channel's own output. The gain used for output 0 is the level alone; the mute is applied separately on the path into the mix and the send. Anyone using the channel outputs as direct outs will find the mute buttons do nothing to them.\n\nA channel leaves both the mix and the send as soon as its own output is patched: each output's channel count is read and that channel's contribution is skipped.\n\nThe expanders attach on the right. MegaTang::process reads rightExpander.module at +0x110 and compares its model against modelMTEX1 and modelMTEX2; MTEX1::process and MTEX2::process read leftExpander.module at +0xe8 and compare against modelMegaTang.\n\nA debug printf was left in. When the module on the right is an MT-EX1, printf is called with the format string \"tang: C1 From: %.2f To: %.2f\\n\" on every sample, and MTEX1::process does the same with \"ex1: C1 From: %.2f To: %.2f\\n\". Neither affects the audio.\n\nParameter ranges: sends 0 to 1 with a default of 0, pans 0 to 1 with a default of 0.5 and a display multiplier of 200, levels 0 to 1 with a default of 1, all as percentages. The mutes are latching buttons; the byte a MuteButton sets on mouse-down only drives a second lamp and is not in the audio path.\n\nThe four channel outputs are numbered so that index 0 is the jack the panel labels 1, which is the bottom one of that column; the tags follow the index, not the panel order."
+}

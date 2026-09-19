@@ -1,0 +1,39 @@
+{
+  "plugin": "forsitan",
+  "module": "imber",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/imber.cpp:418-419 and 422, a poly cable gives player N channel N while a mono cable gives every player the same voltage; the voltage over ten is added to that player’s 0..1 X knob and clamped"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/imber.cpp:420-421 and 423, a poly cable gives player N channel N while a mono cable gives every player the same voltage; the voltage over ten is added to that player’s 0..1 Y knob and clamped"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:435, the voltage over ten is added to a knob spanning 0 to 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:437, the voltage over ten is added to a knob spanning 0 to 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:439, the voltage over ten times 0.65 is added and the result held to 0.05 and 0.7"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:442, the voltage over ten is added to a knob spanning 0 to 1"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:386, rrcTrig.process(getVoltage(), 0.1f, 1.f) rerolls the clocks on the rising edge, ORed with the panel button"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:389, ndcTrig.process(getVoltage(), 0.1f, 1.f) nudges the clocks on the rising edge, ORed with the panel button"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:392, rrfTrig.process(getVoltage(), 0.1f, 1.f) rerolls the FX on the rising edge, ORed with the panel button"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:395, ndfTrig.process(getVoltage(), 0.1f, 1.f) nudges the FX on the rising edge, ORed with the panel button"},
+      "10": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/imber.cpp:444-446, the voltage is added to a tempo held as log2 of the rate, and the result held to 1 and 500"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:447, the voltage over five is added to a knob spanning 0.1 to 2"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:453, the voltage over ten is added to a knob spanning 0 to 1"},
+      "13": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:461, the voltage over ten is added to a knob spanning 0 to 1"},
+      "14": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:463, the voltage over ten is added to a knob spanning 0 to 1"},
+      "15": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:465, the voltage over ten is added to a knob spanning 0 to 1"},
+      "16": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/imber.cpp:467, the voltage over ten is added to a knob spanning 0 to 1"},
+      "17": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:398, rndTrig.process(getVoltage(), 0.1f, 1.f) calls bigRandom() on the rising edge, ORed with the panel button"},
+      "18": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/imber.cpp:401, reseedTrig.process(getVoltage(), 0.1f, 1.f) clears the failed-bank flag and starts a new bank on the rising edge, ORed with the panel button"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/imber.cpp:558-559, a 2ms pulse of 10V on each jittered division edge"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "audio", "poly": false, "range": "±5V", "why": "src/imber.cpp:561, the skip voice scaled by 5 before the master chain"},
+      "6": {"family": "audio", "poly": false, "range": "±5V", "why": "src/imber.cpp:562, the micro voice scaled by 5 before the master chain"},
+      "7": {"family": "audio", "poly": false, "range": "±5V", "why": "src/imber.cpp:564-566, the mix scaled by 5 after a limiter with a -1dBFS ceiling"},
+      "8": {"family": "audio"}
+    }
+  },
+  "comment": "The five clocks and eight effects are not placed by hand: each object owns two rolled positions and the two morph knobs glide the whole population between them, which is the one deliberate departure from the original's mouse canvas. Divisions and effect kinds never change, only positions. The field display is a custom widget rather than a control, so no click in it reaches this help; a muted player is drawn there as a hollow ring rather than a filled dot. Mute, volume and the engine switch are all exempt from Rack's randomize and from the module's own randomize button, because they are performance state rather than sound design. Loop windows drunk-walk in steps of 200ms up to the maximum loop length, and samples come from a bank of 64 by an urn, so the same one never comes twice in a row. The module is inspired by Giorgio Sancristoforo's Haiku: the architecture, timing model, effect designs and voice behaviour follow a reverse-engineering of it, while the generator's numbers were tuned by ear. The sylla module plays the same generated library as a standalone voice. The panel prints imber, x, y, chg, new, clk, fx, rch, cpl, cv, bpm, spd, lpm, skp, sks, scv, rvl, vol, rnd, pls, inst, plv, div, bit, nse, tap, on, seed, rr clk, nd clk, rr fx, nd fx, trg, clr, xcv, ycv, 2n, 4n, 8n, 16n, 32n, skip, micro, L and R."
+}

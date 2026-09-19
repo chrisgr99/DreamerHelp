@@ -1,0 +1,60 @@
+{
+  "plugin": "akaudio",
+  "module": "Ninjam",
+  "description": "A client for NINJAM online jam rooms: it plays a room's public stream, or joins the room's protocol to decode every player's audio and upload your own",
+  "params": [
+    {"ids": [0], "text": "Mixes the metronome click into the MAIN outputs; the click jack carries the tone whether this is on or off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Your audio into the room, one poly channel per NINJAM channel you have declared; it is uploaded only while you are joined and transmitting"},
+    {"ids": [1], "text": "The right side of your audio into the room, one poly channel per NINJAM channel; with nothing patched, the left jack feeds both sides"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the room's mix, summed from every player when joined or taken from the public stream when listening, with the metronome folded in while its toggle is on"},
+    {"ids": [1], "text": "The right side of the room's mix, summed from every player when joined or taken from the public stream when listening, with the metronome folded in while its toggle is on"},
+    {"ids": [2], "text": "The left side of each player's own audio, one poly channel per player in the room; it carries nothing while a public stream is playing rather than the room being joined"},
+    {"ids": [3], "text": "The right side of each player's own audio, one poly channel per player in the room; it carries nothing while a public stream is playing rather than the room being joined"},
+    {"ids": [4], "text": "The metronome tone, a sine burst decaying over about 35ms on every beat, pitched at 1760Hz on the interval's first beat and 880Hz on the rest"},
+    {"ids": [5], "text": "A 10V gate with equal time high and low, pulsing the number of times per beat chosen in the menu"},
+    {"ids": [6], "text": "A 10V pulse over the first half of the interval's first beat"},
+    {"ids": [7], "text": "10V while the room's tempo and interval are known and the clock is running, and 0V otherwise"},
+    {"ids": [8], "text": "A ramp from 0V to 10V across one interval, dropping back to 0V at the downbeat"}
+  ],
+  "notes": [
+    "Picking a room and listening plays its public stream and sends nothing. Joining the protocol puts the input jacks on the air, and a reloaded patch rejoins without transmitting until you say so",
+    "The Looper belongs immediately to the left and the Recorder immediately to the right; both work only while they touch this module, and the menu will place either one",
+    "The server login and the display name are kept in a private file in the Rack user folder rather than in the patch, so a shared patch carries neither",
+    "The clock, reset, run and phase jacks stay at 0V until the room reports a tempo and an interval length"
+  ],
+  "menu": [
+    "Display name (public jams) — the name shown to the other players in the room",
+    "Refresh room list — fetches the directory of public rooms again",
+    "Stop — leaves the room, or stops the public stream being listened to",
+    "Add Looper (left) — places a Looper module immediately to the left",
+    "Add Recorder (right) — places a Recorder module immediately to the right",
+    "Metronome click — mixes the click tone into the MAIN outputs",
+    "MIDI metronome: toggle on trigger (notes/pads) — when on, a mapped MIDI control flips the metronome on each rising edge, rather than its value being read as the on or off state",
+    "Clock: pulses per beat — sets how many pulses the clock jack sends in each beat, chosen from 1, 2, 4, 8 and 24",
+    "Low (~135 kbps) — encodes your transmitted audio at the lowest of the three qualities offered",
+    "Medium (~190 kbps) — encodes your transmitted audio at the middle of the three qualities offered",
+    "High (~235 kbps) — encodes your transmitted audio at the highest of the three qualities offered",
+    "Voice mode (live, unsynced) — sends your audio as NINJAM voice chat: capture starts the moment you transmit and the other players hear it as it arrives, rather than aligned to the interval grid"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic\n\nunpatched it reads the left input."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · continuous · one channel only"
+    }
+  }
+}

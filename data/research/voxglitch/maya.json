@@ -1,0 +1,17 @@
+{
+  "plugin": "voxglitch",
+  "module": "maya",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Maya.hpp:296 reads TRIG_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Maya.hpp:266 divides this input by 10 and multiplies by the attenuverter, and Maya.hpp:269 clamps the knob-plus-input total to 0..1 before Maya.hpp:280 turns it into a word index"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "Maya.hpp:256 multiplies this input by the attenuverter, one bank per volt, and banks.h:127 truncates the sum to an int and raises anything below zero to zero"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "Maya.hpp:299 reads this input with getVoltage() alone at the moment of the trigger; Maya.hpp:304 or Maya.hpp:309 then maps it to plus or minus half an octave"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The PITCH input covers half an octave either way rather than a volt per octave, so it is coloured cv rather than pitch. The bank of your own files is reached with Select Directory Containing Word Files, which replaces the whole vocabulary rather than adding an eleventh bank. PITCH is read once, at the instant the trigger fires (Maya.hpp:299), so moving it during a word does nothing. Its range is a menu choice: the bipolar setting takes ±5V and the unipolar setting takes 0 to 10V with 5V as centre, both covering plus or minus half an octave (Maya.hpp:301-311)."
+}

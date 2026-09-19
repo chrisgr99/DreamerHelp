@@ -1,0 +1,54 @@
+{
+  "plugin": "Extratone",
+  "module": "Splitterburst",
+  "description": "A clock multiplier that runs only while it is switched on, so a steady clock can be broken into bursts of faster pulses",
+  "params": [
+    {"ids": [0], "text": "How many steps a burst started by ON or TOGGLE runs for before stopping itself, a whole number from 1 to 64"},
+    {"ids": [1], "text": "Scales the voltage at the STEPS input before it is added to the STEPS knob, inverting it left of centre; at full, 10V covers the whole 1 to 64 range"},
+    {"ids": [2], "text": "Scales the voltage at the MULTI input before it is added to the MULTI knob, inverting it left of centre; at full, 10V covers the whole 1 to 16 range"},
+    {"ids": [3], "text": "How many pulses the burst puts out for each incoming clock, a whole number from 1 to 16"},
+    {"ids": [4], "text": "Multiplies the MULTI setting by four, taking the burst as high as 64 pulses to the clock"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the MULTI knob through its attenuverter, the total clamped to 1 to 16 and rounded to a whole number"},
+    {"ids": [1], "text": "Adds to the STEPS knob through its attenuverter, the total clamped to 1 to 64 and rounded to a whole number"},
+    {"ids": [2], "text": "Holds the burst on for as long as the voltage here stays at or above 1V"},
+    {"ids": [3], "text": "A rising edge above 1V starts the burst if it is off and stops it if it is on, and sets the step count back to zero either way"},
+    {"ids": [4], "text": "A rising edge above 1V stops the burst and sets the step count back to zero"},
+    {"ids": [5], "text": "A rising edge above 1V starts the burst and sets the step count back to zero"},
+    {"ids": [6], "text": "A rising edge above 1V counts one step, and the burst stops itself once STEPS of them have arrived; edges are counted only for a burst started by ON or TOGGLE, not for one held on by the GATE input"},
+    {"ids": [7], "text": "The clock being multiplied; the interval between two rising edges above 1V is the tempo everything else is worked out from"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The step count as a voltage, climbing from 0V towards 10V as the count fills"},
+    {"ids": [1], "text": "A 1ms pulse on each incoming clock edge, but only while the burst is off"},
+    {"ids": [2], "text": "10V for as long as the burst is on, and 0V while it is off"},
+    {"ids": [3], "text": "A 1ms pulse at each beat of the multiplied rate, and nothing at all while the burst is off"},
+    {"ids": [4], "text": "A 1ms pulse on every incoming clock edge, with the multiplied beats added while the burst is on"},
+    {"ids": [5], "text": "A 1ms pulse at the moment the burst ends, however it was ended"}
+  ],
+  "notes": [
+    "every output is timed from the gap between two rising edges at CLOCK, so nothing comes out until a clock is patched there and has ticked twice.",
+    "the burst comes up off when a patch is loaded, so SOLO is silent until ON, TOGGLE or a high GATE starts it.",
+    "the multiplied beats stop once a whole clock interval has gone by with no new edge, so a clock that stops leaves the module silent rather than free-running."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "stepped",
+      "3": "stepped · one channel only",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

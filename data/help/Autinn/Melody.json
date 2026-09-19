@@ -1,0 +1,68 @@
+{
+  "plugin": "Autinn",
+  "module": "Melody",
+  "description": "A random melody generator: it builds a phrase in a chosen key and mode under rules that keep it sounding deliberate, and plays it from an external clock",
+  "params": [
+    {"ids": [0], "text": "Chooses the key the phrase is built on, twelve semitones from C to B"},
+    {"ids": [1], "text": "Chooses the scale, from the seven church modes through double harmonic major and minor, hexatonic blues, bebop dominant, major pentatonic and chromatic"},
+    {"ids": [2], "text": "Builds a fresh phrase from the current settings, which begins when the phrase now playing ends"},
+    {"ids": [3], "text": "Sets how many notes the next phrase has, from 4 to 32"},
+    {"ids": [4], "text": "Sets how much of each step the gate stays up, from two fifths of it at staccatissimo to almost all of it at legato, sliding smoothly between the four named positions"},
+    {"ids": [5], "text": "Sets the chance that any one note of the next phrase is accented, from 0 to 100 per cent"},
+    {"ids": [6], "text": "Sets the chance that any one note of the next phrase glides up from the note before it, from 0 to 100 per cent"},
+    {"ids": [7], "text": "Sets how many clock steps of silence follow each phrase, from 0 to 10"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the phrase by one step on each rising edge; the number of channels on this cable sets how many independent melodies the module runs"},
+    {"ids": [1], "text": "A rising edge builds a fresh phrase, the same work the button does"},
+    {"ids": [2], "text": "Sets the key from its own voltage rather than adding to the knob: -5V to 5V is spread evenly across the twelve keys and the knob is moved to match"},
+    {"ids": [3], "text": "Sets the scale from its own voltage rather than adding to the knob: -5V to 5V is spread evenly across the thirteen modes and the knob is moved to match"},
+    {"ids": [4], "text": "Sets the phrase length from its own voltage rather than adding to the knob: -5V to 5V is spread evenly across 4 to 32 notes and the knob is moved to match"},
+    {"ids": [5], "text": "Sets the expression from its own voltage rather than adding to the knob: -5V to 5V covers staccatissimo to legato and the knob is moved to match"},
+    {"ids": [6], "text": "Sets the accent chance from its own voltage rather than adding to the knob: -5V to 5V covers 0 to 100 per cent and the knob is moved to match"},
+    {"ids": [7], "text": "Sets the glide chance from its own voltage rather than adding to the knob: -5V to 5V covers 0 to 100 per cent and the knob is moved to match"},
+    {"ids": [8], "text": "Sets the rest length from its own voltage rather than adding to the knob: -5V to 5V covers 0 to 10 steps and the knob is moved to match"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the note now playing, at 1V per octave, sliding over the first 60ms of a note that was marked to glide"},
+    {"ids": [1], "text": "10V while a note is sounding, dropping for the last part of each step by the amount the EXPRESSION knob sets"},
+    {"ids": [2], "text": "10V while an accented note is playing and 0V otherwise"},
+    {"ids": [3], "text": "A one-millisecond pulse at the first note of a newly generated phrase, and not on a repeat"},
+    {"ids": [4], "text": "A one-millisecond pulse at the first note of every phrase, whether it is a repeat or a new one"}
+  ],
+  "notes": [
+    "the module needs an external clock, and with the 1V/OCT output unpatched it stops altogether.",
+    "a polyphonic clock gives one independent melody per channel, each with its own phrase, and all five outputs carry that many channels.",
+    "a CV jack takes its knob over for as long as it is patched, moving the knob rather than adding to it, and every jack is read across -5V to 5V for the whole range of its knob.",
+    "the CV jacks are read only about once every 512 samples, so sweeping one at audio rate will step rather than glide.",
+    "a change to any setting is used by the next phrase generated, not by the one now playing.",
+    "between phrases the gate stays down and the pitch output holds its last note, so an envelope patched from the gate is left to decay.",
+    "a phrase of six notes or more is aimed at a resolution on the tonic, and one of ten or more is aimed at a cadence two notes from the end.",
+    "a glide is a fixed 60ms whatever the tempo, cut short if a clock step is faster than that."
+  ],
+  "menu": [
+    "Glides keeps gate open — holds the gate up through the step before a glided note instead of dropping it, tying the two notes together",
+    "Only 1-step before glides — makes the note before a glide one clock step long, which is how the module behaved before the setting was added",
+    "Generate is immediately — starts a newly generated phrase at once rather than waiting for the phrase now playing to end"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±5V · stepped · one channel only",
+      "3": "±5V · stepped · one channel only",
+      "4": "±5V · stepped · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · stepped · one channel only",
+      "7": "±5V · stepped · one channel only",
+      "8": "±5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

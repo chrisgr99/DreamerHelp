@@ -1,0 +1,37 @@
+{
+  "plugin": "DHE-Modules",
+  "module": "Hostage",
+  "description": "Generates a hold or sustain envelope stage at the voltage it samples from IN",
+  "params": [
+    {"ids": [0], "text": "Sets how long a hold stage lasts, within the range chosen by the 1/10/100 switch; a sustain stage ignores it"},
+    {"ids": [1], "text": "Sets the range of the DURATION knob: 1ms to 1 second, 10ms to 10 seconds, or 100ms to 100 seconds, with the knob centred giving a tenth of the maximum"},
+    {"ids": [2], "text": "Chooses what the stage does: HOLD keeps the sampled voltage for the set duration, SUSTAIN keeps it until the GATE falls"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "While this gate is high the IN signal passes straight to OUT, incoming gates are ignored, and any stage in progress is abandoned; it reads high above 1V"},
+    {"ids": [1], "text": "Modulates the duration; every 1V here turns the DURATION knob a tenth of its travel clockwise"},
+    {"ids": [2], "text": "The voltage a stage holds, sampled when the stage starts, and passed straight to OUT while DEFER is high"},
+    {"ids": [3], "text": "Triggers a hold stage, or holds a sustain stage up for as long as it stays high; it is ignored while DEFER is high, and it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while a stage is being generated or while DEFER is high, and 0V otherwise"},
+    {"ids": [1], "text": "Carries the held voltage, or the IN voltage while DEFER is high"},
+    {"ids": [2], "text": "Carries a 1ms 10V pulse when a stage completes"}
+  ],
+  "notes": [
+    "a stage runs only when the GATE input rises; until the first one arrives OUT passes the IN voltage straight through, which is 0V with nothing patched",
+    "the module is mono: it reads the first channel of a polyphonic cable and ignores the rest, and every output carries a single channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "unipolar · continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

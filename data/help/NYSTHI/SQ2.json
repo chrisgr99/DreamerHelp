@@ -1,0 +1,65 @@
+{
+  "plugin": "NYSTHI",
+  "module": "SQ2",
+  "description": "A programmable sequencer in the manner of the Roland MC-4. A sequence is built stage by stage, and finished sequences are stored as patterns that can be played one after another",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the sequencer"},
+    {"ids": [1], "text": "Returns the sequencer to its first stage"},
+    {"ids": [2], "text": "The rate of the internal clock"},
+    {"ids": [3], "text": "Switches pattern playing on and off, so the stored patterns are played one after another rather than the single sequence"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger starts and stops the sequencer"},
+    {"ids": [3], "text": "A clock here takes over from the internal clock"},
+    {"ids": [5], "text": "A pulse resets the phase of the internal clock, to bring it into step with something else"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note of the stage being played, as a pitch voltage"},
+    {"ids": [1], "text": "The second voltage of the stage being played"},
+    {"ids": [2], "text": "Sends a pulse on each stage"},
+    {"ids": [3], "text": "A gate on each stage, as long as that stage's gate setting makes it"},
+    {"ids": [4], "text": "Passes on the clock the sequencer is running on"},
+    {"ids": [5], "text": "Sends a pulse each time the sequencer is reset"},
+    {"ids": [6], "text": "Sends a pulse when a pattern reaches its end"}
+  ],
+  "notes": [
+    "each stage carries a note, a second voltage, a gate length and a length of its own",
+    "NUM STAGES shows how many stages the sequence holds, and CURR STAGE is clicked to choose which stage the displays below it show",
+    "NOTE sets the pitch the CV1 output carries for that stage, and can be set to REST for a silent stage",
+    "CV2 sets the second voltage that stage carries",
+    "GATE sets how much of that stage's length the gate output stays high for, as a percentage",
+    "LENGTH sets how long that stage lasts, from 1/384 to 1/12 of a note, 1/16 to begin with",
+    "NUM PATTERNS shows how many patterns are stored and CURR PATTERN is clicked to choose which one is loaded",
+    "a new sequencer holds no stages and plays nothing: set the note, second voltage, gate and length on the displays, then add a stage with ADD STAGE, and repeat for each stage of the sequence.",
+    "a sequence is stored as a pattern with ADD PATTERN, and pattern playing steps through the stored patterns one after another rather than the sequence being edited.",
+    "with the mouse over the module the number keys type a value, and N chooses note entry, D length, G gate and C or V the second voltage",
+    "with the mouse over the module, R sets the note to REST, keypad Enter adds a stage at the end, Return updates the current stage and I inserts one before it",
+    "with the mouse over the module, Page Up and Page Down move between stages and Escape drops the edits to the current stage"
+  ],
+  "menu": [
+    "SHOW RUNNING STAGE — keeps the displays following the stage and pattern being played",
+    "CONTINUOUS EDIT — writes each edit into the current stage as it is made, while the sequencer is stopped",
+    "TRANSPOSE — moves the whole sequence with TRANSPOSE +12, TRANSPOSE +1, TRANSPOSE -1 and TRANSPOSE -12",
+    "TRANSPOSE PATTERN +12 — moves the current pattern up an octave, with TRANSPOSE PATTERN +1, TRANSPOSE PATTERN -1 and TRANSPOSE PATTERN -12 beside it",
+    "STAGE COMMANDS — ADD STAGE, INSERT STAGE, UPDATE CURR STAGE FROM SCREEN, LOAD CURR STAGE TO SCREEN and DELETE STAGE, all acting on the sequence being edited",
+    "PATTERN COMMANDS — ADD PATTERN, INSERT PATTERN, UPDATE CURR PATTERN FROM SEQUENCE and LOAD PATTERN TO SEQUENCE, all acting on the stored patterns",
+    "EDIT — COPY SEQUENCE, CUT SEQUENCE, PASTE SEQUENCE and DELETE SEQUENCE act on a whole sequence",
+    "COPY CURR PATTERN — with CUT CURR PATTERN, PASTE PATTERN, DELETE CURR PATTERN and DELETE ALL PATTERNS, acts on the stored patterns",
+    "DELETE SEQUENCE — printed with (option/window key down) and carried out only with that key held, as is DELETE ALL PATTERNS"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "5": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Shaper",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "shaper_core.cpp:87 getPolyVoltage(c) multiplied by the envelope and passed to the output"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Shaper.cpp:11 channels() reads getChannels() here; shaper_core.cpp:15 getPolyVoltage(c) into a bogaudio Trigger, thresholds 1V and 0.1V in rack_overrides.hpp:13"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "shaper_core.cpp:86-87 setChannels then a per-channel write of the input times the envelope; Shaper.cpp:9-10 takes the width from the TRIGGER input"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "shaper_core.cpp:90-92 setChannels then a per-channel write of the envelope clamped to 0 to 10V; Shaper.cpp:9-10 takes the width from the TRIGGER input"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "shaper_core.cpp:93-94 setChannels then a per-channel write of 10V minus the envelope; Shaper.cpp:9-10 takes the width from the TRIGGER input"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:99-100 setChannels then a per-channel 5V end-of-cycle pulse; Shaper.cpp:9-10 takes the width from the TRIGGER input"}
+    }
+  }
+}

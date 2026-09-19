@@ -1,0 +1,70 @@
+{
+  "plugin": "shapetaker",
+  "module": "Evocation",
+  "description": "An envelope generator that records a contour you draw with the mouse and plays it back down four lanes at different speeds, phases and loop settings, or works as a four-output ADSR",
+  "params": [
+    {"ids": [0], "text": "Fires every lane at once, and in ADSR mode fires a one-shot that reaches sustain and releases without a held gate"},
+    {"ids": [1], "text": "Cuts a quiet opening off the recorded gesture, treating anything under 1V for at least 25ms as silence and confirming 12ms of activity before the cut"},
+    {"ids": [2], "text": "Cuts the quiet stretch after the last active point off the recorded gesture and adds a return to 0V where one is needed"},
+    {"ids": [7], "text": "Steps the selected lane through Off, Forward, Reverse and Ping-Pong looping; in ADSR mode it is a plain on and off"},
+    {"ids": [11], "text": "Turns the selected lane's output upside down, so a 0-10V contour comes out running 10V to 0V and a bipolar one changes sign"},
+    {"ids": [17], "text": "Sets the playback speed of the selected lane, from 0.05 times to 8 times; in ADSR mode it sets the selected stage's time, or the sustain level"},
+    {"ids": [18], "text": "Offsets the selected lane through one whole turn of the gesture; in ADSR mode it bends the selected stage from logarithmic through linear to exponential"},
+    {"ids": [19, 20, 21, 22], "text": "Selects which lane the shared speed, phase, loop and invert controls edit; in ADSR mode the four buttons select attack, decay, sustain and release instead"},
+    {"ids": [23], "text": "Switches between the recorded-gesture engine and a four-output ADSR envelope, keeping the gesture in the background while ADSR is chosen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge restarts that voice at the start of the gesture, or at the edge of its loop window; in ADSR mode it fires a one-shot that releases on its own"},
+    {"ids": [1], "text": "A rising edge starts a voice and a falling edge glides it down to 0V; in ADSR mode it runs the usual attack, sustain and release"},
+    {"ids": [6, 7, 8, 9], "text": "Adds to that lane's phase offset, 10V being one whole turn of the gesture, and the result wraps round"},
+    {"ids": [10], "text": "Supplies a tempo for lanes set to a beat division, and never triggers anything; four rising edges establish the beat and only the first channel is read"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That lane's envelope, 0-10V unless the menu sets it to 0-5V or bipolar"},
+    {"ids": [4, 5, 6, 7], "text": "Carries 10V while that lane or ADSR voice is running"},
+    {"ids": [8, 9, 10, 11], "text": "A 1ms pulse at 10V when that lane's one-shot finishes or it crosses the loop boundary its direction defines"}
+  ],
+  "notes": [
+    "it does nothing until a gesture exists: click and hold on the touch strip and move up and down, high on the strip recording 10V and low recording 0V, up to five seconds",
+    "starting a new recording stops all playback and replaces the stored gesture when it finishes; the gesture is saved with the patch",
+    "with a lane looping, coloured start and end markers appear on the screen and can be dragged to narrow the part of the gesture that plays",
+    "clicking the outlined capsule at the top of the screen cycles the selected lane between free running and a quarter, half, one, two or four beats of the clock input",
+    "with both the trigger and the gate patched in gesture mode only the trigger is read; in ADSR mode both keep their own jobs",
+    "a lane fitted to the clock ignores its speed setting until it is put back to free running",
+    "putting a Recollect immediately to the right replaces the played contour with that module's two morphable memories, while recording, triggers and phase stay here",
+    "the four per-lane speed CV inputs the manual describes are declared in the code but have no jack on the panel, so nothing can be patched to them"
+  ],
+  "menu": [
+    "Gesture Mode — chooses the recorded-contour engine, the same choice the panel switch makes",
+    "ADSR Mode — chooses the four-output ADSR engine, the same choice the panel switch makes",
+    "Gesture trigger behavior — chooses whether a trigger restarts lanes that are already looping or leaves those loops running",
+    "Clock fit — sets each lane independently to free running or to a beat division of the clock input",
+    "Output voltage ranges — sets each lane's output independently to 0-10V, 0-5V or bipolar, and carries a normalize switch that scales the lane against the gesture's peak",
+    "Quantize ADSR Phase CV — is kept so old patches load, and changes nothing in this version because the ADSR contour has no CV path"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "unipolar · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "7": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "8": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "10": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic",
+      "6": "0 to 10V · stepped · polyphonic",
+      "7": "0 to 10V · stepped · polyphonic",
+      "8": "0 to 10V · stepped · polyphonic",
+      "9": "0 to 10V · stepped · polyphonic",
+      "10": "0 to 10V · stepped · polyphonic",
+      "11": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

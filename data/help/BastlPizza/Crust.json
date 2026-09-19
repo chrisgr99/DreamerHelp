@@ -1,0 +1,69 @@
+{
+  "plugin": "BastlPizza",
+  "module": "Crust",
+  "description": "A drum voice built from a tuned tone oscillator and a noise generator, crossfaded together and shaped by one envelope, after Bastl's Crust module",
+  "params": [
+    {"ids": [0], "text": "Sets the octave of the tone oscillator over a ten-octave range, and is what the PITCH knob does while the tune mode is Octave"},
+    {"ids": [1], "text": "Sets the pitch envelope: clockwise gives a falling kick-style sweep, counter-clockwise a slower membrane sweep, and this is what the PITCH knob does while the tune mode is Sweep"},
+    {"ids": [2], "text": "Detunes the second oscillator from the first: counter-clockwise by a fixed number of Hz, down into LFO speeds and independent of the pitch, clockwise by an exponential ratio reaching 16 to 1"},
+    {"ids": [3], "text": "Tunes the ratio between the two oscillators in fractions of an interval, and is what the PITCH knob does while the tune mode is Stepped Detune"},
+    {"ids": [4], "text": "Shifts the tone oscillator by up to 12 semitones either way, and is what the PITCH knob does while the tune mode is Semitone"},
+    {"ids": [5], "text": "Shifts the tone oscillator by up to 1 semitone either way, and is what the PITCH knob does while the tune mode is Fine"},
+    {"ids": [6], "text": "Sweeps the tone oscillator smoothly across its whole frequency range, and is what the PITCH knob does while the tune mode is Broad"},
+    {"ids": [7], "text": "Sets the pitch of the noise layer, which each noise algorithm reads its own way, and is what the PITCH knob does while the tune mode is Noise Param"},
+    {"ids": [8], "text": "Steps the PITCH knob to the next tune mode on each press; a long press swaps between the octave, sweep and detune set and the tune, semitone and fine-tune set, and a second long press leaves that"},
+    {"ids": [9], "text": "Crossfades the output between the tone layer and the noise layer"},
+    {"ids": [10], "text": "Steps the tone oscillator to the next mode on each press, through Dual, Ring Mod, FM and FM 2; a long press moves the PITCH knob onto the stepped detune and the ENV knob onto the pitch envelope decay"},
+    {"ids": [11], "text": "Sets the amplitude envelope applied to both the tone and the noise layer: clockwise lengthens the decay, counter-clockwise lengthens attack and decay together"},
+    {"ids": [12], "text": "Sets the decay time of the pitch envelope, shortest at the centre and following a different exponential curve to each side; this is what the ENV knob does after a long press of the tone mode button"},
+    {"ids": [13], "text": "Steps the noise generator to the next algorithm on each press, through Noise, Crunch, Metal and Clap; a long press moves the PITCH knob onto the noise tuning"},
+    {"ids": [14], "text": "Drives the voice into distortion, and is what the TIMBRE fader does while the timbre mode is Distortion"},
+    {"ids": [15], "text": "Sets the filter cutoff applied to the noise layer alone, and is what the TIMBRE fader does while the timbre mode is Filter"},
+    {"ids": [16], "text": "Reshapes the tone oscillator's waveform, and is what the TIMBRE fader does while the timbre mode is Shape"},
+    {"ids": [17], "text": "Steps the TIMBRE fader to the next timbre mode on each press, through Distortion, Filter and Shape; a long press starts choosing what the CTRL knob is assigned to"},
+    {"ids": [18], "text": "Sets whichever one parameter the control destination names, and adds to the voltage at the CTRL input when a cable is patched there"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to whatever the TIMBRE fader is set to at the moment, -5V to 5V covering the full travel of that fader"},
+    {"ids": [1], "text": "Adds to the LAYER fader, -5V to 5V covering the full crossfade between tone and noise"},
+    {"ids": [2], "text": "Adds to the CTRL knob, -5V to 5V covering the full range of whatever the control destination names"},
+    {"ids": [3], "text": "Scales the loudness of the hit, 0V silent and 10V full, and negative voltages read as 0V; with TRIG unpatched a voltage here fires the voice as well, above 1.5V to sound and back below 0.5V to rearm"},
+    {"ids": [4], "text": "Fires the drum on each rising edge past 1V"},
+    {"ids": [5], "text": "Sets the pitch of the tone oscillator, doubling its frequency for each volt"},
+    {"ids": [6], "text": "Adds to the ENV knob, -5V to 5V covering the full range of that knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The amplitude envelope of the voice as a voltage, 0V at rest and 5V at the peak of a hit"},
+    {"ids": [1], "text": "The drum itself, the tone and noise layers crossfaded and enveloped, reaching 5V either way"}
+  ],
+  "notes": [
+    "nothing sounds until a trigger arrives at TRIG; with TRIG unpatched a gate at VELOCITY fires the voice instead, and with neither patched the module is silent",
+    "fourteen factory presets are installed with the plugin, reached from the module's right-click menu under Preset"
+  ],
+  "menu": [
+    "Module Modes — a submenu gathering the four mode settings the panel buttons step through",
+    "Tune Mode: Octave, Sweep, Detune, Stepped Detune, Semitone, Fine, Broad, Noise Param — sets what the PITCH knob adjusts; inside Module Modes",
+    "Tone Mode: Dual, Ring Mod, FM, FM 2 — sets how the two oscillators of the tone layer combine; inside Module Modes",
+    "Noise Mode: Noise, Crunch, Metal, Clap — sets the noise algorithm; inside Module Modes",
+    "Timbre Mode: Distortion, Filter (noise only), Shape — sets what the TIMBRE fader adjusts; inside Module Modes",
+    "Control Destination — sets which one parameter the CTRL knob and the CTRL input act on, chosen from a list of sixteen covering tune, tone, noise, layer and timbre",
+    "Input Jack S&H — one switch per input jack, plus Set all inputs to use S&H and Set no inputs use S&H; a switched-on input is read only at the instant of a trigger and held until the next",
+    "Quantisation: None, Semitone — rounds the V/OCT input to whole semitones before it is used",
+    "Disable flashing light on trigger — stops the panel lights blinking each time the voice is triggered"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "unipolar · continuous · one channel only\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "4": "unipolar · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "bipolar · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

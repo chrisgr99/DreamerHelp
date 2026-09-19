@@ -1,0 +1,64 @@
+{
+  "plugin": "PathSet-Rainbows",
+  "module": "Bridge",
+  "description": "Sequencer of four rows of notes, with bridges between the rows that skip, mute, ratchet, borrow, swap or jump between them",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets the length of that row; above 8 the row ping-pongs, repeating the note at each end"},
+    {"ids": [4, 5, 6, 7], "text": "Attenuates and inverts that row's length CV before it is added to the row length"},
+    {"ids": [8, 9, 10], "text": "Sets the chance that a bridge in that row applies its effect to the notes in the two rows it joins"},
+    {"ids": [11, 12, 13], "text": "Attenuates and inverts that odds CV before it is added to the odds setting"},
+    {"ids": [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45], "text": "Clicking steps that note through the chosen scale; right-clicking opens a menu for setting any note, randomizing, and changing the scale or root"},
+    {"ids": [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69], "text": "Clicking steps that bridge through its effects: none, skip, mute, ratchet, borrow, swap and jump; right-clicking sets the effect directly"},
+    {"ids": [70], "text": "Sets which row the sequence starts on, and offsets every playhead when the play head expander is attached"},
+    {"ids": [71], "text": "Attenuates and inverts the start row CV before it is added to the start row"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Raises or lowers that row's length through its attenuverter"},
+    {"ids": [4, 5, 6], "text": "Raises or lowers those odds through its attenuverter"},
+    {"ids": [7], "text": "Advances the sequence one step on each rising edge"},
+    {"ids": [8], "text": "Returns the sequence to its first step and returns every setting to the state last chosen by hand"},
+    {"ids": [9], "text": "Raises or lowers the start row through its attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the gate of the note being played"},
+    {"ids": [1], "text": "Carries the pitch of the note being played, and holds its last value while a note is muted"},
+    {"ids": [2], "text": "Carries a gate on the first step after the sequence reaches its end"},
+    {"ids": [3], "text": "Carries a gate while the sequence is ratcheting"},
+    {"ids": [4], "text": "Carries a gate while a note is muted"}
+  ],
+  "notes": [
+    "Bypassing this module connects the clock input to the gate output",
+    "The sequence moves only on a rising edge at the clock input, so with nothing patched there the module holds its first note"
+  ],
+  "menu": [
+    "Set Scale — picks the scale the notes come from and randomizes every note on the module",
+    "Root Note — changes the root and shifts every entered note by the interval between the old root and the new one",
+    "Range — sets how many octaves the notes span, centred on the fifth above the root",
+    "Ratchet Speed — sets how fast a ratchet plays: whole notes match the clock, half notes twice per clock, quarter notes four times",
+    "Randomize Notes — randomizes every note within the chosen scale, or shifts some of the notes an octave up or down",
+    "Active Cursor Color — picks the colour of the ring that marks the note being played",
+    "Add Expander — creates the play head expander, which adds three more playheads, or the randomizer expander, which adds buttons and triggers that randomize notes; each goes to the right",
+    "Bridges — initializes every bridge to no effect, or randomizes all of them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only"
+    }
+  }
+}

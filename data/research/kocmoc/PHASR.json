@@ -1,0 +1,14 @@
+{
+  "plugin": "kocmoc",
+  "module": "PHASR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "PHASR.cpp:80 getVoltage(ii) per channel; :91 multiplied by 32 times the cubed index"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "ignored", "why": "PHASR.cpp:60 getChannels() here sets the loop bound; :83 negative volts clipped to zero; :88 freq * pow(2, cv)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "PHASR.cpp:97 -(phase - M_PI) per channel, so plus or minus pi volts; :101 setChannels(channels)"}
+    }
+  },
+  "comment": "The installed plugin.json tags PHASR Oscillator only, without Polyphonic, but the code runs sixteen Phasor instances and calls setChannels from the V/OCT channel count at PHASR.cpp:101, exactly as OP does. The tag is wrong. The output range is plus or minus pi volts, about 3.14; it is recorded as ±5V because that is the nearest spelling the field allows, and the true figure is in the line. The trimpot carries only minus and plus marks on the panel, with no name."
+}

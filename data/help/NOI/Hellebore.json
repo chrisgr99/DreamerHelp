@@ -1,0 +1,46 @@
+{
+  "plugin": "NOI",
+  "module": "Hellebore",
+  "description": "A stereo Moorer reverb built from six comb filters per channel whose delay lines can be resized while they run, which repitches whatever they already hold",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time of the comb filters, from 10ms to 0.6 seconds; the maker's tooltip overstates this and reads up to 0.9 seconds"},
+    {"ids": [1], "text": "Spreads the six comb filters apart, over 0 to 0.2: it lengthens each successive delay line, raises each one's feedback, and bleeds more of one channel into the other"},
+    {"ids": [2], "text": "Sets how long the reverb takes to decay, from 0.1 to 20 seconds"},
+    {"ids": [3], "text": "Sets the balance between the dry input and the reverb, over 0 to 100%; it comes up fully wet"},
+    {"ids": [4], "text": "A latch that stops the comb filters taking new input, so what they hold circulates unchanged and can be resized freely"},
+    {"ids": [5], "text": "Scales the size CV before it is added, up to 0.1 seconds of delay time per volt in either direction"},
+    {"ids": [6], "text": "Scales the variation CV before it is added, up to 0.1 of variation per volt in either direction"},
+    {"ids": [7], "text": "Scales the time CV before it is added, up to 1 second of decay per volt in either direction"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the freeze latch over entirely: above 0V freezes the comb filters, at or below 0V lets them run, and the latch does nothing while a cable is patched here"},
+    {"ids": [1], "text": "Adds to the variation through its attenuverter, which starts at 0"},
+    {"ids": [2], "text": "Adds to the decay time through its attenuverter; the total is clamped to 0.1 and 20 seconds"},
+    {"ids": [3], "text": "Adds to the comb delay time through its attenuverter, smoothed by a 20Hz low-pass so the repitching glides; the total is clamped to 10ms and 1 second"},
+    {"ids": [4], "text": "The left channel fed into the reverb; there is no normalling from one channel to the other, so patching this alone leaves the right channel silent"},
+    {"ids": [5], "text": "The right channel fed into the reverb; there is no normalling from one channel to the other, so patching this alone leaves the left channel silent"},
+    {"ids": [6], "text": "Adds to the dry-wet balance with no attenuverter, a fifth of the range per volt, so 5V alone reaches fully wet; the total is clamped to dry and fully wet"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the reverb, hard-clipped at ±6V"},
+    {"ids": [1], "text": "The right channel of the reverb, hard-clipped at ±6V"}
+  ],
+  "notes": [
+    "The module comes up fully wet, so none of the dry signal reaches the outputs until the dry-wet control is turned down or its input is driven negative."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0V · stepped · one channel only\n\nunpatched it reads the freeze latch; a negative voltage does nothing here.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±6V · continuous · one channel only",
+      "1": "±6V · continuous · one channel only"
+    }
+  }
+}

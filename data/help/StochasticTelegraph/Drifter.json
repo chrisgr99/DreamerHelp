@@ -1,0 +1,48 @@
+{
+  "plugin": "StochasticTelegraph",
+  "module": "Drifter",
+  "description": "A line made of points joined end to end, each of which takes a random walk on command; IN picks a horizontal position along the line and OUT carries the height of the line there",
+  "params": [
+    {"ids": [0], "text": "Sets the range of IN and OUT to -5V to 5V or to 0V to 10V"},
+    {"ids": [1], "text": "Picks the shape drawn between the points of the line: steps, straight lines, or smoothed curves; a change takes effect at once"},
+    {"ids": [2], "text": "Pressing it returns the line to its starting shape, which is chosen in the menu, and applies any change made to COUNT"},
+    {"ids": [3], "text": "Pressing it moves every point of the line once, within the limits set by TOTAL DRIFT, X DRIFT and ENDS"},
+    {"ids": [4], "text": "Sets the furthest a point can travel in two dimensions in one drift, 0V to 10V, with the TOTAL DRIFT input added to it; at zero the points are locked in place"},
+    {"ids": [5], "text": "Sets the number of segments the line is divided into, 1 to 32, taking effect at the next RESET"},
+    {"ids": [6], "text": "Picks what the two end points of the line do: hold their value, drift independently of each other, or the right end tracks the value of the left"},
+    {"ids": [7], "text": "Sets the furthest a point can travel horizontally in one drift, 0V to 10V, with the X DRIFT input added to it; at zero the points are locked horizontally"},
+    {"ids": [8], "text": "Pressing it moves every point of the line once, back towards the shape a RESET would give"},
+    {"ids": [9], "text": "Added to OUT after the attenuverter, -10V to 10V"},
+    {"ids": [10], "text": "Attenuates and inverts OUT before BIAS is added to it, -200% to 200%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger returns the line to its starting shape and applies any change made to COUNT"},
+    {"ids": [1], "text": "A trigger moves every point of the line once, within the limits set by TOTAL DRIFT, X DRIFT and ENDS"},
+    {"ids": [2], "text": "Sets the horizontal position along the line that OUT is read from, and is drawn as a short mark along the bottom of the display"},
+    {"ids": [3], "text": "Added to the TOTAL DRIFT knob to give the furthest a point can travel in two dimensions in one drift"},
+    {"ids": [4], "text": "Added to the X DRIFT knob to give the furthest a point can travel horizontally in one drift"},
+    {"ids": [5], "text": "A trigger moves every point of the line once, back towards the shape a RESET would give"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The height of the line at the horizontal position set by IN, after the attenuverter and BIAS"},
+    {"ids": [1], "text": "A short trigger each time IN crosses from one segment of the line into the next"}
+  ],
+  "notes": [
+    "a new Drifter has every point of the line at zero, so OUT carries only what BIAS adds until DRIFT is pressed or a RESET shape other than the flat one is picked",
+    "bypassed, OUT carries whatever arrives at IN"
+  ],
+  "menu": [
+    "Save curve in rack — keeps the drifted shape in the patch file; unset, the line loads flat at zero",
+    "RESET shape: — the heading over what a RESET draws: Horizontal line at zero, Sine, Triangle, Rising Saw, Falling Saw or Square, the last five each with variants A, B, C and D"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "5": "stepped"
+    },
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

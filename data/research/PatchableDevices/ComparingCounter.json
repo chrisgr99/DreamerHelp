@@ -1,0 +1,17 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "ComparingCounter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "ComparingCounter.cpp:66-68 reads getVoltage() with no channel, multiplies it by the attenuator and compares the result against the B input plus the threshold"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ComparingCounter.cpp:66-68 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the counter limit knob, the sum clamped to 0 and 5.17"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "ComparingCounter.cpp:66-68 reads getVoltage() with no channel and adds the threshold knob to it before the comparison"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "ComparingCounter.cpp:70 sets 5V when the comparison holds and 0V when it does not, one channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "ComparingCounter.cpp:74 sets 5V only while the comparator is high and the count is zero, one channel"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "ComparingCounter.cpp:71 writes the running count, which climbs in steps of one sixth of a volt to at most 31 steps"}
+    }
+  },
+  "comment": "Source read at commit f6cf8d6, the commit whose plugin.json carries the installed 2.0.1. The counter limit parameter is configured with a default of 0 (ComparingCounter.cpp:53) although the panel letters the knob 1 and 31, and the A attenuator's default is 0 too, so a fresh module shows nothing at VALUE and nothing at A-B>T. The whole plugin is monophonic: no module in it calls getChannels, getPolyVoltage or setChannels. The VALUE output is given the cv family rather than pitch because it is a staircase count; the maker points out that its 0.166V step is a whole tone if it is used as a pitch."
+}

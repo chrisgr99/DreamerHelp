@@ -1,0 +1,17 @@
+{
+  "plugin": "SickoCV",
+  "module": "CVrouter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "CVrouter.cpp:150 getVoltage() compared against the threshold at :152 and :156; read on channel 0 only"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "CVrouter.cpp:142 getVoltage() times the trimpot added to the knob, the sum clamped to ±10V at :143-147"},
+      "2": {"poly": true, "step": "continuous", "normal": "10V", "why": "CVrouter.cpp:369 getChannels() becomes the loop bound and :372 reads getVoltage(c); with the jack empty the OUT1-only and OUT2-only cases at :197 and :251 send a 10V gate instead"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "CVrouter.cpp:165 getVoltage() added to the knob as a time in seconds, the total clamped to 0-10 seconds at :356-358"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "CVrouter.cpp:373 setChannels(chan) taken from the IN jack, with setVoltage(value, c) in the loop above"},
+      "1": {"poly": true, "why": "CVrouter.cpp:433 setChannels(chan) taken from the IN jack, with setVoltage(value, c) in the loop above"}
+    }
+  },
+  "comment": "The FADE CV sumRange is a time in seconds, not a voltage. What the module does depends on which jacks have cables in them: with the IN jack empty and one or both outputs patched, the outputs carry a 10V gate faded by the FADE knob instead of a routed signal. The IN and OUT jacks carry whatever is patched, so they get no family."
+}

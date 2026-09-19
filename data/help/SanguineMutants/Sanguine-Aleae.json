@@ -1,0 +1,39 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Aleae",
+  "description": "Two coin tossers: a trigger in sends a trigger or a gate to one of two outputs, with the odds set by a knob and by a control voltage, and every channel of a polyphonic cable tossed separately",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the odds for that section: fully counter-clockwise every trigger goes to A, fully clockwise every trigger goes to B, centred it is an even toss"},
+    {"ids": [2, 3], "text": "Switches that section between direct, where each toss picks the A or the B output, and toggle, where a tails result moves the signal to the other output and heads leaves it"},
+    {"ids": [4, 5], "text": "Switches that section between passing the incoming gate through to the chosen output and latching, where the chosen output stays high until a later toss picks the other one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 2V tosses the coin for the top section, and the number of channels on the cable sets how many independent coins that section tosses"},
+    {"ids": [1], "text": "A rising edge past 2V tosses the coin for the bottom section; with nothing patched here the top section's input is read instead, so one trigger tosses both coins and each gives its own result"},
+    {"ids": [2, 3], "text": "Adds to that section's probability knob, 10V covering the whole knob range"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries 10V while that section's toss stands at A; with the section passing gates through it follows the length of the incoming gate, and with the section latching it stays high until a toss picks B"},
+    {"ids": [2, 3], "text": "Carries 10V while that section's toss stands at B; with the section passing gates through it follows the length of the incoming gate, and with the section latching it stays high until a toss picks A"}
+  ],
+  "notes": [
+    "the module is polyphonic: the channel count of a section's input cable sets how many coins that section tosses, and its two outputs carry that many channels."
+  ],
+  "menu": [
+    "LEDs channel — picks which polyphonic channel the lamp between a section's outputs reports; the choice applies to both sections"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads the input of section 1.",
+      "2": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

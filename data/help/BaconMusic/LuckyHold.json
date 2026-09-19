@@ -1,0 +1,38 @@
+{
+  "plugin": "BaconMusic",
+  "module": "LuckyHold",
+  "description": "Sends each clock tick at random to an A side or a B side and holds a fresh random voltage for whichever side was picked",
+  "params": [
+    {"ids": [0], "text": "Sets how many channels the outputs carry, 1 to 16, each drawing its own random numbers"},
+    {"ids": [1], "text": "Sets the balance between the two sides, every tick going to A fully clockwise, every tick going to B fully counter-clockwise, and an even split at noon, the other way round from the maker's tooltip"},
+    {"ids": [2], "text": "Sets the span of the random voltages, 0 to 10V"},
+    {"ids": [3], "text": "Adds an offset of -5V to 5V to every random voltage, setting the bottom of the random range rather than its middle, despite the maker's Center label"},
+    {"ids": [4], "text": "In latch a side's gate stays high until the other side is picked and its voltage holds until then; in passthrough the clock passes through and a new voltage is drawn every tick"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge picks a side for each channel and draws new random voltages"},
+    {"ids": [1], "text": "Shifts the balance between the two sides, 5V sending every tick to A and -5V sending every tick to B"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a gate on each channel whose most recent tick went to A, 10V in latch and the incoming clock voltage in passthrough"},
+    {"ids": [1], "text": "The random voltage held for the A side, scaled and offset by the Rand CV knobs"},
+    {"ids": [2], "text": "Carries a gate on each channel whose most recent tick went to B, 10V in latch and the incoming clock voltage in passthrough"},
+    {"ids": [3], "text": "The random voltage held for the B side, scaled and offset by the Rand CV knobs"},
+    {"ids": [4], "text": "An echo of the incoming clock on every channel"},
+    {"ids": [5], "text": "A new random voltage drawn on every tick whichever side was picked, scaled and offset by the Rand CV knobs"}
+  ],
+  "notes": [
+    "nothing is drawn and nothing moves until a rising edge arrives at the clock input.",
+    "a polyphonic clock is summed to one signal before the edge is read, so every channel takes its pick from the same edge."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "2": "stepped",
+      "4": "stepped"
+    }
+  }
+}

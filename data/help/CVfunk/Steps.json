@@ -1,0 +1,54 @@
+{
+  "plugin": "CVfunk",
+  "module": "Steps",
+  "description": "A window comparator joined to a stepped voltage accumulator: every trigger adds one step to a running voltage, and the comparator turns that voltage around at the edges of the window",
+  "params": [
+    {"ids": [0], "text": "Sets the centre of the comparator window, -5V to 5V"},
+    {"ids": [1], "text": "Sets the width of the comparator window, 0 to 10V, with its edges half that far above and below the centre"},
+    {"ids": [2], "text": "Sets how far the running voltage moves on each trigger, -1V to 1V"},
+    {"ids": [3], "text": "Attenuverts the bias CV before it is added to the bias knob"},
+    {"ids": [4], "text": "Attenuverts the range CV before it is added to the range knob"},
+    {"ids": [5], "text": "Attenuverts the step size CV before it is added to the step knob"},
+    {"ids": [6], "text": "Attenuverts the voltage arriving at the comparator input"},
+    {"ids": [7], "text": "Adds one step to the running voltage on each press, for every polyphonic channel at once"},
+    {"ids": [8], "text": "Sets the running voltage back to the bias voltage on each press, or back to 0V while a cable is in the comparator input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage compared against the window in place of the module's own running voltage; patching it stops the comparator from turning that voltage around at the window edges"},
+    {"ids": [1], "text": "Shifts the centre of the window, added to the bias knob through its attenuverter and clamped to -10 to 10V"},
+    {"ids": [2], "text": "Widens or narrows the window, added to the range knob through its attenuverter; the total is taken as an absolute value and clamped to 10V"},
+    {"ids": [3], "text": "A high gate reverses the sign of the step, so the running voltage climbs instead of falling"},
+    {"ids": [4], "text": "Changes the step size, added to the step knob through its attenuverter and clamped to -5 to 5V"},
+    {"ids": [5], "text": "A rising edge adds one step to the running voltage"},
+    {"ids": [6], "text": "A rising edge sets the running voltage back to the bias voltage, or to 0V while a cable is in the comparator input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the compared voltage is above the top edge of the window, and 0V otherwise"},
+    {"ids": [1], "text": "Carries 10V while the compared voltage is below the bottom edge of the window, and 0V otherwise"},
+    {"ids": [2], "text": "The running voltage, clamped to -10 to 10V, and snapped to the grid picked under Quantization"}
+  ],
+  "notes": [
+    "nothing moves until a trigger arrives, either at the TRIG. input or from the button; the voltage then walks one step per trigger and turns around at the window edges"
+  ],
+  "menu": [
+    "Poly Channel Count — a slider fixing how many polyphonic channels are run, from Auto, which takes the count from the trigger and comparator inputs, up to 16",
+    "Quantization — snaps the stepper output to equal divisions of a volt: None (default), Octaves at 1-EDO, or 9, 12, 17, 19, 22, 24, 31, 41 and 53-EDO",
+    "Invert Input Mode: Momentary, Latch — Momentary reverses the step while the gate is above 0V; Latch flips the direction on each rise past 1V and holds it there"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic",
+      "1": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V.",
+      "2": "continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "3": "high above 0V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "bipolar · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±5V.",
+      "5": "high above 1V · stepped · polyphonic",
+      "6": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "±10V · polyphonic"
+    }
+  }
+}

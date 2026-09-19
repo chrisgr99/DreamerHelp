@@ -1,0 +1,74 @@
+{
+  "plugin": "Noumenal-B",
+  "module": "HUB",
+  "description": "Stereo send and return hub: three effect paths, and three stages that each choose one path, send the signal out to it and crossfade its return back in, either down a chain or side by side",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Switches that stage in and out of circuit, fading over the time set by FADE; out of circuit the signal passes to the next stage untouched. It reads 1 when the stage is in, despite the name Bypass"},
+    {"ids": [3, 4, 5], "text": "Steps that stage through the three effect paths, A then B then C; it lights in the colour of the path chosen — cyan, magenta or orange — and brightens with that stage's mix knob"},
+    {"ids": [6, 7, 8], "text": "Sets how much of that stage's return is crossfaded against the signal arriving at that stage; at zero nothing is sent out at all, and any setting above zero sends at full strength"},
+    {"ids": [9, 10, 11], "text": "An attenuverter, -1 to +1, setting how far that stage's mix CV input moves its mix knob"},
+    {"ids": [12], "text": "Chooses between running the stages as a chain in the order I, II, III and feeding each one a copy of the main input to be summed; the tooltip calls these Sequential, the default, and Parallel"},
+    {"ids": [13], "text": "A press exchanges the effect paths chosen by stages I and II, dropping both to near silence for about 10ms and fading them back over the time set by FADE"},
+    {"ids": [14], "text": "A press exchanges the effect paths chosen by stages II and III, dropping both to near silence for about 10ms and fading them back over the time set by FADE"},
+    {"ids": [15], "text": "A press exchanges the effect paths chosen by stages III and I, dropping both to near silence for about 10ms and fading them back over the time set by FADE"},
+    {"ids": [17], "text": "Sets the fade time shared by all three stages when one is bypassed or swapped; zero makes the change instant, and the maximum of 3 gives a fade of a few seconds"},
+    {"ids": [18], "text": "Crossfades the main outputs between the dry main input and what the stages return; it comes up fully wet, so the dry input is heard only through the stages"}
+  ],
+  "inputs": [
+    {"ids": [0, 2, 4], "text": "Takes the right side back from that path's effect; with no cable in it the left return of the same path feeds both sides"},
+    {"ids": [1, 3, 5], "text": "Takes the left side back from that path's effect; how much of it reaches the output is set by the mix knob of whichever stage has chosen this path"},
+    {"ids": [6], "text": "The left side of the signal the module works on; a polyphonic cable here has its channels averaged into one"},
+    {"ids": [7], "text": "The right side of the signal the module works on; with no cable in it the left input feeds both sides"},
+    {"ids": [8, 9, 10], "text": "Moves that stage's mix, scaled by that stage's attenuverter and added to its mix knob; 0-10V covers the whole range at a full attenuverter, and the total is clamped between 0 and 1"},
+    {"ids": [11, 12, 13], "text": "A pulse here toggles that stage in and out of circuit. Held for more than 1000 samples it acts as a gate instead: the stage is in circuit while the gate is high and out when it falls"},
+    {"ids": [14], "text": "A rising edge above 2V exchanges the effect paths chosen by stages I and II"},
+    {"ids": [15], "text": "A rising edge above 2V exchanges the effect paths chosen by stages II and III"},
+    {"ids": [16], "text": "A rising edge above 2V exchanges the effect paths chosen by stages III and I"}
+  ],
+  "outputs": [
+    {"ids": [0, 2, 4], "text": "Feeds that path's effect with the left side of the signal. Sending stops when the stage using the path is bypassed or its mix is zero; in the parallel mode the main input goes out here regardless"},
+    {"ids": [1, 3, 5], "text": "Feeds that path's effect with the right side of the signal. Sending stops when the stage using the path is bypassed or its mix is zero; in the parallel mode the main input goes out here regardless"},
+    {"ids": [6], "text": "The left side of the finished signal: what the stages return, crossfaded against the dry main input by MIX"},
+    {"ids": [7], "text": "The right side of the finished signal: what the stages return, crossfaded against the dry main input by MIX"}
+  ],
+  "notes": [
+    "In the chain mode the signal runs through the stages in the order I, II, III; in the parallel mode each stage takes a copy of the main input and the three returns are summed",
+    "In the parallel mode the main outputs carry only the summed returns, so with MIX fully wet and no return patched they read 0V; in the chain mode an unpatched path passes the signal on",
+    "The parallel mode makes the module a three-channel stereo mixer on its own: patch three sources into the return inputs and leave the main input and the sends unpatched",
+    "Two stages set to the same path build a feedback loop through the effect patched there; bypassing either stage or turning either stage's mix knob to zero cuts the loop",
+    "Wherever the module takes a stereo pair, the left jack feeds both sides when the right one has no cable in it",
+    "A polyphonic cable into the left or right input has its channels averaged into one, and every output of the module carries a single channel",
+    "Bypassing a stage fades it out or in over the time set by FADE; a swap drops both stages to near silence in about 10ms first, then fades them back over that same time"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads the L return of the same path.",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only\n\nunpatched it reads the L return of the same path.",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only\n\nunpatched it reads the L return of the same path.",
+      "5": "continuous · one channel only",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic\n\nunpatched it reads the L input.",
+      "8": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "11": "stepped · one channel only",
+      "12": "stepped · one channel only",
+      "13": "stepped · one channel only",
+      "14": "high above 2V · stepped · one channel only",
+      "15": "high above 2V · stepped · one channel only",
+      "16": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only"
+    }
+  }
+}

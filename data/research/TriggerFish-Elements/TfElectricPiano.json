@@ -1,0 +1,20 @@
+{
+  "plugin": "TriggerFish-Elements",
+  "module": "TfElectricPiano",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "TfElectricPiano.cpp:292 takes the channel count from the pitch, gate and velocity jacks; line 314 reads this one per channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "TfElectricPiano.cpp:325 strikes the key when this reads 1V or more and the voice is not already held; ElectricPiano.hpp:509 holds the note for as long as it stays there"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "negative": "ignored", "step": "continuous", "normal": "8V", "why": "TfElectricPiano.cpp:310 clamps the jack divided by 10 to 0 to 1, and uses 0.8 when it is unpatched"},
+      "3": {"family": "cv", "poly": true, "negative": "swings", "step": "continuous", "normal": "0V", "why": "TfElectricPiano.cpp:261 returns no modulation when the jack is unpatched; line 263 scales it by the depth knob"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "TfElectricPiano.cpp:321 reads 1V or more as high and :323 takes its rising edge, which :326 uses to strike the key again while the gate is still up"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "TfElectricPiano.cpp:320 reads 1V or more as the pedal down and passes it to ElectricPiano.hpp:586, which leaves the string undamped after the gate falls"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "TfElectricPiano.cpp:373 sets the channel count from the voices plus any still-ringing tails"},
+      "1": {"family": "audio", "poly": false, "why": "TfElectricPiano.cpp:384 sets this output to one channel"},
+      "2": {"family": "audio", "poly": false, "why": "TfElectricPiano.cpp:385 sets this output to one channel"}
+    }
+  },
+  "comment": "The direct output is only computed when something is patched into it (line 343), so leaving it unpatched costs nothing."
+}

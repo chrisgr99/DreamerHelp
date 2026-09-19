@@ -1,0 +1,51 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "SampleAndUpdate",
+  "description": "A sample-and-hold split in two, in 2HP: one control captures the input into memory and another sends that memory to the output, with a reset that clears it",
+  "params": [
+    {"ids": [0], "text": "Captures the input into memory, for one cycle per press in Single mode or for as long as it is held in Continuous mode"},
+    {"ids": [1, 3, 5], "text": "Switches the control beside it between Single, where the button is momentary and the jack reads a trigger, and Continuous, where the button latches and the jack reads a gate"},
+    {"ids": [2], "text": "Sends what is in memory to the output, once per press in Single mode or continuously while held in Continuous mode"},
+    {"ids": [4], "text": "Clears the memory to 0V, and updates the output too unless the menu says to clear memory only"},
+    {"ids": [6], "text": "Chooses what is stored and put out: Val. passes the voltage itself, Gt. turns it into a gate high or low, Trg. counts triggers seen while sampling"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Captures the input into memory, read as a trigger or as a gate according to the small button beside it"},
+    {"ids": [1], "text": "Sends what is in memory to the output, read as a trigger or as a gate according to the small button beside it"},
+    {"ids": [2], "text": "Clears the memory, read as a trigger or as a gate according to the small button beside it"},
+    {"ids": [3], "text": "The signal to be captured; unpatched it reads 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries whatever was last sent out of memory, holding it until the next update"}
+  ],
+  "notes": [
+    "nothing reaches the output until an update happens, so a plain sample-and-hold means leaving the Update button latched in Continuous mode and triggering Sample",
+    "the three small mode buttons are red for Single and green for Continuous; in Single mode the big button above is momentary and in Continuous mode it latches",
+    "in Trg. mode the output fires one trigger once the counted number of input triggers has been reached at the moment of an update, so it works as a clock divider"
+  ],
+  "menu": [
+    "Reset-mode: Only reset, Reset and update — chooses whether a reset also pushes the cleared memory to the output",
+    "Reset trigger count: Only on Reset, Only on Update (count reached), Reset and Update (count reached) — chooses what clears the counter in Trg. mode",
+    "Trigger count: 1 to 16 — sets how many input triggers must have been counted before an update fires the output trigger",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "plugin": "MADZINE",
+  "module": "Drummmmmmer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "src/Drummmmmmer.cpp:328-336, styleValue += getVoltage(), then round and clamp to 0..9"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "src/Drummmmmmer.cpp:388, trigSchmitt[v].process(getVoltage(), 0.1f, 2.f)"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "ignored", "why": "src/Drummmmmmer.cpp:391, clamp(getVoltage()/10, 0, 1), read only at the trigger"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Drummmmmmer.cpp:357-364, freqParam += getVoltage()*0.2, then clamp(-1, 1), so 5V is a full octave"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/Drummmmmmer.cpp:366-374, decayParam += getVoltage()*0.18, then clamp(0.2, 2)"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "cv"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Drummmmmmer.cpp:406, the two voices summed and multiplied by 5"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Drummmmmmer.cpp:426, tanh of the mix times 5"},
+      "5": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Drummmmmmer.cpp:427, tanh of the mix times 5"}
+    }
+  },
+  "comment": "The ten preset names are a literal table at src/Drummmmmmer.cpp:183-186 and the style knob's tooltip prints them. Style CV is added to the knob before rounding, one whole preset per volt. Each of the four roles owns two synthesis voices from the preset, and VOICE is the probability of the second being chosen at each trigger; both are processed and summed every sample regardless (src/Drummmmmmer.cpp:406). Panning is fixed at -0.5, 0, +0.3 and +0.7 for the four roles, scaled by SPREAD (src/Drummmmmmer.cpp:415). The panel prints STYLE, CV, FREQ, DECAY, OUT, SPREAD, VOICE, L and R; the role name beside each row is drawn at runtime by a custom widget, and the style name likewise. Lettering is drawn in code at src/Drummmmmmer.cpp:597-692."
+}

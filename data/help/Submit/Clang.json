@@ -1,0 +1,47 @@
+{
+  "plugin": "Submit",
+  "module": "Clang",
+  "description": "A techno percussion synthesiser with two engines, eight models and eight sounds within each model, playing up to eight overlapping hits from one output",
+  "params": [
+    {"ids": [0], "text": "Chooses one of eight models, which sets the basic material of the hit; the display names the choice"},
+    {"ids": [1], "text": "Chooses the engine: physical modelling at the bottom, FM at the top. Switching it silences every hit that has not finished"},
+    {"ids": [2], "text": "Chooses one of eight variations within the model; the display names the choice"},
+    {"ids": [3], "text": "Sets how long the hit rings, opening out much further over the top half of its travel"},
+    {"ids": [4], "text": "Tunes the hit over -2 to +2 octaves; it is read at the moment of the trigger, so turning it does not bend a hit already ringing"},
+    {"ids": [5], "text": "Balances the resonant body of the hit against its transient, and sets how quickly the body is damped"},
+    {"ids": [6], "text": "Moves the pitch, phase and modulation of the hit while it rings"},
+    {"ids": [7], "text": "Sets how much noise goes into the hit"},
+    {"ids": [8], "text": "Spreads the pitch of each hit at random around the tuned pitch; at zero every hit lands on the same pitch"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 2V fires a hit; the voltage has to fall below 0.1V before another can fire"},
+    {"ids": [1], "text": "While patched it replaces the MODEL knob altogether: 0-10V picks one of the eight models in order"},
+    {"ids": [2], "text": "While patched it replaces the SOUND knob altogether: 0-10V picks one of the eight sounds in order"},
+    {"ids": [3], "text": "Offsets MOTION, 10V covering the knob's full travel"},
+    {"ids": [4], "text": "Volt-per-octave pitch added to the TUNE knob, read at the moment of the trigger"},
+    {"ids": [5], "text": "Offsets DECAY, 10V covering the knob's full travel"},
+    {"ids": [6], "text": "Offsets NOISE, 10V covering the knob's full travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Every hit that has not finished, summed and held to ±10V"}
+  ],
+  "notes": [
+    "nothing comes out until a hit is fired. Send a trigger to TRIGGER",
+    "eight hits can ring at once; a ninth trigger takes over whichever voice has the least left in it",
+    "BODY and TUNE VAR are the two shaping knobs with no CV input of their own"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only"
+    }
+  }
+}

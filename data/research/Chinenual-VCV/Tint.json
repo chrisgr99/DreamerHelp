@@ -1,0 +1,16 @@
+{
+  "plugin": "Chinenual-VCV",
+  "module": "Tint",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "normal": "0V", "why": "Tint.cpp:85-92 loops to getChannels and reads each channel with getPolyVoltage, clamped to -10V and 10V"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "normal": "0V", "why": "Tint.cpp:98-101 loops to getChannels and reads each channel with getPolyVoltage, clamped to -10V and 10V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "normal": "0V", "why": "Tint.cpp:81 reads the jack with getVoltage through a SchmittTrigger set to 1V and 2V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Tint.cpp:103-108 writes two channels per melody channel and calls setChannels with that count"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Tint.cpp:102 and 107 write one channel per melody channel and call setChannels with that count"}
+    }
+  },
+  "comment": "The mix output is index 0 and the harmony output is index 1, while on the panel the harmony jack is above the mix jack, so index order is not panel order here. The module saves the mode and octave in its own patch data as well as in the parameters, but the parameters overwrite them on the first sample (Tint.cpp:77-78), so the parameters are what count."
+}

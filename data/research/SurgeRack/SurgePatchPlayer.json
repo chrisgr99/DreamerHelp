@@ -1,0 +1,32 @@
+{
+  "plugin": "SurgeRack",
+  "module": "SurgePatchPlayer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:365 reads channel one of this input alone and multiplies it by RACK_TO_SURGE_OSC_MUL, which is 0.2"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:365 reads channel one of this input alone and multiplies it by RACK_TO_SURGE_OSC_MUL, which is 0.2"},
+      "2": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "SurgePatchPlayer.hpp:249 multiplies each channel of this input by 12 and adds it to MIDI note 60"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:250 multiplies each channel of this input by 12.7 into a MIDI velocity of 0 to 127"},
+      "4": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "SurgePatchPlayer.hpp:206 takes getChannels() on this input for the voice count and SurgePatchPlayer.hpp:233 passes each channel to a SchmittTrigger, whose default high threshold is 1V"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:287 clamps channel one of this input to plus or minus 5V and sends it as pitch bend"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:294 clamps channel one of this input to plus or minus 5V and sends it as channel aftertouch"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:321 clamps every channel of this input to plus or minus 5V and sends each as polyphonic aftertouch for that voice"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "why": "SurgePatchPlayer.hpp:333 clamps every channel of this input to plus or minus 5V and sends each as MPE timbre for that voice"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "16": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "17": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "SurgePatchPlayer.hpp:305 clamps channel one of this input to 0-10V and sends it as a MIDI controller"},
+      "18": {"family": "cv", "poly": false, "step": "continuous", "why": "SurgePatchPlayer.hpp:270 reads this input with getVoltage() alone and SurgeModuleCommon.hpp:128 raises two to its power to set the tempo"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "range": "±5V", "why": "SurgePatchPlayer.hpp:377 multiplies this output by SURGE_TO_RACK_OSC_MUL, which is 5"},
+      "1": {"family": "audio", "range": "±5V", "why": "SurgePatchPlayer.hpp:377 multiplies this output by SURGE_TO_RACK_OSC_MUL, which is 5"}
+    }
+  },
+  "comment": "The clock jack is not a trigger: SurgeModuleCommon.hpp:128 raises two to the power of its voltage to set the tempo, so 0V is 120 BPM and each volt doubles it. The gate input is what makes the module polyphonic: the number of channels on it is the number of voices, and pitch, velocity, polyphonic aftertouch and timbre are read a channel at a time to match. The audio outputs are always one channel."
+}

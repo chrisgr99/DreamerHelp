@@ -13,98 +13,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
+#include <cctype>
 
-
-// ---- the text ---------------------------------------------------------------------------------
-
-std::vector<std::string> helpFor(const std::string& plugin, const std::string& model) {
-	// BINARY SEARCH, because the table is meant to grow to the whole library and this runs on a
-	// click. The generator writes it sorted by plugin then model, which is the order compared here.
-	int lo = 0, hi = HELP_COUNT - 1;
-	while (lo <= hi) {
-		const int mid = (lo + hi) / 2;
-		int c = std::strcmp(HELP[mid].plugin, plugin.c_str());
-		if (c == 0)
-			c = std::strcmp(HELP[mid].model, model.c_str());
-		if (c == 0) {
-			std::vector<std::string> out;
-			for (int i = 0; i < HELP[mid].count; i++)
-				out.push_back(HELP[mid].lines[i]);
-			return out;
-		}
-		if (c < 0)
-			lo = mid + 1;
-		else
-			hi = mid - 1;
-	}
-	return std::vector<std::string>();
-}
-
-
-/** The entry for a module, or NULL. */
-static const HelpEntry* helpEntryFor(const std::string& plugin, const std::string& model) {
-	int lo = 0, hi = HELP_COUNT - 1;
-	while (lo <= hi) {
-		const int mid = (lo + hi) / 2;
-		int c = std::strcmp(HELP[mid].plugin, plugin.c_str());
-		if (c == 0)
-			c = std::strcmp(HELP[mid].model, model.c_str());
-		if (c == 0)
-			return &HELP[mid];
-		if (c < 0)
-			lo = mid + 1;
-		else
-			hi = mid - 1;
-	}
-	return NULL;
-}
-
-int helpFamilyFor(const std::string& plugin, const std::string& model,
-		bool isOutput, int port) {
-	const HelpEntry* e = helpEntryFor(plugin, model);
-	if (!e || port < 0)
-		return -1;
-	const signed char* table = isOutput ? e->outFamilies : e->inFamilies;
-	const int count = isOutput ? e->outFamilyCount : e->inFamilyCount;
-	if (!table || port >= count)
-		return -1;
-	return table[port];
-}
-
-std::string helpPropsFor(const std::string& plugin, const std::string& model,
-		bool isOutput, int port) {
-	const HelpEntry* e = helpEntryFor(plugin, model);
-	if (!e || port < 0)
-		return "";
-	const short* table = isOutput ? e->outProps : e->inProps;
-	const int count = isOutput ? e->outPropCount : e->inPropCount;
-	if (!table || port >= count)
-		return "";
-	const short at = table[port];
-	if (at < 0 || at >= HELP_PROP_TEXT_COUNT)
-		return "";
-	return HELP_PROP_TEXT[at];
-}
-
-std::string helpForControl(const std::string& plugin, const std::string& model,
-		HelpKind kind, int index) {
-	const HelpEntry* e = helpEntryFor(plugin, model);
-	if (!e || index < 0)
-		return "";
-	const short* table = NULL;
-	int count = 0;
-	switch (kind) {
-		case HELP_INPUT:  table = e->inputs;  count = e->inputCount;  break;
-		case HELP_OUTPUT: table = e->outputs; count = e->outputCount; break;
-		case HELP_PARAM:  table = e->params;  count = e->paramCount;  break;
-	}
-	if (!table || index >= count)
-		return "";
-	const short line = table[index];
-	if (line < 0 || line >= e->count)
-		return "";
-	return e->lines[line];
-}
 
 // ---- the panel --------------------------------------------------------------------------------
 
@@ -139,15 +49,47 @@ static std::string helpScalePath() {
 
 static void helpLoadScale();
 
-void helpSetScale(float scale) {
-	// LOADED BEFORE IT IS WRITTEN. The menu asks for the current size before any note has been
-	// shown, and without this the first thing a fresh session wrote to the file was the default
-	// it had never read — which threw away the setting it was being asked to change.
-	helpLoadScale();
-	gHelpScale = math::clamp(scale, HELP_SCALE_MIN, HELP_SCALE_MAX);
+/** THE GESTURE THAT ASKS, chosen in the module's menu.
 
+OPTION-CLICK BY DEFAULT, and the reasons are Rack's. Control cannot be used on a Mac at all:
+Rack's mouse callback turns Control-click into a right click and Control-Shift-click into a
+middle click, stripping the modifier, before any widget sees it — so Control appears nowhere in
+this list on a Mac, where RACK_MOD_CTRL is Command. Command-Shift on a port is Rack's clone-the-top
+-cable, and Command alone begins a cable or fine-adjusts a knob. Option is taken only by Rack's
+pan, which the overlay leaves alone by answering on release and only when the pointer did not
+travel — see Overlay.cpp.
+
+THE OTHERS ARE OFFERED ANYWAY, clashes and all. Somebody may never use what a combination does
+in Rack or in another plugin, or may want option-click for something else; whether a clash
+matters is theirs to decide, and every choice here is answered the same way, on a release that
+did not travel. Asked for on the forum. */
+#if defined ARCH_MAC
+const HelpGesture HELP_GESTURES[] = {
+	{GLFW_MOD_ALT, GLFW_MOUSE_BUTTON_LEFT, "option click"},
+	{GLFW_MOD_ALT | GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "option-shift click"},
+	{GLFW_MOD_ALT | RACK_MOD_CTRL, GLFW_MOUSE_BUTTON_LEFT, "command-option click"},
+	{RACK_MOD_CTRL | GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "command-shift click"},
+	{GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "shift click"},
+	{0, GLFW_MOUSE_BUTTON_MIDDLE, "middle click"},
+};
+#else
+const HelpGesture HELP_GESTURES[] = {
+	{GLFW_MOD_ALT, GLFW_MOUSE_BUTTON_LEFT, "alt click"},
+	{GLFW_MOD_ALT | GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "alt-shift click"},
+	{GLFW_MOD_ALT | RACK_MOD_CTRL, GLFW_MOUSE_BUTTON_LEFT, "ctrl-alt click"},
+	{RACK_MOD_CTRL | GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "ctrl-shift click"},
+	{GLFW_MOD_SHIFT, GLFW_MOUSE_BUTTON_LEFT, "shift click"},
+	{0, GLFW_MOUSE_BUTTON_MIDDLE, "middle click"},
+};
+#endif
+const int HELP_GESTURE_COUNT = sizeof(HELP_GESTURES) / sizeof(HELP_GESTURES[0]);
+static int gHelpGesture = 0;
+
+/** Both settings, written together, since they share the file. */
+static void helpSaveSettings() {
 	json_t* rootJ = json_object();
 	json_object_set_new(rootJ, "textScale", json_real(gHelpScale));
+	json_object_set_new(rootJ, "gesture", json_integer(gHelpGesture));
 	// Failure here is silent on purpose: an unwritable settings folder is not a reason to
 	// interrupt somebody reading a note, and the setting still holds for this session.
 	if (FILE* f = std::fopen(helpScalePath().c_str(), "w")) {
@@ -155,6 +97,30 @@ void helpSetScale(float scale) {
 		std::fclose(f);
 	}
 	json_decref(rootJ);
+}
+
+void helpSetScale(float scale) {
+	// LOADED BEFORE IT IS WRITTEN. The menu asks for the current size before any note has been
+	// shown, and without this the first thing a fresh session wrote to the file was the default
+	// it had never read — which threw away the setting it was being asked to change.
+	helpLoadScale();
+	gHelpScale = math::clamp(scale, HELP_SCALE_MIN, HELP_SCALE_MAX);
+	helpSaveSettings();
+}
+
+int helpGestureIndex() {
+	helpLoadScale();
+	return gHelpGesture;
+}
+
+void helpSetGesture(int index) {
+	helpLoadScale();
+	gHelpGesture = math::clamp(index, 0, HELP_GESTURE_COUNT - 1);
+	helpSaveSettings();
+}
+
+const HelpGesture& helpGesture() {
+	return HELP_GESTURES[helpGestureIndex()];
 }
 
 float helpScale() {
@@ -175,6 +141,8 @@ static void helpLoadScale() {
 	if (json_t* rootJ = json_loadf(f, 0, &err)) {
 		if (json_t* j = json_object_get(rootJ, "textScale"))
 			gHelpScale = math::clamp((float) json_number_value(j), HELP_SCALE_MIN, HELP_SCALE_MAX);
+		if (json_t* j = json_object_get(rootJ, "gesture"))
+			gHelpGesture = math::clamp((int) json_integer_value(j), 0, HELP_GESTURE_COUNT - 1);
 		json_decref(rootJ);
 	}
 	std::fclose(f);
@@ -274,8 +242,17 @@ void helpSetSpeak(bool on) {
 ASKED OF THE SYSTEM, because there is nothing to ask otherwise: `say` is a separate process with
 no way to report back, and guessing from the length of the text would be a guess. One `pgrep` on
 a click is nothing. */
+#if defined ARCH_WIN
+// See SpeechWin.cpp, which is kept apart from Rack's headers.
+bool helpWinSpeaking();
+void helpWinSilence();
+void helpWinSay(const std::string& commandLine);
+#endif
+
 static bool helpIsSpeaking() {
-#if defined ARCH_MAC
+#if defined ARCH_WIN
+	return helpWinSpeaking();
+#elif defined ARCH_MAC
 	FILE* pipe = popen("/usr/bin/pgrep -x say >/dev/null 2>&1; echo $?", "r");
 	if (!pipe)
 		return false;
@@ -294,9 +271,8 @@ static void helpSilence() {
 #elif defined ARCH_LIN
 	std::system("killall espeak spd-say >/dev/null 2>&1");
 #elif defined ARCH_WIN
-	// NOT taskkill on powershell.exe, which would kill whatever else the user is running in
-	// one. Windows speech is left to finish its sentence; the next thing said still queues
-	// behind it rather than talking over it, which is the part that mattered.
+	// THE ONE PROCESS WE STARTED, and no other: see SpeechWin.cpp.
+	helpWinSilence();
 #endif
 }
 
@@ -340,15 +316,16 @@ static void helpSay(const std::string& text) {
 	// no `say`, and SAPI is what every Windows machine has had for twenty years — it speaks in
 	// whatever voice Narrator and the Speech settings are set to.
 	//
-	// UNTESTED. There is no Windows machine here. It is written to fail the way the others do:
-	// if PowerShell is absent or blocked, the process exits and the reader gets silence.
+	// STARTED AS A PROCESS WE KEEP, so the next reading can end this one rather than talking
+	// over it — see SpeechWin.cpp. Untested on Windows; if PowerShell is absent or blocked, the
+	// reader gets silence.
 	const std::string command =
-		"start /b powershell -NoProfile -WindowStyle Hidden -Command "
+		"powershell -NoProfile -WindowStyle Hidden -Command "
 		"\"Add-Type -AssemblyName System.Speech; "
 		"$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; "
 		"$s.Rate = " + std::to_string(HELP_RATE_WINDOWS) + "; "
-		"$s.Speak([IO.File]::ReadAllText('" + path + "'))\" >NUL 2>&1";
-	std::system(command.c_str());
+		"$s.Speak([IO.File]::ReadAllText('" + path + "'))\"";
+	helpWinSay(command);
 
 #else
 	(void) text;
@@ -374,13 +351,23 @@ struct HelpPopup : widget::OpaqueWidget {
 	std::string title;
 	std::string line;
 	bool missing = false;
-	/** Enough to find this entry again in data/plugins: which plugin, which model, and which
+	/** Enough to find this entry again in data/help: which plugin, which model, and which
 	control by kind and number. Carried for the copy button and nothing else. */
 	std::string plugin;
 	std::string model;
 	std::string what;
-	/** Set when the words are the maker's own rather than ours, so the note can say so. */
+	/** Set when the words are the maker's tooltip text rather than anybody's help, so the note
+	can say so. */
 	bool fromMaker = false;
+	/** WHOSE HELP FILE THE WORDS CAME FROM, said at the foot of the note: the maker's, the
+	user's, or ours. The disclosure that the text was written with AI belongs to ours alone. */
+	HelpSource from = HELP_FROM_NONE;
+	bool usesDatabase = false;
+	/** A USER'S OWN FILE FOR THIS MODULE, on the module's note only: it can be sent to be folded
+	into the database. Empty where there is none. */
+	std::string sendFile;
+	/** Where the send link was drawn, in content coordinates. */
+	float sendTop = -1.f, sendBottom = -1.f;
 	/** WHETHER THE MAKER CALLS THE MODULE POLYPHONIC: 1 yes, 0 no, -1 they never say.
 
 	A FLAG, BECAUSE IT IS THE ONE FACT THAT DECIDES WHETHER A PATCH IS POSSIBLE. The note says it
@@ -491,6 +478,41 @@ struct HelpPopup : widget::OpaqueWidget {
 		std::string out = title + "\n" + line + "\n";
 		if (!plugin.empty())
 			out += "[" + plugin + " / " + model + (what.empty() ? "" : " — " + what) + "]\n";
+		return out;
+	}
+
+	/** SENDING A USER'S FILE: the file on the clipboard, and a new issue on DreamerHelp's GitHub
+	page open in the browser, titled for the module, with the paste as the one thing left to do.
+	A GitHub account is all it needs. The file goes on the clipboard rather than into the address,
+	because an address has a length limit and a help file does not. */
+	void sendToDatabase() {
+		std::string text;
+		if (FILE* f = std::fopen(sendFile.c_str(), "rb")) {
+			char buf[4096];
+			size_t n;
+			while ((n = std::fread(buf, 1, sizeof(buf), f)) > 0)
+				text.append(buf, n);
+			std::fclose(f);
+		}
+		if (text.empty())
+			return;
+		glfwSetClipboardString(APP->window->win, text.c_str());
+		copiedAt = system::getTime();
+		const std::string subject = "Help for " + plugin + " / " + model;
+		const std::string body = "The help file for " + plugin + " / " + model
+			+ " is on your clipboard. Paste it below, replacing this line.\n\n";
+		system::openBrowser("https://github.com/chrisgr99/DreamerHelp/issues/new?labels=user-help&title="
+			+ helpUrlEncode(subject) + "&body=" + helpUrlEncode(body));
+	}
+
+	static std::string helpUrlEncode(const std::string& in) {
+		std::string out;
+		for (unsigned char c : in) {
+			if (std::isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+				out += (char) c;
+			else
+				out += string::f("%%%02X", c);
+		}
 		return out;
 	}
 
@@ -753,29 +775,54 @@ struct HelpPopup : widget::OpaqueWidget {
 				y += (heading ? 3.f : 6.f) * gHelpScale;
 		}
 
-		// WHOSE WORDS THESE ARE. Only where they are not ours: an entry we wrote needs no
-		// attribution, and a note that says something on every reading says nothing.
-		if (fromMaker) {
+		// WHOSE WORDS THESE ARE. Only where they are not the database's: its text needs no
+		// attribution beyond the disclosure below, and a note that says the same thing on every
+		// reading says nothing. A maker's or a user's help file is named, so somebody editing
+		// one can see their own words are the ones on the screen.
+		const char* whose = fromMaker ? "the maker's own description"
+			: from == HELP_FROM_MAKER ? "from the maker's help file"
+			: from == HELP_FROM_USER ? "from your help file"
+			: NULL;
+		if (whose) {
 			y += 3.f * gHelpScale;
 			nvgFontSize(vg, 10.f * gHelpScale);
 			if (drawing) {
 				nvgFillColor(args->vg, nvgRGB(0x7f, 0x86, 0x92));
-				nvgText(args->vg, HELP_PAD, y, "the maker's own description", NULL);
+				nvgText(args->vg, HELP_PAD, y, whose, NULL);
 			}
 			y += 13.f * gHelpScale;
 		}
 
-		// HOW THIS WAS WRITTEN, on every card. The rule against notes that say the same thing
-		// every time is a rule about *content*; this is a disclosure, and a disclosure that
-		// appears only sometimes is worse than useless. Small, dim and last, so it is there for
-		// anyone who looks and never competes with the module's own words.
-		y += 2.f * gHelpScale;
-		nvgFontSize(vg, 9.f * gHelpScale);
-		if (drawing) {
-			nvgFillColor(args->vg, nvgRGB(0x60, 0x66, 0x70));
-			nvgText(args->vg, HELP_PAD, y, "written with the assistance of AI; may contain errors", NULL);
+		// SENDING A USER'S FILE, on the module's note. A link rather than a button: it is read
+		// before it is used, and it says what it does.
+		sendTop = sendBottom = -1.f;
+		if (!sendFile.empty()) {
+			y += 2.f * gHelpScale;
+			nvgFontSize(vg, 11.f * gHelpScale);
+			const bool hot = APP->event && APP->event->hoveredWidget == this
+				&& hoverY >= y && hoverY < y + 14.f * gHelpScale;
+			if (drawing) {
+				nvgFillColor(args->vg, hot ? nvgRGB(0xff, 0xff, 0xff) : nvgRGB(0x7f, 0xb0, 0xe4));
+				nvgText(args->vg, HELP_PAD, y, "Send this help to Dreamer Help \u203a", NULL);
+			}
+			sendTop = y;
+			sendBottom = y + 14.f * gHelpScale;
+			y += 15.f * gHelpScale;
 		}
-		y += 11.f * gHelpScale;
+
+		// HOW THE DATABASE WAS WRITTEN, on every note that shows any of it. The rule against notes
+		// that say the same thing every time is a rule about *content*; this is a disclosure, and
+		// a disclosure that appears only sometimes is worse than useless. Not on a maker's or a
+		// user's words, which were not written that way. Small, dim and last.
+		if (usesDatabase) {
+			y += 2.f * gHelpScale;
+			nvgFontSize(vg, 9.f * gHelpScale);
+			if (drawing) {
+				nvgFillColor(args->vg, nvgRGB(0x60, 0x66, 0x70));
+				nvgText(args->vg, HELP_PAD, y, "written with the assistance of AI; may contain errors", NULL);
+			}
+			y += 11.f * gHelpScale;
+		}
 		return y + HELP_PAD;
 	}
 
@@ -919,6 +966,10 @@ struct HelpPopup : widget::OpaqueWidget {
 				copyToClipboard();
 				return;
 			}
+			if (sendTop >= 0.f && e.pos.y + scrollY >= sendTop && e.pos.y + scrollY < sendBottom) {
+				sendToDatabase();
+				return;
+			}
 			// A CLICK WHILE IT IS TALKING IS A REQUEST TO STOP. Somebody who has heard enough
 			// reaches for the thing that is talking, and the alternative — starting it again from
 			// the top — is the opposite of what they wanted.
@@ -1046,6 +1097,16 @@ static std::string helpPlatformText(std::string t) {
 threaded through six call sites that have nothing to do with polyphony. */
 static int gPolyFlag = -1;
 
+/** WHOSE WORDS THE NEXT NOTE CARRIES, set just before it is shown, for the same reason. */
+struct HelpCredit {
+	HelpSource from = HELP_FROM_NONE;
+	bool usesDatabase = false;
+	std::string sendFile;
+	HelpCredit() {}
+	HelpCredit(HelpSource f, bool d, const std::string& s) : from(f), usesDatabase(d), sendFile(s) {}
+};
+static HelpCredit gCredit;
+
 static void helpPopupShow(app::ModuleWidget* mw, math::Rect controlBox,
 		const std::string& title, const std::string& line, bool missing,
 		const std::string& what = "", bool fromMaker = false) {
@@ -1062,6 +1123,10 @@ static void helpPopupShow(app::ModuleWidget* mw, math::Rect controlBox,
 	// whatever the last one showed.
 	gPopup->poly = gPolyFlag;
 	gPolyFlag = -1;
+	gPopup->from = gCredit.from;
+	gPopup->usesDatabase = gCredit.usesDatabase;
+	gPopup->sendFile = gCredit.sendFile;
+	gCredit = HelpCredit();
 	gPopup->title = title;
 	gPopup->line = line.empty()
 		? "Nothing here describes this one yet."
@@ -1084,85 +1149,115 @@ static void helpPopupShow(app::ModuleWidget* mw, math::Rect controlBox,
 	helpPopupPlace();
 }
 
-/** WHAT IS UNDER THE POINTER, asked of the module rather than of the widget tree.
+/** EVERY CONTROL, JACK AND LIGHT ON A MODULE, found by walking its whole widget tree.
+
+NOT THE MODULE'S OWN LISTS. Rack's getInputs, getOutputs and getParams return only what is added
+directly to the module's panel, and a maker may attach controls to a panel of their own inside it
+— Venom's Envelope Factory puts each stage's controls on a child panel that is shown or hidden as
+the stage is used. Those were never found, reported on the forum by their maker. So the tree is
+walked, each box moved into the module's coordinates on the way down, and a hidden branch is
+skipped whole: a control inside a hidden panel is not on the screen, whatever its own flag says.
+
+A LIGHT INSIDE A BUTTON IS THE BUTTON'S. A lit button is a parameter with a light drawn in it,
+and the light is the smaller box; answering about the light would answer about the wrong thing. */
+struct HelpFound {
+	HelpKind kind;
+	int id;
+	math::Rect box;
+};
+
+static void helpCollect(widget::Widget* w, math::Vec offset, bool inParam,
+		std::vector<HelpFound>& out) {
+	for (widget::Widget* child : w->children) {
+		if (!child->isVisible())
+			continue;
+		const math::Rect box(offset.plus(child->box.pos), child->box.size);
+		if (app::PortWidget* p = dynamic_cast<app::PortWidget*>(child)) {
+			out.push_back(HelpFound{p->type == engine::Port::OUTPUT ? HELP_OUTPUT : HELP_INPUT,
+				p->portId, box});
+			continue;
+		}
+		bool param = inParam;
+		if (app::ParamWidget* q = dynamic_cast<app::ParamWidget*>(child)) {
+			out.push_back(HelpFound{HELP_PARAM, q->paramId, box});
+			param = true;
+		}
+		else if (app::ModuleLightWidget* l = dynamic_cast<app::ModuleLightWidget*>(child)) {
+			if (!inParam && l->firstLightId >= 0)
+				out.push_back(HelpFound{HELP_LIGHT, l->firstLightId, box});
+		}
+		helpCollect(child, box.pos, param, out);
+	}
+}
+
+/** What the module names a control, for the note's title. */
+static std::string helpControlName(app::ModuleWidget* mw, HelpKind kind, int id) {
+	engine::Module* m = mw->module;
+	std::string named;
+	switch (kind) {
+		case HELP_INPUT:
+			if (m && m->getInputInfo(id))
+				named = m->getInputInfo(id)->getName();
+			return (!named.empty() && named[0] != '#') ? named + " input"
+				: "input " + std::to_string(id + 1);
+		case HELP_OUTPUT:
+			if (m && m->getOutputInfo(id))
+				named = m->getOutputInfo(id)->getName();
+			return (!named.empty() && named[0] != '#') ? named + " output"
+				: "output " + std::to_string(id + 1);
+		case HELP_PARAM:
+			if (m && m->getParamQuantity(id))
+				named = m->getParamQuantity(id)->name;
+			return !named.empty() ? named : "control " + std::to_string(id + 1);
+		case HELP_LIGHT:
+			if (m && id < (int) m->lightInfos.size() && m->lightInfos[id])
+				named = m->lightInfos[id]->name;
+			return !named.empty() ? named + " light" : "light " + std::to_string(id + 1);
+		default:
+			return "";
+	}
+}
+
+/** WHAT IS UNDER THE POINTER, asked of the module rather than of the event system.
 
 The obvious way — let the click fall through and see which widget takes it — cannot work: the
 answer has to be known BEFORE deciding whether to consume, and a knob that has taken a click has
-already started being turned. So the module's own lists of ports and parameters are walked and
-their boxes tested, which is the same test Rack would apply and costs nothing on a click. */
+already started being turned. So the module's controls are found and their boxes tested, which is
+the same test Rack would apply and costs nothing on a click. */
 static bool helpControlAt(app::ModuleWidget* mw, math::Vec pos, std::string& what,
-		std::string& line, math::Rect& where, HelpKind& kind, int& index) {
+		HelpText& line, math::Rect& where, HelpKind& kind, int& index) {
 	if (!mw->model)
 		return false;
 	const std::string plugin = mw->model->plugin ? mw->model->plugin->slug : "";
-	const std::string model = mw->model->slug;
+	const HelpModuleData& d = helpData(plugin, mw->model->slug);
 
 	// THE SMALLEST CONTROL UNDER THE POINTER WINS, not the first one found.
-	//
-	// TWO REASONS, both from real panels. A HIDDEN widget must never answer: a maker may build
-	// two knobs at one spot and show whichever the mode calls for — StochasticTelegraph's
-	// Fixation does exactly that with its LENGTH and note-length knobs — and the hidden one
-	// would otherwise answer for the visible one every time.
 	//
 	// And CONCENTRIC controls must resolve to the one actually pointed at. PinkTrombone puts a
 	// small attenuverter at the centre of a large knob, and Blamsoft does the same; both are
 	// visible, both contain the click, and returning the first in the widget list answers about
 	// whichever the maker happened to add first. Area is what tells them apart: the small knob
 	// is wholly inside the large one, so the smaller box is the more specific answer, and on a
-	// panel where nothing overlaps it changes nothing.
-	float bestArea = 0.f;
-	bool found = false;
-	auto take = [&](math::Rect box) {
-		const float area = box.size.x * box.size.y;
-		if (found && area >= bestArea)
-			return false;
-		bestArea = area;
-		found = true;
-		return true;
-	};
-
-	for (app::PortWidget* p : mw->getInputs()) {
-		if (!p->isVisible() || !p->box.contains(pos) || !take(p->box))
+	// panel where nothing overlaps it changes nothing. A hidden widget never answers — see
+	// helpCollect — which matters where a maker builds two knobs at one spot and shows one.
+	std::vector<HelpFound> all;
+	helpCollect(mw, math::Vec(), false, all);
+	const HelpFound* best = NULL;
+	for (const HelpFound& f : all) {
+		if (!f.box.contains(pos))
 			continue;
-		what = "input " + std::to_string(p->portId + 1);
-		if (p->module) {
-			const std::string named = p->module->getInputInfo(p->portId)
-				? p->module->getInputInfo(p->portId)->getName() : "";
-			if (!named.empty() && named[0] != '#')
-				what = named + " input";
-		}
-		line = helpForControl(plugin, model, HELP_INPUT, p->portId);
-		where = p->box;
-		kind = HELP_INPUT;
-		index = p->portId;
+		if (!best || f.box.size.x * f.box.size.y < best->box.size.x * best->box.size.y)
+			best = &f;
 	}
-	for (app::PortWidget* p : mw->getOutputs()) {
-		if (!p->isVisible() || !p->box.contains(pos) || !take(p->box))
-			continue;
-		what = "output " + std::to_string(p->portId + 1);
-		if (p->module) {
-			const std::string named = p->module->getOutputInfo(p->portId)
-				? p->module->getOutputInfo(p->portId)->getName() : "";
-			if (!named.empty() && named[0] != '#')
-				what = named + " output";
-		}
-		line = helpForControl(plugin, model, HELP_OUTPUT, p->portId);
-		where = p->box;
-		kind = HELP_OUTPUT;
-		index = p->portId;
-	}
-	for (app::ParamWidget* p : mw->getParams()) {
-		if (!p->isVisible() || !p->box.contains(pos) || !take(p->box))
-			continue;
-		what = "control " + std::to_string(p->paramId + 1);
-		if (p->getParamQuantity() && !p->getParamQuantity()->name.empty())
-			what = p->getParamQuantity()->name;
-		line = helpForControl(plugin, model, HELP_PARAM, p->paramId);
-		where = p->box;
-		kind = HELP_PARAM;
-		index = p->paramId;
-	}
-	return found;
+	if (!best)
+		return false;
+	kind = best->kind;
+	index = best->id;
+	where = best->box;
+	what = helpControlName(mw, kind, index);
+	auto it = d.items[kind].find(index);
+	line = it != d.items[kind].end() ? it->second : HelpText();
+	return true;
 }
 
 // ---- catching the click -----------------------------------------------------------------------
@@ -1231,6 +1326,12 @@ static std::string helpMakerText(app::ModuleWidget* mw, HelpKind kind, int index
 			desc = q->description;
 		}
 	}
+	else if (kind == HELP_LIGHT && index < (int) m->lightInfos.size()) {
+		if (engine::LightInfo* i = m->lightInfos[index]) {
+			name = i->name;
+			desc = i->description;
+		}
+	}
 	if (name.empty() && desc.empty())
 		return "";
 	if (name.empty())
@@ -1275,15 +1376,10 @@ if nothing about this module's inputs has been established. */
 static int helpPolyphonyFound(plugin::Model* model) {
 	if (!model || !model->plugin)
 		return -1;
-	const HelpEntry* e = helpEntryFor(model->plugin->slug, model->slug);
-	if (!e || !e->inProps)
-		return -1;
+	const HelpModuleData& d = helpData(model->plugin->slug, model->slug);
 	bool anyKnown = false;
-	for (int i = 0; i < e->inPropCount; i++) {
-		const short at = e->inProps[i];
-		if (at < 0 || at >= HELP_PROP_TEXT_COUNT)
-			continue;
-		const std::string phrase = HELP_PROP_TEXT[at];
+	for (const auto& kv : d.expects[HELP_INPUT]) {
+		const std::string& phrase = kv.second.text;
 		if (phrase.find("polyphonic") != std::string::npos)
 			return 1;
 		if (phrase.find("one channel only") != std::string::npos)
@@ -1321,8 +1417,8 @@ static std::string helpPolyphony(plugin::Model* model) {
 	// and is about the jacks; a tag is theirs and is about the module. They are not the same claim
 	// and the note does not pretend they are.
 	switch (helpPolyphonyFound(model)) {
-		case 1:  return "Inputs on this module take a polyphonic cable — "
-			"option-click a jack to see which.";
+		case 1:  return std::string("Inputs on this module take a polyphonic cable — ")
+			+ helpGesture().name + " a jack to see which.";
 		case 0:  return "Every input on this module reads one channel only.";
 		default: break;
 	}
@@ -1334,21 +1430,6 @@ static std::string helpPolyphony(plugin::Model* model) {
 	}
 }
 
-/** Whether this point in a module is one of its jacks.
-
-Only jacks matter: they are the controls Rack might start a cable drag from, so they are the ones
-whose press has to be left alone until the release settles what it was. */
-static bool helpPortAt(app::ModuleWidget* mw, math::Vec pos) {
-	for (app::PortWidget* p : mw->getInputs()) {
-		if (p->box.contains(pos))
-			return true;
-	}
-	for (app::PortWidget* p : mw->getOutputs()) {
-		if (p->box.contains(pos))
-			return true;
-	}
-	return false;
-}
 
 /** TAKING A CLICK, WHICH IS TWO THINGS AND NOT ONE.
 
@@ -1376,77 +1457,84 @@ static float titleBand() { return 40.f; }
 /** Shows the note for whatever is at this point in the module's own coordinates, or puts the
 note away where there is nothing to say. */
 static void helpAnswer(app::ModuleWidget* mw, math::Vec local) {
-	std::string what, line;
+	const std::string plugin = mw->model->plugin ? mw->model->plugin->slug : "";
+	const HelpModuleData& d = helpData(plugin, mw->model->slug);
+	// A HELP FILE THAT WOULD NOT PARSE IS SAID ON EVERY NOTE ABOUT ITS MODULE, last. Somebody
+	// editing it needs to know the words on the screen are not theirs, and where it went wrong.
+	std::string problems;
+	for (const std::string& p : d.problems)
+		problems += "\n\n" + p;
+
+	std::string what;
+	HelpText line;
 	math::Rect where;
 	HelpKind kind = HELP_PARAM;
 	int index = -1;
 	if (helpControlAt(mw, local, what, line, where, kind, index)) {
+		std::string text = line.text;
+		bool database = line.from == HELP_FROM_DATABASE;
 		// WHAT TO SEND IT, UNDER WHAT IT IS FOR. Rack tells nobody what voltage a jack wants,
 		// whether the signal is continuous or stepped, or whether it takes polyphony, and the
 		// forum answers those with a scope and a test rig. Where we know, it goes on its own
 		// paragraph so it can be clicked and heard on its own.
 		if (kind == HELP_INPUT || kind == HELP_OUTPUT) {
-			const std::string plugin = mw->model->plugin ? mw->model->plugin->slug : "";
-			const std::string props = helpPropsFor(plugin, mw->model->slug,
-				kind == HELP_OUTPUT, index);
-			if (!props.empty())
-				line += (line.empty() ? "" : "\n\n") + props;
+			auto it = d.expects[kind].find(index);
+			if (it != d.expects[kind].end()) {
+				text += (text.empty() ? "" : "\n\n") + it->second.text;
+				database = database || it->second.from == HELP_FROM_DATABASE;
+			}
 		}
-		if (!line.empty()) {
-			helpPopupShow(mw, where, what, line, false, what);
+		if (!text.empty()) {
+			gCredit = HelpCredit{line.from, database, ""};
+			helpPopupShow(mw, where, what, text + problems, false, what);
 			return;
 		}
 		// NOTHING WRITTEN FOR THIS ONE: ask the module itself. Better the maker's own words,
 		// marked as theirs, than telling somebody nobody has got round to it.
 		const std::string maker = helpMakerText(mw, kind, index);
 		if (!maker.empty()) {
-			helpPopupShow(mw, where, what, maker, false, what, true);
+			helpPopupShow(mw, where, what, maker + problems, false, what, true);
 			return;
 		}
-		helpPopupShow(mw, where, what, "", true, what);
+		helpPopupShow(mw, where, what, problems.empty() ? "" : problems.substr(2),
+			problems.empty(), what);
 		return;
 	}
-	// THE TITLE IS THE MODULE ITSELF: what the thing is, which is the first line of its
-	// entry, not a list of everything on it.
+	// THE TITLE IS THE MODULE ITSELF: what the thing is, then everything true of the whole
+	// module rather than of a control.
 	//
 	// THE TITLE BAND AND NOT THE WHOLE PANEL. Answering for the module anywhere on the panel was
 	// tried, and it cost more than it gave: bare panel is then no longer somewhere harmless to
 	// click, so closing the note needs a gesture of its own, and every candidate for that was
 	// worse than the thing it replaced. Somewhere harmless to click is worth keeping.
 	if (local.y < titleBand()) {
-		const std::string plugin = mw->model->plugin ? mw->model->plugin->slug : "";
-		const std::vector<std::string> lines = helpFor(plugin, mw->model->slug);
-		// THE MODULE'S OWN LINES, ALL OF THEM, and until now only the first was reachable.
-		//
-		// An entry's first line says what the module is. Everything after it describes one control
-		// and is reached by clicking that control — except the lines belonging to no control:
-		// `Note —` for something that changes how the module is used, and `Menu —` for a setting
-		// with no knob. There are thousands of those and no click arrived at any of them.
-		//
-		// THE PREFIXES ARE FOR THE AUTHOR, NOT THE READER. `Note —` says nothing to somebody
-		// seeing it for the first time, and `Menu —` is worse: it names a menu without saying
-		// which, and Rack has four — the module's, a knob's, a port's, and whatever a display
-		// carries. So the prefixes come off, and the menu settings are gathered under one heading
-		// that says where to find them, as points beneath it.
-		std::string idea = lines.empty() ? "" : lines[0];
-		std::string menu;
-		for (size_t i = 1; i < lines.size(); i++) {
-			// rfind at 0 is a prefix test that needs no length: the em dash is three bytes in
-			// UTF-8, so counting characters here would be counting the wrong thing.
-			if (lines[i].rfind("Note \u2014 ", 0) == 0)
-				idea += "\n\n\u2022 " + lines[i].substr(std::strlen("Note \u2014 "));
-			else if (lines[i].rfind("Menu \u2014 ", 0) == 0)
-				menu += "\n\n\u2022 " + lines[i].substr(std::strlen("Menu \u2014 "));
-		}
+		// THE NOTES AS POINTS, AND THE MENU SETTINGS UNDER A HEADING THAT SAYS WHERE THEY ARE.
+		// "Menu" alone names no menu — Rack has four: the module's, a knob's, a port's, and
+		// whatever a display carries — so the heading says which.
+		std::string idea = d.description.text;
+		for (const std::string& n : d.notes)
+			idea += "\n\n\u2022 " + n;
 		gPolyFlag = helpPolyphonyFlag(mw->model);
 		const std::string poly = helpPolyphony(mw->model);
-		if (!poly.empty())
-			idea += "\n\n• " + poly;
-		if (!menu.empty())
-			idea += "\n\nRight-click the panel for:" + menu;
+		if (!poly.empty() && !idea.empty())
+			idea += "\n\n\u2022 " + poly;
+		if (!d.menu.empty() && !idea.empty()) {
+			idea += "\n\nRight-click the panel for:";
+			for (const std::string& m : d.menu)
+				idea += "\n\n\u2022 " + m;
+		}
+		// A file with notes and no description leaves the notes at the top.
+		while (idea.rfind("\n\n", 0) == 0)
+			idea.erase(0, 2);
 		const math::Rect at(math::Vec(local.x, titleBand()), math::Vec(0.f, 0.f));
+		// WHOSE, FOR THE NOTE AS A WHOLE: the description's source names it, and the disclosure
+		// goes on if any part of it is the database's.
+		const bool database = d.description.from == HELP_FROM_DATABASE
+			|| d.notesFrom == HELP_FROM_DATABASE || d.menuFrom == HELP_FROM_DATABASE;
+		const std::string send = d.files[HELP_FROM_USER];
 		if (!idea.empty()) {
-			helpPopupShow(mw, at, mw->model->name, idea, false);
+			gCredit = HelpCredit{d.description.from, database, send};
+			helpPopupShow(mw, at, mw->model->name, idea + problems, false);
 			return;
 		}
 		// NOTHING WRITTEN FOR THIS MODULE: the maker's own one-line description, which is the
@@ -1454,7 +1542,9 @@ static void helpAnswer(app::ModuleWidget* mw, math::Vec local) {
 		// NYSTHI's Bitshifter, which nobody has written an entry for, describes itself as
 		// "256 bits bitshifter with S&H and noise and inner LFO and VCO" — worth hearing.
 		const std::string made = mw->model->description;
-		helpPopupShow(mw, at, mw->model->name, made, made.empty(), "", !made.empty());
+		gCredit = HelpCredit{HELP_FROM_NONE, false, send};
+		helpPopupShow(mw, at, mw->model->name, made + problems, made.empty() && problems.empty(),
+			"", !made.empty());
 		return;
 	}
 	// ANYWHERE ELSE ON THE PANEL CLOSES IT. Bare panel has nothing of its own to say, and

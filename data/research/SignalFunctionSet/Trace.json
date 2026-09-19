@@ -1,0 +1,42 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Trace",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "trace.cpp declares that lane's draw CV, which writes the lane in place of the mouse"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "10V", "why": "trace.cpp:601 reads it with getVoltage and records while it is at or above 1V, treating an unpatched jack as always recording; trace.cpp:1633 places a port widget for it on the panel"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "trace.cpp:447 clockTrig.process crosses 2V, not 1V, and :453 measures samplesPerClock from the time between rises; :481 that sets how fast the paper scrolls"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "trace.cpp declares the bar input, read against the clocks-per-bar menu setting"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares the speed CV, summed with the speed knob"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares the slew CV, summed with the slew knob"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares the ink CV, summed with the ink knob"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "trace.cpp:422 sets running from getVoltage() >= 1V outright while the jack is patched, so it overrides the RUN button rather than ORing with it"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "trace.cpp:524 inverts the scroll direction while getVoltage() >= 1V, on top of whatever the REV button has set"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "why": "trace.cpp:432 resetTrigIn.process crosses 2V, not 1V, and :538 zeroes paperPos and barCount"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares that lane's head offset CV, which moves its read head along the paper"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "cv"},
+      "17": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "trace.cpp:777 clamps getVoltage()*0.1 to 0 to 1 and SETS that lane's ink to it, replacing the INK knob's accumulation while the jack is patched"},
+      "18": {"family": "cv"},
+      "19": {"family": "cv"},
+      "20": {"family": "cv"},
+      "21": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares the head spread CV, summed with the spread knob"},
+      "22": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "trace.cpp declares the leak CV, summed with the leak knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "trace.cpp declares that lane's value output, the line under its read head"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv", "poly": false, "why": "trace.cpp declares that lane's ink output, the weight on the paper under its read head"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"}
+    }
+  },
+  "comment": "Six outputs are declared with no widget: the four per-lane offset-head values and the loop trigger the manual describes, which have no jacks on this panel. A write parameter is marked retired in place and given no widget, because parameters and inputs are saved by index and removing one would repatch every saved patch. The write gate input carries the same retired wording in its tooltip and says it has no jack on the panel, but trace.cpp:1633 does place a jack for it and trace.cpp:601 does read it: with a cable patched, the draw CV inputs record only while it is at or above 1V. The read is a proper resampling of the paper rather than nearest-neighbour."
+}

@@ -1,0 +1,70 @@
+{
+  "plugin": "Coalescent",
+  "module": "Islands",
+  "description": "Four small populations drifting at random: each island resamples its allele frequency every generation under selection, mutation and migration, and puts the four frequencies out as bounded CV.",
+  "params": [
+    {"ids": [0], "text": "Sets the number of allele copies in each island, 8 to 4096 on a log2 scale; more copies make each random step smaller and smoother."},
+    {"ids": [1], "text": "Sets the signed fitness advantage, -0.25 to +0.25; below centre favours allele B and above it favours allele A."},
+    {"ids": [2], "text": "Sets the symmetric mutation probability per copy per generation: exactly zero at the bottom, then 0.000001 to 0.05 on a logarithmic scale."},
+    {"ids": [3], "text": "Sets the fraction of each island replaced from the common migrant pool, 0 to 1; at 1 every island starts a generation from the same probability."},
+    {"ids": [4], "text": "Sets the internal generation rate, stopped at the bottom and then exponential up to 200 generations a second."},
+    {"ids": [5], "text": "Resamples the next island in the repeating order 1, 2, 3, 4 from eight copies only, which it holds until the next ordinary generation redraws it at the SIZE setting."},
+    {"ids": [6], "text": "Returns all four islands and the event memory to the deterministic starting state."},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, scaling the CV into the selection."},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, scaling the CV into the mutation probability."},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, scaling the CV into the migration fraction."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Doubles the allele-copy count for every volt, added to the SIZE knob and clamped to 8 through 4096 copies."},
+    {"ids": [1], "text": "Modulates the selection, 0.05 per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the mutation probability along its logarithmic scale, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [3], "text": "Modulates the migration fraction, a tenth per volt through its attenuverter."},
+    {"ids": [4], "text": "Doubles the running generation rate for every volt, added to the GENERATIONS knob and capped at 200 generations a second."},
+    {"ids": [5], "text": "A rising edge past 1V advances exactly one synchronous generation, without resetting the phase of the internal clock."},
+    {"ids": [6], "text": "A rising edge past 1V bottlenecks the next island in rotation to eight copies."},
+    {"ids": [7], "text": "A rising edge past 1V restores the initial population and clears the event memory."}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The allele-A frequency of that island, 0 to 10V."},
+    {"ids": [4], "text": "The mean allele-A frequency across the four islands, 0 to 10V."},
+    {"ids": [5], "text": "The within-island heterozygosity, 0 to 10V: 10V when every island is at a frequency of a half, and 0V when every island is internally fixed, including when the four are split between all-A and all-B."},
+    {"ids": [6], "text": "10V for as long as every island is fixed at allele A."},
+    {"ids": [7], "text": "10V for as long as every island is fixed at allele B."},
+    {"ids": [8], "text": "A 10V pulse 1ms long on entry into either global fixation state."},
+    {"ids": [9], "text": "A 10V pulse 1ms long when the mean frequency enters the A-high or the B-high region."}
+  ],
+  "notes": [
+    "With the generation rate at the bottom the simulation is stopped, and nothing changes until a trigger arrives at STEP; the two can also be used together.",
+    "Changing a knob never redraws the population already on screen; a new setting only alters the probabilities of the generations that follow.",
+    "The five frequency and heterozygosity outputs ramp to each new generation's value over 50ms rather than stepping, so they can be patched to audio-rate destinations without clicking.",
+    "The screen plots the recent history of the four island frequencies, with a ring marking the island the next founder bottleneck will hit."
+  ],
+  "menu": [
+    "New random seed — replaces the random stream the simulation draws from, so the sequence from here on differs.",
+    "Restore factory seed — returns the random stream to the one the module ships with, making the sequence repeatable."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "high above 1V · one channel only",
+      "7": "high above 1V · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "SillySounds",
+  "module": "Lola",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Lola.cpp:79 takes the channel count from this jack, src/Lola.cpp:127 stores getPolyVoltage(c) for each of them while capturing, and src/Lola.cpp:203 copies the same per channel to the output; nothing scales, clamps or rectifies the value, so whatever is patched comes back out"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Lola.cpp:84 passes getVoltage() — one channel — through a rack::dsp::SchmittTrigger, whose Rack 2 defaults take the edge above 1V and re-arm below 0V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Lola.cpp:143 passes getVoltage() — one channel — through a rack::dsp::SchmittTrigger, whose Rack 2 defaults take the edge above 1V and re-arm below 0V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/Lola.cpp:192 writes the stored sample per channel while playing and src/Lola.cpp:203 writes getPolyVoltage(c) otherwise, with setChannels at src/Lola.cpp:208; no range can be stated because the jack carries back whatever was patched in"}
+    }
+  },
+  "comment": "The signal input and the output carry whatever is patched in, so neither is given a family and neither is given a range.\n\nThe capture limit is a count of samples, not a duration: src/Lola.cpp:56 sets sampleMax to 192000 and the comment beside it assumes 48kHz. At 96kHz the same buffer holds two seconds.\n\nsrc/Lola.cpp:79 takes the channel count from the signal input and src/Lola.cpp:208 hands it to the output unconditionally. With nothing patched to the signal input, getChannels returns 0 and the output is set to 0 channels even in the middle of playing a capture back.\n\nThe stop button has a lamp of its own which is lit only while the button is held (src/Lola.cpp:171); it is not an indication of the playback state.\n\nThere is no dataToJson or dataFromJson anywhere in this plugin, so the capture does not survive a patch save.\n\nNo module in this plugin has a context menu of its own."
+}

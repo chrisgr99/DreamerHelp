@@ -1,0 +1,85 @@
+{
+  "plugin": "CVfunk",
+  "module": "Glass",
+  "description": "A glass armonica: thirty-seven tuned bowls turn on a spindle and a wet finger rubs whichever one the pitch input names, so notes take time to speak and keep ringing after the gate drops",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the bowls turn, 0 to 6Hz, which sets how quickly a rubbed bowl comes up to level"},
+    {"ids": [1], "text": "Attenuverts the rotation CV before it is added to the rotation knob"},
+    {"ids": [2], "text": "Sets how wet the finger is: dry gives a bright squeaking excitation, wet a dark smooth one"},
+    {"ids": [3], "text": "Attenuverts the water CV before it is added to the water knob"},
+    {"ids": [4], "text": "Sets how long a bowl keeps ringing after its gate drops, despite the panel printing DECAY"},
+    {"ids": [5], "text": "Attenuverts the sustain CV before it is added to the sustain knob"},
+    {"ids": [6], "text": "Darkens the bowls, from a bright transparent ring at one end of the travel to a muted one at the other"},
+    {"ids": [7], "text": "Attenuverts the damp CV before it is added to the damp knob"},
+    {"ids": [8], "text": "Wobbles the spindle, which sets how much tremolo the rubbing produces"},
+    {"ids": [9], "text": "Attenuverts the wobble CV before it is added to the wobble knob"},
+    {"ids": [10], "text": "Damps every bowl at once while it is held, at the depth set by the Damper Depth slider on the menu"},
+    {"ids": [11], "text": "Places the bowls across the stereo pair, -1 to 1, from reversed through mono to fully spread"},
+    {"ids": [12], "text": "Transposes every bowl, -2 to 2 octaves"},
+    {"ids": [13], "text": "Bends the pitch of every bowl continuously, -1 to 1, which detunes them away from their fixed tuning"},
+    {"ids": [14], "text": "Attenuverts the FM CV before it is added to the FM knob"},
+    {"ids": [15], "text": "Sets the output level, silence to four times, which drives the output saturator at the top of its travel"},
+    {"ids": [16], "text": "Attenuverts the volume CV before it is added to the volume knob"},
+    {"ids": [17], "text": "Sets how hard the external input excites the bowls, silence to full"},
+    {"ids": [18], "text": "Attenuverts the external gain CV before it is added to the external gain knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Picks which bowl is rubbed, as a volt per octave folded into the three octaves the bowls cover; the number of channels here is how many notes can sound at once"},
+    {"ids": [1], "text": "A high gate keeps the matching bowl being rubbed; with nothing patched every channel of the pitch input holds its bowl continuously, so the damper is the only way to stop a note"},
+    {"ids": [2], "text": "Sets how hard each bowl is rubbed, 0-10V per channel, matched channel for channel with the pitch input"},
+    {"ids": [3], "text": "A high gate damps the bowl of the matching pitch channel, silencing that note while leaving the others alone"},
+    {"ids": [4], "text": "Changes the rotation speed, scaled by a tenth and added to the rotation knob through its attenuverter, the total clamped to 0 to 6Hz"},
+    {"ids": [5], "text": "Changes the wetness of the finger, scaled by a tenth and added to the water knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [6], "text": "Changes the ring-off time, scaled by a tenth and added to the sustain knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [7], "text": "Changes the brightness, scaled by a tenth and added to the damp knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [8], "text": "Changes the spindle wobble, scaled by a tenth and added to the wobble knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [9], "text": "Changes the continuous detune, scaled by a tenth and added to the FM knob through its attenuverter"},
+    {"ids": [10], "text": "Changes the output level, scaled by a tenth and added to the volume knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [11], "text": "A voltage above 0.5V damps every bowl at once, which is what the damp button does by hand"},
+    {"ids": [12], "text": "A signal fed into every ringing bowl, which lets them be excited by something other than the rubbing"},
+    {"ids": [13], "text": "Changes how hard the external input excites the bowls, scaled by a tenth and added to the external gain knob through its attenuverter"},
+    {"ids": [14], "text": "Transposes every bowl, added to the root knob and clamped to two octaves either way"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the bowls as panned by the spread control, soft-clipped and clamped to -12 to 12V"},
+    {"ids": [1], "text": "The right side of the bowls as panned by the spread control, soft-clipped and clamped to -12 to 12V"},
+    {"ids": [2], "text": "Follows the loudness of the mixed output as a root-mean-square envelope, 0-10V"}
+  ],
+  "notes": [
+    "nothing sounds until a pitch arrives at V/OCT; with no gate patched that pitch alone keeps its bowl sounding, and the DAMP ALL button or the mute gate is what stops it",
+    "the bowls are fixed at thirty-seven tuned pitches over three octaves, and the pitch input is folded into that range and snapped to the nearest bowl; ROOT and FM move the tuning"
+  ],
+  "menu": [
+    "Attack — a slider setting how quickly a bowl's pressure envelope rises once its gate goes high",
+    "Release — a slider setting how quickly a bowl's pressure envelope falls once its gate drops",
+    "Attack Curve (log - exp) — a slider from -1 to 1 bending the pressure envelope's rise between logarithmic and exponential",
+    "Release Curve (log - exp) — a slider from -1 to 1 bending the pressure envelope's fall between logarithmic and exponential",
+    "Max Noise Cutoff Hz (dry setting) — a slider from 100Hz to 4000Hz setting how bright the rubbing noise is with the water control fully dry",
+    "Damper Depth (gate/mute darkness) — a slider setting how far the damper closes the bowls down, from a light touch to a full stop",
+    "Panic: Clear All Bowl Energy — silences every bowl at once, which clears a runaway build-up without reloading the patch"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 0V · stepped · polyphonic\n\nunpatched it reads the V/OCT jack; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "3": "high above 0V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "11": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "12": "continuous · one channel only",
+      "13": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "14": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±2V."
+    },
+    "outputs": {
+      "0": "±12V · continuous · one channel only",
+      "1": "±12V · continuous · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "plugin": "BGal256",
+  "module": "SortStep",
+  "description": "A sequencer driven by sorting algorithms: an array is shuffled, sorted and then read through, and every operation puts the index it touched and the value there out as CV",
+  "params": [
+    {"ids": [0], "text": "Sets the top of the range the index and value outputs are scaled to, 0.1 to 10V, while the screen's key output is off"},
+    {"ids": [1], "text": "Pressing it puts the array back to its starting order and returns to the shuffle stage"},
+    {"ids": [2], "text": "Pressing it scrambles the array outright and returns to the shuffle stage"},
+    {"ids": [3], "text": "Pressing it works the whole sorting out again from the beginning"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V performs one operation, moving on from shuffle to sort to traverse as each finishes, and doing nothing once the traverse is over"},
+    {"ids": [1], "text": "A rising edge past 1V puts the array back to its starting order and returns to the shuffle stage"},
+    {"ids": [2], "text": "A rising edge past 1V performs one step of the Fisher-Yates shuffle, beginning again once the array has been through it"},
+    {"ids": [3], "text": "A rising edge past 1V performs one operation of the chosen sorting algorithm, and does nothing once the array is sorted"},
+    {"ids": [4], "text": "A rising edge past 1V moves to the next element of the sorted array, beginning again from the left at the end"},
+    {"ids": [5], "text": "A rising edge past 1V scrambles the array outright and returns to the shuffle stage"},
+    {"ids": [6], "text": "A rising edge past 1V works the whole sorting out again from the beginning"},
+    {"ids": [7], "text": "Chooses the sorting algorithm, but reaches only the first nine of the twenty-seven, because 10V is scaled to eight rather than to the number of algorithms"},
+    {"ids": [8], "text": "Sets how many elements the array holds, 10V giving the full thousand"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The index of the element an operation touched, scaled across the array into the range OUT SCALE sets, on two channels when the operation touched two elements"},
+    {"ids": [1], "text": "The value held at the element an operation touched, scaled across the array into the range OUT SCALE sets, on two channels when the operation touched two elements"},
+    {"ids": [2], "text": "A 10V pulse 1ms long once all three stages have finished"},
+    {"ids": [3], "text": "A 10V pulse 1ms long once the shuffle has been through the whole array"},
+    {"ids": [4], "text": "A 10V pulse 1ms long once the array is sorted"},
+    {"ids": [5], "text": "A 10V pulse 1ms long once the traverse has reached the end of the array"}
+  ],
+  "notes": [
+    "nothing happens on its own: every operation is driven by a rising edge at one of the step jacks, and the three buttons only reset, scramble or recalculate",
+    "three buttons drawn on the screen open panels for the array size and algorithm, for filtering out kinds of operation, and for mapping the output onto a musical scale",
+    "the screen's own buttons and panels are drawn inside one widget, so none of them can be clicked for a help entry of its own",
+    "a PdArray Array, a dbRackModules module or a MindMeld ShapeMaster placed immediately to either side has its stored data read in and sorted instead of the module's own array",
+    "both CV outputs always carry two channels, and an operation that touched one element writes only the first of them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "0 to 10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "plugin": "Quostate",
+  "module": "MorphfastMini",
+  "description": "Generates one voltage transition from an Init voltage to a Target voltage, timed in whole clock pulses and shaped by one of four curves",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage the transition starts from, -10V to 10V; the setting is captured at the instant the transition starts"},
+    {"ids": [1], "text": "Sets the voltage the transition runs to, -10V to 10V; the setting is captured at the instant the transition starts"},
+    {"ids": [2], "text": "Sets how many clock pulses the transition lasts, 1 to 64 in whole steps, with the delay setting taken off the top so the two together never exceed 64"},
+    {"ids": [3], "text": "Starts a transition on the next clock edge, or at once when a clock edge has passed within the chaining window; a press is ignored while a transition or its delay is already running"},
+    {"ids": [4], "text": "Exchanges the INIT and TARGET settings"},
+    {"ids": [5], "text": "Steps the curve on by one each press, cycling Ramp, Ramp Back, Step and Triangle"},
+    {"ids": [6], "text": "Steps the start delay on by one each press, cycling OFF, 1, 2, 4, 8, 16 and 32 clock pulses counted from the edge that arms the transition"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Rising edges both start the transition and time it, one pulse to one step of the duration; if the clock stops the output holds where it is until the next edge"},
+    {"ids": [1], "text": "A rising edge cancels an armed, delayed or running transition and snaps the output back to the INIT voltage"},
+    {"ids": [2], "text": "A trigger starts a transition on the next clock edge, or at once when a clock edge has passed within the chaining window; it is ignored while a transition or its delay is already running"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger 10ms long, sent when a transition finishes"},
+    {"ids": [1], "text": "The transition voltage; it holds the INIT setting until the first transition, and afterwards rests at TARGET for Ramp and Step or back at INIT for Ramp Back and Triangle"}
+  ],
+  "notes": [
+    "Nothing happens until a clock is patched and a transition is fired, from the FIRE jack or the button. A fire before any clock edge has arrived arms the module until the first edge.",
+    "Every setting is captured at the instant a transition starts, so knob, curve, delay and easing changes made during a transition or its delay apply only from the next one.",
+    "The two-digit readout mirrors the DURATION setting, the DLY readout the delay setting and the icon beside them the curve; none of the three can be clicked.",
+    "The yellow lamp is lit from the moment a fire is accepted until the transition ends, covering the delay as well as the transition.",
+    "Only the difference between the two ease settings is used, so setting both to the same value gives the plain linear shape on every curve."
+  ],
+  "menu": [
+    "Ease in — softens the start of the motion, 0 to 100 per cent",
+    "Ease out — softens the arrival at the end of the motion, 0 to 100 per cent",
+    "Same-step chain — treats a fire arriving within half a millisecond of a clock edge, or a quarter of the last clock period where that is shorter, as falling on that edge rather than the next one"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±10V · one channel only"
+    }
+  }
+}

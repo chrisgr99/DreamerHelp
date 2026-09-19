@@ -1,0 +1,23 @@
+{
+  "plugin": "SeasideModular",
+  "module": "Proteus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:375-379 clamps the jack to ±10V, multiplies by three and adds it to the length knob, the sum held between 1 and 32; read at voltages[0] with no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Proteus.cpp:348-351 reads the jack and passes rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) to a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:372 and 381 clamp the jack to ±10V, take its whole-volt part, multiply by five and add it to the lambda knob, the sum held between 1 and 50; read at voltages[0] with no channel loop"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:370 and 384 clamp the jack to ±10V, divide by ten and add it to the gate knob, the sum held between 0.1 and 1; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:373 and 380 clamp the jack to ±10V and take ten times it off the rest probability, the sum held between 0 and 100; read at voltages[0] with no channel loop"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:374 and 382 clamp the jack to ±10V, multiply by ten and add it to the octave chance knob, the sum held between 0 and 100; read at voltages[0] with no channel loop"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Proteus.cpp:371 and 383 clamp the jack to ±10V, multiply by ten and add it to the note change knob, the sum held between 0 and 100; read at voltages[0] with no channel loop"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Proteus.cpp:353-356 reads the jack and passes rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) to a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Proteus.cpp:338-341 reads the jack and passes rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) to a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Proteus.cpp:343-346 reads the jack and passes rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) to a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "why": "Proteus.cpp:725 setVoltage with no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "why": "Proteus.cpp:402-404 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The CV scalings are all in process() at Proteus.cpp:370-385 and none of them is a volt per unit: length moves three steps per volt because maxSteps/10 is integer division, lambda is cast to int before scaling so it only responds in whole volts, and density, octave and mutate each move ten percentage points per volt. The gate knob is configured from 0.05 but the clamp after the CV sum has a floor of 0.1, so the shortest gate reachable with any CV patched is a tenth of the clock gap, and no gate is ever shorter than 10ms (line 518). The source comment beside mode 1 at line 419 says \"allow to regen but no mutations\", which is the wrong way round: that setting sets mutate true and accumulate false, so note changes carry on and new melodies stop, as the maker's README says."
+}

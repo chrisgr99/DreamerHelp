@@ -1,0 +1,16 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "Shape",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Shape.cpp:757 getVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "normal": "the left input", "why": "src/Shape.cpp:758 isConnected else leftIn"},
+      "2": {"family": "audio", "poly": false, "normal": "the jack being gated", "why": "src/Shape.cpp:821-829, getChannels>0 selects processSampleWithKey"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Shape.cpp:864 setVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "why": "src/Shape.cpp:865 setVoltage, one channel only"}
+    }
+  },
+  "comment": "PUNCH is not an attack control. The README says \"PUNCH control: 0% to 100% (attack time: 0%=5ms slow, 100%=0.1ms fast/punchy)\"; in the code the knob value is loaded into punchEnvelope on every closed-to-open transition and the gain becomes smoothedGain * (1 + punchEnvelope), decaying with a 15ms time constant (src/Shape.cpp:226-227, 240, 296). Attack time comes only from the menu slider, 0.1ms to 25ms. The GATE knob is marked in dB but the mapping is linear in voltage: (dB + 60)/60 times 80% of the reference, so -60dB is 0V and 0dB is 4V at the 5V reference (src/Shape.cpp:171-176). The sidechain is chosen by getChannels() > 0, which is the same test as isConnected() here. The gate attenuation meter is driven from the left channel only (src/Shape.cpp:835)."
+}

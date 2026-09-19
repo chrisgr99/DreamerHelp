@@ -1,0 +1,22 @@
+{
+  "plugin": "dbRackModules",
+  "module": "DRM",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "DRM.cpp:73 takes the channel count from this input and DRM.cpp:79 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "why": "DRM.cpp:73 takes the channel count from this input and DRM.cpp:92 reads it four channels at a time"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "DRM.cpp:104 reads it four channels at a time, scales it by the Offset CV knob, adds the Offset knob to the carrier and clamps the total to -5..5"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "DRM.cpp:75 reads it four channels at a time, scales it by the VB CV knob, adds the Vb knob and clamps the total to just above zero and 5"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "DRM.cpp:76 reads it four channels at a time, scales it by the VL-VB CV knob, adds the Vl-Vb knob and clamps the total to just above zero and 5"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "DRM.cpp:77 reads it four channels at a time, scales it by the Gain CV knob, adds the Slope knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "DRM.cpp:130 sets this output's channel count from whichever of In and Carrier carries more channels"},
+      "1": {"family": "audio", "poly": true, "why": "DRM.cpp:126 sets this output's channel count from whichever of In and Carrier carries more channels"},
+      "2": {"family": "audio", "poly": true, "why": "DRM.cpp:127 sets this output's channel count from whichever of In and Carrier carries more channels"},
+      "3": {"family": "audio", "poly": true, "why": "DRM.cpp:128 sets this output's channel count from whichever of In and Carrier carries more channels"},
+      "4": {"family": "audio", "poly": true, "why": "DRM.cpp:129 sets this output's channel count from whichever of In and Carrier carries more channels"}
+    }
+  },
+  "comment": "The diode curve is zero below Vb, a square law between Vb and Vl, and a straight line of the given slope above that, DRM.cpp:12-18. The polarity switches are lettered + 0 - on the panel, but DRM.cpp:81-87 show that the + setting keeps only the values below zero and the - setting only those above. The Ring output is the Sum path minus the Diff path, DRM.cpp:121. This is a port of the Diode Ring Modulator from the JE plugin for Rack v1."
+}

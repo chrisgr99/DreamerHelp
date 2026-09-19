@@ -1,0 +1,19 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "Q",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/Q.cpp:116, scaled by a quarter and used as the radius"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:99-101, added to the knob in octaves before two is raised to that power"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:97-98, scaled by a tenth and added to the knob in the exponent"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:109-110, scaled by a tenth and added to the PLK knob, then two raised to that power multiplying the uncertainty oscillator"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:121-122, scaled by a tenth and added to the NTN knob, then two raised to that power scaling the squared radius term added to the output"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:124-125, scaled by a tenth and added to the MASS knob, then two raised to that power scaling the containment term added to the output"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Q.cpp:118, added whole to the knob in the exponent, so a volt is a doubling"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Q.cpp:135, the summed terms halved"}
+    }
+  },
+  "comment": "The angle input is the one modulation jack added whole rather than scaled by a tenth (src/Q.cpp:118 against lines 97, 109, 121 and 124), so it is ten times as sensitive as the other five. The mass knob is configured with a minimum of 2, a maximum of 4 and a default of 0 (src/Q.cpp:74); the default lies outside the range, and what a freshly placed module reads there is Rack's clamping rather than anything the module sets. The stability step at lines 108 and 127 replaces a value with the square of the threshold divided by that value whenever it grows past the threshold, which is what keeps the divisions bounded. The maker's longer account is in Q.md in the repository, and it is a physical analogy rather than a control reference. The panel prints OM, SING, PLK, NTN, MASS, ANG, the six modulation jacks, IN and OUT."
+}

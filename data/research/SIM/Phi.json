@@ -1,0 +1,16 @@
+{
+  "plugin": "SIM",
+  "module": "Phi",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "normal": "no channels", "why": "Phi.cpp:110 takes this port as the value buffer, one step per channel"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Phi.cpp:272 getNormalPolyVoltage reads this jack and :226 clockTracker.process passes it to a SchmittTrigger crossing 1V to time one step; with Use Phasor as input on, :279 reads it as a 0 to 10V ramp instead"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the phasor or clock input", "why": "Phi.cpp:233 nextTrigger.process crosses 1V to advance one step; :234 with nothing patched here the advance is taken from the phasor or clock input instead"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Phi.cpp:327 resetTrigger.process crosses 1V and :332 sets every channel's step detector back to step 0"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Phi.cpp:114 sends one step trigger, its length set by the Gate Length slider"}
+    }
+  },
+  "comment": "No family is given for the poly input or the main output: they carry whatever is patched in, which the module never interprets. The clock input is coloured as a trigger, which is what it takes in its default setting; with Use Phasor as input switched on it expects a rising ramp instead."
+}

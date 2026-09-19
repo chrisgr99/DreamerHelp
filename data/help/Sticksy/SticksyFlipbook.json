@@ -1,0 +1,37 @@
+{
+  "plugin": "Sticksy",
+  "module": "SticksyFlipbook",
+  "description": "A 12HP panel that steps through a numbered sequence of SVG files, one frame per clock pulse, with an end-of-cycle output",
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge past 1V moves to the next frame, in whichever order the play mode sets"},
+    {"ids": [1], "text": "A rising edge past 1V returns the sequence to its first frame and points ping pong forward again; a reset and a clock arriving in the same sample are settled in the reset's favour"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V pulse each time the sequence finishes a pass through the frames, or on every clock pulse while a single frame is loaded"}
+  ],
+  "notes": [
+    "the panel is empty until you load a sequence: right-click it and choose Load Flipbook Image..., then pick any file of a numbered set such as cat_01.svg.",
+    "picking one file loads every SVG in the same folder whose name matches it apart from the number on the end, ordered by that number, to a limit of 128 frames.",
+    "a file whose name does not end in a number is loaded on its own, as a sequence of one frame.",
+    "with nothing patched into the clock input nothing advances and the panel holds the frame it is on.",
+    "a file that cannot be read is replaced by the plugin's own fallback picture, so a missing frame shows something rather than a gap.",
+    "the first time the plugin loads it makes a Sticksy folder in your Rack user folder and copies the bundled artwork there, including a sixteen-frame cat sequence.",
+    "the file browser opens in that Animation folder the first time you load a flipbook in a session.",
+    "in Random mode the end-of-cycle output fires once every time as many clock pulses have arrived as there are frames, rather than at any particular frame."
+  ],
+  "menu": [
+    "Load Flipbook Image... — opens a file browser and loads the numbered sequence that the file you pick belongs to",
+    "Load Background Image... — loads one SVG that is drawn behind every frame",
+    "Clear Background — removes the background picture; it is greyed out while there is none",
+    "Play Mode: Forward, Reverse, Ping Pong, Random — sets the order the clock steps through the frames"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

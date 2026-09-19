@@ -1,0 +1,48 @@
+{
+  "plugin": "ESeries",
+  "module": "E340",
+  "description": "A bank of up to eight oscillators tuned to one pitch, then detuned against each other and modulated by filtered noise, summed to a single sawtooth and a single sine.",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch in semitones, 8 octaves from -48 to +48; 0 gives C4 at 261.63Hz."},
+    {"ids": [1], "text": "Sets the pitch over one semitone either side of COARSE, despite the manual giving about half an octave."},
+    {"ids": [2], "text": "Attenuates the FM input, from nothing at 0 to a quarter of an octave per volt at 10."},
+    {"ids": [3], "text": "Detunes the oscillators either side of the centre pitch; the amount is the cube of the setting, so it stays small for most of the travel and reaches 21 semitones at the top."},
+    {"ids": [4], "text": "Sets how deep the filtered noise pushes each oscillator's pitch around; the depth is the cube of the setting, and at 10 the wandering runs to several octaves."},
+    {"ids": [5], "text": "Sets the corner of the lowpass on that noise, and so how fast the wandering is, from 0.1Hz rising as the sixth power of the setting; it is continuous, not the six steps of the manual."},
+    {"ids": [6], "text": "Chooses how many oscillators run, 2, 4 or 8; the sum is divided by that number, so the level stays the same, despite the manual saying a setting of 2 is louder."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of every oscillator together, 1V/octave, added to COARSE and FINE; the number of channels patched here is the module's polyphony."},
+    {"ids": [1], "text": "Modulates the pitch of every oscillator, through the FM knob, which at 10 gives a quarter of an octave per volt."},
+    {"ids": [2], "text": "Hard-syncs every oscillator, resetting the phases on each upward crossing of 0V, rather than at the +0.25V threshold the manual gives."},
+    {"ids": [3], "text": "Adds to the SPREAD knob, a tenth of its travel per volt, with the total held between 0 and 10."},
+    {"ids": [4], "text": "Adds to the CHAOS knob, a tenth of its travel per volt, with the total held between 0 and 10."},
+    {"ids": [5], "text": "Adds to the CHAOS BW knob, a tenth of its travel per volt, with the total held between 0 and 10."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sawtooth waves of every running oscillator, summed and divided by their number, ±5V, through a 20Hz high-pass that removes the offset."},
+    {"ids": [1], "text": "The sine waves of every running oscillator, summed and divided by their number, ±5V, through a 20Hz high-pass that removes the offset."}
+  ],
+  "notes": [
+    "There are no attenuators on the CV inputs. A ±5V signal reaches the whole of a control's range only with that control's knob at its midpoint, because the total is clamped.",
+    "The module is polyphonic. Every polyphonic channel runs its own bank of oscillators with its own noise, so a chord comes out as a chord of clouds rather than one.",
+    "The oscillators are stopped altogether while both output jacks are empty, and restart from wherever their phases were left."
+  ],
+  "menu": [
+    "Spread tuning: Fourths, Fifths — chooses the intervals the detuned oscillators are spread across; Initialize puts it back to Fourths."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · polyphonic\n\nunpatched it reads nothing; the FM knob has no effect.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads nothing; sync is off while the jack is empty.",
+      "3": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

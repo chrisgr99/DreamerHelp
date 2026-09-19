@@ -1,0 +1,50 @@
+{
+  "plugin": "HetrickCV",
+  "module": "FBSineChaos",
+  "description": "Chaotic generator built from a sine oscillator whose phase is multiplied, offset and fed back into itself, ported from SuperCollider",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new value is generated"},
+    {"ids": [1], "text": "Attenuverter for the S. Rate CV input, -1 to +1"},
+    {"ids": [2], "text": "Multiplies the phase going into the sine, setting how many times the waveform folds through itself"},
+    {"ids": [3], "text": "Attenuverter for the Index X CV input, -1 to +1"},
+    {"ids": [4], "text": "Adds a fixed amount to the phase at every step, which sets the underlying frequency"},
+    {"ids": [5], "text": "Attenuverter for the Phase + CV input, -1 to +1"},
+    {"ids": [6], "text": "Multiplies the running phase at every step, over a range of about 1 to 3, stretching and breaking up the phase"},
+    {"ids": [7], "text": "Attenuverter for the Phase X CV input, -1 to +1"},
+    {"ids": [8], "text": "Mixes the previous Out X value back into the sine's phase"},
+    {"ids": [9], "text": "Attenuverter for the Feedback CV input, -1 to +1"},
+    {"ids": [10], "text": "Normal wraps the phase with a plain modulo; Broken reflects negative phase values instead, which coarsens the output"},
+    {"ids": [11], "text": "Fast runs the generator across its full rate range; Slow divides that rate by 100 for modulation speeds"},
+    {"ids": [12], "text": "Stepped jumps to each new value; Slewed interpolates linearly between values, which doubles as a low-pass filter at audio rates"},
+    {"ids": [13], "text": "DC passes the output as generated; AC strips any DC offset out of it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here generates one new value, replacing the internal rate clock"},
+    {"ids": [1], "text": "Modulates the generation rate, scaled by the S. Rate attenuverter"},
+    {"ids": [2], "text": "Modulates the phase multiplier going into the sine, scaled by the Index X attenuverter"},
+    {"ids": [3], "text": "Modulates the per-step phase offset, scaled by the Phase + attenuverter"},
+    {"ids": [4], "text": "Modulates the running phase multiplier, scaled by the Phase X attenuverter"},
+    {"ids": [5], "text": "Modulates the feedback amount, scaled by the Feedback attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sine output, -5V to 5V"},
+    {"ids": [1], "text": "The oscillator's own phase, wrapped and scaled to -5V to 5V"}
+  ],
+  "notes": [
+    "the generation rate is set as a fraction of the patch's own sample rate, so changing the patch's sample rate changes the speed and the sound of what comes out."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · polyphonic",
+      "5": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · polyphonic",
+      "1": "±5V · polyphonic"
+    }
+  }
+}

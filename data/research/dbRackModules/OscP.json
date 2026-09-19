@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "OscP.cpp:196 takes the channel count from this input and reads it four channels at a time, adding it to the Freq and Fine knobs"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "OscP.cpp:206 reads it four channels at a time, scales it by a tenth and the width CV knob, adds the width knob and clamps the total"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "OscP.cpp:200 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "OscP.cpp:209 sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The width CV knob carries no name of its own in the maker's configuration, OscP.cpp:125, so its tooltip is blank. The phase reset offers three distributions here against the four of OscS, OscP.cpp:150. The partials knob is a power of two, OscP.cpp:147, giving 1 to 512."
+}

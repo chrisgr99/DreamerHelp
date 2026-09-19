@@ -1,0 +1,29 @@
+{
+  "plugin": "EnigmaCurry",
+  "module": "Latch",
+  "description": "Two independent latches: a voltage at TRIG sets the output high and one at RESET sets it low, each side taking up to 16 polyphonic channels",
+  "inputs": [
+    {"ids": [0, 2], "text": "1V or more sets that side's LATCH output to 10V and holds it there; while the latch is already set, further voltage here changes nothing"},
+    {"ids": [1, 3], "text": "1V or more returns that side's LATCH output to 0V, and while the voltage is held that side's TRIG input cannot set the latch again"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "10V while that side's latch is set and 0V while it is clear, carrying as many channels as the busier of that side's two inputs"}
+  ],
+  "notes": [
+    "the inputs are read as levels rather than as edges: any voltage of 1V or more counts, whether it arrives as a trigger, a gate or a slow ramp crossing 1V.",
+    "the two sides share nothing. With 16 channels into each, the module holds 32 separate latches.",
+    "a change of state is followed by one sample in which that channel accepts neither input, which keeps a trigger and a reset arriving together from fighting over the latch."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "3": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

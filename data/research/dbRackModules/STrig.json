@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "STrig",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "STrig.cpp:49 takes the channel count from this input and STrig.cpp:55 reads it per channel with getVoltage(k)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "normal": "the Hi knob", "why": "STrig.cpp:54 reads it per channel with getPolyVoltage(k) when it is connected, in place of the knob"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "normal": "the Low knob", "why": "STrig.cpp:53 reads it per channel with getPolyVoltage(k) when it is connected, in place of the knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "STrig.cpp:57 sets this output's channel count from the input; STrig.cpp:55 writes 10V or 0V"}
+    }
+  },
+  "comment": "The In jack is the input the maker never named, so it carries a blank tooltip: STrig.cpp:44 calls configOutput rather than configInput, and with the CV_INPUT index, which lands on the Gate output and is then overwritten by the line below. The In jack gets no family because what is patched into it is whatever signal the gate is to be taken from. No range is given for the threshold jacks because neither is clamped; the knobs run -10V to 10V but a cable can take the thresholds anywhere."
+}

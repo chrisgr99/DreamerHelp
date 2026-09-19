@@ -1,0 +1,36 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndC",
+  "description": "Runs a smooth random voltage at a set rate, with three outputs carrying three different distributions, drawn from a seedable random source",
+  "params": [
+    {"ids": [0], "text": "Sets the seed, 0 to 1 across the seed range; at 0 the seed comes from the clock of the computer instead and every reset gives a fresh run"},
+    {"ids": [1], "text": "While on, the values are drawn over -5V to 5V; while off, over 0-10V"},
+    {"ids": [2], "text": "Sets how fast new values are reached, as a power of two in hertz, from about 0.004Hz to 256Hz"},
+    {"ids": [3], "text": "Sets how many uniform draws each value is made from, 1 to 20; at 1, marked Uniform, every output carries a plain uniform distribution"},
+    {"ids": [4], "text": "Sets how many channels the outputs carry, 1 to 16, unless a polyphonic cable in the FM jack sets a larger count"},
+    {"ids": [5], "text": "Attenuates the voltage at the jack above it before it is added to the rate, 0 to 100 per cent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here reseeds the random source from the Seed knob and refills the whole run of values, so the same run is heard again"},
+    {"ids": [1], "text": "Shifts the rate, one octave per volt scaled by the knob below it; a cable with more than one channel here also sets how many channels the outputs carry"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The smallest of the draws, interpolated smoothly, which crowds the values towards the bottom of the range as Sth is raised"},
+    {"ids": [1], "text": "A Weibull distribution with its density set by Sth, interpolated smoothly"},
+    {"ids": [2], "text": "The average of the draws, interpolated smoothly, which crowds the values towards the middle of the range as Sth is raised and approaches a normal distribution"}
+  ],
+  "notes": [
+    "the smooth curve through the drawn values overshoots them, so the outputs pass outside 0-10V in unipolar mode and outside -5V to 5V in bipolar mode"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

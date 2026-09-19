@@ -1,0 +1,51 @@
+{
+  "plugin": "CVfunk",
+  "module": "Tatami",
+  "description": "A stereo wavefolder with a morphing fold shape, a compressor in front of the fold, an offset that makes the fold asymmetric, and separate fold counts for the two sides",
+  "params": [
+    {"ids": [0], "text": "Attenuates the shape CV before it is added to the shape knob"},
+    {"ids": [1], "text": "Morphs the fold curve through four shapes, 0 to 3, wrapping round from the last back to the first"},
+    {"ids": [2], "text": "Attenuates the compression CV before it is added to the compression knob"},
+    {"ids": [3], "text": "Levels the signal before it reaches the fold, so the fold count stops depending on how loud the signal is; the compression is undone after the fold"},
+    {"ids": [4], "text": "Attenuates the symmetry CV before it is added to the symmetry knob"},
+    {"ids": [5], "text": "Shifts the signal before the fold and takes the same shift off afterwards, -5V to 5V, which moves the folds off centre"},
+    {"ids": [6], "text": "Sets how many times the left side is folded, 1 to 20"},
+    {"ids": [7], "text": "Attenuates both density CVs before they are added to their knobs"},
+    {"ids": [8], "text": "Sets how many times the right side is folded, 1 to 20"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left signal to be folded; with only the right jack patched, that one feeds both sides"},
+    {"ids": [1], "text": "Changes the fold shape, added to the shape knob through its attenuator and wrapped into the knob's own range"},
+    {"ids": [2], "text": "The right signal to be folded; with only the left jack patched, that one feeds both sides"},
+    {"ids": [3], "text": "Changes the compression, scaled by a tenth and added to the compression knob through its attenuator, the total clamped to none through full"},
+    {"ids": [4], "text": "Changes the offset before the fold, added to the symmetry knob through its attenuator and clamped to -5 to 5V"},
+    {"ids": [5], "text": "Changes the left fold count, added to the left density knob through the shared attenuator; with only the right jack patched, that one feeds this side too"},
+    {"ids": [6], "text": "Changes the right fold count, added to the right density knob through the shared attenuator; with only the left jack patched, that one feeds this side too"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The folded left signal, clamped to -10 to 10V"},
+    {"ids": [1], "text": "The folded right signal, clamped to -10 to 10V"}
+  ],
+  "notes": [
+    "the fold count is what drives the folding: with both density knobs at their minimum and no compression, the shaper is close to a gentle saturator rather than a folder"
+  ],
+  "menu": [
+    "Apply DC Blocking Filter — puts the folded signal through a high-pass filter, which removes the offset a lopsided fold leaves behind",
+    "Enable 8x Supersampling — runs the output through an eight-times oversampled path, which reduces the aliasing a hard fold produces"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic\n\nunpatched it reads the R audio jack.",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "±10V · continuous · polyphonic\n\nunpatched it reads the L audio jack.",
+      "3": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "5": "bipolar · continuous · polyphonic\n\nunpatched it reads the right density jack.",
+      "6": "bipolar · continuous · polyphonic\n\nunpatched it reads the left density jack."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic"
+    }
+  }
+}

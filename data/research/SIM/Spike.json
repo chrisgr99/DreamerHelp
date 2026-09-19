@@ -1,0 +1,17 @@
+{
+  "plugin": "SIM",
+  "module": "Spike",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Spike.cpp:314 getNormalPolyVoltage reads this jack and :272 clockTracker.process passes it to a SchmittTrigger crossing 1V to time one step; with Use Phasor as input on, :318 reads it as a 0 to 10V ramp instead"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the phasor or clock input", "why": "Spike.cpp:280 nextTrigger.process crosses 1V to advance one step; with nothing patched here the advance is taken from the phasor or clock input instead"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Spike.cpp:368 resetTrigger.process crosses 1V and :374 sets every channel's step detector back to step 0"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "negative": "swings", "step": "continuous", "normal": "the duration knob", "why": "the README states the CV expects 0V to 10V with 10V a full step, and that a patched cable turns the knob into an attenuverter; a polyphonic cable sets a duration per step"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "0V", "why": "the README states the delay CV expects 0V to 10V with 10V a full step, taken per step from a polyphonic cable"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Spike.cpp:129 configures one gate output, described in the README as monophonic"}
+    }
+  },
+  "comment": "The clock input is coloured as a trigger, which is what it takes in its default setting; with Use Phasor as input switched on it expects a rising ramp instead."
+}

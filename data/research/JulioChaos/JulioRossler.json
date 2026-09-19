@@ -1,0 +1,19 @@
+{
+  "plugin": "JulioChaos",
+  "module": "JulioRossler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioRossler.cpp line 96, getVoltage multiplied by the attenuverter and by rateScale*0.037/sr, then the sum clamped"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioRossler.cpp line 98, getVoltage multiplied by the attenuverter and by 0.12, then the sum clamped to 0.05 to 0.33"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioRossler.cpp line 100, getVoltage multiplied by the attenuverter and by -0.34, then the sum clamped to 0.15 to 0.9"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioRossler.cpp line 102, getVoltage multiplied by the attenuverter and by 5, then the sum clamped to 5.5 to 16.5"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "JulioRossler.cpp line 117, resetTrigger.process(signal, 0.1f, 2.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "JulioRossler.cpp line 135, 0.2 times the direct-voltage-blocked x"},
+      "1": {"family": "audio", "poly": false, "why": "JulioRossler.cpp line 136, 0.2 times the direct-voltage-blocked y"},
+      "2": {"family": "audio", "poly": false, "why": "JulioRossler.cpp line 137, 0.03 times the direct-voltage-blocked z"}
+    }
+  },
+  "comment": "Read from the repository at commit 39d9429, whose plugin.json carries the installed 2.1.0; the repository's head is one commit later and changes only the README. The four CV inputs and the three outputs are all single channel, read with getVoltage and written with setVoltage. No output range is given because none is clamped: each is a coordinate of a chaotic system multiplied by a fixed factor, 0.2 for x and y and 0.03 for z, after a direct-voltage blocker, so how far it swings depends on where the constants are set. The runaway guard at line 115 tests each coordinate against 12V after scaling and drops the system back to x 0.1, y 0.3, z 0.9, which is the same state the RESET input produces. The RATE CV is scaled by rateScale times 0.037 over the sample rate, so its effect follows whichever range the HF/LF button is in. The maker's own comment beside the B constant reads 0.15 to 0.9 while the line computes 0.9 down to 0.15, so the knob runs backwards from what the comment suggests; the line above follows the code."
+}

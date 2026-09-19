@@ -1,0 +1,17 @@
+{
+  "plugin": "Mental",
+  "module": "MentalCounters",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCounters.cpp:89 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing adds one to the count, and the output pulses for 10ms when the count reaches the number the knob sets"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCounters.cpp:81 a dsp::SchmittTrigger at its default thresholds of 0 and 1, which zeroes the count and the output; the same trigger object processes the reset button immediately before the jack on that line, so its state is cleared each sample and a held gate resets continuously rather than only on the edge"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCounters.cpp:110 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing adds one to that counter's count, and the output pulses for 10ms when the count reaches the number the knob sets"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCounters.cpp:102 a dsp::SchmittTrigger at its default thresholds of 0 and 1, which zeroes that counter's count and output; the same trigger object processes the reset button immediately before the jack on that line, so its state is cleared each sample and a held gate resets continuously rather than only on the edge"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalCounters.cpp:99, 10 while the pulse generator is running and 0 otherwise"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalCounters.cpp:120"}
+    }
+  },
+  "comment": "Each counter's reset button and reset input share one dsp::SchmittTrigger inside a single || expression (src/MentalCounters.cpp:81 and 102), so the trigger is handed two different values per sample and a steady high voltage at a reset input fires a reset every sample; the counter is therefore held at zero for as long as the voltage stays high rather than reset once. The knob is configured 1 to 32 and rounded (src/MentalCounters.cpp:65). The display is a TransparentWidget added with addChild and has no ParamWidget, so it is not in the census position lists and no click can reach it. The panel prints Counters, Clk In, Out and Reset."
+}

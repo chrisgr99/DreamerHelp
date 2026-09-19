@@ -1,0 +1,21 @@
+{
+  "plugin": "TC-Wurl",
+  "module": "TC-Wurl",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "stepped", "negative": "swings", "normal": "0V", "why": "Wurl.cpp:805 reads getChannels() and line 816 getVoltage(c) per channel; line 818 rounds 60 plus 12 times that voltage to the nearest whole MIDI note, so the jack moves the pitch in semitones only"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Wurl.cpp:804 reads getChannels() to set the voice count and line 810 reads getVoltage(c) per channel into a Schmitt trigger rescaled at line 812 so it goes high above 2V and low below 0.1V"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the hardest strike", "why": "Wurl.cpp:823 reads getPolyVoltage(c), scales it by 0.1 and clamps it to 0.01 and 1; line 821 substitutes 1 when the jack is empty"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Wurl.cpp:984 reads getPolyVoltage(c), scales it by 0.2 and clamps it to -1 and 1 for the bark modulation; line 1016 reads the same port, scales it by 0.1 and clamps it to 0 and 1 for the reed drive"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "Wurl.cpp:872 reads getVoltage() with no channel and line 874 puts it through a Schmitt trigger rescaled so it goes high above 2V and low below 0.1V"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "no bend", "why": "Wurl.cpp:1034 reads getVoltage() with no channel on every 64th sample, divides it by 5 and multiplies by the menu's semitone count over 12 at line 1040"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Wurl.cpp:1065 passes getVoltage() with no channel to a SchmittTrigger at its default thresholds, high above 1V and low below 0V"},
+      "7": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "Wurl.cpp:1104 reads getVoltage() with no channel, scales it by 0.1 and clamps it to -1 and 1, and line 1109 multiplies that by the Mod depth slider"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Wurl.cpp:1151 writes one value with setVoltage and no setChannels, hard clamped to -10 and 10"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "Wurl.cpp:1152 writes one value with setVoltage and no setChannels, hard clamped to -10 and 10"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 5d573b7, the only commit whose plugin.json carries the installed 2.0.1. Params 2, 18, 19, 20, 21 and 22 are configured but no ParamWidget is added for them: they are sliders on the BARK knob's menu (Modulation depth), the FILT knob's menu (Mod depth, Keytrack) and the module's own menu (Velocity curve, Reed drive, Mod depth), so no click on the panel can reach them and they carry no line or tag here. The manual is dated to 2.0.0 and disagrees with the shipped code in two places: it gives the VOLUME default as 70% where configParam sets 0.85, and it calls the reed drive's mod depth bipolar where configParam gives it 0 to 1. MOD is scaled two different ways by the two things that read it — times 0.2 and clamped to ±1 for bark, times 0.1 and clamped to 0 and 1 for reed drive, so a negative voltage swings the bark and is ignored by the reed drive; the manual gives only the ±5V to ±1 mapping. The gate and pedal Schmitt triggers are only advanced on every eighth sample, so a gate shorter than about 170 microseconds at 48kHz can be missed."
+}

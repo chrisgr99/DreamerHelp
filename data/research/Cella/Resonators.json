@@ -1,0 +1,22 @@
+{
+  "plugin": "Cella",
+  "module": "Resonators",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "Resonators.cpp:141 reads this input with getVoltage(), which is channel 1 alone"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Resonators.cpp:156 asks this input for its channel count and Resonators.cpp:172 reads channels by index to tune the other three resonators"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "the first pitch jack's second channel", "why": "Resonators.cpp:169 reads this input with getVoltage(), which is channel 1 alone; Resonators.cpp:170 falls back to the polyphonic first pitch jack"},
+      "3": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "the first pitch jack's third channel", "why": "Resonators.cpp:169 reads this input with getVoltage(), which is channel 1 alone; Resonators.cpp:170 falls back to the polyphonic first pitch jack"},
+      "4": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "the first pitch jack's fourth channel", "why": "Resonators.cpp:169 reads this input with getVoltage(), which is channel 1 alone; Resonators.cpp:170 falls back to the polyphonic first pitch jack"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Resonators.cpp:151 asks this input for its channel count; Resonators.cpp:180 reads each channel, divides by 10, scales by the attenuverter and clamps the knob-plus-jack total to 0 and 1"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Resonators.cpp:152 asks this input for its channel count; Resonators.cpp:192 reads each channel, divides by 10, scales by the attenuverter and clamps the knob-plus-jack total to 0 and 1"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Resonators.cpp:153 asks this input for its channel count; Resonators.cpp:202 reads each channel, divides by 10, scales by the attenuverter and clamps the knob-plus-jack total to 0.0001 and 1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "Resonators.cpp:146 reads this input with getVoltage(), which is channel 1 alone, divides by 10 and scales by the attenuverter; Resonators.cpp:148 clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Resonators.cpp:254 writes channel 1 alone and the output is never given more channels"},
+      "1": {"family": "audio", "poly": true, "why": "Resonators.cpp:158 sets this output to four channels and Resonators.cpp:246 writes one resonator per channel"}
+    }
+  },
+  "comment": "Read from src/Resonators.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1. The manual is written for 2.11.0 and says nothing about this module that the code contradicts. Two things it leaves out. The AMP knob scales only what reaches the OUT jack; the WET jack carries the four resonators at their GAIN settings alone (Resonators.cpp:246 against 250). And the polyphonic CV jacks fall back to their last channel rather than to zero when they carry fewer than four channels (Resonators.cpp:183, 195 and 205), so a monophonic cable into DECAY, COLOR or GAIN moves all four resonators. The COLOR figures come from Resonators.cpp:197 to 234: the knob is turned into a factor of 100 to the power of twice the knob minus one, which multiplies a 20000Hz lowpass and a 20Hz highpass, both clamped to 20Hz and 20000Hz."
+}

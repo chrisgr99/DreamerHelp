@@ -1,0 +1,19 @@
+{
+  "plugin": "CVfunk",
+  "module": "Strata",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "Strata.cpp:908 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "Strata.cpp:1333 reads it with getVoltage, so only channel 1, into a Schmitt trigger offset by 0.1V"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±10V", "why": "Strata.cpp:1512 reads it with getVoltage, so only channel 1, and adds it to the note; Strata.cpp:1528 clamps the total to -10 to 10V"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "Strata.cpp:1398 reads it with getVoltage, so only channel 1, into a Schmitt trigger; Strata.cpp:1384 instead rounds it to a layer number when Layer Advance by CV is on"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "sumRange": "1 to 24V", "why": "Strata.cpp:988 reads it with getVoltage, so only channel 1, adds it to the pattern knob; Strata.cpp:990 rounds up and clamps the total to 1 to 24"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Strata.cpp:1322 writes one channel with setVoltage, 10V or 0V"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Strata.cpp:1323 writes one channel with setVoltage, 10V or 0V"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Strata.cpp:1532 writes one channel with setVoltage from the summed note rounded to a twelfth of a volt"}
+    }
+  },
+  "comment": "The pitch knobs, switches, ratios and gate pattern are all held per layer in the module rather than in the parameters (Strata.cpp:1425), so changing layer writes the stored values back into the controls and at any other moment the controls are read back into storage. A row whose step count reaches none is switched off and stops contributing (Strata.cpp:1524). The eight pitch stages are switched in and out in two groups of four and the last one left in a group cannot be switched out (Strata.cpp:1430). The octave destination switch decides whether the octave transposition applies to stages one to four, five to eight, or all of them (Strata.cpp:1518)."
+}

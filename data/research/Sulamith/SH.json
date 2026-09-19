@@ -1,0 +1,20 @@
+{
+  "plugin": "Sulamith",
+  "module": "SH",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "±10V", "step": "continuous", "why": "SH.cpp SH::process: getChannels() on this jack sets the channel count while the channel knob is at 0, and getVoltage(i) is read per channel and clamped to ±10V, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SH.cpp SH::process: getVoltageSum() on this jack, so a polyphonic cable is added to one voltage, rescaled from 0.1V and 2V onto 0 and 1 and fed to a single SchmittTrigger for the whole section, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"poly": true, "range": "±10V", "step": "continuous", "why": "SH.cpp SH::process: getChannels() on this jack sets the channel count while the channel knob is at 0, and getVoltage(i) is read per channel and clamped to ±10V, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SH.cpp SH::process: getVoltageSum() on this jack, so a polyphonic cable is added to one voltage, rescaled from 0.1V and 2V onto 0 and 1 and fed to a single SchmittTrigger for the whole section, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "4": {"poly": true, "range": "±10V", "step": "continuous", "why": "SH.cpp SH::process: getChannels() on this jack sets the channel count while the channel knob is at 0, and getVoltage(i) is read per channel and clamped to ±10V, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SH.cpp SH::process: getVoltageSum() on this jack, so a polyphonic cable is added to one voltage, rescaled from 0.1V and 2V onto 0 and 1 and fed to a single SchmittTrigger for the whole section, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "±10V", "step": "stepped", "why": "SH.cpp SH::process: setChannels then setVoltage(noize[i], i) per channel, the value being a sampled voltage clamped to ±10V or a random one clamped to the same, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"poly": true, "range": "±10V", "step": "stepped", "why": "SH.cpp SH::process: setChannels then setVoltage(noize[i], i) per channel, the value being a sampled voltage clamped to ±10V or a random one clamped to the same, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"poly": true, "range": "±10V", "step": "stepped", "why": "SH.cpp SH::process: setChannels then setVoltage(noize[i], i) per channel, the value being a sampled voltage clamped to ±10V or a random one clamped to the same, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The signal jacks and the outputs carry whatever is sampled, so no family is set for them. The third section reads A2_PARAM, B2_PARAM, C2_PARAM, D2_PARAM and QU2_PARAM, which are the middle section's controls. The probability test sits inside the `if (!CVcon)` branch only, so it gates generated voltages and not sampled ones; the README says it decides whether an incoming trigger is used at all. The quantise block runs after both branches and so applies to sampled values too, against the README. Per-channel SchmittTrigger arrays are declared and never used; the source carries the comment \"NEEDS REPAIR!! Want it to be GTin polyphonic not VoltageSum\"."
+}

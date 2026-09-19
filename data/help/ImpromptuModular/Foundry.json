@@ -1,0 +1,97 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Foundry",
+  "description": "Four-track phrase sequencer, 32 steps to a sequence, 64 sequences to a track and 99 phrases to a song, each track separately clocked and edited",
+  "params": [
+    {"ids": [1], "text": "Chooses which phrase of the song is being edited, in song mode only"},
+    {"ids": [2], "text": "Chooses the sequence being played and edited, or in song mode the sequence number the current phrase calls up"},
+    {"ids": [3], "text": "Starts and stops all four tracks; there is one run state for the whole module"},
+    {"ids": [4], "text": "Copies the current sequence, or the chosen part of it, into the buffer; in song mode it copies phrases instead"},
+    {"ids": [5], "text": "Writes the buffer into the current sequence from the edit head, or into the song in song mode"},
+    {"ids": [6], "text": "Returns every track to the first step of its sequence or of its song"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13], "text": "Sets the octave of the step at the edit head; the lit button is the octave that step holds"},
+    {"ids": [14], "text": "Turns the gate of the step at the edit head on or off"},
+    {"ids": [15], "text": "Turns on portamento from the previous step's voltage into this one; the slide time is set on the CV2 display, 1 being a whole clock period"},
+    {"ids": [16], "text": "Moves the edit head on to the next step after each write, so a run of notes can be entered one after another"},
+    {"ids": [29], "text": "Sets the order the steps are played in, or in song mode the order of the phrases: forward, reverse, ping-pong, pendulum, brownian, random, track A's positions, or each one once"},
+    {"ids": [30], "text": "Sets the track's clock resolution, which is what allows the advanced gate types, and its clock delay of 0 to 99 pulses; a reset is needed before a new delay takes effect"},
+    {"ids": [31], "text": "Opens transposing all 32 steps of the sequence or rotating the steps within its length, with the amount turned in on the sequence knob"},
+    {"ids": [32], "text": "Turns on probability for that step's gate, so the gate reaches the output only some of the time; the chance is set on the CV2 display, 0 to 1"},
+    {"ids": [33], "text": "Ties the step at the edit head to the step before it, so one note is held across both"},
+    {"ids": [34], "text": "Sets how many steps or phrases SEL and COPY-PASTE work on: four, eight, or a custom range picked out by clicking"},
+    {"ids": [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66], "text": "Moves the edit head to that step, its lamps showing the gate and whether the step is picked out; while the length or repeat setting is open, clicking a step sets the length there and then"},
+    {"ids": [67], "text": "Steps back through the four tracks, choosing the one every edit acts on"},
+    {"ids": [68], "text": "Steps forward through the four tracks, choosing the one every edit acts on"},
+    {"ids": [69], "text": "Sets the value shown on the CV2 display for the step at the edit head: its second control voltage, its gate probability, or its slide time"},
+    {"ids": [70], "text": "Extends every edit across a run of steps, as many of them as the 4/8/CUST switch chooses"},
+    {"ids": [71], "text": "Applies every edit to all four tracks at once"},
+    {"ids": [72], "text": "In sequence mode it sets how many steps the sequence plays; in song mode it sets how many times the current phrase repeats, 0 to 99, where 0 skips the phrase"},
+    {"ids": [73], "text": "Marks the current phrase as the first one the song plays, for working on one section of a long song"},
+    {"ids": [74], "text": "Marks the current phrase as the last one the song plays"},
+    {"ids": [75], "text": "Switches the keyboard between entering notes and entering gate types"},
+    {"ids": [76], "text": "Makes the edit heads follow the run heads, so the step being edited is the step being played"},
+    {"ids": [77], "text": "Steps the CV2 display through the three things it can hold for a step: the second control voltage, the gate probability and the slide time"},
+    {"ids": [78], "text": "Switches the whole sequencer between editing and playing single sequences and building a song out of numbered phrases"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here writes whatever is arriving at the CV inputs into the step at the edit head; an input with no cable is left out of the write"},
+    {"ids": [1, 2, 3, 4], "text": "The pitch written into that track's current step when a trigger reaches WRITE"},
+    {"ids": [5], "text": "A trigger here returns every track to the first step of its sequence or of its song"},
+    {"ids": [6, 7, 8, 9], "text": "Advances that track one step per pulse; with no cable patched, the track runs on the clock of the track before it"},
+    {"ids": [12], "text": "A trigger here starts and stops all four tracks"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The pitch of the step that track has reached, at a volt per octave"},
+    {"ids": [4, 5, 6, 7], "text": "The second control voltage of the step that track has reached, 0-10V, for accents or velocity"},
+    {"ids": [8, 9, 10, 11], "text": "The gate of the step that track has reached"}
+  ],
+  "notes": [
+    "each track has its own clock input, and a track with nothing patched to its CLK input runs on the clock of the track before it, so one cable into track A's CLK clocks all four",
+    "right-clicking a key of the onboard keyboard enters the note and moves on to the next step; holding ctrl while right-clicking carries the current gate type over as well",
+    "with the mouse over the sequence display, a sequence number can be typed on the computer keyboard, two key presses within one second reading as a two-digit number",
+    "in song mode, with the mouse over the sequence display, the space bar moves on to the next phrase"
+  ],
+  "menu": [
+    "Poly merge into track A outputs — None, Track B, Tracks B and C, or Tracks B, C and D; merged tracks become extra channels of track A's outputs and their own outputs hold 0V",
+    "CV2 mode — reads the CV2 value as Volts at 0.05V resolution, as 0-127 numbered levels, or as Notes, which rescales the CV2 outputs to semitones",
+    "CV2 bipolar — changes the CV2 outputs from 0-10V to -5V to 5V",
+    "Seq CV in level — sets how the SEQ# CV inputs on the expander are read: 0-10V across the 64 sequences, the note voltages C2-D7#, or Trig-Incr, where a trigger steps to the next sequence",
+    "Single shot song — plays the song once instead of repeating it, stopped by the track chosen from Off, Track A, Track B, Track C and Track D",
+    "Reset on run — returns every track to the start each time the sequencer is started",
+    "Retrigger gates on reset — holds the gate outputs low for 1ms after a reset so a trigger-sensitive target fires again; the choices are No, Yes, and Only when Run cable is unconnected",
+    "Hold tied notes — keeps the gate high across a run of tied steps; with it off only the first step of the run carries a gate",
+    "AutoStep write bounded by seq length — stops a write autostepping past the last step of the sequence",
+    "AutoSeq when writing via CV inputs — moves on to the next sequence when a write runs off the end of the current one, which turns the sequencer into a long CV recorder",
+    "Add expander (10HP right side) — places the FOUNDRY-X expander against the right edge of this module",
+    "Portable sequence — holds Copy sequence and Paste sequence, which move the selected sequence between this module and other sequencers; it can be used in SEQ mode only"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "±10V · continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "12": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous",
+      "4": "0 to 10V",
+      "5": "0 to 10V",
+      "6": "0 to 10V",
+      "7": "0 to 10V",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    }
+  }
+}

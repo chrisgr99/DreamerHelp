@@ -1,0 +1,39 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "SuperADSR",
+  "description": "Two envelope generators copied from the S-SMP chip of the Super Nintendo, each with a normal and an inverted output",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the height and the polarity of that envelope, -128 to 127; below zero the whole envelope is turned upside down"},
+    {"ids": [2, 3], "text": "Sets how long that envelope takes to climb to its full height, 0 to 15, with 15 the slowest and 0 instant"},
+    {"ids": [4, 5], "text": "Sets how long that envelope takes to fall from its peak to the sustain level, 0 to 7, with 7 the slowest"},
+    {"ids": [6, 7], "text": "Sets the level that envelope falls to before the sustain stage begins, 0 to 7, in eighths of full height"},
+    {"ids": [8, 9], "text": "Sets how quickly that envelope keeps falling once it has reached the sustain level, 0 to 31; at the top of the slider it holds indefinitely"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Starts that envelope on each rise past 2V and releases it once it falls back to 0V"},
+    {"ids": [2, 3], "text": "Restarts that envelope from its attack stage on each rise past 2V, without the gate having to fall first"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries that envelope, up to 10V at full height"},
+    {"ids": [2, 3], "text": "Carries that envelope turned upside down, which is what you patch to duck something rather than open it"}
+  ],
+  "notes": [
+    "neither envelope moves until a gate above 2V reaches its GATE jack, so with nothing patched the module puts out 0V",
+    "there is no release control. When the gate falls the chip runs its own very short release, which exists to stop the note clicking, and that stage cannot be adjusted",
+    "the panel prints RR over the fifth slider and the manual calls it Release Rate, but the code drives the chip's sustain rate, which sets how fast the envelope falls while the gate is held"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "high above 2V · stepped · polyphonic",
+      "3": "high above 2V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic",
+      "2": "±10V · continuous · polyphonic",
+      "3": "±10V · continuous · polyphonic"
+    }
+  }
+}

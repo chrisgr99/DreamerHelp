@@ -1,0 +1,27 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Muse",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "muse.cpp:368 reads it with getVoltage, so only channel 1, into a Schmitt trigger that advances the engine"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "muse.cpp:369 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "muse.cpp:370 reads it with getVoltage, so only channel 1, as a gate that replaces the run button"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "muse.cpp:371 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "muse.cpp:374 names it a CV offsetting that slider's tap choice, summed with the slider"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "muse.cpp:375 names it a CV offsetting that slider's tap choice, summed with the slider"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "muse.cpp:377 names it a volt per octave added to the root knob"},
+      "13": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "muse.cpp:378 names it the scale select; the shared scale bus carries the whole scale over the extra channels when one is patched from another module"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "muse.cpp writes one channel with setVoltage from the quantized melody, or over a fixed span when an output range is chosen"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "muse.cpp writes one channel with setVoltage, a trigger per step"}
+    }
+  },
+  "comment": "The theme sliders are combined with an exclusive-nor rather than an exclusive-or, so a theme with every slider on OFF is a stable pattern instead of silence. The four interval taps form a four-bit number whose low three bits index the scale and whose top bit adds an octave, which is why the melody's range is a little over an octave before the root is applied."
+}

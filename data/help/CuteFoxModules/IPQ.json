@@ -1,0 +1,35 @@
+{
+  "plugin": "CuteFoxModules",
+  "module": "IPQ",
+  "description": "A chromatic quantizer that keeps its note until the incoming pitch has moved a set interval away from it, then takes the nearest semitone; two intervals are set and used in turn.",
+  "params": [
+    {"ids": [0], "text": "Sets the first interval, 0 to 11 semitones, snapped to whole numbers."},
+    {"ids": [1], "text": "Sets the second interval, 0 to 11 semitones, snapped to whole numbers."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be quantized, 1V/octave; the nearest semitone is taken whenever it has moved by the current interval or more from the note already being sent."},
+    {"ids": [1], "text": "Sets the first interval from 0V for 0 semitones to 10V for 11 semitones, overriding the knob and turning it as it goes."},
+    {"ids": [2], "text": "Sets the second interval from 0V for 0 semitones to 10V for 11 semitones, overriding the knob and turning it as it goes."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch, 1V/octave, held at the last note until the input has moved the current interval away from it."},
+    {"ids": [1], "text": "A 10V trigger 1ms long each time a new note is quantized."}
+  ],
+  "notes": [
+    "Nothing comes out of either jack until a cable is in OUT. With OUT unpatched the quantizer is skipped altogether, so TRIGGER is left at whatever voltage it last held.",
+    "The intervals alternate: the first note change is allowed by interval 1, the next by interval 2, then interval 1 again. Which of the two is in force is not shown on the panel.",
+    "An interval of 0 semitones puts no distance between notes, so the input is requantized every sample and TRIGGER stays at 10V rather than pulsing.",
+    "Each display shows its interval as a number of semitones and its name, from Unison through to Major 7th. Neither can be clicked."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads nothing; OUT falls to 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

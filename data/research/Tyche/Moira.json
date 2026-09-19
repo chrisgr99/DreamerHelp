@@ -1,0 +1,24 @@
+{
+  "plugin": "Tyche",
+  "module": "Moira",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the slider's own position", "why": "Moira.cpp:474-484 getProbabilityAt multiplies the slider by the jack rescaled from -5V and +5V to 0 to 1 when the jack is connected; read at voltages[0] with no channel loop"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the slider's own position", "why": "Moira.cpp:474-484 getProbabilityAt multiplies the slider by the jack rescaled from -5V and +5V to 0 to 1 when the jack is connected; read at voltages[0] with no channel loop"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the slider's own position", "why": "Moira.cpp:474-484 getProbabilityAt multiplies the slider by the jack rescaled from -5V and +5V to 0 to 1 when the jack is connected; read at voltages[0] with no channel loop"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own voltage", "why": "Moira.cpp:486-497 getVoltageAt reads getVoltage(channel) when the jack is connected and scales it by the knob rescaled from -10V and +10V to 0 to 1, and line 272 takes the channel count from getChannels()"},
+      "4": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own voltage", "why": "Moira.cpp:486-497 getVoltageAt reads getVoltage(channel) when the jack is connected and scales it by the knob rescaled from -10V and +10V to 0 to 1, and line 274 takes the channel count from getChannels()"},
+      "5": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "the knob's own voltage", "why": "Moira.cpp:486-497 getVoltageAt reads getVoltage(channel) when the jack is connected and scales it by the knob rescaled from -10V and +10V to 0 to 1, and line 276 takes the channel count from getChannels()"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Moira.cpp:265 triggerInput.process(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 1.f), so a rising edge is detected past 1V and the jack is armed again below 0.1V; read at voltages[0] with no channel loop"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Moira.cpp:256 resetTrigger.process(getInput(RESET_INPUT).getVoltage()) with rack's default SchmittTrigger thresholds, so a rising edge is detected past 1V and the jack is armed again below 0V; read at voltages[0] with no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Moira.cpp:511-513 setVoltage on the chosen-trigger outputs with no setChannels for them"},
+      "1": {"family": "trigger", "poly": false, "why": "Moira.cpp:511-513 setVoltage on the chosen-trigger outputs with no setChannels for them"},
+      "2": {"family": "trigger", "poly": false, "why": "Moira.cpp:511-513 setVoltage on the chosen-trigger outputs with no setChannels for them"},
+      "3": {"family": "cv", "poly": true, "why": "Moira.cpp:279 setChannels on the AUX output, the count taken from the three voltage inputs at lines 271-276"},
+      "4": {"family": "cv", "poly": true, "why": "Moira.cpp:278 setChannels on the main output, the count taken from the three voltage inputs at lines 271-276"}
+    }
+  },
+  "comment": "The probability sliders are normalised against their total at Moira.cpp:222-230, which is what makes them relative. The voltage knobs change job when their jack is patched: getVoltageAt at lines 486-497 then uses the knob as a gain between 0 and 1 taken from its -10V to +10V scale, so a knob left at its default 0V halves the patched voltage rather than passing it through. The auxiliary choice is drawn from a second reading of the same noise 300 units further along the phase (AUX_OFFSET, line 214), so it is not an independent random source. The crossfade curve at lines 44-49 is a cubic ease in and out."
+}

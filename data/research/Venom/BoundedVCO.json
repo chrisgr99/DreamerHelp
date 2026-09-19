@@ -1,0 +1,16 @@
+{
+  "plugin": "Venom",
+  "module": "BoundedVCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "BoundedVCO.cpp:147 adds this jack through its attenuverter straight into the exponent of two that sets the slope", "negative": "swings"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "BoundedVCO.cpp:145 adds this jack through its attenuverter to the skew knob, the sum clamped to 0.01 to 0.99", "negative": "subtracts"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±12V", "why": "BoundedVCO.cpp:136 adds this jack through its attenuverter to the floor knob, the sum clamped to -12 to 12V"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "sumRange": "±12V", "why": "BoundedVCO.cpp:137 adds this jack through its attenuverter to the ceiling knob, the sum clamped to -12 to 12V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "BoundedVCO.cpp:193 or 199 writes the slope times 5V per channel, then setChannels at BoundedVCO.cpp:207; the widest input sets the count at BoundedVCO.cpp:122-124"},
+      "1": {"family": "audio", "poly": true, "why": "BoundedVCO.cpp:203 and 206 a per-channel SIMD write then setChannels; the LOW and HIGH knobs set the triangle's bounds, so there is no fixed swing"}
+    }
+  }
+}

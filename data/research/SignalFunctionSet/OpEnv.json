@@ -1,0 +1,27 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "OpEnv",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "op_env.cpp:161 reads it with getVoltage, so only channel 1; a rise past 1V calls engine.gate(true) and a fall below 0.1V calls engine.gate(false)"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "op_env.cpp:154 adds round(getVoltage()/10*31) to the voice knob and :155 clamps the total to the bank's voice count, so 0 to 10V spans all 32 slots and a negative subtracts from the knob"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "op_env.cpp:143 adds round(getVoltage()) to the bank knob and :144 clamps the total to the loaded bank count — one volt per bank, which no range spelling fits, and a negative subtracts from the knob"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "op_env.cpp:180 adds getVoltage()/5*99 to that stage's rate knob, rounds the total and clamps it to -99 to 99, so ±5V covers the whole offset range"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "op_env.cpp:182 adds getVoltage()/5*99 to that stage's level knob, rounds the total and clamps it to -99 to 99, so ±5V covers the whole offset range"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "no rate scaling", "why": "op_env.cpp:189 rounds getVoltage()*12+60 to a whole MIDI note, so a volt is an octave; :190 engine.setNote switches the rate scaling on only while the jack is patched, and unpatched it passes note 60 with the scaling off"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "op_env.cpp:221 adds getVoltage()/10 to the output-level knob and clamps the total to 0 to 2, so 0 to 10V adds a whole unit on top of the knob and a negative subtracts from it"},
+      "13": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "op_env.cpp:194 adds getVoltage()/5*99 to the LFO rate knob, rounds the total and clamps it to -99 to 99, so ±5V covers the whole offset range"},
+      "14": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "op_env.cpp:196 adds getVoltage()/5*99 to the LFO depth knob, rounds the total and clamps it to -99 to 99, so ±5V covers the whole offset range"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "op_env.cpp declares the envelope output as 0-10V"}
+    }
+  },
+  "comment": "The third level is the sustain and the fourth is where the release ends, which is normally zero in a DX7 patch but need not be; the menu can force the release to 0V regardless. The rates are scaled to the host sample rate, so the stage times are right whatever rate Rack is running at."
+}

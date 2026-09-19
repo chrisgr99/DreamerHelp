@@ -1,0 +1,55 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "2A03",
+  "description": "The four voices of the Ricoh 2A03 from the Nintendo Entertainment System: two pulses, a triangle and a noise generator",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that voice, two and a half octaves either side of C4"},
+    {"ids": [3], "text": "Sets the pitch of the noise, 0 to 15, with the highest setting giving the shortest period and so the brightest hiss"},
+    {"ids": [4, 5, 6], "text": "Attenuates the voltage at that voice's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [7], "text": "Picks the noise flavour: one position gives the long 32767-step sequence, which sounds like hiss, the other the short 93-step sequence, which sounds metallic and pitched"},
+    {"ids": [8, 9, 11], "text": "Sets the level of that voice, 0 to 15"},
+    {"ids": [12, 13], "text": "Picks the duty cycle of that pulse, 0 to 3, giving an eighth, a quarter, a half or three quarters"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that voice by a volt per octave; unpatched it reads the VOCT jack of the voice before it, and the first pulse reads 0V"},
+    {"ids": [3], "text": "Moves the noise pitch, each 2V raising it by one step, and does nothing until a cable is patched"},
+    {"ids": [4, 5, 6], "text": "Modulates the pitch of that voice, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the voice before it, and the first pulse reads 5V"},
+    {"ids": [7], "text": "Flips the noise flavour set by the LFSR switch while it is above 2V"},
+    {"ids": [8, 9, 11], "text": "Scales that voice's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the voice before it, and the first pulse reads 10V"},
+    {"ids": [12, 13], "text": "Moves the duty cycle of that pulse through 0 to 7V; unpatched it reads the PW jack of the pulse before it, and the first pulse reads 0V"},
+    {"ids": [14], "text": "Restarts the triangle wave from the beginning of its cycle on each rise past 0.02V"},
+    {"ids": [15], "text": "Restarts the noise sequence on each rise past 0.02V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries that voice's audio, hard clipped at 5V, with the audio of any earlier voice whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the triangle voice has no level control at all: the chip's triangle is either on or off, so no AMP knob or jack is fitted for it",
+    "the four outputs are chained: a voice whose output is left unpatched is summed into the next output along, so patching only the noise output gives a mix of all four"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "7": "high above 2V · stepped · polyphonic",
+      "8": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "12": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "13": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "14": "high above 0.02V · stepped · polyphonic",
+      "15": "high above 0.02V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

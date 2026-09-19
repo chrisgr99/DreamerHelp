@@ -1,0 +1,48 @@
+{
+  "plugin": "acModules",
+  "module": "Rhythm1101",
+  "description": "A 16-step drum sequencer with four trigger tracks: each step's knob is a number whose binary digits say which of the four tracks fire.",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets which tracks that step fires, 0 to 15: 1 is track 1, 2 is track 2, 4 is track 3, 8 is track 4, and any sum of those fires all of them; 0 fires nothing and 15 fires all four."},
+    {"ids": [16], "text": "Chooses the pattern, 1 to 16; changing it loads that pattern into the sixteen step knobs."},
+    {"ids": [17], "text": "Sets how many of the sixteen steps are played before the sequence wraps, 1 to 16."},
+    {"ids": [18], "text": "Adds extra triggers on rhythmically likely steps for the length of one measure, without changing the stored pattern."},
+    {"ids": [19], "text": "Sets which tracks the mutation may add to, 0 to 15, read the same way a step knob is; the four lamps beside it show the choice."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 2V moves the sequence on one step and fires whichever tracks that step names."},
+    {"ids": [1], "text": "A rising edge past 2V puts the sequence back before its first step and restores the pattern from its stored version, dropping any mutation."},
+    {"ids": [2], "text": "Takes over the pattern knob while a cable is here: 0V to 10V spans the 16 patterns, and the knob is moved to follow."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger 1ms long on every step whose value includes track 1."},
+    {"ids": [1], "text": "A 10V trigger 1ms long on every step whose value includes track 2."},
+    {"ids": [2], "text": "A 10V trigger 1ms long on every step whose value includes track 3."},
+    {"ids": [3], "text": "A 10V trigger 1ms long on every step whose value includes track 4."}
+  ],
+  "notes": [
+    "Nothing moves until triggers arrive at STEP. The module has no clock of its own.",
+    "Turning the pattern knob overwrites the step knobs with that pattern, and moving a step knob writes back into the stored pattern, replacing the factory groove until the menu restores it.",
+    "All sixteen patterns are saved with the patch, edits included."
+  ],
+  "menu": [
+    "Shift Pattern: Shift Right, Shift Left — moves every step of the current pattern one place around the sixteen.",
+    "Mutation Frequency: 1:1, 1:2, 1:3, 1:4 — sets how often a mutation is rolled: every measure, every second, every third or every fourth.",
+    "Clear Current Pattern — sets every step of the current pattern to 0.",
+    "Clear All Patterns — sets every step of all sixteen patterns to 0.",
+    "Reset to Factory Patterns — replaces all sixteen patterns with the grooves the module ships with, losing any edits."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "SillySounds",
+  "module": "Kyle",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Kyle.cpp:104 takes the channel count from this jack and src/Kyle.cpp:110 reads getPolyVoltage(c) for each of them through abs(), which discards the sign, so a negative swing raises the envelope exactly as the matching positive one does"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/Kyle.cpp:60 writes with setVoltage(out, channel) and src/Kyle.cpp:140 calls setChannels; the value comes from src/Kyle.cpp:85, an abs() held to a maximum of 10"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/Kyle.cpp:61 writes 10 minus the same value with setVoltage(10 - out, channel) and src/Kyle.cpp:141 calls setChannels; that value is an abs() held to a maximum of 10, so this jack runs from 0V to 10V the other way up"}
+    }
+  },
+  "comment": "The decay knob's default of 0 makes the module inert on arrival: src/Kyle.cpp:38 configures it 0 to 10 with a default of 0, and src/Kyle.cpp:82-83 multiplies that value by the elapsed-time curve, so at 0 nothing is subtracted and the envelope only ever rises.\n\nThe amp knob is a gain of 1 + 9 times its value (src/Kyle.cpp:85), so its default of 0 is unity rather than silence.\n\nThe silence gate at src/Kyle.cpp:115-121 counts process calls, not seconds, and compares the count against args.sampleRate, which makes it one second at any sample rate. Below 0.01V the envelope keeps decaying for that second and is then forced to 0.\n\nThe maker's tooltip for the amp knob reads \"Amplication of output\", which is a typo for amplification.\n\nNo module in this plugin has a context menu of its own."
+}

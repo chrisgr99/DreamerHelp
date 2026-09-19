@@ -1,0 +1,59 @@
+{
+  "plugin": "HetrickCV",
+  "module": "ChaoticAttractors",
+  "description": "Chaotic signal generator running eight named attractors, each with four parameters, across X, Y and Z outputs",
+  "params": [
+    {"ids": [0], "text": "Sets how often a new value is generated; these attractors are not periodic, so this is a rate rather than a pitch"},
+    {"ids": [1], "text": "Attenuverter for the S. Rate CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the first of the four parameters driving the selected attractor"},
+    {"ids": [3], "text": "Attenuverter for the Chaos A CV input, -1 to +1"},
+    {"ids": [4], "text": "Sets the second of the four parameters driving the selected attractor"},
+    {"ids": [5], "text": "Attenuverter for the Chaos B CV input, -1 to +1"},
+    {"ids": [6], "text": "Sets the third of the four parameters driving the selected attractor"},
+    {"ids": [7], "text": "Attenuverter for the Chaos C CV input, -1 to +1"},
+    {"ids": [8], "text": "Sets the fourth of the four parameters driving the selected attractor"},
+    {"ids": [9], "text": "Attenuverter for the Chaos D CV input, -1 to +1"},
+    {"ids": [10], "text": "Selects the attractor: De Jong, Latoocarfian, Clifford, Tinkerbell, Lorenz, Rossler, Pickover or Fitzhugh-Nagumo"},
+    {"ids": [11], "text": "Attenuverter for the Mode CV input, -1 to +1"},
+    {"ids": [12], "text": "Fast runs the generator across its full rate range; Slow divides that rate by 100 for modulation speeds"},
+    {"ids": [13], "text": "Stepped jumps to each new value; Slewed interpolates linearly between values, which doubles as a low-pass filter at audio rates"},
+    {"ids": [14], "text": "DC passes the output as generated; AC strips any DC offset out of it"},
+    {"ids": [15], "text": "Inserts fresh random values into the attractor, restarting it when it has settled or gone silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here generates one new value, replacing the internal rate clock"},
+    {"ids": [1], "text": "A rising edge here restarts the attractor with fresh random values"},
+    {"ids": [2], "text": "Modulates the generation rate, scaled by the S. Rate attenuverter"},
+    {"ids": [3], "text": "Modulates the first attractor parameter, scaled by the Chaos A attenuverter"},
+    {"ids": [4], "text": "Modulates the second attractor parameter, scaled by the Chaos B attenuverter"},
+    {"ids": [5], "text": "Modulates the third attractor parameter, scaled by the Chaos C attenuverter"},
+    {"ids": [6], "text": "Modulates the fourth attractor parameter, scaled by the Chaos D attenuverter"},
+    {"ids": [7], "text": "Modulates the attractor selection, scaled by the Mode attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The attractor's first dimension, -5V to 5V"},
+    {"ids": [1], "text": "The attractor's second dimension, -5V to 5V"},
+    {"ids": [2], "text": "The attractor's third dimension, -5V to 5V; on the two-dimensional attractors it carries Out X multiplied by Out Y"}
+  ],
+  "notes": [
+    "the Tinkerbell attractor refills itself with random values whenever all of its values reach zero, which produces bursts of periodic noise",
+    "the generation rate is set as a fraction of the patch's own sample rate, so changing the patch's sample rate changes the speed and the sound of what comes out."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · polyphonic",
+      "5": "±5V · continuous · polyphonic",
+      "6": "±5V · continuous · polyphonic",
+      "7": "stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · polyphonic",
+      "1": "±5V · polyphonic",
+      "2": "±5V · polyphonic"
+    }
+  }
+}

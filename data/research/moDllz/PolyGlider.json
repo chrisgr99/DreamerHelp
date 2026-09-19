@@ -1,0 +1,23 @@
+{
+  "plugin": "moDllz",
+  "module": "PolyGlider",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/PolyGlider.cpp:247, getVoltage(voCh) times the attenuverter, added to the knob and floored at 0"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "why": "src/PolyGlider.cpp:252, getVoltage(voCh) times the attenuverter, added to the knob and floored at 0"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/PolyGlider.cpp:235, clamp(cshape + getVoltage(voCh), 0.0375f, 32.f)"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the threshold knob's own setting", "why": "src/PolyGlider.cpp:181, knob * 0.1f * clamp(getVoltage(), 0.f, 10.f) only when isConnected()"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the timeframe knob's own setting", "why": "src/PolyGlider.cpp:178, knob * 0.1f * clamp(getVoltage(), 0.f, 10.f) only when isConnected()"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 5V", "why": "src/PolyGlider.cpp:190, getVoltage(voCh) > 5.f, compared per channel"},
+      "6": {"poly": true, "why": "src/PolyGlider.cpp:187, getVoltage(voCh) read per channel as follow[2]"},
+      "7": {"poly": true, "why": "src/PolyGlider.cpp:171-172 getChannels() sets the channel count for the whole module, and process returns when it is zero"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/PolyGlider.cpp:174 setChannels(numCh), 289 from g_risegate, 10.f or 0.f"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/PolyGlider.cpp:176 setChannels(numCh), 290 from g_fallgate, 10.f or 0.f"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "src/PolyGlider.cpp:175 setChannels(numCh), 291 from 5.f * glide / abs(diff)"},
+      "3": {"poly": true, "why": "src/PolyGlider.cpp:173 setChannels(numCh), 288 the glided input"}
+    }
+  },
+  "comment": "The signal input, the follow input and the signal output carry whatever is patched in, so they are given no family. Input 2, the slope shape CV, is the one jack the maker never named: configInput is never called for SHAPECV_INPUT, so Rack shows an empty tooltip there. The glide-from switch's three choices are configured as Self, ch16 and ch1 (src/PolyGlider.cpp:148) while the panel prints Self, Prev and Ext; the code reads follow[1] as the previous poly channel's output and follow[2] as the follow jack, so the panel is right and the tooltip is stale. With nothing in the signal input, process returns at line 172 before any output is written, so every jack holds whatever it last carried. The threshold and timeframe CVs scale their knobs rather than adding to them."
+}

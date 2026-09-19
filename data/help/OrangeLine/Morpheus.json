@@ -1,0 +1,81 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Morpheus",
+  "description": "Polyphonic CV looper with turing machine behaviour and sixteen memory slots, mutating a loop step by step or morphing it toward a stored one",
+  "params": [
+    {"ids": [0], "text": "Sets the chance that the current step is left as it is, 0% replacing every step and 100% replacing none"},
+    {"ids": [1], "text": "Sets where a replacement comes from, 0% always the source and 100% always randomized"},
+    {"ids": [2], "text": "Sets the number of steps in the loop, 1 to 128"},
+    {"ids": [3], "text": "Steps the selected memory slot up; the slot number shows red while the selection is not the slot in use"},
+    {"ids": [4], "text": "Steps the selected memory slot down; the slot number shows red while the selection is not the slot in use"},
+    {"ids": [5], "text": "Stores the current loop in the selected memory slot and makes that slot the one in use"},
+    {"ids": [6], "text": "Makes the selected slot the one in use while the slot number shows red, and otherwise loads that slot's loop into the step loop at once"},
+    {"ids": [7], "text": "Freezes the steps of every channel, so nothing is replaced and a recall passes them over"},
+    {"ids": [8], "text": "Randomizes the current step of every channel for as long as the button is held"},
+    {"ids": [9], "text": "Shifts the step loop of every channel one step to the left"},
+    {"ids": [10], "text": "Shifts the step loop of every channel one step to the right"},
+    {"ids": [11], "text": "Sets the current step of every channel to that channel's OFS value for as long as the button is held"},
+    {"ids": [12], "text": "Takes the source for replacement from the SRC input rather than from the memory slot in use"},
+    {"ids": [13], "text": "Writes the external CV into the current step for as long as the button is held"},
+    {"ids": [14], "text": "Sets the threshold the step's CV has to cross for a gate; a higher setting lowers the threshold and so produces more gates"},
+    {"ids": [15], "text": "Scales the randomly generated CV, -10V to 10V, positive giving unipolar values from OFS upward and negative bipolar values centred on OFS"},
+    {"ids": [16], "text": "Sets the offset of the randomly generated CV, -10V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the lock setting per channel, 0-10V covering the full range"},
+    {"ids": [1], "text": "Added to the source and random balance per channel, 0-10V covering the full range"},
+    {"ids": [2], "text": "Sets the loop length per channel, 0.01V per step; a channel at 0V takes the length from the knob"},
+    {"ids": [3], "text": "A channel above 0V freezes that channel's steps"},
+    {"ids": [4], "text": "A channel above 0V randomizes that channel's current step"},
+    {"ids": [5], "text": "A channel above 0V shifts that channel's loop one step to the left"},
+    {"ids": [6], "text": "A channel above 0V shifts that channel's loop one step to the right"},
+    {"ids": [7], "text": "A channel above 0V sets that channel's current step to its OFS value"},
+    {"ids": [8], "text": "The external CV used as the source for replacement and for recording"},
+    {"ids": [9], "text": "A channel above 5V writes the external CV into that channel's current step"},
+    {"ids": [10], "text": "Sets the gate threshold per channel in place of the knob"},
+    {"ids": [11], "text": "Sets the random CV scale per channel in place of the knob"},
+    {"ids": [12], "text": "Sets the random CV offset per channel in place of the knob"},
+    {"ids": [13], "text": "Selects the memory slot by voltage, 0.1V per slot, and is monophonic"},
+    {"ids": [14], "text": "A voltage above 0V stores the loop in the selected slot"},
+    {"ids": [15], "text": "A voltage above 0V recalls the selected slot"},
+    {"ids": [16], "text": "A trigger sets the playhead of every loop back to the first step"},
+    {"ids": [17], "text": "The clock that advances the loop one step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current external CV while EXT is on, and the value from the memory slot in use otherwise"},
+    {"ids": [1], "text": "A gate for each channel whose step CV crosses the GTP threshold, switchable to a trigger in the menu"},
+    {"ids": [2], "text": "The CV of the current step of each channel's loop"}
+  ],
+  "notes": [
+    "nothing advances until a clock is patched to CLK"
+  ],
+  "menu": [
+    "Output Trg instead of Gate — puts out a trigger at each step that crosses the threshold rather than a gate held across it",
+    "Recall on Mem CV Change — makes the slot the MEM voltage points at the one in use as soon as that voltage changes",
+    "Load on Mem CV Change — loads the slot the MEM voltage points at into the step loop as soon as that voltage changes",
+    "Smart HLD — turns the HLD input around, so a low channel is frozen and the edit buttons reach only the channels held high",
+    "MEM is Note — reads the MEM voltage as a volt per octave note in place of 0.1V per slot",
+    "Load Channels on HLD — loads a frozen channel from the memory slot as well, where a recall would otherwise pass it over",
+    "Scale on Output — applies SCL and OFS as the CV leaves the module rather than when a random value is written into a step",
+    "Channels — the number of polyphonic output channels, Auto to follow the number of channels coming in, or 1 to 16"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V",
+      "1": "0 to 10V",
+      "3": "high above 0V · stepped",
+      "4": "high above 0V · stepped",
+      "5": "high above 0V · stepped",
+      "6": "high above 0V · stepped",
+      "7": "high above 0V · stepped",
+      "9": "high above 5V · stepped",
+      "14": "high above 0V · stepped",
+      "15": "high above 0V · stepped",
+      "16": "stepped",
+      "17": "stepped"
+    },
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

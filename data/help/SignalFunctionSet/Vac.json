@@ -1,0 +1,45 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Vac",
+  "description": "An attack and release envelope whose stage times wander from one trigger to the next, the way a vactrol's response drifts, with a separate amount of wander on each stage",
+  "params": [
+    {"ids": [0], "text": "Sets the base attack time, 1ms to 5 seconds"},
+    {"ids": [1], "text": "Sets how far the attack time wanders from one trigger to the next, -1 to 1; at the centre it is fixed, positive makes each attack randomly longer and negative randomly shorter"},
+    {"ids": [2], "text": "Sets the base release time, 1ms to 5 seconds"},
+    {"ids": [3], "text": "Sets how far the release time wanders from one trigger to the next, -1 to 1; at the centre it is fixed, positive makes each release randomly longer and negative randomly shorter"},
+    {"ids": [4], "text": "Blends both stages between a constant rate and a rate proportional to what is left, from a straight ramp at one end of the travel to a curved one at the other"},
+    {"ids": [5], "text": "Latches automatic retriggering on each press, so the envelope starts a new cycle as each release finishes; switching it on from rest starts a cycle without a trigger"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise past 1V starts one attack and release cycle and draws fresh stage lengths for it; a retrigger continues from wherever the envelope is rather than dropping to 0V"},
+    {"ids": [1], "text": "Changes the attack time, scaled by a tenth and added to the rise knob, the total clamped to the knob's travel"},
+    {"ids": [2], "text": "Changes how far the attack wanders, scaled by a fifth and added to the rise stability knob, the total clamped to -1 to 1"},
+    {"ids": [3], "text": "Changes the release time, scaled by a tenth and added to the fall knob, the total clamped to the knob's travel"},
+    {"ids": [4], "text": "Changes how far the release wanders, scaled by a fifth and added to the fall stability knob, the total clamped to -1 to 1"},
+    {"ids": [5], "text": "Changes the curve, scaled by a tenth and added to the curve knob, the total clamped to the knob's travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V trigger each time the release reaches 0V"},
+    {"ids": [1], "text": "The envelope, 0-10V"}
+  ],
+  "notes": [
+    "the wander is drawn once per trigger and holds for that cycle; the menu can instead have it move continuously within each stage"
+  ],
+  "menu": [
+    "Continuous drift (rate wobbles during stage) — makes the stage rate wander while the stage is running, rather than being drawn once as the stage starts"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

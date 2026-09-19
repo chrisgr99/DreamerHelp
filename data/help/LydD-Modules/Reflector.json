@@ -1,0 +1,45 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Reflector",
+  "description": "Two wavefolders that fold or wrap whatever goes past the edges of a voltage window back inside it, each giving the result and the result of the inverted input",
+  "params": [
+    {"ids": [0, 1], "text": "Sets how tall the window is, 0.5V to 10V, the window being centred on the Height setting"},
+    {"ids": [2, 3], "text": "Moves the centre of the window, -5V to 5V"},
+    {"ids": [4, 5], "text": "Bends the result inside the window, -0.99 for nearly logarithmic through 0 for untouched to 0.99 for exponential"},
+    {"ids": [6, 7], "text": "Switches that half between folding what goes past an edge back in and wrapping it round to the far edge"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to fold; with no cable this half gets 0V"},
+    {"ids": [1], "text": "The signal to fold; with no cable this half takes whatever the other Signal jack carries"},
+    {"ids": [2, 3], "text": "The absolute value of the voltage is added to the Frame knob, the total clamped to 0.5V and 10V"},
+    {"ids": [4, 5], "text": "Added to the Height knob, the total clamped to -5V and 5V"},
+    {"ids": [6, 7], "text": "Divided by 5 and added to the Bend knob, the total clamped to -0.99 and 0.99"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The folded signal, always inside the window"},
+    {"ids": [2, 3], "text": "The folded signal with the input inverted first, always inside the window"}
+  ],
+  "notes": [
+    "the window runs from the Height setting minus half the Frame setting to the Height setting plus half of it, so Frame at 10 and Height at 0 leaves everything between -5V and 5V untouched",
+    "folding and wrapping are applied over and over until the result lands inside the window, but no more than ten times, so an input far enough outside a narrow window can come out beyond its edges",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the other Signal jack.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0.5 to 10V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0.5 to 10V.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only"
+    }
+  }
+}

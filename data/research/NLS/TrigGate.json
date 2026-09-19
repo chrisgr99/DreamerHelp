@@ -1,0 +1,16 @@
+{
+  "plugin": "NLS",
+  "module": "TrigGate",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/TrigGateModule.cpp:42 divides this jack by 10; src/TrigGate.vult:18 tests it above 0V and :20 opens gate1 on the rising edge for the number of seconds the gate1 knob sets"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/TrigGateModule.cpp:43 divides this jack by 10; src/TrigGate.vult:18 tests it above 0V and :20 opens gate2 on the rising edge for the number of seconds the gate2 knob sets"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/TrigGateModule.cpp:47"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/TrigGateModule.cpp:48"}
+    }
+  },
+  "source": "https://github.com/michelezaccagnini/NLS/blob/main/README.md",
+  "comment": "Written from the maker's source at commit 5ebe71e, the last commit carrying 2.1.6.0. The constructor calls configInput for both trigger jacks and configOutput for neither, so the two gate outputs have no tooltip; the census records both output names as blank. The gate length is a plain accumulation of sampleTime, so the knob's 0 to 1 is 0 to 1 second at any sample rate. With the knob at exactly zero, trig2gate in TrigGate.vult reaches its open state with dur at 0 and len at 0: neither 'dur < len' nor 'dur > len' is true, so the state is never cleared and the gate stays high until the patch is reloaded. Both length knobs are read once every four samples; the trigger inputs are read every sample. The panel prints the module as T2G and labels the jacks trig and gate."
+}

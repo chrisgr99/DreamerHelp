@@ -1,4 +1,5 @@
-/** The one gesture this plugin owns: Option-click anywhere in the rack.
+/** The one gesture this plugin owns: Option-click anywhere in the rack, or whichever other
+combination is chosen in the Help module's menu — see HELP_GESTURES.
 
 WHY THIS IS NOT INSIDE THE RACK. Rack's ScrollWidget consumes Option-click before offering it
 to its children, so that Option-drag can pan the view. A handler parented to the rack, or to a
@@ -40,13 +41,12 @@ struct HelpOverlay : widget::Widget {
 		// click first and consumes it to read itself aloud.
 		//
 		// NOT CONSUMED. Dismissing is a side effect of the click, not an answer to it.
-		if (e.action == GLFW_PRESS && (e.mods & RACK_MOD_MASK) != GLFW_MOD_ALT)
+		const HelpGesture& g = helpGesture();
+		const bool asking = e.button == g.button && (e.mods & RACK_MOD_MASK) == g.mods;
+		if (e.action == GLFW_PRESS && !asking)
 			helpDismissNote();
 
-		const bool optionLeft = e.button == GLFW_MOUSE_BUTTON_LEFT
-			&& (e.mods & RACK_MOD_MASK) == GLFW_MOD_ALT;
-
-		if (e.action == GLFW_PRESS && optionLeft) {
+		if (e.action == GLFW_PRESS && asking) {
 			pressedAt = APP->scene->getMousePos();
 			pressedForHelp = true;
 			// Falls through: the rack must see this press, or it can never start a drag.

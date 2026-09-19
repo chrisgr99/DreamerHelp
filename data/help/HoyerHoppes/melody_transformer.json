@@ -1,0 +1,71 @@
+{
+  "plugin": "HoyerHoppes",
+  "module": "melody_transformer",
+  "description": "A polyphonic quantizer whose scale notes each carry a priority, giving four outputs of the same melody filtered to the whole scale, to a pentatonic, to a triad and to the root",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Steps that note through five states: black keeps it out of every output, and dark grey, mid grey, light grey and white put it into prio1, into prio1 and prio2, into those and prio3, and into all four"},
+    {"ids": [12], "text": "Multiplies the input by -1 to 1, so it attenuates the signal and inverts it below zero; while a cable is patched to the gain input this knob attenuates that voltage instead"},
+    {"ids": [13], "text": "Adds -5V to 5V to the input after gain, and is ignored while a cable is patched to the offset input"},
+    {"ids": [14], "text": "Passes the held sample rather than the moment-to-moment input while it is lit; unlit, the input goes through unsampled and no sampling reaches the outputs"},
+    {"ids": [15], "text": "Sets how many of the shift register's sixteen steps are read before it returns to the first, 1 to 16; a shorter setting does not erase the steps past it"},
+    {"ids": [16], "text": "Plays the shift register to the outputs while it is lit, and writes the input into the register while it is unlit"},
+    {"ids": [17], "text": "Writes the input into the current step of the shift register while it is held, in place of playing that step back, and does nothing while the loop button is unlit"},
+    {"ids": [18], "text": "Chooses what a value below the floor becomes: to ceiling sends it to the ceiling, up oct adds 1V until it clears, rectify reflects it above the floor, clip sets it to the floor, bypass passes it"},
+    {"ids": [19], "text": "Chooses what a value above the ceiling becomes: to root sends it to a root note, down oct drops it 1V at a time, rectify reflects it under the ceiling, clip sets it to the ceiling, bypass passes it"},
+    {"ids": [20], "text": "Sets the voltage below which the floor mode acts, -10V to 10V, with gain and offset applied to it as well as to the signal; a cable at the floor level input replaces it"},
+    {"ids": [21], "text": "Sets the voltage above which the ceiling mode acts, -10V to 10V, with gain and offset applied to it as well as to the signal; a cable at the ceiling level input replaces it"},
+    {"ids": [22], "text": "Transposes the scale in semitones, -12 to 12, carrying every note's priority with it, so the key changes and the mode does not"},
+    {"ids": [23], "text": "Moves the priorities round the notes already in the scale without adding any, so the mode changes and the key does not; a setting that lands on no note of the scale changes nothing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage to be processed and quantized; with nothing patched, one channel of white noise between -10V and 10V is used, and the channels patched here are the channels every output carries"},
+    {"ids": [1], "text": "Sets the gain in place of the knob while patched, its voltage divided by 10 and multiplied by the knob, so the knob attenuates it"},
+    {"ids": [2], "text": "Sets the offset in place of the knob while patched, its voltage added straight to the signal; the knob does not attenuate it, despite the maker's tooltip saying that it does"},
+    {"ids": [3], "text": "Takes a new sample of the input on each rising edge, and clocks the shift register as well while the clock input is empty"},
+    {"ids": [4], "text": "Steps the shift register on each rising edge; with nothing patched here the s&h input does that instead"},
+    {"ids": [5], "text": "Writes the input into the current step of the shift register on the next clock while this reads 1V or above, in place of playing that step back"},
+    {"ids": [6], "text": "Chooses the floor mode in place of the knob while patched, its voltage cut to a whole number, 0 for to ceiling through to 4 for bypass"},
+    {"ids": [7], "text": "Chooses the ceiling mode in place of the knob while patched, its voltage cut to a whole number, 0 for to root through to 4 for bypass"},
+    {"ids": [8], "text": "Sets the floor in place of the knob while patched, -10V to 10V before gain and offset are applied to it"},
+    {"ids": [9], "text": "Sets the ceiling in place of the knob while patched, -10V to 10V before gain and offset are applied to it"},
+    {"ids": [10], "text": "Sets the transposition in place of the knob while patched, at 1V per octave, wrapping round every twelve semitones"},
+    {"ids": [11], "text": "Sets the priority shift in place of the knob while patched, at 1V per octave; a voltage that rounds to a note outside the scale leaves the shift where it was"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input after sample and hold, the loop, gain, offset and the floor and ceiling limits, with no quantizing applied"},
+    {"ids": [1], "text": "The processed input quantized to every note of the scale that is not black; the prio shift control makes no difference here, because this output takes any note above black whatever its priority"},
+    {"ids": [2], "text": "The processed input quantized to the notes of the scale set to mid grey, light grey or white"},
+    {"ids": [3], "text": "The processed input quantized to the notes of the scale set to light grey or white"},
+    {"ids": [4], "text": "The processed input quantized to the notes of the scale set to white"}
+  ],
+  "notes": [
+    "the input runs through sample and hold, then the sixteen-step shift register, then gain, then offset, then the floor and ceiling limits, and only then the quantizer",
+    "a value is quantized down to the nearest scale note at or below it, not to whichever scale note is closest",
+    "the root that the ceiling's to root mode uses is the lowest note in the scale whose priority is below white, not the lowest white note the manual describes",
+    "the twelve coloured dots by the keyboard show each note's priority after transpose and prio shift have been applied; they are drawing only and no click reaches them",
+    "the contents of the shift register are saved with the patch and come back on reload, so a loop survives a restart"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads white noise between -10V and 10V.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads the gain knob.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads the offset knob.",
+      "3": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · polyphonic\n\nunpatched it reads the s&h jack; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · polyphonic\n\nunpatched it reads the overwrite button; a negative voltage does nothing here.",
+      "6": "0 to 5V · stepped · one channel only\n\nunpatched it reads the floor mode knob; a negative voltage does nothing here.",
+      "7": "0 to 5V · stepped · one channel only\n\nunpatched it reads the ceiling mode knob; a negative voltage does nothing here.",
+      "8": "±10V · continuous · one channel only\n\nunpatched it reads the floor level knob.",
+      "9": "±10V · continuous · one channel only\n\nunpatched it reads the ceiling level knob.",
+      "10": "1V per octave · stepped · one channel only\n\nunpatched it reads the transpose knob.",
+      "11": "1V per octave · stepped · one channel only\n\nunpatched it reads the prio shift knob."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

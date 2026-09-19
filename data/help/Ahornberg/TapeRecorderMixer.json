@@ -1,0 +1,65 @@
+{
+  "plugin": "Ahornberg",
+  "module": "TapeRecorderMixer",
+  "description": "A channel strip for the Tape Recorder: it takes one source, offers an effects loop, and passes the whole lot along a polyphonic bus that carries up to four tape tracks",
+  "params": [
+    {"ids": [0], "text": "Sends this channel's signal to the tape while it is on, and tells the recorder to erase what is already on that track"},
+    {"ids": [1], "text": "Takes the effects loop out of circuit, so the signal from the input goes on without the return"},
+    {"ids": [2], "text": "Nothing in the module reads this knob. The plugin's tags promise ducking and the code for it was never written, so turning it changes no sound."},
+    {"ids": [3], "text": "Sets how much of what comes back from the tape is mixed into this channel, squared, from silence to 6dB above unity, despite the panel printing erase and the maker naming it Tape Erase Amount"},
+    {"ids": [4], "text": "Nothing in the module reads this switch beyond lighting itself. No signal is muted or unmuted by it and no other module is told about it."},
+    {"ids": [5], "text": "Silences this channel's own audio output; what goes to the tape is not affected"},
+    {"ids": [6], "text": "Sets the level of the signal at the audio input, squared, from silence to 6dB above unity"},
+    {"ids": [7], "text": "Silences the signal at the audio input before anything else happens to it; it appears on the panel only after Enable Input Mute has been chosen from the menu"},
+    {"ids": [10], "text": "Nothing in the module reads this screw. It is named Delay in samples and counts 0 to 100, and no delay is applied anywhere in the code."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal this channel mixes"},
+    {"ids": [1], "text": "Where the effects chain comes back; with nothing patched here the send and return are skipped altogether"},
+    {"ids": [2], "text": "The leg of the bus running towards the Tape Recorder, taken from the strip on the right"},
+    {"ids": [3], "text": "The leg of the bus coming back from the Tape Recorder, taken from the recorder's audio output or from the strip on the right"},
+    {"ids": [4], "text": "A rising edge toggles the record switch"},
+    {"ids": [5], "text": "A rising edge toggles the effects bypass switch"},
+    {"ids": [6], "text": "Nothing in the module reads this jack; the ducking it was meant to control was never written."},
+    {"ids": [7], "text": "Nothing in the module reads this jack; the tape return level is set by its knob alone."},
+    {"ids": [8], "text": "A rising edge toggles the solo switch, which nothing in the module reads"},
+    {"ids": [9], "text": "A rising edge toggles the mute switch"},
+    {"ids": [10], "text": "Scales the input level knob, 0V for silence and 10V for the knob as it is set, clamped at 20V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "This channel's audio after the effects loop, the mute and the meter"},
+    {"ids": [1], "text": "The signal going out to the effects chain, taken after the input level and after whatever came back from the tape"},
+    {"ids": [2], "text": "The leg of the bus running away from the Tape Recorder, with this channel's track taken off it, for the strip on the left"},
+    {"ids": [3], "text": "The leg of the bus running towards the Tape Recorder, with this channel's audio added to it, for the strip on the right"}
+  ],
+  "notes": [
+    "the strip does nothing about tape until the bus is joined up, and the Tape Recorder goes to the right of the strips.",
+    "patch the recorder's audio output into the bus from tape input of the nearest strip, that strip's bus from tape output into the next strip's bus from tape input, and so on leftwards.",
+    "the bus to tape jacks run the other way: each strip's bus to tape output goes into the next strip's bus to tape input, ending at the recorder's audio input.",
+    "which track a strip owns is counted along that chain, and the number appears on the display.",
+    "the meter and the track number on the display are drawn by the module; neither can be clicked."
+  ],
+  "menu": [
+    "the text field at the top — holds the track name shown on the display, of which the first seven characters fit",
+    "Enable Input Mute — puts a mute button on top of the input level knob, and reads Disable Input Mute once it is there"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the send, so the loop is skipped.",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "8": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "9": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "10": "0 to 10V · continuous · one channel only\n\nunpatched it reads the knob alone; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic"
+    }
+  }
+}

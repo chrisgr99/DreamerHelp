@@ -1,0 +1,45 @@
+{
+  "plugin": "MADZINE",
+  "module": "U8",
+  "description": "Stereo channel strip in four HP: level with CV, a ducker, mute and solo, and a chain pair that lets several of these feed one output",
+  "params": [
+    {"ids": [0], "text": "Sets the channel gain, silent at the bottom of its travel, unity in the middle and twice over at the top"},
+    {"ids": [1], "text": "Sets how hard the duck signal pulls the channel down: nothing at the bottom of its travel, and at the top a 3.3V duck signal is enough to silence the channel outright"},
+    {"ids": [2], "text": "Silences the channel; it lights while the channel is silent, whether by this button or by another channel in the chain being soloed"},
+    {"ids": [3], "text": "Silences every other channel in the chain of mixers this one is touching, left and right, and lights while it is doing so"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal being mixed; with nothing patched to the right jack this one feeds both sides, the right delayed by 20ms"},
+    {"ids": [1], "text": "The right side of the signal being mixed"},
+    {"ids": [2], "text": "Pulls the channel down as its voltage rises, 0V leaving the channel alone and 10V ducking it as far as the DUCK knob allows"},
+    {"ids": [3], "text": "Added to the LEVEL knob, a tenth of the knob's travel per volt; the total is held between silence and twice over"},
+    {"ids": [4], "text": "A rising edge through 1V toggles the mute button"},
+    {"ids": [5], "text": "A rising edge through 1V toggles the solo button"},
+    {"ids": [6], "text": "A signal added to the left output after the level, duck and mute of this channel, so it passes through untouched"},
+    {"ids": [7], "text": "A signal added to the right output after the level, duck and mute of this channel, so it passes through untouched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of this channel plus whatever reaches the left chain jack, clipped at ±10V"},
+    {"ids": [1], "text": "The right side of this channel plus whatever reaches the right chain jack, clipped at ±10V"}
+  ],
+  "notes": [
+    "solo reaches across the rack. Every U8, ALEXANDERPLATZ and SHINJUKU touching this one is searched, and if any of their channels is soloed this one is silenced unless it is soloed too.",
+    "patch the outputs of one of these into the chain inputs of the next to build a mixer out of several, the last one in the run carrying the sum."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic",
+      "2": "0 to 10V · polyphonic\n\na negative voltage does nothing here.",
+      "3": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 2V.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "±10V · continuous · polyphonic",
+      "7": "±10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic"
+    }
+  }
+}

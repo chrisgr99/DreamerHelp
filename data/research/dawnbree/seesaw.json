@@ -1,0 +1,19 @@
+{
+  "plugin": "dawnbree",
+  "module": "seesaw",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/seesaw.cpp:72, clockTrigger.process(getVoltage() + the button), dsp::SchmittTrigger's default 0V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/seesaw.cpp:71, resetTrigger.process(getVoltage() + the button)"},
+      "2": {"poly": true, "why": "src/seesaw.cpp:77 getChannels(), looped over at 99-102 and 111-113"},
+      "3": {"poly": true, "why": "src/seesaw.cpp:78 getChannels(), looped over at 107-109 and 111-113"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "normal": "the steps for a knob", "why": "src/seesaw.cpp:74, clamp(floor(getVoltage()), 0, 9) only when isConnected()"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "normal": "the steps for b knob", "why": "src/seesaw.cpp:75, clamp(floor(getVoltage()), 0, 9) only when isConnected()"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/seesaw.cpp:97 and 105, setChannels() from whichever input is being passed"},
+      "1": {"poly": true, "why": "src/seesaw.cpp:98 and 106, setChannels() from a alone or from the wider of a and b"}
+    }
+  },
+  "comment": "The a and b jacks and the two outputs carry whatever is patched in, so they are given no family. The steps CV inputs take the floor of the voltage, so 2.9V is two steps. The button and the jack for clock are added together before one Schmitt trigger, and the same for reset (src/seesaw.cpp:71-72), so a press while the jack already reads above 1V does nothing. The maker's tooltips on the step CV inputs already say 0-10V, 1V/step, and the code agrees."
+}

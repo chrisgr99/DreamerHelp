@@ -1,0 +1,14 @@
+{
+  "plugin": "HetrickCV",
+  "module": "BinaryNoise",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "BinaryNoise.cpp:87 passes it to a Rack SchmittTrigger, which fires above 1V"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "BinaryNoise.cpp:81 passes it to getSampleRateParameter, which scales the CV by 0.2 into a 0 to 1 rate (HetrickUtilities.hpp:137)"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "BinaryNoise.cpp:92 passes it to normalizeParameter, which maps the CV by v*0.1+0.5 clamped to 0 to 1 (HetrickUtilities.hpp:105)"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "BinaryNoise.cpp:76 and 107 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write; the polarity switch at BinaryNoise.cpp:94 makes it 0 to 10V or ±5V"}
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "MUS-X",
+  "module": "Filter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Filter.cpp:90 reads this input with getPolyVoltageSimd and multiplies it by 0.1 against a knob spanning ten octaves, which Filter.cpp:34 says is what makes the volt-per-octave scaling work"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "subtracts", "normal": "0V", "why": "Filter.cpp:95 reads this input with getPolyVoltageSimd and multiplies it by 0.1 before adding it to the knob's 0 to 1 travel"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "why": "Filter.cpp:85 takes the module's channel count from this input and Filter.cpp:106 reads it with getVoltageSimd"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Filter.cpp:86 sets this output's channel count from the audio input; the post-filter saturator holds the result to about ±10V"}
+    }
+  },
+  "comment": "Read from src/Filter.cpp and src/blocks/FilterBlock.hpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1. The cutoff knob spans 20Hz to 20480Hz, exactly ten octaves, which the maker's own comment at Filter.cpp:34 says is required for the volt-per-octave CV scaling. The cutoff is also clamped to a fifth of the oversampled rate (Filter.cpp:92), so it cannot reach the top of the knob at low oversampling settings. The eighteen mode names are at FilterBlock.hpp:65 to 82 and the module starts on the ninth of them, the two-pole Sallen-Key lowpass."
+}

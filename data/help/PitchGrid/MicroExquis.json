@@ -1,0 +1,31 @@
+{
+  "plugin": "PitchGrid",
+  "module": "MicroExquis",
+  "description": "Interface to the Exquis hex keyboard by Intuitive Instruments: it draws the keyboard on screen, retunes incoming notes to the scale the Exquis is set to, and passes that tuning to other modules",
+  "params": [
+    {"ids": [7], "text": "Steps the writing on the on-screen keys through three states, none, the note's name in the current scale, and the note's two lattice coordinates; the lamp beside it shows which is in use"},
+    {"ids": [8], "text": "Steps the tuning table offered to MTS-ESP instruments through three mappings: one Exquis key per MIDI note, one scale degree per MIDI note, and one per white key with the black keys silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes a volt per octave pitch with 0V as middle C, rounds it to the nearest semitone and finds the key of that MIDI note on the Exquis layout"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of that key in the current tuning, in volts where one volt doubles the frequency; the maker's tooltip on this jack gives the module's own description rather than the jack's"},
+    {"ids": [1], "text": "Sends the current tuning and scale to the Microtonal Hammond as a stream of numbers rather than as a signal"}
+  ],
+  "notes": [
+    "the scale, the tuning and the key layout are chosen on the Exquis itself; nothing on this panel changes them",
+    "the module hunts for an Exquis over MIDI every two seconds and checks the link every five; the lamp at the top of the panel is red while none answers and pale blue once one does",
+    "the module claims the MTS-ESP master place when it starts, so instruments that follow MTS-ESP take their tuning from it; the three KEYMAP lamps stay dark if another master holds that place",
+    "the hexagons on screen and the tuning figures beside them are drawn rather than built from controls, so no click on them reaches this help"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "one channel only"
+    }
+  }
+}

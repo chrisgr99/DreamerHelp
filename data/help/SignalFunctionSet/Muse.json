@@ -1,0 +1,66 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Muse",
+  "description": "A recreation of the 1972 Triadex Muse: eight sliders tap a set of binary counters and a thirty-one bit shift register, and their interaction makes a long melody nobody wrote",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Picks which of the forty taps this slider reads for the theme; the four theme taps are combined and the result is fed back into the shift register, which is what shapes the pattern over the long run"},
+    {"ids": [4, 5, 6, 7], "text": "Picks which of the forty taps this slider reads for the interval; the four interval taps form a four-bit number each clock, three bits choosing a note and the fourth adding an octave"},
+    {"ids": [8], "text": "Transposes the melody, -24 to 24 semitones"},
+    {"ids": [9], "text": "Starts and stops the sequence on each press; the lamp is lit while it runs"},
+    {"ids": [10], "text": "Clears the counters and the shift register and starts the pattern again on each press"},
+    {"ids": [11], "text": "Draws fresh positions for the sliders on each press, over whichever sliders the menu has it set to touch"},
+    {"ids": [12], "text": "Picks the scale the interval bits read, from the same list the other modules use"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the engine by one step; the module has no tempo of its own"},
+    {"ids": [1], "text": "A rise clears the counters and the shift register and starts the pattern again"},
+    {"ids": [2], "text": "A high gate runs the sequence, taking the run button's place"},
+    {"ids": [3], "text": "A rise draws fresh positions for the sliders"},
+    {"ids": [4, 5, 6, 7], "text": "Moves that interval slider's tap choice, ±5V added to the slider"},
+    {"ids": [8, 9, 10, 11], "text": "Moves that theme slider's tap choice, ±5V added to the slider"},
+    {"ids": [12], "text": "Transposes the melody, a volt per octave added to the root knob"},
+    {"ids": [13], "text": "Picks the scale, added to the scale knob; it takes the same signal another module's scale output sends"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The melody as a volt per octave, with the scale and the root applied, or rescaled to a fixed span when the menu sets an output range"},
+    {"ids": [1], "text": "A trigger on each step, or only on the steps where the pitch changes, depending on the menu"}
+  ],
+  "notes": [
+    "the module has no clock of its own: nothing moves until a clock is patched and the sequence is running",
+    "a slider can point at OFF, ON, the raw clock, six counter bits or the thirty-one shift-register bits, and the lamp column beside the sliders shows each tap moment by moment"
+  ],
+  "menu": [
+    "Presets (from Triadex manual) — a submenu of seventeen slider settings taken from the original 1972 manual, each loading all eight sliders at once",
+    "Output range — a label over the four choices below it",
+    "V/oct — sends the melody out as a standard volt per octave with the root applied",
+    "1V — rescales the melody's whole span into one volt and ignores the root, for use as modulation rather than pitch",
+    "2V — rescales the melody's whole span into two volts and ignores the root",
+    "5V — rescales the melody's whole span into five volts and ignores the root",
+    "Link — a label over the linking choice below it",
+    "Allow expander linking (adjacent Muse → follow) — makes a second Muse placed immediately to the right follow this one's engine, so several can be chained off one pattern",
+    "Gate — a label over the two choices below it",
+    "Every clock pulse — fires the gate output on every step",
+    "Only when pitch changes — fires the gate output only where the melody moves, so repeated notes are tied together",
+    "Randomize — a label over the four items below it",
+    "All 8 sliders — makes the randomize button and jack draw fresh positions for every slider",
+    "Theme only — makes the randomize button and jack touch the four theme sliders alone",
+    "Interval only — makes the randomize button and jack touch the four interval sliders alone",
+    "Randomize now — draws fresh slider positions at once, over whichever sliders the scope above allows"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "stepped · one channel only",
+      "4": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "8": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "12": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "13": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

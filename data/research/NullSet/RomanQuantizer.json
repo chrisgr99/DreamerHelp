@@ -1,0 +1,18 @@
+{
+  "plugin": "NullSet",
+  "module": "RomanQuantizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "RomanQuantizer.cpp:437-438 takes this port's getChannels() as the voice count and 483 reads each channel in turn"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "RomanQuantizer.cpp:441 reads getVoltage() with no channel and rescales 0.1V to 2V into a Schmitt trigger"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "RomanQuantizer.cpp:443 reads getVoltage() with no channel and rescales 0.1V to 2V into a Schmitt trigger"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "RomanQuantizer.cpp:435 reads getVoltage() with no channel and 484 adds it straight to the quantized volts"},
+      "4": {"poly": false, "why": "RomanQuantizer.cpp configures this port at line 403 and never reads it anywhere in process(); the pattern comes from params[PPATTERN_PARAM] at line 436"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "RomanQuantizer.cpp:487-488 writes one value with setVoltage and never calls setChannels"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "RomanQuantizer.cpp:438 sets this port's channel count from the In port and 485 writes one voltage per channel"}
+    }
+  },
+  "comment": "Source read at commit 21bfcbf, the commit whose plugin.json carries the installed 2.0.0. THE PTTERN INPUT IS DEAD: RomanQuantizer.cpp:403 configures it and nothing in process() ever reads it, so the sequence can only be changed with the knob. The maker's README lists 'Pattrn: Switch between different sequences' without saying which control, and the jack's own tooltip reads 'Pattern', which is why it gets a line saying so rather than being left untagged. The sixteen chord squares are ChordWidget displays with no ParamWidget, so they have no census position and no note; the same is true of the key display under the KEY knob."
+}

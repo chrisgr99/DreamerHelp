@@ -1,0 +1,48 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "DualIntegrator",
+  "description": "Two slew limiters that can be driven into cycling, each with a hold input and an end comparator, and a comparator across the two of them",
+  "params": [
+    {"ids": [0, 1], "text": "Chooses what that cell's hold input does: up for Sample and Hold, where one step of slew passes on each rising edge, down for Track and Hold, where the cell freezes while the gate is high"},
+    {"ids": [2, 3], "text": "Scales that cell's attenuverted rate input, -1 to +1, before it is added to the rate"},
+    {"ids": [4, 5], "text": "Sets that cell's slew rate, an octave a step from about 0.03Hz to about 11600Hz"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that cell slews"},
+    {"ids": [2, 3], "text": "Forces 0V onto that cell's input while the voltage is above 1.8V, so the cell slews down towards zero"},
+    {"ids": [4, 5], "text": "Freezes that cell: in Sample and Hold a rising edge past 1.8V lets one step of slew through, and in Track and Hold the cell is frozen for as long as the voltage stays above 1.8V"},
+    {"ids": [6, 7], "text": "Added to that cell's rate through its attenuverter, a volt an octave"},
+    {"ids": [8, 9], "text": "Added to that cell's rate with no attenuation, a volt an octave"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "That cell's slewed signal, following the voltage range of what is fed into it"},
+    {"ids": [2, 3], "text": "-5V once that cell's output reaches +5V and +5V once it reaches -5V, which makes the cell cycle when it is patched back into that cell's input"},
+    {"ids": [4], "text": "5V while the left cell's output is above the right cell's, and -5V otherwise"}
+  ],
+  "notes": [
+    "patch a cell's END output back into its own IN with the switch down, in Track and Hold, and the cell cycles: a triangle at OUT and a square at END, tuned by the RATE knob",
+    "patching a cell's OUT or END back into its own CV input bends the wave, because that is self frequency modulation; the rate needs retuning afterwards",
+    "every input in this module reads one channel, so polyphonic cables are cut down to their first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±12V · continuous · one channel only",
+      "1": "±12V · continuous · one channel only",
+      "2": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "1V per octave · continuous · one channel only",
+      "7": "1V per octave · continuous · one channel only",
+      "8": "1V per octave · continuous · one channel only",
+      "9": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "±5V · one channel only",
+      "3": "±5V · one channel only",
+      "4": "±5V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "CCA2",
+  "description": "Two dimensional continuous cellular automaton on a 32 by 32 grid, where each cell holds a value from 0 to 1, read by up to sixteen play heads",
+  "params": [
+    {"ids": [0], "text": "Moves the play head across the columns; a right click on the grid sets it to the column clicked"},
+    {"ids": [1], "text": "Moves the play head across the rows; a right click on the grid sets it to the row clicked"},
+    {"ids": [2], "text": "Multiplies the cell value, which runs from 0 to 1, before it reaches the output, 0 to 10"},
+    {"ids": [3], "text": "Shifts the output voltage, -5V to 5V"},
+    {"ids": [4], "text": "The cell value a gate needs to pass, 0 to 1"},
+    {"ids": [5], "text": "Fills the grid with random values"},
+    {"ids": [6], "text": "The spread of the random values a random fill writes, 1 to 10"},
+    {"ids": [7], "text": "Runs one generation of the automaton"},
+    {"ids": [8], "text": "Lets the Gen input run generations; while it is off only the Gen button does"},
+    {"ids": [9], "text": "Winds the grid back to the last saved state"},
+    {"ids": [10], "text": "Picks the rule applied to the averaged neighbourhood of each cell, one of seven arithmetic functions of that average and the Param knob"},
+    {"ids": [11], "text": "The number the rule works with, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Places a play head on a column for each of its channels, the 32 columns spread over 0-10V, added to the CvX knob and wrapped around"},
+    {"ids": [1], "text": "Places a play head on a row for each of its channels, the 32 rows spread over 0-10V, added to the CvY knob and wrapped around"},
+    {"ids": [2], "text": "Adds to the scale, one channel per play head, one for one in volts"},
+    {"ids": [3], "text": "Adds to the offset, one channel per play head, one for one in volts"},
+    {"ids": [4], "text": "A rising edge runs one generation while On is lit"},
+    {"ids": [5], "text": "A rising edge winds the grid back to the last saved state"},
+    {"ids": [8], "text": "Fills the grid with random values while the voltage here is above 1V"},
+    {"ids": [9], "text": "Sets that number, 0-10V across the whole range, and overrides the Param knob while patched"},
+    {"ids": [10], "text": "A rising edge saves the grid as it stands, for a reset to come back to"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The cell value under the play head, multiplied by the scale and shifted by the offset, one channel per play head"},
+    {"ids": [1], "text": "Carries 10V on a play head's channel while the cell under it is above the threshold"}
+  ],
+  "notes": [
+    "every cell comes up at zero: press Rnd, or send a trigger to the Rnd input, to fill the grid before the play heads have anything to read"
+  ],
+  "menu": [
+    "Avg Type — picks how a cell's neighbourhood is averaged: Wighted, Normal, or NWSE only, which counts only the four cells sharing an edge",
+    "Color Mode — draws the grid in Grey, Palette 1, Palette 2 or Palette 3",
+    "Clear — sets every cell to zero"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "continuous · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "continuous · one channel only",
+      "10": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "P16B",
+  "description": "Builds an address voltage from four clock dividers read as the bits of a number, with a gate output for each bit",
+  "params": [
+    {"ids": [0], "text": "Picks what the ones bit of the number follows: OFF, ON, or one of the sixteen clock dividers C1 to C16"},
+    {"ids": [1], "text": "Picks what the twos bit of the number follows: OFF, ON, or one of the sixteen clock dividers C1 to C16"},
+    {"ids": [2], "text": "Picks what the fours bit of the number follows: OFF, ON, or one of the sixteen clock dividers C1 to C16"},
+    {"ids": [3], "text": "Picks what the eights bit of the number follows: OFF, ON, or one of the sixteen clock dividers C1 to C16"},
+    {"ids": [4], "text": "Sets the address space the number is spread over, 4 to 32; use 16 to address TD4"},
+    {"ids": [6], "text": "Sets the counter value a reset jumps to, 0 to 32"},
+    {"ids": [7], "text": "Inverts the ones bit before the number is built and before it reaches its gate output"},
+    {"ids": [8], "text": "Inverts the twos bit before the number is built and before it reaches its gate output"},
+    {"ids": [9], "text": "Inverts the fours bit before the number is built and before it reaches its gate output"},
+    {"ids": [10], "text": "Inverts the eights bit before the number is built and before it reaches its gate output"},
+    {"ids": [11], "text": "Inverts all sixteen divider gates carried on the divider output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge advances the counter the dividers are taken from"},
+    {"ids": [1], "text": "A rising edge sets the counter to the offset and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Sets the offset the counter resets to, 3.2 counts per volt over 0-10V, and overrides the Ofs knob while patched"},
+    {"ids": [3], "text": "Selects what the ones bit follows, a quarter of a volt per position, and a negative voltage selects by its size and switches the inversion on"},
+    {"ids": [4], "text": "Selects what the twos bit follows, a quarter of a volt per position, and a negative voltage selects by its size and switches the inversion on"},
+    {"ids": [5], "text": "Selects what the fours bit follows, a quarter of a volt per position, and a negative voltage selects by its size and switches the inversion on"},
+    {"ids": [6], "text": "Selects what the eights bit follows, a quarter of a volt per position, and a negative voltage selects by its size and switches the inversion on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The number built from the four bits as a voltage: the number divided by the size, times 10"},
+    {"ids": [1], "text": "A 1ms trigger whenever the address voltage changes"},
+    {"ids": [2], "text": "Carries 10V while the ones bit is high and 0V while it is low"},
+    {"ids": [3], "text": "Carries 10V while the twos bit is high and 0V while it is low"},
+    {"ids": [4], "text": "Carries 10V while the fours bit is high and 0V while it is low"},
+    {"ids": [5], "text": "Carries 10V while the eights bit is high and 0V while it is low"},
+    {"ids": [6], "text": "All sixteen clock dividers at once, one per channel, 10V while that divider is high"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

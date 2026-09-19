@@ -1,0 +1,98 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "SuperZzzaw",
+  "description": "A polyphonic stereo oscillator built by stacking twelve sawtooth waves, each with its own level, phase, detune and pan",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Sets how much of this sawtooth goes into the mix, -1 to 1, starting at 0; a negative setting turns that sawtooth upside down"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Shifts where in its cycle this sawtooth starts, 0 to 0.999 of a cycle"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Shifts this sawtooth's frequency away from the others, -5% to 5%"},
+    {"ids": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Places this sawtooth between the two outputs, -1 fully to the left output and 1 fully to the right"},
+    {"ids": [48], "text": "Sets the base frequency the oscillator plays at 0V, 10Hz to 20000Hz, starting at 261.626Hz for C4; the scale is linear in Hz, so most of the travel covers the top of the range"},
+    {"ids": [49], "text": "Multiplies the sum of all twelve sawtooths, 0 to 1, starting at 0.5"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Sets this sawtooth's level directly over -10V to 10V for -1 to 1, overriding its Level knob while patched"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Added to this sawtooth's phase knob at a tenth of a cycle per volt, with the sign of the voltage thrown away so a negative voltage shifts the same way as a positive one"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Sets this sawtooth's detune directly at one per cent per volt, overriding its Detune knob while patched; 10V gives 10%, twice what the knob reaches"},
+    {"ids": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Sets this sawtooth's pan directly over -10V to 10V for -1 to 1, overriding its Pan knob while patched"},
+    {"ids": [48], "text": "Multiplies the base frequency by its own voltage divided by ten, so 10V doubles it; the result is held between 10Hz and 20000Hz"},
+    {"ids": [49], "text": "Sets the pitch at 1V per octave from the base frequency knob's setting at 0V, and sets how many polyphonic voices the module plays"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the whole mix when it is the only output patched, and the left side of the stereo image when the right output is patched as well"},
+    {"ids": [1], "text": "Carries the right side of the stereo image; it is held at 0V unless the left output is patched too"}
+  ],
+  "notes": [
+    "every Level knob starts at 0, so a freshly placed module is silent until at least one of them is raised",
+    "the mix is not limited in any way; twelve sawtooths at full level reach far past ±10V, so keep the output level knob down and put a limiter after this module",
+    "panning does something only when both outputs are patched; with the left output alone the whole mix goes out of it at double the level the stereo pair would give",
+    "with nothing patched to V-In the oscillator plays one voice at the base frequency knob's setting",
+    "a sawtooth whose level is exactly 0 has its phase frozen while no V-In is patched, so raising its level starts it from wherever it stopped",
+    "the Harmonics setting changes nothing while Band is set to Unlimited",
+    "the Pitch In jack works two ways: with V-In empty a volt lifts the frequency by a tenth, and with V-In patched a volt doubles it, which the source marks as unfinished",
+    "the maker's manual gives the detune jack's range as -1 to 1 for ±10V; the code reads it at one per cent per volt, so ±10V is ±10%"
+  ],
+  "menu": [
+    "Ramp: Up, Down — chooses whether each sawtooth rises through the cycle and drops at its end, or falls through it and jumps at its end",
+    "Band: Unlimited, Limited — chooses between a straight ramp, which is rich but aliases, and a ramp rebuilt from a set number of sine partials, which is duller and cleaner",
+    "Harmonics: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 50 — sets how many partials the Limited ramp is built from, starting at 10"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "4": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "7": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "8": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "9": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "10": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "11": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Level knob.",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "13": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "14": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "15": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "16": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "17": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "18": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "19": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "20": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "21": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "22": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "23": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "24": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "25": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "26": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "27": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "28": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "29": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "30": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "31": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "32": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "33": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "34": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "35": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Detune knob.",
+      "36": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "37": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "38": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "39": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "40": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "41": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "42": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "43": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "44": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "45": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "46": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "47": "±10V · continuous · one channel only\n\nunpatched it reads this sawtooth's Pan knob.",
+      "48": "±10V · continuous · one channel only",
+      "49": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

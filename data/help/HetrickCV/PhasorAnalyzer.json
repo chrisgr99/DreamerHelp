@@ -1,0 +1,31 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorAnalyzer",
+  "description": "Reports the state of a phasor sample by sample: which way it is moving, whether it is moving at all, and where it resets",
+  "inputs": [
+    {"ids": [0], "text": "The phasor being analysed, 0-10V; voltages outside that range wrap back into it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "5V while the phasor is ascending, -5V while it is descending, and 0V while it is not moving"},
+    {"ids": [1], "text": "10V while the phasor is moving, 0V while it is stopped"},
+    {"ids": [2], "text": "A trigger each time the phasor's value falls by more than half in one sample, which is the ordinary end-of-cycle reset; a reset from part-way through a cycle can be missed"},
+    {"ids": [3], "text": "A trigger on any large proportional change in the phasor's value, catching resets the Reset output misses and often firing when a paused phasor starts again"},
+    {"ids": [4], "text": "The change in the phasor's slope from one sample to the next, -5V to +5V; 0V on a plain linear phasor except at its reset point"}
+  ],
+  "notes": [
+    "on extremely slow phasors, around 1000 seconds per cycle, rounding error drives the measured slope to zero and the Direction and Active outputs burst with noise",
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "±5V · polyphonic"
+    }
+  }
+}

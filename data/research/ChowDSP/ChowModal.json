@@ -1,0 +1,17 @@
+{
+  "plugin": "ChowDSP",
+  "module": "ChowModal",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "ChowModal.cpp process(): float x = inputs[AUDIO_IN].getVoltage(), no channel argument"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "ChowModal.cpp multiplies the mode frequency by std::pow(2, inputs[FREQ_IN].getVoltage())"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1.5V", "why": "ChowModal.cpp adds getVoltage() / 10 to the decay knob and clamps the total to 0 and 1.5 before multiplying by seven seconds"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "ChowModal.cpp adds 0.1 times getVoltage() to the amplitude knob with no clamp"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "ChowModal.cpp adds 0.1 times getVoltage() to the phase knob with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "setVoltage with no channel argument in ChowModal.cpp"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 7dc3dab and doc/manual.md in the same tree. The frequency knob is -36 to 36 semitones around dsp::FREQ_C4, which is 32.7Hz to 2093Hz. The decay knob is 0 to 1 multiplied by a fixed seven seconds, with a default of 0.2; its CV is the only one clamped, at 1.5, which is where the 10.5 second figure comes from. The amplitude knob is scaled by 0.01 inside the mode, and the phase is used as the argument of a complex polar amplitude. A 30Hz high-pass follows the mode."
+}

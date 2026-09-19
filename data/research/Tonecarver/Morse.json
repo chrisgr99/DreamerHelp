@@ -1,0 +1,13 @@
+{
+  "plugin": "Tonecarver",
+  "module": "Morse",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "src/Morse.cpp lines 322 to 331: a single getVoltage with no channel loop, fed to a dsp::SchmittTrigger at its default 0V and 1V thresholds, and process returns early when the jack is unconnected"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Morse.cpp lines 354 and 357: one voltage of 10 or 0 set with no setChannels in the file"}
+    }
+  },
+  "comment": "Morse is work in progress that reached the library. src/Morse.cpp lines 306 to 318: closeFile and openFile are empty stubs marked TODO, and getNextCharacter returns `int(rand() % 127)` under the comment \"TODO: get this from a file\". The Data File menu item therefore changes nothing about what plays.\n\nA second fault in the same file makes the code itself wrong. initializeLookupTable at lines 224 to 238 calls `dotDashToGates(alpha->code_sequence)` inside a loop over k, using the first element of each table rather than `alpha[k]`. Every one of the 26 letters is given A's pattern, every digit is given zero's pattern, and every punctuation mark ampersand's. Characters with no table entry fall to the error pattern at line 347.\n\nOnly one input and one output have PortWidgets. SEMITONE_CV, LOOP_CV, BOUNCE_CV and AUDIO_IN are configured at lines 197 to 200 and their addInput calls are commented out at lines 438 to 441, and DIRECTION_KNOB_PARAM is configured at line 266 with its addParam commented out at line 434. The census has no paramPos entry for it at all, so no click can reach it and it gets no line and no tag.\n\nFILE_LOADED_LED_LIGHT is given a LightWidget at line 445 and never written anywhere in the file.\n\nThe timing figures in the lines are literals in dotDashToGates at lines 240 to 256: one time unit for a dot, three for a dash, one for the gap between symbols, with three prepended before each letter at line 345 and seven for a space at line 342."
+}

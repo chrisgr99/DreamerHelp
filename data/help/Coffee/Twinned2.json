@@ -1,0 +1,88 @@
+{
+  "plugin": "Coffee",
+  "module": "Twinned2",
+  "description": "Two eight step pitch and gate sequences running together, with a per step chance deciding which of them is heard",
+  "params": [
+    {"ids": [0], "text": "Advances the sequence one step, as a rising edge at the clock jack does"},
+    {"ids": [1], "text": "Sends the sequence back to its first step"},
+    {"ids": [2], "text": "Sets the number of steps the sequence runs before it returns to the first, 1 to 8"},
+    {"ids": [3], "text": "Sets the voltage the A/B select jack is compared against, 0V to 10V; below it sequence A plays and at or above it sequence B"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "Sets the note for that step of that sequence, 0V to 1V, added to the octave knob beside it"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], "text": "Sets the octave for that step of that sequence, -10 to 10, added to the note knob beside it"},
+    {"ids": [36, 37, 38, 39, 40, 41, 42, 43], "text": "Sets the chance that step plays from sequence B rather than sequence A, 0 always giving A and 1 always giving B"},
+    {"ids": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], "text": "Sets the gate length for that step of that sequence, as a share of one clock beat; 0 mutes the step and 1 holds the gate for the whole beat"},
+    {"ids": [60], "text": "Sets how far a randomise trigger moves a control, as a share of its full range"},
+    {"ids": [61, 62], "text": "Randomises the eight note knobs of that sequence, by the amount set by the randomise knob"},
+    {"ids": [63, 64], "text": "Randomises the eight gate knobs of that sequence, by the amount set by the randomise knob"},
+    {"ids": [65], "text": "Replaces every control covered by the Module Randomization menu with a fresh random value"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here advances the sequence one step"},
+    {"ids": [1], "text": "A rising edge here sends the sequence back to its first step"},
+    {"ids": [2], "text": "Chooses the sequence directly instead of by chance: below the threshold knob sequence A plays, at or above it sequence B"},
+    {"ids": [3], "text": "Sets the number of steps, read over the range set by the Step Input Scale menu; the red lamp lights when the voltage would give a step count outside 1 to 8"},
+    {"ids": [4, 5], "text": "Plays that sequence's notes from a polyphonic cable, one channel per step, in place of its note and octave knobs"},
+    {"ids": [6, 7], "text": "Sets that sequence's gate lengths from a polyphonic cable, one channel per step"},
+    {"ids": [8, 9], "text": "A rising edge here randomises the eight note knobs of that sequence"},
+    {"ids": [10, 11], "text": "A rising edge here randomises the eight gate knobs of that sequence"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the pitch of whichever sequence won the chance on this step"},
+    {"ids": [1], "text": "Carries sequence A's pitch on every step, whether or not it won"},
+    {"ids": [2], "text": "Carries sequence B's pitch on every step, whether or not it won"},
+    {"ids": [3], "text": "Sends a 1ms pulse as the sequence reaches its last step"},
+    {"ids": [4], "text": "Carries sequence B's gates"},
+    {"ids": [5], "text": "Carries sequence A's gates"},
+    {"ids": [6], "text": "Carries the gates of whichever sequence won the chance on this step"}
+  ],
+  "notes": [
+    "nothing moves until a clock reaches the clock jack or the button beside it is pressed",
+    "gate length is measured against the time between the last two clocks, so the gates settle to the right length only after the second clock",
+    "the two small lamps under each chance knob show which sequence that step last played from"
+  ],
+  "menu": [
+    "Polyphonic Gate Out — puts each step's gate on its own channel of the three gate outputs instead of putting them all on one",
+    "Update knobs from polyphony inputs — moves the note and gate knobs to match a polyphonic cable as it plays, so the panel shows what is being played",
+    "Copy A V1 -> B — copies sequence A's eight note knobs onto sequence B's",
+    "Copy A V2 -> B — copies sequence A's eight octave knobs onto sequence B's",
+    "Copy B V1 -> A — copies sequence B's eight note knobs onto sequence A's",
+    "Copy B V2 -> A — copies sequence B's eight octave knobs onto sequence A's",
+    "Copy A Gates -> B — copies sequence A's eight gate knobs onto sequence B's",
+    "Copy B Gates -> A — copies sequence B's eight gate knobs onto sequence A's",
+    "Randomize Notes only — the four randomise buttons and jacks move the note knobs and leave the octaves alone",
+    "Randomize Notes and Octave — the four randomise buttons and jacks move the note and octave knobs together",
+    "Include V1 (Notes) — whether the big randomise button touches the note knobs",
+    "Include V2 (Octaves) — whether the big randomise button touches the octave knobs",
+    "Include Gates — whether the big randomise button touches the gate knobs",
+    "Include Probability — whether the big randomise button touches the chance knobs",
+    "Include Steps — whether the big randomise button touches the step count",
+    "0.0 to 1.0 — reads the steps jack over a one volt range",
+    "0.0 to 8.0 — reads the steps jack over an eight volt range",
+    "0.0 to 10.0 — reads the steps jack over a ten volt range, and is the setting the module comes up in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "unipolar · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "1V per octave · continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "high above 1V · stepped · one channel only",
+      "11": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic",
+      "6": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

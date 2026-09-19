@@ -1,0 +1,43 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorGates64",
+  "description": "Divides an incoming phasor into as many as sixty-four steps and fires a gate on whichever steps are switched on",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the 64 steps the cycle is divided into, 1 to 64 in whole numbers"},
+    {"ids": [1], "text": "Attenuverts the steps CV input, -1 to +1"},
+    {"ids": [2], "text": "Sets the width of the step gates, from 0% to 100% of a step, with 50% at centre"},
+    {"ids": [3], "text": "Attenuverts the gate width CV input, -1 to +1"},
+    {"ids": [4], "text": "Raw compares the phasor against the gate width directly; Smart mutes the output when the phasor stops and flips the comparison when it runs backwards, keeping reverse phasors in time"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68], "text": "Turns this step's gate on or off; the lamp shows green when the step is on, blue while it plays, and red when the step is beyond the Steps setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor that drives the steps; each 0-10V cycle is divided into them"},
+    {"ids": [1], "text": "Modulates the number of steps"},
+    {"ids": [2], "text": "Modulates the gate width"},
+    {"ids": [3], "text": "Holds the module at the first step below 1V and lets it run at 1V or above; unpatched, it always runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate on every step whose gate button is on, at the set width"},
+    {"ids": [1], "text": "A 10V trigger at the start of each of those gates"},
+    {"ids": [2], "text": "A 0-10V ramp across each step whose gate button is on, and 0V across the rest"},
+    {"ids": [3], "text": "A 10V gate on every step whose gate button is off, at the set width"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in.",
+    "every step gate starts switched off, so until you switch at least one step on no gates or triggers come out and the inverted gate output is high on every step."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

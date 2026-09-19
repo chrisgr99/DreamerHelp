@@ -1,0 +1,13 @@
+{
+  "plugin": "4msCompany",
+  "module": "CLKD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "why": "CLKDCore.cc:56 divides this jack by 5V and CLKDCore.cc:77 clamps the knob-plus-jack total between 0 and 1; CLKDCore.cc:13 derives from CoreProcessor rather than CoreProcessorPoly"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.5V", "why": "CLKDCore.cc:52 hands this jack to cp.updateClock, whose SchmittTrigger at clockPhase.h:58 goes high at 1.5V and low at 0.5V; clockPhase.h:14-20 take each rising edge as the measured input period and step the clock count"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 8V", "why": "CLKDCore.cc:28 with CLKDCore.cc:96 puts out 8V while the wrapped phase is under the 0.5 pulse width set at CLKDCore.cc:88"}
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Quad_Decoder",
+  "description": "Turns a matrix-encoded stereo pair back into four quadraphonic channels, with a mono subwoofer output alongside",
+  "params": [
+    {"ids": [0], "text": "Sets the level of every output; the middle of its travel is unity gain and full clockwise is 6dB above that"},
+    {"ids": [1], "text": "Trades level between the two front outputs and the two surround outputs; the middle gives both the same level, full anticlockwise leaves only the fronts and full clockwise only the surrounds"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left half of the matrix-encoded pair"},
+    {"ids": [1], "text": "The right half of the matrix-encoded pair"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The front left channel recovered from the matrix"},
+    {"ids": [1], "text": "The front right channel recovered from the matrix"},
+    {"ids": [2], "text": "The surround left channel recovered from the matrix"},
+    {"ids": [3], "text": "The surround right channel recovered from the matrix"},
+    {"ids": [4], "text": "The average of the four recovered channels put through a pair of two-pole lowpass filters, at the corner chosen on the menu and after the level and balance controls"},
+    {"ids": [5], "text": "A five-channel polyphonic copy of the outputs, in the order front left, front right, surround left, surround right, subwoofer"}
+  ],
+  "notes": [
+    "decoding runs on blocks of 64 samples, so the outputs lag the inputs by that much",
+    "the logic decoding mode adds level-dependent steering between opposite corners to widen the separation, and the maker marks it experimental"
+  ],
+  "menu": [
+    "Decoding Mode: QS / Quark Matrix Decode, QS / Quark Logic Decode (Experimental), SQ Matrix Decode (Experimental) — chooses the matrix the two inputs are decoded with",
+    "Sub Cutoff: Bypass, 60Hz, 70Hz, 80Hz, 90Hz, 100Hz, 110Hz, 120Hz — sets the corner of the filter on the subwoofer output; Bypass moves the corner to 20000Hz rather than removing the filter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · polyphonic"
+    }
+  }
+}

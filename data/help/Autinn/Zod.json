@@ -1,0 +1,59 @@
+{
+  "plugin": "Autinn",
+  "module": "Zod",
+  "description": "Four dynamics stages on one stereo signal, in series: a noise gate, an expander, a compressor and a limiter, sharing one gain",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the expander and compressor change gain, from 1ms to 2.6 seconds"},
+    {"ids": [1], "text": "Sets how fast the gain returns once the signal falls back, from 1ms to 5 seconds"},
+    {"ids": [2], "text": "Sets how hard the signal is held back above the compressor threshold, from no compression at one end to ten to one at the other"},
+    {"ids": [3], "text": "Sets how steeply the signal is pushed down below the expander threshold, from no expansion at one end to four decibels out for every one in at the other"},
+    {"ids": [4], "text": "Sets the ceiling the signal is never allowed past, from -15dB to 7.5dB"},
+    {"ids": [5], "text": "Sets the level above which the signal is held back, from -70dB to 7.5dB"},
+    {"ids": [6], "text": "Sets the level below which the signal is pushed further down, from -70dB to 7.5dB"},
+    {"ids": [7], "text": "Sets the level below which the signal is silenced outright, from -70dB to 7.5dB; at its lowest setting the gate is off"},
+    {"ids": [8], "text": "Sets the window the expander and compressor measure over, from 1ms to 350ms; a long window follows the average level and a short one follows the shape of each note"},
+    {"ids": [9], "text": "Sets how fast the limiter catches a peak, from 0.1ms to 2ms"},
+    {"ids": [10], "text": "Multiplies the signal after all four stages, from 0dB to 20dB"},
+    {"ids": [11], "text": "Rounds the corner at both the expander and the compressor thresholds, from a hard corner at one end to 10dB of rounding at the other"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One side of the stereo pair to be processed"},
+    {"ids": [1], "text": "One side of the stereo pair to be processed"},
+    {"ids": [2], "text": "Sets the noise gate threshold from its own voltage instead of from the knob: the size of the voltage is read as a level, the knob is moved to match and 0V is taken as -70dB"},
+    {"ids": [3], "text": "Sets the expander threshold from its own voltage instead of from the knob: the size of the voltage is read as a level, the knob is moved to match and 0V is taken as -70dB"},
+    {"ids": [4], "text": "Sets the compressor threshold from its own voltage instead of from the knob: the size of the voltage is read as a level, the knob is moved to match and 0V is taken as -70dB"},
+    {"ids": [5], "text": "Sets the limiter ceiling from its own voltage instead of from the knob: the size of the voltage is read as a level, the knob is moved to match and 0V is taken as -15dB"},
+    {"ids": [6], "text": "Patching either sidechain jack switches detection away from the programme, so the gain follows what is here rather than what is being processed"},
+    {"ids": [7], "text": "Patching either sidechain jack switches detection away from the programme, so the gain follows what is here rather than what is being processed"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "That side of the pair after all four stages and the makeup gain"},
+    {"ids": [1], "text": "That side of the pair after all four stages and the makeup gain"}
+  ],
+  "notes": [
+    "the five small lamps show which stage has the gain: yellow for the noise gate, green for the expander, blue for unity, a second green for the compressor and red for the limiter.",
+    "two of the small lamps at half brightness mean the signal is inside a rounded corner between two stages.",
+    "the two sides share one gain, so a peak on either channel ducks both and the stereo image does not shift.",
+    "the limiter follows the peak level while the expander and compressor follow the averaged level, which is why they have separate timing knobs.",
+    "the signal is delayed by four milliseconds so that the gain is already moving when a peak arrives; everything through this module comes out that much late.",
+    "the four columns of lamps are levels: input left, input right, output left and output right, each covering 22.5dB in fifteen steps.",
+    "mono per side: a polyphonic cable is read as its first channel.",
+    "the maker's own comments mark this module as superseded by Non, which is the limiter alone with a lower attack floor and a fixed lookahead."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

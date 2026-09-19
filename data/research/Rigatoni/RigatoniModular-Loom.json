@@ -1,0 +1,27 @@
+{
+  "plugin": "Rigatoni",
+  "module": "RigatoniModular-Loom",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:673 adds 0.4 times the attenuverter times getNormalVoltage(env) to the knob; loom.cpp:241 clamps the total to -2 and 2 before the exponential scaling"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:682 adds 0.2 times the attenuverter times getNormalVoltage(env) to the knob; loom.cpp:244 clamps the total to 0 and 2"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:705 multiplies it by 0.2 and by the pivot attenuverter before adding the PIVOT POINT knob"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "loom.cpp:708 multiplies it by 0.2 with no attenuverter and no normal voltage; loom.cpp:252 clamps the total to 0 and 1"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "the PING envelope", "why": "loom.cpp:711 multiplies it by 0.2 and by the drive attenuverter; loom.cpp:253 clamps the total to 0 and 2"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "loom.cpp:695 clamps it to -2V and 8V and loom.cpp:702 adds it to the exponential pitch sum"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 8V", "step": "continuous", "negative": "ignored", "why": "loom.cpp:663 clamps it to 0 and 8 before the envelope slew at loom.cpp:664"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:718 multiplies it by 0.1 and by the square of the PM attenuverter, keeping the attenuverter's sign"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:693 clamps the attenuverted voltage to -5V and 5V; loom.cpp:703 multiplies it by 5 for linear FM"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "why": "loom.cpp:714 reads this jack into the algorithm's fourth transfer slot; :287-290 divides the previous sample by the step to place the crossing inside the sample, and takes the sync only on an upward crossing, with the new value at or above 0"},
+      "10": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:676 adds 0.2 times the attenuverter times getNormalVoltage(env) to the knob; loom.cpp:242 clamps the total to 0 and 1"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PING envelope", "why": "loom.cpp:679 adds 0.2 times the attenuverter times getNormalVoltage(env) to the knob; loom.cpp:243 clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 8V", "why": "loom.cpp:732 setVoltage of the envelope on one channel, the envelope's source clamped to 0 and 8 at loom.cpp:663"},
+      "1": {"family": "audio", "poly": false, "why": "loom.cpp:731 setVoltage on one channel"},
+      "2": {"family": "audio", "poly": false, "why": "loom.cpp:729 setVoltage on one channel"},
+      "3": {"family": "audio", "poly": false, "why": "loom.cpp:730 setVoltage on one channel"}
+    }
+  },
+  "comment": "Three things the maker's own configuration gets wrong. The ENV output is configured as 'Square' at loom.cpp:620, but loom.cpp:732 writes the ping envelope to it and the manual documents it as the envelope. The pivot attenuverter is configured as 'Spectral Shaping Intensity CV Attenuverter' at loom.cpp:585, but loom.cpp:705 uses it on the S PIVOT input; the intensity input has no attenuverter at all. And the DRIVE input, index 4, was never given a configInput call, so it has no tooltip. The panel prints OFF, SYNC and ON for the continuous stride switch while the switch is configured Off, Sync and Free. The BLEP menu's names are offset from the level they set: the default is level 3, which is the item printed '2nd Order', while the manual recommends '3rd Order'. The manual says the Nyquist falloff starts at 0.75 of Nyquist; loom.cpp:294 puts the fade's lower bound at two thirds of the harmonic multiple limit. The FM input is coloured as CV rather than pitch: in EXP mode at full attenuverter it does track a volt per octave, but it passes through an attenuverter that starts at zero and a switch that makes it linear, so it is not a jack a keyboard is patched into."
+}

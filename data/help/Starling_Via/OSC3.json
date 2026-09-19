@@ -1,0 +1,64 @@
+{
+  "plugin": "Starling_Via",
+  "module": "OSC3",
+  "description": "Three oscillators tuned from one pitch: a fundamental and two detuned voices that can be spread apart, quantized to a scale or beaten against each other",
+  "params": [
+    {"ids": [0], "text": "Sets the base frequency of all three oscillators; the two frequency knobs work as a coarse and a fine tune on the same pitch"},
+    {"ids": [1], "text": "Sets the base frequency of all three oscillators; the two frequency knobs work as a coarse and a fine tune on the same pitch"},
+    {"ids": [2], "text": "Spreads oscillators 2 and 3 away from the base frequency, by an even amount, a scaled amount, a chord or a division of the unity input according to the beat mode button"},
+    {"ids": [3], "text": "Sets the level of oscillator 2 in the detuned output, -5V to +5V; patching the oscillator 2 level input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the oscillator 3 level input by -1 to +1; with nothing patched to that input it reads 5V, so the knob alone sets oscillator 3's level from -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the phase input that modulates oscillators 2 and 3, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the detune input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Shifts the whole module up an octave each time it is clicked, as far as +5 Octaves"},
+    {"ids": [8], "text": "Steps through the waveform all three oscillators use: Saw, Square, Trapezoid or Triangle"},
+    {"ids": [9], "text": "Turns sampling of the oscillator 2 and 3 levels on or off, so they either track their cables or are held at each cycle of oscillator 1"},
+    {"ids": [10], "text": "Shifts the whole module down an octave each time it is clicked, as far as +0 Octaves"},
+    {"ids": [11], "text": "Steps through the scale the detune is quantized to: Off, Semitone, Major or Minor"},
+    {"ids": [12], "text": "Steps through how the detune is spread: Even, Scaled, Chords, or Sync to Unity Input"},
+    {"ids": [13], "text": "Nothing in the Rack module reads this button; the unity input jack beside it is what drives that function"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the level of oscillator 2 in the detuned output; patched here, it overrides the oscillator 2 level knob"},
+    {"ids": [1], "text": "Sets the level of oscillator 3 in the detuned output, multiplied by the oscillator 3 level knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Volt-per-octave pitch for all three oscillators, read at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Modulates the phase of oscillators 2 and 3, through the 2 + 3 phase CV scale knob"},
+    {"ids": [4], "text": "Modulates the detune spread, through the detune CV scale knob"},
+    {"ids": [5], "text": "A rising edge here shifts the module up an octave"},
+    {"ids": [6], "text": "The signal oscillators 2 and 3 are locked against when the beat mode button is set to Sync to Unity Input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Oscillators 2 and 3 mixed at their own levels"},
+    {"ids": [1], "text": "A 5V gate that follows the beat between the detuned oscillators"},
+    {"ids": [2], "text": "Oscillator 1 on its own, the undetuned fundamental"},
+    {"ids": [3], "text": "A 5V trigger each time the pitch changes"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the oscillator 3 level input is normalled to 5V and the 3 LVL knob multiplies whatever arrives by -1 to +1. Unpatched it is a -5V to +5V source; patched it attenuverts the cable.",
+    "the detuned output is oscillators 2 and 3 at the levels set by the 2 LVL and 3 LVL controls. Set both to 0V and that output goes silent, while oscillator 1 keeps coming out of its own jack.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it."
+  ],
+  "menu": [
+    "Optimized — runs the oscillators through the plugin's faster path, which is the setting to leave it on; found under the CPU Mode heading",
+    "Direct Port — runs the hardware firmware straight through, which costs more CPU; found under the CPU Mode heading",
+    "Select Scale Set File — loads a scale file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

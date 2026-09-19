@@ -1,0 +1,20 @@
+{
+  "plugin": "SickoCV",
+  "module": "Wavetabler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Wavetabler.cpp takes getChannels() from this jack alongside the V/Oct jack to set the voice count, and compares each channel against 1V"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the master knob; with 'Polyphonic Master IN' ticked it reads getVoltage(c) per voice"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the tune knob"},
+      "3": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Wavetabler.cpp takes getChannels() from this jack as the voice count and raises 2 to getVoltage(c) for each voice's playback speed"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the attack time"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the decay time"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the sustain level"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Wavetabler.cpp adds getVoltage() times the trimpot to the release time"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Wavetabler.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off; the LIM switch clamps to ±5V"}
+    }
+  },
+  "comment": "There is one output jack, not the stereo pair sickoPlayer has, and no cue or loop cursors: the whole file is the cycle. The waveform display is a custom widget with no ParamWidget, so its right-click menu — which carries the same Load Sample and Samples Browser items — cannot be reached by clicking it for help; the module's own menu carries them too. The output range is ±5V only with the LIM switch on; with it off the level depends on the file and the master knob."
+}

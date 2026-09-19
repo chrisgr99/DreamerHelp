@@ -1,0 +1,52 @@
+{
+  "plugin": "CountModula",
+  "module": "BasicSequencer8",
+  "description": "Eight step sequencer giving a control voltage, a trigger and a gate per step, with voltage control over the sequence length and the play direction",
+  "params": [
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the voltage carried by OUT while that step is active, 0V to 8V before the SCALE switch is applied"},
+    {"ids": [16], "text": "Sets how many of the eight steps play, from 1 to 8. The small green lights mark the steps that fall within that length"},
+    {"ids": [18], "text": "Sets the range of the CV outputs to 2V, 4V or 8V, a step knob at its maximum giving that voltage"},
+    {"ids": [19], "text": "Picks forward, where the sequence runs left to right and starts over on the left; pendulum, where it runs out and back; or reverse, where it runs right to left"},
+    {"ids": [20, 21, 22, 23, 24, 25, 26, 27], "text": "Turns the trigger on or off for that step; TRIG then goes high for as long as the clock pulse is high"},
+    {"ids": [28, 29, 30, 31, 32, 33, 34, 35], "text": "Turns the gate on or off for that step; GATE then stays high for the whole step, and two neighbouring steps turned on give one gate across both"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A high gate runs the sequencer and a low gate pauses it, picking up again at the next clock; with nothing patched the sequencer runs. 2V starts it, 0.1V stops it"},
+    {"ids": [1], "text": "A rising edge moves the sequencer on one step, and the time the clock spends high sets how long TRIG stays high. The threshold is 2V for high, 0.1V for low"},
+    {"ids": [2], "text": "A rising edge restarts the sequence at step one on the next clock; when reset and clock arrive within 100 microseconds of each other it moves to step one at once"},
+    {"ids": [3], "text": "Sets the sequence length from the applied voltage and takes the LENGTH switch out of circuit while a cable is patched; 10V gives all eight steps"},
+    {"ids": [4], "text": "Sets the play direction from the applied voltage and takes the DIRECTION switch out of circuit: under 2V forward, 2V to 4V pendulum, over 4V reverse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Goes to 10V on any step whose trigger is turned on, for as long as the clock pulse is high"},
+    {"ids": [1], "text": "Goes to 10V for the whole of any step whose gate is turned on; two neighbouring steps turned on give a single gate lasting across both"},
+    {"ids": [2], "text": "The current step's knob voltage, scaled by the SCALE switch. It changes on every step whether or not that step has a trigger or a gate turned on"},
+    {"ids": [3], "text": "The current step's knob voltage scaled by the SCALE switch and then negated, so a knob turned up gives a negative voltage"}
+  ],
+  "notes": [
+    "SX-CV8, SX-OUT8 and SX-TRIG8 add further channels of output when placed immediately to the right, and the context menu will add a compatible expander for you",
+    "with the mouse pointer over the module, Shift+Ctrl+C randomizes the step knobs, Shift+Ctrl+G the gates, Shift+Ctrl+T the triggers and Shift+Ctrl+R all three"
+  ],
+  "menu": [
+    "Initialize — puts step settings back to their defaults, with a choice of CV only, Gates only, Triggers only or CV/Gates/Triggers only",
+    "Randomize — sets step settings at random, with a choice of CV only, Gates only, Triggers only or CV/Gates/Triggers only",
+    "Add CV expander — places a Sequencer CV Expander to the right of this module",
+    "Add output expander — places a Sequencer Output Expander to the right of this module",
+    "Add trigger expander — places a Sequencer Trigger Expander to the right of this module",
+    "Add random melody expander — places a Gated Comparator Random Melody expander to the right of this module",
+    "Add logic expander — places a Gated Comparator Gate Logic expander to the right of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

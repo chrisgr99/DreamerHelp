@@ -1,0 +1,16 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Combverb",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Combverb.cpp:135 reads getVoltage() with no channel argument, and line 154 writes one value with setVoltage"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Combverb.cpp:136-137 adds getVoltage() * 0.1 to the 0 to 1 knob and clamps the total to 0 and 1"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Combverb.cpp:144-145 adds getVoltage() * 0.1 to the 0 to 1 knob and clamps the total to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Combverb.cpp:138-139 adds getVoltage() * 0.1 to the 0 to 1 knob and clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Combverb.cpp:154 writes one value with setVoltage, never calls setChannels, and clamps to -10 and 10"}
+    }
+  },
+  "comment": "Read from the maker's source at commit b9d77ec, the only commit carrying version 2.1.0. The panel prints FEEDBACK, DAMP and MIX once per row, over both the knob and the CV jack beside it. The knob names the maker configured are Feedback, Damp and Mix. The decay figures come from DECAY_MIN 0.1, DECAY_MAX 30 and GROW_MAX 24 at Combverb.cpp:45-47, and the damping corners from DAMP_FC_MIN 200 and DAMP_FC_MAX 18000 at lines 39-40. UNITY_POS is two thirds and the Feedback parameter is configured with a display multiplier of 150, so the tooltip percentage and the knob travel line up with 100% at the two-thirds point. The input is scaled by INPUT_GAIN 0.015 before it reaches the comb filters; that is a fixed gain with no control over it, so it gets no line. The comb delay lengths are 521, 631, 769, 929, 1129, 1373, 1663 and 2017 samples and the allpass lengths 556 and 441, all fixed. The file says it is based on Freeverb. Every configured parameter and port is read in process(); nothing is configured twice and no jack is left unread."
+}

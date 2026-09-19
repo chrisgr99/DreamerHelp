@@ -1,0 +1,15 @@
+{
+  "plugin": "MUS-X",
+  "module": "LFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "LFO.cpp:78 takes this input's channel count and LFO.cpp:91 reads it with getPolyVoltageSimd, adding it to the knob in octaves"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "LFO.cpp:79 takes this input's channel count and LFO.cpp:92 reads it with getPolyVoltageSimd; LFOBlock.hpp:95 clamps the knob-plus-jack total to 0 and 10"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "normal": "0V", "why": "LFO.cpp:80 takes this input's channel count and LFO.cpp:93 reads it with getPolyVoltageSimd; LFOBlock.hpp:100 restarts the cycle on a step of more than 0.5V from the last sample"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "LFO.cpp:82 sets this output's channel count from the largest of the three inputs; LFOBlock.hpp:180 multiplies a wave running -1 to 1 by the amplitude, which LFOBlock.hpp:95 caps at 10"}
+    }
+  },
+  "comment": "Read from src/LFO.cpp and src/blocks/LFOBlock.hpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1. The reset is a step detector rather than a threshold: LFOBlock.hpp:100 compares the jack against its own value half a volt earlier, so only a jump of more than 0.5V between two samples restarts the cycle. The Reset button adds 1 to the same value, which is how pressing it works. The amplitude knob reaches 5 while the total with the jack is clamped at 10, so a jack alone can drive the output twice as far as the knob. The eight shape names are at LFOBlock.hpp:34 to 43."
+}

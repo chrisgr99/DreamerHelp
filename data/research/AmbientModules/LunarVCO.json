@@ -1,0 +1,19 @@
+{
+  "plugin": "AmbientModules",
+  "module": "LunarVCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "normal": "0V", "why": "LunarVCO.cpp:69 names it as 1V/octave and the process loop reads it per channel with getPolyVoltage"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "normal": "0V", "why": "LunarVCO.cpp:70 configures it and the process loop reads it per channel with getPolyVoltage, scaled by the FM amount knob"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "normal": "0V", "why": "LunarVCO.cpp:71 configures it and the process loop reads it per channel, scaled by the shape CV knob"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "why": "LunarVCO.cpp:72 names it as a hard sync that resets the phase to 0, read per channel through a trigger"},
+      "4": {"family": "trigger", "poly": true, "step": "stepped", "why": "LunarVCO.cpp:82 configures the gate, which the process loop puts through a per-channel Schmitt trigger"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "LunarVCO.cpp:84 names it as overriding the internal envelope, gate and hold, read per channel and divided by 10"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "LunarVCO.cpp:73 configures the audio output, whose channel count is set from the module's channel count"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "LunarVCO.cpp:83 configures the envelope output, written as the envelope times 10"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "LunarVCO.cpp:74 names this output Phase (-5V to +5V)"}
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "RareBreeds_Orbits",
+  "module": "RareBreeds_Orbits_Eugene",
+  "description": "Euclidean rhythm generator: it spreads a number of hits as evenly as it can around a cycle of up to 32 beats and fires a trigger on each hit as an external clock advances it",
+  "params": [
+    {"ids": [0], "text": "Sets how many beats the cycle runs for, 1 to 32, before it returns to the first beat"},
+    {"ids": [1], "text": "Sets how many of those beats are hits, from none at fully counter-clockwise to every beat at fully clockwise, with the hits spread around the cycle as evenly as they will go"},
+    {"ids": [2], "text": "Rotates the pattern around the cycle by up to 31 beats, wrapped to the current length; it changes which beats carry the hits, not how many there are"},
+    {"ids": [3], "text": "Scales the length CV jack before that voltage is added to the LENGTH knob, 0 to 1; at 1 five volts there moves the length by the full 31 beats"},
+    {"ids": [4], "text": "Scales the hits CV jack before that voltage is added to the HITS knob, 0 to 1; at 1 five volts there covers the whole range from no hits to every beat"},
+    {"ids": [5], "text": "Scales the shift CV jack before that voltage is added to the SHIFT knob, 0 to 1; at 1 five volts there moves the shift by the full 31 beats"},
+    {"ids": [6], "text": "Switches the direction the clock walks the cycle, clockwise when off and anticlockwise when on; a cable in the reverse CV jack takes the switch out of use"},
+    {"ids": [7], "text": "Turns every hit into a rest and every rest into a hit; a cable in the invert CV jack takes the switch out of use"},
+    {"ids": [9], "text": "Sets the cycle back to its first beat on each press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge plays the current beat and moves on to the next; with nothing patched here the rhythm never advances"},
+    {"ids": [1], "text": "A rising edge sets the cycle back to the first beat of the rhythm, which is always the top of the display"},
+    {"ids": [2], "text": "Scaled by the length CV knob and added to the LENGTH knob; five volts at full gain covers the whole 1 to 32 range, and the total is rounded to a whole number of beats"},
+    {"ids": [3], "text": "Scaled by the hits CV knob and added to the HITS knob; five volts at full gain covers the whole range, and the total is rounded to a whole number of hits"},
+    {"ids": [4], "text": "Scaled by the shift CV knob and added to the SHIFT knob; five volts at full gain covers the full 31 beats, and the total is rounded and wrapped to the current length"},
+    {"ids": [5], "text": "While a cable is here it replaces the reverse switch: above 1V the clock walks the cycle anticlockwise, and at 0V or below it walks clockwise again"},
+    {"ids": [6], "text": "While a cable is here it replaces the invert switch: above 1V hits and rests swap, and at 0V or below they go back"},
+    {"ids": [7], "text": "A rising edge randomises the controls ticked under Randomize Filter on the menu"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V on each hit, shaped as a pulse or a gate according to the Beat Mode menu item"},
+    {"ids": [1], "text": "A 10V pulse 1ms long when a new cycle starts, at the beat the EOC Mode menu item picks"}
+  ],
+  "notes": [
+    "Nothing moves until a clock is patched into CLK. The module has no clock of its own.",
+    "The round display shows the whole cycle with the current beat marked; hits are drawn as filled circles, and as empty circles while invert is on. It cannot be clicked.",
+    "Bypassing the module passes the clock input straight through to the OUT jack."
+  ],
+  "menu": [
+    "Beat Mode: Pulse, Gate, Hold — sets the shape of the OUT jack: a 1ms pulse on each hit, a gate retriggered between successive hits, or a gate held across them",
+    "EOC Mode: On Repeat, First, Last — sets which beat raises the EOC jack: the first beat after a cycle has completed, the first beat of any cycle, or the last beat",
+    "Randomize Filter: Length, Length CV, Hits, Hits CV, Shift, Shift CV, Reverse, Invert — ticks which controls change when the module is randomised or the RND jack fires"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "±5V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

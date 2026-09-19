@@ -1,0 +1,53 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "TheMatrix",
+  "description": "Sequencer on a 32 by 32 grid of typed characters, read by up to sixteen play heads that turn each character into a voltage",
+  "params": [
+    {"ids": [0], "text": "Moves the play head across the columns"},
+    {"ids": [1], "text": "Moves the play head across the rows"},
+    {"ids": [2], "text": "The share of cells a random fill gives a character rather than a space, 0 to 1; the README describes it as setting how many spaces are generated"},
+    {"ids": [3], "text": "Fills the grid, or the selected block, with random characters between the two Range knobs"},
+    {"ids": [4], "text": "The voltage one step of the character table is worth, 0.01V to 1V; at one twelfth of a volt the characters run in semitones and A is A two octaves below middle A"},
+    {"ids": [5], "text": "The lowest character a random fill can write, by its place in the ASCII table, 33 to 126"},
+    {"ids": [6], "text": "The highest character a random fill can write, by its place in the ASCII table, 33 to 126"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Places a play head on a column for each of its channels, the 32 columns spread over 0-10V, added to the CvX knob and wrapped around"},
+    {"ids": [1], "text": "Places a play head on a row for each of its channels, the 32 rows spread over 0-10V, added to the CvY knob and wrapped around"},
+    {"ids": [2], "text": "Sets that share, 0-10V across the whole range, and overrides the Dens knob while patched"},
+    {"ids": [3], "text": "Sets the level directly, 0-1V, one channel per play head"},
+    {"ids": [4], "text": "A rising edge fills the grid, or the selected block, with random characters between the two Range knobs"},
+    {"ids": [5], "text": "A rising edge writes the note at the CV input into the cell under the cursor as the character that plays it back"},
+    {"ids": [6], "text": "The pitch that is written in as a character when a trigger arrives at the Trg input, read as 1V/octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The character under the play head as a voltage: its place in the character table, counted from P at zero, times the level"},
+    {"ids": [1], "text": "Carries 10V on a play head's channel while the character under it is anything but a space"},
+    {"ids": [2], "text": "A 1ms trigger on a play head's channel when the character under that head changes"}
+  ],
+  "notes": [
+    "the grid comes up filled with spaces, which hold the gate output at 0V and the CV output at zero: type characters in, press Rnd, or play notes into the CV and Trg inputs",
+    "the cursor can be moved over the grid and typed into, and PageUp and PageDown step the character under it up and down the ASCII table",
+    "a block of cells can be selected for cut, copy and paste, text pastes in from the system clipboard, and every edit goes into Rack's undo history"
+  ],
+  "menu": [
+    "Clear — empties the whole grid to spaces",
+    "Color Mode — draws the grid in Blue, Matrix or Grey"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "continuous · one channel only",
+      "3": "0 to 1V · continuous · polyphonic",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "RebelTech",
+  "module": "Phoreo",
+  "description": "Three stages on one clock: it reshapes the pulse width, multiplies the rate, and repeats each trigger a set number of times",
+  "params": [
+    {"ids": [0], "text": "Sets the pulse width as a share of the incoming clock's period, 0 to 100%, and the same share is applied to all three outputs"},
+    {"ids": [1], "text": "Sets how much of the pulse width CV reaches that knob, none at the far left and the whole of its travel at the far right"},
+    {"ids": [2], "text": "Sets how many pulses the multiplier puts out for each clock it receives, 1 to 16"},
+    {"ids": [3], "text": "Sets how much of the multiplier CV reaches that knob, none at the far left and its full 16 steps at the far right"},
+    {"ids": [4], "text": "Sets how many times each incoming trigger is repeated, 1 to 16, spaced at whatever rate the multiplier is running"},
+    {"ids": [5], "text": "Sets how much of the repeat CV reaches that knob, none at the far left and its full 16 steps at the far right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock whose pulse width is reshaped; its period is measured between rising edges past 2V"},
+    {"ids": [1], "text": "Adds to the pulse width knob, 10V covering the whole of its travel at full attenuation"},
+    {"ids": [2], "text": "The clock the multiplier subdivides, taken on rising edges past 2V; with nothing patched it uses the clock above it"},
+    {"ids": [3], "text": "Adds to the multiplier knob, 10V covering its full 16 steps at full attenuation"},
+    {"ids": [4], "text": "The trigger that fires a burst of repeats, taken on rising edges past 2V; with nothing patched it uses whichever clock the multiplier is using"},
+    {"ids": [5], "text": "Adds to the repeat knob, 10V covering its full 16 steps at full attenuation"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The incoming clock with its pulse width reset by the pulse width knob, 10V high"},
+    {"ids": [1], "text": "The multiplied clock, 10V high"},
+    {"ids": [2], "text": "A burst of repeats each time a trigger arrives, 10V high"}
+  ],
+  "notes": [
+    "the multiplier measures the period between two clock edges, so the first cycle after a clock starts is not divided up",
+    "with only the top jack patched all three stages run from it, because the second input is normalled to the first and the third to the second"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads the clock at the pulse width input; a negative voltage does nothing here.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads the clock the multiplier is using; a negative voltage does nothing here.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

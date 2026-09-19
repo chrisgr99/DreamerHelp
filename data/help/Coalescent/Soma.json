@@ -1,0 +1,46 @@
+{
+  "plugin": "Coalescent",
+  "module": "Soma",
+  "description": "A bursting neuron oscillator on the Hindmarsh-Rose equations: one current control moves it from silence through single spikes to bursts and on into chaos.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed the simulation runs at, over ±4 octaves, with the centre giving C4 at 261.63Hz at the default voicing."},
+    {"ids": [1], "text": "Sets the injected current, 0.4 to 4.0, which moves the cell between quiescent, tonic spiking, bursting and chaos; the chaotic region is around 3.25."},
+    {"ids": [2], "text": "Sets the adaptation rate on a logarithmic scale, 0.001 to 0.05; small values give long bursts and large ones tonic spiking."},
+    {"ids": [3], "text": "Sets the strength of the adaptation, 1.0 to 5.0, which is the depth of the burst."},
+    {"ids": [4], "text": "An attenuverter, -1 to +1, scaling the CV into the injected current."},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, scaling the CV into the adaptation rate."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the PITCH knob at 1V per octave, setting the speed the simulation runs at."},
+    {"ids": [1], "text": "Modulates the injected current, at a tenth per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the adaptation rate in the log domain, multiplying it by a tenth of an octave per volt through its attenuverter."},
+    {"ids": [3], "text": "A rising edge past 1V injects a decaying current pulse, which from a current below threshold starts a single burst."},
+    {"ids": [4], "text": "A rising edge past 1V re-seeds all three state variables at rest, which locks the cell to a clock and gives hard-sync timbres."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The membrane potential, high-passed and soft-clipped to ±5V."},
+    {"ids": [1], "text": "A 10V pulse 1ms long on each spike, so a burst puts out a flurry of triggers."},
+    {"ids": [2], "text": "The slow adaptation variable as a ±5V CV centred on its midpoint: the burst envelope, and not high-passed."}
+  ],
+  "notes": [
+    "The number of voices follows the V/OCT or TRIG cable, whichever carries more channels; the CV, SYNC and TRIG jacks are all read per channel.",
+    "The screen draws the phase portrait: the orbit in the membrane-potential against recovery plane."
+  ],
+  "menu": [
+    "Anti-aliasing: Off, ×2 oversampling, ×4 oversampling, ×8 oversampling — sets how many times the simulation is stepped per sample before decimation, and with it the pitch ceiling."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±5V · polyphonic"
+    }
+  }
+}

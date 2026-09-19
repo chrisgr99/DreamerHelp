@@ -1,0 +1,16 @@
+{
+  "plugin": "wintoid",
+  "module": "VortexMM",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Vortex/Vortex.cpp:153 reads it per lane through readBroadcast and line 128 takes the module's voice count from its getChannels()"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "src/Vortex/Vortex.cpp:158 multiplies the corner by vortex::voct_to_mult of this voltage times the attenuverter, which is two raised to the volts"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Vortex/Vortex.cpp:167 scales it by the attenuverter and 0.2, subtracts it from the damping and clamps the damping to 0.01..0.707"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "subtracts", "sumRange": "0 to 1V", "why": "src/Vortex/Vortex.cpp:174 scales it by the attenuverter and a tenth, adds it to the drive knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Vortex/Vortex.cpp:130 calls setChannels with the voice count taken from the audio input"}
+    }
+  },
+  "comment": "Parameter 0, the filter mode, is declared and read by process() but is never given a ParamWidget: the mode is changed through ModeDisplay at src/Vortex/Vortex.cpp:281, a plain Widget. It therefore has no position in the census and can carry no line or tag. The panel SVG has no lettering at all; every label is drawn in code in PanelLabels at src/Vortex/Vortex.cpp:349, which prints Cutoff, Reso, Drive, In and Out. The sumRange written for the resonance CV is a damping figure rather than a voltage, because that is what the code clamps; the field's spelling forces a V onto it."
+}

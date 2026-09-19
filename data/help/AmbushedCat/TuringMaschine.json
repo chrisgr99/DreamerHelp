@@ -1,0 +1,48 @@
+{
+  "plugin": "AmbushedCat",
+  "module": "TuringMaschine",
+  "description": "A sixteen bit shift register sequencer after Music Thing Modular's Turing Machine, giving a stepped voltage, a gate from the register's top bit and a random bit stream",
+  "params": [
+    {"ids": [0], "text": "Sets how likely the bit coming round is replaced by a fresh random one; with the write switch off and Write Mode set to Standard the register repeats unchanged and this knob changes nothing"},
+    {"ids": [1], "text": "Sets how many of the register's top bits are read into the stepped output, 1 to 16; the loop itself is sixteen steps long whatever this is set to"},
+    {"ids": [2], "text": "Sets which way a newly written bit falls, fully anticlockwise always low, fully clockwise always high and even odds at the centre"},
+    {"ids": [3], "text": "Allows fresh random bits to be written into the register; switched off, the pattern comes round unchanged"},
+    {"ids": [4], "text": "Fills the register with a fresh random sixteen bit pattern and stores it as the pattern the reset input returns to"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the register one place on each rising edge above 1V"},
+    {"ids": [1], "text": "Reloads the stored seed pattern on a rising edge above 1V, without shifting the register"},
+    {"ids": [2], "text": "Nothing in the module acts on this jack: its voltage is added to the change probability only after that probability has already been used, and the sum is then thrown away"},
+    {"ids": [3], "text": "Adds to the number of top bits read into the stepped output, 1.6 bits per volt, and the total is held between 1 and 16"},
+    {"ids": [4], "text": "Adds to the bias of a newly written bit, 10V covering the whole of the bias knob, and the total is held between always low and always high"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The register's top bits read as a number and scaled between 0V and the top of the range set on the menu, which is 5V unless you change it"},
+    {"ids": [1], "text": "10V while the register's top bit is high, or a 50ms pulse each time that bit changes when Pulse Mode is set to Tap"},
+    {"ids": [2], "text": "A fresh random choice of 0V or 10V drawn every sample, taken from neither the register nor the clock"}
+  ],
+  "notes": [
+    "both expanders go to the right: a Gates expander only works as the immediate right neighbour, while Flow expanders work anywhere down the chain of modules to the right",
+    "the register is filled with a random pattern when the module is added, so a clock alone is enough to get a sequence out of it"
+  ],
+  "menu": [
+    "Mode: Normal, Poly Ryhtmic — Normal shifts the register once per clock; Poly Ryhtmic shifts it only on some clocks and writes no new bits at all, so the pattern is fixed",
+    "Pitch Output Range: 5V, 3V, 1V — sets the top of the stepped output's range",
+    "Write Mode: Standard, Evolving — Standard writes new bits only while the write switch is on; Evolving always writes them, at a tenth of the change knob's probability",
+    "Pulse Mode: Gate, Tap — Gate holds the pulse output high for as long as the register's top bit is high; Tap gives a 50ms pulse each time that bit changes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "one channel only\n\nunpatched it reads 0V, and read to no effect.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V, leaving the knob alone; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

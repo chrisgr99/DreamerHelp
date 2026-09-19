@@ -1,0 +1,43 @@
+{
+  "plugin": "rchoices",
+  "module": "gchoice",
+  "description": "Passes one of seven inputs through to the output and draws a new one on each trigger, with a bell curve deciding which input is likely",
+  "params": [
+    {"ids": [0], "text": "Scales the voltage at the mean cv jack before it is added to the mean slider, 0 to 0.6, so at its top 10V moves the centre of the curve across all seven inputs"},
+    {"ids": [1], "text": "Sets which input the curve is centred on, 0 at the bottom of its travel for the lowest jack up to 6 for the highest; it starts at 3, the middle jack"},
+    {"ids": [2], "text": "Sets how wide the curve is, 0.5 to 3.5 measured in jack spacings, so turned down the draw nearly always lands on the centre input and turned up it reaches the ends"},
+    {"ids": [3], "text": "Scales the voltage at the spread cv jack before it is added to the spread knob, 0 to 0.35, so at its top 10V covers the whole of that knob's travel"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6], "text": "One of the seven signals the module draws between; its voltage reaches the output for as long as the draw is on it"},
+    {"ids": [7], "text": "Moves the centre of the curve, scaled by the mean cv att knob and added to the mean slider, with the total held between the lowest and highest jack"},
+    {"ids": [8], "text": "Widens or narrows the curve, scaled by the spread cv att knob and added to the spread knob, with the total held between 0.5 and 3.5"},
+    {"ids": [9], "text": "A trigger draws a new input; it fires above 2V and rearms below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the voltage of whichever input the last draw landed on"}
+  ],
+  "notes": [
+    "the module starts on the middle input and passes it through; a trigger at trig is what makes it draw again",
+    "the lamp beside each jack shows how likely that input is to be drawn, and the one the draw is on is lit fully",
+    "a draw that falls off either end of the seven is thrown away and the choice is left where it was, so with spread turned up some triggers pass without changing anything",
+    "the chosen input is not written into the patch file, so a saved patch reopens on the middle input"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only",
+      "5": "one channel only",
+      "6": "one channel only",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

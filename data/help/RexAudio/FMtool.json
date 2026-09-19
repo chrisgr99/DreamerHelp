@@ -1,0 +1,31 @@
+{
+  "plugin": "RexAudio",
+  "module": "FMtool",
+  "description": "A phase modulation effect for any two audio signals: the carrier is written into a delay line and the modulator moves the point it is read back from, which gives the harmonics of DX-style FM",
+  "params": [
+    {"ids": [0], "text": "Sets how far the modulator moves the read point, reaching 50 samples per volt of modulator at full travel; more of it adds higher harmonics"},
+    {"ids": [1], "text": "Attenuates and inverts the DEPTH CV input, from -1 at full counter-clockwise through 0 at noon to +1 at full clockwise, before it is added to the FM DEPTH knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The carrier, which is the signal written into the delay line and read back modulated"},
+    {"ids": [1], "text": "The modulator, whose voltage moves the read point and so modulates the phase of the carrier"},
+    {"ids": [2], "text": "Modulates the FM depth: the voltage is divided by 5, scaled by the attenuverter and added to the FM DEPTH knob, and the total is clamped to the knob's own 0 to 1 range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modulated carrier, at as many channels as the wider of IN and MOD IN"}
+  ],
+  "notes": [
+    "the read point starts 5ms behind the write point, so the output lags the input by 5ms with no modulation applied",
+    "depth changes are smoothed, each sample moving a thousandth of the way to the new value, so turning FM DEPTH or moving its CV arrives over a few tens of milliseconds"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

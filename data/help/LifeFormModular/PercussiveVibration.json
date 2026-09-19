@@ -1,0 +1,65 @@
+{
+  "plugin": "LifeFormModular",
+  "module": "PercussiveVibration",
+  "description": "Percussion voice: one phase-shaped sine or white noise through a resonant filter, with a decay envelope, a pitch-bend envelope and an accent envelope",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the voice in whole octaves, 4 to 12, where 8 gives C4 at 261.63Hz"},
+    {"ids": [1], "text": "Sets how far the bend envelope raises the pitch, silent counter-clockwise to five octaves clockwise"},
+    {"ids": [2], "text": "Sets how much of each cycle is held at 0V before the sine runs, a tenth to nine tenths of it, brightening the tone as it rises"},
+    {"ids": [4], "text": "Attenuates and inverts the width CV, adding it to the WIDTH setting"},
+    {"ids": [6], "text": "Sets the decay of the main envelope, 1ms at the bottom to about 1 second at the top"},
+    {"ids": [7], "text": "Sets the decay of the bend envelope, 1ms at the bottom to about 1 second at the top"},
+    {"ids": [8], "text": "Sets the decay of the accent envelope, 1ms at the bottom to about 1 second at the top"},
+    {"ids": [10], "text": "Sets how far the modulating sine bends the pitch of the voice"},
+    {"ids": [11], "text": "Sets the pitch of the modulating sine against the voice, two octaves down counter-clockwise to three octaves up clockwise"},
+    {"ids": [12], "text": "Crossfades the voice between the sine counter-clockwise and white noise clockwise"},
+    {"ids": [13], "text": "Attenuates and inverts the voltage at the FM jack, adding it to the FM depth"},
+    {"ids": [14], "text": "Attenuates and inverts the main envelope's decay CV, adding it to that envelope's decay time"},
+    {"ids": [15], "text": "Attenuates and inverts the bend envelope's decay CV, adding it to that envelope's decay time"},
+    {"ids": [16], "text": "Attenuates and inverts the accent envelope's decay CV, adding it to that envelope's decay time"},
+    {"ids": [17], "text": "Multiplies the decay range of the accent envelope by ten, reaching about 10 seconds"},
+    {"ids": [18], "text": "Multiplies the decay range of the main envelope by ten, reaching about 10 seconds"},
+    {"ids": [19], "text": "Multiplies the decay range of the bend envelope by ten, reaching about 10 seconds"},
+    {"ids": [20], "text": "Sets the filter cutoff, about 33Hz fully counter-clockwise to about 16kHz fully clockwise"},
+    {"ids": [21, 22], "text": "Attenuates and inverts one of the two cutoff CVs, adding it to the filter cutoff; each volt moves the cutoff an octave at the full setting"},
+    {"ids": [23], "text": "Sets the resonance of the filter, flat counter-clockwise to a sharp peak at the cutoff clockwise"},
+    {"ids": [24], "text": "Switches the filter between lowpass and highpass"},
+    {"ids": [25], "text": "Attenuates and inverts the main envelope where it is added to the filter cutoff"}
+  ],
+  "inputs": [
+    {"ids": [1], "text": "Sets the pitch of the voice, a volt per octave, added to the octave setting"},
+    {"ids": [3], "text": "A voltage here shifts the FM depth, scaled by the FM attenuverter"},
+    {"ids": [4], "text": "A voltage here shifts the WIDTH setting, scaled by the X MOD. attenuverter"},
+    {"ids": [7], "text": "A trigger here starts the main envelope and the bend envelope, and restarts both oscillators from zero phase"},
+    {"ids": [8], "text": "A trigger here starts the accent envelope"},
+    {"ids": [9], "text": "A voltage here shifts the decay of the main envelope, scaled by that envelope's MOD. attenuverter"},
+    {"ids": [10], "text": "A voltage here shifts the decay of the bend envelope, scaled by that envelope's MOD. attenuverter"},
+    {"ids": [11], "text": "A voltage here shifts the decay of the accent envelope, scaled by that envelope's MOD. attenuverter"},
+    {"ids": [12, 13], "text": "A voltage here shifts the filter cutoff, scaled by its own attenuverter"},
+    {"ids": [14], "text": "A voltage sampled here at each trigger scales the level of the audio output, silent at 0V and full at 10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The bare oscillator, sine to noise as set by SOURCE, about ±5V, with no envelope and no filter"},
+    {"ids": [1], "text": "The voice after the main envelope, the velocity level and the filter, ±5V"},
+    {"ids": [2], "text": "The main envelope, 0-10V, jumping to 10V at a trigger and falling at the time set for it"},
+    {"ids": [3], "text": "The bend envelope, 0-10V, jumping to 10V at a trigger and falling at the time set for it"},
+    {"ids": [4], "text": "The accent envelope, 0-10V, jumping to 10V at an accent trigger and falling at the time set for it"}
+  ],
+  "notes": [
+    "The AUDIO output is silent until a trigger reaches TRIGGER, because the main envelope scales it; the OSC output carries the bare oscillator whether or not the voice has been triggered."
+  ],
+  "expects": {
+    "inputs": {
+      "1": "1V per octave · continuous",
+      "7": "stepped",
+      "8": "stepped"
+    },
+    "outputs": {
+      "0": "±5V · continuous",
+      "1": "±5V · continuous",
+      "2": "0 to 10V",
+      "3": "0 to 10V",
+      "4": "0 to 10V"
+    }
+  }
+}

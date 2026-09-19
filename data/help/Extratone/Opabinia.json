@@ -1,0 +1,57 @@
+{
+  "plugin": "Extratone",
+  "module": "Opabinia",
+  "description": "A bass drum: a sine whose pitch and level each fall away from a struck peak, run through a wavefolder and a hard clipper that a separate input can borrow for distortion on its own",
+  "params": [
+    {"ids": [0], "text": "How long the pitch takes to fall from HIGH to LOW, a half-life of 1ms fully left and 0.201 seconds fully right"},
+    {"ids": [1], "text": "How long the level takes to fall, a half-life of 1ms fully left and 0.501 seconds fully right"},
+    {"ids": [2], "text": "Scales the voltage at the SLIDE input before it is added to the SLIDE knob, inverting it left of centre; at full, 10V covers the knob's whole travel"},
+    {"ids": [3], "text": "Scales the voltage at the LIFE input before it is added to the LIFE knob, inverting it left of centre; at full, 10V covers the knob's whole travel"},
+    {"ids": [4], "text": "The pitch the sine is struck at, 100Hz to 500Hz"},
+    {"ids": [5], "text": "The pitch the sine falls away to and settles at, 0Hz to 100Hz"},
+    {"ids": [6], "text": "Scales the voltage at the HIGH input before it shifts the struck pitch, inverting it left of centre; at full the input tracks 1V per octave"},
+    {"ids": [7], "text": "Scales the voltage at the LOW input before it shifts the settled pitch, inverting it left of centre; at full the input tracks 1V per octave"},
+    {"ids": [8], "text": "Gain into the hard clipper, unity fully left and five times fully right, with everything past full scale flattened off"},
+    {"ids": [9], "text": "Gain into the wavefolder, unity fully left and three times fully right; anything driven past full scale is reflected back inside instead of clipping"},
+    {"ids": [10], "text": "Scales the voltage at the DIST'R'N input before it is added to the DIST'R'N knob, inverting it left of centre; at full, 10V covers the knob's whole travel"},
+    {"ids": [11], "text": "Scales the voltage at the FOLD input before it is added to the FOLD knob, inverting it left of centre; at full, 10V covers the knob's whole travel"},
+    {"ids": [12], "text": "How many times the folding stage is run over the wave, a whole number from 1 to 5"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the SLIDE knob through its attenuverter, the total clamped to the knob's own range"},
+    {"ids": [1], "text": "Adds to the LIFE knob through its attenuverter, the total clamped to the knob's own range"},
+    {"ids": [2], "text": "Multiplies the struck pitch by two for every volt, scaled first by the HIGH attenuverter, so it does nothing while that attenuverter is at zero"},
+    {"ids": [3], "text": "Multiplies the settled pitch by two for every volt, scaled first by the LOW attenuverter, so it does nothing while that attenuverter is at zero"},
+    {"ids": [4], "text": "A rising edge above 1V strikes the drum: the phase restarts, the level jumps to full and the pitch jumps to HIGH"},
+    {"ids": [5], "text": "Adds to the DIST'R'N knob through its attenuverter, the total clamped to the knob's own range"},
+    {"ids": [6], "text": "Adds to the FOLD knob through its attenuverter, the total clamped to the knob's own range"},
+    {"ids": [7], "text": "Audio for the folder and the clipper on their own, with no envelope and no oscillator, taken one polyphonic channel at a time"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The falling pitch envelope, 5V while the sine is at HIGH and 0V once it has reached LOW"},
+    {"ids": [1], "text": "The falling level envelope, 5V at the strike and decaying towards 0V"},
+    {"ids": [2], "text": "The drum itself, the sine swinging ±5V at the strike, scaled by the level envelope and shaped by the folder and the clipper"},
+    {"ids": [3], "text": "The DIST-IN signal after folding and clipping, carrying as many channels as it arrived with"}
+  ],
+  "notes": [
+    "nothing sounds until a trigger arrives at TRIG; on a freshly added module the level has already decayed to silence.",
+    "the folder and the clipper are shared: NUMBER, FOLD and DIST'R'N shape the drum and the DIST-IN signal at the same time.",
+    "ENV(S) is scaled by the gap between HIGH and LOW; set HIGH to 100Hz and LOW to 100Hz and that jack divides by zero."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "±5V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "2": "±5V · continuous · one channel only",
+      "3": "continuous · polyphonic"
+    }
+  }
+}

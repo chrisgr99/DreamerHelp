@@ -1,0 +1,19 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "HiHat",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:60 takes a rising edge from that voltage being greater than 0.5"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:155 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:69 takes a rising edge from that voltage being greater than 0.5"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:147 adds it to the DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:141 adds it to the BRIGHTNESS knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/HiHat.hh:129 adds it to the THICKNESS knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/HiHat.hh:107 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/HiHat.hh:108 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "This is the one voice in the plugin whose oscillators are not doubled: src/modules/HiHat.hh:159 sets each phase increment to (frequency + offset) * rSampleRate with no factor of two, so the printed 1kHz to 2kHz is what is heard. The six offsets are at :168-169; the manual says four oscillators. Open decay is 50ms to 250ms at :145-149 where the tooltip and the manual say 300ms. Closed decay is a fixed 10ms at :112. Thickness does two jobs at :129-136: the makeup gain falls from 10 to 2 as the knob rises, and the highpass corner is mapped backwards, 10000Hz at the bottom of the knob to 1000Hz at the top. Choke is read at :62 and works by zeroing the open hat's decay coefficient for that sample, which empties the envelope."
+}

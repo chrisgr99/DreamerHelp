@@ -1,0 +1,36 @@
+{
+  "plugin": "Mojo",
+  "module": "sheep",
+  "description": "Random voltage generator: a new value on each trigger or at a rate of its own, drawn from a flat or a bell-shaped spread, with a gate output that fires on the higher draws",
+  "params": [
+    {"ids": [0], "text": "Switches between drawing a new value at the module's own rate and drawing one on each incoming trigger; the lamp in the Trig group lights while triggers are used"},
+    {"ids": [1], "text": "Sets how long each drawn value is held, from a new value on every sample at the counter-clockwise end to one every 2ms at the clockwise end"},
+    {"ids": [2], "text": "Switches the draw between a flat spread from zero upwards and a bell curve centred on zero, which is what puts negative voltages on the outputs"},
+    {"ids": [3], "text": "Scales the drawn voltage: on the flat setting the value reaches five volts times this, and on the bell setting it sets the width of the curve"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V draws a new value; this jack is read only while the Trig switch is set to use triggers"},
+    {"ids": [1], "text": "Added to the hold time in whole samples, one volt lengthening it by one sample"},
+    {"ids": [2], "text": "Added to the range knob, one volt raising it by a twentieth of that knob's whole travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A gate whose high level is five volts times the range setting, fired when the drawn value passes a threshold: zero on the bell setting and 2.5V on the flat one"},
+    {"ids": [1], "text": "The drawn voltage itself, held until the next value is drawn"}
+  ],
+  "notes": [
+    "on the flat setting the gate output tests against a fixed 2.5V while the value drawn only reaches five volts times the range knob, so at or below that knob's middle it never leaves 0V",
+    "the module comes up free-running with the hold time at nothing, so it draws a fresh value every sample and its output is white noise until the hold knob is turned up",
+    "the maker gave no name to any knob or jack here, so hovering one of them shows nothing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±10V · one channel only"
+    }
+  }
+}

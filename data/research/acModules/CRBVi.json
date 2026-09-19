@@ -1,0 +1,17 @@
+{
+  "plugin": "acModules",
+  "module": "CRBVi",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/CRBVi.cpp process(): getChannels() bounds the loop and getPolyVoltage(i) reads each channel"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/CRBVi.cpp process(): clamp(..., -5.08f, 5.08f) into setVoltage(curVolt)"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/CRBVi.cpp getVoltageCurve(): the default yAxisRangeMode multiplies by 10 and clamps 0 to 10"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/CRBVi.cpp process(): setVoltage(isDragging ? 10.f : 0.f)"},
+      "3": {"poly": true, "why": "src/CRBVi.cpp process(): setChannels(inputs[INPUT_VCA].getChannels()); it carries whatever is patched to the external input, scaled"},
+      "4": {"poly": true, "why": "src/CRBVi.cpp process(): setChannels(5); the five channels carry different quantities"}
+    }
+  },
+  "comment": "The XY pad is a custom display widget rather than a parameter, so it has no census position and no click on it can reach this help; what it does is carried on a Note line instead. The X output is clamped to ±5.08V, which is a little over five octaves and not a round number. The VCA output follows the channel count of the external input, and puts out a single channel of 0V when nothing is patched there. The raw polyphonic output always carries exactly five channels. The curve applied to the VCA output is not quite the one applied to the Y output: the second curve setting uses a different formula in each (getVoltageCurve against getVCAVoltageCurve), and the Y output's menu range setting does not apply to the VCA at all."
+}

@@ -1,0 +1,30 @@
+{
+  "plugin": "Autinn",
+  "module": "Geiger",
+  "description": "A Geiger counter: random clicks at a rate set by a radiation level, played through a modelled speaker",
+  "params": [
+    {"ids": [0], "text": "Sets the radiation level, from 0.02 to 50 milliroentgen an hour, which is what sets how often a click happens"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge fires one click, on top of whatever the radiation level is already producing"},
+    {"ids": [1], "text": "Adds to the radiation knob, 10V covering the knob's whole travel, with the total clamped to its ends"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clicks, clamped to ±5V"}
+  ],
+  "notes": [
+    "the click rate is 21.666 clicks a second for each milliroentgen an hour, drawn one sample at a time from a random number, so the clicks are irregular rather than evenly spaced.",
+    "each click is a five-sample pulse through a 1250Hz lowpass and a 150Hz highpass and then a soft clipper, which is what gives it the knock of a small speaker rather than a bare tick.",
+    "the lamp lights on each click and fades over about a fifteenth of a second.",
+    "the knob draws a gold arc from its own position round to where the CV input has moved it, and the arc turns orange when the CV pushes the level past either end."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

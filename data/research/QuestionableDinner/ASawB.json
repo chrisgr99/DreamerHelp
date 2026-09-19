@@ -1,0 +1,24 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "ASawB",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/ASawB.cpp:58-71 takes the channel count from the widest of the six inputs and loops; line 79 reads it with getNormalVoltage(0.f, i)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/ASawB.cpp:58-71 loops over channels; line 80 reads it with getNormalVoltage(0.f, i)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the comparator A jack", "why": "src/ASawB.cpp:90 reads it with getNormalVoltage(a, i), where a is the Logic A voltage"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the comparator B jack", "why": "src/ASawB.cpp:91 reads it with getNormalVoltage(b, i), where b is the Logic B voltage"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the rectifier A jack", "why": "src/ASawB.cpp:97 reads it with getNormalVoltage(a, i), where a is the Split A voltage"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the rectifier B jack", "why": "src/ASawB.cpp:98 reads it with getNormalVoltage(b, i), where b is the Split B voltage"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/ASawB.cpp:83 sets (a+bias<b)*10.f"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/ASawB.cpp:84 sets (a-bias>b)*10.f"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/ASawB.cpp:86 sets (abs(a-b)<=bias)*10.f"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/ASawB.cpp:87 sets (abs(a-b)>bias)*10.f"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "why": "src/ASawB.cpp:94 sets max(bias,a-b)-bias"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "why": "src/ASawB.cpp:95 sets abs(min(-bias,a-b)+bias)"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "src/ASawB.cpp:101 sets a-b with no clamp"}
+    }
+  },
+  "comment": "The knob was called Bias before version 2.1.7 and is now printed W for Window on the panel, but the maker's tooltips on the four comparator outputs still read '(-Bias)', '(+Bias)' and '(±Bias)'; they mean this knob."
+}

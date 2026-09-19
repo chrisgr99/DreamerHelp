@@ -1,0 +1,18 @@
+{
+  "plugin": "acModules",
+  "module": "CRBViXL",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/CRBViXL.cpp process(): getChannels() bounds the loop and getPolyVoltage(i) reads each channel"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/CRBViXL.cpp process(): getChannels() > 1 reads channels 0 and 1; scaleModVoltage() maps the switch's span to -1 through 1"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/CRBViXL.cpp process(): clamp(curVolt + modVoltageX, -10.f, 10.f)"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/CRBViXL.cpp voltToOutputRange(); the default range multiplies by 10 and clamps 0 to 10"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/CRBViXL.cpp process(): setVoltage(isDragging ? 10.f : 0.f)"},
+      "3": {"poly": true, "range": "±5V", "why": "src/CRBViXL.cpp getVCAVoltageCurve(): clamp(outVolt * inVoltage, -5.f, 5.f); setChannels follows the external input"},
+      "4": {"poly": true, "why": "src/CRBViXL.cpp process(): setChannels(5); the five channels carry different quantities"}
+    }
+  },
+  "comment": "The XL covers 1 to 5 octaves where CRBVi covers 1 to 3, and its note output is clamped to ±10V after modulation rather than to the ±5.08V the unmodulated position is clamped to. The modulation input reads channel 1 for the note routing and channel 2 for the level routing, so a two-channel cable drives the two axes separately; a single-channel cable drives both from the same voltage. The modulation range switch does not limit the jack, it only tells the scaling what span to expect, and the scaled result is clamped to plus or minus one. The XY pad is a custom display widget with no census position, so no click on it can reach this help; what it does is carried on a Note line. The raw polyphonic output always carries exactly five channels, and the VCA output carries a single channel of 0V when nothing is patched to the external input."
+}

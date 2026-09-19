@@ -1,0 +1,67 @@
+{
+  "plugin": "WordGenerator",
+  "module": "WordGenerator",
+  "description": "Two sixteen-step binary words, set bit by bit with the buttons and played out a bit at a time, each word giving a held level and a trigger, with a chance of any bit coming out random instead",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock rate, doubling it for every 1 the knob adds and starting at 10Hz; the readout gives that exponent rather than the frequency, so it says 3.322 where the clock is running at 10Hz"},
+    {"ids": [1], "text": "Chooses whether the sequence steps from the module's own clock or from the voltage at CLK IN, printing Internal and External"},
+    {"ids": [2], "text": "Sets how many of the sixteen bits are played before the word starts again, 1 to 16"},
+    {"ids": [3], "text": "Chooses whether the two words play side by side as sixteen bits each or end to end as thirty-two, printing 16 bit and 32 bit"},
+    {"ids": [4], "text": "Chooses whether the sequence keeps repeating or runs one cycle at a time, printing Auto and Single; on Single nothing moves until the button is pressed or a trigger arrives"},
+    {"ids": [5], "text": "Sets the chance, drawn afresh for every bit on every cycle, that the bit played comes from a pseudo-random word instead of the one the buttons set; at the bottom of its travel only the buttons count"},
+    {"ids": [6], "text": "Restarts the word at its first bit and plays one cycle, then stops on the last bit"},
+    {"ids": [7], "text": "Turns every bit of the first word over, so a button switched off plays a one and a button switched on plays a zero"},
+    {"ids": [8], "text": "Turns every bit of the second word over, so a button switched off plays a one and a button switched on plays a zero"},
+    {"ids": [9], "text": "Scales the voltage at the clock rate jack, and turns it upside down below the centre; with it centred that jack does nothing"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], "text": "Sets that bit of the first word on or off, and the lamp beside it shows the bit actually played, which is not the same thing once the invert switch or the random chance is in play"},
+    {"ids": [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41], "text": "Sets that bit of the second word on or off, and the lamp beside it shows the bit actually played, which is not the same thing once the invert switch or the random chance is in play"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One step of the sequence for every rise above 1V, and only while the clock switch is on External"},
+    {"ids": [1], "text": "A trigger sends the sequence back to its first bit and draws a fresh pseudo-random word for the random-chance setting to use; it fires above 1V and rearms below 0V"},
+    {"ids": [2], "text": "A trigger restarts the word at its first bit and plays one cycle; it fires above 1V and rearms below 0V"},
+    {"ids": [3], "text": "Adds to the random-chance knob, where 10V covers the whole of that knob's travel"},
+    {"ids": [4], "text": "A trigger flips the first word's invert switch itself, so the switch on the panel moves; it fires above 1V and rearms below 0V"},
+    {"ids": [5], "text": "A trigger flips the second word's invert switch itself, so the switch on the panel moves; it fires above 1V and rearms below 0V"},
+    {"ids": [6], "text": "Adds to the word length at one and a half bits per volt, rounded to a whole bit, with the total held between 1 and 16"},
+    {"ids": [7], "text": "A trigger flips the 16 bit and 32 bit switch itself, so the switch on the panel moves; it fires above 1V and rearms below 0V"},
+    {"ids": [8], "text": "Moves the internal clock rate, scaled by the attenuverter beside it, and 5V at full attenuation doubles the rate"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V pulse on each step where the first word's current bit is on, which is a trigger rather than the gate the panel calls it"},
+    {"ids": [1], "text": "A 1ms 10V pulse on each step where the second word's current bit is on, which is a trigger rather than the gate the panel calls it"},
+    {"ids": [2], "text": "10V for the whole step while the first word's current bit is on and 0V while it is off, which is a gate rather than the control voltage the panel calls it"},
+    {"ids": [3], "text": "10V for the whole step while the second word's current bit is on and 0V while it is off, which is a gate rather than the control voltage the panel calls it"},
+    {"ids": [4], "text": "A 1ms 10V pulse as the sequence reaches the first bit of the word"},
+    {"ids": [5], "text": "A 1ms 10V pulse as the sequence reaches the last bit of the word"},
+    {"ids": [6], "text": "The clock the sequence is running on: a square wave at the rate the CLOCK knob sets, half the time at 10V, or a copy of whatever is at CLK IN when the clock switch is on External"}
+  ],
+  "notes": [
+    "on 32 bit the words play end to end and the cycle doubles, but the two outputs differ: the first word's output runs A then B while the second's runs B then A, sixteen steps apart",
+    "WORD LEN counts bits in one word, so on 32 bit a length of 16 gives a cycle of 32 steps",
+    "the module comes up with every bit button off, clock Internal, Auto, 16 bit, length 16 and no random chance, so it clocks along with both words silent until you switch some bits on",
+    "the panel prints BOOGA WORD GENERATOR and the module is modelled on the HP 8006A word generator, a bench instrument for feeding a digital circuit a chosen pattern of ones and zeros"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Chance",
+  "description": "A melody generated as a walk through a scale: a seeded skeleton that repeats exactly, with a chance at each step of straying to a neighbouring note",
+  "params": [
+    {"ids": [16], "text": "Picks the scale the walk moves through, from the shared list of nineteen"},
+    {"ids": [17], "text": "Sets the root the scale is built on, C through B"},
+    {"ids": [18], "text": "Sets the first step of the window that is played, 1 to 8"},
+    {"ids": [19], "text": "Sets the last step of the window that is played, 1 to 8; setting it before the start plays the window backwards"},
+    {"ids": [20], "text": "Leans the walk upward or downward; at the centre it is as likely to rise as to fall"},
+    {"ids": [21], "text": "Sets how large each move is, from steps of a second at one end of the travel to leaps of up to an octave at the other"},
+    {"ids": [22], "text": "Sets the chance of straying from the skeleton at each step; at none the skeleton plays unchanged, and a stray does not shift the notes after it"},
+    {"ids": [24], "text": "Sets the chance that an odd-numbered step of the walk is silent"},
+    {"ids": [25], "text": "Sets the chance that an even-numbered step of the walk is silent"},
+    {"ids": [26], "text": "Sets the chance that a step jumps an octave up or down"},
+    {"ids": [27], "text": "Sets the chance that a step retriggers as two or three short bursts, keeping its own pitch"},
+    {"ids": [29], "text": "Rolls a fresh skeleton for the playing pattern on each press"},
+    {"ids": [30], "text": "Returns to the first active pattern on each press"},
+    {"ids": [31], "text": "Picks the second voice's interval: Off, a third, a fifth or an octave up or down, or Varied, which draws a consonant interval per step, some of them moving the other way"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the walk by one step; the module has no clock of its own"},
+    {"ids": [1], "text": "A rise returns to the first active pattern"},
+    {"ids": [2], "text": "A rise rolls a fresh skeleton for the playing pattern"},
+    {"ids": [3], "text": "Sets the root, a volt per octave snapped to semitones, added to the root knob"},
+    {"ids": [4], "text": "Leans the walk up or down, added to the gravity knob at a tenth per volt"},
+    {"ids": [5], "text": "Changes the move size, added to the drift knob at a tenth per volt"},
+    {"ids": [6], "text": "Changes the chance of straying, added to the branch knob at a tenth per volt"},
+    {"ids": [7], "text": "Picks the scale, one volt per scale, added to the scale knob; it takes the same signal another module's scale output sends"},
+    {"ids": [8], "text": "Changes the chance of an odd step being silent, added to that knob at a tenth per volt"},
+    {"ids": [9], "text": "Changes the chance of an even step being silent, added to that knob at a tenth per volt"},
+    {"ids": [10], "text": "Changes the chance of an octave jump, added to that knob at a tenth per volt"},
+    {"ids": [11], "text": "Changes the chance of a burst, added to the ratchet knob at a tenth per volt"},
+    {"ids": [12], "text": "Moves the first step of the played window, one volt per step, added to the start knob"},
+    {"ids": [13], "text": "Moves the last step of the played window, one volt per step, added to the end knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The melody as a volt per octave, quantized to the root and scale"},
+    {"ids": [1], "text": "The melody's gate, of the length set on the menu"},
+    {"ids": [2], "text": "The second voice as a volt per octave, at the interval the harmony switch names"},
+    {"ids": [3], "text": "The second voice's gate"}
+  ],
+  "notes": [
+    "the walk moves only on an external clock; the module has no tempo of its own",
+    "the eight patterns, their repeat counts, whether each is active, and the per-step gates are all edited on the display, which cannot be reached by clicking for help",
+    "a step switched off on the display is a forced rest whatever the rest knobs say, which is the usual reason for an unexpected gap",
+    "the next note is drawn from hand-written tables of what follows what in that scale rather than at random, so a seven-note scale pulls toward chord tones and resolves its leading note"
+  ],
+  "menu": [
+    "Pattern cell: click = edit · dbl-click = on/off · boxes = repeats · R = reseed — a label saying what the mouse does on a pattern slot",
+    "Gate row (focused pattern): click = on/off · shift-click = tie — a label saying what the mouse does on the step gates",
+    "Gate length — a slider setting how much of each step the gate output holds high",
+    "Glide — a slider setting how far the pitch output slides between notes",
+    "Start each cycle on root — grounds the first step of every cycle on the tonic",
+    "Vary shaping each run (rests/holds/octaves/ratchets) — rolls fresh rests, octave jumps and bursts on every pass rather than keeping them fixed to the pattern",
+    "Walk range — a label over the two range choices below it",
+    "±1 octave — holds the walk inside one octave either side of where it started",
+    "±2 octaves — lets the walk reach two octaves either side of where it started",
+    "New core for current pattern — rolls a fresh skeleton for the pattern being edited",
+    "New cores for all patterns — rolls fresh skeletons for all eight patterns"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "10": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "11": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "12": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "13": "bipolar · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

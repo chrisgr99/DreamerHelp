@@ -1,0 +1,63 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Pilfer",
+  "description": "A particle chased across a one or two dimensional field: the incoming signal gives a target position, the particle is accelerated towards it, and the output is where the particle got to",
+  "params": [
+    {"ids": [0], "text": "Sets how hard the particle is pulled towards the target, over about eighteen octaves of pull"},
+    {"ids": [1], "text": "Sets how much of its speed the particle keeps from one sample to the next, none at the far left"},
+    {"ids": [2], "text": "Sets how far from the target the particle has to be before it is pulled at all; inside this distance it coasts"},
+    {"ids": [3], "text": "Sets how much speed the particle keeps when it strikes the wall, none at the far left and almost all at the far right"},
+    {"ids": [4], "text": "Sets how much of the acceleration jack reaches the acceleration, inverted anticlockwise of centre and none at centre"},
+    {"ids": [5], "text": "Sets how much of the friction jack reaches the friction, inverted anticlockwise of centre and none at centre"},
+    {"ids": [6], "text": "Sets how much of the distance jack reaches the trigger distance, inverted anticlockwise of centre and none at centre"},
+    {"ids": [7], "text": "Sets how much of the bounce jack reaches the bounce, inverted anticlockwise of centre and none at centre"},
+    {"ids": [8], "text": "Sets how much of the drive jack reaches the drive, inverted anticlockwise of centre and none at centre"},
+    {"ids": [9], "text": "Sets how much of the shake jack is added to the particle's speed, inverted anticlockwise of centre and none at centre"},
+    {"ids": [10], "text": "Multiplies the incoming signal on the way in and divides the outgoing one by the same amount, so the particle is worked harder against the same walls"},
+    {"ids": [11], "text": "Scales the acceleration and the trigger distance for the signal being tracked: the upper position is set up for audio and the lower divides both down for control voltages"},
+    {"ids": [12], "text": "Chooses how the speed is bled away: in the lower position a fixed amount is taken off each sample, and in the upper position a fixed proportion of it"},
+    {"ids": [13], "text": "Chooses whether the two input jacks are read as X and Y positions or as a radius and an angle"},
+    {"ids": [14], "text": "Sets how many times the motion is worked out per sample, 1 to 16; higher settings keep fast signals stable and cost more processing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the acceleration by one doubling per volt at the far ends of the attenuverter above it"},
+    {"ids": [1], "text": "Shifts the friction, scaled by the attenuverter above it and divided by ten"},
+    {"ids": [2], "text": "Shifts the trigger distance, scaled by the attenuverter above it and halved"},
+    {"ids": [3], "text": "Shifts the bounce, scaled by the attenuverter above it and divided by ten"},
+    {"ids": [4], "text": "Shifts the drive, scaled by the attenuverter above it and halved"},
+    {"ids": [5], "text": "Adds directly to the particle's speed, which knocks it off course without moving the target"},
+    {"ids": [6], "text": "The target position along the first axis, read as X in rectangular coordinates and as the radius in polar; patching this jack alone puts the module into one dimensional mode"},
+    {"ids": [7], "text": "The target position along the second axis, read as Y in rectangular coordinates and as the angle in polar; patching this jack puts the module into two dimensional mode"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The particle's position along the first axis, squashed through a hyperbolic tangent and scaled by 12"},
+    {"ids": [1], "text": "The particle's position along the second axis; it is held at 0V in one dimensional mode"},
+    {"ids": [2], "text": "The particle's speed, as a positive voltage, which rises as the particle is thrown about and settles as it catches up with the target"}
+  ],
+  "notes": [
+    "The mode is chosen by what is patched, not by a switch: the second axis jack makes it two dimensional, the first axis or the shake jack alone makes it one dimensional",
+    "With all three of those jacks empty both position outputs are held at 0V",
+    "The wall the particle bounces off is ten units from the centre; the maker's manual gives twelve, which is the number the outputs are scaled by rather than where the wall is",
+    "The boundary is a circle in two dimensional mode whichever coordinate system is chosen; there is no square boundary in the code"
+  ],
+  "menu": [
+    "Use Classic Theme — returns the panel to the original untinted artwork, which no entry in the Panel Theme list will give back"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "6": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "7": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    }
+  }
+}

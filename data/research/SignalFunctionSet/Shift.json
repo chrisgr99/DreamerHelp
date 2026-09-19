@@ -1,0 +1,29 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Shift",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "why": "shift.cpp reads it with getVoltage, so only channel 1, and samples it each time a lane fires"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "shift.cpp reads it with getVoltage, so only channel 1, into a Schmitt trigger that advances every lane"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "shift.cpp:148 names it ±5V for ±15 steps, summed into every lane's step knob"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "shift.cpp:150 reads it with getVoltage, so only channel 1, into a Schmitt trigger that clears the module"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "shift.cpp:141 names it ±5V for ±15 steps, summed with that lane's step knob"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "shift.cpp writes one channel with setVoltage from that lane's held value"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "shift.cpp writes one channel with setVoltage, following the shape of the input clock on each firing"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "cv", "poly": false, "why": "shift.cpp writes one channel with setVoltage from the randomly picked lane value"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "shift.cpp writes one channel with setVoltage, mirroring the input clock shape"}
+    }
+  },
+  "comment": "The first lane's mode switch is declared but never given a widget (it has no position in the census), because cascade has no meaning there: the first lane has no lane above it to be fed from and falls back to parallel. The clock divider multiplies with the buffer length rather than replacing it, so a lane at four steps divided by three comes out twelve input clocks behind."
+}

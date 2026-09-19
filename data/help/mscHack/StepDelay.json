@@ -1,0 +1,42 @@
+{
+  "plugin": "mscHack",
+  "module": "StepDelay",
+  "description": "Four delay taps in series clocked from a beat input, each with a note length, level, pan and feedback of its own, and a multimode filter on the way into the delay line",
+  "params": [
+    {"ids": [0], "text": "Picks the filter: off, low pass, high pass, band pass or notch"},
+    {"ids": [1], "text": "Sets the cutoff of the filter the signal passes through on its way into the delay line"},
+    {"ids": [2], "text": "Sets the resonance of the filter the signal passes through on its way into the delay line"},
+    {"ids": [3, 4, 5, 6], "text": "Sets the level of that tap in the delayed mix"},
+    {"ids": [7, 8, 9, 10], "text": "Sets the position of that tap between the left and right outputs"},
+    {"ids": [11, 12, 13, 14], "text": "Sets how much of that tap is fed back into the delay line"},
+    {"ids": [15, 16, 17, 18], "text": "Sets the length of that tap as a note value, off, two bars, a bar, a half, a quarter, an eighth, a sixteenth or a thirty-second, counted on from where the tap before it landed"},
+    {"ids": [19], "text": "Crossfades between the unfiltered input and the sum of the four taps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the note lengths are measured against, one edge to the next counting as a quarter note"},
+    {"ids": [2], "text": "The left input, and the source for both sides when the right input is empty"},
+    {"ids": [3], "text": "The right input"},
+    {"ids": [4], "text": "Adds to the filter cutoff knob, 5V covering the whole of the knob's range and -5V closing the filter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output, the dry input and the delayed taps mixed by Mix"},
+    {"ids": [1], "text": "The right output, the dry input and the delayed taps mixed by Mix"}
+  ],
+  "notes": [
+    "a tap set to Off is skipped, and the taps after it are measured from where the last sounding tap landed",
+    "all four Delay knobs come up at Off, so a new module passes the input through unchanged until at least one tap is set to a note length",
+    "the tap lengths are measured from the clock at Beat, and are recalculated on each edge of it; with that jack empty they are left at the length the module started with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

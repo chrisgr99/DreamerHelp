@@ -1,0 +1,51 @@
+{
+  "plugin": "Cella",
+  "module": "Bytebeat",
+  "description": "Bytebeat player: a short C-style expression in a counter variable is evaluated once per step and the result, masked to a chosen number of bits, becomes the output voltage",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the counter steps, 16Hz at fully counter-clockwise to about 22kHz at fully clockwise, coming up at 8000Hz; with a cable in the CLOCK jack it becomes a multiplier of that clock"},
+    {"ids": [1], "text": "Starts and stops the counter; while it is stopped the output holds at 0V"},
+    {"ids": [2], "text": "Sets the counter back to zero without stopping it"},
+    {"ids": [3], "text": "Sets the value the letter a stands for in the expression, a whole number from 0 to 128"},
+    {"ids": [4], "text": "Sets the value the letter b stands for in the expression, a whole number from 0 to 128"},
+    {"ids": [5], "text": "Sets the value the letter c stands for in the expression, a whole number from 0 to 128"},
+    {"ids": [6], "text": "Sets how many bits of the result are kept, 1 to 12, which is what makes the steps in the output coarse or fine"},
+    {"ids": [7], "text": "Attenuates the CV a jack, 0 to 1; at 0 that jack does nothing"},
+    {"ids": [8], "text": "Attenuates the CV b jack, 0 to 1; at 0 that jack does nothing"},
+    {"ids": [9], "text": "Attenuates the CV c jack, 0 to 1; at 0 that jack does nothing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scaled so that 10V is the full 128, multiplied by its attenuator and added to the a knob, the total clamped to 128"},
+    {"ids": [1], "text": "Scaled so that 10V is the full 128, multiplied by its attenuator and added to the b knob, the total clamped to 128"},
+    {"ids": [2], "text": "Scaled so that 10V is the full 128, multiplied by its attenuator and added to the c knob, the total clamped to 128"},
+    {"ids": [3], "text": "Each rise past 2V starts or stops the counter, the same flip the RUN button makes"},
+    {"ids": [4], "text": "Each rise past 2V sets the counter back to zero"},
+    {"ids": [5], "text": "Sets the base rate from the time between its own rises, and the FREQ knob then multiplies that; with no cable the base rate is 2Hz"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The value of the expression, scaled onto whichever range the menu is set to and 0V while the counter is stopped"}
+  ],
+  "notes": [
+    "the module puts out 0V until an expression is typed into the display and submitted with the Enter key; nothing on the panel does anything before that",
+    "the two lamps report on the expression: one lights while the text has been changed but not submitted, the other while the submitted text could not be parsed",
+    "the editor is a plain text field rather than a control, so clicking it cannot reach a help line",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Output Range: -2.5V..2.5V, -5V..5V, 0..5V, 0..10V — sets the span the expression's result is scaled onto",
+    "Submit/New Line: Enter/Shift+Enter, Shift+Enter/Enter — swaps which key submits the expression and which starts a new line in the editor"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "high above 2V · stepped · one channel only",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 2Hz."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

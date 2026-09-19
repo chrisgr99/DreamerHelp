@@ -1,0 +1,50 @@
+{
+  "plugin": "SickoCV",
+  "module": "BtogglerStCompact",
+  "description": "A stereo gate that opens and closes on the next clock pulse after you arm it, following an attack-sustain-release envelope, in 4HP",
+  "params": [
+    {"ids": [0], "text": "Sets how long the envelope takes to rise, 1ms to 10 seconds; fully anticlockwise there is no rise at all and the level jumps straight to sustain"},
+    {"ids": [1], "text": "Sets the level the envelope holds at, 0 to 100%"},
+    {"ids": [2], "text": "Sets how long the envelope takes to fall, 1ms to 10 seconds; fully anticlockwise there is no fall at all and the level drops straight to zero"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pulse train that times the opening and closing; no state changes until a pulse arrives here"},
+    {"ids": [1], "text": "A trigger here arms the module, and the next clock pulse opens or closes it; a second trigger before that pulse cancels the arming"},
+    {"ids": [2], "text": "A trigger here shuts the envelope and drops its level to zero at once, without waiting for a clock"},
+    {"ids": [3], "text": "The left signal to be gated; with nothing patched the left output carries the bare envelope at up to 10V"},
+    {"ids": [4], "text": "The right signal to be gated; with nothing patched the right output carries the bare envelope at up to 10V"},
+    {"ids": [5], "text": "Lengthens the attack by one second per volt, added to the A knob and capped at 10 seconds; it is read only at the moment the envelope opens"},
+    {"ids": [6], "text": "Raises the sustain level by 100% per volt, added to the S knob and held between 0 and 100%"},
+    {"ids": [7], "text": "Lengthens the release by one second per volt, added to the R knob and capped at 10 seconds; it is read only at the moment the envelope closes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left signal at the envelope's level"},
+    {"ids": [1], "text": "The right signal at the envelope's level"},
+    {"ids": [2], "text": "10V for as long as the envelope is open, 0V otherwise, or a 1ms pulse at each change with 'Trigger on Gate Out' ticked"}
+  ],
+  "notes": [
+    "nothing happens until a clock is patched: an ARM trigger only arms the module, and the change takes effect on the next pulse at the CLK jack."
+  ],
+  "menu": [
+    "Initialize on Start — comes up closed when Rack loads a patch, instead of resuming whatever state it was saved in",
+    "Disable Unarm — stops a second ARM trigger from cancelling an arming before its clock pulse arrives",
+    "Trigger on Gate Out — replaces the held gate at the GATE output with a 1ms pulse each time the state changes on a clock"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "continuous · polyphonic\n\nunpatched it reads 10V.",
+      "4": "continuous · polyphonic\n\nunpatched it reads 10V.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "0 to 1V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

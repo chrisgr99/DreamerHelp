@@ -1,0 +1,24 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Key",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "key.cpp:310 names it a volt per octave snapped to semitones, summed with the root knob"},
+      "1": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "key.cpp:311 names it one volt per scale; the shared scale bus carries the whole scale over the extra channels of the same jack"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "why": "key.cpp:500 gives each channel its own Schmitt on getPolyVoltage(c), so a rise past 1V samples that channel; :499 with nothing patched every channel samples on every sample instead"},
+      "3": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "key.cpp:301 names this input polyphonic to sixteen voices and its output carries the same channel count"},
+      "4": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "key.cpp:301 names this input polyphonic to sixteen voices and its output carries the same channel count"},
+      "5": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "key.cpp:301 names this input polyphonic to sixteen voices and its output carries the same channel count"},
+      "6": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "key.cpp:301 names this input polyphonic to sixteen voices and its output carries the same channel count"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "key.cpp:302 declares this output as that channel's quantized pitch, carrying as many channels as its input"},
+      "1": {"family": "pitch"},
+      "2": {"family": "pitch"},
+      "3": {"family": "pitch"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "key.cpp:313 declares this output as a volt per octave root for driving another module's root input"},
+      "9": {"family": "cv", "poly": true, "why": "key.cpp:314 declares this output as one volt per scale on the first channel with the whole scale on the channels after it"}
+    }
+  },
+  "comment": "Four outputs are declared and marked \"(retired)\" by the maker (key.cpp:306); they have no widget and cannot be reached, so they are left untagged. The quantizer works in real semitone intervals within a period rather than on a twelve-bit mask, which is what lets Pelog, Slendro, the harmonic series and non-octave Scala scales quantize correctly. Where the key cannot be named by a number, the first channel of the scale output carries the nearest canonical scale as a lossy summary and the real scale rides on the channels behind it."
+}

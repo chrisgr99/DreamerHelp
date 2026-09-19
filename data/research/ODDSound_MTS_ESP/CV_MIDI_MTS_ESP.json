@@ -1,0 +1,21 @@
+{
+  "plugin": "ODDSound_MTS_ESP",
+  "module": "CV_MIDI_MTS_ESP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:87 takes the channel count from this jack and line 93 reads each channel with getVoltage(c)"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:97 reads it with getPolyVoltage and treats 1V and above as a note held"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "7.87V, which is velocity 100", "why": "CV_MIDI_MTS_ESP.cpp:88-90 reads it with getNormalPolyVoltage defaulting to 1000/127 volts, divides by 10, multiplies by 127 and clamps to 0..127"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:100-102 reads it with getPolyVoltage, divides by 10, multiplies by 127 and clamps to 0..127"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:106-108 reads channel one only with getVoltage, adds 5, divides by 10 and spreads it over the fourteen-bit wheel"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:110-112 reads channel one only with getVoltage, divides by 10, multiplies by 127 and clamps to 0..127"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:124 reads channel one only with getVoltage and treats 1V and above as a clock pulse"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "CV_MIDI_MTS_ESP.cpp:114-116 reads it with getNormalVoltage defaulting to 10V, divides by 10, multiplies by 127 and clamps to 0..127"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:118-120 reads channel one only with getVoltage, adds 5, divides by 10 and multiplies by 127"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:127 reads channel one only with getVoltage and treats 1V and above as a start"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:130 reads channel one only with getVoltage and treats 1V and above as a stop"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "CV_MIDI_MTS_ESP.cpp:133 reads channel one only with getVoltage and treats 1V and above as a continue"}
+    }
+  },
+  "comment": "This is VCV's own CV-MIDI with an MTS-ESP client added. With a master connected the pitch voltage is turned into a frequency and the master is asked which note that frequency belongs to (CV_MIDI_MTS_ESP.cpp:93-96), so the note number follows the master's mapping rather than twelve-tone tuning; with no master it falls back to twelve semitones to the volt around note 60."
+}

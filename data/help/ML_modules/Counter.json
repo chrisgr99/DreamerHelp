@@ -1,0 +1,40 @@
+{
+  "plugin": "ML_modules",
+  "module": "Counter",
+  "description": "Counts trigger pulses and passes them on until a set number has been reached, with start and stop triggers in and out",
+  "params": [
+    {"ids": [0], "text": "Sets how many pulses are passed before the counter stops, a whole number from 0 to 128"},
+    {"ids": [1], "text": "Starts the counter by hand and sets the count back to zero"},
+    {"ids": [2], "text": "Stops the counter by hand and clears the count"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scales the count set by the Length knob by its voltage over 10V, so 5V halves it"},
+    {"ids": [1], "text": "The pulses being counted; each one is passed on while the counter is running"},
+    {"ids": [2, 4], "text": "A rising edge starts the counter and sets the count back to zero"},
+    {"ids": [3, 5], "text": "A rising edge stops the counter and clears the count"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the input pulse at 10V while the counter is running, and nothing once it has stopped"},
+    {"ids": [1], "text": "A 1ms pulse at 10V when the counter starts"},
+    {"ids": [2], "text": "A 1ms pulse at 10V when the counter stops, whether from a stop trigger or from reaching the set length"}
+  ],
+  "notes": [
+    "the two Start jacks are added together before the rising edge is detected, and so are the two Stop jacks, so a steady voltage on one shifts what the other does",
+    "the counter comes up stopped, so no pulses reach Trigger Out until a rising edge arrives at a Start input or the Start button is pressed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

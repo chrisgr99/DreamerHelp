@@ -1,0 +1,48 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-ev3",
+  "description": "Three VCOs on one panel, each with its own pitch offsets, waveform and mixing level, with separate outputs and a mixed output, and hard sync from VCO 1 to either of the others",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets how much of that VCO goes into the mixed output, with no effect on that VCO's own output jack"},
+    {"ids": [3, 11, 19], "text": "Sets the base octave for that VCO over a ten octave range, with the number shown above the knob"},
+    {"ids": [4, 12, 20], "text": "Transposes that VCO by up to 12 semitones either way, shown as a note name while its V/oct jack is patched and as the interval from the VCO it tracks while it is not"},
+    {"ids": [5, 13, 21], "text": "Tunes that VCO a semitone up or down"},
+    {"ids": [6, 14, 22], "text": "Attenuates the CV at the Fm jack for that VCO, which bends the pitch exponentially and suits vibrato rather than FM synthesis"},
+    {"ids": [8, 16, 24], "text": "Picks the waveform for that VCO: sine, triangle, saw, square, even, or off, which silences it without unpatching anything"},
+    {"ids": [9, 17, 25], "text": "Sets the pulse width for that VCO, with an audible effect only while its square wave is selected"},
+    {"ids": [10, 18, 26], "text": "Attenuates the CV at the Pwm jack for that VCO before it is added to the pulse width knob"},
+    {"ids": [15, 23], "text": "Hard-syncs that VCO to VCO 1, restarting its cycle from the saw wave of VCO 1"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that VCO, a volt per octave; left unpatched, the VCO takes its pitch from the nearest patched V/oct jack above it"},
+    {"ids": [3, 4, 5], "text": "Bends the pitch of that VCO through its Mod knob; left unpatched, it takes the signal from the nearest patched Fm jack above it"},
+    {"ids": [6, 7, 8], "text": "Modulates the pulse width of that VCO through its pwm knob; left unpatched, it takes the signal from the nearest patched Pwm jack above it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The three VCOs added together at the levels set by the mixing knobs, scaled back to a 10V peak when those levels total more than full scale; the plus signs turn green while that is happening"},
+    {"ids": [1, 2, 3], "text": "That VCO's waveform on its own, at full level, untouched by the mixing knobs"}
+  ],
+  "notes": [
+    "the three mixing knobs come up at zero, so the mixed output is silent until one of them is turned up; each VCO's own output jack carries full level from the start",
+    "the Mod and Pwm knobs come up at zero, so a cable at a Fm or Pwm jack changes nothing until the knob for that VCO is turned up"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous"
+    }
+  }
+}

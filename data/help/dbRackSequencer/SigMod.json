@@ -1,0 +1,60 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "SigMod",
+  "description": "Scrambles a signal through a sixteen value shift register: on each clock either the input or a value already in the register is read in, decided by three comparators",
+  "params": [
+    {"ids": [0], "text": "Picks which stored value the first comparator looks at, position 0 to 15"},
+    {"ids": [1], "text": "Picks which stored value the second comparator looks at, position 0 to 15"},
+    {"ids": [2], "text": "Picks which stored value the third comparator looks at, position 0 to 15"},
+    {"ids": [3], "text": "The voltage the first comparator compares against; it reads true when the stored value is at or above this, where the README writes the test as less than"},
+    {"ids": [4], "text": "The voltage the second comparator compares against; it reads true when the stored value is at or above this, where the README writes the test as less than"},
+    {"ids": [5], "text": "The voltage the third comparator compares against; it reads true when the stored value is at or above this, where the README writes the test as less than"},
+    {"ids": [6], "text": "Picks which stored value is read back in when the comparators come out false, position 0 to 15"},
+    {"ids": [7], "text": "Picks which stored value the Out jack carries, position 0 to 15"},
+    {"ids": [8], "text": "Mod leaves the choice of what is read in to the comparators; SR always reads back the oldest stored value, which makes the register loop; Seq always reads in the In signal"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge reads one value into the register and shifts the rest along by one place"},
+    {"ids": [1], "text": "A rising edge clears all sixteen stored values to 0V and blocks the clock for 1ms"},
+    {"ids": [2], "text": "The signal offered to the register; it is read in whenever the comparators come out true"},
+    {"ids": [3], "text": "Sets the position the first comparator looks at, 1.6 positions per volt, and overrides the Pos1 knob while patched"},
+    {"ids": [4], "text": "Sets the position the second comparator looks at, 1.6 positions per volt, and overrides the Pos2 knob while patched"},
+    {"ids": [5], "text": "Sets the position the third comparator looks at, 1.6 positions per volt, and overrides the Pos3 knob while patched"},
+    {"ids": [6], "text": "Sets the first comparison voltage and overrides the Cmp1 knob while patched"},
+    {"ids": [7], "text": "Sets the second comparison voltage and overrides the Cmp2 knob while patched"},
+    {"ids": [8], "text": "Sets the third comparison voltage and overrides the Cmp3 knob while patched"},
+    {"ids": [9], "text": "Sets the position that is read back in, one position per volt, and overrides the PosR knob while patched"},
+    {"ids": [10], "text": "Sets the position the Out jack carries, one position per volt, and overrides the PosO knob while patched"},
+    {"ids": [11], "text": "Sets the mode, Mod below 5V, SR at 5V and Seq at 10V, and overrides the mode switch while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The stored value at the position set by the PosO knob"},
+    {"ids": [1], "text": "All sixteen stored values at once, the oldest on the first channel and the most recent on the sixteenth"}
+  ],
+  "menu": [
+    "Cmp Range — the span of the three comparison knobs: -10V to 10V, -5V to 5V, -3V to 3V, -2V to 2V, -1V to 1V, or 0V up to 10V, 5V, 3V, 2V or 1V, starting at -10V to 10V",
+    "Invers 1 — turns the first comparator's result around, so it reads true below its comparison voltage",
+    "Invers 2 — turns the second comparator's result around, so it reads true below its comparison voltage",
+    "Invers 3 — turns the third comparator's result around, so it reads true below its comparison voltage"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "continuous · one channel only",
+      "11": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "Mental",
+  "module": "MentalCartesian",
+  "description": "A four by four grid of knobs with a position that walks in x and y, after Make Noise's René",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Moves the position to that cell for as long as it is held down, and lights while it is held"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets the voltage that cell sends, -2V at fully counter-clockwise to 2V fully clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the position up one row on each rising edge above 1V, wrapping from the top row round to the bottom"},
+    {"ids": [1], "text": "Moves the position down one row on each rising edge above 1V, wrapping from the bottom row round to the top"},
+    {"ids": [2], "text": "Moves the position one column left on each rising edge above 1V, wrapping from the first column round to the last"},
+    {"ids": [3], "text": "Moves the position one column right on each rising edge above 1V, wrapping from the last column round to the first"},
+    {"ids": [4], "text": "Adds its voltage, rounded and held between 0 and 3, to the column on every sample rather than once, so anything above half a volt sends the position racing along the row"},
+    {"ids": [5], "text": "Adds its voltage, rounded and held between 0 and 3, to the row on every sample rather than once, so anything above half a volt sends the position racing down the column"},
+    {"ids": [6], "text": "Moves the position to the first cell of the first row on each rising edge above 1V, and cancels any step arriving in the same sample"},
+    {"ids": [7], "text": "Moves the position to the first column on each rising edge above 1V, leaving the row where it is, and cancels any step arriving in the same sample"},
+    {"ids": [8], "text": "Moves the position to the first row on each rising edge above 1V, leaving the column where it is, and cancels any step arriving in the same sample"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the knob at the current position, exactly as that knob is set"},
+    {"ids": [1], "text": "The voltage of the knob at the current position, rounded to the nearest semitone"},
+    {"ids": [2, 3, 4, 5], "text": "The knob in its own column, on whichever row the position is on"},
+    {"ids": [6, 7, 8, 9], "text": "The knob in its own row, in whichever column the position is on"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched to one of the four step inputs; with none patched the position stays on the first cell and every output holds that cell's value",
+    "the position wraps in both directions and there is no length setting, so the walk always covers all four columns and all four rows",
+    "the knob settings are saved with the patch; the position is not, and starts again at the first cell every time the patch is opened"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "0 to 3V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "0 to 3V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±2V · one channel only",
+      "1": "±2V · continuous · one channel only",
+      "2": "±2V · one channel only",
+      "3": "±2V · one channel only",
+      "4": "±2V · one channel only",
+      "5": "±2V · one channel only",
+      "6": "±2V · one channel only",
+      "7": "±2V · one channel only",
+      "8": "±2V · one channel only",
+      "9": "±2V · one channel only"
+    }
+  }
+}

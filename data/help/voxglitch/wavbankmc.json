@@ -1,0 +1,73 @@
+{
+  "plugin": "voxglitch",
+  "module": "wavbankmc",
+  "description": "Sample player for a folder of WAV files, playing every channel of a multi-channel file at once through a polyphonic output",
+  "params": [
+    {"ids": [0], "text": "Picks which file in the folder plays, from the first to the last"},
+    {"ids": [1], "text": "Attenuates the SAMPLE selection CV, from nothing through to its full range"},
+    {"ids": [2], "text": "When on, playback returns to the start position as it passes the end position"},
+    {"ids": [3], "text": "Steps forward one file in the folder; with a cable in the SAMPLE CV input this has no effect"},
+    {"ids": [4], "text": "Steps back one file in the folder; with a cable in the SAMPLE CV input this has no effect"},
+    {"ids": [5], "text": "Restarts the chosen file from its start position"},
+    {"ids": [6], "text": "Sets where playback begins, from the start of the file to its end"},
+    {"ids": [7], "text": "Attenuates the START CV, from nothing through to its full range"},
+    {"ids": [8], "text": "Sets where playback ends, from the start of the file to its end; a start later than the end swaps the two"},
+    {"ids": [9], "text": "Attenuates the END CV, from nothing through to its full range"},
+    {"ids": [10], "text": "Sets how long the fade in at the start of the played region lasts, from none to half the region"},
+    {"ids": [11], "text": "Attenuates the ATTACK CV, from nothing through to its full range"},
+    {"ids": [12], "text": "Sets how long the fade down lasts, from none to half the region; turned fully clockwise the level is held instead"},
+    {"ids": [13], "text": "Attenuates the DECAY CV, from nothing through to its full range"},
+    {"ids": [14], "text": "Attenuates the pitch CV, from nothing through to its full range"},
+    {"ids": [15], "text": "Attenuates the volume CV, from nothing through to its full range"},
+    {"ids": [16], "text": "Splits the played region into 1 to 16 parts, and EOC fires at the end of each one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge restarts the chosen file from its start position; with nothing patched here the file plays without waiting"},
+    {"ids": [1], "text": "Adds to the file selection after its attenuator, 0-10V spanning the whole folder"},
+    {"ids": [2], "text": "Sets the level, 10V for full level falling to silence at 0V, read per channel from a polyphonic cable"},
+    {"ids": [3], "text": "Shifts the playback speed by a volt per octave after the attenuator, read per channel from a polyphonic cable"},
+    {"ids": [4], "text": "A rising edge steps forward one file in the folder"},
+    {"ids": [5], "text": "A rising edge steps back one file in the folder"},
+    {"ids": [6], "text": "Adds to the start position after its attenuator, 0-10V covering the whole file"},
+    {"ids": [7], "text": "Adds to the end position after its attenuator, 0-10V covering the whole file"},
+    {"ids": [8], "text": "Adds to the attack time after its attenuator, 0-10V covering its full range"},
+    {"ids": [9], "text": "Adds to the decay time after its attenuator, 0-10V covering its full range"},
+    {"ids": [10], "text": "Above 1V playback returns to the start position as it passes the end position"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first channel of the file being played, -5V to 5V"},
+    {"ids": [1], "text": "The second channel of the file being played; a single-channel file is carried on both of these outputs"},
+    {"ids": [2], "text": "Every channel of the file on its own polyphonic channel, -5V to 5V"},
+    {"ids": [3], "text": "A 1ms 10V trigger at the end of the played region, and at each division point set by DIVISION"}
+  ],
+  "notes": [
+    "the outputs stay silent until a folder is chosen with Select Directory Containing WAV Files in the right-click menu; the module holds no files of its own"
+  ],
+  "menu": [
+    "Select Directory Containing WAV Files — points the module at a folder of files to play",
+    "Sample Change Behavior — Restart begins a newly chosen file at the start position, Continual carries on from the position already reached",
+    "Envelope Mode — AD Envelope (decay after attack), Start/End (attack at start, decay at end), or Disabled",
+    "Smoothing — fades across a jump in playback rather than cutting it, which removes the click"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "high above 2V · stepped · one channel only",
+      "5": "high above 2V · stepped · one channel only",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "10": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous",
+      "1": "continuous",
+      "2": "±5V · continuous",
+      "3": "stepped"
+    }
+  }
+}

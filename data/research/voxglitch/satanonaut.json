@@ -1,0 +1,20 @@
+{
+  "plugin": "voxglitch",
+  "module": "satanonaut",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Satanonaut.hpp:153 reads this input with getVoltage() alone and pushes it straight into the audio buffer"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "Satanonaut.hpp:154 reads this input with getVoltage() alone and pushes it straight into the audio buffer"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "ignored", "why": "Satanonaut.hpp:122 divides this input by 10 and multiplies by the knob into an int, and Satanonaut.hpp:129 clamps that to 0..the effect count"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "why": "Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1; Satanonaut.hpp:145 stores the scaled buffer size in an int"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "Satanonaut.hpp:87 divides this input by 10 and Satanonaut.hpp:92 clamps the knob-scaled result to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "Params 0 (clock division), 6 (purge) and 7 (drive) exist in the code but have no control on the panel; drive stays at its default of 1, so the output is not scaled. The five CV jacks multiply their knob rather than adding to it (Satanonaut.hpp:92): at 0V the knob is ignored and the parameter reads zero, and the knob sets how far 10V can push it. With no cable the knob is used on its own."
+}

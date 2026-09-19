@@ -1,0 +1,53 @@
+{
+  "plugin": "Kalliste",
+  "module": "KArp",
+  "description": "An interactive harmonic sequencer: sixteen chords played in turn by an internal clock, with a six by sixteen grid choosing which notes of the chord now playing the arpeggio sounds",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the sixteen chords the sequence plays before returning to the first, 1 to 16"},
+    {"ids": [1], "text": "Sets how many columns of the arpeggio grid are played within each chord, 1 to 16; the chord's time is divided evenly between them"},
+    {"ids": [2], "text": "Sets the octave of the chord now selected, 0 to 8, with 4 putting the root at 0V; selecting another chord brings that chord's own octave here"},
+    {"ids": [3], "text": "Sets the internal tempo, 1 to 300 BPM, which is the rate the sequence moves from one chord to the next"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "Sets the root note of its own chord in twelve steps, C at the bottom to B at the top; clicking it also makes that chord the selected one, and it is frozen for chords beyond the CHORDS LEN setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V starts the sequence when it is stopped and stops it when it is running"},
+    {"ids": [1], "text": "A rising edge past 1V returns the sequence to the first chord and the first column of the arpeggio grid"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The notes of the arpeggio column now playing, 1V per octave, one channel per cell switched on in that column; a column with none on holds the pitches of the last column that had some"},
+    {"ids": [1], "text": "A 10V gate on each channel of the arpeggio pitch output, lasting the first 85% of each column and staying at 0V for a column with no cells switched on"},
+    {"ids": [2], "text": "The chord now playing as three polyphonic channels of 1V per octave: root, third and fifth"},
+    {"ids": [3], "text": "A 10V gate on three polyphonic channels while the sequence runs, dropping to 0V for 5ms at each change of chord so the next chord gets a fresh edge"},
+    {"ids": [4], "text": "The root note of the chord now playing, on its own, 1V per octave"},
+    {"ids": [5], "text": "A 5ms pulse at 10V each time the sequence moves on to the next chord, and 0V while the sequence is stopped"}
+  ],
+  "notes": [
+    "nothing moves until RUN is switched on. The module comes up stopped, and the clock output and both gate outputs rest at 0V until then.",
+    "there is no clock input. BPM sets the rate of the chords, and ARP LEN divides each chord into that many arpeggio steps.",
+    "the round button under a chord slider selects that chord. Clicking it again, once it is the selected one, steps that chord through major, minor, sus2, sus4, diminished and augmented.",
+    "the round chord buttons, the RUN button and the RST SEQ button are drawings rather than knobs, so clicking any of them opens no help of its own.",
+    "the arpeggio grid is one drawing rather than 96 controls, so no cell can be clicked for help. A click switches a cell on or off, and only columns within ARP LEN can be edited.",
+    "the six rows of the arpeggio grid, upwards from the bottom, are the root, third and fifth of the chord and those same three an octave higher.",
+    "Ctrl-click a grid cell to show a note name for about a second. The name is that note in the chord whose number matches the column, not the chord being played.",
+    "the RUN button starts and stops the sequence, and the RST SEQ button returns it to the first chord and the first arpeggio column.",
+    "K-SCENE goes immediately to the right of this module and stores and recalls its whole setup."
+  ],
+  "menu": [
+    "Clear ARP Matrix — switches every cell of the arpeggio grid off and returns to its first column, leaving the chords alone",
+    "Clear Chords — puts every chord back to a C major at octave 4 and returns to the first chord, leaving the arpeggio grid and the two length knobs alone"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

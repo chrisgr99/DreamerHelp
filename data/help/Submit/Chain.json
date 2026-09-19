@@ -1,0 +1,61 @@
+{
+  "plugin": "Submit",
+  "module": "Chain",
+  "description": "A two-channel stereo mixer with pre-gain, pan, a high pass switch, two effects loops and chain jacks for joining mixers end to end",
+  "params": [
+    {"ids": [0, 7], "text": "Sets the gain applied to that channel before anything else, from silence to twice the input"},
+    {"ids": [1, 8], "text": "Sets the level of that channel, after the high pass filter and before the pan"},
+    {"ids": [2, 9], "text": "Places that channel across the stereo field on a constant-power curve"},
+    {"ids": [3, 10], "text": "Silences that channel, and with it the effects sends taken from it and the returns those sends were scaling"},
+    {"ids": [4, 11], "text": "Puts that channel through a high pass filter at 40Hz; it comes up off"},
+    {"ids": [5, 12], "text": "Sets how much of that channel, taken after its fader and before its pan, goes to the FX 1 send outputs"},
+    {"ids": [6, 13], "text": "Sets how much of that channel, taken after its fader and before its pan, goes to the FX 2 send outputs"}
+  ],
+  "inputs": [
+    {"ids": [0, 2], "text": "The left audio input of that channel"},
+    {"ids": [1, 3], "text": "The right audio input of that channel; it follows the left input of the same channel when unpatched"},
+    {"ids": [4, 5], "text": "Ducks that channel: 10V silences it and 0V leaves it alone, scaling the fader in between"},
+    {"ids": [6, 7], "text": "Silences that channel while the voltage here is above 1V"},
+    {"ids": [8], "text": "A stereo mix arriving from another Chain-family module, added to the left output at the level it arrives"},
+    {"ids": [9], "text": "A stereo mix arriving from another Chain-family module, added to the right output at the level it arrives"},
+    {"ids": [14, 16], "text": "The left return of that effects loop, added to the main mix at the higher of the two send settings for that loop"},
+    {"ids": [15, 17], "text": "The right return of that effects loop; it follows the left return of the same loop when unpatched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left main mix: both channels panned, the chain input and both returns"},
+    {"ids": [1], "text": "The right main mix: both channels panned, the chain input and both returns"},
+    {"ids": [2, 4], "text": "The left send of that effects loop: both channels at their send settings, plus the matching send chain input"},
+    {"ids": [3, 5], "text": "The right send of that effects loop: both channels at their send settings, plus the matching send chain input"}
+  ],
+  "notes": [
+    "a return jack is scaled by the send knobs of the loop it belongs to, so an effect patched into a loop is not heard until one of that loop's send knobs is raised",
+    "the chain inputs and outputs carry a running stereo mix. Patch OUT/L and OUT/R of one mixer into IN/L and IN/R of the next to add channels, and take the last mixer's outputs as the finished mix",
+    "four further send chain inputs are configured in the module but have no jack on the panel, so a send output carries only what this mixer makes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the left input of the same channel.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads the left input of the same channel.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "8": "±5V · continuous · one channel only",
+      "9": "±5V · continuous · one channel only",
+      "14": "±5V · continuous · one channel only",
+      "15": "±5V · continuous · one channel only\n\nunpatched it reads the left return of the same loop.",
+      "16": "±5V · continuous · one channel only",
+      "17": "±5V · continuous · one channel only\n\nunpatched it reads the left return of the same loop."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only"
+    }
+  }
+}

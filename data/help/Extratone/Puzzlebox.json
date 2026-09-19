@@ -1,0 +1,37 @@
+{
+  "plugin": "Extratone",
+  "module": "Puzzlebox",
+  "description": "A puzzle with no instructions except the one on the panel: three lights have to be made green, and working out how is the module",
+  "params": [
+    {"ids": [0, 1, 2], "text": "One of three numbered knobs whose settings have to be guessed; the first light comes on when any one of them is right and the second when all three are"},
+    {"ids": [3], "text": "Sets the whole volts of a number the module is holding in secret, 0 to 10"},
+    {"ids": [4], "text": "Adds a fraction of a volt to the larger knob's setting, 0 to 1, so the two together can be matched against the hidden number to three decimal places"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Meets a condition while the voltage here is exactly the two output voltages added together"},
+    {"ids": [1], "text": "Meets a condition while the voltage here is exactly the one the red output is carrying"},
+    {"ids": [2], "text": "Meets a condition while the voltage here is exactly the negative of the one the green output is carrying"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a random voltage between 0V and 1V that is redrawn every 2000 samples, but only once the first light is on"},
+    {"ids": [1], "text": "Carries a second random voltage between 0V and 1V, redrawn at the same instants, but only once the second light is on"},
+    {"ids": [2], "text": "Counts the conditions met so far, one volt for each, until all five are met; from then on it carries the hidden number the two lower knobs have to be matched to"}
+  ],
+  "notes": [
+    "the three coloured input jacks are meant to be fed from the module's own coloured outputs: the test is for exact equality against a voltage redrawn every 2000 samples, which no knob can meet.",
+    "the third light needs the two lower knobs held on the hidden number many times over; the score built up by holding a match drains away by one count per sample between matches.",
+    "the module's source code gives the knob settings away, and a comment in it says that reading them spoils the puzzle."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 2V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "-1 to 0V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 1V · one channel only",
+      "1": "0 to 1V · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

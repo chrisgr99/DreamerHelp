@@ -1,0 +1,52 @@
+{
+  "plugin": "AmbientModules",
+  "module": "Lunar50Drone",
+  "description": "Drone voice of five sawtooth oscillators through one envelope, with a knob that first detunes them together and then has them modulate each other",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4], "text": "Tunes this oscillator, twelve octaves from eight below C4 up to four above it"},
+    {"ids": [5, 6, 7, 8, 9], "text": "Switches this oscillator on and off; it sounds while the button is lit, despite the column being headed MUTE"},
+    {"ids": [10, 11, 12, 13, 14], "text": "Lets the frequency CV reach this oscillator; with it unlit the oscillator ignores that input altogether"},
+    {"ids": [15], "text": "Scales the frequency CV before it reaches the oscillators, -100% to 100%, so that below zero the CV is inverted"},
+    {"ids": [16], "text": "Holds the envelope open for as long as it is lit, whatever the gate input is doing"},
+    {"ids": [17], "text": "Sets how long the envelope takes to rise, 1ms to 15 seconds"},
+    {"ids": [18], "text": "Sets how long the envelope takes to fall once the gate closes, 1ms to 15 seconds"},
+    {"ids": [19], "text": "Transposes all five oscillators down together over its first half, by up to two octaves; past halfway that holds and the oscillators start to frequency-modulate each other, up to an octave deep"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts all five oscillators together in octaves, through the attenuverter, and only reaches an oscillator whose MOD button is lit"},
+    {"ids": [1, 2, 3, 4, 5], "text": "A rising edge switches this oscillator on if it was off and off if it was on; only the first channel of a polyphonic cable is read"},
+    {"ids": [6], "text": "Opens the envelope while it is high, and is ignored while Hold is lit or a cable is patched to the envelope input"},
+    {"ids": [7], "text": "Adds to the Volt knob, 0-10V covering its whole travel"},
+    {"ids": [8], "text": "Replaces the envelope entirely while a cable is patched here, along with the gate input and the Hold button; 0-10V, so another module's envelope output drives this one"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The five oscillators mixed and shaped by the envelope"},
+    {"ids": [1], "text": "The envelope currently shaping the mix, 0-10V"}
+  ],
+  "notes": [
+    "only oscillator 1 is switched on when the module is added, so the other four are silent until their buttons are lit.",
+    "the frequency CV input is ignored by any oscillator whose MOD button is unlit, which follows the original hardware and is not a fault.",
+    "the module's channel count follows whichever of the frequency CV, gate, Volt CV and envelope inputs carries the most channels."
+  ],
+  "menu": [
+    "FM topology: Average of active others, Circular chain — chooses how the oscillators modulate one another once the Volt knob passes halfway",
+    "Oscillator mix: Fixed sum / 5 (legacy), Average of active oscillators, Soft-clip saturated sum — chooses how the five oscillators are combined into the output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · polyphonic",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

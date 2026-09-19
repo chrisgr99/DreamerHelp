@@ -1,0 +1,19 @@
+{
+  "plugin": "forsitan",
+  "module": "ululo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/ululo.cpp:151, gain += getVoltage()*0.2"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "standard guitar tuning", "why": "src/ululo.cpp:190-195, getChannels() then getVoltage(i % used), one channel per string with repeats"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/ululo.cpp:184, wham += getVoltage()*0.1"},
+      "3": {"family": "audio", "poly": false, "range": "±10V", "why": "src/ululo.cpp:213, getVoltage() scaled by 0.1 and then by the in lvl knob"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/ululo.cpp:157, distK += getVoltage()*0.1"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/ululo.cpp:165, decayK += getVoltage()*0.1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/ululo.cpp:172, toneK += getVoltage()*0.1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/ululo.cpp:238, the loop output multiplied by 5 after the amp stage bounds it"}
+    }
+  },
+  "comment": "The v/oct jack is polyphonic but the output is not: the six strings are inside one mono loop. Where the patched chord has fewer than six notes the strings wrap round the notes given and the repeats are taken an octave up. The topology follows Nathaniel Virgo's SuperCollider guitar feedback emulation, reimplemented in C++. The panel prints ululo, gain, dist, decay, tone, drive, whammy, in lvl, then gain, v/oct, wham, dist, decay and tone over the CV jacks, and in and out."
+}

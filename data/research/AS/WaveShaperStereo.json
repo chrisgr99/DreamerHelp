@@ -1,0 +1,20 @@
+{
+  "plugin": "AS",
+  "module": "WaveShaperStereo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "WaveShaperStereo.cpp:102 reads channel one of this input only (getVoltage with no channel)"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "WaveShaperStereo.cpp:111 reads channel one of this input only (getVoltage with no channel)"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "WaveShaperStereo.cpp:142 reads channel one of this input only (getVoltage with no channel), divides it by ten and adds it to the SCALE knob, clamped to -1..1"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "why": "WaveShaperStereo.cpp:140 reads channel one of this input only (getVoltage with no channel) and rescales -10..10 onto a shape of -5..5"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "why": "WaveShaperStereo.cpp:144 reads channel one of this input only (getVoltage with no channel) and multiplies it by the scale value before it is added to the shape"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "WaveShaperStereo.cpp:115 reads channel one of this input only (getVoltage with no channel) and flips the range switch on any voltage that is not zero"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "WaveShaperStereo.cpp:96 reads channel one of this input only (getVoltage with no channel) into a dsp::SchmittTrigger, whose default thresholds are 0V and 1V (Rack digital.hpp:69)"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The range input flips the 5V/10V switch on every sample whose voltage is not zero (WaveShaperStereo.cpp:115-118), so a steady voltage there toggles the switch at the sample rate rather than selecting a range."
+}

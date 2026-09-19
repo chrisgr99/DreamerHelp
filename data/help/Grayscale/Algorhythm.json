@@ -1,0 +1,59 @@
+{
+  "plugin": "Grayscale",
+  "module": "Algorhythm",
+  "description": "Eight-step pulse sequencer with an output for every step, a combined pattern output, and start, stop and clock outputs",
+  "params": [
+    {"ids": [0], "text": "Arms the sequencer, and playback then begins on the next rising clock edge; pressing it again halts playback at once"},
+    {"ids": [1], "text": "Chooses whether the pattern repeats indefinitely or stops when it reaches its endpoint, which is the last step of the pattern or an external reset"},
+    {"ids": [2], "text": "Chooses sequential playback, which plays the programmed pattern in order, or random playback, where the number of switched-on steps sets the chance of a pulse at PATTERN"},
+    {"ids": [3], "text": "Sets the length of the pulses at PATTERN: a gate matching the incoming clock pulse, or a fixed 10ms trigger"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "Switches that step of the pattern on or off, and in the other display modes the same button sets the loop count, the sequence length or the gate setting for that step"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A pulse here starts playback when the sequencer is stopped and stops it when it is running"},
+    {"ids": [1], "text": "A pulse here restarts the pattern at its first step on the next clock pulse"},
+    {"ids": [2], "text": "Each rising edge advances the pattern by one step while the sequencer is running"},
+    {"ids": [3], "text": "A pulse here switches playback between sequential and random"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries 5V on its own step: in sequential playback it follows the clock whether or not that step is switched on, and in random playback only when that step is on and the draw matches it"},
+    {"ids": [8], "text": "A 5V trigger 10ms long whenever playback starts"},
+    {"ids": [9], "text": "A 5V trigger 10ms long whenever playback stops"},
+    {"ids": [10], "text": "A copy of the signal at the CLOCK input, regenerated at 5V"},
+    {"ids": [11], "text": "The switched-on steps as one pulse stream at 5V, with the pulse length set by the GATE/TRIG button"}
+  ],
+  "notes": [
+    "Clock output, Reset behavior, Startup state and Step outputs are gathered under a User preferences heading in the same menu",
+    "the module has no clock of its own; nothing advances until a clock is patched to CLOCK",
+    "playback has to be started before PATTERN carries anything: press START/STOP, or send a pulse to STATE"
+  ],
+  "menu": [
+    "Display modes — a heading over Grid programming, Loop repeats, Sequence length and Gate/trig settings, choosing what the eight step buttons show and set",
+    "Clock output — chooses Always active, so the CLOCK output carries the clock all the time, or During playback",
+    "Reset behavior — chooses Immediate, applying a reset the moment it arrives, or Queued, holding it back until the next clock pulse",
+    "Startup state: Start, Stop, Remember — sets the playback state the module takes when a patch is loaded",
+    "Step outputs — chooses Always active, so a step output pulses on its step whatever the pattern says, or Follow program, so it pulses only where that step is switched on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Play",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "play.cpp:678 names this input polyphonic; the manual states that the channel count of this jack and the gate jack sets the polyphony, up to sixteen"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "why": "play.cpp:764 getChannels sizes the voice count and :766 reads each channel with getVoltage(ch); a rise past 1V calls noteOn with the pitch and velocity read at that instant, and a fall clears that channel's hold"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "play.cpp:680 names this input polyphonic and 0-10V read as 1 to 127; a one-channel cable is broadcast to every voice"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "play.cpp:681 declares the instrument select CV, summed with the instrument knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "play.cpp:682 declares the level CV, which scales the output"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "play.cpp:683 declares the left output; the sixteen voices are summed into it rather than carried separately"},
+      "1": {"family": "audio", "poly": false, "why": "play.cpp:684 declares the right output; the sixteen voices are summed into it rather than carried separately"}
+    }
+  },
+  "comment": "A note-off releases the voice by default; without that, a melodic line would stack voices until it hit the sixteen-voice limit and began stealing. A DecentSampler library file is unpacked into the plugin's own folder under Rack's user directory before it is read (play.cpp:430)."
+}

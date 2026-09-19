@@ -1,0 +1,20 @@
+{
+  "plugin": "forsitan",
+  "module": "materiae",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/materiae.cpp:408, the trigger voltage read as a rising edge"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/materiae.cpp:331, the voltage is added to the pitch in octaves"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "why": "src/materiae.cpp:336-337, the ratio index takes getVoltage()*0.2, a step of the table per five volts scaled by the table length"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/materiae.cpp:360, knob + getVoltage()*0.2, clamped to 0..1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/materiae.cpp:365, the relation index takes getVoltage()*0.4"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/materiae.cpp:373, the voltage is added to the cutoff in octaves"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/materiae.cpp:234, the maker's own port name and doc record 0 to 10V"},
+      "1": {"family": "audio", "poly": false, "why": "src/materiae.cpp:235, the voice before the amplifier, at whichever output level the menu is set to"},
+      "2": {"family": "audio", "poly": false, "why": "src/materiae.cpp:236, the voice through the amplifier, at whichever output level the menu is set to"}
+    }
+  },
+  "comment": "The two oscillators are naive squares with no band limiting, and the module's character comes from how they are read rather than from what they are. The ratio table holds nineteen entries: 1:2, 2:3, 3:4, 5:4, 4:3, 3:2, 5:3, 7:4, 2:1, 5:2, 3:1, 4:1, a unison, a unison detuned by one per cent, the square root of two, e, pi, and a 1:4 at the bottom; the menu can swap the knob for a free sweep from a quarter to four times. The relation control crossfades between neighbouring operators rather than switching between them, which is what lets the modulation envelope walk it. Env 1 is the amplitude envelope with attack, decay and curve; env 2 has an instant attack and its own decay and curve, and its three bipolar trimpots route it to pitch, relation and cutoff. The panel prints materiae, pitch, ratio, shape, grid, div, xmod, tilt, dest, relation, blend, cutoff, reso, lp/bp, gain, pit, rel, cut, att, dec, crv, dec 2, crv 2, hit, trig, v/o, ratio, xmod, rel, cut, env, drone and out."
+}

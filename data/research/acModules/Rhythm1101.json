@@ -1,0 +1,18 @@
+{
+  "plugin": "acModules",
+  "module": "Rhythm1101",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/Rhythm1101.cpp process(): inTrigger.process(getVoltage(), 0.01f, 2.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/Rhythm1101.cpp process(): inReset.process(getVoltage(), 0.01f, 2.f)"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "src/Rhythm1101.cpp process(): clamp(rescale(getVoltage(), 0, 10, 1, 16), 1, 16), written back into the knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Rhythm1101.cpp process(): monoStepOutput[i].trigger(1e-3f) and setVoltage(10.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Rhythm1101.cpp process(): monoStepOutput[1]"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Rhythm1101.cpp process(): monoStepOutput[2]"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Rhythm1101.cpp process(): monoStepOutput[3]"}
+    }
+  },
+  "comment": "The panel prints MONO OUT above the four trigger jacks, which are numbered 1 to 4 and are separate mono outputs rather than one mixed one. The bit order was checked against getBinaryOfNumAt: track 1 is the units bit, so a step value of 1 fires the first jack and 8 the fourth, matching the README. The sixteen step knobs share one line and the four trigger outputs are written separately because each names a different track. The trigger thresholds are 0.01V low and 2V high rather than Rack's usual 0V and 1V. The pattern CV writes its value back into the knob, so the knob cannot be turned by hand while that jack is patched. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "aridacity",
+  "module": "Remainder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Remainder.cpp process() reads inputs[AUDIO_INPUT].getVoltageSum(), which adds every channel into one number, and the output is written with a single setVoltage"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Remainder.cpp process(): gain = params[GAIN_PARAM].getValue() + params[GAIN_CV_PARAM].getValue() * inputs[GAIN_INPUT].getVoltage(), one channel, and with no divisor so a volt adds a whole unit of gain at the attenuverter's maximum"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Remainder.cpp process(): feedback = params[FEEDBACK_PARAM].getValue() + params[FEEDBACK_CV_PARAM].getValue() * inputs[FEEDBACK_INPUT].getVoltage()/10.f, one channel"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Remainder.cpp process(): shape = params[SHAPE_PARAM].getValue() + params[SHAPE_CV_PARAM].getValue() * inputs[SHAPE_INPUT].getVoltage()/10.f, then clamp(shape, 0.f, 1.f)"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Remainder.cpp process(): mix = params[MIX_PARAM].getValue() + params[MIX_CV_PARAM].getValue() * inputs[MIX_INPUT].getVoltage()/10.f, then clamp(mix, 0.f, 1.f)"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Remainder.cpp process(): divisor = params[FOLD_PARAM].getValue() + inputs[FOLD_INPUT].getVoltage(), one channel and no attenuverter, and the fold is skipped when fabs(divisor) is 0.01 or less"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Remainder.cpp process() ends with outputs[AUDIO_OUTPUT].setVoltage(crossfade(dry, wet, mix)) and never calls setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at tag commit 7a96486 (v2.1.0), the installed version. The gain attenuverter multiplies the gain input without the divide by ten the feedback, shape and mix attenuverters use, so 10V at that jack with the attenuverter fully clockwise adds 10 to a gain knob whose own range is 0 to 10. The fold knob is the one parameter with randomizeEnabled set false. Panel order and index order differ among the large knobs: index 2 is the shape knob and index 3 the mix knob, while index 4 is the fold knob drawn between the gain and feedback row and the shape and mix row."
+}

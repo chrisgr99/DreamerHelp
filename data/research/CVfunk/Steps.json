@@ -1,0 +1,21 @@
+{
+  "plugin": "CVfunk",
+  "module": "Steps",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Steps.cpp:181 takes getChannels() on this input and Steps.cpp:222 reads it with getPolyVoltage; Steps.cpp:230 compares it against the window in both directions"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "Steps.cpp:157 reads it with getVoltage, so only channel 1; Steps.cpp:168 clamps the knob-plus-input total to -10 to 10V"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "why": "Steps.cpp:161 reads it with getVoltage, so only channel 1; Steps.cpp:169 takes the absolute value of the knob-plus-input total and clamps it to 0 to 10V"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "Steps.cpp:204 reads it with getPolyVoltage; Steps.cpp:215 treats anything above 0V as high in the default momentary mode, and Steps.cpp:209 anything above 1V in latch mode"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "sumRange": "±5V", "why": "Steps.cpp:165 reads it with getVoltage, so only channel 1; Steps.cpp:170 clamps the knob-plus-input total to -5 to 5V"},
+      "5": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Steps.cpp:244 reads it with getPolyVoltage into a Schmitt trigger set to 0.1V and 1V"},
+      "6": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Steps.cpp:247 reads it with getPolyVoltage into a Schmitt trigger set to 0.1V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Steps.cpp:193 sets its channel count from the trigger and comparator inputs; Steps.cpp:261 writes 10V or 0V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Steps.cpp:194 sets its channel count from the trigger and comparator inputs; Steps.cpp:262 writes 10V or 0V"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "why": "Steps.cpp:192 sets its channel count from the trigger and comparator inputs; Steps.cpp:255 clamps the running voltage to -10 to 10V"}
+    }
+  },
+  "comment": "The range CV is added to the RANGE knob and the total is then passed through an absolute value (Steps.cpp:169), so a CV large enough to drive the total negative reopens the window rather than closing it; that is why the negative field is left off that input."
+}

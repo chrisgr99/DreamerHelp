@@ -1,0 +1,63 @@
+{
+  "plugin": "Grayscale",
+  "module": "Permutation18",
+  "description": "Looping random sequencer built on a 16-bit shift register, with a voltage sequence, an inverted copy of it, a gate output for each of the sixteen bits, white noise and a clock copy",
+  "params": [
+    {"ids": [0], "text": "Holds the sequence while it is pressed by disconnecting the clock, and playback carries on from where it stopped when it is released"},
+    {"ids": [1], "text": "Generates one internal clock pulse, moving the sequence forward by one bit"},
+    {"ids": [2], "text": "While it is held, the first bit of the shift register is set to zero on each clock pulse, turning ones into zeroes"},
+    {"ids": [3], "text": "While it is held, the first bit of the shift register is set to one on each clock pulse, turning zeroes into ones"},
+    {"ids": [4], "text": "Sets the chance the last bit is inverted as it is copied back to the first: even at the centre, none at LIN so the loop repeats unaltered, and inversion every time round at CYC, doubling the loop"},
+    {"ids": [5], "text": "Sets the bit the sequence is copied back from, 1 to 16, which is the length of the loop"},
+    {"ids": [6], "text": "Scales the voltage at SEQ and INV SEQ, from -8V fully counter-clockwise to 8V fully clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves the shift register on by one bit; it counts as high from 2V upwards"},
+    {"ids": [1], "text": "Adds to the SHIFT knob, 5V here covering the knob's full travel"},
+    {"ids": [2], "text": "Adds to the BITS knob, at three bits per volt"},
+    {"ids": [3], "text": "Adds to the LEVEL knob, and the result is limited to the range -8V to 8V"},
+    {"ids": [4], "text": "A voltage of 2V or more sets the first bit of the shift register to zero on the next clock pulse"},
+    {"ids": [5], "text": "A voltage of 2V or more sets the first bit of the shift register to one on the next clock pulse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first eight bits of the shift register read as a number from 0 to 255 and scaled by LEVEL, giving a new voltage on every clock pulse"},
+    {"ids": [1], "text": "The voltage at SEQ with its sign flipped"},
+    {"ids": [2], "text": "White noise from the module's own generator, running whether or not a clock is patched"},
+    {"ids": [3], "text": "Carries 8V while the signal at the CLOCK input is high"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "Carries 8V while that bit of the shift register is a one, for as long as the clock pulse lasts"}
+  ],
+  "notes": [
+    "the contents of the shift register are saved with the patch, so a locked sequence comes back when the patch is reopened",
+    "the module has no clock of its own; the shift register moves only on a rising edge at CLOCK or a press of the STEP button"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only"
+    },
+    "outputs": {
+      "2": "continuous",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped"
+    }
+  }
+}

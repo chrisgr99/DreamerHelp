@@ -1,0 +1,60 @@
+{
+  "plugin": "Geodesics",
+  "module": "Pulsars",
+  "description": "Two rotating crossfaders: the top one blends eight inputs down to one output, the bottom one spreads one input across eight outputs",
+  "params": [
+    {"ids": [0, 1], "text": "Includes the empty jacks of that pulsar in the rotation, so the rotation passes through silence where no cable is patched; with it off only the patched jacks are visited"},
+    {"ids": [2, 3], "text": "Turns that pulsar's rotation the other way round the circle"},
+    {"ids": [4, 5], "text": "Makes that pulsar pick its next jack at random instead of the next one round the circle, and shuffles the order of the jacks in the all-jacks reading of the rotation input"},
+    {"ids": [6, 7], "text": "Steps that pulsar's rotation input through three readings: minus 5V to 5V, 0V to 10V, and a third where one 0V to 10V sweep runs across all of that pulsar's connected jacks"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "One of the eight signals the top pulsar rotates through, crossfaded with the next one as the rotation passes between them"},
+    {"ids": [8], "text": "The signal the bottom pulsar spreads across its outputs; with nothing patched here each output takes the top pulsar's input jack at the matching point of the circle"},
+    {"ids": [9], "text": "Drives the rotation of the top pulsar, the voltage read across the range set by that pulsar's polarity button"},
+    {"ids": [10], "text": "Drives the rotation of the bottom pulsar, and with nothing patched here the bottom pulsar follows the voltage at the top pulsar's rotation input"},
+    {"ids": [11, 12], "text": "A trigger here switches that pulsar between rotating through every jack and rotating through only the patched ones"},
+    {"ids": [13, 14], "text": "A trigger here reverses the direction of that pulsar's rotation"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The top pulsar's crossfade between the input it has reached and the next one in the rotation"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Carries the bottom pulsar's input while the rotation has reached this jack, fading in and out as the rotation passes it"}
+  ],
+  "notes": [
+    "neither pulsar rotates by itself; each needs a moving voltage at its rotation input, and with nothing patched there it rests on one jack",
+    "the shape of the rotation voltage sets the character of the crossfade: a triangle gives a linear fade, a sine an exponential one, a sawtooth a jump with no fade at all",
+    "a square wave at a rotation input makes that pulsar a plain sequential switch, since it never rests between two jacks",
+    "the first jack patched on a pulsar is where its rotation cycle starts",
+    "the white lamp of a pulsar flashes at the start of each fade cycle, which shows whether the rotation voltage is reaching the amplitude that pulsar needs",
+    "the blue lamps show how much of each jack is reaching the output, dark at none and full at all of it",
+    "a pulsar moves on to the next jack only when its rotation voltage arrives at an end of its range, so changing the amplitude of that voltage changes the rhythm of the steps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "continuous",
+      "11": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "continuous"
+    }
+  }
+}

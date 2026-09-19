@@ -1,0 +1,82 @@
+{
+  "plugin": "4msCompany",
+  "module": "DLD",
+  "description": "Two delay lines that can be looped and reversed, their times set from one shared ping and stepped in whole multiples of it",
+  "params": [
+    {"ids": [0, 4], "text": "Sets that channel's delay as a multiple of the pinged time, in seventeen steps from once up to sixteen times"},
+    {"ids": [1, 3], "text": "Shifts that channel's whole range of times: 1/8TH divides the pinged time by eight, = leaves it alone, and +16 multiplies it by sixteen"},
+    {"ids": [2], "text": "Tap it twice to set the time both channels work from"},
+    {"ids": [5, 10], "text": "Sets how much of that channel's delayed signal is fed back in, up to 110%, so past full the loop grows rather than dies away"},
+    {"ids": [6, 9], "text": "Reverses the direction that channel's delay is read in"},
+    {"ids": [7, 8], "text": "Holds what is in that channel's delay line, so it loops round and nothing new is written in"},
+    {"ids": [11, 14], "text": "Sets how much of the input is written into that channel's delay line"},
+    {"ids": [12, 13], "text": "Crossfades that channel's output between the dry input and the delayed signal"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger sets the time both channels work from; two edges above 0.1V give the period"},
+    {"ids": [1, 6], "text": "That channel's input, up to 10V; with nothing in IN B, channel B takes whatever is in IN A"},
+    {"ids": [2, 5], "text": "The return of that channel's send and return loop: whatever is patched here is what goes into the delay line"},
+    {"ids": [3, 4], "text": "A trigger or a gate above 0.1V reverses that channel, as chosen on the menu"},
+    {"ids": [7, 8], "text": "A trigger or a gate above 0.1V holds that channel's loop, as chosen on the menu"},
+    {"ids": [9, 14], "text": "Moves that channel's delay time; the voltage is read upside down, so -5V lengthens it and +5V shortens it"},
+    {"ids": [10, 13], "text": "Adds to that channel's FEEDBACK knob, 0V to 5V covering the whole range"},
+    {"ids": [11, 12], "text": "Adds to that channel's DELAY FEED knob, 0V to 5V covering the whole range"}
+  ],
+  "outputs": [
+    {"ids": [0, 2], "text": "A 5V trigger at the start of each loop of that channel's delay"},
+    {"ids": [1], "text": "A 5V clock at the pinged time, taken from channel B"},
+    {"ids": [3, 6], "text": "That channel's output; with nothing patched into OUT B, OUT A carries both channels summed and halved"},
+    {"ids": [4, 5], "text": "That channel's send: the signal on its way into the delay line, for an effect to be patched between send and return"}
+  ],
+  "notes": [
+    "The two channels share one ping. Tapping the button or pinging the jack sets the time both work from, and each channel's TIME knob and switch then take their own multiple of it.",
+    "The send and return jacks form a loop around each delay line: patch an effect from SEND into RETURN and it is heard inside the feedback path."
+  ],
+  "menu": [
+    "Soft Clip A — when on, channel A's delay line compresses as it reaches full scale rather than clipping flat",
+    "Soft Clip B — when on, channel B's delay line compresses as it reaches full scale rather than clipping flat",
+    "AutoMute A — when on, channel A's input is faded down while it stays quiet and faded back up when it returns",
+    "AutoMute B — when on, channel B's input is faded down while it stays quiet and faded back up when it returns",
+    "Ping Method: Avg 4, Avg 2, 1:1, IgnoreJitter, Ignore%Change — sets how a new ping time is taken: averaged over four pings or two, taken as it comes, or refused if it strays too far",
+    "Hold A: Trig, Gate — sets whether channel A's HOLD jack toggles the hold or holds it only while the jack is high",
+    "Hold B: Trig, Gate — sets whether channel B's HOLD jack toggles the hold or holds it only while the jack is high",
+    "Rev. A: Trig, Gate — sets whether channel A's REVERSE jack toggles the direction or reverses only while the jack is high",
+    "Rev. B: Trig, Gate — sets whether channel B's REVERSE jack toggles the direction or reverses only while the jack is high",
+    "DelayFeed A Taper: Log, Lin — sets the law of channel A's DELAY FEED knob",
+    "DelayFeed B Taper: Log, Lin — sets the law of channel B's DELAY FEED knob",
+    "Time A Auto-UnQ: Off, On — when on, a voltage at channel A's TIME jack moves the delay smoothly instead of snapping to the knob's steps",
+    "Time B Auto-UnQ: Off, On — when on, a voltage at channel B's TIME jack moves the delay smoothly instead of snapping to the knob's steps",
+    "Stereo Mode A: Off, On — when on, channel A's buffer holds a stereo pair, its IN and RETURN jacks becoming the two sides",
+    "Stereo Mode B: Off, On — when on, channel B's buffer holds a stereo pair, its IN and RETURN jacks becoming the two sides",
+    "Crossfade A: 1ms, 2ms, 4ms, 8ms, 25ms, 100ms, 250ms — sets how long channel A's read head takes to fade across when the delay time changes",
+    "Crossfade B: 1ms, 2ms, 4ms, 8ms, 25ms, 100ms, 250ms — sets how long channel B's read head takes to fade across when the delay time changes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.1V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "±10V · continuous · one channel only",
+      "3": "high above 0.1V · stepped · one channel only",
+      "4": "high above 0.1V · stepped · one channel only",
+      "5": "±10V · continuous · one channel only",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads the IN A jack.",
+      "7": "high above 0.1V · stepped · one channel only",
+      "8": "high above 0.1V · stepped · one channel only",
+      "9": "±5V · continuous · one channel only",
+      "10": "0 to 5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "11": "0 to 5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "12": "0 to 5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "13": "0 to 5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "14": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "±10V · continuous · one channel only",
+      "5": "±10V · continuous · one channel only",
+      "6": "±10V · continuous · one channel only"
+    }
+  }
+}

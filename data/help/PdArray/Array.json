@@ -1,0 +1,52 @@
+{
+  "plugin": "PdArray",
+  "module": "Array",
+  "description": "A row of stored values that you draw with the mouse, record into or load from a wav file, and read out with a voltage that moves a cursor along it",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage span that sweeps a cursor from the start of the array to the end, +10V, ±5V or ±10V, and applies to POS and REC POS alike"},
+    {"ids": [1], "text": "Sets the voltage span that the bottom and top of the array stand for, +10V, ±5V or ±10V, and applies to the signal being recorded and to both outputs"},
+    {"ids": [2], "text": "Writes REC IN into the array while the button is held, or starts and stops the recording at each click when the recording mode is Toggle; it glows while recording"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the playback cursor along the array, the bottom of the range set by POS RANGE reading the first value and the top the last; a polyphonic cable gives every channel its own cursor"},
+    {"ids": [1], "text": "The signal written into the array while recording, read over the span set by I/O RANGE and clipped to it"},
+    {"ids": [2], "text": "Sets the point in the array that a recorded value is written to, read over the span set by POS RANGE"},
+    {"ids": [3], "text": "A high gate records REC IN for as long as it lasts, or a rising edge starts and stops the recording when the recording mode is Toggle; it reads high above 2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the stored value under the cursor with no smoothing, stepping from one value to the next"},
+    {"ids": [1], "text": "Carries the value under the cursor smoothed with a four-point curve through the neighbouring values, the same interpolation the tabread4~ object in Pure Data uses"}
+  ],
+  "notes": [
+    "drag across the display with the mouse to draw the array; the pointer's height sets the value under it, and a fast drag draws a straight line through the values it passes over",
+    "the number under SIZE is how many values the array holds; click it and type a new one, up to 999999, and new values are added at 0V",
+    "recording is monophonic: only the first channel of REC IN and REC POS is read, however many the cable carries",
+    "the array comes up holding ten values rising evenly from the bottom to the top, and Reset array contents on the menu puts them back",
+    "bypassing the module passes REC IN straight to both outputs",
+    "loading a wav file locks drawing, and Disable drawing on the menu unlocks it again"
+  ],
+  "menu": [
+    "Reset array contents — replaces the array with ten values rising evenly from the bottom to the top",
+    "Set array contents to zero — sets every value in the array to 0V, keeping its length",
+    "Sort array contents — reorders the values already in the array into a rising ramp",
+    "Add fade in/out to prevent clicks — fades the start and the end of the array towards 0V, over the number of values printed beside the item",
+    "Disable drawing — stops the mouse from changing the array, which loading a wav file switches on by itself",
+    "Recording mode: Gate, Toggle — chooses whether the REC input and button record while they are high or held, or start and stop the recording at each rising edge and click",
+    "Load .wav file... — reads a wav file into the array, keeping the current SIZE and filling only that many values, with the duration of the present array printed beside the item",
+    "Load .wav file and resize array... — reads a wav file into the array and sets SIZE to the length of the file, up to 999999 values",
+    "Data persistence: Save full array data to patch file, Save path to loaded sample, Don't save array data — chooses what the patch stores of the array",
+    "Interpolation at boundary: Constant, Mirror, Periodic — chooses what the smooth output reads past the ends of the array: the end value held, the array folded back, or the array repeated"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "one channel only",
+      "2": "continuous · one channel only",
+      "3": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

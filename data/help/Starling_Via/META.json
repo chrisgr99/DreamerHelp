@@ -1,0 +1,69 @@
+{
+  "plugin": "Starling_Via",
+  "module": "META",
+  "description": "A contour generator: one shape from a wavetable played once or over and over, used as an oscillator, an envelope, a modulation sequence or a drum voice",
+  "params": [
+    {"ids": [0], "text": "Sets the main time: a coarse tune in Audio range, the attack time in Envelope range, the cycle time in Sequence range, and the pitch of the drum when the module is in drum mode"},
+    {"ids": [1], "text": "Sets the second time: a fine tune in Audio range, the release time in Envelope range, the skew between rise and fall in Sequence range, and the decay when the module is in drum mode"},
+    {"ids": [2], "text": "Scans across the current wavetable, morphing the contour through the shapes stored in it"},
+    {"ids": [3], "text": "Sets one of the two voltages the main output runs between, -5V to +5V; patching the A input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the B input by -1 to +1 to set the other voltage the main output runs between; with nothing patched to B the input reads 5V, so the knob alone gives -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the Time 2 CV input before the module adds it, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the Wave shape CV input before the module adds it, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through what happens to the A and B levels at each contour event: Off, Track and hold A, Resample B, Track and hold A resample B, Track and hold A and B, or Resample A and B"},
+    {"ids": [8], "text": "Steps forward through the eight wavetables of the current range, wrapping round at the end"},
+    {"ids": [9], "text": "Steps through the frequency range the module works in: Audio, Envelope or Sequence"},
+    {"ids": [10], "text": "Steps through what a trigger does: No Retrigger, Hard Sync, A/R Model, Gated A/R Model or Pendulum. In drum mode it picks the drum instead: 808 Kick, Tom, Pluck or Tone"},
+    {"ids": [11], "text": "Steps backward through the eight wavetables of the current range, wrapping round at the start"},
+    {"ids": [12], "text": "Turns looping on or off, so the contour either repeats until stopped or runs once per trigger"},
+    {"ids": [13], "text": "Fires a trigger by hand, exactly as a rising edge at the Trigger input does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two voltages the main output runs between; patched here, it overrides the A knob"},
+    {"ids": [1], "text": "The other voltage the main output runs between, multiplied by the B knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Modulates the main time, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Modulates the second time, through the Time 2 CV scale knob"},
+    {"ids": [4], "text": "Scans the wavetable, through the Wave shape CV scale knob"},
+    {"ids": [5], "text": "A rising edge starts or restarts the contour; what exactly it does is set by the TRIG response button"},
+    {"ids": [6], "text": "Holds the contour where it is for as long as this is high"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The contour, scaled between the A and B levels"},
+    {"ids": [1], "text": "A 5V gate, high during the release or during the attack according to the Logic out menu setting"},
+    {"ids": [2], "text": "The contour itself as a voltage, without the A and B scaling"},
+    {"ids": [3], "text": "A 5V gate that follows which way the contour is travelling"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the B input is normalled to 5V and the B knob multiplies whatever arrives by -1 to +1. Unpatched the knob is a -5V to +5V source; patched it attenuverts the cable.",
+    "the main output is the module's own signal scaled between the A and B levels. Set both of those to 0V and the main output is silent whatever else the module is doing.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it.",
+    "the two triangle buttons either side of the word TABLE step the same wavetable setting, one forward and one back."
+  ],
+  "menu": [
+    "High during release — makes the gate output high while the contour is falling; found under the Logic out heading",
+    "High during attack — makes the gate output high while the contour is rising; found under the Logic out heading",
+    "Triangle — sends a plain triangle to the contour output instead of the shaped contour; found under Signal out, which appears when the frequency range is not Audio or looping is on",
+    "Contour — sends the shaped contour to the contour output; found under Signal out, which appears when the frequency range is not Audio or looping is on",
+    "Drum signal out: Triangle, Contour, Envelope, Noise — picks what the contour output carries while the module is in drum mode",
+    "Stock presets: Drum, Oscillator, AR Envelope, Looping AR, Modulation Sequence, Complex LFO — sets all six buttons at once to a factory combination",
+    "Select wavetable set — loads a wavetable file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "plugin": "4msCompany",
+  "module": "BWAVP",
+  "description": "Plays a .wav file straight off disk, reading it a piece at a time rather than loading the whole file",
+  "params": [
+    {"ids": [0], "text": "Starts playback; pressed again while the sample runs it restarts, stops or pauses it, whichever Play Retrig Mode is set to. Its light is green playing, yellow re-buffering, red on error"},
+    {"ids": [1], "text": "Turns looping on and off; with it on, the sample begins again at the end instead of stopping"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 0.5V does what pressing PLAY does"},
+    {"ids": [1], "text": "While this jack is above 0.5V the LOOP button's setting is reversed, so looping runs when the button is off and stops when it is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the sample, 5V peak, or the whole of a mono file"},
+    {"ids": [1], "text": "The right channel of the sample, 5V peak, or the whole of a mono file"},
+    {"ids": [2], "text": "5V for as long as the sample is playing, and 0V while it is stopped or paused"},
+    {"ids": [3], "text": "A 10ms 5V pulse each time the sample reaches its end, and each time playback is restarted or stopped"}
+  ],
+  "notes": [
+    "Nothing plays until a file is chosen: right-click the panel and use Load Sample... to pick a .wav.",
+    "The waveform drawing and the message strip above it are one display each, not controls; the play head, the buffer state and any file error are reported there."
+  ],
+  "menu": [
+    "Play Retrig Mode: Retrigger, Stop, Pause — sets what a play trigger does while the sample is already running",
+    "Waveform Zoom — sets how much of the recent audio the waveform drawing covers",
+    "Playback Buffer Threshold — sets how full the buffer has to be before playback starts, as a share of the buffer; lower starts sooner, higher survives a slow disk",
+    "Max Buffer Size — sets the memory the module may use for the sample, from 1MB to 128MB; a sample that fits is held whole and needs no further disk reads",
+    "Buffer Strategy: Fill to threshold, Fill completely — chooses whether reading from disk stops at the threshold or carries on until the buffer is full",
+    "Startup Delay (sec) — holds off any disk access for this many seconds after the patch loads, so several players can be made to load one after another",
+    "Load Sample... — opens a file chooser for the .wav file this module plays"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.5V · stepped · one channel only",
+      "1": "high above 0.5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "0 to 5V · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

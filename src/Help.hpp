@@ -12,8 +12,10 @@ menu options gathered at the end. Written by reading the manual rather than gene
 module, because a generated sheet can only repeat the port names that are already on the panel —
 which on the modules that most need explaining are numbers.
 
-The text lives in data/plugins/<PluginSlug>.yaml and is flattened into HelpText.cpp by
-tools/build.py. Edit the YAML, never the generated table.
+The database is data/help/<PluginSlug>/<ModuleSlug>.json, which ships with the plugin and is read
+one module at a time; what it was worked out from is in data/research and does not ship. A maker's
+own help files and a user's are read the same way and come first — see HelpData.cpp and
+design/help-database.md.
 
 NOT ON EVERY MODULE, AND THAT IS VISIBLE. A plugin with no entry yet gets a panel saying so
 rather than a guess. Nothing here is inferred: an entry exists because somebody read the source
@@ -26,110 +28,77 @@ Rack uses Option-drag to pan, and a mode that silently claims a gesture across s
 panel is one that breaks their module with no way to tell what did it. */
 #include "plugin.hpp"
 
+#include <map>
 #include <string>
 #include <vector>
 
-/** One module's text, in the generated table.
 
-AND WHICH LINE BELONGS TO WHICH JACK. The lines are written one per control, so a click on a
-control can be answered with the line that describes it — but only if something records that this
-input, by number, is the one line four is about. That is what the three index tables are: one
-entry per input, output and parameter, holding the line number that covers it, or -1 where
-nothing does.
+/** What kind of thing was clicked. In the order a help file lists them, so the numbers can index
+the per-kind tables below. */
+enum HelpKind { HELP_INPUT, HELP_OUTPUT, HELP_PARAM, HELP_LIGHT, HELP_KINDS };
 
-Written by hand in the JSON beside the text, because it cannot be derived: the makers who most
-need explaining are exactly the ones who leave every port unnamed. */
-struct HelpEntry {
-	const char* plugin;
-	const char* model;
-	const char* const* lines;
-	int count;
-	const short* inputs;
-	int inputCount;
-	const short* outputs;
-	int outputCount;
-	const short* params;
-	int paramCount;
-	/** WHAT EACH JACK CARRIES, as a Palette.hpp FAM_ number, or -1 where we did not say.
-	
-	Read off the panels while the help was written, and consulted by anything that colours a
-	jack — the same reading serving both. */
-	const signed char* inFamilies;
-	int inFamilyCount;
-	const signed char* outFamilies;
-	int outFamilyCount;
-	/** WHAT EACH INPUT EXPECTS, as an index into HELP_PROP_TEXT, or -1 where nothing is known.
+/** WHERE A PIECE OF TEXT CAME FROM — see design/help-database.md. In order of precedence: the
+maker's own help file, then a user's, then this plugin's database. */
+enum HelpSource { HELP_FROM_NONE, HELP_FROM_MAKER, HELP_FROM_USER, HELP_FROM_DATABASE,
+	HELP_SOURCES };
+const char* helpSourceName(HelpSource s);
 
-	A sensible voltage range, whether the signal is continuous or stepped, whether the port takes
-	polyphony: the questions the Rack forum keeps answering with a scope and a test rig. Two of the
-	three fall out of the family already recorded beside this, so they are worked out by
-	tools/build.py and pooled. SHORT, NOT A BYTE: there were a handful of distinct phrases while the
-	shapes were derived from families, and once agents began reading real ranges out of real source
-	the pool went past 127 in an afternoon and the table stopped compiling. */
-	const short* inProps;
-	int inPropCount;
-	/** THE SAME FOR OUTPUTS, where the question is what comes OUT rather than what to send in.
-	Unipolar or bipolar is the one a patch usually turns on: a 0-10V envelope into something
-	expecting ±5V is the commonest silent mistake in a rack. */
-	const short* outProps;
-	int outPropCount;
+struct HelpText {
+	std::string text;
+	HelpSource from = HELP_FROM_NONE;
+	HelpText() {}
+	HelpText(const std::string& t, HelpSource f) : text(t), from(f) {}
 };
 
-/** The pooled phrases the indices above point into. */
-extern const char* const HELP_PROP_TEXT[];
-extern const int HELP_PROP_TEXT_COUNT;
+/** EVERYTHING KNOWN ABOUT ONE MODULE, the three sources already laid over each other: for each
+item, the text of the first source that has any. */
+struct HelpModuleData {
+	HelpText description;
+	std::vector<std::string> notes;
+	HelpSource notesFrom = HELP_FROM_NONE;
+	/** Settings with no knob, reached from the module's right-click menu. */
+	std::vector<std::string> menu;
+	HelpSource menuFrom = HELP_FROM_NONE;
+	/** Per HelpKind, control number to text. */
+	std::map<int, HelpText> items[HELP_KINDS];
+	/** WHAT EACH JACK EXPECTS — range, shape, polyphony — for inputs and then outputs. Shown under
+	the jack's own line: the line says what it is for, this says what to send it. */
+	std::map<int, HelpText> expects[2];
+	/** The file each source was read from, where there was one. */
+	std::string files[HELP_SOURCES];
+	/** Files that were there and would not parse, said on the card. */
+	std::vector<std::string> problems;
+};
 
-/** THE GESTURE'S NAME, AS SHORT AS THE PANEL NEEDS IT.
+/** The help for a module, read on first asking and kept until helpReload. */
+const HelpModuleData& helpData(const std::string& plugin, const std::string& model);
+/** Forgets everything read, so an edited file is read again on the next card. */
+void helpReload();
+/** The database's own text for a module, without the maker's or a user's laid over it. */
+HelpModuleData helpDatabaseOnly(const std::string& plugin, const std::string& model);
 
-Symbols on a Mac, because a two-line row has about twelve characters to spend. DejaVuSans, which
-is the panel font, carries U+2325 and U+21E7 — checked, not assumed. Windows and Linux have no
-symbol anybody reads at a glance, so they get the words they are used to.
+/** Where each source's file for a module is, whether or not it exists. */
+std::string helpMakerFile(const std::string& plugin, const std::string& model);
+std::string helpUserFile(const std::string& plugin, const std::string& model);
+std::string helpUserFolder(const std::string& plugin);
+std::string helpDatabaseFile(const std::string& plugin, const std::string& model);
 
-OPTION, AND WHERE IT IS HANDLED IS THE WHOLE POINT. Cmd+Shift is Rack's clone-the-top-cable on
-a port, so a question there began a cable and took it back. Control cannot be used on a Mac at
-all: Rack's mouse callback turns Control-click into a RIGHT click and Control-Shift-click into a
-MIDDLE click, stripping the modifier, before any widget sees it.
+/** Writes a starting help file for every module of a plugin into a folder — see the export in
+design/help-database.md. Existing files are left alone. Returns a sentence saying what was done. */
+std::string helpExport(plugin::Plugin* p, const std::string& folder);
 
-Option looked impossible too, because ScrollWidget consumes option-click BEFORE its children so
-that option-drag can pan the rack. It is not: that only defeats a handler parented to the rack.
-This plugin's overlay is a child of the SCENE, added after the rack's scroll view, which is why
-option-click has always opened the clip-on menu on a port. The help is answered from that same
-overlay, so option reaches it untouched — and nothing of Rack's is claimed, since the only thing
-Rack does with option is pan, which still works everywhere except over a control.
-
-SPEECH IS HANDLED SEPARATELY, and has to be: `say` reads a symbol as nothing at all. helpSpeech
-turns these back into words on the way to the voice, which is the same split every other piece of
-panel shorthand gets — what is on screen matches what is printed, and the spoken copy is
-computed from it. */
-#if defined ARCH_MAC
-	#define HELP_MOD_NAME "⌥"
-#else
-	#define HELP_MOD_NAME "Alt"
-#endif
-
-/** What kind of thing was clicked. */
-enum HelpKind { HELP_INPUT, HELP_OUTPUT, HELP_PARAM };
-extern const HelpEntry HELP[];
-extern const int HELP_COUNT;
-
-/** The lines for a module, or an empty vector if nobody has written any. */
-std::vector<std::string> helpFor(const std::string& plugin, const std::string& model);
-
-/** What the help entries say this jack carries, as a Palette.hpp FAM_ number, or -1 if they say
-nothing. A port-colouring consumer asks this. */
-int helpFamilyFor(const std::string& plugin, const std::string& model, bool isOutput, int port);
-
-/** What this input expects — range, shape, polyphony — or empty where nothing is established.
-
-SHOWN UNDER THE LINE, NOT INSTEAD OF IT. The line says what the jack is for, which is what
-somebody asks first; this says what to send it, which is what they ask next and what Rack itself
-has never told anybody. */
-std::string helpPropsFor(const std::string& plugin, const std::string& model,
-	bool isOutput, int port);
-
-/** The one line covering this jack or knob, or empty if nothing does. */
-std::string helpForControl(const std::string& plugin, const std::string& model,
-	HelpKind kind, int index);
+/** THE GESTURE THAT ASKS FOR HELP, chosen in the module's menu; option-click by default. */
+struct HelpGesture {
+	int mods;
+	int button;
+	/** What the panel and the note call it, on this platform. */
+	const char* name;
+};
+extern const HelpGesture HELP_GESTURES[];
+extern const int HELP_GESTURE_COUNT;
+int helpGestureIndex();
+void helpSetGesture(int index);
+const HelpGesture& helpGesture();
 
 /** Keeps the click-catcher on the rack, and switches option-click help on or off.
 

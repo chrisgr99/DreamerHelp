@@ -1,0 +1,14 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Pulse",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "vco_base.cpp:97 channels() reads getChannels() here; :123 adds clamp(getVoltage(c),-5,5) as volts per octave"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "Pulse.cpp:39 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 0.01V", "step": "stepped", "why": "vco_base.cpp:139 getPolyVoltage(c) into PositiveZeroCrossing, threshold 0.01f in dsp/signal.hpp:76"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Pulse.cpp:52-53 setChannels(_channels) then a per-channel write of the square at the 5V amplitude constant in vco_base.hpp:53"}
+    }
+  }
+}

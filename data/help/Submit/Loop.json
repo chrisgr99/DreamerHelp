@@ -1,0 +1,55 @@
+{
+  "plugin": "Submit",
+  "module": "Loop",
+  "description": "A stereo sample looper: it plays one WAV file round and round, free running or stretched to fit a set number of bars against a clock",
+  "params": [
+    {"ids": [0], "text": "Sets how many bars the sample counts as, 1 to 24; at zero the count comes from the tempo read out of the filename, falling back to four bars"},
+    {"ids": [1], "text": "Sets the tempo the sample counts as, up to 300 BPM; at zero the tempo comes from the filename, falling back to 120 BPM"},
+    {"ids": [2], "text": "Shifts the playback speed by up to an octave either way, halving it at one end and doubling it at the other"},
+    {"ids": [3], "text": "Locks the playback speed to the clock so the sample fills the set number of bars; it comes up on"},
+    {"ids": [4], "text": "Plays the sample backwards; the change takes effect at the next bar boundary and the playhead snaps to that boundary"},
+    {"ids": [5], "text": "Sends the sample to the mono cue output and silences the main outputs; switching back fades the main outputs in over 1 second"},
+    {"ids": [6], "text": "Sends playback back to the start. With the clock switch on and a cable at CLK it takes effect on the next quarter-note pulse, otherwise at once"},
+    {"ids": [7], "text": "Moves the loop start point in eighths of the whole sample, 1 to 8; a change takes effect at the end of the current pass"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One pulse per quarter note. Its tempo is measured and used to stretch the sample across the set number of bars"},
+    {"ids": [1], "text": "A rising edge above 1V sends playback back to the start, on the same terms as the RESET button"},
+    {"ids": [2], "text": "Shifts the playback speed: 5V raises it by an octave and -5V lowers it by one"},
+    {"ids": [3], "text": "Offsets BARS by 2.4 bars per volt, holding the total between 1 and 24 bars"},
+    {"ids": [4], "text": "Offsets BPM by 30 BPM per volt, holding the total between 0 and 300 BPM"},
+    {"ids": [5], "text": "Offsets SHIFT by 0.8 steps per volt, holding the total between 1 and 8"},
+    {"ids": [6], "text": "Above 1V it flips the REV switch over, so the sample runs the opposite way to whatever the switch shows"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the sample, ±5V; silent while CUE is on"},
+    {"ids": [1], "text": "The right channel of the sample, ±5V; silent while CUE is on"},
+    {"ids": [2], "text": "The two channels summed to mono, carried here only while CUE is on and silent the rest of the time"}
+  ],
+  "notes": [
+    "nothing plays until a file is loaded. Right-click the module and choose Load WAV...",
+    "the tempo is read out of the filename and nothing else: the digits immediately before the letters bpm are taken as the tempo, and the bar count is worked out from that",
+    "the loaded file is embedded in the patch when the patch is saved, so it reopens without the original file, at the cost of a larger patch"
+  ],
+  "menu": [
+    "Load WAV... — opens a file chooser and loads the chosen WAV into the module",
+    "1 PPQN (Submit standard) — reads each pulse at CLK as one quarter note",
+    "4 PPQN (compatibility) — reads four pulses at CLK as one quarter note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "±5V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only"
+    }
+  }
+}

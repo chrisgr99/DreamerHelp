@@ -1,0 +1,65 @@
+{
+  "plugin": "4msCompany",
+  "module": "SHEV",
+  "description": "Two rise-fall envelope generators with a waveshaper and a VCA on each, able to cycle, to follow a voltage, or to be triggered",
+  "params": [
+    {"ids": [0, 5], "text": "Sets that side's envelope cycling, so it turns round at the end of each fall and rises again"},
+    {"ids": [1, 3], "text": "Picks which of three ranges that side's RISE slider covers: FAST, MED or SLOW"},
+    {"ids": [2, 4], "text": "Picks which of three ranges that side's FALL slider covers: FAST, MED or SLOW"},
+    {"ids": [6, 13], "text": "Scales that side's ENV output, passing the envelope through at the top, silencing it at centre and inverting it below that"},
+    {"ids": [7, 12], "text": "Sets what that side's TRIG jack does: ASR holds the envelope at the top while the jack is high, AR fires a rise and fall on each edge, and CYCLE makes the jack switch cycling instead"},
+    {"ids": [8, 10], "text": "Sets that side's rise time inside the range its three-way range switch picks"},
+    {"ids": [9, 11], "text": "Sets that side's fall time inside the range its three-way range switch picks"},
+    {"ids": [14, 15], "text": "Shifts that side's ENV output up or down, -10V to +10V"},
+    {"ids": [16, 19], "text": "An attenuverter, -100% to +100%, setting how much that side's SHAPE CV jack moves the shape"},
+    {"ids": [17, 18], "text": "Bends that side's envelope from exponential at the bottom, through linear at the centre, to logarithmic at the top"},
+    {"ids": [20, 22], "text": "An attenuverter, -100% to +100%, setting how much that side's TIME CV jack moves its rise time"},
+    {"ids": [21, 23], "text": "An attenuverter, -100% to +100%, setting how much that side's TIME CV jack moves its fall time"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "A rising edge above 2V starts that side's envelope again; with the mode switch on CYCLE, a level above 0.5V here also reverses the CYCLE button"},
+    {"ids": [2, 3], "text": "Moves that side's shape, through the attenuverter knob beside it, 10V covering the whole range"},
+    {"ids": [4, 7], "text": "Patching this jack puts that side's envelope into follow mode: instead of running to its own top it slews toward this voltage"},
+    {"ids": [5, 6], "text": "Moves that side's rise and fall times, each through its own attenuverter knob"},
+    {"ids": [8, 9], "text": "The signal passing through that side's VCA; with nothing in the B jack, side B takes whatever is in the A jack"},
+    {"ids": [10, 11], "text": "Patching this jack takes the VCA on that side away from its envelope and drives it from this voltage instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "8V for as long as envelope A is falling"},
+    {"ids": [1, 2], "text": "That side's shaped envelope after its LEVEL and OFFSET knobs"},
+    {"ids": [3], "text": "8V whenever envelope B is not falling"},
+    {"ids": [4, 8], "text": "That side's audio input through its VCA, the gain reaching about unity at the envelope's top"},
+    {"ids": [5, 7], "text": "That side's envelope before the shaper and before the LEVEL and OFFSET knobs, a straight 0V to 5V"},
+    {"ids": [6], "text": "Whichever of the two ENV outputs is the higher at each moment"}
+  ],
+  "notes": [
+    "The VCA on each side is driven by the shaped envelope, not the plain one, so the SHAPE slider changes the way the audio is opened as well as the envelope output."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · polyphonic",
+      "5": "bipolar · continuous · polyphonic",
+      "6": "bipolar · continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic\n\nunpatched it reads the AUDIO A input.",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 8V · polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "0 to 8V · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "0 to 5V · polyphonic",
+      "6": "polyphonic",
+      "7": "0 to 5V · polyphonic",
+      "8": "continuous · polyphonic"
+    }
+  }
+}

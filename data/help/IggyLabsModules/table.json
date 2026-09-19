@@ -1,0 +1,39 @@
+{
+  "plugin": "IggyLabsModules",
+  "module": "table",
+  "description": "A wavetable oscillator that plays a .wav file you load, splitting it into single cycles and sweeping between them; sixteen channels of polyphony",
+  "params": [
+    {"ids": [0], "text": "Shifts the pitch by up to half an octave either way, added to what the V/oct knob sets"},
+    {"ids": [1], "text": "Sweeps through the cycles of the loaded wavetable, 0 at the first cycle and 1 at the last, mixing the two nearest cycles in between"},
+    {"ids": [2], "text": "Sets the pitch in octaves, -3 to +3 from C4 at 261.63Hz with the knob centred"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the pitch by one octave per 5V, added to what the knobs and the V/oct input set"},
+    {"ids": [1], "text": "Moves the position through the wavetable, one full sweep per 10V, added to the pos knob and clamped to the ends of the table"},
+    {"ids": [2], "text": "Sets the pitch at 1V per octave, added to what the knobs set; the number of channels here is also the number of voices the oscillator runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator, plus and minus 5V, with as many channels as the V/oct input carries"}
+  ],
+  "notes": [
+    "a new module plays a single-cycle saw wave and stays on it until you load a wavetable from the right-click menu, either one of the four presets or a .wav file of your own",
+    "the pitch the knobs and both pitch inputs add up to is clamped to 3.5 octaves either side of C4, about 23Hz at the bottom and about 2960Hz at the top",
+    "the lamp on the panel is lit once a wavetable has been read, and stays dark while the built-in saw wave is playing",
+    "a file is cut into at most 256 cycles; anything past that is dropped, and a file shorter than one cycle is played as a single cycle of whatever length it has"
+  ],
+  "menu": [
+    "Current table — the name of the .wav file in use, with no extension, or Single Saw for the built-in wave; it cannot be clicked",
+    "Load wavetable: 256 samples/cycle, 512 samples/cycle, 1024 samples/cycle, 2048 samples/cycle — says how long one cycle of the file is, then opens a file chooser for the .wav to read",
+    "Preset wavetables: Harmonic, Chebyshev, Formant, Spectral Noise — loads one of the four wavetables that ship with the plugin, each read at 2048 samples per cycle"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V.",
+      "1": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "1V per octave · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

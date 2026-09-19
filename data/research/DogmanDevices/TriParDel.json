@@ -1,0 +1,22 @@
+{
+  "plugin": "DogmanDevices",
+  "module": "TriParDel",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "normal": "0V", "why": "TriParDel.cpp:123 reads the jack with getVoltageSum, which adds every channel of a polyphonic cable into one signal"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "0V", "why": "TriParDel.cpp:123 reads the jack with getVoltageSum, which adds every channel of a polyphonic cable into one signal"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "normal": "0V", "why": "TriParDel.cpp:123 reads the jack with getVoltageSum, which adds every channel of a polyphonic cable into one signal"},
+      "3": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "TriParDel.cpp:132 adds the jack, scaled by the trimmer, to the exponent of a base-two delay rate"},
+      "4": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "TriParDel.cpp:132 adds the jack, scaled by the trimmer, to the exponent of a base-two delay rate"},
+      "5": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "TriParDel.cpp:132 adds the jack, scaled by the trimmer, to the exponent of a base-two delay rate"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "TriParDel.cpp:197-205 writes one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "TriParDel.cpp:197-205 writes one channel with setVoltage"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "TriParDel.cpp:197-205 writes one channel with setVoltage"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "TriParDel.cpp:207 writes a third of the sum of the three lines on one channel"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "why": "TriParDel.cpp:209-212 calls setChannels(3) and writes the three lines"}
+    }
+  },
+  "comment": "The three Feedback knobs are read into a local variable that multiplies lastWet, but lastWet is a by-value parameter of the delay function whose assignment at TriParDel.cpp:174 never reaches the member it was copied from (TriParDel.cpp:122, 196-204). The member stays at its initial zero, so the feedback term is always zero and the knobs change nothing. The maker's own port description says the time jack is 1V per octave when the Time CV trimmer is at 100%, which the code bears out."
+}

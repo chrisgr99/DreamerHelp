@@ -1,0 +1,24 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "NamPlayer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "src/NamPlayer.cpp:125 getVoltage() with no channel loop; the voltage is divided by 5 for the model"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the input level knob", "why": "src/NamPlayer.cpp:121-124 rescale(cv, -5, 5, 0, 2) replacing the param when isConnected"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the output level knob", "why": "src/NamPlayer.cpp:252-255 rescale(cv, -5, 5, 0, 2) replacing the param when isConnected"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the THRES knob", "why": "src/NamPlayer.cpp:131-134 rescale(cv, -5, 5, -80, 0) replacing the param when isConnected"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the ATTCK knob", "why": "src/NamPlayer.cpp:137-140 rescale(cv, -5, 5, 0.1, 50) replacing the param when isConnected"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the REL knob", "why": "src/NamPlayer.cpp:143-146 rescale(cv, -5, 5, 10, 500) replacing the param when isConnected"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the HOLD knob", "why": "src/NamPlayer.cpp:149-152 rescale(cv, -5, 5, 10, 500) replacing the param when isConnected"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the BASS knob", "why": "src/NamPlayer.cpp:156-160 rescale(cv, -5, 5, 0, 1), then scaled to ±12dB"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the MID knob", "why": "src/NamPlayer.cpp:162-166 rescale(cv, -5, 5, 0, 1), then scaled to ±12dB"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the TRBL knob", "why": "src/NamPlayer.cpp:168-172 rescale(cv, -5, 5, 0, 1), then scaled to ±12dB"},
+      "10": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the PRES knob", "why": "src/NamPlayer.cpp:174-178 rescale(cv, -5, 5, 0, 1), then scaled to ±12dB"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the DPTH knob", "why": "src/NamPlayer.cpp:180-184 rescale(cv, -5, 5, 0, 1), then scaled to ±12dB"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/NamPlayer.cpp:262 setVoltage with no channel argument and no setChannels anywhere"}
+    }
+  },
+  "comment": "The equaliser is applied after the amp model, not before it (src/dsp/Nam.h:215-223). The noise gate and equaliser settings are read once per 128-sample block rather than every sample (src/NamPlayer.cpp:127), so a fast CV into any of those nine jacks is quantized to that block. Model loading happens on a background thread, so the module keeps passing audio while a large model loads."
+}

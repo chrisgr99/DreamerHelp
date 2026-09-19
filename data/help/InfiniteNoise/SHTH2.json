@@ -1,0 +1,45 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "SHTH2",
+  "description": "Two sample-and-hold sections in 2HP, each with a mode switch, an internal clock and a built-in noise source when nothing is patched in",
+  "params": [
+    {"ids": [0, 1], "text": "Chooses what that section does: S&H samples the input at each trigger, T&H passes the input while the clock is high and holds it while low, H&T does the reverse"},
+    {"ids": [2, 3], "text": "Sets the rate of that section's internal clock, from 0.0039Hz fully counter-clockwise to 1024Hz fully clockwise, and is ignored while a clock is patched"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The clock that section follows, read as a trigger in S&H and as a gate in the two tracking modes; a polyphonic clock samples each channel on its own"},
+    {"ids": [2, 3], "text": "The signal that section samples; with the jack empty the section samples its own white noise instead"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries the value that section is holding, or the input itself while it is tracking"}
+  ],
+  "notes": [
+    "with nothing patched into a signal input, that section samples white noise between -5V and +5V, which makes it a random voltage source without any other module",
+    "the number of output channels comes from the signal input if one is patched, otherwise from the clock input, otherwise from the noise polyphony on the menu",
+    "the held values are saved with the patch, so a section comes back holding what it held"
+  ],
+  "menu": [
+    "A-Noise range, B-Noise range — sets the range of that section's built-in noise, -5V to 5V unless you change it",
+    "A-Noise polyphony, B-Noise polyphony: 1 (monophonic) up to 16 channels — sets how many channels of independent noise that section makes when nothing is patched into its signal input",
+    "A-LFO high/low ratio, B-LFO high/low ratio: 10%/90% up to 90%/10% — sets how much of each internal clock cycle is high, which matters in the two tracking modes",
+    "A-LFO rate chaos, B-LFO rate chaos — picks a new random speed for each cycle of that section's internal clock, and does nothing while a clock is patched",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Auto select process quality — picks the process quality from the dialled-in rate and from which ports are patched, and greys out the manual choice while it is on",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\nunpatched it reads that section's internal clock; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads that section's internal clock; a negative voltage does nothing here.",
+      "2": "polyphonic\n\nunpatched it reads that section's own white noise.",
+      "3": "polyphonic\n\nunpatched it reads that section's own white noise."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

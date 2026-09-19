@@ -1,0 +1,15 @@
+{
+  "plugin": "Dintree-Virtual",
+  "module": "V101-Dual_Envelope",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "V101-Dual_Envelope.cpp:239-240 reads the input with getVoltage and compares it against 1.0"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "V101-Dual_Envelope.cpp:239-240 reads the input with getVoltage and compares it against 1.0"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "V101-Dual_Envelope.cpp:247 writes this output with setVoltage, from a level capped at MAX_LEVEL 65535 scaled by 0.000152588"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "V101-Dual_Envelope.cpp:247 writes this output with setVoltage, from a level capped at MAX_LEVEL 65535 scaled by 0.000152588"}
+    }
+  },
+  "comment": "The README says the clone runs at 12-bit resolution; the code carries the envelope as a 16-bit level, 0 to 65535, scaled to 0V-10V (V101-Dual_Envelope.cpp:243-244). The 1kHz rate the README gives is in the code as RT_TASK_RATE. The D knob is read only in ADSR mode: in AR and LFO the attack phase goes straight to release (V101-Dual_Envelope.cpp:438-444), and the S level is likewise never reached. Attack, decay and release times come from a 128-entry step table indexed by the knob, fastest at the counter-clockwise end. The two channels share nothing but the panel, so the A, D, S, R and MODE lines are each tagged to both of that control's knobs."
+}

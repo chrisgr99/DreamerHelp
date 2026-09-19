@@ -1,0 +1,22 @@
+{
+  "plugin": "Fundamental",
+  "module": "Random",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "why": "Random.cpp:155 reads inputs[RATE_PARAM] with getVoltage() and adds it to the rate; RATE_PARAM and RATE_INPUT are both index 0, so it is this jack that is read"},
+      "1": {"poly": false, "step": "continuous", "why": "Random.cpp:172 reads this input with getVoltage; Random.cpp:172 uses this input as a value"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Random.cpp:144 reads this input with getVoltage; Random.cpp:144 puts this input through a Schmitt trigger whose high threshold is 2V"},
+      "3": {"poly": true, "why": "Random.cpp:94 takes getChannels() on this input, and the outputs take their channel count from it"},
+      "4": {"poly": false, "step": "continuous", "why": "Random.cpp:108 reads this input with getVoltage; Random.cpp:108 uses this input as a value"},
+      "5": {"poly": false, "step": "continuous", "why": "Random.cpp:100 reads this input with getVoltage; Random.cpp:100 uses this input as a value"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Random.cpp:180 sets the channel count inside interpolateOutput, which writes this output per channel"},
+      "1": {"family": "cv", "poly": true, "why": "Random.cpp:180 sets the channel count inside interpolateOutput, which writes this output per channel"},
+      "2": {"family": "cv", "poly": true, "why": "Random.cpp:180 sets the channel count inside interpolateOutput, which writes this output per channel"},
+      "3": {"family": "cv", "poly": true, "why": "Random.cpp:180 sets the channel count inside interpolateOutput, which writes this output per channel"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Random.cpp:236 writes 10V or 0V with no channel argument and never calls setChannels on this output"}
+    }
+  },
+  "comment": "The rate input is read as inputs[RATE_PARAM] at Random.cpp:155 rather than inputs[RATE_INPUT]. Both constants are index 0, so the jack works, but the source names the wrong enum."
+}

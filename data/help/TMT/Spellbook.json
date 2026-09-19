@@ -1,0 +1,56 @@
+{
+  "plugin": "TMT",
+  "module": "Spellbook",
+  "description": "Sequencer that plays a plain-text table: one row per step, one column per output, written in the maker's RhythML notation",
+  "params": [
+    {"ids": [0], "text": "Switches the Index input between reading a phasor across the whole sequence and reading a row number as a voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V moves on one row, wrapping round at the end of the sequence"},
+    {"ids": [1], "text": "A rising edge above 1V returns to the first row, and the step inputs are ignored for the next 5ms"},
+    {"ids": [2], "text": "Sets the current row directly, the first row at 0V and the last at 10V, or by row number counted from zero when the switch is set to absolute; a cable here stops both step inputs from working"},
+    {"ids": [3], "text": "A rising edge above 1V moves back one row, wrapping round at the start of the sequence"},
+    {"ids": [4], "text": "The voltages written into the text of the current row when Record Trigger fires, one channel per column"},
+    {"ids": [5], "text": "A rising edge above 1V writes the Record In voltages into the current row; a mono cable writes every Record In channel at once, while each channel of a polyphonic cable writes only its own column"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Every column of the current row on one cable, with the channel count set by the polyphony mode on the menu"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "text": "The voltage the current row gives that column: the cell's own value, 10V for a gate, a 1ms pulse for a trigger, or the value held over from an earlier row when the cell is blank"},
+    {"ids": [17], "text": "The position in the sequence, 0V on the first row rising to 10V on the last"},
+    {"ids": [18], "text": "The number of the current row as a voltage, 1V on the first row and rising a volt per row"}
+  ],
+  "notes": [
+    "the module plays nothing until you click the black panel and type a sequence: one row per line, cells separated by commas, one column per output jack.",
+    "click outside the text to commit an edit and parse it, or press Ctrl and Enter to commit without leaving the text.",
+    "Ctrl and the bracket keys change the text size, and while the module is playing the text scrolls to keep the current row centred.",
+    "drag the right-hand edge of the panel to make the module wider or narrower.",
+    "a cell takes a decimal voltage, a percentage where 100% is 10V, a note name such as C4 or G#3, a MIDI number as m60, semitones as s7, cents as 100ct, or a frequency as 261.63Hz; C4 is 0V.",
+    "in a cell, W or the bar character holds 10V for the whole step, T or the caret gives 0V for 1ms then 10V for 1ms then 0V, and X or the underscore drops to 0V for 1ms and then holds 10V.",
+    "a cell the parser cannot read gives 0V, and anything after a question mark in a cell is a comment.",
+    "comments in the first row are taken as column labels and become the names Rack shows when you hover the output jacks.",
+    "a Page expander placed immediately to the right carries columns 17 onwards, and further Pages after it carry sixteen more each."
+  ],
+  "menu": [
+    "Widest row (constant channels) — the polyphonic output always carries as many channels as the widest row of the sequence",
+    "Non-blank cells only (variable) — the polyphonic output carries only the filled cells of the current row, packed into consecutive channels",
+    "Up to last non-blank (per row) — the polyphonic output carries the current row through to its last filled cell, blanks in the middle keeping their place; a new module starts here",
+    "Decimal (4 decimal places) — recorded voltages are written into the text as decimals such as 0.5833",
+    "Note names (quantized to semitones) — recorded voltages are rounded to the nearest semitone and written into the text as note names such as C4 or G#5"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "continuous · polyphonic",
+      "5": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "one channel only",
+      "17": "0 to 10V · one channel only",
+      "18": "one channel only"
+    }
+  }
+}

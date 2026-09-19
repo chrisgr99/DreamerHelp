@@ -1,0 +1,96 @@
+{
+  "plugin": "Tonecarver",
+  "module": "Traveler",
+  "description": "A generative sequencer on a grid: rovers travel across a matrix until they meet a wall, another rover or an obstacle, and a wall strike sounds the pitch the scale puts at that point of the wall",
+  "params": [
+    {"ids": [0], "text": "Sets the rate the rovers travel at when no cable is patched into the clock input, doubling every sixth of the sweep from 15 BPM at the left to 960 BPM at the right"},
+    {"ids": [1], "text": "Sets the chance that a rover striking a wall bounces off it; fully anticlockwise none do, and a rover that does not bounce passes through and reappears at the opposite wall on the same heading"},
+    {"ids": [2], "text": "Sets the chance that an obstacle acts on a rover that reaches it; fully anticlockwise the rover passes over every obstacle untouched"},
+    {"ids": [3], "text": "Sets the chance that a wall strike puts out a pitch and a gate; fully anticlockwise the rovers move in silence"},
+    {"ids": [4], "text": "Sets the chance that a rover holds its course rather than being deflected"},
+    {"ids": [5], "text": "Each press removes every obstacle from the matrix and leaves the rovers where they are"},
+    {"ids": [6], "text": "Each press toggles between running and paused; the lamp is lit while the rovers are moving"},
+    {"ids": [7], "text": "Each press reverses the direction every rover on the matrix is travelling in, and the lamp is lit while the reversal is in force"},
+    {"ids": [8], "text": "Sets how much of the voltage at the jack for the Wall? control reaches it, and in which direction"},
+    {"ids": [9], "text": "Sets how much of the voltage at the jack for the Obs? control reaches it, and in which direction"},
+    {"ids": [10], "text": "Sets how much of the voltage at the jack for the Note? control reaches it, and in which direction"},
+    {"ids": [11], "text": "Sets how much of the voltage at the jack for the Stdy? control reaches it, and in which direction"},
+    {"ids": [12], "text": "Each press removes every rover from the matrix and leaves the obstacles where they are"},
+    {"ids": [13], "text": "Each press removes the most recently placed occupant of the matrix, rover or obstacle"},
+    {"ids": [14], "text": "Sets how much of the voltage at the jack for the Note Length control reaches it, and in which direction"},
+    {"ids": [15], "text": "Sets the length of the gate a wall strike opens, one beat at the centre and two beats fully clockwise"},
+    {"ids": [16, 17, 18, 19], "text": "Reverses the order the scale runs along that wall, so the pitches descend where they ascended; the lamp is lit while the wall is reversed"},
+    {"ids": [20], "text": "Sets how much of the voltage at the jack for the Rows control reaches it, and in which direction"},
+    {"ids": [21], "text": "Sets how many rows of the matrix are in play, from one at the left to sixteen at the right"},
+    {"ids": [22], "text": "Each press toggles whether rovers are carried inward by a shrinking matrix. Lit, a rover the wall passes over is dragged in front of it; unlit, it keeps its cell and falls outside the active area."},
+    {"ids": [23, 24, 25, 26], "text": "Turns the scale along that wall by up to fifteen places in either direction, moving which pitch each point of the wall carries"},
+    {"ids": [27], "text": "Sets how much of the voltage at the jack for the Columns control reaches it, and in which direction"},
+    {"ids": [28], "text": "Sets how many columns of the matrix are in play, from one at the left to sixteen at the right"},
+    {"ids": [29], "text": "Each press undoes every turn the scales have taken and puts all four walls back to the positions their Rotate knobs ask for"},
+    {"ids": [30, 31, 32, 33], "text": "Turns the scale along that wall by this many places every time a rover strikes it, so the pitches drift as the patch runs"},
+    {"ids": [34, 35, 36, 37], "text": "Slides a rover along that wall by this many cells after it strikes, up to fifteen in either direction"},
+    {"ids": [38], "text": "Each press steps the pitch jacks through three settings: the lowest pitch of the strikes in that step, the highest, or one polyphonic channel per strike; the lit lamp shows which"},
+    {"ids": [39, 41, 47, 49], "text": "Selects that scale slot as the one the four walls use, and the lamp beside it is lit for the slot in force. While a cable is patched into the scale selector input this button does nothing."},
+    {"ids": [40, 42, 48, 50], "text": "Sets the root note of that scale slot in semitones, 0 to 120, and takes effect on the walls while that slot is the one selected"},
+    {"ids": [43, 44, 45, 46], "text": "Each press silences that wall, and the lamp is lit while it is silent"},
+    {"ids": [51], "text": "Toggles what the alternate travel speed means for rovers set to it: half the step rate, or twice it, with the lamp beside the printed marking showing which"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "An external clock for the rover steps, overriding the BPM knob once it has seen one edge. The edge test needs the voltage to fall to 0V and then reach a full 10V, so a 5V clock never registers."},
+    {"ids": [1], "text": "A voltage above 1V toggles running and paused the same way a press of the Run button does"},
+    {"ids": [2], "text": "A voltage above 1V reverses every rover's direction the same way a press of the Rev button does"},
+    {"ids": [3], "text": "Voltage over the wall bounce chance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [4], "text": "Voltage over the obstacle chance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [5], "text": "Voltage over the note chance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [6], "text": "Voltage over the steady chance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [7], "text": "Voltage over the gate length, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [8], "text": "Voltage over the number of rows, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [9], "text": "Voltage over the number of columns, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [10], "text": "Selects which of the four scale slots is in force, over 0 to 10V split into four equal bands; while a cable is here the four scale select buttons are ignored"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 10V gate for as long as a strike on that wall is sounding"},
+    {"ids": [4], "text": "A 10V gate while a strike is sounding on any of the four walls"},
+    {"ids": [5, 6, 7, 8], "text": "The pitch of a strike on that wall at a volt per octave, 0V for note 48; one channel in the lowest and highest settings, one channel per strike in the polyphonic setting"},
+    {"ids": [9], "text": "The pitch of a strike on any of the four walls at a volt per octave, 0V for note 48; one channel in the lowest and highest settings, one channel per strike in the polyphonic setting"}
+  ],
+  "notes": [
+    "The matrix starts empty and nothing sounds until you put a rover in it. Pick a rover or obstacle from the palette, then left-click a cell to place it; right-click a cell to clear it.",
+    "The palette and the matrix are each one custom widget rather than a grid of controls, so no cell of either can be clicked for help.",
+    "The rover icons set a starting direction and a normal or alternate speed. The obstacle icons mirror, deflect, detour, spin or teleport a rover that reaches them, or change its speed.",
+    "A newly placed Traveler comes up paused with the Run lamp dark, and with herding off, because both buttons carry a value their triggers read as a press on the first sample. Click Run to start.",
+    "Until a scale file is loaded each slot holds a seven note major scale and the slot's name reads blank, so the module makes pitches from the start.",
+    "The maker named none of this module's knobs, jacks, buttons or outputs, so hovering any of them shows an empty tooltip. The lines here are the only text there is."
+  ],
+  "menu": [
+    "Polyphony — sets the ceiling on channels the pitch jacks put out in the polyphonic mode, from 2 to 16",
+    "Scale 1, Scale 2, Scale 3, Scale 4 — each opens a file chooser to load a scale definition into that slot, and shows the file loaded there; the scale files are in the maker's repository"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "1V per octave · continuous · polyphonic",
+      "6": "1V per octave · continuous · polyphonic",
+      "7": "1V per octave · continuous · polyphonic",
+      "8": "1V per octave · continuous · polyphonic",
+      "9": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

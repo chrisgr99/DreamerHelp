@@ -1,0 +1,29 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "G32",
+  "description": "Turns one voltage into 32 gates, taken from the bits of that voltage or from a random number seeded by it",
+  "params": [
+    {"ids": [0], "text": "Shifts the read range to -5V to 5V in place of 0-10V"},
+    {"ids": [1], "text": "Picks how the gates are made: ieee takes the raw bits of the input as a floating point number, int spreads the input over a 32 bit whole number, rnd seeds one random number with that"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage the gates are made from, 0-10V, or -5V to 5V when BiPolar is on"},
+    {"ids": [1], "text": "With a cable patched here the gates are made on each rising edge and held between edges; with nothing patched they follow the input continuously"},
+    {"ids": [2], "text": "Selects the method, one volt per method, and overrides the method switch while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first sixteen bits, one per channel, 10V for a set bit and 0V for a clear one"},
+    {"ids": [1], "text": "The last sixteen bits, one per channel, 10V for a set bit and 0V for a clear one"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "stepped · one channel only",
+      "2": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

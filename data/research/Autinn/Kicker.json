@@ -1,0 +1,14 @@
+{
+  "plugin": "Autinn",
+  "module": "Kicker",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Kicker.cpp:107 takes getChannels() on this input and the output takes its channel count from it; Kicker.cpp:143 reads channel c with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Kicker.cpp:173 reads channel c of this input with getPolyVoltage; Kicker.cpp:175 raises 2 to that power, unclamped, so a negative voltage lowers the drum"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Kicker.cpp:108 sets this output's channel count from the trigger input"}
+    }
+  },
+  "comment": "The pitch sweep depth is the SWEEP knob times 5, over a knob range of 0 to 1.4, so up to 7 octaves (Kicker.cpp:119). The beater is white noise high-passed at 1750Hz (Kicker.cpp:125) with an envelope that is the pitch envelope to the fourth power (Kicker.cpp:212, :213). The output is a tanh times 5 (Kicker.cpp:218, :220). The channel count follows the trigger input alone, so a polyphonic pitch cable with no polyphonic trigger gives one voice."
+}

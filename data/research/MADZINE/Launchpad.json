@@ -1,0 +1,34 @@
+{
+  "plugin": "MADZINE",
+  "module": "Launchpad",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Launchpad.cpp:684, clockTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Launchpad.cpp:672, resetTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Launchpad.cpp:755-765, one dsp::SchmittTrigger per scene, process(getVoltage(), 0.1f, 1.f); a rising edge through 1V launches the first scene at once while QUANTIZE is off, and queues it to the next quantise point otherwise"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/Launchpad.cpp:740-752, a dsp::SchmittTrigger, process(getVoltage(), 0.1f, 1.f); a rising edge through 1V stops every playing cell at once while QUANTIZE is off, and queues the stop to the next quantise point otherwise"},
+      "11": {"poly": false, "range": "±10V", "why": "src/Launchpad.cpp:772-778, a single getVoltage() written into the recording buffer"},
+      "19": {"family": "audio", "poly": false, "range": "±10V", "why": "src/Launchpad.cpp:895-896, a single getVoltage() added into the mix"},
+      "20": {"family": "audio", "poly": false, "range": "±10V", "why": "src/Launchpad.cpp:895-896, a single getVoltage() added into the mix"},
+      "21": {"family": "audio", "poly": false, "range": "±10V", "why": "src/Launchpad.cpp:895-896, a single getVoltage() added into the mix"},
+      "22": {"family": "audio", "poly": false, "range": "±10V", "why": "src/Launchpad.cpp:895-896, a single getVoltage() added into the mix"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "src/Launchpad.cpp:878, the played sample times the row level, with no clamp"},
+      "8": {"family": "audio", "poly": false, "why": "src/Launchpad.cpp:901, the summed send, with no clamp"},
+      "9": {"family": "audio"},
+      "10": {"family": "audio"},
+      "11": {"family": "audio"},
+      "12": {"family": "audio", "poly": false, "why": "src/Launchpad.cpp:907, the summed mix plus both returns, with no clamp"},
+      "13": {"family": "audio"}
+    }
+  },
+  "comment": "The sixty-four cells are one custom display widget, not sixty-four parameters, so none of them appears in paramPos and no help click can reach one; their gestures are covered by Notes instead. A left click on a cell does one of several things according to its state: record, stop recording, play, stop, or cancel a queued action (src/Launchpad.cpp:413-463). A press held for one second clears the cell (src/Launchpad.cpp:492-495). A drag moves the recording to another cell, and Shift-drag copies it (src/Launchpad.cpp:1048-1055). Right-clicking a cell opens a menu of its own with ten playback speeds from -8x to 8x and a slider, which is the only place per-cell speed can be set (src/Launchpad.cpp:1293-1395). The quantise settings are Free, 1, 8, 16, 32 and 64 clocks. The row outputs carry the level knob but not the pan; the sends and the mix carry both. The two returns are added into the mix only, not into the row outputs or the sends. A cell's buffer is 480000 samples, ten seconds at 48000, and recording stops when it is full. Nothing in the output path is clamped. The panel prints LAUNCHPAD, Clock, Reset, Quantize, Send A, Send B, Pan, Level, Out, a line reading 'Right-click cell to set playback speed', Stop All, Send A, Return A, Send B, Return B and Mix. Lettering is drawn in code at src/Launchpad.cpp:1423-1522."
+}

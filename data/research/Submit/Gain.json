@@ -1,0 +1,23 @@
+{
+  "plugin": "Submit",
+  "module": "Gain",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Gain.cpp:120 reads getVoltage"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input", "why": "Gain.cpp:121 uses isConnected to fall back to the left input"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Gain.cpp:140 uses isConnected; Gain.cpp:141 clamps getVoltage to 0V to 10V; Gain.cpp:142 scales the fader by one minus a tenth of it"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Gain.cpp:147 uses isConnected and compares getVoltage against 1V"},
+      "4": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Gain.cpp:163 reads getVoltage; Gain.cpp:167 adds it straight to the left output"},
+      "5": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Gain.cpp:164 reads getVoltage; Gain.cpp:168 adds it straight to the right output"},
+      "8": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Gain.cpp:158 multiplies getVoltage by the FX Send knob"},
+      "9": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left return", "why": "Gain.cpp:159 uses isConnected to fall back to the left return"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Gain.cpp:167 sets one channel with setVoltage"},
+      "1": {"family": "audio", "poly": false, "why": "Gain.cpp:168 sets one channel with setVoltage"},
+      "2": {"family": "audio", "poly": false, "why": "Gain.cpp:171 sets one channel with setVoltage"},
+      "3": {"family": "audio", "poly": false, "why": "Gain.cpp:172 sets one channel with setVoltage"}
+    }
+  },
+  "comment": "Two inputs, FX Chain In L and FX Chain In R, are configured and are summed into the send outputs (Gain.cpp:171-172) but have no jack on the panel, so they read 0V and cannot be patched. The manual lists them among the module's inputs.\n\nThe return jacks are multiplied by the FX Send knob, with a muted channel counting as zero (Gain.cpp:156-160), the same arrangement Chain uses and the same one the manual does not mention.\n\nThe soft clipper folds anything past 5V towards a 10V asymptote rather than clamping (Gain.cpp:95-100). The manual calls the module's gain 'up to 10x', which matches Gain.cpp:72, and does not mention the clipper's threshold.\n\nThere is no pan: the channel keeps the balance of its two inputs."
+}

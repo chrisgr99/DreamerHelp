@@ -1,0 +1,36 @@
+{
+  "plugin": "Moffenzeef",
+  "module": "Kleztizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:202-204: keyNorm = param / 11.f + keyCV / 10.f, rounded and clamped to 0..11; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:208-210: modeNorm = param / 4.f + modeCV / 10.f, rounded and clamped to 0..4; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:246-248: voiceParam += (getVoltage() / 5.f) * 3.f then clamp(roundf(voiceParam), 0, 3); mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:240-242: invParam += (getVoltage() / 5.f) * 2.f then clamp(roundf(invParam), 0, 2); mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:186-190: cv = clamp(getVoltage(), -5.f, 5.f) then chordSelect = clamp(roundf(((cv + 5.f) / 10.f) * 6.f) + 1, 1, 7), which overrides the buttons; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "negative": "swings", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:331-334: rawCV is attenuated by the lead CV knob, offset added, then multiplied by 12 to give semitones; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:350-353: octaveParam += (getVoltage() / 5.f) * 4.f then clamp(octaveParam, 0.f, 4.f), rounded and shifted by -2; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "negative": "swings", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:331-334: rawCV is attenuated by the lead CV knob, offset added, then multiplied by 12 to give semitones; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:350-353: octaveParam += (getVoltage() / 5.f) * 4.f then clamp(octaveParam, 0.f, 4.f), rounded and shifted by -2; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "pitch"},
+      "3": {"family": "pitch"},
+      "4": {"family": "pitch", "poly": true, "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Kleztizer.cpp:302-316: outputs[CHORDOUT1_OUTPUT].setChannels(3) and setVoltage(v, channel) for three voices; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "5": {"family": "pitch"},
+      "6": {"family": "pitch"},
+      "7": {"family": "pitch"},
+      "8": {"family": "pitch"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"}
+    }
+  },
+  "comment": "Read from the maker's source at 2.6.1, commit e6a0c67. The mode and voicing names are read verbatim from Kleztizer::Kleztizer. The pedal jack carries key/12 - 2V and the bass jack the chord root an octave above that, dropping a further octave on the seventh degree. Output 4 is the only polyphonic port in the whole plugin: it is given a channel count and written at voltages[0], [1] and [2], which is what the panel's 1/POLY marking means. Exactly how each mode's degrees and inversions are built was not traced through, so the chord lines stay general."
+}

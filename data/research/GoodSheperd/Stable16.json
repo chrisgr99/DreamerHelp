@@ -1,0 +1,22 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "Stable16",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Stable16.cpp process(): clockTime = powf(2.0f, params[CLOCK_PARAM].getValue() + inputs[CLOCK_INPUT].getVoltage()), one voltage and no clamp"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Stable16.cpp process(): inputs[EXT_CLOCK_INPUT].isConnected() switches to it and clockTrigger.process(rescale(inputs[EXT_CLOCK_INPUT].getVoltage(), 0.1f, 1.f, 0.f, 1.f))"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Stable16.cpp process(): resetTrigger.process(rescale(params[RESET_PARAM].getValue() + inputs[RESET_INPUT].getVoltage(), 0.1f, 1.f, 0.f, 1.f))"}
+    },
+    "outputs": {
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Stable16.cpp process(): outputs[ROW_OUTPUT + y].setVoltage((gateIn && !mute[y] && stepValue[getMatrixPosition(y)]) ? 10.0f : 0.0f), no setChannels"}
+    }
+  },
+  "comment": "Nine outputs beyond the eight row jacks are declared in the source and never reach the panel: GATES_OUTPUT and the eight GATE_OUTPUT jacks are in the OutputIds enum, are counted by config(), and are neither added as widgets nor written in process(), so they have no position in the census and get no line or tag. The eight mute switches are the one group of controls the maker never passed to configParam; Rack's own config() gives every parameter a default 0 to 1 quantity, so the switches still toggle and still save, but each shows a blank name on hover. The 128 step buttons are configured without a name for the same reason and behave the same way. The Start and End knobs are configured 0 to 15 with no display offset while the panel numbers the columns 1 to 16, so every reading is one lower than the column it points at. dataToJson() writes the per-row step increment under the key \"increments\" and dataFromJson() reads \"increment\", so that value never restores; nothing in the module changes it from 1, so the mismatch has no effect today. onRandomize() replaces Rack's default instead of extending it, so randomising changes only the step pattern."
+}

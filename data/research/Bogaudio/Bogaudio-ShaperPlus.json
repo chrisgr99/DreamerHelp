@@ -1,0 +1,26 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-ShaperPlus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "ShaperPlus.cpp:11 channels() reads getChannels() here; shaper_core.cpp:87 getPolyVoltage(c) multiplied by the envelope"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "shaper_core.cpp:15 getPolyVoltage(c) into a bogaudio Trigger, thresholds 1V and 0.1V in rack_overrides.hpp:13"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the ATTACK knob"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the ON knob"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the DECAY knob"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the OFF knob"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the ENV knob"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "shaper_core.cpp:139 levelParam() clamps getPolyVoltage(c)/10 to 0..1 for the SIGNAL knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "shaper_core.cpp:86-87 setChannels then a per-channel write of the input times the envelope; ShaperPlus.cpp:10-11 takes the width from the SIGNAL input"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "shaper_core.cpp:90-92 setChannels then a per-channel write of the envelope clamped to 0 to 10V; ShaperPlus.cpp:10-11 takes the width from the SIGNAL input"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "shaper_core.cpp:93-94 setChannels then a per-channel write of 10V minus the envelope; ShaperPlus.cpp:10-11 takes the width from the SIGNAL input"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:99-100 setChannels then a per-channel 5V end-of-cycle pulse; ShaperPlus.cpp:10-11 takes the width from the SIGNAL input"},
+      "4": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:103-104 setChannels then a per-channel 5V while the attack stage runs"},
+      "5": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:107-108 setChannels then a per-channel 5V while the on stage runs"},
+      "6": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:111-112 setChannels then a per-channel 5V while the decay stage runs"},
+      "7": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "shaper_core.cpp:115-116 setChannels then a per-channel 5V while the off stage runs"}
+    }
+  }
+}

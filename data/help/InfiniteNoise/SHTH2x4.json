@@ -1,0 +1,56 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "SHTH2x4",
+  "description": "Two sample-and-hold sections in 4HP, each holding four signals at once from one clock, with a built-in noise source on every unpatched input",
+  "params": [
+    {"ids": [0, 1], "text": "Chooses what that section does: SH samples its inputs at each trigger, TH passes them while the clock is high and holds them while low, HT does the reverse"},
+    {"ids": [2, 3], "text": "Sets the rate of that section's internal clock, from 0.0039Hz fully counter-clockwise to 1024Hz fully clockwise, and is ignored while a clock is patched"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The clock that section follows, read as a trigger in SH and as a gate in the two tracking modes; with the B jack empty the B section follows the A clock"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "One of the four signals that section samples; with the jack empty that one samples white noise instead"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries the value held for the input beside it, or that input itself while the section is tracking"}
+  ],
+  "notes": [
+    "patching a clock into the A section alone drives all eight holds; patching the B section separately splits them, and with neither patched each section runs its own internal clock",
+    "every unpatched signal input samples white noise between -5V and +5V, so the module doubles as eight random voltage sources"
+  ],
+  "menu": [
+    "A-Noise range, B-Noise range — sets the range of that section's built-in noise, -5V to 5V unless you change it",
+    "A-Noise polyphony, B-Noise polyphony: 1 (monophonic) up to 16 channels — sets how many channels of independent noise that section makes when nothing is patched into its signal input",
+    "A-LFO high/low ratio, B-LFO high/low ratio: 10%/90% up to 90%/10% — sets how much of each internal clock cycle is high, which matters in the two tracking modes",
+    "A-LFO rate chaos, B-LFO rate chaos — picks a new random speed for each cycle of that section's internal clock, and does nothing while a clock is patched",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Auto select process quality — picks the process quality from the dialled-in rate and from which ports are patched, and greys out the manual choice while it is on",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads that section's internal clock; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the A clock, or this section's internal clock; a negative voltage does nothing here.",
+      "2": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "3": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "4": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "5": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "6": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "7": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "8": "polyphonic\n\nunpatched it reads white noise from this section.",
+      "9": "polyphonic\n\nunpatched it reads white noise from this section."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic"
+    }
+  }
+}

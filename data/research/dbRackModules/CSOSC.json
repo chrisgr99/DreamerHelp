@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "CSOSC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "CSOSC.cpp:80 takes the channel count from this input and CSOSC.cpp:93 adds it to the Freq knob"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "CSOSC.cpp:82 takes the channel count from this input when it is connected and CSOSC.cpp:89 maps -5V to 5V onto one turn"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "CSOSC.cpp:104-106 read it four channels at a time, scale it by a tenth and the Skew Amt knob, add the Skew knob and clamp the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "CSOSC.cpp:107-109 read it four channels at a time, scale it by a tenth and the Clip Amt knob, add the Clip knob and clamp the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "CSOSC.cpp:96 and CSOSC.cpp:98 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "CSOSC.cpp:129 sets this output's channel count; CSOSC.cpp:123 writes the phase over -5V to 5V"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "CSOSC.cpp:128 sets this output's channel count; CSOSC.cpp:125 writes five times the cosine"}
+    }
+  },
+  "comment": "The two shaping controls work on the phase rather than on the wave, CSOSC.cpp:19-27: Skew moves where the phase reaches its halfway point and Clip holds it still at the two ends. The frequency is held to half the sample rate, CSOSC.cpp:101. Oversampling is skipped while the Phs input is patched or the Wave output is empty, CSOSC.cpp:85."
+}

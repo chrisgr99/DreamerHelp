@@ -1,0 +1,46 @@
+{
+  "plugin": "kocmoc",
+  "module": "DDLY",
+  "description": "A digital delay of as much as 3 seconds, with a feedback path, a send and return insert point, and a crossfade that covers changes of delay time",
+  "params": [
+    {"ids": [0], "text": "Sets the delay time as the cube of the dial across a 3 second buffer; with a cable in CLK it picks a ratio of the clock period instead"},
+    {"ids": [1], "text": "Sets how much of the delayed signal is written back into the delay line, -1 to +1, with negative settings inverting it on the way round"},
+    {"ids": [2], "text": "Scales what the time CV input does to the delay time, from fully inverted through nothing to fully positive"},
+    {"ids": [3], "text": "Scales what the feedback CV input does to the feedback amount, from fully inverted through nothing to fully positive"},
+    {"ids": [4], "text": "Crossfades the output between the dry input and the delayed signal"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the delay time by a fifth of its voltage, scaled by its attenuverter"},
+    {"ids": [1], "text": "Shifts the feedback amount by a fifth of its voltage, scaled by its attenuverter"},
+    {"ids": [2], "text": "A clock here takes the delay time away from the knob: the knob then picks a ratio of the measured clock period, from an eighth of it up to double"},
+    {"ids": [3], "text": "What gets written into the delay line, in place of the input and feedback sum; with nothing patched the delay feeds itself as usual"},
+    {"ids": [4], "text": "The signal into the delay; a polyphonic cable is summed down to one channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input added to the feedback signal, which is what the module would write into the delay line"},
+    {"ids": [1], "text": "The dry input and the delayed signal mixed in the proportion D/W sets"}
+  ],
+  "notes": [
+    "the module is monophonic: the input is summed to one channel and both outputs carry one channel",
+    "SEND and RET form an insert: patch SEND out to an effect and its result back into RET, and the effect is placed inside the feedback loop",
+    "a clock needs two rising edges before the module can measure its period; the knob sets the delay time directly until that second edge arrives",
+    "with a cable in CLK the delay time knob selects from sixteen ratios of the clock period, an eighth to double in steps of an eighth",
+    "below the middle of the delay time dial the clock ratio is squared, which spreads the short divisions further apart",
+    "changing the delay time crossfades between two read points in the buffer rather than sweeping one, so the pitch of the delayed signal does not slide",
+    "everything written into the delay line passes through a DC blocking filter and is inverted on the way in, so a repeat comes back with its polarity flipped",
+    "bypassing the module passes IN straight through to OUT"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "high above 0V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "continuous · one channel only\n\nunpatched it reads the input plus the feedback signal.",
+      "4": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

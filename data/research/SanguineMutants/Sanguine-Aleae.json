@@ -1,0 +1,19 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Aleae",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "aleae.cpp:97 tests each channel of this input against 2V, and aleae.cpp:87 takes the module's channel count from its getChannels()"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "normal": "the input of section 1", "why": "aleae.cpp:84 swaps in the section 1 input when nothing is patched here; aleae.cpp:97 tests each channel against 2V"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "why": "aleae.cpp:102 reads this input with getPolyVoltage(channel), divides it by 10 and adds the knob"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "why": "aleae.cpp:102 reads this input with getPolyVoltage(channel), divides it by 10 and adds the knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "aleae.cpp:119 writes 10V or 0V per channel and aleae.cpp:129 sets the channel count"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "aleae.cpp:119 writes 10V or 0V per channel and aleae.cpp:129 sets the channel count"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "aleae.cpp:120 writes 10V or 0V per channel and aleae.cpp:132 sets the channel count"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "aleae.cpp:120 writes 10V or 0V per channel and aleae.cpp:132 sets the channel count"}
+    }
+  },
+  "comment": "This is a rewrite rather than a port of Émilie Gillet's Branches: src/aleae.cpp holds the whole coin toss, with no vendored DSP behind it. The trigger threshold is 2V, which the manual does not give. The probability total is deliberately left unclamped — the source says so in a comment at aleae.cpp:100 — because the comparison against a uniform random number between 0 and 1 saturates on its own. In toggle mode the new result is the exclusive-or of the toss and the previous result, so a heads keeps the current output and a tails changes it. The two mode lamps are lit at full brightness rather than at the plugin's button-lamp level: aleae.cpp:146 and aleae.cpp:148 multiply the enum by kSanguineButtonLightValue before the comparison rather than after it, so the expression reduces to a plain true or false. That is cosmetic and changes nothing a cable can carry."
+}

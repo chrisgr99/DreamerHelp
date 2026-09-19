@@ -1,0 +1,28 @@
+{
+  "plugin": "3HR",
+  "module": "ENVELOOP3HR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:410 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:411 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:412 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:413 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:414 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:415 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:416 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "ENVELOOPER.cpp:417 reads it with getPolyVoltageSimd, scales it by 0.1 times the CV knob and clamps the sum with the knob to 0 and 1"},
+      "8": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "ENVELOOPER.cpp:383 takes this port's getChannels() as the module's channel count, 386 reads it with getPolyVoltageSimd, and every stage test in Advance compares that value for equality with 10"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:394 sets this port's channel count from the gate input and 388 writes it with setVoltageSimd"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:395 sets this port's channel count from the gate input and 389 writes it with setVoltageSimd"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:396 sets this port's channel count from the gate input and 390 writes it with setVoltageSimd"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:397 sets this port's channel count from the gate input and 391 writes it with setVoltageSimd"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:398 sets this port's channel count from the gate input and 392 writes it with setVoltageSimd"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:399 sets this port's channel count from the gate input and 393 writes it with setVoltageSimd"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:400 sets this port's channel count from the gate input and 394 writes it with setVoltageSimd"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENVELOOPER.cpp:401 sets this port's channel count from the gate input and 395 writes it with setVoltageSimd"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. TWO THINGS A READER SHOULD KNOW AND CANNOT SEE. The gate is tested with '(Triggered[c] == 10)' in every stage of Advance() and in CheckResetA/CheckResetB, so only a gate of exactly 10V starts or holds an envelope; the range field says 'high above 1V' because the field has no spelling for an equality test, and the line itself gives the real rule. And the eight stage-time parameters are configured with ranges up to 3 (attack and decay) and 5 (release) at ENVELOOPER.cpp:341-356, but CollectSignals clamps knob plus CV to 0 and 1 at lines 410-417, so everything above one second is clamped away. The panel is lettered NVLOP3HR."
+}

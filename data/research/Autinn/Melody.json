@@ -1,0 +1,25 @@
+{
+  "plugin": "Autinn",
+  "module": "Melody",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Melody.cpp:539 takes getChannels() on this input and every output takes its channel count from it; Melody.cpp:589 reads channel c with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Melody.cpp:566 takes getChannels() on this input and Melody.cpp:571 reads channel c with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:557 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across the twelve keys"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:558 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across the thirteen modes"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:559 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across phrase lengths 4 to 32"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Melody.cpp:563 passes this input to attenuvertFloat, which at Melody.cpp:838 reads it with getVoltage and rescales -5V to 5V across the expression range 0 to 3"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:560 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across 0 to 100 per cent"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:561 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across 0 to 100 per cent"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "swings", "why": "Melody.cpp:562 passes this input to attenuvertInt, which at Melody.cpp:825 reads it with getVoltage and rescales -5V to 5V across 0 to 10 rest steps"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Melody.cpp:545 sets this output's channel count from the clock input; Melody.cpp:654 and :663 write channel c"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Melody.cpp:546 sets this output's channel count from the clock input; Melody.cpp:673 and :675 write 0V or 10V to channel c"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Melody.cpp:547 sets this output's channel count from the clock input; Melody.cpp:666 writes 0V or 10V to channel c"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Melody.cpp:549 sets this output's channel count from the clock input; Melody.cpp:632 writes a one-millisecond pulse to channel c"},
+      "4": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Melody.cpp:548 sets this output's channel count from the clock input; Melody.cpp:631 writes a one-millisecond pulse to channel c"}
+    }
+  },
+  "comment": "The generator is at Melody.cpp:680 onwards. The starting note is drawn from the tonic, third, fifth or leading tone with odds that depend on the phrase length (Melody.cpp:709 to :722); the step from note to note is clamped between -2 and 4 scale degrees, tightened as the melody wanders from the tonic (Melody.cpp:736 to :739). A phrase of six notes or more reserves its last note for the tonic, and one of ten or more is steered to a cadence two notes from the end (Melody.cpp:730, :746). The four expression settings are gate fractions of 0.40, 0.60, 0.87 and 0.99 of the step, and the knob rescales smoothly between the first and the last of them rather than snapping (Melody.cpp:34 to :37, :212, :819). The CV jacks write their parameter with setValue rather than being summed with it (Melody.cpp:831, :840), so each takes its knob over. The phrase, its durations, accents and glides are all saved with the patch, one set per voice."
+}

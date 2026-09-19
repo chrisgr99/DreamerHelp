@@ -1,0 +1,63 @@
+{
+  "plugin": "CVfunk",
+  "module": "Hammer",
+  "description": "A compact eight-channel clock ratio generator: each channel runs at the master tempo multiplied by one whole number and divided by another, set by a pair of up and down buttons",
+  "params": [
+    {"ids": [0, 4, 8, 12, 16, 20, 24, 28], "text": "Takes one off that channel's multiplier on each press, down to 0, at which the channel stops"},
+    {"ids": [1, 5, 9, 13, 17, 21, 25, 29], "text": "Adds one to that channel's multiplier on each press, up to 99"},
+    {"ids": [2, 6, 10, 14, 18, 22, 26, 30], "text": "Takes one off that channel's divisor on each press, down to 1"},
+    {"ids": [3, 7, 11, 15, 19, 23, 27, 31], "text": "Adds one to that channel's divisor on each press, up to 99"},
+    {"ids": [32], "text": "Sets the internal tempo, 0 to 480 BPM"},
+    {"ids": [33], "text": "Attenuverts the clock CV before it is added to the tempo knob"},
+    {"ids": [34], "text": "Rotates the eight ratio settings round the eight channels, -1 to 1 for a whole turn in either direction"},
+    {"ids": [35], "text": "Attenuverts the rotate CV before it is added to the rotate knob"},
+    {"ids": [36], "text": "Starts the clock on each press and stops it on the next"},
+    {"ids": [37], "text": "Returns every channel's phase to the start on each press and drops all the gates"},
+    {"ids": [38], "text": "Shifts every other beat of the master clock earlier or later, -99 to 99 per cent, which swings the whole set of channels together"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the tempo, added to the tempo knob at 10 BPM per volt through its attenuverter; the menu can read it as a volt per octave or as one volt per ten BPM instead"},
+    {"ids": [1], "text": "Rotates the ratio settings round the channels, scaled by a tenth and added to the rotate knob through its attenuverter"},
+    {"ids": [2], "text": "Sets the tempo from the time between two rises, in place of the tempo knob; it also reads the three chaining levels another CV funk clock sends, at 10.42V, 10.69V and 10.86V"},
+    {"ids": [3], "text": "A rise starts the clock, and the next stops it"},
+    {"ids": [4], "text": "A rise returns every channel's phase to the start and drops all the gates"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The master clock, a 10V gate half of each cycle high; in phasor mode it carries a 0-10V ramp over the cycle instead"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "That channel's clock, a 10V gate at the master tempo times its multiplier over its divisor, half of each cycle high; in phasor mode it carries a 0-10V ramp instead"},
+    {"ids": [9], "text": "Carries all sixteen gates at once: channels one to eight are the eight upright clocks and channels nine to sixteen the same eight inverted"},
+    {"ids": [10], "text": "Carries a 5V pulse on every master beat, and the three levels that start, stop and reset another CV funk clock: 10.42V for reset, 10.69V for start and 10.86V for stop"}
+  ],
+  "notes": [
+    "the clock does not run until it is started, by the ON/OFF button or a rise at the ON/OFF jack",
+    "the ratios are held in the module rather than on knobs, so the panel shows them on the RATIO display and the only way to change them is the up and down buttons",
+    "the gate width is fixed at half of each cycle; unlike the larger Syncro there is no width control"
+  ],
+  "menu": [
+    "Phasor Mode — replaces every gate with a 0-10V ramp over each cycle",
+    "Clock CV as V/oct — reads the clock CV as a volt per octave against the tempo knob, ignoring the attenuverter, so one volt doubles the tempo",
+    "Clock CV is 1V/10BPM — reads the clock CV as ten BPM per volt added to the tempo knob, ignoring the attenuverter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "0 to 10V · stepped · polyphonic",
+      "10": "0 to 10V · one channel only"
+    }
+  }
+}

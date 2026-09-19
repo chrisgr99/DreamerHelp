@@ -1,0 +1,41 @@
+{
+  "plugin": "RebelTech",
+  "module": "Stoicheia",
+  "description": "Two Euclidean sequencers sharing one clock, each spreading a chosen number of filled steps as evenly as it can over a chosen length",
+  "params": [
+    {"ids": [0], "text": "Rotates sequence α around its own length, moving where the filled steps fall without changing how many there are; it shifts by none up to one step short of the length"},
+    {"ids": [1], "text": "Rotates sequence β around its own length, moving where the filled steps fall without changing how many there are; it shifts by none up to one step short of the length"},
+    {"ids": [2], "text": "Sets how many steps sequence α runs before it comes round again, 1 to 16"},
+    {"ids": [3], "text": "Sets how many steps sequence β runs before it comes round again, 1 to 16"},
+    {"ids": [4], "text": "Sets how many of sequence α's steps are filled, from one of them to all of them, spread as evenly over the length as the two numbers allow"},
+    {"ids": [5], "text": "Sets how many of sequence β's steps are filled, from one of them to all of them, spread as evenly over the length as the two numbers allow"},
+    {"ids": [6], "text": "Chooses whether the two sequences both advance on every clock, or take turns: α runs its whole length, then β runs its whole length, and while one is running both outputs carry it"},
+    {"ids": [7], "text": "Sets what the α output does on a filled step: hold 10V for the whole step, put out nothing, or repeat the clock pulse; the maker's tooltip calls the holding setting Alternating, which it is not"},
+    {"ids": [8], "text": "Sets what the β output does on a filled step: hold 10V for the whole step, put out nothing, or repeat the clock pulse; the maker's tooltip calls the holding setting Alternating, which it is not"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 2V sends both sequences back to the step their rotation knob picks"},
+    {"ids": [1], "text": "Advances both sequences on each rising edge past 2V, and its high and low state is what the repeating setting of the mode switches passes on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries sequence α, 10V on a filled step and 0V otherwise, shaped by the α mode switch"},
+    {"ids": [1], "text": "Carries sequence β, 10V on a filled step and 0V otherwise, shaped by the β mode switch"},
+    {"ids": [2], "text": "Carries 10V for as long as the clock input is above its threshold and 0V below it"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched; the module has no clock of its own",
+    "while the two sequences are taking turns both outputs carry whichever one is running, so α and β put out the same thing",
+    "on the hardware the mode switches double as a reset; in this version they do not"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

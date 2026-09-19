@@ -1,0 +1,37 @@
+{
+  "plugin": "repelzen",
+  "module": "reburst",
+  "description": "Burst generator: every trigger fires a run of up to eight pulses, with a stepping CV alongside them, and the spacing can be tightened or scattered as the run goes on",
+  "params": [
+    {"ids": [0], "text": "Fires a burst by hand, as though a trigger had arrived at the burst input"},
+    {"ids": [1], "text": "Sets the time between pulses, reaching 1 second at the top on an exponential scale; with a cable in clk the knob instead scales the clock interval by a power of two, an eighth to sixteen times"},
+    {"ids": [2], "text": "Sets how many pulses a burst fires, a whole number from 0 to 8"},
+    {"ids": [3], "text": "Shortens each gap by dividing it by this figure once for every pulse so far, 1 to 2; at 1 the pulses stay evenly spaced and at 2 each gap is half the one before"},
+    {"ids": [4], "text": "Scatters the pulses, shifting each gap at random either way by a fraction of itself, 0 for exact spacing and 1 for a gap anywhere between nothing and twice its length"},
+    {"ids": [5], "text": "Picks what the CV output does across the burst: even steps up, even steps down, two patterns alternating about zero, positive random, negative random, a random walk, or random between -5V and 5V"},
+    {"ids": [6], "text": "Sets what the burst output carries: a gate lasting half the current gap, or a 10ms trigger"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the repetition modulation input, which is added to the repetitions knob; at full travel 10V there adds eight pulses"},
+    {"ids": [8], "text": "Attenuates and inverts the voltage at the time modulation input, which is added to the time knob; at full travel 10V there covers the knob's whole range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge starts a burst, restarting one that is already running"},
+    {"ids": [1], "text": "A clock here takes over the timing: each gap becomes the measured interval between ticks scaled by the time knob, from an eighth of that interval to sixteen times it"},
+    {"ids": [2], "text": "Adds to the repetitions knob through its attenuverter, 10V adding eight pulses at full travel"},
+    {"ids": [3], "text": "Adds to the time knob through its attenuverter; a cable in clk overrides this input entirely"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries each pulse of the burst at 10V, either as a gate half the current gap long or as a 10ms trigger, depending on the switch"},
+    {"ids": [1], "text": "A 10ms trigger at 10V, fired on the last pulse of the burst"},
+    {"ids": [2], "text": "The stepping CV set by the mode knob, holding each step until the next pulse and dropping to 0V when the burst ends; in the rising mode it reaches 5V on the last pulse"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

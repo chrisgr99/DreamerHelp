@@ -1,0 +1,21 @@
+{
+  "plugin": "Coalescent",
+  "module": "Lineages",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Lineages.cpp:769-773 knob + getVoltage(), clamp(-12, 5), 0.1*exp2"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "src/Lineages.cpp:762-766 clamp(getVoltage()*0.1, 0.0, 1.0)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Lineages.cpp:914-915 newInputTrigger.process(v, 0.1f, 1.f)"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Lineages.cpp:918-919 resetInputTrigger.process(v, 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Lineages.cpp:877 setChannels(leafCount); :882-886 traitSteps*step/12, clamped to ±10V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Lineages.cpp:36 PULSE_VOLTS 10.f, :35 PULSE_SECONDS 1e-3f; :978"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Lineages.cpp:35-36, :980"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/Lineages.cpp:35-36, :982"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Lineages.cpp:893-897 10*(k-1)/(n-1), clamped 0..10"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/Lineages.cpp:899-902 meanPairwise*DIVERSITY_VOLTS_PER_MUTATION 2.f, clamped 0..10"}
+    }
+  },
+  "comment": "No input is polyphonic; TRAITS is the only polyphonic output and carries one channel per leaf of the tree that is currently loaded, which is the SAMPLES value the tree was generated with rather than the current knob position. The yellow lamp beside NEW has no widget in the census's parameter list because it is a light rather than a control, so no click reaches it; the Note line carries what it means. With a cable in TIME, NEW and RESET install or replay at the voltage-selected age rather than at an endpoint, and emit no historical event pulses."
+}

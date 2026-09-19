@@ -1,0 +1,16 @@
+{
+  "plugin": "vanTies",
+  "module": "Bufke",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Bufke.cpp:125 resets on getVoltage() > 2.5f, a level test against 2.5V rather than a Schmitt trigger; no channel loop anywhere in the file", "range": "high above 2.5V", "step": "stepped", "negative": "ignored", "normal": "0V"},
+      "1": {"family": "cv", "poly": false, "why": "Bufke.cpp:173 pushes getVoltage() straight into the buffer, and line 155 uses isConnected() to switch the buffer on", "range": "±5V", "step": "continuous", "negative": "swings", "normal": "nothing recorded, the buffer switched off"},
+      "2": {"family": "cv", "poly": false, "why": "Bufke.cpp:152-153 adds 0.1 times getVoltage() to the delay knob", "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V"},
+      "3": {"family": "trigger", "poly": false, "why": "Bufke.cpp:165-166 sets the clock from getVoltage() > 2.5f, a level test against 2.5V rather than a Schmitt trigger", "range": "high above 2.5V", "step": "stepped", "negative": "ignored", "normal": "unclocked, the delay read as a time"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Bufke.cpp:116 setChannels from the parent Adje's channel count, or sixteen when there is no parent"}
+    }
+  },
+  "comment": "The reset input and the reset button carry no configInput or configParam name, so hovering either shows nothing; the panel prints 'reset' beside them. Bufke pushes the raw voltage into its buffer (Bufke.cpp:173) where Ad scales by a tenth first, so the output carries the same voltages that went in. With no parent the module falls back to sixteen channels and partial numbers 1 to 16 (lines 111-114). The buffer is four seconds long, matching Adje rather than Ad's eight."
+}

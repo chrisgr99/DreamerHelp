@@ -1,0 +1,20 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Arp31",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "Arp31c.cpp:619 read with getVoltage() alone, with no channel loop, fed at line 633 into a rack::dsp::SchmittTrigger at its 0V/1V default", "poly": false},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "Arp31c.cpp:709 takes getChannels() on this input and line 715 reads getVoltage(p) per channel as a 1V/octave pitch"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "why": "Arp31c.cpp:714 reads getVoltage(p) per channel of this input and keeps the pitch of any channel whose gate is above 0V"},
+      "3": {"family": "cv", "step": "stepped", "range": "0 to 7V", "why": "Arp31c.cpp:624 read with getVoltage() alone, with no channel loop, casts it to an unsigned int and clamps that between 0 and 7, one arpeggio pattern per whole volt", "poly": false},
+      "4": {"family": "cv", "step": "stepped", "why": "Arp31c.cpp:630 read with getVoltage() alone, with no channel loop and takes its sign against a 0.001V dead band, so the jack holds, releases or does nothing", "poly": false},
+      "5": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "Arp31c.cpp:621 read with getVoltage() alone, with no channel loop, fed at line 634 into a rack::dsp::SchmittTrigger at its 0V/1V default", "poly": false}
+    },
+    "outputs": {
+      "0": {"family": "pitch"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"}
+    }
+  },
+  "comment": "The pattern, arpeggio and length inputs are cast to an unsigned integer before they are clamped (Arp31c.cpp:624), so a negative voltage does not read as zero: it wraps to a very large number and the clamp then pins it to the last setting in the list. Send only positive voltages to those jacks."
+}

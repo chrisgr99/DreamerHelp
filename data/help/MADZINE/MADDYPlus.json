@@ -1,0 +1,69 @@
+{
+  "plugin": "MADZINE",
+  "module": "MADDYPlus",
+  "description": "A swung clock of its own driving three Euclidean tracks of envelopes, and three voltage sequencers that read the same five knobs but step in their own orders and at their own clocks",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, doubling per unit of travel from 0.125Hz at the bottom to 128Hz at the top; two clock pulses come out of every cycle"},
+    {"ids": [1], "text": "Moves the second of each pair of clock pulses, evenly spaced at the bottom of its travel and a quarter cycle from the first at the top"},
+    {"ids": [2], "text": "Sets how many steps all three patterns run for; the knob reads up to 48 but anything above 32 is treated as 32"},
+    {"ids": [3], "text": "Sets how long every track's envelope takes to fall, 10ms at the bottom of its travel to 1 second at the top, and bends the curve with it"},
+    {"ids": [4, 6, 8], "text": "Sets what share of the pattern's steps that track fires on, 0% to 100%"},
+    {"ids": [5, 7, 9], "text": "Divides or multiplies the clock for that track, from a quarter speed through the clock's own rate to four times it"},
+    {"ids": [10, 11, 12, 13, 14], "text": "One of the five voltages all three sequencers step between, -10V to +10V"},
+    {"ids": [15, 21, 26], "text": "Steps through the six orders that sequencer can take: Sequential, Custom, Jump, and each of those three run backwards"},
+    {"ids": [16, 22, 27], "text": "Sets how many of the five knobs that sequencer's pattern is built from, two at the bottom of its travel, then three, then four, then five"},
+    {"ids": [17], "text": "Replaces a share of the first sequencer's steps with a knob chosen at random, 0% to 100% of half the pattern length"},
+    {"ids": [18, 20, 25], "text": "Steps through the seven things that can clock that sequencer: the internal clock, any one of the three tracks, or any one of the three chain outputs"},
+    {"ids": [19], "text": "Returns all three tracks and all three sequencers to the start and sends 10V out of the reset jack for a tenth of a second"},
+    {"ids": [23, 28], "text": "Sets a delay in time rather than in steps on that sequencer's output, up to 1 second"},
+    {"ids": [24, 29], "text": "Sets how many steps behind its own reading that sequencer's output runs, 0 to 5"},
+    {"ids": [30], "text": "Attenuates and inverts the voltage at the clock jack, -1 to +1, before it is added to the FREQ knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the FREQ knob through the trimmer beside it, one volt per doubling of the rate"},
+    {"ids": [1, 2], "text": "Scales the time delay set by the CVD knob beside it, 0V giving no delay and 10V the full time; while this jack is patched the knob alone no longer sets it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms trigger at 10V on every pulse of the internal clock, swung pulses included"},
+    {"ids": [1], "text": "A 10V level for a tenth of a second whenever the reset button is pressed, for resetting other modules alongside this one"},
+    {"ids": [2, 3, 4], "text": "That track's envelope, 0V to 10V, fired on each step of its pattern that carries a hit"},
+    {"ids": [5], "text": "The envelope of track 1 for one full pass of its pattern, then track 2 for one full pass, and repeats"},
+    {"ids": [6], "text": "The envelope of track 2 for one full pass of its pattern, then track 3 for one full pass, and repeats"},
+    {"ids": [7], "text": "One full pass each of track 1, track 2, track 1 again and track 3, then repeats"},
+    {"ids": [8, 10, 12], "text": "The voltage of the knob that sequencer's current step points at"},
+    {"ids": [9, 11, 13], "text": "A 10ms trigger at 10V whenever that sequencer lands on a voltage different from the one before it"}
+  ],
+  "notes": [
+    "this module makes its own clock and needs nothing patched to run. There is no clock input, only a clock output and a jack that shifts the internal rate.",
+    "the three track jacks carry envelopes shaped by the DECAY knob, not triggers, even though the maker's tooltips call them T1, T2 and T3 Trigger.",
+    "the LENGTH knob is configured to 48 but process() clamps the figure to 32, so the top third of its travel does nothing.",
+    "the second and third sequencers share the five knobs and the custom pattern with the first, and differ only in their mode, density, clock source and the two delays."
+  ],
+  "menu": [
+    "Enter pattern (1-5): — a text field taking a run of the digits 1 to 5, which becomes the order the knobs are played in for any sequencer set to Custom",
+    "Reset to Default — puts the custom pattern back to the 32-step order the module starts with",
+    "Attack Time — a slider setting how long every track's envelope takes to rise, shared across all three",
+    "Track 1 Shift — rotates track 1's pattern by 0 to 4 steps",
+    "Track 2 Shift — rotates track 2's pattern by 0 to 4 steps",
+    "Track 3 Shift — rotates track 3's pattern by 0 to 4 steps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads the CVD knob alone; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads the CVD knob alone; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V",
+      "4": "0 to 10V",
+      "8": "±10V · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "±10V · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "13": "stepped"
+    }
+  }
+}

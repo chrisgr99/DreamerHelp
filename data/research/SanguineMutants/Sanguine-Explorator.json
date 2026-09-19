@@ -1,0 +1,35 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Explorator",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "explorator.cpp:154 reads this input four channels at a time and explorator.cpp:149 takes the section's channel count from its getChannels()"},
+      "1": {"poly": true, "why": "explorator.cpp:189 reads this input four channels at a time and explorator.cpp:183 takes the section's channel count from the larger getChannels() of the two"},
+      "2": {"poly": true, "why": "explorator.cpp:190 reads this input four channels at a time and explorator.cpp:183 takes the section's channel count from the larger getChannels() of the two"},
+      "3": {"poly": true, "why": "explorator.cpp:220 reads this input four channels at a time and explorator.cpp:215 takes the section's channel count from the largest getChannels() of the three"},
+      "4": {"poly": true, "why": "explorator.cpp:221 reads this input four channels at a time and explorator.cpp:215 takes the section's channel count from the largest getChannels() of the three"},
+      "5": {"poly": true, "why": "explorator.cpp:222 reads this input four channels at a time and explorator.cpp:215 takes the section's channel count from the largest getChannels() of the three"},
+      "6": {"poly": true, "why": "explorator.cpp:171 reads this input four channels at a time and explorator.cpp:166 takes the section's channel count from its getChannels()"},
+      "7": {"poly": true, "why": "explorator.cpp:204 reads this input four channels at a time and explorator.cpp:200 takes the section's channel count from the larger getChannels() of the two"},
+      "8": {"poly": true, "why": "explorator.cpp:205 reads this input four channels at a time and explorator.cpp:200 takes the section's channel count from the larger getChannels() of the two"},
+      "9": {"poly": true, "normal": "the module's noise generator", "why": "explorator.cpp:270 reads this input per channel when it is connected, and explorator.cpp:272 substitutes the noise channel when it is not"},
+      "10": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "explorator.cpp:268 passes this input per channel to a Rack SchmittTrigger, whose default high threshold is 1V, and explorator.cpp:239 takes the section's channel count from its getChannels()"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "explorator.cpp:155 writes four channels at a time and explorator.cpp:161 sets the channel count"},
+      "1": {"poly": true, "why": "explorator.cpp:156 writes four channels at a time and explorator.cpp:162 sets the channel count"},
+      "2": {"poly": true, "why": "explorator.cpp:157 writes four channels at a time and explorator.cpp:163 sets the channel count"},
+      "3": {"poly": true, "why": "explorator.cpp:191 writes four channels at a time and explorator.cpp:196 sets the channel count"},
+      "4": {"poly": true, "why": "explorator.cpp:192 writes four channels at a time and explorator.cpp:197 sets the channel count"},
+      "5": {"poly": true, "why": "explorator.cpp:230 writes four channels at a time and explorator.cpp:234 sets the channel count"},
+      "6": {"poly": true, "why": "explorator.cpp:172 writes four channels at a time and explorator.cpp:178 sets the channel count"},
+      "7": {"poly": true, "why": "explorator.cpp:173 writes four channels at a time and explorator.cpp:179 sets the channel count"},
+      "8": {"poly": true, "why": "explorator.cpp:174 writes four channels at a time and explorator.cpp:180 sets the channel count"},
+      "9": {"poly": true, "why": "explorator.cpp:206 writes four channels at a time and explorator.cpp:211 sets the channel count"},
+      "10": {"poly": true, "why": "explorator.cpp:207 writes four channels at a time and explorator.cpp:212 sets the channel count"},
+      "11": {"family": "audio", "poly": true, "why": "explorator.cpp:284 writes one noise value per channel and explorator.cpp:247 sets the channel count"},
+      "12": {"poly": true, "why": "explorator.cpp:280 writes the held voltages and explorator.cpp:245 sets the channel count"}
+    }
+  },
+  "comment": "This is a rewrite rather than a port: src/explorator.cpp carries all six sections as plain arithmetic on Rack's SIMD voltage accessors, with no vendored Links or Kinks code. Most of the jacks are left without a family because what they carry is whatever you patch: a multiple, an adder and a rectifier pass audio and control voltage alike. The sample and hold trigger is a Rack SchmittTrigger on the raw voltage, so it reads high above 1V. The section only holds a channel's reading while its trigger cable is present: explorator.cpp:265 skips the whole sampling loop when nothing is patched to the trigger. The averager is off by default, so the 3:1 section sums rather than averages until the HW button is pressed."
+}

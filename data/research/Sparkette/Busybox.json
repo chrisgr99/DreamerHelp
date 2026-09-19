@@ -1,0 +1,29 @@
+{
+  "plugin": "Sparkette",
+  "module": "Busybox",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Busybox.cpp line 328, a default SchmittTrigger on getVoltage() with no channel argument"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "the envelope does not run", "why": "src/Busybox.cpp lines 142-145 and 154, getChannels then readVoltages, and gates[i] > 0.5f; the whole routine returns early when getChannels is 0"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Busybox.cpp lines 216-218, vca[i] multiplied by envelope[i]/10 over getChannels"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "the envelope does not run", "why": "src/Busybox.cpp lines 142-145 and 154 through the second ADSR_VCA, set up at lines 316-324"},
+      "4": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Busybox.cpp lines 216-218 through the second ADSR_VCA, set up at lines 316-324"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp lines 87-88, y*10 less 5 when bipolar, written with setVoltage"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp line 89, (bipolar ? 0 : 10) - y"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp lines 87-88"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp line 89"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Busybox.cpp lines 87-88 with the square wave at line 104"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Busybox.cpp line 89 with the square wave at line 104"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp lines 87-88 with the sine at line 107"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp line 89 with the sine at line 107"},
+      "8": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "src/Busybox.cpp lines 336-342, 10*uniform less 5 when bipolar, setChannels(noise_channels)"},
+      "9": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp lines 221-222, setChannels(nchan) from the gate jack then writeVoltages of the envelope"},
+      "10": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "src/Busybox.cpp lines 223-229, setChannels from the VCA input's own channel count"},
+      "11": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/Busybox.cpp lines 221-222 through the second ADSR_VCA"},
+      "12": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "src/Busybox.cpp lines 223-229 through the second ADSR_VCA"}
+    }
+  },
+  "comment": "src/Busybox.cpp at commit b90cd69. The oscillator frequency knobs run -3 to 8 and are read as two to that power (line 83), giving 0.125Hz to 256Hz with a default of 4Hz. The envelope time knobs run 0 to 4 and are displayed in milliseconds, so 0 to 4 seconds. Two faults worth knowing. First, the attack knob comes up fully counter-clockwise at zero, and the attack stage divides by it at line 202 before the stage-advance test can move past it, so the first sample of every note taken with the attack at zero computes a division by zero; turn the attack off zero to avoid it. Second, an inverted oscillator output is the twin of its own output and cannot be set separately: unipolar it is 10V less the output, bipolar it is the negative. The noise source is only computed while its output is patched (line 336). The VCA outputs take their channel count from the VCA input rather than from the gate, and with the gate carrying one channel that single envelope is applied to every VCA channel (line 218). The panel draws the four wave shapes beside their knobs, prints LFO, Reset, Noise and ADSR/VCA, and names none of the eight envelope knobs."
+}

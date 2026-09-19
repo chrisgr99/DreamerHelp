@@ -1,0 +1,17 @@
+{
+  "plugin": "VostokInstruments",
+  "module": "Path",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "negative": "swings", "normal": "10V", "why": "src/Path.cpp:58 reads this input with getNormalVoltage(10.f)"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "range": "±5V", "sumRange": "0 to 1V", "why": "src/Path.cpp:52-54 reads this input with getVoltage, divides by 5, scales by the ROUTE CV knob, applies the +/- switch and clamps the sum with the slider to 0-1"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "src/Path.cpp:59-62 writes each output with setVoltage, the input times a gain from gainsForChannels at src/plugin.cpp:20-27"},
+      "1": {"poly": false, "why": "src/Path.cpp:59-62 writes each output with setVoltage, the input times a gain from gainsForChannels at src/plugin.cpp:20-27"},
+      "2": {"poly": false, "why": "src/Path.cpp:59-62 writes each output with setVoltage, the input times a gain from gainsForChannels at src/plugin.cpp:20-27"},
+      "3": {"poly": false, "why": "src/Path.cpp:59-62 writes each output with setVoltage, the input times a gain from gainsForChannels at src/plugin.cpp:20-27"}
+    }
+  },
+  "comment": "The signal input and the four outputs carry whatever you patch in, so they are given no family. sumRange for the ROUTE CV input is written as a voltage range because the field takes only those four spellings; the quantity it clamps is the 0-to-1 routing position, not a voltage. The crossfade law is a cubic in gainsForChannels (src/plugin.cpp:20-27) with per-channel gains of 0.89, 0.865, 0.865 and 0.89; outputs 1 and 4 are clamped at their outer ends so the routing does not wrap. The maker's own second-line descriptions on the two inputs read 'Normalized to 10V' and 'Expects 5V peak-to-peak, combines with ROUTE slider', and both are borne out by the code."
+}

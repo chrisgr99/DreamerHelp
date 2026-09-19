@@ -1,0 +1,40 @@
+{
+  "plugin": "DarkProcessIndustries",
+  "module": "Stones",
+  "description": "An ADSR envelope generator that can also cycle on its own, with the envelope and its inverse on separate jacks",
+  "params": [
+    {"ids": [0], "text": "Sets how long the envelope takes to climb to full, 1ms to 5 seconds"},
+    {"ids": [1], "text": "Sets how long the envelope takes to fall from full to the sustain level, up to 5 seconds"},
+    {"ids": [2], "text": "Sets the level the envelope holds at while the gate is high, from nothing to full"},
+    {"ids": [3], "text": "Sets how long the envelope takes to fall back to nothing after the gate goes low, up to 5 seconds"},
+    {"ids": [4], "text": "Starts the envelope again each time its decay finishes, and while it is on the Trig input is not read at all"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Starts the envelope on a rising edge above 1V and releases it once the voltage falls back to 1V or below"},
+    {"ids": [1], "text": "Adds to the attack time at one second per volt, and the total is held at 1ms at the shortest"},
+    {"ids": [2], "text": "Adds to the decay time at one second per volt"},
+    {"ids": [3], "text": "Adds to the sustain level, 1V covering the whole of the S knob, and nothing clamps the total"},
+    {"ids": [4], "text": "Adds to the release time at one second per volt"}
+  ],
+  "outputs": [
+    {"ids": [0, 2], "text": "The envelope, 0V to 10V"},
+    {"ids": [1], "text": "The envelope turned upside down, 10V while the envelope is at rest and 0V while it is at full"}
+  ],
+  "notes": [
+    "nothing comes out until either a trigger reaches Trig or Cycle is switched on; with neither, the envelope never starts"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V, which holds the envelope released; a negative voltage does nothing here.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V, so the knob alone; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

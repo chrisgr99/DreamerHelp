@@ -1,0 +1,58 @@
+{
+  "plugin": "Leviathan",
+  "module": "Iris",
+  "description": "An oscillator that turns a picture into a wavetable: each row of the image becomes one waveform, and a scan control sweeps down the rows",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, from 10Hz at the far left to 10000Hz at the far right, and starts at 261.63Hz; in LFO mode the same travel covers 0.01Hz to 100Hz"},
+    {"ids": [1], "text": "Detunes the oscillator by up to a hundred cents either side of the pitch set by FREQ"},
+    {"ids": [2], "text": "Chooses which row of the picture is read as the waveform, the top row at the far left and the bottom row at the far right"},
+    {"ids": [3], "text": "Sets how much of the voltage at the SCAN jack is added to the SCAN knob, and reverses its sign anticlockwise of centre; at centre the jack does nothing"},
+    {"ids": [4], "text": "Sets how much of the voltage at the LIN FM jack reaches the frequency, none at the far left"},
+    {"ids": [5], "text": "Drops the pitch range to 0.01Hz through 100Hz, so the module works as a modulation source rather than an oscillator"},
+    {"ids": [6], "text": "Snaps FREQ to whole octaves above and below middle C instead of letting it run smoothly, and starts off"},
+    {"ids": [7], "text": "Picks what the SYNC jack does: in the up position an edge restarts the waveform from the beginning, in the down position it reverses the direction of travel instead"},
+    {"ids": [8], "text": "Opens the settings that turn the picture into waveforms: two smoothing sliders, how the rows are levelled, which way up they are read, whether flat rows are trimmed, and whether the result is inverted"},
+    {"ids": [9], "text": "Steps through which part of the picture's colour becomes the waveform: all three together, then red, then green, then blue; the four lamps beside it say which is chosen"},
+    {"ids": [10], "text": "Opens a short menu choosing where the picture comes from: an image file you pick, or the Nautiloid placed to the left of this module"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch at a volt per octave, added to FREQ and FINE; the number of channels on this jack sets how many voices the module runs"},
+    {"ids": [1], "text": "Modulates the frequency as a fraction of the current pitch, scaled by the LIN FM knob; the signal is stripped of any steady offset first, so only its swing counts"},
+    {"ids": [2], "text": "Moves the scan down and up the picture, ten volts covering the whole image at the attenuverter's full setting; it is added to the SCAN knob and the total is held between the top and bottom rows"},
+    {"ids": [3], "text": "A rising edge above 1V restarts the waveform, or reverses it when SOFT is chosen"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The row of the picture chosen by SCAN, read as a waveform at the pitch the module is set to, swinging ±5V"},
+    {"ids": [1], "text": "The same waveform a quarter of a cycle ahead of OUT, swinging ±5V"}
+  ],
+  "notes": [
+    "with no picture loaded the module makes sound anyway: the built-in table sweeps sine to triangle to saw to square as SCAN is turned, which is also what Clear image puts back",
+    "the upper dark rectangle shows the picture the wavetable was made from, and the lower one draws the waveform currently being read; neither can be clicked",
+    "to use a fractal instead of a file, place a Nautiloid immediately to the left and choose it from the source button; panning and zooming the fractal then reshapes the table as you go"
+  ],
+  "menu": [
+    "Load image... — opens a file chooser for the picture the wavetable is built from",
+    "Reload image — reads the picture off disk again, picking up any change made to the file",
+    "Clear image — throws the picture away and goes back to the built-in sine, triangle, saw and square table",
+    "Embed image source in patch — saves the picture inside the patch file, so the patch sounds right on a machine that does not have the image",
+    "Seam smoothing — a slider setting how much the join between the end and start of each waveform is rounded off",
+    "Wave smoothing — a slider setting how much each waveform is smoothed along its length, trading detail for a quieter tone; it is on the image options button, not the panel menu",
+    "Normalize: Balanced, Global, Per row, Off — sets how the levels of the rows are evened out; it is on the image options button, not the panel menu",
+    "Row order: Top to bottom, Bottom to top — sets which end of the picture SCAN starts at; it is on the image options button, not the panel menu",
+    "Trim flat rows: Off, Gentle, Medium, Aggressive — drops rows of the picture with too little variation to make a waveform; it is on the image options button, not the panel menu",
+    "Per-row DC removal — takes the steady offset out of each row, so no waveform is off centre; it is on the image options button, not the panel menu",
+    "Invert conversion — turns the picture's light and dark the other way round before the waveforms are made; it is on the image options button, not the panel menu"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic",
+      "2": "±10V · continuous · polyphonic\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "3": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

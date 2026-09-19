@@ -1,0 +1,47 @@
+{
+  "plugin": "Dintree-Virtual",
+  "module": "V218-SH-Clock-Noise",
+  "description": "Three sections on one panel: a sample and hold, a clock generator with saw, square and trigger outputs, and a noise source giving white, pink and slow random voltages",
+  "params": [
+    {"ids": [0], "text": "Attenuates the held voltage on its way to SH OUT, from silence at fully counter-clockwise to the full sampled value at fully clockwise; it comes after the hold, so it does not change what is sampled"},
+    {"ids": [1], "text": "Sets the clock rate from 0.3Hz to 30Hz, on a cubed curve that puts most of the travel at the slow end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "While this is above 1V the sample and hold passes SH IN straight through; when it falls below 1V the last value is held"},
+    {"ids": [1], "text": "A rising edge here resets the clock's sawtooth core to zero wherever it had got to, which is how to syncopate the clock against another one"},
+    {"ids": [2], "text": "A rising edge here samples SH IN once and holds it, with no tracking in between edges"},
+    {"ids": [3], "text": "Adds to the CLOCK FREQ setting, a tenth of the full 30Hz span per volt in either direction, with the result held inside the 0.3Hz to 30Hz range"},
+    {"ids": [4], "text": "The voltage the sample and hold section captures"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 5ms long at each rising edge of SQ OUT"},
+    {"ids": [1], "text": "White noise from a random number generator, 20V peak to peak"},
+    {"ids": [2], "text": "The clock's sawtooth core, rising from 0V to 10V once per cycle"},
+    {"ids": [3], "text": "Pink noise, the white noise source put through three filter stages; its level is a little below the white output"},
+    {"ids": [4], "text": "The held voltage, scaled by S&H LEVEL"},
+    {"ids": [5], "text": "0V for the first half of each clock cycle and 10V for the second half"},
+    {"ids": [6], "text": "A slowly wandering voltage, made by peak-detecting the pink noise and low-passing the result twice"}
+  ],
+  "notes": [
+    "SH OUT is only written while GATE IN is above 1V or at the moment of a TRIG IN edge. With neither jack patched the sample and hold never samples, and SH OUT stays where it was.",
+    "TRIG IN and SYNC IN fire when the whole-volt part of the input goes from zero to anything else, so a swing past -1V triggers them as surely as one past +1V."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "continuous · one channel only",
+      "4": "one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "one channel only"
+    }
+  }
+}

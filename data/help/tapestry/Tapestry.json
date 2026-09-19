@@ -1,0 +1,86 @@
+{
+  "plugin": "tapestry",
+  "module": "Tapestry",
+  "description": "A granular tape recorder: audio is recorded onto a reel, the reel is cut into segments by markers, and grains are played back from the current segment under knob and CV control",
+  "params": [
+    {"ids": [0], "text": "Crossfades the output between the incoming audio fully left and reel playback fully right; while recording over existing audio in replace mode it also sets how much of the old recording is kept"},
+    {"ids": [1], "text": "Sets the length of the grain read from the current segment: the whole segment fully left, about 1ms fully right, on a fourth-power curve"},
+    {"ids": [2], "text": "Scales the voltage at the grain size CV input, -1 to +1, before it is added to the GRAIN knob"},
+    {"ids": [3], "text": "Sets playback speed and direction: stopped at centre, forward to twice speed fully right, backwards at about 4.5 times speed fully left, though the manual calls that end 26 semitones down"},
+    {"ids": [4], "text": "Scales the voltage at the speed CV input, -1 to +1, before it is added to the SPEED knob"},
+    {"ids": [5], "text": "Sets how much the grains overlap: gaps between them below 15%, one seamless grain to 35%, two voices to 50%, three with stereo panning to 70%, and four with random pitch above that"},
+    {"ids": [6], "text": "Offsets where in the current segment the grain is read from: the start of the segment fully left, as far in as the grain length allows fully right"},
+    {"ids": [7], "text": "Scales the voltage at the scan CV input, -1 to +1, before it is added to the SCAN knob"},
+    {"ids": [8], "text": "Steps through the markers on the reel and moves playback to the one chosen; its top value follows the number of markers and it reads out from 1"},
+    {"ids": [9], "text": "Pressing it starts recording the input onto the reel and pressing it again stops; with a cable in the clock input recording begins on the next clock edge instead of immediately"},
+    {"ids": [10], "text": "Pressing it drops a marker at the playback position, cutting another segment out of the reel"},
+    {"ids": [11], "text": "Pressing it moves playback to the next marker, wrapping round after the last one"},
+    {"ids": [12], "text": "Pressing it deletes every marker, sets the marker count back to four and returns SLCT to its first position"},
+    {"ids": [13], "text": "Pressing it spreads markers evenly across the reel, stepping through 4, 8 and 16 on successive presses"},
+    {"ids": [14], "text": "Sets what pressing REC does to audio already on the reel: replace wipes the reel and every marker first, overdub keeps them and adds the new audio from the playback position"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, recorded onto the reel and crossfaded to the output by MIX, with ±5V taken as full scale"},
+    {"ids": [1], "text": "The right audio input; with nothing patched here the left input feeds both channels"},
+    {"ids": [2], "text": "Shifts the MIX crossfade, 8V covering the whole of the knob's travel; the total of knob and voltage is held inside that travel"},
+    {"ids": [3], "text": "Shifts the grain length after scaling by its attenuverter, 8V covering the whole of the GRAIN knob's travel; the total is held inside that travel"},
+    {"ids": [4], "text": "Shifts the playback speed after scaling by its attenuverter, 4V covering the whole of the SPEED knob's travel; the total is held inside that travel"},
+    {"ids": [5], "text": "Shifts the grain overlap, 5V covering the whole of the DENS knob's travel; the total is held inside that travel"},
+    {"ids": [6], "text": "Shifts the scan offset after scaling by its attenuverter, 8V covering the whole of the SCAN knob's travel; the total is held inside that travel"},
+    {"ids": [7], "text": "Shifts the marker chosen by SLCT, 5V covering the whole run of markers; the total is held inside that run"},
+    {"ids": [8], "text": "A rising edge past 2.5V starts the next grain when DENS is below about half, or sets the grain length to the measured clock period above it"},
+    {"ids": [9], "text": "Playback runs while this is above 2.5V and stops at the end of the grain once it falls; with nothing patched it counts as held high"},
+    {"ids": [10], "text": "A rising edge past 2.5V starts recording, and the next one stops it"},
+    {"ids": [11], "text": "A rising edge past 2.5V drops a marker at the playback position"},
+    {"ids": [12], "text": "A rising edge past 2.5V moves playback to the next marker"},
+    {"ids": [13], "text": "A rising edge past 2.5V deletes every marker and returns SLCT to its first position"},
+    {"ids": [14], "text": "A rising edge past 2.5V spreads markers evenly across the reel, stepping through 4, 8 and 16 on successive edges"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output: the incoming audio and the reel playback mixed by MIX at ±5V, or the expander's processed signal when one is fitted"},
+    {"ids": [1], "text": "The right output: the incoming audio and the reel playback mixed by MIX at ±5V, or the expander's processed signal when one is fitted"},
+    {"ids": [2], "text": "An envelope follower on the output, 0V in silence and rising to 8V at full level"},
+    {"ids": [3], "text": "A 10V pulse 1ms long at the end of every grain and every segment"}
+  ],
+  "notes": [
+    "the reel is empty when the module is added, so nothing plays until you record onto it with REC or load a WAV file from the panel menu",
+    "the SPEED knob comes up at its centre, where playback is stopped, so a freshly added module is silent until it is moved off centre",
+    "clicking the waveform display drops a marker at that point, clicking an existing marker moves playback to it, and right-clicking a marker deletes it",
+    "a Tapestry Expander placed immediately to the right takes over the two audio outputs, feeding them through its bit crusher and filter",
+    "two buttons held together give extra actions: REC with NXT levels the incoming audio, and REC with MRK records into a new segment",
+    "NXT held with MRK deletes the current marker, and NXT held with REC deletes the audio of the current segment",
+    "holding NXT with MRK for 3 seconds deletes every marker, and holding NXT with REC for 3 seconds erases the whole reel"
+  ],
+  "menu": [
+    "Load Reel... — opens a file dialog and reads a WAV file onto the reel",
+    "Save Reel... — writes the reel out as a WAV file",
+    "Clear Reel — erases the recorded audio",
+    "Splice Count: 4 (click to cycle) — spreads that many markers evenly across the reel and steps the count on through 4, 8 and 16",
+    "Waveform Color: Red, Amber, Green, Baby Blue, Peach, Pink, White — sets the colour the recorded waveform is drawn in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the Audio L jack.",
+      "2": "0 to 8V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 8V.",
+      "3": "±8V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 8V.",
+      "4": "±4V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±4V.",
+      "5": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "6": "±8V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 8V.",
+      "7": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "8": "high above 2.5V · stepped · one channel only\n\nunpatched it reads free-running, not clock-synced; a negative voltage does nothing here.",
+      "9": "high above 2.5V · stepped · one channel only\n\nunpatched it reads high; a negative voltage does nothing here.",
+      "10": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "11": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "12": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "13": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "14": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "0 to 8V · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

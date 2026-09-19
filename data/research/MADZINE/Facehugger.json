@@ -1,0 +1,23 @@
+{
+  "plugin": "MADZINE",
+  "module": "Facehugger",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/Facehugger.cpp:279-281, getChannels() sets the channel count and getPolyVoltage(c) reads each"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "normal": "the left input", "why": "src/Facehugger.cpp:281-287, unpatched, rightInput is set to leftInput"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:292-300, grainSize += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:303-311, grainDensity += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:314-322, grainPosition += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:336-344, mix += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:238-246, chaosAmount += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Facehugger.cpp:249-257, chaosRate += getPolyVoltage*0.2, then clamp(0.01, 2)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Facehugger.cpp:228, setChannels from the audio inputs"},
+      "1": {"family": "audio", "poly": true, "why": "src/Facehugger.cpp:229, setChannels from the audio inputs"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "src/Facehugger.cpp:275, chaosUnscaled clamped to ±1 and multiplied by 5"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "why": "src/Facehugger.cpp:276, the held value clamped to ±1 and multiplied by 5"}
+    }
+  },
+  "comment": "Grain length is size * 99 + 1 milliseconds and the grain trigger rate is density * 50 + 1 per second (src/RipleyDSP.hpp:234, 243). With chaos above zero, each new grain has a 30 per cent chance of playing backwards, and where the density is above 0.7 a further 20 per cent chance of being pitched an octave down or up (src/RipleyDSP.hpp:256-268). Sixteen grains is the ceiling (src/RipleyDSP.hpp:209). The maker's tooltip calls the BREAK knob Break; in the code it is the grain density. The auto-patching is in the widget's step(), the same arrangement as Runner and Ovomorph. The panel prints SIZE, BREAK, SHIFT, MIX, CHAOS and RATE over the knobs and again over the CV jacks, then CHAOS and S&H over the two CV outputs; the four audio jacks carry no lettering. Lettering is drawn in code at src/Facehugger.cpp:403-474."
+}

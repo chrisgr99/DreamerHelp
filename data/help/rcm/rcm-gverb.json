@@ -1,0 +1,57 @@
+{
+  "plugin": "rcm",
+  "module": "rcm-gverb",
+  "description": "A reverb built on the GVerb code, taking mono or stereo audio and returning stereo, with a CV input and an attenuverter for every control; the maker calls it dirty and unstable",
+  "params": [
+    {"ids": [0], "text": "Sets the size of the modelled room in metres, 2 to 300, which sets the length of the longest delay inside the reverb"},
+    {"ids": [1], "text": "Sets how long the tail takes to decay, 0 to 10 seconds"},
+    {"ids": [2], "text": "Sets how fast the tail loses its high frequencies, 0 for none and 1 for the most, starting at 0.98"},
+    {"ids": [3], "text": "Sets how far apart the two output channels are, mixing them to mono at 0 and leaving them separate at 1; the reverb engine's own spread stays fixed at 90 degrees"},
+    {"ids": [4], "text": "Sets how much of the input's high end reaches the reverb, 1 passing the signal whole and 0 filtering it heavily; it starts at 0.01"},
+    {"ids": [5], "text": "Sets the level of the early reflections in the reverb signal, 0 to 1"},
+    {"ids": [6], "text": "Sets the level of the reverb tail in the reverb signal, 0 to 1"},
+    {"ids": [7], "text": "Crossfades the output between the dry input at 0 and the reverb alone at 1"},
+    {"ids": [8], "text": "Rebuilds the reverb engine from scratch, clearing whatever it was doing; the knob settings are left alone"},
+    {"ids": [9], "text": "Attenuates and inverts the CV going to ROOM SIZE, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [10], "text": "Attenuates and inverts the CV going to DAMP, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [11], "text": "Attenuates and inverts the CV going to TIME, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [12], "text": "Attenuates and inverts the CV going to BANDWIDTH, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [13], "text": "Attenuates and inverts the CV going to EARLY, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [14], "text": "Attenuates and inverts the CV going to LATE, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [15], "text": "Attenuates and inverts the CV going to MIX, -1 to +1, and at zero that CV changes nothing"},
+    {"ids": [16], "text": "Attenuates and inverts the CV going to SPREAD, -1 to +1, and at zero that CV changes nothing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input; a reverb engine for this channel exists only while a cable is patched here, and unpatching the cable throws that engine away"},
+    {"ids": [1], "text": "The right audio input; a reverb engine for this channel exists only while a cable is patched here, and unpatching the cable throws that engine away"},
+    {"ids": [2], "text": "Modulates the room size; 10V through the ROOM attenuverter at +1 adds 300 metres to the knob setting, and the result is clamped to 2 to 300 metres"},
+    {"ids": [3], "text": "Modulates the damping; 10V through the DAMP attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [4], "text": "Modulates the decay; 10V through the TIME attenuverter at +1 adds 10 seconds to the knob setting, and the result is clamped to 0 to 10 seconds"},
+    {"ids": [5], "text": "Modulates the input bandwidth; 10V through the BW attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [6], "text": "Modulates the early reflection level; 10V through the EARLY attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [7], "text": "Modulates the tail level; 10V through the LATE attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [8], "text": "Modulates the dry and reverb balance; 10V through the MIX attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [9], "text": "Modulates the channel separation; 10V through the SPREAD attenuverter at +1 adds 1 to the knob setting, and the result is clamped to 0 to 1"},
+    {"ids": [10], "text": "A rising edge rebuilds the reverb engine from scratch, clearing whatever it was doing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output, crossfading dry against reverb according to MIX; with nothing patched to the left input the dry part comes from the right input"},
+    {"ids": [1], "text": "The right output, crossfading dry against reverb according to MIX; with nothing patched to the right input the dry part comes from the left input"}
+  ],
+  "notes": [
+    "an envelope follower inside the module divides both outputs down whenever the reverb climbs past 10V, which can pull the level about on its own during loud passages",
+    "the reverb engine is built when a cable is patched to an audio input and thrown away when that cable is removed; with nothing patched to either input both outputs are held at 0V",
+    "shift-dragging up or down on the module name changes the colour of the panel, and holding ctrl as well makes the change finer"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "10": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

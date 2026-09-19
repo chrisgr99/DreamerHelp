@@ -1,0 +1,45 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-samp",
+  "description": "Sampler that plays SFZ instruments, polyphonic, with velocity, exponential pitch modulation and through-zero linear FM using the samples as the carrier; an instrument is loaded from the context menu",
+  "params": [
+    {"ids": [1], "text": "Tunes the player over a two octave range"},
+    {"ids": [2], "text": "Attenuates and inverts the CV at the FM jack before it is added to the pitch knob"},
+    {"ids": [3], "text": "Sets the depth of the through-zero linear FM from the signal at the LFM jack"},
+    {"ids": [4], "text": "Sets the overall output level"},
+    {"ids": [7], "text": "Transposes the player in octaves over a ten octave range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of each voice, a volt per octave with 0V as C4; the number of channels on this cable sets how many voices play"},
+    {"ids": [1], "text": "Sets the velocity of each note, 0V for MIDI velocity zero and 10V for velocity 127; what an instrument does with velocity varies, often picking between samples or setting the level"},
+    {"ids": [2], "text": "Starts a note while the voltage is above 1V and ends it below that, one channel per voice"},
+    {"ids": [3], "text": "Bends the pitch exponentially through the trim knob above it, positive voltage raising the pitch and negative lowering it"},
+    {"ids": [4], "text": "The modulator for through-zero linear FM, with the samples as the carrier; an audio rate signal is the usual thing to patch here"},
+    {"ids": [5], "text": "Scales the depth of the linear FM, 0V for none and 10V for the full depth set by the Depth knob; with nothing patched it acts as though 10V were present"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The instrument's audio, polyphonic with one channel per voice"}
+  ],
+  "notes": [
+    "the module is silent until an SFZ instrument is loaded from Load SFZ file on its right-click menu; nothing is shipped with the plugin, so the file has to be downloaded first",
+    "both the V/Oct and the Gate inputs have to be patched before a note plays",
+    "the trim knob above the FM jack comes up at zero, so a cable there changes nothing until the trim is turned off centre"
+  ],
+  "menu": [
+    "Load SFZ file — opens a file picker for the instrument; the display at the top then shows its name and the range of pitches it answers to, or the error if it would not load",
+    "Trigger delay — holds the gate input back by 5 samples, which is on when the module is added and worth leaving on in most patches"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "high above 2V · stepped · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "plugin": "MrLumps",
+  "module": "SEQE",
+  "description": "Euclidean sequencer with four channels, each given a pattern length, a number of beats to spread through it and a chance of playing each beat, and each sending a gate and a trigger",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock in whole beats per minute, 30 to 256, and is read only while the clock input is empty"},
+    {"ids": [1], "text": "Sends every channel back to the first step of its pattern and drops any gate that is high"},
+    {"ids": [2], "text": "Sets how long each gate lasts, from nothing to a whole beat, printed as a percentage; the beat it divides comes from the BPM knob and not from a clock patched into the clock input"},
+    {"ids": [3, 4, 5, 6], "text": "The chance that a beat in that channel's pattern is played, 0 to 100%, drawn afresh at every step"},
+    {"ids": [7, 8, 9, 10], "text": "Sets how many beats are spread evenly through that channel's pattern, 0 to 256; at 0 the channel plays nothing, and at the pattern length or above every step is a beat"},
+    {"ids": [11, 12, 13, 14], "text": "Sets how many steps that channel's pattern runs before it repeats, 0 to 256"},
+    {"ids": [15, 16, 17, 18], "text": "Moves that channel's pattern on by one step and leaves the other three where they are, which shifts it against them"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances every channel by one step and replaces the internal clock; it reads high above 1V"},
+    {"ids": [1], "text": "A rising edge sends every channel back to the first step of its pattern and drops any gate that is high; it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while a gate is high on any of the four channels"},
+    {"ids": [1], "text": "Carries 10V for one sample whenever any of the four channels plays a beat"},
+    {"ids": [2, 3, 4, 5], "text": "Carries 10V for the length set by the gate knob whenever that channel plays a beat"},
+    {"ids": [6, 7, 8, 9], "text": "Carries 10V for one sample at each beat that channel plays"}
+  ],
+  "notes": [
+    "a channel is silent until both its fill and its length are raised; both knobs come up at 0, and a fill of 0 plays nothing whatever the length is",
+    "with nothing patched into the clock input the module runs from its own clock at the tempo set by the BPM knob",
+    "the beats dropped by the probability knobs come from a counter started at the same fixed value on all four channels, so channels set alike drop the same beats together"
+  ],
+  "menu": [
+    "High Contrast — draws the seven-segment displays as black figures on white instead of red on dark red"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads the internal clock at the BPM knob's tempo; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 10V · one channel only"
+    }
+  }
+}

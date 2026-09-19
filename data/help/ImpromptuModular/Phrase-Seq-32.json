@@ -1,0 +1,84 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Phrase-Seq-32",
+  "description": "Thirty-two sequences of up to 32 steps, each step holding a pitch, two gates, a tie and a slide; song mode chains sequences as up to 32 phrases, 1024 steps in all",
+  "params": [
+    {"ids": [3], "text": "In the SEQ position the selected sequence plays and its contents can be edited; in SONG the series of phrases plays and is edited, and sequence contents cannot be changed"},
+    {"ids": [4], "text": "Selects which sequence is edited and played in SEQ mode, and which sequence the selected phrase points at in SONG mode; it also enters lengths, transpositions and rotations"},
+    {"ids": [5], "text": "Starts and stops the sequencer"},
+    {"ids": [6], "text": "Copies the selected sequence, or the part of it set by the copy-paste switch; in SONG mode it copies part of the song"},
+    {"ids": [7], "text": "Pastes what was copied. Copying in one mode and pasting in the other runs a shortcut instead, such as randomising the pitches or filling the song with rising sequence numbers"},
+    {"ids": [8], "text": "Returns the play head to the first step of the sequence, and to the first phrase of the song in SONG mode"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15], "text": "Puts the note of the step being edited into that octave, 4 being the octave of middle C; the lit button is the octave that step currently holds"},
+    {"ids": [16], "text": "Turns the first gate of the step being edited on or off"},
+    {"ids": [17], "text": "Turns the second gate of the step being edited on or off"},
+    {"ids": [18], "text": "Turns portamento on for the step being edited, so its pitch glides from the pitch of the step before it"},
+    {"ids": [19], "text": "How long that glide takes, from nothing up to one whole clock period; the default is a tenth of a clock period"},
+    {"ids": [20], "text": "Ties the edit head to the play head so that editing follows what is playing. In the 2x16 configuration, clicking a step attaches the edit head to that row"},
+    {"ids": [21], "text": "When on, writing a note advances the edit head one step to the right"},
+    {"ids": [34], "text": "One press sets the length, by the main knob or by clicking a step; a second press sets the run mode; holding it for 2 seconds sets the clock resolution in pulses per step"},
+    {"ids": [35], "text": "One press transposes the selected sequence in semitones, a second press rotates its steps, with the main knob setting the amount. In 2x16 only the edit head's row is changed"},
+    {"ids": [36], "text": "The chance that a gate 1 on a marked step reaches its output, 0 to 1. One setting serves the whole module rather than one per step"},
+    {"ids": [37], "text": "Marks the step being edited so that its first gate is output only some of the time"},
+    {"ids": [38], "text": "Ties the step being edited to the pitch of the step before it, holding one note across both. The menu option Hold tied notes governs whether gate 1 stays high across the run"},
+    {"ids": [39], "text": "Sets how much a copy takes: 4 steps, 8 steps, or the whole sequence together with its length and run mode"},
+    {"ids": [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71], "text": "In SEQ mode this selects that step for editing, and its light shows the edit head in red and the play head in green; in SONG mode it selects that phrase of the song"},
+    {"ids": [72], "text": "In the 1x32 position one 32-step sequence plays out of the A outputs; in 2x16 the top row of steps plays out of the A outputs and the bottom row out of the B outputs"},
+    {"ids": [73], "text": "Switches the keyboard back to entering note pitches"},
+    {"ids": [74], "text": "Switches the keyboard from entering pitches to entering one of the 12 advanced gate types; pressing it again alternates between setting gate 1 and gate 2"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V stores the voltage at CV IN into the step being edited"},
+    {"ids": [1], "text": "The voltage written into the step being edited when a write is triggered; anything from -10V to 10V is stored"},
+    {"ids": [2], "text": "A rising edge above 1V returns the play head to the first step, and to the first phrase in SONG mode"},
+    {"ids": [3], "text": "Advances the sequencer one step on each rising edge"},
+    {"ids": [4], "text": "A rising edge above 1V moves the edit head one step to the left"},
+    {"ids": [5], "text": "A rising edge above 1V moves the edit head one step to the right"},
+    {"ids": [6], "text": "A rising edge above 1V starts or stops the sequencer"},
+    {"ids": [7], "text": "Selects the sequence from outside, 0-10V spread across the 32 sequences; the menu offers note voltages or a trigger that steps to the next sequence instead"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the step being played, 1V per octave. This carries the whole sequence in the 1x32 configuration and the top row of steps in 2x16"},
+    {"ids": [1], "text": "The first gate of the row played out of the A outputs, 10V when high"},
+    {"ids": [2], "text": "The second gate of the row played out of the A outputs, 10V when high"},
+    {"ids": [3], "text": "The pitch of the step being played in the bottom row, 1V per octave; used in the 2x16 configuration"},
+    {"ids": [4], "text": "The first gate of the bottom row of steps, 10V when high; used in the 2x16 configuration"},
+    {"ids": [5], "text": "The second gate of the bottom row of steps, 10V when high; used in the 2x16 configuration"}
+  ],
+  "notes": [
+    "The onboard keyboard sets the pitch of the step being edited. Right-clicking a key enters the note and moves to the next step; holding ctrl carries the gate type over too",
+    "with the mouse over the sequence display, a sequence number can be typed on the computer keyboard, two key presses within one second reading as a two-digit number",
+    "in song mode, with the mouse over the sequence display, the space bar moves on to the next phrase"
+  ],
+  "menu": [
+    "Seq CV in level — sets how the SEQ # input is read: 0-10V across the 32 sequences, the note voltages C4-G6, or Trig-Incr, where a trigger steps to the next sequence",
+    "Hold tied notes — keeps gate 1 high across a run of tied steps; with it off only the first step of the run carries a gate",
+    "Reset on run — returns the play head to the start every time the sequencer is started",
+    "Retrigger gates on reset — holds the gate outputs low for 1ms after a reset so a trigger-sensitive target fires again; the choices are No, Yes, and Only when Run cable is unconnected",
+    "Single shot song — plays the song once instead of repeating it",
+    "AutoStep write bounded by seq length — stops a write autostepping past the last step of the sequence",
+    "AutoSeq when writing via CV inputs — moves on to the next sequence when a write runs off the end of the current one, which turns the sequencer into a long CV recorder",
+    "Portable sequence — holds Copy sequence and Paste sequence, which move the selected sequence between this module and other sequencers that support the format; it can be used in SEQ mode only",
+    "Add expander (4HP right side) — places the PS-X expander against the right edge of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "1V per octave · continuous",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

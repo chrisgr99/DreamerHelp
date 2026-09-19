@@ -1,0 +1,43 @@
+{
+  "plugin": "VultModules",
+  "module": "Nurage",
+  "description": "Dual low pass gate on a modified version of the best known Buchla design, with a detailed vactrol model, switchable VCA action, and a left and a right channel that also work as a stereo filter",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency at which both filters start to act: fully counter-clockwise they are closed, fully clockwise they are open"},
+    {"ids": [1, 2], "text": "Attenuates or amplifies the gate signal on that side before it reaches the cutoff, and the amplification lets a low gate signal open the filter further"},
+    {"ids": [3], "text": "Boosts the frequencies near the cutoff in both filters, and past a point they self-oscillate and can be played as a sound source"},
+    {"ids": [4], "text": "Attenuates and inverts the RES input before it is added to the resonance"},
+    {"ids": [5], "text": "Sets how much signal enters both filters, and raising it saturates them and adds harmonics"},
+    {"ids": [6], "text": "Attenuates and inverts the DRIVE input before it is added to the drive"},
+    {"ids": [7], "text": "ON puts the vactrol model in the gate path, which gives smoother transitions from its memory effect; OFF lets the gate signal change the cutoff at once"},
+    {"ids": [8], "text": "ON makes the gate change the amplitude of the signal as well as the cutoff, which greatly reduces the resonance; OFF leaves the gate acting on the cutoff alone"},
+    {"ids": [9], "text": "LINK has both gate signals control both filters, UNLINK has the left gate control the left filter and the right gate the right filter"},
+    {"ids": [10], "text": "Attenuates and inverts the CV input before it is added to the cutoff, and a 1V/octave signal through it makes the cutoff track pitch"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel of the audio input"},
+    {"ids": [1], "text": "The right channel of the audio input"},
+    {"ids": [2, 3], "text": "A signal that opens and closes the filters, scaled by its own GATE attenuverter, reaching one filter or both according to the GATES switch"},
+    {"ids": [4], "text": "A control voltage added to the resonance, scaled by the RES attenuverter"},
+    {"ids": [5], "text": "A control voltage added to the drive, scaled by the DRIVE attenuverter"},
+    {"ids": [6], "text": "A control voltage added to the cutoff, scaled by the CV attenuverter, and tracking 1V per octave when that attenuverter is set for it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the processed signal"},
+    {"ids": [1], "text": "The right channel of the processed signal"}
+  ],
+  "notes": [
+    "a closed gate passes no sound, so nothing reaches the outputs until CUTOFF is raised or a signal arrives at a GATE input, where it is scaled by that side's GATE attenuverter"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "6": "1V per octave · continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

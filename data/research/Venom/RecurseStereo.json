@@ -1,0 +1,21 @@
+{
+  "plugin": "Venom",
+  "module": "RecurseStereo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "RecurseStereo.cpp:119 reads it per channel and multiplies the signal by it"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "RecurseStereo.cpp:120 reads it per channel and adds it, in volts, to the signal"},
+      "2": {"poly": true, "why": "RecurseStereo.cpp:138 reads one channel of this jack per recursion pass"},
+      "3": {"poly": true, "why": "RecurseStereo.cpp:140 reads one channel of this jack per recursion pass"},
+      "4": {"poly": true, "why": "RecurseStereo.cpp:98 reads every channel of the jack; its channel count sets the module width"},
+      "5": {"poly": true, "why": "RecurseStereo.cpp:117 reads every channel of the jack"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "RecurseStereo.cpp:134 and 161 a per-channel write then setChannels(outChannels times recurCount)"},
+      "1": {"poly": true, "why": "RecurseStereo.cpp:136 and 164 a per-channel write then setChannels(outChannels times recurCount)"},
+      "2": {"poly": true, "why": "RecurseStereo.cpp:152 and 162 a per-channel write then setChannels(outChannels), taken from the input's channel count"},
+      "3": {"poly": true, "why": "RecurseStereo.cpp:154 and 165 a per-channel write then setChannels(outChannels), taken from the input's channel count"}
+    }
+  },
+  "comment": "Each return input is read one channel per recursion pass, so its channel count is the input width multiplied by the recursion count."
+}

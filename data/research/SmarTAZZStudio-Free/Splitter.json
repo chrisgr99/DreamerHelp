@@ -1,0 +1,16 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Splitter",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "Splitter.cpp Splitter::process: getChannels() on this jack chooses the branch, and getVoltage(cur_Channel) reads channels 0 to 3 individually, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "Splitter.cpp Splitter::process: setVoltage with no channel argument in every branch, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"poly": false, "why": "Splitter.cpp Splitter::process: setVoltage with no channel argument in every branch, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"poly": false, "why": "Splitter.cpp Splitter::process: setVoltage with no channel argument in every branch, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "3": {"poly": false, "why": "Splitter.cpp Splitter::process: setVoltage with no channel argument in every branch, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "In the Pitch Down branch for three channels the final swap of elements 0 and 1 has no `if (volt_In[0] < volt_In[1])` guard, unlike the matching Pitch Up branch, so the swap is unconditional and a descending input is left mis-sorted. The outputs are never zeroed when the channel count drops, so they hold stale voltages. The jacks carry whatever is patched to them, so no family is set."
+}

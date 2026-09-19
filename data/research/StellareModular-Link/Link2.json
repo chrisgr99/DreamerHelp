@@ -1,0 +1,12 @@
+{
+  "plugin": "StellareModular-Link",
+  "module": "Link2",
+  "facts": {
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Link2.cpp:195 writes 10.0 for the first 2 ticks of each period and 0.0 otherwise, with no setChannels; the period comes from the switch at line 169 and is 128, 64, 32, 16 or 8 ticks"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Link2.cpp:203 writes 10.0 for the first 2 of the 128 ticks in a bar and 0.0 otherwise, with no setChannels"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "why": "Link2.cpp:206 writes log2f(tempo / 120) into outputs[BPM_OUTPUT].value, one channel, with no setChannels; tempo comes from the Link session state at line 125"}
+    }
+  },
+  "comment": "Source read at commit a5a5bc2, the repository head, whose plugin.json is byte-identical to the installed one and whose res files all match byte for byte. Link here means Ableton Link, the network tempo protocol, not a connection between neighbouring modules; LinkPeer.cpp holds one shared ableton::Link for the whole plugin. FOUR THINGS THE PANEL DOES NOT SHOW. First, the module declares a second clock output, CLOCK_OUTPUT_2ND, which the code writes 0V into on every tick but for which Link2Widget adds no PortWidget, so no cable and no click can reach it; it is left untagged and unwritten here. Second, the code comment at Link2.cpp:194 says the clock has 50% PWM but the expression is (tick % period) < 2, a fixed pulse of two ticks, a sixteenth of a beat, at every rate. Third, the BPM output is written only inside the branch that runs when the module is in sync and playing, so on a resync or a Link stop it holds its last value rather than falling to 0V. Fourth, the RATIO knob is snapped 0 to 4 with a default of 2, which is the 1 mark, one pulse per beat. Offset, shuffle and the tick grid are identical to the older Link module: 32 ticks to a beat, 128 to a bar, a bar fixed at four beats, offset scaled to five ticks either way and shuffle to three, applied only in the second half of each eight-tick group. The RESYNC button is momentary and read as a level: while held the module is out of sync and all its pulse outputs are muted until the tick reaches 0 at the top of a bar, and the lamp above it is lit while it is NOT in sync. The panel prints SHUFFLE where the README says swing. No parameter or output is given a name, so Rack's hover tooltips are blank throughout."
+}

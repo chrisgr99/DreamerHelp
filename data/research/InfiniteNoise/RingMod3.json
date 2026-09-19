@@ -1,0 +1,20 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "RingMod3",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "normal": "0V", "why": "RingMod3.cpp:201 takes the section's channel count from this jack and RingMod3.cpp:281 reads getPolyVoltage(c)"},
+      "1": {"poly": true, "normal": "the output of the section above", "why": "RingMod3.cpp:280 tests this jack with isConnected and line 281 reads it with getPolyVoltage per channel; with the jack empty line 282 takes the value line 299 stored for the section above, which is that section's A times B product after the output quantize and clip at lines 296 and 297. So an empty jack here chains this section onto the one above it. Whichever value arrives then goes through this section's own A scale and negative-handling settings at line 283 before the multiply."},
+      "2": {"poly": true, "normal": "the output of the section above", "why": "RingMod3.cpp:280 tests this jack with isConnected and line 281 reads it with getPolyVoltage per channel; with the jack empty line 282 takes the value line 299 stored for the section above, which is that section's A times B product after the output quantize and clip at lines 296 and 297. So an empty jack here chains this section onto the one above it. Whichever value arrives then goes through this section's own A scale and negative-handling settings at line 283 before the multiply."},
+      "3": {"poly": true, "normal": "the A input of its own section", "why": "RingMod3.cpp:286 tests this jack with isConnected and line 287 reads it with getPolyVoltage per channel. With the jack empty, and this being the first section, line 289 uses the same section's raw A voltage — the value taken at line 280 before that section's A scale and negative settings are applied — so the section squares its A input. That raw A value is itself the previous section's product whenever the A jack is empty too."},
+      "4": {"poly": true, "normal": "the B input of the section above", "why": "RingMod3.cpp:286 tests this jack with isConnected and line 287 reads it with getPolyVoltage per channel; with the jack empty line 290 takes the value line 291 stored for the section above, which is that section's B voltage before any scaling, so the B side carries straight down the chain. Line 274 hands down that section's B channel count in the same way. Whichever value arrives then goes through this section's own B scale and negative-handling settings at line 292 before the multiply."},
+      "5": {"poly": true, "normal": "the B input of the section above", "why": "RingMod3.cpp:286 tests this jack with isConnected and line 287 reads it with getPolyVoltage per channel; with the jack empty line 290 takes the value line 291 stored for the section above, which is that section's B voltage before any scaling, so the B side carries straight down the chain. Line 274 hands down that section's B channel count in the same way. Whichever value arrives then goes through this section's own B scale and negative-handling settings at line 292 before the multiply."}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "RingMod3.cpp:210 sets each section's output to the larger of its two input channel counts"},
+      "1": {"poly": true, "why": "RingMod3.cpp:210 sets each section's output to the larger of its two input channel counts"},
+      "2": {"poly": true, "why": "RingMod3.cpp:210 sets each section's output to the larger of its two input channel counts"}
+    }
+  },
+  "comment": "The panel prints A1, B1, AB1 and so on. Feeding more than 10V into a B input turns the section into an amplifier rather than an attenuator, and a negative voltage there inverts the A signal."
+}

@@ -1,0 +1,44 @@
+{
+  "plugin": "Noise86",
+  "module": "SeqOfChanges",
+  "description": "Markov trigger sequencer in which the chance of the next trigger is set by the last three clocks, a state drawn as one of eight trigrams",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The chance of a trigger on the next clock while the module is in that state, 0 for never and 1 for every clock"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 3V draws the next trigger, at the chance set by the knob for the current state"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "A rising edge sets the state to that trigram; a clock arriving in the same sample is ignored"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V when the clock three before the last one fired a trigger, 0V when it did not"},
+    {"ids": [1], "text": "10V when the clock before the last one fired a trigger, 0V when it did not"},
+    {"ids": [2], "text": "10V when the last clock fired a trigger, 0V when it did not"},
+    {"ids": [3], "text": "The chance set for the current state, scaled to 0-10V"},
+    {"ids": [4], "text": "A 1ms 10V pulse each time the sequencer fires"}
+  ],
+  "notes": [
+    "the arrows on the panel show which states can follow which, a solid arrow for a clock that fired a trigger and a broken arrow for one that did not",
+    "Every probability knob comes up at zero, so no trigger is ever fired until one of them is raised",
+    "The state moves only on a rising edge at the clock input, so with nothing patched there the module holds the state it is in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "0 to 10V",
+      "4": "stepped"
+    }
+  }
+}

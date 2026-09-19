@@ -1,0 +1,71 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "NamPlayer",
+  "description": "Neural Amp Modeler player: it runs a captured amp model over a mono guitar signal, with a noise gate in front of the model and a five-band equaliser after it",
+  "params": [
+    {"ids": [0], "text": "Sets the gain into the amp model, silent fully anticlockwise and twice the input voltage fully clockwise"},
+    {"ids": [1], "text": "Sets the gain out of the amp model, from silence to double, after which the signal is limited to 7.5V either way"},
+    {"ids": [2], "text": "Sets the level below which the noise gate closes, -80dB to 0dB"},
+    {"ids": [3], "text": "Sets how quickly the gate opens once the signal rises past the threshold, 0.1ms to 50ms"},
+    {"ids": [4], "text": "Sets how quickly the gate closes once the hold time has run out, 10ms to 500ms"},
+    {"ids": [5], "text": "Sets how long the gate stays open after the signal drops below the threshold, 10ms to 500ms"},
+    {"ids": [6], "text": "A low shelf at 100Hz on the model's output, 12dB of cut fully anticlockwise and 12dB of boost fully clockwise, flat in the middle"},
+    {"ids": [7], "text": "A peaking filter at 650Hz on the model's output, 12dB of cut fully anticlockwise and 12dB of boost fully clockwise, flat in the middle"},
+    {"ids": [8], "text": "A high shelf at 3200Hz on the model's output, 12dB of cut fully anticlockwise and 12dB of boost fully clockwise, flat in the middle"},
+    {"ids": [9], "text": "A peaking filter at 3500Hz on the model's output, 12dB of cut fully anticlockwise and 12dB of boost fully clockwise, flat in the middle"},
+    {"ids": [10], "text": "A peaking filter at 80Hz on the model's output, 12dB of cut fully anticlockwise and 12dB of boost fully clockwise, flat in the middle"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The guitar or line signal to be amplified, mono, with 5V taken as the model's full scale"},
+    {"ids": [1], "text": "Takes over the input gain while patched, -5V for silence and 5V for double gain; the knob does nothing while a cable is in here"},
+    {"ids": [2], "text": "Takes over the output gain while patched, -5V for silence and 5V for double gain; the knob does nothing while a cable is in here"},
+    {"ids": [3], "text": "Takes over the gate threshold while patched, -5V for -80dB and 5V for 0dB; the knob does nothing while a cable is in here"},
+    {"ids": [4], "text": "Takes over the gate attack while patched, -5V for 0.1ms and 5V for 50ms; the knob does nothing while a cable is in here"},
+    {"ids": [5], "text": "Takes over the gate release while patched, -5V for 10ms and 5V for 500ms; the knob does nothing while a cable is in here"},
+    {"ids": [6], "text": "Takes over the gate hold while patched, -5V for 10ms and 5V for 500ms; the knob does nothing while a cable is in here"},
+    {"ids": [7], "text": "Takes over the BASS control while patched, -5V for a 12dB cut and 5V for a 12dB boost; the knob does nothing while a cable is in here"},
+    {"ids": [8], "text": "Takes over the MID control while patched, -5V for a 12dB cut and 5V for a 12dB boost; the knob does nothing while a cable is in here"},
+    {"ids": [9], "text": "Takes over the TRBL control while patched, -5V for a 12dB cut and 5V for a 12dB boost; the knob does nothing while a cable is in here"},
+    {"ids": [10], "text": "Takes over the PRES control while patched, -5V for a 12dB cut and 5V for a 12dB boost; the knob does nothing while a cable is in here"},
+    {"ids": [11], "text": "Takes over the DPTH control while patched, -5V for a 12dB cut and 5V for a 12dB boost; the knob does nothing while a cable is in here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The amp model's output, mono, limited to 7.5V either way"}
+  ],
+  "notes": [
+    "the module passes its input through with the two level knobs applied and nothing else until a model is loaded from the right-click menu",
+    "every CV input here replaces its knob rather than adding to it: while a cable is patched, -5V to 5V covers the whole range of that control and the knob is out of circuit",
+    "the display across the top is a bar meter of the output signal, and it prints ECO ON in the corner while Eco Mode is on",
+    "the green lamp lights when a model is loaded and glows at half brightness while one is loading",
+    "the yellow lamp lights when the loaded model was captured at a different sample rate from the engine, which is resampled to match",
+    "the red lamp lights while the noise gate is closed",
+    "the NAM FX Loop expander goes immediately to the right of this module and inserts its send and return between the amp model and this module's output jack"
+  ],
+  "menu": [
+    "Bundled Models — lists the model files that ship with the plugin; picking one loads it",
+    "Load Custom Model... — opens a file dialogue for a .nam model file anywhere on disk",
+    "Unload Model — drops the loaded model, leaving the module passing its input through",
+    "Eco Mode: Off, On — averages each pair of samples and runs the model once per pair, for about half the processor cost",
+    "Use Fast Tanh — computes the model's activation function from an approximation rather than the library function, for less processor cost",
+    "Waveform Color: Green, Baby Blue, Amber, Red, Purple, White — sets the colour of the bars in the output display"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the input level knob.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads the output level knob.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads the THRES knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads the ATTCK knob.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads the REL knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads the HOLD knob.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads the BASS knob.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads the MID knob.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads the TRBL knob.",
+      "10": "±5V · continuous · one channel only\n\nunpatched it reads the PRES knob.",
+      "11": "±5V · continuous · one channel only\n\nunpatched it reads the DPTH knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

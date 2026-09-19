@@ -1,0 +1,51 @@
+{
+  "plugin": "NonlinearCircuits",
+  "module": "GENiE",
+  "description": "Three neuron circuits with each output normalled round into the next one's input, making a feedback ring that runs with nothing patched",
+  "params": [
+    {"ids": [0, 3, 6], "text": "Adds a steady 0V to 5V into that neuron's mix before the mix is rectified"},
+    {"ids": [1, 4, 7], "text": "Sets the size of that neuron's comparator swing, 1V to 10V; that much is taken off the rectified mix while the mix is above 0V and added to it while it is not"},
+    {"ids": [2, 5, 8], "text": "Scales whatever reaches the IN jack below it, passing nothing fully anticlockwise and full level fully clockwise; with that jack empty it scales the neighbouring neuron's output instead"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Feeds neuron 1 through the IN knob above it; with nothing patched that knob passes neuron 3's output instead"},
+    {"ids": [1, 6], "text": "Added into neuron 1 and neuron 2 at once, at full level and with no knob in the way"},
+    {"ids": [2], "text": "Feeds neuron 2 through the IN knob above it; with nothing patched that knob passes neuron 1's output instead"},
+    {"ids": [3, 8], "text": "Added into neuron 2 and neuron 3 at once, at full level and with no knob in the way, despite the jack's tooltip naming neurons 3 and 4"},
+    {"ids": [4], "text": "Feeds neuron 3 through the IN knob above it; with nothing patched that knob passes neuron 2's output instead"},
+    {"ids": [5], "text": "Added straight into neuron 1's mix at full level, with no knob in the way"},
+    {"ids": [7], "text": "Added straight into neuron 2's mix at full level, with no knob in the way"},
+    {"ids": [9], "text": "Added straight into neuron 3's mix at full level, with no knob in the way"}
+  ],
+  "outputs": [
+    {"ids": [0, 2, 4], "text": "That neuron's mix, clamped to 0V to 10V, with its comparator swing applied"},
+    {"ids": [1], "text": "Neuron 1 plus neuron 3 less neuron 2 while that difference is negative, down to -10V, and 0V at any other time"},
+    {"ids": [3], "text": "Neuron 1 plus neuron 3 less neuron 2 while that difference is positive, up to 10V, and 0V at any other time"}
+  ],
+  "notes": [
+    "the three IN knobs come up fully anticlockwise, which breaks the feedback ring; until one is raised each neuron output rests at whatever its REACT knob is set to.",
+    "raising the IN knobs is all it takes to make sound: the ring has no clock and needs nothing patched, and the loop is one sample long, so changing Rack's sample rate changes what comes out.",
+    "a cable in an IN jack replaces the neighbouring neuron's output at that point rather than adding to it, which opens the ring at that neuron."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads neuron 3's output; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "continuous · one channel only\n\nunpatched it reads neuron 1's output; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "continuous · one channel only\n\nunpatched it reads neuron 2's output; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "-10 to 0V · one channel only",
+      "2": "±10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "±10V · one channel only"
+    }
+  }
+}

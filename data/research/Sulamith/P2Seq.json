@@ -1,0 +1,15 @@
+{
+  "plugin": "Sulamith",
+  "module": "P2Seq",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "P2Seq.cpp P2Seq::process: getChannels() on this jack sets the sequence length and getVoltage(activeChannel) reads the chosen channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "P2Seq.cpp P2Seq::process: trr = getVoltage() ? true : false, then stepTrigger.process(trr), so the Schmitt trigger sees a 0 or 1 and any non-zero voltage counts as high, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "P2Seq.cpp P2Seq::process: resetTrig.process(getVoltage()), a Rack SchmittTrigger at its default 0.1V and 1V thresholds, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"poly": false, "step": "continuous", "why": "P2Seq.cpp P2Seq::process: setVoltage of the chosen channel's voltage, optionally plus the random offset, with no channel argument, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The polyphonic input and the output carry whatever is patched in, so no family is set for them. A reset enters the same block as a clock pulse and only takes effect inside the branch guarded by the step probability, so a reset can be thrown away by the probability roll. The random offset is drawn afresh on every accepted step and is added, not replaced. The RND range switch prints its first choice as 0.2 without a v where the other nine carry one."
+}

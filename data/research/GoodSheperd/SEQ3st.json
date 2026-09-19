@@ -1,0 +1,31 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "SEQ3st",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/SEQ3st.cpp process(): clockTime = powf(2.0f, params[CLOCK_PARAM].getValue() + inputs[CLOCK_INPUT].getVoltage()), one voltage and no clamp"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/SEQ3st.cpp process(): inputs[EXT_CLOCK_INPUT].isConnected() switches to it and clockTrigger.process(inputs[EXT_CLOCK_INPUT].getVoltage()) uses SchmittTrigger's default 0 and 1 thresholds"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/SEQ3st.cpp process(): resetTrigger.process(params[RESET_PARAM].getValue() + inputs[RESET_INPUT].getVoltage()) with the default 0 and 1 thresholds"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/SEQ3st.cpp setIndex(): clamp(roundf(params[STEPS_PARAM].getValue() + inputs[STEPS_INPUT].getVoltage()), 1.0f, 8.0f)"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/SEQ3st.cpp process(): shapeValue = params[SHAPE_PARAM].getValue() + inputs[SHAPE_INPUT].getVoltage(), then clamp(roundf(shapeValue), -5.f, 5.f) inside getShapedRandom()"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATES_OUTPUT].setVoltage((gateIn && gates[index]) ? 10.0f : 0.0f), no setChannels"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[ROW1_OUTPUT].setVoltage(params[ROW1_PARAM + index].getValue()) with the knob configured 0.0f to 10.0f, no setChannels"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[ROW2_OUTPUT].setVoltage(params[ROW2_PARAM + index].getValue()) with the knob configured 0.0f to 10.0f, no setChannels"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[ROW3_OUTPUT].setVoltage(params[ROW3_PARAM + index].getValue()) with the knob configured 0.0f to 10.0f, no setChannels"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_ROW1_OUTPUT].setVoltage(gateRow1Out ? 10.0f : 0.0f), no setChannels"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_ROW2_OUTPUT].setVoltage(gateRow2Out ? 10.0f : 0.0f), no setChannels"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_ROW3_OUTPUT].setVoltage(gateRow3Out ? 10.0f : 0.0f), no setChannels"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "10": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "11": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "12": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "13": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"},
+      "14": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/SEQ3st.cpp process(): outputs[GATE_OUTPUT + i].setVoltage((running && gateIn && i == index && gates[i]) ? 10.0f : 0.0f), no setChannels"}
+    }
+  },
+  "comment": "The probability test is params[ROWn_PARAM + index].getValue() >= getShapedRandom(shapeValue), a 0 to 10 knob against a 0 to 10 draw, so the knob is both the row's CV and its gate chance. getShapedRandom() maps a uniform draw through a transfer curve set by the rounded Shape value: at -5 the curve collapses the draw onto the middle of the range, so a step above halfway always fires and one below never does; at +5 the draw lands near one end or the other. Shape is rounded inside getShapedRandom(), so the knob moves continuously but has eleven effective positions. The Steps total is rounded and clamped to 1 to 8, and the Clock input is added to the knob without any clamp. The maker calls this a modified Fundamental SEQ3; the Shape control and the three P Gate outputs are the additions."
+}

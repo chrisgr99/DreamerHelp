@@ -1,0 +1,64 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Dobbs-Env",
+  "description": "Two independent halves, each holding a pair of attack-release envelopes: a first one fired by its own gate and a second that follows after a set delay, both with end-of-cycle triggers",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the attack time of the first envelope, 12 microseconds at fully counter-clockwise to 12 seconds at fully clockwise, the setting squared; its Fast button shortens that to half a second"},
+    {"ids": [2, 3], "text": "Sets the attack time of the second envelope, 12 microseconds at fully counter-clockwise to 12 seconds at fully clockwise, the setting squared; its Fast button shortens that to half a second"},
+    {"ids": [4, 5], "text": "Sets the release time of the first envelope, 12 microseconds at fully counter-clockwise to 12 seconds at fully clockwise, the setting squared along the way"},
+    {"ids": [6, 7], "text": "Sets the release time of the second envelope, 12 microseconds at fully counter-clockwise to 12 seconds at fully clockwise, the setting squared along the way"},
+    {"ids": [8, 9], "text": "Bends both envelopes of that half from nearly logarithmic at -0.99, through straight at 0, to exponential at 0.99"},
+    {"ids": [10, 11], "text": "Sets how long after the first envelope is triggered the second one starts, 1 millisecond to 1 second"},
+    {"ids": [12, 13], "text": "Holds both envelopes at full while the gate is above 0.5V, turning them from attack-release into attack-sustain-release"},
+    {"ids": [14, 15], "text": "Multiplies the first envelope's attack and release times by 0.5 instead of 12, so its longest stage becomes half a second"},
+    {"ids": [16, 17], "text": "Multiplies the second envelope's attack and release times by 0.5 instead of 12, so its longest stage becomes half a second"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Divided by 5 and added to the A1 knob, the total clamped to the knob's own range before it is squared"},
+    {"ids": [2, 3], "text": "Divided by 5 and added to the A2 knob, the total clamped to the knob's own range before it is squared"},
+    {"ids": [4, 5], "text": "Divided by 5 and added to the R1 knob, the total clamped to the knob's own range before it is squared"},
+    {"ids": [6, 7], "text": "Divided by 5 and added to the R2 knob, the total clamped to the knob's own range before it is squared"},
+    {"ids": [8, 9], "text": "Divided by 5 and multiplied by the Shape knob, so the knob becomes an attenuverter over this jack; the total is clamped to -1 and 1"},
+    {"ids": [10, 11], "text": "The absolute value of the voltage, divided by 5, is added to the 2 Delay knob, the total clamped to 1 second"},
+    {"ids": [12, 13], "text": "Any rise away from 0V starts the first envelope; while AR/ASR is on, a level above 0.5V also holds both envelopes at full"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The first envelope, 0V to 10V"},
+    {"ids": [2, 3], "text": "The second envelope, 0V to 10V"},
+    {"ids": [4, 5], "text": "A 10V pulse 0.08 seconds long when the first envelope reaches the end of its release"},
+    {"ids": [6, 7], "text": "A 10V pulse 0.08 seconds long when the second envelope reaches the end of its release"}
+  ],
+  "notes": [
+    "the two halves share nothing: each has its own gate, its own pair of envelopes and its own set of knobs",
+    "retriggering an envelope part way through picks the phase up from where it had got to rather than jumping back to zero",
+    "every output is monophonic, whatever is patched in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads a multiplier of 1.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads a multiplier of 1.",
+      "10": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "high above 0V · stepped · one channel only",
+      "13": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

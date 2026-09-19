@@ -1,0 +1,80 @@
+{
+  "plugin": "Leviathan",
+  "module": "IntegralFlux",
+  "description": "Two function generators, each also a slew limiter and an envelope follower, feeding four attenuverter channels and a mixing bus that sums, inverts and takes the maximum",
+  "params": [
+    {"ids": [0, 11], "text": "An attenuverter on that generator's output, silent at centre, full level clockwise and full level inverted anticlockwise; it feeds the numbered output below it and the mixing bus"},
+    {"ids": [1, 2], "text": "Latches that channel into free running, so it retriggers itself the moment the fall ends; the lamp beside it is lit while looping"},
+    {"ids": [3, 4], "text": "Sets how long that channel's rise takes, from a tenth of a millisecond at the far left to 1500 seconds at the far right"},
+    {"ids": [5], "text": "An attenuverter on IN 2, silent at centre, full level clockwise and inverted anticlockwise; with IN 2 unpatched it scales a fixed 10V, giving a manual offset from -10V to +10V"},
+    {"ids": [6, 7], "text": "Sets how long that channel's fall takes, from a tenth of a millisecond at the far left to 1500 seconds at the far right"},
+    {"ids": [8], "text": "An attenuverter on IN 3, silent at centre, full level clockwise and inverted anticlockwise; with IN 3 unpatched it scales a fixed 5V, giving a manual offset from -5V to +5V"},
+    {"ids": [9, 10], "text": "Bends both slopes of that channel: logarithmic at the far left, linear a third of the way up, exponential at the far right; the left half also stretches the stage times, the right half shortens them"},
+    {"ids": [12, 13], "text": "Picks how CURVE is applied to that channel: Shark Fin bends the rise and the fall in opposite directions, Mirror bends both the same way, and Mirror is the position it starts in"}
+  ],
+  "inputs": [
+    {"ids": [0, 5], "text": "A signal for that channel to slew; while the generator is idle the channel tracks this voltage at the rates set by SURGE and SINK, and while a cycle is running it is folded in gently instead"},
+    {"ids": [1, 4], "text": "A rising edge above 1V starts a fresh rise on that channel; an edge during the rise is ignored, and one during the fall drops the output to 0V and restarts"},
+    {"ids": [2], "text": "A signal scaled by the attenuverter above it and sent to output 2 and the mixing bus; with nothing patched the channel reads a fixed 10V"},
+    {"ids": [3], "text": "A signal scaled by the attenuverter above it and sent to output 3 and the mixing bus; with nothing patched the channel reads a fixed 5V"},
+    {"ids": [6, 7], "text": "Lengthens that channel's rise by half an octave of time per volt, and shortens it for negative voltage, over a span of twelve octaves either way"},
+    {"ids": [8, 9], "text": "Scales the rise and the fall of that channel together, positive voltage making the whole cycle faster and negative voltage slower"},
+    {"ids": [10, 11], "text": "Lengthens that channel's fall by half an octave of time per volt, and shortens it for negative voltage, over a span of twelve octaves either way"},
+    {"ids": [12, 13], "text": "A voltage above 2.5V puts that channel into free running for as long as it is held, whatever the LOOP button is set to"}
+  ],
+  "outputs": [
+    {"ids": [0, 3], "text": "That generator's output scaled by the attenuverter above it, clamped to ±10V; patching this jack takes the channel out of the OR, SUM and INV bus"},
+    {"ids": [1], "text": "IN 2 scaled by the attenuverter above it, clamped to ±10V; patching this jack takes the channel out of the OR, SUM and INV bus"},
+    {"ids": [2], "text": "IN 3 scaled by the attenuverter above it, clamped to ±10V; patching this jack takes the channel out of the OR, SUM and INV bus"},
+    {"ids": [4], "text": "A 10V gate on channel 1, going high at the top of the rise and staying high for the whole of the fall; with IN 1 patched and no cycle running it is high while the slew falls"},
+    {"ids": [5, 9], "text": "That generator's output at full level, ahead of its attenuverter, swinging from 0V to 10.2V"},
+    {"ids": [6], "text": "The highest of the four channel voltages after their attenuverters, floored at 0V and clamped to 10V, counting only channels whose numbered output is unpatched"},
+    {"ids": [7], "text": "The four channel voltages after their attenuverters added together and clamped to ±10V, counting only channels whose numbered output is unpatched"},
+    {"ids": [8], "text": "The SUM voltage with its sign flipped, clamped to ±10V"},
+    {"ids": [10], "text": "A 10V gate on channel 4, high for the whole of the rise; with IN 4 patched and no cycle running it is high while the slew rises"}
+  ],
+  "notes": [
+    "both attenuverters start at centre, where they pass nothing, so the numbered outputs and the mixing bus are silent until you turn one of them away from noon",
+    "the two dark rectangles draw the shape of each channel's cycle, with a dot running along it while the channel is active; nothing on them can be clicked or dragged",
+    "a channel with nothing patched into its signal or trigger jack and its LOOP button off holds at 0V; it needs a trigger, a loop or a patched signal before it puts anything out"
+  ],
+  "menu": [
+    "Bandlimited EOR/EOC — smooths the edges of the EoR and EoC gates so they alias less at audio rates",
+    "Bandlimited CH1/CH4 Signal Outputs — smooths the jump the generator makes when a fall reaches the bottom, so the output aliases less at audio rates",
+    "Preview Tracer — draws a moving dot on each channel's curve display showing where that channel is in its cycle",
+    "Interpolate Timing Updates — spreads a change of rise or fall time across the samples between timing updates, removing the zipper tone heavy modulation otherwise causes",
+    "Timing Update Rate — sets how often the rise and fall times are recalculated from the knobs and the CV, at audio rate or one sample in four, eight, sixteen or thirty-two",
+    "Force Halo Dynamic Surface to NanoVG — draws the lit rings around the knobs without OpenGL"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 10V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "bipolar · continuous · one channel only",
+      "6": "bipolar · continuous · one channel only",
+      "7": "bipolar · continuous · one channel only",
+      "8": "bipolar · continuous · one channel only",
+      "9": "bipolar · continuous · one channel only",
+      "10": "bipolar · continuous · one channel only",
+      "11": "bipolar · continuous · one channel only",
+      "12": "high above 2.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 2.5V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "±10V · one channel only",
+      "2": "±10V · one channel only",
+      "3": "±10V · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10.2V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "±10V · one channel only",
+      "8": "±10V · one channel only",
+      "9": "0 to 10.2V · one channel only",
+      "10": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

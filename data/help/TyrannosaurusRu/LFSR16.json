@@ -1,0 +1,45 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "LFSR16",
+  "description": "Sequencer running a sixteen-bit linear feedback shift register that can be split into two independently clocked registers, with the bits also read across a four by four grid, superseded by LFSR16 Poly",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Switches one feedback coefficient on or off; the register bits whose coefficient is on are combined to make the bit shifted in"},
+    {"ids": [16], "text": "Makes the first register feed back the inverted bit, an XNOR rather than an XOR"},
+    {"ids": [17], "text": "Makes the second register feed back the inverted bit, an XNOR rather than an XOR"},
+    {"ids": [18], "text": "Sets how many of the sixteen bits belong to the first register, 0 to 16, the rest forming the second register"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge shifts the first register one place, reading high above 2V and low below 0.1V"},
+    {"ids": [1], "text": "A rising edge shifts the second register one place, reading high above 2V and low below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A voltage built from the four bits of one column of the grid, 0V to 1V, the four bits not being weighted as a plain binary number"},
+    {"ids": [4, 5, 6, 7], "text": "The four bits of one row of the grid read as a binary number, 0V to 1V"},
+    {"ids": [8, 9, 10, 11], "text": "Carries 10V when the four bits of one column of the grid hold an odd number of set bits, and 0V otherwise"},
+    {"ids": [12, 13, 14, 15], "text": "Carries 10V when the four bits of one row of the grid hold an odd number of set bits, and 0V otherwise"},
+    {"ids": [16], "text": "Carries 10V while the lowest bit of the first register is set, despite the tooltip naming it sequence 2"},
+    {"ids": [17], "text": "Carries 10V while the lowest bit of the second register is set"}
+  ],
+  "notes": [
+    "each square light gives one register bit, red in the first register and green in the second, and brighter where the bit is set",
+    "the first register is shifted only by a rising edge at CLK1 and the second only by one at CLK2; with nothing patched there the outputs never change",
+    "every feedback coefficient starts switched off, so a register shifts in zeros and falls silent within a few clocks; switch at least one coefficient on for a repeating sequence",
+    "the maker marks this module deprecated and points to LFSR16 Poly instead, so it is left out of the module browser unless the browser is set to show deprecated modules"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped",
+      "1": "high above 2V · stepped"
+    },
+    "outputs": {
+      "0": "0 to 1V",
+      "1": "0 to 1V",
+      "2": "0 to 1V",
+      "3": "0 to 1V",
+      "4": "0 to 1V",
+      "5": "0 to 1V",
+      "6": "0 to 1V",
+      "7": "0 to 1V"
+    }
+  }
+}

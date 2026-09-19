@@ -1,0 +1,57 @@
+{
+  "plugin": "BGal256",
+  "module": "DressMeUp",
+  "description": "A four-step sequencer played as a dressing game: each step holds a piece of clothing dragged onto the model in the display, and the output voltage follows whatever that step is wearing",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the sequence runs through, 1 to 4"},
+    {"ids": [1], "text": "Sets the voltage range the STEP/CV jack is read over: +10V, ±5V or ±10V"},
+    {"ids": [2], "text": "Sets the voltage range the value jacks are read over: +10V, ±5V or ±10V"},
+    {"ids": [3], "text": "Multiplies both voltage outputs, 0 to 10"},
+    {"ids": [4], "text": "Crossfades from one step's value to the next as the STEP/CV voltage moves between them, instead of snapping to the nearer step"},
+    {"ids": [5], "text": "Chooses what the output value is: enabled, the number of the clothing worn at that step; disabled, the voltage last sent to that step's value jack"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V sets the sequence back to the first step"},
+    {"ids": [1], "text": "A rising edge past 1V moves back one step, wrapping round at the first, and is ignored while STEP/CV is patched"},
+    {"ids": [3], "text": "Sets the current step from a voltage spread across the range chosen on the STEP/CV switch, and stops the STEP and PREV jacks from moving the sequence"},
+    {"ids": [10], "text": "Sets the value of step A from a voltage across the chosen value range, changing the clothing shown for that step"},
+    {"ids": [11], "text": "Sets the value of step B from a voltage across the chosen value range, changing the clothing shown for that step"},
+    {"ids": [12], "text": "Sets the value of step C from a voltage across the chosen value range, changing the clothing shown for that step"},
+    {"ids": [13], "text": "Sets the value of step D from a voltage across the chosen value range, changing the clothing shown for that step"},
+    {"ids": [14], "text": "Sets the value of whichever step is current, across the chosen value range, changing the clothing shown for it"},
+    {"ids": [15], "text": "A rising edge past 1V moves on one step, wrapping round after the last, and is ignored while STEP/CV is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current step's value multiplied by RANGE"},
+    {"ids": [1], "text": "A 10V pulse 1ms long when the step changes or the current step's value changes, and only while that value is not zero"},
+    {"ids": [2], "text": "The values of every step in use added together, multiplied by RANGE and then divided by four, although the manual calls this the raw sum"}
+  ],
+  "notes": [
+    "with QUAN enabled the output follows the clothing worn by the model, so a fresh module puts out 0V until a garment is dragged onto it",
+    "garments are dragged onto the model in the display, and the one belonging to the current step is highlighted as the sequence runs",
+    "the garments in the display are drawn inside a single widget, so clicking one of them cannot reach a help entry of its own"
+  ],
+  "menu": [
+    "Shader parameters — opens sliders for the look of the screen, among them Spot Width, Spot Height, Color Boost, Input Gamma and Output Gamma",
+    "Disable Shader — draws the screen without its shader",
+    "Enable Output Filter — puts a 100Hz highpass on the main output, which lets it swing below 0V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "13": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "14": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "15": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "one channel only"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "MADZINE",
+  "module": "PPaTTTerning",
+  "description": "Clocked sequencer that plays one of five knob voltages per step, in an order built from a mode, a density and an amount of randomness, with a second pair of outputs running behind the first",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4], "text": "One of the five voltages the sequence steps between, -10V to +10V"},
+    {"ids": [5], "text": "Steps through the three orders the sequence can take: Sequential walks the knobs in turn, Custom follows the pattern typed into the menu, and Jump takes them 1, 3, 5, 2, 4"},
+    {"ids": [6], "text": "Sets how many of the five knobs the pattern is built from and how long it runs: two knobs and 8 steps at the bottom, three a fifth up, four two fifths up, five knobs and 48 steps above that"},
+    {"ids": [7], "text": "Replaces a share of the steps with a knob chosen at random, 0% to 100% of half the pattern length, and rebuilds the pattern every time it moves"},
+    {"ids": [8], "text": "Sets a delay in time rather than in steps on the second pair of outputs, up to 1 second"},
+    {"ids": [9], "text": "Sets how many steps behind the main outputs the second pair runs, cycling through 0 to 5 on each press; the lamp brightens with the number and is dark at 0"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge through 1V moves the sequence on one step"},
+    {"ids": [1], "text": "A rising edge through 1V returns the sequence to its first step and empties both the step memory and the time delay buffer"},
+    {"ids": [2], "text": "Scales the time delay set by the CVD trimmer, 0V giving no delay and 10V the full time; while this jack is patched the trimmer alone no longer sets the delay"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the knob the current step points at"},
+    {"ids": [1], "text": "A 10ms trigger at 10V whenever a step lands on a voltage different from the one before it"},
+    {"ids": [2], "text": "The voltage the main CV output carried the set number of steps ago, held back further by the CVD time delay"},
+    {"ids": [3], "text": "A 10ms trigger at 10V whenever the voltage at the delayed CV output changes"}
+  ],
+  "notes": [
+    "the Density tooltip reports a step count rising from 28 to 48 across the top two fifths of that knob's travel, where the sequence in fact runs 48 steps throughout.",
+    "the sequence does not move until a clock reaches CLK; the CV output holds the voltage of whatever step it stopped on."
+  ],
+  "menu": [
+    "Enter pattern (1-5): — a text field taking a run of the digits 1 to 5, which becomes the order the knobs are played in while the mode is Custom",
+    "Reset to Default — puts the custom pattern back to the 32-step order the module starts with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads the CVD trimmer alone; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "±10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "Empath",
+  "description": "Input stage of an expandable chain of bandpass, notch and comb filters, carrying the audio inputs, the cascade control and a chaotic modulation source routed through the whole chain",
+  "params": [
+    {"ids": [0], "text": "Adds an Empath Filter to the right, cloned from the settings of the filter used to add it, shifting the rest of the chain over to make room"},
+    {"ids": [1], "text": "Switches the chain between stereo and polyphonic; in polyphonic mode the left input feeds every channel and the right output and send ports carry one channel of 0V"},
+    {"ids": [2], "text": "Sets how many filter stages, 1 to 3, each filter expander in the chain runs in series, which steepens the slope and narrows the response"},
+    {"ids": [3], "text": "Attenuates and inverts the cascade CV"},
+    {"ids": [4], "text": "Sets the rate of the built-in chaotic modulation source that is routed to every control in the chain"},
+    {"ids": [5], "text": "Attenuates and inverts the chaos speed CV, and with nothing patched there it sets how much internal chaos modulates the chaos speed itself"},
+    {"ids": [6], "text": "Sets the overall depth of the chaotic modulation reaching the whole chain; at zero no chaos reaches any control"},
+    {"ids": [7], "text": "Attenuates and inverts the chaos level CV"},
+    {"ids": [8], "text": "Resets every Empath, Empath Filter and Empath Out in the chain to default settings"},
+    {"ids": [9], "text": "Switches the spectrum graph on each filter between one trace and one trace per channel"},
+    {"ids": [10], "text": "Gives the left and right channels separate chaotic modulation when on, or one shared chaotic signal when off; with more than two channels it alternates the two signals across odd and even channels"},
+    {"ids": [11], "text": "Randomizes the chaotic modulation source across the whole chain at once"},
+    {"ids": [12], "text": "Sets the level of audio entering the chain"},
+    {"ids": [13], "text": "Attenuates and inverts the input gain CV"},
+    {"ids": [14], "text": "Stops the chaotic modulation source, holding every chaotic voltage where it is, which also cuts CPU use"},
+    {"ids": [15], "text": "Shows the chaos voltages on the spectrum displays"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Left audio into the chain; with the right input empty this one feeds both sides, and in polyphonic mode it carries every channel"},
+    {"ids": [1], "text": "Right audio into the chain"},
+    {"ids": [2], "text": "Varies the number of filter stages run in series by each filter in the chain"},
+    {"ids": [3], "text": "Varies the rate of the chaotic modulation source, and patching a cable here replaces the internal chaos on that control"},
+    {"ids": [4], "text": "Varies the depth of the chaotic modulation reaching the chain"},
+    {"ids": [5], "text": "Varies the level of audio entering the chain"}
+  ],
+  "notes": [
+    "every control with an attenuverter is modulated by the internal chaos source through that attenuverter, and patching a cable into its CV input replaces the chaos with the cable's voltage",
+    "this module has no output ports: the chain needs at least one Empath Filter and an Empath Output to its right, both added automatically when Empath is taken from the module browser.",
+    "holding Shift while clicking the add-filter button gives the new filter default settings, and holding Ctrl, or Command on a Mac, gives it a level of zero."
+  ],
+  "menu": [
+    "Interpolator — chooses Linear (uses less CPU) or Sinc (cleaner audio) for the filters in the chain",
+    "Configure for V/OCT — on the chaos speed attenuverter's own menu, not the panel menu: sets that attenuverter so the chaos speed CV tracks a volt per octave",
+    "Low sensitivity — on an attenuverter knob's own menu, not the panel menu: divides that knob's effect by 10 and marks the knob with an orange dot",
+    "Unipolar mode — on an attenuverter knob's own menu, not the panel menu: adds 5V to the CV on that control and clamps the result at zero"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads the left audio input.",
+      "2": "continuous · polyphonic\n\nunpatched it reads Empath's own chaos voltage; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "3": "bipolar · continuous · polyphonic\n\nunpatched it reads Empath's own chaos voltage; the knob and this input are summed and the total held to ±5V.",
+      "4": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 2V.",
+      "5": "continuous · polyphonic\n\nunpatched it reads Empath's own chaos voltage; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V."
+    }
+  }
+}

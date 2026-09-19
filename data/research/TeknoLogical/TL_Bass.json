@@ -1,0 +1,16 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Bass",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Bass.cpp:180 trigIn.process(getVoltage(), 0.1f, 1.f)"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the base note, about 65.4Hz", "why": "src/TL_Bass.cpp:206 clamp(getVoltage(), -2.f, 2.f) added to BASE_V_DEFAULT -2.75f, 440Hz at 0V"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "src/TL_Bass.cpp:247-250 knob + getVoltage(), clamp(-10, 10)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "±10V", "why": "src/TL_Bass.cpp:198-201 knob + getVoltage(), clamp(-10, 10)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±11.7V", "why": "src/TL_Bass.cpp:256 clamp(out*5.f, -11.7f, 11.7f)"}
+    }
+  },
+  "comment": "The manual says the output is mono ±5V and \"limited to ±5 V\"; the code multiplies by 5 and then clamps at ±11.7V (TL_Bass.cpp:256), so a loud note can exceed ±5V and the stated limit is not the one in the build. The decay times of 80ms to 800ms come from DecayEnvelope::trigger in helpers/dsp_utils.hpp:113-122; the manual gives no figures. The DECAY CV is sampled only when a note fires, so moving it during a note does not change that note. The timbre switch is configured with its choice list in the order \"2\", \"1\", so the tooltip reads 1 for the upper position, which is also what the panel prints. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

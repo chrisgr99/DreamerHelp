@@ -1,0 +1,43 @@
+{
+  "plugin": "JPFree",
+  "module": "Octavator",
+  "description": "Replaces or shifts the octave of a V/Oct signal at random, with a fader per octave setting how often each one is chosen and a seed that makes the pattern repeatable",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "text": "Sets how often this octave is chosen; at zero it is never used, and the faders are weighed against each other rather than adding up to anything"},
+    {"ids": [10], "text": "Adds up to a hundred cents of random detuning to each note"},
+    {"ids": [11], "text": "Returns the internal seed to its stored value, so the same pattern of octaves plays again"},
+    {"ids": [12], "text": "Draws a new internal seed from the clock, giving a fresh pattern of octaves"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be re-octaved; each polyphonic channel is treated on its own"},
+    {"ids": [1], "text": "Marks where one note ends and the next begins, so a new octave can be drawn; each polyphonic channel is treated on its own"},
+    {"ids": [2], "text": "Returns the internal seed to its stored value when the voltage rises past 2V"},
+    {"ids": [3], "text": "Draws a new internal seed when the voltage rises past 2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The re-octaved pitch, with as many channels as the wider of the two inputs"},
+    {"ids": [1], "text": "The gate input passed through, with as many channels as the wider of the two inputs"}
+  ],
+  "notes": [
+    "with nothing patched into the gate input the octave is redrawn whenever the incoming pitch changes",
+    "the fader row is read differently in each mode, so the number under a fader means an absolute octave, a shift in octaves, or an interval, depending on what the menu is set to",
+    "in Absolute the ten faders are the octaves 0 to 9, and the one chosen replaces the octave of the incoming note",
+    "in Relative the ten faders are shifts of minus five to plus five octaves, added to the octave of the incoming note",
+    "in Relative + Intervals the top row of faders is shifts of minus two to plus three octaves and the bottom row is intervals set below the note"
+  ],
+  "menu": [
+    "Mode: Absolute, Relative, Relative + Intervals — chooses how the row of faders is read, and swaps the panel artwork to match"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "polyphonic",
+      "2": "unipolar · one channel only\n\na negative voltage does nothing here.",
+      "3": "unipolar · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "VostokInstruments",
+  "module": "Atlas",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Atlas.cpp:132-133 reads a connected input with getVoltageSum and otherwise falls back to the previous channel's value"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "the jack above it", "why": "src/Atlas.cpp:132-133 reads a connected input with getVoltageSum and otherwise falls back to the previous channel's value"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "the jack above it", "why": "src/Atlas.cpp:132-133 reads a connected input with getVoltageSum and otherwise falls back to the previous channel's value"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "the jack above it", "why": "src/Atlas.cpp:132-133 reads a connected input with getVoltageSum and otherwise falls back to the previous channel's value"},
+      "4": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "0V", "why": "src/Atlas.cpp:130-131 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Atlas.cpp:130-131 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "6": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Atlas.cpp:130-131 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "7": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "normal": "the jack above it", "why": "src/Atlas.cpp:130-131 reads each frequency input with getNormalVoltage, the normal being the previous channel's value and 0V for channel 1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/Atlas.cpp:103-106 reads each FM2/RES input with getVoltage and clamps it to ±5V for the resonance path; src/Atlas.cpp:129 passes the raw voltage to the filter's FM input instead when the switch is on FM2"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/Atlas.cpp:103-106 reads each FM2/RES input with getVoltage and clamps it to ±5V for the resonance path; src/Atlas.cpp:129 passes the raw voltage to the filter's FM input instead when the switch is on FM2"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/Atlas.cpp:103-106 reads each FM2/RES input with getVoltage and clamps it to ±5V for the resonance path; src/Atlas.cpp:129 passes the raw voltage to the filter's FM input instead when the switch is on FM2"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/Atlas.cpp:103-106 reads each FM2/RES input with getVoltage and clamps it to ±5V for the resonance path; src/Atlas.cpp:129 passes the raw voltage to the filter's FM input instead when the switch is on FM2"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "range": "0 to 10V", "why": "src/Atlas.cpp:149 reads this input with getVoltage, divides by 10 and clamps the sum with the slider to 0-1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Atlas.cpp:137-139 writes each output with setVoltage from the chosen filter tap, sign-corrected"},
+      "1": {"family": "audio", "poly": false, "why": "src/Atlas.cpp:137-139 writes each output with setVoltage from the chosen filter tap, sign-corrected"},
+      "2": {"family": "audio", "poly": false, "why": "src/Atlas.cpp:137-139 writes each output with setVoltage from the chosen filter tap, sign-corrected"},
+      "3": {"family": "audio", "poly": false, "why": "src/Atlas.cpp:137-139 writes each output with setVoltage from the chosen filter tap, sign-corrected"},
+      "4": {"family": "audio", "poly": false, "why": "src/Atlas.cpp:137-139 writes each output with setVoltage from the chosen filter tap, sign-corrected"}
+    }
+  },
+  "comment": "The four signal inputs are read with getVoltageSum, which loops over the polyphonic channels and adds them, so a polyphonic cable is summed to one mono signal rather than filtered per voice; poly is recorded true on that basis. Resonance is capped at 0.8 of the knob plus 0.9 of the CV and clamped to 0.9, which the maker's comment calls about 80% of the Ripples model it is built on. The frequency knobs run from 20Hz to 20kHz, the Ripples constants kFreqKnobMin and kFreqKnobMax. The HP tap is a 2-pole and is halved in level before the output; LP and BP are 4-pole. Three debug menu items — gain compensation, add lowend to HP, and a circuit-based filter simulation — are commented out in the widget and are not reachable."
+}

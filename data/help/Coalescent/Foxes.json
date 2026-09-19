@@ -1,0 +1,46 @@
+{
+  "plugin": "Coalescent",
+  "module": "Foxes",
+  "description": "A three-species food chain: grass feeds bunnies and bunnies feed foxes, and one knob takes the chase from a steady rest through period doubling into chaos.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed the simulation runs at, -8 to +4 octaves; the centre gives C4 at 261.63Hz at the periodic default and the bottom about 1Hz."},
+    {"ids": [1], "text": "Sets the saturation of the bunny-to-fox link, 0 to 1, mapped onto a narrow band around 2, which reshapes the chase and moves the chaotic windows."},
+    {"ids": [2], "text": "Sets the bifurcation parameter, 0 to 1, taking the chain from rest through a regular chase and period doubling into chaos at about 0.62, and on into deep crashes."},
+    {"ids": [3], "text": "An attenuverter, -1 to +1, scaling the CV into the upper trophic saturation."},
+    {"ids": [4], "text": "An attenuverter, -1 to +1, scaling the CV into the bifurcation parameter."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the RATE knob at 1V per octave, setting the speed the simulation runs at."},
+    {"ids": [1], "text": "Modulates the upper trophic saturation, at a tenth per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the bifurcation parameter, at a tenth per volt through its attenuverter."},
+    {"ids": [3], "text": "A continuous force added to the grass at a quarter unit per volt, clamped to ±15V first: a short gate re-times the ecology and an audio-rate signal cross-modulates it."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The grass population centred on its equilibrium, at a gain of 8 and soft-clipped to ±5V."},
+    {"ids": [1], "text": "The bunny population centred on its equilibrium, at a gain of 18 and soft-clipped to ±5V."},
+    {"ids": [2], "text": "The fox population centred on its equilibrium, at a gain of 2.5 and soft-clipped to ±5V."},
+    {"ids": [3], "text": "A 10V pulse 1ms long at each local maximum of the grass population."},
+    {"ids": [4], "text": "A 10V pulse 1ms long at each local maximum of the bunny population."},
+    {"ids": [5], "text": "A 10V pulse 1ms long at each local maximum of the fox population."}
+  ],
+  "notes": [
+    "The peak outputs are events, not a three-phase clock. At the periodic default they tick once each per lap in grass, bunny, fox order; in chaos the order and the count vary.",
+    "The three populations are not equally spaced in phase, and the output gains of 8, 18 and 2.5 exist to bring their very different native swings to a comparable level."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · one channel only",
+      "1": "±5V · one channel only",
+      "2": "±5V · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    }
+  }
+}

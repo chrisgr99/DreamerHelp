@@ -1,0 +1,15 @@
+{
+  "plugin": "MissingMileModular",
+  "module": "DoubleplusPulses",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/DoubleplusPulses.cpp process() calls clockTrigger.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 1.0f) with no channel argument"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/DoubleplusPulses.cpp process() calls bitTrigger.process(inputs[BIT_INPUT].getVoltage(), THRESH_LO, THRESH_HI) with THRESH_HI 1.0f and THRESH_LO 0.2f, no channel argument"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/DoubleplusPulses.cpp process() ends with outputs[OUTA_OUTPUT].setVoltage(outA ? GATE_HIGH : 0.f), GATE_HIGH 10.f, and no channel count is ever set"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/DoubleplusPulses.cpp process() ends with outputs[OUTB_OUTPUT].setVoltage(outB ? GATE_HIGH : 0.f), GATE_HIGH 10.f, and no channel count is ever set"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 4120a74, the head of main. Every commit in the repository carries version 2.0.0, so the version string settles nothing; the installed build is the post-rebrand one, because the installed plugin.json has slug MissingMileModular and model DoubleplusPulses, which are the names introduced by eb7c34b, and the only two commits after that touch README.md alone. src/ is unchanged from 095f204 onward. The panel prints CLK, not CLOCK as the README's control table and the maker's configured port name both have it; the lines use CLK. The panel prints AND above, MUTE in the middle and OR below, between the two bus toggles, and the constants agree: MODE_AND is 2, which res-src/rotate_befaco.py documents as the up throw of the stock Befaco lever, and MODE_OR is 0, the down throw. A comment in DoubleplusPulsesWidget says the opposite, 'OR up / MUTE centre / AND down'; it contradicts both the constants and the panel and is a stale comment rather than behaviour. The maker tags the module Expander, but it is not one in Rack's sense: it reads no expander bus and has no side to be placed on. Ten lights are configured and none of them has a ParamWidget, so none is clickable; the two that matter to using the module are covered by Note lines. Index order and panel order agree for the routing toggles, which run 1 to 8 down the panel zig-zagging between two columns, and for the two bus toggles and two outputs, which run left to right as A then B."
+}

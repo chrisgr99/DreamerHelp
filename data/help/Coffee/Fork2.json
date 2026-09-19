@@ -1,0 +1,40 @@
+{
+  "plugin": "Coffee",
+  "module": "Fork2",
+  "description": "Compares one voltage against a threshold and sends one of two other voltages, modified or not, to a single output",
+  "params": [
+    {"ids": [0], "text": "Takes a fresh reading of the source voltage, as a rising edge at the trigger jack does"},
+    {"ids": [1], "text": "Sets the voltage the source is compared against, -10V to 10V; above it the left half is used, at or below it the right half"},
+    {"ids": [2, 3], "text": "Multiplies that half's result, -10 to 10"},
+    {"ids": [4, 5], "text": "Adds -10V to 10V to that half's input before it is multiplied"},
+    {"ids": [6, 7], "text": "In the Modify position the source voltage is added to that half's input before the offset and scale; in Replace the source is dropped and only that half's input is used"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here takes a fresh reading of the source voltage"},
+    {"ids": [1], "text": "Sets the comparison threshold, and overrides the threshold knob while patched"},
+    {"ids": [2, 3], "text": "The voltage that half sends on, after its offset and scale and, in Modify, with the source added"},
+    {"ids": [4], "text": "The voltage that is compared against the threshold, and the one Modify adds in"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the result of whichever half the comparison picked"},
+    {"ids": [1, 2], "text": "Sends a 1ms pulse when the comparison changes over to that half, and the lamp above lights while that half is the one in use"}
+  ],
+  "notes": [
+    "with nothing patched to the trigger jack the source is read continuously; patch a trigger there and the source is only read on a rising edge",
+    "the output is recalculated only when the source voltage changes, so turning the offset, scale or threshold knobs does nothing until the source moves"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Slide",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "slide.cpp:585 multiplies it by 12 so a volt is an octave, snaps that to the nearest scale degree (snapBar at :265) and transposes it by the position knob's degrees; :588 unpatched, the knob alone is the position"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the slant CV, ±5V, summed with the slant knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the decay CV, ±5V, summed with the decay knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the damping CV, ±5V, summed with the damping knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the pick hardness CV, ±5V, summed with the pick knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the tone CV, ±5V, summed with the tone knob"},
+      "6": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the volt per octave that transposes the whole instrument, or places the bar under the menu setting"},
+      "7": {"family": "trigger", "poly": true, "step": "stepped", "why": "slide.cpp:890 gives each gate channel its own Schmitt at 1V and picks the Nth NOTE, not the Nth string — the solver chooses the string; :873 a single-channel cable is one stroke, the melody string or one roll step, never a strum"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "slide.cpp:874 divides it by 10 and clamps to 0.03 to 1 as that stroke's velocity, read per gate channel with getPolyVoltage at :892; unpatched every stroke is full"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "why": "slide.cpp:916 clockTrig.process crosses 1V and :921 calls rollStep, but only while the AUTO switch is on (:913)"},
+      "11": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp:529 adds getVoltage()*0.1*16 to the pattern knob, rounds the total and clamps it to the sixteen rolls, so a ±5V swing sweeps the whole list"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slide.cpp names it the density CV, ±5V, summed with the density knob"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "why": "slide.cpp names it a unipolar volume pedal that overrides the swell knob, or a bipolar offset on it under the menu setting"},
+      "14": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "slide.cpp names it a volt per octave snapped to semitones, summed with the root knob"},
+      "15": {"family": "cv", "poly": true, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "slide.cpp names it one volt per scale with 0V meaning free; the shared scale bus carries a whole scale over the extra channels of the same jack"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "slide.cpp declares the left side of the mix"},
+      "1": {"family": "audio"},
+      "3": {"family": "audio", "poly": false, "why": "slide.cpp declares the even-numbered strings summed"},
+      "4": {"family": "audio", "poly": false, "why": "slide.cpp declares the odd-numbered strings summed"}
+    }
+  },
+  "comment": "Two parameters and two jacks are declared and marked retired or given no widget by the maker: a scrape control, a legato reach control, a roll reset input, and a per-string audio output that now lives on the SLIDE XP expander. None of them can be reached on this panel. The bar's travel is rate-based and shaped as an S-curve scaled to the distance, which is why a wide move takes proportionally longer than a narrow one and why it does not sound like an ordinary portamento. The bar is modelled as a lossy mass-loaded termination that returns less treble than a fret would."
+}

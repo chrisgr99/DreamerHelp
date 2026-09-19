@@ -1,0 +1,96 @@
+{
+  "plugin": "MindMeldModular",
+  "module": "ShapeMaster",
+  "description": "Eight-channel multi-stage envelope generator and complex LFO: each channel plays a shape you draw, with its own VCA, CV output, trigger modes, crossover and sidechain trigger detection",
+  "params": [
+    {"ids": [0, 1, 25, 26, 50, 51, 75, 76, 100, 101, 125, 126, 150, 151, 175, 176], "text": "Sets the cycle length of that channel, 0.56ms to 30 minutes; right-clicking it takes a length typed in seconds"},
+    {"ids": [2, 27, 52, 77, 102, 127, 152, 177], "text": "Sets how many times the shape cycles once it starts playing, 1 to 99, or endlessly at the INF setting"},
+    {"ids": [3, 28, 53, 78, 103, 128, 153, 178], "text": "Holds the shape back by as many as 8192 samples after a trigger arrives, in Trigger and Sidechain modes"},
+    {"ids": [4, 29, 54, 79, 104, 129, 154, 179], "text": "Runs alternate cycles fast and the ones between them slow, -99% to +99%"},
+    {"ids": [5, 30, 55, 80, 105, 130, 155, 180], "text": "Shifts the shape through its cycle, 0 to 360 degrees"},
+    {"ids": [6, 31, 56, 81, 106, 131, 156, 181], "text": "Stretches or compresses the shape vertically along an exponential curve, -100% to +100%"},
+    {"ids": [7, 32, 57, 82, 107, 132, 157, 182], "text": "Stretches the shape horizontally towards one end of the cycle and compresses it at the other, -100% to +100%"},
+    {"ids": [8, 33, 58, 83, 108, 133, 158, 183], "text": "Attenuates the output voltage, 0 to 100%"},
+    {"ids": [9, 34, 59, 84, 109, 134, 159, 184], "text": "Limits how fast the output voltage can change, measured against the cycle length so that 50% turns a square wave into a triangle"},
+    {"ids": [10, 35, 60, 85, 110, 135, 160, 185], "text": "Filters the output voltage to soften the clicks that steep vertical changes in the shape make, 0 to 100%"},
+    {"ids": [11, 36, 61, 86, 111, 136, 161, 186], "text": "Splits the audio through the VCA into a low band and a high band at this frequency, 20Hz to 20kHz, and turns the crossover off at its lowest setting"},
+    {"ids": [12, 37, 62, 87, 112, 137, 162, 187], "text": "Attenuates how far the shape modulates the high band of the VCA, 0 to 100%"},
+    {"ids": [13, 38, 63, 88, 113, 138, 163, 188], "text": "Attenuates how far the shape modulates the low band of the VCA, 0 to 100%"},
+    {"ids": [14, 39, 64, 89, 114, 139, 164, 189], "text": "Sets the level the sidechain envelope follower has to pass for a trigger to be generated, 0 to 100%"},
+    {"ids": [15, 40, 65, 90, 115, 140, 165, 190], "text": "Starts the playhead on that channel, and pressing it during play stops the playhead and resets it; alt-clicking resets the channel"},
+    {"ids": [16, 41, 66, 91, 116, 141, 166, 191], "text": "Holds the playhead in place, with the voltage under it held at the CV output"},
+    {"ids": [17, 42, 67, 92, 117, 142, 167, 192], "text": "Steps through off, a sustain marker the playhead holds at while the gate is high, and a pair of loop markers the playhead runs between while the gate is high"},
+    {"ids": [18, 43, 68, 93, 118, 143, 168, 193], "text": "Hard-syncs the cycle length to a clock; it is fixed off in this module and works only in ShapeMaster Pro"},
+    {"ids": [19, 44, 69, 94, 119, 144, 169, 194], "text": "Quantises triggers and length changes to a main clock pulse, and does nothing unless sync is on"},
+    {"ids": [20, 45, 70, 95, 120, 145, 170, 195], "text": "Sends the sidechain audio to that channel's VCA output for listening"},
+    {"ids": [21, 46, 71, 96, 121, 146, 171, 196], "text": "Loads the previous preset in the same folder, replacing the shape and every front panel control on that channel"},
+    {"ids": [22, 47, 72, 97, 122, 147, 172, 197], "text": "Loads the next preset in the same folder, replacing the shape and every front panel control on that channel"},
+    {"ids": [23, 48, 73, 98, 123, 148, 173, 198], "text": "Loads the previous shape in the same folder, leaving every control on that channel untouched"},
+    {"ids": [24, 49, 74, 99, 124, 149, 174, 199], "text": "Loads the next shape in the same folder, leaving every control on that channel untouched"},
+    {"ids": [200], "text": "Resets all eight channels"},
+    {"ids": [201], "text": "Starts and stops all eight channels; a channel plays only while run is on and its own play button is on"},
+    {"ids": [202], "text": "Opens the advanced sidechain settings for the selected channel: use VCA input, gain adjust, a 24dB per octave high pass and low pass, hysteresis, hold off and sensitivity"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Audio into that channel's VCA, whose gain the shape modulates over 0-10V whatever the CV range is set to"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Starts the shape on that channel from a trigger or a gate, and sets the playhead position directly when the channel is in CV mode"},
+    {"ids": [17], "text": "A trigger resets all eight channels"},
+    {"ids": [18], "text": "A trigger toggles run on and off"},
+    {"ids": [19], "text": "Polyphonic audio the trigger levels read, its channels 1 to 8 feeding ShapeMaster channels 1 to 8"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "That channel's VCA input with the shape applied to its amplitude"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "The shape as a control voltage, over the range picked in the graph window"}
+  ],
+  "notes": [
+    "a channel plays only while run is on and that channel's play button is on; in Trigger, Gate or Sidechain mode it starts only when something arrives at its TRIG input.",
+    "double-clicking in the graph window adds a node and double-clicking a node deletes it; shift-dragging draws a stepped pattern, and alt or ctrl dragging snaps a node to the grid.",
+    "right-clicking in the graph window opens a menu of its own carrying Add node, and right-clicking a node opens one with that node's time and voltage and a Delete node item.",
+    "right-clicking a channel button opens that channel's own menu, with its label and colour, gain adjust at the VCA input, poly VCA summing, retrigger, and copy, paste and initialise.",
+    "hard sync to a clock belongs to ShapeMaster Pro: this build has no clock jack and its cycle lengths are set in time rather than in bars and beats."
+  ],
+  "menu": [
+    "Run off setting — stops and resets every channel when run goes off, or freezes them where they are",
+    "Show channel labels — draws each channel's name in the graph window",
+    "Show node tooltip — reads out the voltage and the time of a node while the pointer is over it",
+    "Show shape nodes — hides the nodes and the curve control points until one is under the pointer",
+    "Line width — a slider setting the thickness of the shape, 0.3pt to 2pt",
+    "Shadow — picks which side of the shape the shaded area is drawn on",
+    "Knob label display colour — sets the colour of the readouts under the knobs",
+    "Knob arcs — draws the knob position arc, the CV arc, both or neither",
+    "Cloaked mode — turns off the drawing that is not needed, to save processor time"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "0 to 10V · continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic",
+      "5": "0 to 10V · continuous · polyphonic",
+      "6": "0 to 10V · continuous · polyphonic",
+      "7": "0 to 10V · continuous · polyphonic",
+      "8": "stepped · one channel only",
+      "9": "stepped · one channel only",
+      "10": "stepped · one channel only",
+      "11": "stepped · one channel only",
+      "12": "stepped · one channel only",
+      "13": "stepped · one channel only",
+      "14": "stepped · one channel only",
+      "15": "stepped · one channel only",
+      "17": "high above 1V · stepped · one channel only",
+      "18": "high above 1V · stepped · one channel only",
+      "19": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous"
+    }
+  }
+}

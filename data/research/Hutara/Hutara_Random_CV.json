@@ -1,0 +1,15 @@
+{
+  "plugin": "Hutara",
+  "module": "Hutara_Random_CV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/Random.cpp:95 samples when this input's getVoltage() is 1 or more and src/Random.cpp:124 re-arms when it falls below 1, so a negative voltage never triggers"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Random.cpp:107 to 120 set this output to 10 or 0 with setVoltage(), which is channel 1 alone"},
+      "1": {"family": "cv", "poly": false, "why": "src/Random.cpp:105 writes this output with setVoltage(), which is channel 1 alone"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/Random.cpp:121 writes ten minus the gate output with setVoltage(), which is channel 1 alone"}
+    }
+  },
+  "comment": "Read from src/Random.cpp at commit 90c6a4e, version 2.0.0. The Trigger Division knob is dead: src/Random.cpp:67 reads it, src/Random.cpp:79 divides a local gateSpeed by it, and gateSpeed is never read again anywhere in process(), so nothing the knob does reaches an output. The whole gateSpeed block at src/Random.cpp:70 to 93, including the clock-derived rate and the three-position switch's arm of it, is discarded the same way; only the switch's second use, at src/Random.cpp:108 to 117, has any effect, and there it scales the gate probability rather than a speed. That contradicts the maker's tooltip, which names the switch Random Gate Speed, and the README, which calls its three positions slow, medium and fast. The GATE LENGTH knob likewise sets no duration: src/Random.cpp:107 compares it against a random number from -1 to 1 to decide whether the gate is 10V or 0V, and the gate then holds until the next trigger. Because the comparison is against a range centred on zero, the chance of a gate never falls below one half at any setting. The README's claim that the strength knob's range is 1 to 10 and the S&H offset's is -5V to 5V both match the source; its claim that a voltage of 1V or higher is considered active also matches, but its statement that the clock input responds at a 0.1V threshold applies only to the discarded gateSpeed block."
+}

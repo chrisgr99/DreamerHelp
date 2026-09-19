@@ -1,0 +1,19 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "ADREnvelope",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "ADREnvelope.cpp:413 reads getVoltage() with no channel index, as a gate or a trigger according to the panel switch"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the rising edge of the Phase input", "why": "ADREnvelope.cpp:395 reads this jack when patched and ADREnvelope.cpp:413 routes the Phase input's rising edge here otherwise"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the falling edge of the Phase input", "why": "ADREnvelope.cpp:402 reads this jack when patched and ADREnvelope.cpp:413 routes the Phase input's falling edge here otherwise"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "every output is written with setVoltage and no channel index; the maker lists the module as monophonic"},
+      "1": {"family": "trigger", "poly": false, "why": "every output is written with setVoltage and no channel index; the maker lists the module as monophonic"},
+      "2": {"family": "trigger", "poly": false, "why": "every output is written with setVoltage and no channel index; the maker lists the module as monophonic"},
+      "3": {"family": "trigger", "poly": false, "why": "every output is written with setVoltage and no channel index; the maker lists the module as monophonic"},
+      "4": {"family": "cv", "poly": false, "why": "every output is written with setVoltage and no channel index; the maker lists the module as monophonic"}
+    }
+  },
+  "comment": "The maker calls this an ADR envelope, but the attack level doubles as a sustain level and the delay is the held stage, so it behaves as an attack, sustain, delay, release generator. A dedicated A.trig or DR.trig input takes priority over the Phase input when both are patched.\nMAKER BUG: ADREnvelope.cpp:498 drives the four phase outputs from outTrig[i].running(), which is true for the whole 1ms high plus 1ms low of the pulse, where every other module in the plugin uses isHigh() and gets a 1ms pulse. These outputs are therefore high for 2ms and have no forced low gap. The same line takes its levels from gateOutHigh and gateOutLow, so the Trigger-high output-level and Trigger-low output-level items on this module's menu are never read."
+}

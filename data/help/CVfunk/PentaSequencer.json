@@ -1,0 +1,50 @@
+{
+  "plugin": "CVfunk",
+  "module": "PentaSequencer",
+  "description": "A five-step sequencer with five knobs and five outputs, each output reading a different knob on every step so that all five voltages rotate around the outputs together",
+  "params": [
+    {"ids": [0], "text": "Sets how far each output slides toward its new voltage before the next step arrives; fully anticlockwise steps instantly, and the slide is timed from the measured gap between triggers"},
+    {"ids": [1], "text": "Sets one of the five voltages the outputs rotate through, -5V to 5V"},
+    {"ids": [2], "text": "Sets one of the five voltages the outputs rotate through, -5V to 5V"},
+    {"ids": [3], "text": "Sets one of the five voltages the outputs rotate through, -5V to 5V"},
+    {"ids": [4], "text": "Sets one of the five voltages the outputs rotate through, -5V to 5V"},
+    {"ids": [5], "text": "Sets one of the five voltages the outputs rotate through, -5V to 5V"},
+    {"ids": [6], "text": "Advances the sequence by one step on each press"},
+    {"ids": [7], "text": "Returns the sequence to its first step on each press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the sequence by one step"},
+    {"ids": [1], "text": "Above 1V the knobs are read in the star order, and at or below 1V in the circle order"},
+    {"ids": [2], "text": "Added to every output voltage, before the total is clamped to -10 to 10V"},
+    {"ids": [3], "text": "Above 1V the rotation runs anticlockwise, and at or below 1V clockwise"},
+    {"ids": [4], "text": "A rising edge returns the sequence to its first step"},
+    {"ids": [5], "text": "Overrides the slew knob and moves it: 0-10V is read as the whole knob travel"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4], "text": "One of the five rotating voltages, slewed and shifted, clamped to -10 to 10V"}
+  ],
+  "notes": [
+    "the outputs do not move until a trigger arrives, either at the TRIG input or from the button beside it",
+    "the slew time is measured from the gap between the last two triggers, so a change of clock tempo is followed automatically"
+  ],
+  "menu": [
+    "Enable Polyphonic Output to Channel A — gathers all five output voltages into the A output as five polyphonic channels"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "stepped · one channel only",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · polyphonic",
+      "1": "±10V",
+      "2": "±10V",
+      "3": "±10V",
+      "4": "±10V"
+    }
+  }
+}

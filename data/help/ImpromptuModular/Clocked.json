@@ -1,0 +1,56 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Clocked",
+  "description": "Master clock with three sub-clocks, each running at its own ratio of the master tempo; it can be chained with other clocks and locked to an external clock source",
+  "params": [
+    {"ids": [0], "text": "Sets the master tempo in whole BPM, 30 to 300"},
+    {"ids": [1, 2, 3], "text": "Ratio of that clock to the master tempo: turned up it multiplies, turned down it divides, through every whole number to 16 plus 1.5 and 2.5, then selected values on to 96"},
+    {"ids": [4], "text": "Swing on the master clock, -99 to +99: every even pulse is moved earlier or later while the odd pulses hold their place, and at centre the pulses are evenly spaced"},
+    {"ids": [5, 6, 7], "text": "Swing on that sub-clock, -99 to +99: every even pulse of that clock is moved earlier or later while the odd pulses hold their place"},
+    {"ids": [8], "text": "Duration of the master clock pulse. The pulse and the gap after it are each held to at least 1ms whatever the swing setting"},
+    {"ids": [9, 10, 11], "text": "Duration of that sub-clock's pulse. The pulse and the gap after it are each held to at least 1ms"},
+    {"ids": [12], "text": "Restarts the time keeping of the master clock and of all three sub-clocks"},
+    {"ids": [13], "text": "Pause and play. The outputs hold their state while it is off, and the clock resumes where it stopped, so sub-clocks at different ratios stay in step"},
+    {"ids": [15, 16, 17], "text": "Delays that sub-clock against the master by a fraction of its own clock period: none, 1/16, 1/8, 1/4, 1/3, 1/2, 2/3 or 3/4"},
+    {"ids": [18], "text": "Steps back through the tempo modes, which are BPM CV and external sync at 24, 16, 12, 8, 4 or 2 pulses per step"},
+    {"ids": [19], "text": "Steps forward through the tempo modes, which are BPM CV and external sync at 2, 4, 8, 12, 16 or 24 pulses per step"}
+  ],
+  "inputs": [
+    {"ids": [4], "text": "A trigger here restarts the time keeping of the master clock and all three sub-clocks"},
+    {"ids": [5], "text": "A trigger here toggles between run and pause; the menu can make this input follow a gate level instead"},
+    {"ids": [6], "text": "In CV mode this sets the tempo, with 0V giving 120 BPM and each volt doubling it. In a sync mode the clock locks to the pulses arriving here, and with nothing patched the tempo comes from the BPM knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The master clock pulse, at the tempo shown on the BPM display"},
+    {"ids": [1, 2, 3], "text": "The pulse of that sub-clock, at its own ratio of the master tempo"},
+    {"ids": [4], "text": "A 10V pulse when the module is reset, for passing the reset on to sequencers or to another clock"},
+    {"ids": [5], "text": "A 10V pulse when run is switched on or off, for passing the run state on to sequencers or to another clock"},
+    {"ids": [6], "text": "Passes on the voltage at the BPM input when a cable is patched there; with nothing patched it gives the module's own tempo as a BPM CV"}
+  ],
+  "menu": [
+    "Outputs high on reset when not running — holds the clock outputs high while a stopped clock is reset, so a sequential switch reset at that moment is not stepped on",
+    "On Start — offers Do internal reset and Send reset pulse, so that switching run on restarts the clock and the sequencers it drives together",
+    "Display delay values in notes — shows the delay settings as note lengths instead of clock fractions, one quarter note being one clock period",
+    "Run CV input is level sensitive — makes the RUN input follow a gate rather than a trigger; in a chain of clocks only the first should have it turned on",
+    "Auto-patch — makes this the clock master and patches the reset, run and BPM inputs of the other Clocked and Clkd modules to it, leaving already-patched inputs alone",
+    "Add expander (4HP right side) — places the expander that adds pulse width and swing CV inputs against the right edge of this module",
+    "On Stop — offers Do internal reset and Send reset pulse, so that switching run off restarts the clock and the sequencers it drives together",
+    "BPM output is CV when ext sync — makes the BPM output carry the module's own tempo as a BPM CV rather than passing on the voltage at the BPM input",
+    "BPM Input when CV mode — two sliders, Scale and Offset, changing how the voltage at the BPM input is read as a tempo"
+  ],
+  "expects": {
+    "inputs": {
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "plugin": "wintoid",
+  "module": "Brink",
+  "description": "Dual voltage-window comparator: each channel reports whether its signal is inside a window you set, gives its position within that window as a voltage, and fires a trigger at each boundary crossing",
+  "params": [
+    {"ids": [0, 4], "text": "Sets the midpoint of that channel's window, -5V at the left and +5V at the right"},
+    {"ids": [1, 5], "text": "Sets the total span of that channel's window, 0V at the left and 10V at the right, with the boundaries half of that span either side of the midpoint; it starts at 5V"},
+    {"ids": [2, 6], "text": "Scales that channel's CTR CV input before it is added to the CENTER knob, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [3, 7], "text": "Scales that channel's WID CV input before it is added to the WIDTH knob, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage Channel A compares with its window; its channel count sets how many voices Channel A runs"},
+    {"ids": [1], "text": "Moves the midpoint of Channel A's window, added to the CENTER knob through the attenuverter beside it"},
+    {"ids": [2], "text": "Changes the total span of Channel A's window, added to the WIDTH knob through the attenuverter beside it, and the resulting span is held between 1mV and 20V"},
+    {"ids": [3], "text": "The voltage Channel B compares with its window; with nothing patched here Channel B reads Channel A's SIGNAL input, in full for a polyphonic cable"},
+    {"ids": [4], "text": "Moves the midpoint of Channel B's window through the attenuverter beside it; with nothing patched here Channel B reads Channel A's CTR CV input"},
+    {"ids": [5], "text": "Changes the total span of Channel B's window through the attenuverter beside it; with nothing patched here Channel B reads Channel A's WID CV input"}
+  ],
+  "outputs": [
+    {"ids": [0, 7], "text": "10V while that channel's signal is inside its window and 0V otherwise, with a signal resting exactly on a boundary counted as inside"},
+    {"ids": [1, 8], "text": "10V while that channel's signal is outside its window and 0V while it is inside"},
+    {"ids": [2, 9], "text": "Where that channel's signal falls within its window: -5V at the low boundary, 0V at the midpoint and +5V at the high boundary, clamped to those limits beyond them"},
+    {"ids": [3, 10], "text": "A 1ms 10V trigger when that channel's signal crosses the low boundary upward, entering the window from below"},
+    {"ids": [4, 11], "text": "A 1ms 10V trigger when that channel's signal crosses the high boundary upward, leaving the window above"},
+    {"ids": [5, 12], "text": "A 1ms 10V trigger when that channel's signal crosses the low boundary downward, leaving the window below"},
+    {"ids": [6, 13], "text": "A 1ms 10V trigger when that channel's signal crosses the high boundary downward, entering the window from above"},
+    {"ids": [14], "text": "10V while both channels are inside their windows, 0V otherwise"},
+    {"ids": [15], "text": "10V while either channel is inside its window, 0V while neither is"},
+    {"ids": [16], "text": "10V while exactly one of the two channels is inside its window, 0V otherwise"},
+    {"ids": [17], "text": "A held 0V or 10V that flips on every rising edge of XOR, so it changes each time the two channels go from agreeing to disagreeing; it starts low and is not saved with the patch"}
+  ],
+  "notes": [
+    "crossings are measured against the window as it stands at that moment, so modulating CENTER or WIDTH across a stationary signal fires the same triggers as moving the signal would.",
+    "a jump that clears the whole window in one step fires both boundary triggers, in the order they were passed.",
+    "the starting state is taken silently: no trigger is produced when the module is added to a patch or reset.",
+    "a hysteresis of 1mV is applied to every boundary test, so a noisy signal lying on a boundary does not chatter between states.",
+    "the slim rail between each channel's SIGNAL and POSITION sockets draws the first voice on a fixed -10V to +10V scale, with ticks marking +10V, 0V and -10V.",
+    "on that rail a translucent band marks the window, lines mark its low boundary, midpoint and high boundary, and a short pale line marks the signal. Voltages past either end stop there.",
+    "each channel runs up to 16 voices, counted from its own SIGNAL input, and a mono CTR CV or WID CV cable is copied to every voice.",
+    "the four shared logic outputs run at the larger of the two channels' voice counts, with the shorter channel's first voice copied across.",
+    "this module is kept so that patches already using it keep loading, and it is hidden from the module browser. BrinkV2 is the current one."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0.001 to 20V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads Channel A's SIGNAL input.",
+      "4": "bipolar · continuous · polyphonic\n\nunpatched it reads Channel A's CTR CV input.",
+      "5": "continuous · polyphonic\n\nunpatched it reads Channel A's WID CV input; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0.001 to 20V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · stepped · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic",
+      "6": "0 to 10V · stepped · polyphonic",
+      "7": "0 to 10V · stepped · polyphonic",
+      "8": "0 to 10V · stepped · polyphonic",
+      "9": "±5V · continuous · polyphonic",
+      "10": "0 to 10V · stepped · polyphonic",
+      "11": "0 to 10V · stepped · polyphonic",
+      "12": "0 to 10V · stepped · polyphonic",
+      "13": "0 to 10V · stepped · polyphonic",
+      "14": "0 to 10V · stepped · polyphonic",
+      "15": "0 to 10V · stepped · polyphonic",
+      "16": "0 to 10V · stepped · polyphonic",
+      "17": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

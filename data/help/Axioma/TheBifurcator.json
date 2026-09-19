@@ -1,0 +1,41 @@
+{
+  "plugin": "Axioma",
+  "module": "TheBifurcator",
+  "description": "Sequencer driven by a chaotic map: an iterated function is stepped once per clock, and the section of the map its value falls in fires the CV, GATE and TRIG jacks belonging to that section",
+  "params": [
+    {"ids": [0], "text": "Chooses the function that is iterated: the logistic map at 0, the tent map at 1, the parabola at 2"},
+    {"ids": [1], "text": "Sets how many times the function is applied to its own result on each clock step, 1 to 7"},
+    {"ids": [2], "text": "Sets the bifurcation parameter over a range of 0 to 10, which is the growth rate fed to the function: 2.5 to 3.99 for the logistic map, 1.0 to 1.99 for the tent and the parabola"},
+    {"ids": [3], "text": "Sets the rate of the internal clock, doubling per step from 15 bpm at -2 to 3840 bpm at 6, and it has no effect while EXT is patched"},
+    {"ids": [4], "text": "Splits the map into 1, 2, 4 or 8 sections, which sets how many jacks share a section: at 1 every jack is active at once, at 8 only the jacks of one section are"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the r(t) knob, one unit of its 0 to 10 range per volt, and the total is clamped to that range"},
+    {"ids": [1], "text": "Adds to the CLK knob, doubling the internal clock rate per volt, and it has no effect while EXT is patched"},
+    {"ids": [2], "text": "A rising edge steps the function once and takes over from the internal clock; it reads high at 1V and low at 0V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The position of the current point within the section this jack belongs to, 0V at the bottom of that section rising to 10V at the top, held at its last value while the point is elsewhere"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "10V while the current point falls inside the section this jack belongs to, 0V while it is elsewhere"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "A 1ms pulse of 10V each time the point arrives in the section this jack belongs to"}
+  ],
+  "notes": [
+    "the internal clock runs from the moment the module is added, so the outputs move with nothing patched; a cable in EXT replaces that clock",
+    "the COBWEB DIAGRAM draws the shape of the chosen function with its latest iteration points, and the BIFURCATION MAP draws where the point has been falling; neither takes a click"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped"
+    },
+    "outputs": {
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped",
+      "20": "stepped",
+      "21": "stepped",
+      "22": "stepped",
+      "23": "stepped"
+    }
+  }
+}

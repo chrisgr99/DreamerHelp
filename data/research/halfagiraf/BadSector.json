@@ -1,0 +1,27 @@
+{
+  "plugin": "halfagiraf",
+  "module": "BadSector",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "src/BadSector.cpp:652, getVoltage() * 0.2f with no channel loop"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "normal": "the left audio input", "why": "src/BadSector.cpp:653-654, isConnected() ? getVoltage()*0.2f : rawInL"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:515, clampf(timeKnobSmooth + getVoltage()*0.1f, 0, 1)"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:516, clampf(knob + getVoltage()*0.1f, 0, 1)"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:517, clampf(knob + getVoltage()*0.1f, 0, 1)"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:518 in Macro, and 669-670 in Micro where it is added as 1V per octave"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:519, clampf(stored + getVoltage()*0.1f*atten, 0, 1)"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "sumRange": "0 to 10V", "why": "src/BadSector.cpp:521-523 take the isConnected branch, and a voltage at or below 0V sets corruptN to 0 outright rather than subtracting from the knob; above 0V the voltage is multiplied by 0.1 and the attenuverter and added to the knob, clamped to 0 to 1"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:544 tests this jack at 0.4V for the held level and :548 runs bendGate, a Schmitt trigger with thresholds of 0.1V and 0.4V, for the rising edge"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:545 tests this jack at 0.4V for the held level and :549 runs breakGate, a Schmitt trigger with thresholds of 0.1V and 0.4V, for the rising edge"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:546 tests this jack at 0.4V for the held level and :550 runs corruptGate, a Schmitt trigger with thresholds of 0.1V and 0.4V, for the rising edge"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:547 tests this jack at 0.4V for the held level and :551 runs freezeGate, a Schmitt trigger with thresholds of 0.1V and 0.4V, for the rising edge"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:581, clockTrig.process(getVoltage(), 0.1f, 0.4f)"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 0.4V", "why": "src/BadSector.cpp:573, resetTrig.process(getVoltage(), 0.1f, 0.4f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/BadSector.cpp:804, sentOutL * 5.f"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/BadSector.cpp:805, sentOutR * 5.f"}
+    }
+  },
+  "comment": "Index order is not panel order in the gate row: the freeze gate is input 11 but is the leftmost jack of that row, with bend, break and corrupt to its right as inputs 8, 9 and 10. The three menu sliders (Glitch windowing, Stereo width, LED brightness) are ui::Slider widgets rather than params, so they cannot be clicked on the panel. The knob's damage and CV channels are stored per channel and swapped by the square buttons, so one param index covers three different settings depending on which channel is selected. configBypass wires the left and right inputs straight to the matching outputs."
+}

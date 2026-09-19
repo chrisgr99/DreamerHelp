@@ -1,0 +1,32 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-9",
+  "description": "One signal routed out to one of eight jacks, or eight signals routed into one, chosen by a knob, a voltage or a clock; with nothing patched to either side it puts out a gate on the chosen row",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the eight rows is switched through; with a clock patched it sets how many rows the stepping runs through before returning to the first"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Multiplies the selector knob by a tenth of this voltage, so 10V gives the knob's own row and a patched cable at 0V forces the first row"},
+    {"ids": [1], "text": "Advances the selector one row on each rising edge above 1V, wrapping at the row the selector knob is set to; in gate mode the chosen output follows this signal high and low rather than staying high"},
+    {"ids": [2], "text": "Sends the stepping back to the first row on a rising edge above 1V; it is read only while a clock is patched"},
+    {"ids": [3], "text": "The single signal sent out to whichever row is chosen, the other seven outputs held at 0V"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11], "text": "The signal for that row; when that row is the chosen one it reaches the single output at the far end and that row's own output as well"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "0V unless this is the chosen row, and then whatever came into the module, or a 10V gate when nothing is patched into it at all"},
+    {"ids": [8], "text": "The chosen row's input, or with nothing patched into the module a staircase reading the row number, 0V for the first row and 10V for the eighth"}
+  ],
+  "notes": [
+    "with all eight row inputs empty and the single input empty too, the module becomes a gate source: the chosen output goes to 10V and the rest to 0V, and a clock steps that gate along the rows",
+    "the OP button steps through four modes on each click: outputs as they are, outputs inverted, every row but the chosen one passed inverted, every row but the chosen one passed",
+    "the OP button and the yellow lamp that marks the chosen row are both drawn by the module rather than placed as widgets, so neither can be clicked for help"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "bipolar · continuous · one channel only"
+    }
+  }
+}

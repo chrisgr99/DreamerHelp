@@ -1,0 +1,20 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorRhythmGroup",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorRhythmGroup.cpp:125 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"poly": true, "step": "continuous", "why": "PhasorRhythmGroup.cpp:122 clamps the knob plus this CV to 1 to 64 steps and keeps the float"},
+      "2": {"poly": true, "step": "continuous", "why": "PhasorRhythmGroup.cpp:131 clamps the knob plus this CV to 1 to 64 and keeps the float"},
+      "3": {"poly": true, "step": "continuous", "why": "PhasorRhythmGroup.cpp:134 clamps the knob plus this CV to 1 to 64 and keeps the float"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:109 and 156 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the phasor times HCV_PHZ_UPSCALE; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:141 and 157 write HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"},
+      "2": {"poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:159 writes the group phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:148 and 160 write HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"},
+      "4": {"poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:162 writes the subgroup phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "5": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorRhythmGroup.cpp:154 and 163 write HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"}
+    }
+  }
+}

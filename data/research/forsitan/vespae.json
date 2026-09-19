@@ -1,0 +1,21 @@
+{
+  "plugin": "forsitan",
+  "module": "vespae",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/vespae.cpp:447, one getVoltage() with no channel loop"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/vespae.cpp:376, the voltage times the trk trimmer is added to the cutoff in octaves"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/vespae.cpp:377, the voltage times the fm attenuverter is added to the cutoff in octaves"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/vespae.cpp:387, res + getVoltage()*0.1, clamped to 0..1"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/vespae.cpp:461, mix + getVoltage()*0.1, clamped to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/vespae.cpp:314, one of the five simultaneous filter nodes, with no stated clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"}
+    }
+  },
+  "comment": "The module is monophonic despite its plugin.json tag: process reads one voltage from the audio jack. The null of the mix output sits at the cutoff times the square root of one minus mix over mix, which is the hardware manual's asymmetrical, symmetrical and asymmetrical notch. configBypass passes the audio input to the lowpass and mix outputs. The four trimmers, fm, trk, bias and hiss, are marked in the maker's own doc as attenuverter, tracking and two modifications that the hardware has no controls for. The panel prints vespae, fm, trk, cutoff, bias, hiss, res, drive, grit, mix, in, v/oct, fm, res, mix, lp, bp, hp, notch and mix."
+}

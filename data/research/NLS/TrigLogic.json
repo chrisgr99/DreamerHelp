@@ -1,0 +1,17 @@
+{
+  "plugin": "NLS",
+  "module": "TrigLogic",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "normal": "0V", "why": "src/TrigLogicModel.cpp:58 divides this jack by 10; src/TrigLogic.vult:36 copies it to the parsed trig output when the logic is true and 0.0 when not, and :37 to the inverted output when false, so whatever is patched here passes at unity and no edge is ever detected"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/TrigLogicModel.cpp:59 divides this jack by 10; src/TrigLogic.vult:18 reduces it to -1, 0 or +1 — its sign, or its direction against the previous sample, per the dir/sign1 switch — and :20 compares that to the up/zero/down knob, so only the state is read and the level never is; no range is recorded because the law has no voltage span"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "src/TrigLogicModel.cpp:60 divides this jack by 10; src/TrigLogic.vult:19 reduces it to -1, 0 or +1 — its sign, or its direction against the previous sample, per the dir/sign2 switch — and :21 compares that to the up/zero/down knob, so only the state is read and the level never is; no range is recorded because the law has no voltage span"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "src/TrigLogicModel.cpp:63"},
+      "1": {"family": "trigger", "poly": false, "why": "src/TrigLogicModel.cpp:64"}
+    }
+  },
+  "source": "https://github.com/michelezaccagnini/NLS/blob/main/README.md",
+  "comment": "Written from the maker's source at commit 5ebe71e, the last commit carrying 2.1.6.0. Index order is not panel order on either row: the inputs read lfo1 (index 1), trig (index 0), lfo2 (index 2) from left to right, and the outputs read invert (index 1) then trig (index 0). The panel letters the two small knobs '- / 0 / +' while the maker's tooltip calls them 'up/zero/down'; the panel is what the reader is looking at, so the line uses plus, minus and zero. The lfo2 input's tooltip is spelt 'lof2' in the source and so reads that way in the rack. Neither output has a family-defining voltage of its own: they pass the trig input's voltage through unchanged, divided by ten on the way in and multiplied by ten on the way out. The and/or switch is configured with 'or' at 0 and 'and' at 1 and defaults to 'or', although the Vult code's own default sets it the other way; the module writes the parameter into the processor every four samples, so the parameter wins from the first block."
+}

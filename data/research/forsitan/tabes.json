@@ -1,0 +1,25 @@
+{
+  "plugin": "forsitan",
+  "module": "tabes",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/tabes.cpp:385, getChannels() on the audio jack sets the tape's width at the moment recording starts"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/tabes.cpp:389, getVoltage() >= 1.f, a level rather than an edge"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/tabes.cpp:407, spliceTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/tabes.cpp:412, decay += getVoltage()*0.2"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/tabes.cpp:416, wowK += getVoltage()*0.2"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/tabes.cpp:420, overlap += getVoltage()*0.2"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/tabes.cpp:424, sendMix += getVoltage()*0.2"},
+      "7": {"family": "audio", "poly": true, "range": "±10V", "why": "src/tabes.cpp:632, the send and return pair carry the tape's own channel count"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/tabes.cpp:400, getVoltage() >= 1.f, a level rather than an edge"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/tabes.cpp:631-636, setChannels to the tape width, then 5 times the signal clamped to ±2"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/tabes.cpp:641, 0.1V per pass, held at 10V"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/tabes.cpp:642, a 1ms pulse at 10V"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/tabes.cpp:645, the head position as a 0 to 10V ramp"},
+      "4": {"family": "audio", "poly": true, "range": "±10V", "why": "src/tabes.cpp:632-638, setChannels to the tape width, then 5 times the loop clamped to ±2"}
+    }
+  },
+  "comment": "The tape's width is fixed when recording starts and does not change afterwards, so repatching the input later cannot split a stereo loop. A pristine copy of the first recording is kept off the tape and splice restores it and puts the age back to zero. The age jack steps once per full turn of the tape regardless of overlap, while eoc and ramp follow the heard repeat, which with overlap up is more often. The two gate jacks and the record and overdub buttons are levels rather than edges. The panel prints tabes, decay, wow, overlap, send, cv four times, dub lvl, rec, dub, splice, in, gate, gate, trig, send, return, age, ramp, eoc and out."
+}

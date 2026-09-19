@@ -1,0 +1,66 @@
+{
+  "plugin": "SonusModular",
+  "module": "Luppolo3",
+  "description": "A three-track stereo loop station: the first track sets the length of the loop and the other two are locked to it",
+  "params": [
+    {"ids": [0], "text": "Reverses the direction all three tracks play in, on each press"},
+    {"ids": [1], "text": "Empties all three tracks and forgets the loop length, on each press"},
+    {"ids": [2], "text": "Silences all three tracks while keeping their length"},
+    {"ids": [3, 4], "text": "Nothing in the module reads this button; the master CLEAR button silences this track, or use the jack beside it"},
+    {"ids": [5, 6, 7], "text": "Sets the level that track goes out at, from silence to twice"},
+    {"ids": [8], "text": "Starts recording the master track on the first press, stops it and starts everything playing on the second, and throws all three tracks away on the third"},
+    {"ids": [9, 10], "text": "Starts recording over that slave track on each press and stops on the next; it does nothing until the master loop exists"},
+    {"ids": [11, 12, 13], "text": "Starts mixing the incoming signal into that track on each press and stops on the next"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal to be recorded into whichever tracks are armed"},
+    {"ids": [1], "text": "The right side of the signal to be recorded into whichever tracks are armed"},
+    {"ids": [2], "text": "A rising edge reverses the direction all three tracks play in"},
+    {"ids": [3], "text": "On the master track a rising edge starts recording, the next stops it and starts everything playing, and a third throws all three tracks away and records afresh"},
+    {"ids": [4, 5], "text": "On a slave track a rising edge starts recording over that track, and the next stops it; it does nothing until the master loop exists"},
+    {"ids": [6, 7, 8], "text": "A rising edge starts mixing the incoming signal into that track as it plays, and the next stops it"},
+    {"ids": [9], "text": "A rising edge empties all three tracks and forgets the loop length"},
+    {"ids": [10, 11, 12], "text": "A rising edge silences that track while keeping its length"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The three tracks mixed, each at its own volume, with the incoming signal added while any track is recording"},
+    {"ids": [1], "text": "The three tracks mixed, each at its own volume, with the incoming signal added while any track is recording"},
+    {"ids": [2, 3, 4, 5, 6, 7], "text": "That track alone, at its own volume; it carries nothing until the master loop exists"}
+  ],
+  "notes": [
+    "nothing can be recorded onto the slave tracks until the master track has been recorded and stopped; the master sets the length that all three share.",
+    "the slave CLEAR buttons do nothing, and the master CLEAR button silences all three tracks rather than the master alone; the slave CLEAR jacks work as labelled.",
+    "a red lamp is lit while its track is recording or overdubbing, and all three green lamps come on together once the master loop exists.",
+    "CLEAR silences a track but keeps the loop running at its length; ERASE throws the length away as well.",
+    "overdubbing adds without scaling, so going round the loop again and again builds the level until it clips.",
+    "an edge is counted only when a jack moves away from exactly 0V, and no further edge until it returns there.",
+    "nothing is saved with the patch: reloading gives three empty tracks."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "stepped · one channel only",
+      "10": "stepped · one channel only",
+      "11": "stepped · one channel only",
+      "12": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only"
+    }
+  }
+}

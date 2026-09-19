@@ -1,0 +1,16 @@
+{
+  "plugin": "voxglitch",
+  "module": "wavbank",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "WavBank.hpp:189 reads this input with getVoltage() alone into a Schmitt trigger whose high threshold is 2V (vgLib-2.0/constants.cpp:5); in the menu's gate mode WavBank.hpp:201 instead tests it against 5V"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "why": "WavBank.hpp:149 divides this input by 10, scales it by the sample count and the attenuverter, adds the knob and stores the total in an unsigned int at WavBank.hpp:149"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "WavBank.hpp:156 reads this input with getVoltage() alone and passes it to SamplePlayer::step, which raises 2 to that voltage at vgLib-2.0/SamplePlayer.hpp:142"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The END output and the Auto-Increment on Completion menu item are wired up in the widget but never written or read in the 2.41.1 processing code, so neither is described here."
+}

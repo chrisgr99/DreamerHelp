@@ -1,0 +1,41 @@
+{
+  "plugin": "VsWorld",
+  "module": "XLimitJIAutotuner2",
+  "description": "A JI quantizer built from eight ratios of your own choosing: each row gives a run of powers of one ratio, and every combination of them is an allowed pitch for the input to snap to.",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets the top number of that row's ratio, 1 to 1024; the row's interval is that number over the one beside it."},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the bottom number of that row's ratio, 1 to 1024, which is what makes a row subharmonic."},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Sets the lowest power of that row's ratio the search uses, -30 to +30; setting it above the upper bound lights that row's red lamp and stops the list being rebuilt."},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets the highest power of that row's ratio the search uses, -30 to +30; the row contributes one pitch for every whole number from the lower bound to this one."},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39], "text": "Shifts that row's whole run of powers up or down by up to 30, leaving the number of them alone."},
+    {"ids": [40], "text": "Takes each incoming keyboard step as one step along the list of allowed pitches, instead of tuning the pitch it names; switching it on switches Guess off."},
+    {"ids": [41], "text": "Sets how many keyboard keys the remap counts to an octave, 1 to 100."},
+    {"ids": [42], "text": "Picks, from the pitches inside the cent window beside it, the one with the smallest Tenney harmonic distance from the root, rather than the one nearest in pitch; switching it on switches Remap off."},
+    {"ids": [43], "text": "Sets how far either side of the incoming pitch the guess may look, 1 to 150 cents."},
+    {"ids": [45], "text": "Chooses whether the lines in the display are spaced by pitch or by frequency."},
+    {"ids": [46], "text": "Chooses whether the display is a circle covering one octave or a spiral covering three."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitches to be tuned, 1V per octave; the first channel is the root the others are measured against."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The tuned pitches, 1V per octave, one channel for each channel of the input, clamped to ±10V."},
+    {"ids": [1], "text": "What the tuned pitch lost when it was rounded from double to single precision, for adding back at an oscillator that takes it."}
+  ],
+  "notes": [
+    "Every bound comes up at 0, which is a list of one pitch, so the module passes the input through unchanged until an upper bound is raised.",
+    "A red lamp on a row means its lower bound is above its upper bound; all eight at once mean the bounds ask for more than a million pitches. Either way the list is left as it was.",
+    "In the display, the lines reaching the outer edge are every allowed pitch and the shorter lines inside are the pitches being put out right now, one per channel.",
+    "The plugin ships whole tuning systems as module presets — 3-limit and 5-limit scales and their modes — so the Preset submenu on the right-click menu is the quickest way to a working setting.",
+    "Bypassing the module passes the input jack straight to the V/Oct output."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

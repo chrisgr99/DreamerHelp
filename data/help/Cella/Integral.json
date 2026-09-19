@@ -1,0 +1,46 @@
+{
+  "plugin": "Cella",
+  "module": "Integral",
+  "description": "Integrator: it adds its input into a running total at a set rate, holds that total when the input is at zero, and can be made to leak back towards zero over a set time",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the input is added into the total, -5 to 5 in octaves around whichever range the switch chooses, the hover text reading the result in hertz"},
+    {"ids": [1], "text": "Sets how long the total takes to fall to about a third of itself with no input, from no leak at all at fully counter-clockwise to a short time constant at fully clockwise"},
+    {"ids": [2], "text": "Sets which decade the RATE knob works in: L runs 6.25mHz to 6.4Hz, M runs 0.125Hz to 128Hz, H runs 25Hz to 25.6kHz"},
+    {"ids": [3], "text": "Chooses what happens at the voltage limit: CLIP holds the total there, FOLD turns the output back from it, RESET drops the total to 0V"},
+    {"ids": [4], "text": "Sets the total straight back to 0V"},
+    {"ids": [5], "text": "While it is held down, the voltage set by the INIT knob is added to the input, which is how a total is started from nothing"},
+    {"ids": [6], "text": "Sets the voltage the INIT button adds to the input, -10V to 10V"},
+    {"ids": [7], "text": "Attenuates and inverts the RATE jack, -1 to 1, before that voltage is added to the RATE knob"},
+    {"ids": [8], "text": "Attenuates and inverts the LEAK jack, -1 to 1, before that voltage is added to the LEAK knob"},
+    {"ids": [9], "text": "Switches between integrating only while the GATE jack is above 0V and integrating only while it is at exactly 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The voltage added into the total; every channel of a polyphonic cable is summed first"},
+    {"ids": [1], "text": "Stops and starts the integration; which way round it works is set by the gate-mode button, and with no cable here integration always runs"},
+    {"ids": [2], "text": "Divided by 2, scaled by its attenuverter and added to the RATE knob, so 2V at a full attenuverter moves the rate by one octave"},
+    {"ids": [3], "text": "Divided by 10, scaled by its attenuverter and added to the LEAK knob, the total clamped to the knob's own range"},
+    {"ids": [4], "text": "A rise past 1V sets the total straight back to 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The running total, held to the voltage limit the menu sets in the way the switch chooses"}
+  ],
+  "notes": [
+    "on the FOLD setting only the output is folded; the total inside the module keeps growing past the limit, so it can take a while to come back once the input is removed",
+    "the gate test for the low setting is against exactly 0V, so a gate that idles at a few millivolts stops the integration on that setting"
+  ],
+  "menu": [
+    "Range: -5V..5V, -10V..10V — sets the voltage limit the CLIP, FOLD and RESET switch acts at"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "high above 0V · stepped · one channel only\n\nunpatched it reads always integrating.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "plugin": "Venom",
+  "module": "PolySHASR",
+  "description": "Ten polyphonic sample and hold rows, normalled so that consecutive rows work together as an analogue shift register",
+  "params": [
+    {"ids": [0], "text": "Sets oversampling to off, 2x, 4x, 8x, 16x or 32x, cutting aliasing when the sample and hold is triggered at audio rates"},
+    {"ids": [1], "text": "Sets the range of the internal random generator: 0-1V, 0-5V, 0-10V, or the bipolar 1V, 5V and 10V pairs"},
+    {"ids": [2], "text": "Triggers a sample on the first row"},
+    {"ids": [3], "text": "Resets every polyphonic channel of all ten HOLD outputs to 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise above 2V samples the first row's DATA voltage, and the trigger counts as low again below 0.1V"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8, 9], "text": "A rise above 2V samples that row's DATA voltage, and the trigger counts as low again below 0.1V; unpatched it takes the TRIG input of the row above"},
+    {"ids": [10], "text": "The voltage the first row samples; unpatched it is normalled to a fresh random value"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18, 19], "text": "The voltage that row samples; with the row's TRIG patched it is normalled to a fresh random value, and with TRIG unpatched to the HOLD output of the row above"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "text": "Carries the last value that row sampled, held until its next trigger"}
+  ],
+  "notes": [
+    "patching a lower row rather than the top one leaves the rows above it idle, which costs far less CPU while oversampling is on"
+  ],
+  "menu": [
+    "Save held values — on by default, storing the held values with the patch and restoring them on load; switch it off and the rows come back empty",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "high above 2V · stepped · polyphonic",
+      "3": "high above 2V · stepped · polyphonic",
+      "4": "high above 2V · stepped · polyphonic",
+      "5": "high above 2V · stepped · polyphonic",
+      "6": "high above 2V · stepped · polyphonic",
+      "7": "high above 2V · stepped · polyphonic",
+      "8": "high above 2V · stepped · polyphonic",
+      "9": "high above 2V · stepped · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic",
+      "12": "continuous · polyphonic",
+      "13": "continuous · polyphonic",
+      "14": "continuous · polyphonic",
+      "15": "continuous · polyphonic",
+      "16": "continuous · polyphonic",
+      "17": "continuous · polyphonic",
+      "18": "continuous · polyphonic",
+      "19": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "plugin": "Hutara",
+  "module": "FmOperator",
+  "description": "Four oscillators — sine, saw, triangle and square — tuned in whole octaves from a shared pitch jack, each with its own volume, and all four summed again through a resampling stage",
+  "params": [
+    {"ids": [0], "text": "Sets the octave of the sine oscillator, four octaves either side of C4 at 261.63Hz, in whole steps"},
+    {"ids": [1], "text": "Sets the octave of the saw oscillator, four octaves either side of C4 at 261.63Hz, in whole steps"},
+    {"ids": [2], "text": "Sets the octave of the triangle oscillator, four octaves either side of C4 at 261.63Hz, in whole steps"},
+    {"ids": [3], "text": "Sets the octave of the square oscillator, four octaves either side of C4 at 261.63Hz, in whole steps"},
+    {"ids": [4], "text": "Sets how far the FM in jack moves the pitch of all four oscillators, -0.7 to 1.23 octaves per volt, and at 0 that jack has no effect"},
+    {"ids": [5], "text": "Crossfades the sine output between the plain sine and a folded waveshaped version, -0.5 to 1.5; at 0 the sine passes unshaped"},
+    {"ids": [6], "text": "Crossfades the saw output between the plain ramp and a folded waveshaped version, -0.5 to 1; at 0 the ramp passes unshaped"},
+    {"ids": [7], "text": "Crossfades the triangle output between the plain triangle and a folded waveshaped version, -0.5 to 1; at 0 the triangle passes unshaped"},
+    {"ids": [8], "text": "Scales the voltage at the central MoD jack before it reaches the sine, saw and triangle shaping, -0.5 to 1; with that jack unpatched the knob changes nothing"},
+    {"ids": [9], "text": "Scales the FM Amount jack before that voltage is added to the FM Input knob, -0.5 to 0.6; the setting is applied twice in the code, so the jack arrives multiplied by the square of it"},
+    {"ids": [10], "text": "Scales the sine output, 0 to 1, and scales the sine's share of the Resample output"},
+    {"ids": [11], "text": "Scales the saw output, 0 to 1, and scales the saw's share of the Resample output"},
+    {"ids": [12], "text": "Scales the triangle output, 0 to 1, and scales the triangle's share of the Resample output"},
+    {"ids": [13], "text": "Scales the square output, 0 to 1, and scales the square's share of the Resample output"},
+    {"ids": [14], "text": "Multiplies the voltage at the Resample jack, 0 to 0.8; that product is both the resampling rate and the final gain of the Resample output, so at 0 that output is silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One volt per octave added to the sine oscillator's octave knob"},
+    {"ids": [1], "text": "One volt per octave added to the saw oscillator's octave knob"},
+    {"ids": [2], "text": "One volt per octave added to the triangle oscillator's octave knob"},
+    {"ids": [3], "text": "One volt per octave added to the square oscillator's octave knob"},
+    {"ids": [4], "text": "Frequency modulation for all four oscillators at once, scaled by the FM Input knob and added in octaves, so the modulation is exponential rather than linear"},
+    {"ids": [5], "text": "Scaled by the square of the FM Amount knob and added to the FM Input knob, varying how far the FM in jack moves the pitch"},
+    {"ids": [6], "text": "Added volt for volt to the Saw Psychedelic knob, shaping the saw further"},
+    {"ids": [7], "text": "Scaled by the Psychedelic CV knob and fed to all three waveshaping controls; the sine takes it scaled by the Sine Waveshaper knob too, the triangle takes it inverted"},
+    {"ids": [8], "text": "Added volt for volt to the Triangle Psychedelic knob, shaping the triangle further"},
+    {"ids": [9], "text": "Multiplied by the Resample knob to give both the resampling rate and the gain of the Resample output; with nothing patched here that output stays at 0V"},
+    {"ids": [10], "text": "One volt per octave added to the octave knob of all four oscillators at once"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sine wave, -5V to 5V at full Sine Volume with the Sine Waveshaper knob at 0"},
+    {"ids": [1], "text": "The saw ramp, 0 to 10V at full Saw Volume with the Saw Psychedelic knob at 0, running upward from zero rather than either side of it"},
+    {"ids": [2], "text": "The triangle wave, -5V to 5V at full Triangle Volume with the Triangle Psychedelic knob at 0"},
+    {"ids": [3], "text": "The square wave, -5V to 5V at full Square Volume; no waveshaping control is applied to it"},
+    {"ids": [4], "text": "The four waveform outputs added together, multiplied by a resampled square built from the same four phases and then by the Resample jack times the Resample knob, with no limiting"}
+  ],
+  "notes": [
+    "The Resample output is silent until a cable is patched into the Resample jack: its level is that jack's voltage times the Resample knob, and an unpatched jack reads 0V.",
+    "Every jack on the module is monophonic; only the first channel of a polyphonic cable is read.",
+    "None of the four waveforms is anti-aliased. Each is built straight from a wrapping phase counter.",
+    "The module has no menu of its own beyond Rack's."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "continuous · one channel only"
+    }
+  }
+}

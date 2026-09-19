@@ -1,0 +1,15 @@
+{
+  "plugin": "Volders",
+  "module": "NSE-01",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "normal": "the module's own noise", "why": "NSE-01.cpp:72-74 reads getVoltage() when isConnected and falls back to the module's own noise otherwise, with no getChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "NSE-01.cpp:71 trigTrigger.process(inputs[TRIG_INPUT].getVoltage()) at Rack's default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "NSE-01.cpp:64,66 noiseVolts = noise * 5.f from a source uniform in -1 to 1, with no setChannels"},
+      "1": {"poly": false, "why": "NSE-01.cpp:77 setVoltage(held) with no setChannels; the range of held follows whatever feeds the sample and hold input"}
+    }
+  },
+  "comment": "Read from the source at tag 2.1.2 (commit d57e97e), which is the installed build. The module adds nothing to Rack's right-click menu, so there are no menu lines. The pink filter is Paul Kellet's economy version, coefficients at lines 54-60; the 0.11 scaling at line 60 is what matches its level to the white path. The sample and hold input is given no family because it carries whatever is patched to it. The maker's summary calls the module a white and pink noise source with sample and hold, which the code matches."
+}

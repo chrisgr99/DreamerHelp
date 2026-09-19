@@ -1,0 +1,26 @@
+{
+  "plugin": "Aluminium",
+  "module": "Zones",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "src/Zones.cpp:310 getChannels() sets the loop bound, :320 getVoltage(c) per channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "src/Zones.cpp:321 getVoltage(c) >= 1 per channel"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "src/Zones.cpp:421 and :440 getVoltage(c) per channel, copied straight to the zone output"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "why": "src/Zones.cpp:422 and :441 getVoltage(c) per channel, copied straight to the zone output"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "src/Zones.cpp:305 runs rtrgTrigger[c], one dsp::SchmittTrigger per channel declared at :185, on this jack's voltage for that channel at Rack's default 0V and 1V thresholds; a rising edge fires the retrigger pulse for the zone holding the top note at :328-329"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Zones.cpp:434 setChannels to the input count in polyphonic mode, :411 one channel in monophonic"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Zones.cpp:435 setChannels to the input count, :423 10V for a held zone in monophonic mode"},
+      "2": {"family": "cv", "poly": true, "why": "src/Zones.cpp:436 setChannels to the input count in polyphonic mode, :413 one channel in monophonic"},
+      "3": {"family": "cv", "poly": true, "why": "src/Zones.cpp:437 setChannels to the input count in polyphonic mode, :414 one channel in monophonic"},
+      "4": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Zones.cpp:438 setChannels to the input count, :428 a 1ms 10V pulse in monophonic mode"},
+      "5": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Zones.cpp:434 setChannels to the input count in polyphonic mode, :411 one channel in monophonic"},
+      "6": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Zones.cpp:435 setChannels to the input count, :423 10V for a held zone in monophonic mode"},
+      "7": {"family": "cv", "poly": true, "why": "src/Zones.cpp:436 setChannels to the input count in polyphonic mode, :413 one channel in monophonic"},
+      "8": {"family": "cv", "poly": true, "why": "src/Zones.cpp:437 setChannels to the input count in polyphonic mode, :414 one channel in monophonic"},
+      "9": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Zones.cpp:438 setChannels to the input count, :428 a 1ms 10V pulse in monophonic mode"}
+    }
+  },
+  "comment": "The maker's README names the two priority menu items 'Zone A priority (when monophonic)' and 'Zone B priority (when monophonic)'; the code creates them as 'Monophonic priority (Zone A)' and '(Zone B)' (src/Zones.cpp:602-611), which is what the menu prints. The split test is pitch greater than or equal to the threshold for Zone B, so the split note itself belongs to Zone B. The velocity and aftertouch ports are given no range because nothing in the module scales or clamps them; they are passed through as they arrive. The Aluminium theme submenu is on every module of this plugin and is left out of the lines."
+}

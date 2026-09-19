@@ -1,0 +1,29 @@
+{
+  "plugin": "questionablemodules",
+  "module": "quatosc",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "quatosc.cpp:232 uses inputs[input].getVoltage() as an exponent of two in calcVOctFreq"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "quatosc.cpp:232 uses inputs[input].getVoltage() as an exponent of two in calcVOctFreq"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "quatosc.cpp:232 uses inputs[input].getVoltage() as an exponent of two in calcVOctFreq"},
+      "4": {"family": "cv", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "a 2Hz base rate", "why": "quatosc.cpp:304-312 clockTrigger.process(0.1f, 2.f), the measured rate kept only between 0.001 and 1000, and clockFreq forced to 2.f when the jack is empty"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:216 getValue adds inputs[param+VOCT1_OCT_INPUT].getVoltage() to the octave knob with no clamp, and line 230 rounds the sum"},
+      "6": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:216 getValue adds inputs[param+VOCT1_OCT_INPUT].getVoltage() to the octave knob with no clamp, and line 230 rounds the sum"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:216 getValue adds inputs[param+VOCT1_OCT_INPUT].getVoltage() to the octave knob with no clamp, and line 230 rounds the sum"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the LFO influence knobs configured 0 to 1 at lines 165-167"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the LFO influence knobs configured 0 to 1 at lines 165-167"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the LFO influence knobs configured 0 to 1 at lines 165-167"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:332-334 getValue adds this jack's voltage to a rotation knob configured 0 to 100 at lines 168-170, with no clamp"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:332-334 getValue adds this jack's voltage to a rotation knob configured 0 to 100 at lines 168-170, with no clamp"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "quatosc.cpp:332-334 getValue adds this jack's voltage to a rotation knob configured 0 to 100 at lines 168-170, with no clamp"},
+      "14": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the position influence knobs configured 0 to 1 at lines 171-173"},
+      "15": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the position influence knobs configured 0 to 1 at lines 171-173"},
+      "16": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "quatosc.cpp:215 getValue with c=true returns fclamp(0.f, 1.f, knob + inputs[...].getVoltage()) for the position influence knobs configured 0 to 1 at lines 171-173"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "quatosc.cpp:353 outputs[OUT].setChannels(spread) and line 377 setVoltage per channel"},
+      "1": {"family": "audio", "poly": true, "why": "quatosc.cpp:354 outputs[OUT2].setChannels(spread) and line 378 setVoltage per channel"}
+    }
+  },
+  "comment": "Read from the source at tag v2.1.14 (commit 75e5f70), which is the installed build. Input 3 (TRIGGER, named Gate) is configured but has no PortWidget and is never read, so it gets no line, no tag and no props. Param 14 (Dephase Algorithm) likewise has no widget; it is reachable only from the panel menu and is covered by a Menu line. The maker's page says setting an OCTAVE knob to Off disables that LFO; in the code calcVOctFreq returns 1.f for a negative octave under the Old dephase algorithm, which leaves that axis turning at 1Hz, and 0.f under the New one. Under the New algorithm a Z octave below zero also forces the Z LFO influence to a fixed 0.95 (line 325). The three ROTATION jacks are given no range because the knob they add to runs 0 to 100 and the sum is never clamped, so no single voltage span is the fact."
+}

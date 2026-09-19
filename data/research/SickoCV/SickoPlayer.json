@@ -1,0 +1,24 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoPlayer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SickoPlayer.cpp reads this jack per voice and compares it against 1V, as a rising edge in Trig mode and as a level in Gate mode"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "SickoPlayer.cpp reads this jack per voice and takes a rising edge at 1V to send playback to its release stage"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the master knob; with 'Polyphonic Master IN' ticked it reads getVoltage(c) per voice"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the tune knob"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "SickoPlayer.cpp takes getChannels() from this jack as the voice count and raises 2 to getVoltage(c) for each voice's playback speed"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the attack time"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the decay time"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the sustain level"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "SickoPlayer.cpp adds getVoltage() times the trimpot to the release time"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "SickoPlayer.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off; the LIM switch clamps to ±5V"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "SickoPlayer.cpp sets the channel count from the voice count when 'Polyphonic OUTs' is on and to 1 when it is off; the LIM switch clamps to ±5V"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoPlayer.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "SickoPlayer.cpp writes a 1ms pulse per voice and follows the same channel count as the audio outputs"}
+    }
+  },
+  "comment": "The output range is ±5V only with the LIM switch on; with it off the level depends on the file and the master knob. The waveform display is a custom widget with no ParamWidget, so the extra items it carries — Phase scan, Reset Cursors, Copy Cue to Loop, Copy Loop to Cue and the Presets submenu at SickoPlayer.cpp:1479-1490 — cannot be reached by clicking it for help; Phase scan and Presets also appear on the module's own menu, but Reset Cursors, Copy Cue to Loop and Copy Loop to Cue appear only on the display's menu. The 'Unlimited Sample Size (risky)' item is stored under the name unlimitedRecording (:276) although this module does not record."
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "pachde-CHEM",
+  "module": "chem-core",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.8V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "modules/Core/Core.cpp:1154-1156 reads the jack with getVoltage and compares it against 0.8V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0.8V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "modules/Core/Core.cpp:1160-1162 reads the jack with getVoltage and compares it against 0.8V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "modules/Core/Core.cpp:1166-1167 writes 10V or 0V on one channel"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "modules/Core/Core.cpp:1092-1097 loops 14 or 16 channels and writes 10V times the held-note flag for each"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "modules/Core/Core.cpp:1100-1107 loops the channels and writes the note number plus bend, less 60, divided by 12"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "modules/Core/Core.cpp:1110-1123 loops the channels and writes the 14-bit Y value scaled to 0-10V"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "modules/Core/Core.cpp:1126-1139 loops the channels and writes the 14-bit Z value scaled to 0-10V"}
+    }
+  },
+  "comment": "The CHEM-time knob is declared as P_NOTHING in Core.hpp and is turned by the module itself in Core.cpp:1062-1068; no code reads its value. The four surface outputs take 14 channels from MIDI channels 2 to 15 by default, or 16 channels from every channel when MPE mode is turned off on the Core actions menu (Core.cpp:1091). Menu items live on the Core actions hamburger button on the panel, not in the module's right-click menu, which carries only themes, screws and theme reloading."
+}

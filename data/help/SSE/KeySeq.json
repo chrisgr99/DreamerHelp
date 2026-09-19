@@ -1,0 +1,85 @@
+{
+  "plugin": "SSE",
+  "module": "KeySeq",
+  "description": "Sequencer holding twelve sequences of up to 256 steps, recorded from a MIDI keyboard through a MIDI-to-CV module, and played and controlled from that same keyboard",
+  "params": [
+    {"ids": [1], "text": "Sets how long the gate output stays high, 10 to 1000 in blocks of eight samples, so the default of 250 is about 45ms at 44.1kHz"},
+    {"ids": [2], "text": "Starts and stops playback; the clock advances the play sequence only while this is on"},
+    {"ids": [3], "text": "Returns the play sequence to its first step and drops the gate and end-of-sequence outputs"},
+    {"ids": [4], "text": "Moves the edit position of the record sequence forward by the number of steps the keyboard last set, and by one step until it sets another; from the keyboard the octave chooses 1, 5 or 11 steps"},
+    {"ids": [5], "text": "Moves the edit position of the record sequence back by the number of steps the keyboard last set, and by one step until it sets another; from the keyboard the octave chooses 1, 5 or 11 steps"},
+    {"ids": [6], "text": "Pressed on its own this button does nothing: the maker named it Reserved and the code marks it reserved for future expansion. While Sel or Copy is waiting for a target it chooses sequence 8."},
+    {"ids": [7], "text": "Copies the record sequence into another of the twelve; the next key or button pressed chooses which, and every light turns yellow until one is"},
+    {"ids": [9], "text": "Empties the record sequence; its light is green while that sequence holds nothing"},
+    {"ids": [10], "text": "Copies the record sequence into the play sequence, so the sequence being played becomes the one being recorded; record sequence 11 goes to the transpose sequence instead"},
+    {"ids": [11], "text": "Writes a tied step, holding the note before it without starting a new gate, and moves on a step"},
+    {"ids": [12], "text": "Deletes the step at the edit position of the record sequence"},
+    {"ids": [13], "text": "Switches insert mode on and off: on, a new note is pushed into the sequence; off, it overwrites the step at the edit position. The light is green while insert mode is on."},
+    {"ids": [14], "text": "Writes a rest at the edit position of the record sequence and moves on a step"},
+    {"ids": [15], "text": "Starts choosing which of the twelve record sequences is the current one; the next key or button pressed chooses it, and every light turns yellow until one is"},
+    {"ids": [16], "text": "Switches transpose mode on and off: with it on, a note from the first keyboard sets the base note the play sequence is transposed to rather than being recorded. The light is blue while it is on."},
+    {"ids": [17], "text": "Switches recording and playback on and off: turned off, the module plays no sequence and passes the CV, gate and velocity inputs straight to the outputs. It comes up on."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch from the first MIDI keyboard, one volt per octave; the note is written into the record sequence when its gate falls"},
+    {"ids": [1], "text": "A rising edge here starts playback if it is stopped and stops it if it is running, reading high above 1V"},
+    {"ids": [2], "text": "The gate from the first MIDI keyboard, reading high above 1V; a step is recorded when it falls, and holding it while a second key is pressed runs a command"},
+    {"ids": [3], "text": "A rising edge advances the play sequence one step, reading high above 1V"},
+    {"ids": [4], "text": "The velocity from the first MIDI keyboard, stored with the note; with nothing patched here every note is recorded at 10V"},
+    {"ids": [5], "text": "Holds the play sequence at its first step while the voltage here is above 0V"},
+    {"ids": [6], "text": "A change of voltage here chooses the record sequence to copy into the play sequence, read as a note within the octave, C for the first and B for the twelfth"},
+    {"ids": [7], "text": "The pitch from a second MIDI keyboard, one volt per octave, where one key on its own is one command and no key combination is needed"},
+    {"ids": [8], "text": "The gate from a second MIDI keyboard, reading high above 1V; the command on the key held is run on the rising edge"},
+    {"ids": [9], "text": "A change of voltage here sets the base note the play sequence is transposed to, read as one volt per octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the step being played, one volt per octave, with the current base note added; a rest sends 0V"},
+    {"ids": [1], "text": "Carries 10V for the length the gate knob sets, held on through the next step where that step is tied, and stays at 0V on a rest"},
+    {"ids": [2], "text": "The velocity stored with the step being played, and 0V on a rest"},
+    {"ids": [3], "text": "Carries 10V for 200 of the module's processing blocks, 1600 samples, each time the play sequence passes its last step"}
+  ],
+  "notes": [
+    "Nothing plays until a clock is patched to Clk and Run is on, and the CV, Gate and Vel inputs are fed from a MIDI-to-CV module carrying a keyboard.",
+    "While Sel or Copy is waiting for a target, the twelve keyboard buttons stand for the twelve sequences in keyboard order, from Play as the first to Trans as the twelfth.",
+    "A command from the first MIDI keyboard is given by holding one key down and pressing a second; the keyboard drawn on the panel shows which key carries which command.",
+    "Record sequence 11 is never played. The Play command copies it into the transpose sequence, which hands the play sequence a new base note at the end of each pass.",
+    "The module runs its logic on every eighth sample, so the gate length and the end-of-sequence length are counted in blocks of eight samples rather than in samples.",
+    "The three-line display shows the record sequence around the edit position, which stays in the middle; a rest is written as an apostrophe, a tied step as three tildes and the end as a bar."
+  ],
+  "menu": [
+    "Cmd from keyboard — allows commands from the first MIDI keyboard, given by holding one key and pressing another",
+    "Cmd from last key — takes the command from the second key pressed rather than from the first",
+    "AutoPlay — a submenu of five events, each of which copies the record sequence into the play sequence when it happens",
+    "Always — on the AutoPlay submenu; copies the record sequence into the play sequence after any of those events",
+    "When new note — on the AutoPlay submenu; copies the record sequence into the play sequence once a note is recorded",
+    "When new rest — on the AutoPlay submenu; copies the record sequence into the play sequence once a rest is recorded",
+    "When new tie — on the AutoPlay submenu; copies the record sequence into the play sequence once a tied step is recorded",
+    "When delete — on the AutoPlay submenu; copies the record sequence into the play sequence once a step is deleted",
+    "When select sequence — on the AutoPlay submenu; copies the record sequence into the play sequence once another record sequence is selected",
+    "Play Input CV 0..10V — reads the Play input as 0V to 10V spread over the twelve sequences instead of as a note within the octave",
+    "Play Input selects sequence — makes the Play input choose the current record sequence rather than copy one into the play sequence",
+    "Copy after end of sequence — holds a copy into the play sequence back until the play sequence passes its last step, rather than taking it on the next clock",
+    "Transpose after end of sequence — holds a new base note back until the play sequence passes its last step, rather than taking it on the next clock",
+    "Set sequence after copy — makes the target of a Copy command the current record sequence"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 10V.",
+      "5": "high above 0V · stepped · one channel only",
+      "6": "continuous · one channel only",
+      "7": "1V per octave · continuous · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

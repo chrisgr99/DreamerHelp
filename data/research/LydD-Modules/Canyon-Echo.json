@@ -1,0 +1,26 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Canyon-Echo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Canyon.cpp:258 reads this input with getVoltage(0), which is channel 1 alone, multiplies it by the attenuverter and divides by 5 before adding it to the knob"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Canyon.cpp:258 reads this input with getVoltage(0), multiplies it by the attenuverter and divides by 5 before adding it to the knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Canyon.cpp:356 reads this input with getVoltage(0) and divides it by 5; Canyon.cpp:357 multiplies by the attenuverter and adds the knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Canyon.cpp:356 reads this input with getVoltage(0) and divides it by 5; Canyon.cpp:357 multiplies by the attenuverter and adds the knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "normal": "a multiplier of 1", "why": "Canyon.cpp:343 reads this input with getVoltage(0), divides it by 5 and multiplies the knob by it; Canyon.cpp:344 clamps the total to 0 and 1.1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "±2V", "normal": "0V", "why": "Canyon.cpp:253 reads this input with getVoltage(0) and adds it to the knob; Canyon.cpp:254 clamps the total to -2 and 2"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "normal": "a multiplier of 1", "why": "Canyon.cpp:350 reads this input with getVoltage(0), divides it by 5 and multiplies the knob by it; Canyon.cpp:351 clamps the total to 0 and 1"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "the Freeze button", "why": "Canyon.cpp:367 reads this input with getVoltage(0) in place of the button; Canyon.cpp:369 counts it high at 1V and above"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "the Reverse button", "why": "Canyon.cpp:368 reads this input with getVoltage(0) in place of the button; Canyon.cpp:370 counts it high at 1V and above"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "Canyon.cpp:282 reads this input with getVoltage(0) and divides it by 5; Canyon.cpp:283 adds the knob and clamps the total to 0 and 1"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "sumRange": "0 to 1V", "normal": "0V", "why": "Canyon.cpp:284 reads this input with getVoltage(0) and divides it by 5; Canyon.cpp:285 adds the knob and clamps the total to 0 and 1"},
+      "11": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "0V", "why": "Canyon.cpp:193 reads this input with getVoltage(0), which is channel 1 alone, and uses 0V when it is unconnected"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "Audio In - Left", "why": "Canyon.cpp:194 reads this input with getVoltage(0) and falls back to the left input when unconnected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Canyon.cpp:290 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "1": {"family": "audio", "poly": false, "why": "Canyon.cpp:290 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"}
+    }
+  },
+  "comment": "Read from src/Canyon.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. The buffer is 352800 samples (Canyon.cpp:14), which the maker's comment calls about eight seconds; the delay block is stepped every second sample, so the entry states the time as a fraction of the buffer rather than in seconds. Feedback is multiplied by 1.1 before the jack is applied and clamped at 1.1 (Canyon.cpp:342 and 344), so the top of the knob is above unity gain and the lines build rather than decay; nothing on the panel says so. In Light/Dark the filter corner is worked out from the unclamped knob-plus-jack sum and only the crossfade position is clamped (Canyon.cpp:357 to 359), so a large CV can push the corner far outside the 300Hz to 1200Hz the knob alone reaches. The Feedback, Freeze and Reverse controls are marked with glyphs rather than words, as are their jacks, and the four small CV attenuverters have no labels at all. The module has no right-click menu of its own, so no panel-colour choice. There is no manual and no README entry for it."
+}

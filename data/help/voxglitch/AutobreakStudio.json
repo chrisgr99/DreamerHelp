@@ -1,0 +1,83 @@
+{
+  "plugin": "voxglitch",
+  "module": "AutobreakStudio",
+  "description": "Breakbeat player with six sixteen-step sequencers driving position, sample choice, volume, pan, reverse and ratcheting, and sixteen memory slots holding those sequences",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Selects that memory slot, loading its six sequences; with COPY armed, pressing a slot copies the sequences of the current slot into it"},
+    {"ids": [16], "text": "Arms copying, so the next memory slot pressed receives a copy of the sequences in the current slot; pressing it again disarms"},
+    {"ids": [17], "text": "Erases all six sequences in the current memory slot"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the loop follows, taken at sixteenth notes; the tempo is worked out from the time between two rising edges, and no sound is made until two have arrived"},
+    {"ids": [1], "text": "A rising edge returns the sequencers and the playback position to the start and holds everything until the next clock"},
+    {"ids": [2], "text": "A rising edge jumps to the slice chosen by the position sequence without waiting for the next clock"},
+    {"ids": [3], "text": "Picks which of the sixteen memory slots is loaded, 0-10V across the sixteen; with a cable here the memory buttons are ignored"},
+    {"ids": [4], "text": "Replaces the position sequence, 0-10V choosing one of the sixteen slices of the loop, and below about 0.6V playback runs on undisturbed"},
+    {"ids": [5], "text": "Replaces the sample sequence, 0-10V spanning the eight loaded loops"},
+    {"ids": [6], "text": "Replaces the volume sequence, 0-10V for silence to full level"},
+    {"ids": [7], "text": "Replaces the pan sequence, 0V hard left through 5V centre to 10V hard right"},
+    {"ids": [8], "text": "Replaces the reverse sequence; above 5V playback runs backwards through the loop"},
+    {"ids": [9], "text": "Replaces the ratchet sequence, 0V for no ratcheting and higher voltages picking one of five faster repeat rates"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the loop being played, after volume and pan"},
+    {"ids": [1], "text": "The right channel of the loop being played, after volume and pan"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "The left channel of that loop, carrying sound only while the sample sequence has chosen it"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16, 17], "text": "The right channel of that loop, carrying sound only while the sample sequence has chosen it"},
+    {"ids": [18], "text": "The value the position sequence holds at the current step, 0-10V"},
+    {"ids": [19], "text": "The value the sample sequence holds at the current step, 0-10V"},
+    {"ids": [20], "text": "The value the volume sequence holds at the current step, 0-10V"},
+    {"ids": [21], "text": "The value the pan sequence holds at the current step, 0-10V"},
+    {"ids": [22], "text": "The value the reverse sequence holds at the current step, 0-10V"},
+    {"ids": [23], "text": "The value the ratchet sequence holds at the current step, 0-10V"}
+  ],
+  "notes": [
+    "the tabs across the display choose which of the six sequences is drawn and edited: Position, Sample, Volume, Pan, Reverse and Ratchet",
+    "the outputs stay silent until a loop is loaded into one of the eight slots under Samples in the right-click menu, and until two clock pulses have arrived at CLOCK"
+  ],
+  "menu": [
+    "Samples — the eight numbered items under this label each load a WAV file into that slot, and each prints the filename it holds",
+    "Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out",
+    "Load first 8 WAV files from a folder — opens a folder browser and puts that folder's first eight WAV files into the eight slots in name order"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · continuous · one channel only",
+      "7": "unipolar · continuous · one channel only",
+      "8": "high above 5V · stepped · one channel only",
+      "9": "unipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "continuous",
+      "9": "continuous",
+      "10": "continuous",
+      "11": "continuous",
+      "12": "continuous",
+      "13": "continuous",
+      "14": "continuous",
+      "15": "continuous",
+      "16": "continuous",
+      "17": "continuous",
+      "18": "0 to 10V",
+      "19": "0 to 10V",
+      "20": "0 to 10V",
+      "21": "0 to 10V",
+      "22": "0 to 10V",
+      "23": "0 to 10V"
+    }
+  }
+}

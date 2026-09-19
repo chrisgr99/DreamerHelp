@@ -1,0 +1,61 @@
+{
+  "plugin": "CVfunk",
+  "module": "EnvelopeArray",
+  "description": "Six envelope generators whose stage times are set by two end points, the four in between interpolated, each with its own trigger input and a gate marking the envelope's rest",
+  "params": [
+    {"ids": [0], "text": "Bends both slopes of every envelope from a fast attack with a long fall at one end to the reverse at the other"},
+    {"ids": [1], "text": "Shapes every envelope between exponential, linear and logarithmic"},
+    {"ids": [2], "text": "Sets the length of the first envelope, within the span picked by its RANGE button"},
+    {"ids": [3], "text": "Sets the length of the last envelope, within the span picked by its RANGE button"},
+    {"ids": [4], "text": "Attenuverts the slant CV, which is scaled so that 10V covers the whole slant travel"},
+    {"ids": [5], "text": "Attenuverts the curve CV, which is scaled so that 10V covers the whole curve travel"},
+    {"ids": [6], "text": "Attenuverts the first width CV, which is scaled so that 10V covers the whole width travel"},
+    {"ids": [7], "text": "Attenuverts the last width CV, which is scaled so that 10V covers the whole width travel"},
+    {"ids": [8], "text": "Steps the first envelope through three time spans, one lamp lit per span, each press moving to the next and wrapping round"},
+    {"ids": [9], "text": "Steps the last envelope through three time spans, one lamp lit per span, each press moving to the next and wrapping round"},
+    {"ids": [10], "text": "Fires the first envelope on each press, and through the normalling the other five follow it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the slant of all six envelopes, added to the slant knob through its attenuverter and clamped to the knob's own travel"},
+    {"ids": [1], "text": "Shifts the curve of all six envelopes, added to the curve knob through its attenuverter and clamped to the knob's own travel"},
+    {"ids": [2], "text": "Shifts the length of the first envelope, added to the first width knob through its attenuverter"},
+    {"ids": [3], "text": "Shifts the length of the last envelope, added to the last width knob through its attenuverter"},
+    {"ids": [4, 5, 6, 7, 8, 9], "text": "A rising edge past 1V fires the envelope of that number; with nothing patched it takes its trigger from the nearest patched input to its left, or from the next channel of a polyphonic cable there"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "The envelope of that number, 0-10V"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "Carries 10V while the envelope of that number rests at 0V, and 0V while that envelope is running"}
+  ],
+  "notes": [
+    "the six trigger inputs are normalled left to right, so one cable in the leftmost input fires all six in turn, each after the one before it has finished",
+    "a polyphonic cable in any trigger input feeds that input and the ones after it, one channel each, in place of the left-to-right normalling",
+    "the envelopes are computed at a tenth of the sample rate and the outputs interpolated between those steps, which is why the module is cheap to run"
+  ],
+  "menu": [
+    "Enable Retriggering — lets a trigger restart an envelope that is already running, rather than being ignored until the envelope reaches 0V",
+    "Enable Polyphonic Output to Channel 1 — gathers all six envelopes into the first envelope output and all six gates into the first gate output, as six polyphonic channels"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 1V · stepped · polyphonic",
+      "5": "high above 1V · stepped · polyphonic\n\nunpatched it reads the jack to its left.",
+      "6": "high above 1V · stepped · polyphonic\n\nunpatched it reads the jack to its left.",
+      "7": "high above 1V · stepped · polyphonic\n\nunpatched it reads the jack to its left.",
+      "8": "high above 1V · stepped · polyphonic\n\nunpatched it reads the jack to its left.",
+      "9": "high above 1V · stepped · polyphonic\n\nunpatched it reads the jack to its left."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V",
+      "2": "0 to 10V",
+      "3": "0 to 10V",
+      "4": "0 to 10V",
+      "5": "0 to 10V",
+      "6": "0 to 10V · polyphonic"
+    }
+  }
+}

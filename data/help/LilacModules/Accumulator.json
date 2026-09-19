@@ -1,0 +1,32 @@
+{
+  "plugin": "LilacModules",
+  "module": "Accumulator",
+  "description": "Two independent integrators on one panel: each one adds the voltage at its RATE input up over time and puts the running total on its SUM output",
+  "inputs": [
+    {"ids": [0, 2], "text": "The voltage added into the running total each second: a steady 1V here raises SUM by 1V every second, and a negative voltage counts the total back down"},
+    {"ids": [1, 3], "text": "Sets the running total back to 0V each time this rises above 0V; over a polyphonic cable only the channels whose own voltage rises are cleared"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The running total in volts, one channel for each channel the RATE input carries; nothing limits how far it can go, so a steady rate will run it past any range"}
+  ],
+  "notes": [
+    "the lower half does nothing until a cable is patched to the upper half's RATE input; the module stops at the end of the upper section while that jack has never carried a channel",
+    "the total is held when the RATE input is unpatched, and is written into the patch file, so a saved patch comes back with both totals where they were",
+    "Initialize on the right-click menu clears both totals and both channel counts, which is the only way to clear a section without a cable at its RESET input"
+  ],
+  "menu": [
+    "Save sum with patch — when this is off the totals are left out of the patch file, and the module comes back at 0V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic",
+      "1": "high above 0V · stepped · polyphonic",
+      "2": "bipolar · continuous · polyphonic",
+      "3": "high above 0V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

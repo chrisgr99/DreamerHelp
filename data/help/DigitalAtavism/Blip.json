@@ -1,0 +1,42 @@
+{
+  "plugin": "DigitalAtavism",
+  "module": "Blip",
+  "description": "An 8-bit blip voice: one oscillator crossfading between a pulse wave and a falling sawtooth, shaped by a hold-and-release envelope",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it"},
+    {"ids": [1], "text": "Crossfades the oscillator from a pulse wave at its minimum to a falling sawtooth at its maximum"},
+    {"ids": [2], "text": "Sets the width of the pulse wave, from 1% to 99%; with BLND fully over to the sawtooth the pulse is out of the mix and this does nothing"},
+    {"ids": [4], "text": "Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms"},
+    {"ids": [5], "text": "Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the pitch set by FREQ at one volt per octave, read at the moment the trigger arrives"},
+    {"ids": [1], "text": "Adds to the crossfade set by BLND, a tenth of its travel per volt"},
+    {"ids": [2], "text": "Adds to the width set by PW, a tenth of its travel per volt"},
+    {"ids": [3], "text": "Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [4], "text": "Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [5], "text": "Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start"}
+  ],
+  "outputs": [
+    {"ids": [2], "text": "The envelope as a voltage from 0V to 10V, quantised to 127 steps"},
+    {"ids": [3], "text": "The voice, quantised to 127 steps and clipped at 5V either way"}
+  ],
+  "notes": [
+    "With nothing patched into TRIG the envelope is held wide open and the oscillator drones. It only shapes the sound once a trigger cable is in.",
+    "The pitch, the hold time and the release time are read once, at the moment TRIG fires; moving those controls during a note has no effect until the next one."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "unipolar · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "stepped · one channel only"
+    }
+  }
+}

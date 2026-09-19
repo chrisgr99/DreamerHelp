@@ -1,0 +1,16 @@
+{
+  "plugin": "RebelTech",
+  "module": "Stoicheia",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Stoicheia.cpp:193 resets both sequences on triggers[RESET_INPUT].process(rescale(voltage, 0.1f, 2.f, 0.f, 1.f)), read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Stoicheia.cpp:224 advances both sequences on triggers[CLOCK_INPUT].process(rescale(voltage, 0.1f, 2.f, 0.f, 1.f)), read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Stoicheia.cpp:293 setVoltage with no setChannels anywhere in the file"},
+      "1": {"family": "trigger", "poly": false, "why": "Stoicheia.cpp:297 setVoltage with no setChannels anywhere in the file"},
+      "2": {"family": "trigger", "poly": false, "why": "Stoicheia.cpp:302 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Mode A and Mode B are configSwitch(MODE_x_PARAM, LATCHED, NORMAL, NORMAL, ..., {\"Alternating\", \"Mute\", \"Trigger\"}) at Stoicheia.cpp:165-166, so the tooltip for the LATCHED position reads Alternating; the code at lines 234-238 holds the output at a flat 10V for the whole filled step, which is not alternation. Klasmata's latched mode does alternate, and the label looks to have come from there. The Sequence mode switch is drawn with rack's three-frame BefacoSwitch but configured 0 to 1, and SvgSwitch picks its frame as value minus minimum, so INDEPENDENT shows the lever down and ALTERNATING shows it centred; the lever never reaches the top position. The panel prints alpha-plus-beta below that switch and nothing above it, which could be read as marking the lower position, and the lower position is the independent one. That is worth checking in the rack before anybody relies on the marking. The panel prints no words at all apart from the two Greek letters, so no line carries a panel label."
+}

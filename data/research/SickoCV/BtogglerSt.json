@@ -1,0 +1,22 @@
+{
+  "plugin": "SickoCV",
+  "module": "BtogglerSt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "BtogglerSt.cpp:176 getVoltage() taken as a rising edge at 1V at :178"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "BtogglerSt.cpp:230 getVoltage() taken as a rising edge at 1V at :231"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "BtogglerSt.cpp:186 getVoltage() taken as a rising edge at 1V at :187"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "BtogglerSt.cpp:366 getChannels() becomes the loop bound and getVoltage(c) is read inside it; with the jack empty :375 sends 10V times the envelope"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "normal": "10V", "why": "BtogglerSt.cpp:379 getChannels() becomes the loop bound and getVoltage(c) is read inside it; with the jack empty :388 sends 10V times the envelope"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "BtogglerSt.cpp:275 getVoltage() times the attenuverter added to the knob as a time in seconds, capped at 10 seconds"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "BtogglerSt.cpp:170 getVoltage() * attenuverter * 0.1 added to the knob, the sum clamped to 0-1 at :171-174"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "BtogglerSt.cpp:326 getVoltage() times the attenuverter added to the knob as a time in seconds, capped at 10 seconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "BtogglerSt.cpp:372 setChannels(chan) with setVoltage(value, c) written in the loop above it"},
+      "1": {"family": "audio", "poly": true, "why": "BtogglerSt.cpp:385 setChannels(chan) with setVoltage(value, c) written in the loop above it"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "BtogglerSt.cpp:256 and :283 write 10V, :188 writes 0V; no setChannels on this port"}
+    }
+  },
+  "comment": "The sustain CV sumRange is a level: knob plus CV is clamped to 0-1, which is 0 to 100%. RESET is the one control that does not wait for a clock — BtogglerSt.cpp:186-199 drops the level to zero immediately. Left and right take their channel counts separately."
+}

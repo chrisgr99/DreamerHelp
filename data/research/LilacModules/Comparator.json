@@ -1,0 +1,16 @@
+{
+  "plugin": "LilacModules",
+  "module": "Comparator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the A knob", "why": "Comparator.cpp:72 replaces the knob value with getVoltage() from this jack whenever it is connected, and line 51 takes the channel count from it"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Comparator.cpp:75 reads getVoltage() from this jack with no connection test, so an unpatched jack gives 0V; line 53 takes the channel count from it when it is the wider of the two"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Comparator.cpp:59 calls setChannels with the wider input's channel count and line 80 writes 10V, or 0V from line 69, per channel; this is GREATER_OUTPUT, the bottom jack"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Comparator.cpp:58 calls setChannels with the wider input's channel count and line 82 writes 10V, or 0V from line 68, per channel; this is EQUAL_OUTPUT, the middle jack"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Comparator.cpp:57 calls setChannels with the wider input's channel count and line 78 writes 10V, or 0V from line 67, per channel; this is LESS_OUTPUT, the top jack"}
+    }
+  },
+  "comment": "Read from source at commit 058e876. THE OUTPUT INDICES RUN AGAINST THE PANEL. The enum declares greater, equal, less, while the widget draws them less, equal, greater down the panel, so output 0 is the A > B jack at the bottom and output 2 is the A < B jack at the top; the tags above follow the positions, not the enum. The maker's tooltip for the A input reads A override, which is what it does. Exactly one of the three outputs is high on any channel: line 78 onwards is a single if-else chain."
+}

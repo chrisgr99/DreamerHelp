@@ -1,0 +1,23 @@
+{
+  "plugin": "MADZINE",
+  "module": "Runner",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/Runner.cpp:236-238, getChannels() sets the channel count and getPolyVoltage(c) reads each"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "normal": "the left input", "why": "src/Runner.cpp:289-294, unpatched, rightInput is set to leftInput"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:301-310, timeL += getPolyVoltage*0.2, then clamp(0.001, 2)"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:314-323, timeR += getPolyVoltage*0.2, then clamp(0.001, 2)"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:331-341, feedback += getPolyVoltage*0.1, then clamp(0, 0.95)"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:361-369, mix += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:248-256, chaosAmount += getPolyVoltage*0.1, then clamp(0, 1)"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "src/Runner.cpp:259-267, chaosRate += getPolyVoltage*0.2, then clamp(0.01, 2)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Runner.cpp:241, setChannels from the audio inputs"},
+      "1": {"family": "audio", "poly": true, "why": "src/Runner.cpp:242, setChannels from the audio inputs"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "src/Runner.cpp:286, chaosUnscaled clamped to ±1 and multiplied by 5"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "why": "src/Runner.cpp:287, the held value clamped to ±1 and multiplied by 5"}
+    }
+  },
+  "comment": "The chaos generator is a Lorenz-style three-variable system stepped by rate * 0.001 per sample, with x scaled by a tenth and clamped to ±1 (src/RipleyDSP.hpp:8-38). The chaos drift added inside the module is a tenth of the scaled value on each of the two times and on the feedback (src/Runner.cpp:311, 324, 339). The auto-patching is done in the widget's step() (src/Runner.cpp:540-694): YAMANOTE output 0 and 1 are send A, inputs 18 and 19 return A, outputs 2 and 3 send B, inputs 20 and 21 return B, and a cable is only made where the jack at that end is empty. The cables are drawn in the YAMANOTE green, #80C342. The CV jacks add a fixed amount of parameter per volt rather than one of the four range shapes, so range is left off them. The panel prints TIME L, TIME R, FEEDBACK, MIX, CHAOS and RATE over the knobs and again over the CV jacks, then CHAOS and S&H over the two CV outputs; the four audio jacks carry no lettering. Lettering is drawn in code at src/Runner.cpp:430-501."
+}

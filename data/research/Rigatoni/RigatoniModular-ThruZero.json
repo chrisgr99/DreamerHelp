@@ -1,0 +1,19 @@
+{
+  "plugin": "Rigatoni",
+  "module": "RigatoniModular-ThruZero",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "thruzero.cpp:75 multiplies the single voltage by 0.4, adds the knob and clamps the total to -2 and 2"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "sumRange": "±5V", "normal": "0V", "why": "thruzero.cpp:74 adds the single voltage to the knob and clamps the total to -5V and 5V"},
+      "2": {"family": "pitch", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "thruzero.cpp:80 subtracts the threshold from this single voltage and thruzero.cpp:82 takes the absolute value of the difference"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "thruzero.cpp:90 multiplies this single voltage by the input level; thruzero.cpp:140 clamps the phase shifter's result to -5V and 5V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "thruzero.cpp:114 setVoltage of 10 or 0 on one channel"},
+      "1": {"family": "pitch", "poly": false, "why": "thruzero.cpp:115 setVoltage on one channel"},
+      "2": {"family": "audio", "poly": false, "why": "thruzero.cpp:123 setVoltage on one channel"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "thruzero.cpp:116 setVoltage on one channel, of a value clamped to -5V and 5V at thruzero.cpp:140"}
+    }
+  },
+  "comment": "The panel draws an arc marked -5 and +5 around the IN LVL knob, but configParam at thruzero.cpp:51 gives that parameter a range of -2 to 2. The THRESHOLD knob above it carries the same arc and its range really is -5 to 5, so the marking looks copied. The two switches are configured as Off and On for 'Enable spike smoothing' and 'Enable classic XWY flavor', while the panel prints ON/OFF and XWY/ENJ; the XWY switch's Off position is the ENJ flavour. The spike remover is the maker's own description of an imperfect fix: a highpass at 10000Hz drives an envelope follower, and when that follower passes 2.5 the output lowpass drops to 500Hz. CV OUT is named 1V/oct by the maker and is meant for the carrier's FM input rather than for a pitch input directly."
+}

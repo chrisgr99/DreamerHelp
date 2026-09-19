@@ -1,0 +1,18 @@
+{
+  "plugin": "GP",
+  "module": "Rotary",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "Rotary.cpp:212 reads inputs[Input_Mono].getVoltageSum(), which adds every polyphonic channel"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "Rotary.cpp:470 reads inputs[Input_Slow].getVoltage() with no channel and compares it against 1.0"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "Rotary.cpp:465 reads inputs[Input_Fast].getVoltage() with no channel and compares it against 1.0"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "Rotary.cpp:458 reads inputs[Input_Varispeed].getVoltage() with no channel and divides it by 10 to give the fraction of fast speed"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Rotary.cpp:464-470 reads inputs[Input_WheelSF].getVoltage() with no channel and compares it against 6.6666666 and 3.3333333"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Rotary.cpp:284,292 write one value with setVoltage and never call setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "Rotary.cpp:285,294 write one value with setVoltage and never call setChannels"}
+    }
+  },
+  "comment": "ANGLE_MIN is 60.0f at Rotary.cpp:45 and the parameter is configured with it at line 121, so the ANGLE knob goes down to 60 degrees; the manual (docs/Rotary.md) says 90. The code wins. The VARISPEED input is not clamped, so a voltage above 10V or below 0V is passed through to the speed target as a fraction outside 0 to 1. The SLOW and FAST jacks are given the trigger family because they are read as gate levels, not as continuous control."
+}

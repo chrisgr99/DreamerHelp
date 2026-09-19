@@ -1,0 +1,69 @@
+{
+  "plugin": "nullpath",
+  "module": "randrouter",
+  "description": "Routes nine inputs to nine outputs, rearranging the routing on each clock by a rule the mode and entropy switches pick out of eighteen",
+  "params": [
+    {"ids": [0], "text": "Switches between treating the nine lines one at a time and treating them as pairs, so that each pair is moved together"},
+    {"ids": [1], "text": "Picks one of six families of rearrangement: Basic, Up, Down, Broadcast, Pairs and Triplets"},
+    {"ids": [2], "text": "Picks how far each clock moves the routing from where it is: Negative pulls it back towards straight through, Low makes a small change, and High makes a large one"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V rearranges the routing by the rule the mode and entropy switches name"},
+    {"ids": [1], "text": "A rising edge past 1V puts the routing back to straight through, each input to the output of the same number"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9, 10], "text": "One of the nine signals to be routed; where it comes out depends on the routing as it stands"},
+    {"ids": [11], "text": "Replaces the channels switch, below 5V for one line at a time and 5V or above for pairs; with trigger mode on, a rising edge flips it instead"},
+    {"ids": [12], "text": "Replaces the mode switch, a voltage of 0V to 10V picking one of the six in order; with trigger mode on, a rising edge steps or jumps to another mode instead"},
+    {"ids": [13], "text": "Replaces the entropy switch, a voltage of 0V to 10V picking one of the three in order; with trigger mode on, a rising edge steps or jumps to another setting instead"},
+    {"ids": [14], "text": "A rising edge past 1V rearranges the routing by the negative rule of the current mode, whatever the entropy switch is set to"},
+    {"ids": [15], "text": "A rising edge past 1V rearranges the routing by the low rule of the current mode, whatever the entropy switch is set to"},
+    {"ids": [16], "text": "A rising edge past 1V rearranges the routing by the high rule of the current mode, whatever the entropy switch is set to"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8], "text": "Carries whichever input the routing currently sends here, or a crossfade between the old and new ones while fading is switched on"}
+  ],
+  "notes": [
+    "nothing happens until a clock arrives: the routing starts straight through and only a clock, or one of the three entropy clocks, changes it.",
+    "the eighteen rules are the six modes crossed with the three entropy settings: Basic gives Unwind, Swap and Randomize, and Up and Down give Sort, Shunt and Rotate in that direction.",
+    "Broadcast gives Split, Double and Blast, which set two or all nine outputs to the same input; Pairs and Triplets repeat the Basic rules in sets of two and three.",
+    "the three entropy clock inputs act alongside the main clock, so one patch can pull the routing about with one clock and settle it with another.",
+    "every output carries as many channels as the widest cable patched into any input."
+  ],
+  "menu": [
+    "Trigger mode: Enabled, Random mode — turns the three CV jacks into trigger inputs that step through their settings, and Random mode inside it makes each trigger jump to a random setting instead",
+    "Hold last value — makes an output hold the last voltage it carried when the input the routing sends it is unpatched, instead of dropping to 0V",
+    "Fade while switching — crossfades between the old routing and the new one instead of switching at once",
+    "Fade Time — sets how long that crossfade takes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "14": "high above 1V · stepped · one channel only",
+      "15": "high above 1V · stepped · one channel only",
+      "16": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "ACC",
+  "description": "Accumulator: every clock adds a fixed amount to a stored voltage, and a trigger fires when that voltage crosses a threshold",
+  "params": [
+    {"ids": [0], "text": "The amount added to the stored voltage on each clock, -1V to 1V"},
+    {"ids": [1], "text": "The voltage the accumulator is set to on a reset, -10V to 10V"},
+    {"ids": [2], "text": "Sets the stored voltage to the Set value"},
+    {"ids": [3], "text": "The voltage the stored value has to cross for a trigger to fire, -10V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge adds the step amount to the stored voltage, and the number of channels patched here sets how many accumulators run side by side"},
+    {"ids": [1], "text": "A trigger sets the stored voltage to the Set value and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Sets the step amount, 10V here giving a step of 1V, and overrides the Step knob while patched"},
+    {"ids": [3], "text": "Sets the value the accumulator resets to and overrides the Set knob while patched"},
+    {"ids": [4], "text": "Sets the threshold and overrides the Trsh knob while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The stored voltage, with one channel per channel of the clock input"},
+    {"ids": [1], "text": "A 1ms trigger when the stored voltage crosses the threshold, on that accumulator's channel; patching it back into Rst makes the accumulator loop"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±10V · continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

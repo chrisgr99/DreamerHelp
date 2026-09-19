@@ -1,0 +1,42 @@
+{
+  "plugin": "CVfunk",
+  "module": "StepWave",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "StepWave.cpp:385 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "why": "StepWave.cpp:491 takes getChannels() on this input and StepWave.cpp:527 reads it, clamping to -5 to 5V; StepWave.cpp:546 adds it to the shape knob instead when Stage Value CV Modulates Shape is on"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "the jack above it", "why": "StepWave.cpp:491 takes getChannels() on this input; StepWave.cpp:535 falls back to the nearest patched stage above when nothing is patched"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "why": "StepWave.cpp:474 takes getChannels() on this input and StepWave.cpp:509 reads it; StepWave.cpp:662 clamps the knob-plus-input total to -5 to 5V"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "the jack above it", "why": "StepWave.cpp:474 takes getChannels() on this input; StepWave.cpp:517 falls back to the nearest patched displacement above when nothing is patched"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "sumRange": "0 to 1V", "why": "StepWave.cpp:897 reads it with getVoltage, so only channel 1, divides by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "17": {"family": "trigger", "poly": false, "step": "stepped", "why": "StepWave.cpp:411 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "18": {"family": "trigger", "poly": false, "step": "stepped", "why": "StepWave.cpp:607 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "19": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "StepWave.cpp:431 reads it with getVoltage, so only channel 1, and exclusive-ors anything above 0.05V with the link button"},
+      "20": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "StepWave.cpp:448 reads it with getVoltage, so only channel 1, and exclusive-ors anything above 0.05V with the track button"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "StepWave.cpp:968 writes one channel with setVoltage from the stage value drawn through its shape and slewed"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "StepWave.cpp:944 writes one channel with setVoltage, 10V on the first half of each beat"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "StepWave.cpp:687 writes one channel with setVoltage, 10V while the sequence is on that stage"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger"}
+    }
+  },
+  "comment": "The link and track jacks exclusive-or with their buttons rather than overriding them (StepWave.cpp:431, StepWave.cpp:448), so a high gate inverts whatever the button is set to. The stage value inputs are normalled left to right and so are the displacement inputs, each falling back to the nearest patched jack before it (StepWave.cpp:492, StepWave.cpp:475). The module runs two copies of the sequencer, one of them a beat ahead for the display, and only the second writes the output jacks (StepWave.cpp:930). It switches itself to an oversampled output path whenever the measured beat is shorter than 50ms (StepWave.cpp:400), which also turns off the panel lamps."
+}

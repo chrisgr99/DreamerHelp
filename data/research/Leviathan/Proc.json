@@ -1,0 +1,21 @@
+{
+  "plugin": "Leviathan",
+  "module": "Proc",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; the signal is clamped into the 0V to 10V function span in slew mode, and in cycle mode soft-limited and folded in", "negative": "swings", "step": "continuous"},
+      "1": {"family": "trigger", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; dsp::SchmittTrigger at its default 0.1V/1V thresholds, rising edge only", "range": "high above 1V", "negative": "ignored"},
+      "2": {"family": "trigger", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; processChannel takes haltHigh = voltage >= 2.5f as a level, not an edge, and returns early while it is true", "range": "high above 2.5V", "negative": "ignored"},
+      "3": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; computeStageTime soft-limits the CV at 8V, scales it by STAGE_CV_OCT_PER_V = 0.5 octaves per volt and clamps to CV_OCT_CLAMP = 12 octaves either way", "negative": "swings", "step": "continuous"},
+      "4": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; bothTimeScaleFromCv soft-limits at 8V and returns a time multiplier either side of the neutral voltage", "negative": "swings", "step": "continuous"},
+      "5": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; computeStageTime soft-limits the CV at 8V, scales it by STAGE_CV_OCT_PER_V = 0.5 octaves per volt and clamps to CV_OCT_CLAMP = 12 octaves either way", "negative": "swings", "step": "continuous"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; process() writes 10V or 0V from the gate state", "range": "0 to 10V"},
+      "1": {"family": "trigger", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: every jack is read with getVoltage() and nothing in the module loops over an input's channels; process() writes 10V or 0V from the gate state", "range": "0 to 10V"},
+      "2": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: the function runs FUNCTION_V_MIN = 0.f to FG_V_MAX = 10.f, scaled down by the amplitude knob, and slew mode passes the input across the same span", "range": "0 to 10V"},
+      "3": {"family": "cv", "poly": false, "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Proc.cpp: negOut = -outRendered, and outRendered runs 0V to 10V", "range": "-10 to 0V"}
+    }
+  },
+  "comment": "One channel of Integral Flux with a HALT input added and the mixing bus removed. Panel lettering names the controls INPUT, TRIG, LOOP, SURGE, BOTH, HALT, SINK and CURVE; the maker's tooltips call them Signal, Trigger, Cycle, Surge, Both CV, Halt CV, Sink and Curve, and the amplitude knob carries no printed label at all. HALT is checked as a level and makes processChannel return before anything is written, so the output and both gates freeze rather than falling to zero. The amplitude knob is applied only while a cycle is running: the slew path sets signalOutputGain back to 1, so a slewed signal passes at full level whatever the knob says. Self-cycling is held to 1000Hz and external triggering to 2000Hz. There is no loop CV jack on this module, only the button."
+}

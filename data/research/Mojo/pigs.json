@@ -1,0 +1,17 @@
+{
+  "plugin": "Mojo",
+  "module": "pigs",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/pigs.cpp line 72, added to VOLUME_PARAM with no clamp"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/pigs.cpp line 92, multiplied by TRIMPOT_PARAM then added to DRIVE_PARAM"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/pigs.cpp lines 58 to 60, added to PITCH_PARAM then clamped to -4 and 4 octaves"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/pigs.cpp line 68, added to UP_PARAM with no clamp"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/pigs.cpp line 64, added to SUB_PARAM with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/pigs.cpp lines 103 and 106, setVoltage with no setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3bcad57. The enum calls the third partial SUB_PARAM, but it is std::sin(6*pi*phase) against the fundamental's std::sin(2*pi*phase), which is three times the frequency: an octave and a fifth ABOVE, not below. The panel prints Up 2 over it, which is nearer the truth than the enum but still wrong by a fifth. Up 1 is std::sin(4*pi*phase), a clean octave up. The folder is a single reflection, out = sign(out)*2*drive - out, applied only when the signal is outside plus or minus the drive value; the parameter runs 0 to 2 with a default of 0, so at the default the whole signal is merely inverted, and once the knob passes the peak of the signal the folder does nothing at all for the rest of its travel. The Exciter's second voice is std::sin(2*pi*phase) + std::sin(1*pi*phase); the second term runs at half the phase rate while the phase itself wraps every cycle, so it breaks at each wrap rather than sounding as a clean sub-octave. Every CV jack except the drive one is added to its knob with no attenuator and no clamp. Nothing is named: configParam and the port configs were all called with an empty name."
+}

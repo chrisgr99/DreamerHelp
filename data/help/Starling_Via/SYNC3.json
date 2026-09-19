@@ -1,0 +1,65 @@
+{
+  "plugin": "Starling_Via",
+  "module": "SYNC3",
+  "description": "Three oscillators locked to one clock, each at its own ratio chosen from a scale, with the second and third mixed to one output and the first on its own",
+  "params": [
+    {"ids": [0], "text": "Picks oscillator I's ratio to the incoming clock from the current scale"},
+    {"ids": [1], "text": "Picks oscillator II's ratio to the incoming clock from the current scale"},
+    {"ids": [2], "text": "Picks oscillator III's ratio to the incoming clock from the current scale"},
+    {"ids": [3], "text": "Sets oscillator II's level in the mixed output, -5V to +5V; patching the oscillator II level input takes this knob out of circuit"},
+    {"ids": [4], "text": "Multiplies the oscillator III level input by -1 to +1; with nothing patched to that input it reads 5V, so the knob alone sets oscillator III's level from -5V to +5V"},
+    {"ids": [5], "text": "Attenuates the II ratio CV input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [6], "text": "Attenuates the III ratio CV input, from nothing at fully counter-clockwise to all of it at fully clockwise"},
+    {"ids": [7], "text": "Steps through oscillator I's waveform: Saw, Square or Triangle"},
+    {"ids": [8], "text": "Steps forward through the eight scales: Rhythms, Integers, Open Intervals, Circle of Fifths, Major Arp, Minor Arp, Microtonal and Bohlen-Pierce (Spooky)"},
+    {"ids": [9], "text": "Steps through oscillator II's waveform: Saw, Square or Triangle"},
+    {"ids": [10], "text": "Switches between Independent Ratios, where each CV input picks its own oscillator's ratio, and II + III and Phase Modulation, where one input moves both and the other becomes a phase modulation input"},
+    {"ids": [11], "text": "Steps backward through the eight scales, wrapping round at the start"},
+    {"ids": [12], "text": "Steps through oscillator III's waveform: Saw, Square or Triangle"},
+    {"ids": [13], "text": "Tapping this sets the tempo the three oscillators lock to, in place of a pulse at the Sync input"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets oscillator II's level in the mixed output; patched here, it overrides the oscillator II level knob"},
+    {"ids": [1], "text": "Sets oscillator III's level in the mixed output, multiplied by the oscillator III level knob; unpatched it reads 5V"},
+    {"ids": [2], "text": "Picks oscillator I's ratio, at 384 units of the internal 12-bit control range per volt"},
+    {"ids": [3], "text": "Picks oscillator II's ratio, or both II and III together when the CV mapping button is on its second setting, through the II CV scale knob"},
+    {"ids": [4], "text": "Picks oscillator III's ratio, or phase-modulates the pair when the CV mapping button is on its second setting, through the III CV scale knob"},
+    {"ids": [5], "text": "The clock all three oscillators lock to; each rising edge is measured to work out the tempo"},
+    {"ids": [6], "text": "While this is high the oscillator II and III level inputs are frozen at the values they held"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Oscillators II and III mixed at their own levels"},
+    {"ids": [1], "text": "A 5V gate that fires when a frequency ratio changes"},
+    {"ids": [2], "text": "Oscillator I on its own"},
+    {"ids": [3], "text": "A 5V gate at half the rate of the incoming clock"}
+  ],
+  "notes": [
+    "the A input is normalled to the A knob: with nothing patched the knob sets that voltage, and patching a cable into A takes the knob out of circuit entirely.",
+    "the oscillator III level input is normalled to 5V and the III LVL knob multiplies it by -1 to +1. Unpatched it is a -5V to +5V source; patched it attenuverts the cable.",
+    "the II + III output carries those two oscillators at the levels set by the II LVL and III LVL controls. Set both to 0V and it goes silent, while oscillator I keeps coming out of its own jack.",
+    "nothing is heard until a clock reaches the Sync input or the TAP button is tapped; the three oscillators take their frequency from the measured tempo.",
+    "each of the six buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it."
+  ],
+  "menu": [
+    "Optimized — runs the oscillators through the plugin's faster path, which is the setting to leave it on; found under the CPU Mode heading",
+    "Direct Port — runs the hardware firmware straight through, which costs more CPU; found under the CPU Mode heading",
+    "Select Scale Set File — loads a scale file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the A knob.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 5V.",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "±5.33V · continuous · one channel only",
+      "3": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "AP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "AP.cpp:84 takes the channel count from this input and AP.cpp:89 reads it four channels at a time"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "the Freq knob alone", "why": "AP.cpp:92 reads it four channels at a time, scales it by 0.05 and the Freq CV knob, adds the Freq knob and clamps the total to 0.001..0.49"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 0.5V", "why": "AP.cpp:87 reads it with getVoltage() and no channel loop, scales it by 0.001 and the Delay CV knob, adds the Delay knob and clamps the total to 0..0.5 seconds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "AP.cpp:100 sets this output's channel count from the In jack"}
+    }
+  },
+  "comment": "The delay jack is read monophonic although the filter itself is polyphonic, AP.cpp:87, so one voltage moves the delay of every channel. The sum it is clamped into is a time in seconds rather than a voltage, which is why the range field reads 0 to 0.5. The module also configures a bypass from input to output, AP.cpp:80."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "TextDisplay",
+  "module": "TextExpander",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 reads getVoltage() on channel 0 and passes it to a dsp::SchmittTrigger with default thresholds, firing at 1 and resetting at 0, but only when isConnected() is true"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 in processToggle, called for this index from the loop at line 84"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 in processToggle, called for this index from the loop at line 84"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 in processToggle, called for this index from the loop at line 84"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:95 tests isConnected() and passes getVoltage() to triggers[7], a dsp::SchmittTrigger with default thresholds; the pulse is sent on for one sample"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 in processToggle, called for this index from the loop at line 84"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:66 in processToggle, called for this index from the loop at line 84"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TextExpander.cpp:101 tests isConnected() and passes getVoltage() to triggers[8], a dsp::SchmittTrigger with default thresholds; the pulse is sent on for one sample"}
+    }
+  },
+  "comment": "Source read at commit a7468df, whose plugin.json is byte-identical to the installed one. The module has no parameters at all, so only the eight jacks can be clicked for help; its eight lamps are LightWidgets and cannot. The panel SVG holds no text elements, so nothing is labelled. The expander protocol runs both ways: TextExpander fills both its left and its right producer message and flips whichever side has a VerticalTextModule against it, and VerticalTextModule looks for an expander on both of its sides, so one display can be driven by an expander on each side at once. onExpanderChange clears every toggle, but only when there is no module at all on either side — any neighbour, related or not, keeps the states. Two small faults. The single-symbol jack is index 4, which falls inside the toggle loop as well as being read as a pulse, so its voltage goes through two Schmitt triggers and sets a toggle state that is never sent anywhere; the lamp it sets in that loop is overwritten a few lines later by the pulse value. And the two pulse lamps are driven with setBrightness rather than setBrightnessSmooth, so they are lit for exactly one sample. The toggles fire on a rising edge through 1V and rearm below 0V, which is Rack's default Schmitt trigger and not the 0.1V to 2V window the voltage standards suggest."
+}

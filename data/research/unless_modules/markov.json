@@ -1,0 +1,19 @@
+{
+  "plugin": "unless_modules",
+  "module": "markov",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "markov.cpp:243 adds this input to the record button and puts the sum through a trigger switch"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "markov.cpp:244 adds this input to the stop button and puts the sum through a trigger switch"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "markov.cpp:257 adds a tenth of this input to the knob and clamps the total to -1 to 1"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "why": "markov.cpp:255 hands this input to cvToMidi, which at :230 adds 5V and rounds 0 to 10.58V onto midi note 0 to 127"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "why": "markov.cpp:246 gate_trigger.update crosses utils.hpp:246's 0.1V threshold; :288 then sets the chain to the note at the CV input, or :272 adds it while learning"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "why": "markov.cpp:245 trigger_trigger.update crosses utils.hpp:246's 0.1V threshold; :278 steps the chain and :284 holds the gate output at 10V while it stays high"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "markov.cpp:292 writes a single voltage"},
+      "1": {"family": "trigger", "poly": false, "why": "markov.cpp:278-284 write a single voltage"}
+    }
+  },
+  "comment": "cvToMidi clamps the incoming pitch to 0 to 10.58V after adding 5V (markov.cpp:227), so notes below C-1 or above the top of the midi range fold onto the ends."
+}

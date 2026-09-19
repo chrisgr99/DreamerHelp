@@ -1,0 +1,87 @@
+{
+  "plugin": "OhmerPrems",
+  "module": "6OPDX",
+  "description": "A six-operator phase-modulation synthesiser voice laid out like a DX7, with every operator's oscillator, envelope, keyboard scaling and level on the panel at once, and a 32-voice cartridge behind it.",
+  "params": [
+    {"ids": [0, 1], "text": "Turns to change whatever the display is showing"},
+    {"ids": [2], "text": "Switches the voice between playing one note at a time and playing polyphonically"},
+    {"ids": [3, 4], "text": "Presses the command the display prints beside it"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "Switches that operator in and out of the algorithm"},
+    {"ids": [13, 14, 15, 16, 17, 18], "text": "Switches that operator's frequency between a ratio of the played note and a fixed frequency"},
+    {"ids": [27, 28, 29, 30, 31, 32], "text": "Sets the coarse part of that operator's frequency"},
+    {"ids": [34, 35, 36, 37, 38, 39], "text": "Sets the fine part of that operator's frequency"},
+    {"ids": [41, 42, 43, 44, 45, 46], "text": "Detunes that operator slightly against the others, which thickens the sound"},
+    {"ids": [48, 49, 50, 51, 52, 53, 55, 56, 57, 58, 59, 60, 62, 63, 64, 65, 66, 67, 69, 70, 71, 72, 73, 74], "text": "Sets the rate of that segment of that operator's envelope: how quickly it moves to the matching level"},
+    {"ids": [76, 77, 78, 79, 80, 81, 83, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 97, 98, 99, 100, 101, 102], "text": "Sets the level that segment of that operator's envelope moves to"},
+    {"ids": [104, 105, 106, 107, 108, 109], "text": "Sets how far the LFO's amplitude modulation reaches that operator"},
+    {"ids": [111, 112, 113, 114, 115, 116], "text": "Sets that operator's output level, which is its volume as a carrier and its modulation depth as a modulator"},
+    {"ids": [118, 119, 120, 121, 122, 123], "text": "Sets how far note velocity changes that operator's level"},
+    {"ids": [125, 126, 127, 128, 129, 130], "text": "Sets how much that operator's level falls for notes below the breakpoint"},
+    {"ids": [132, 133, 134, 135, 136, 137], "text": "Sets the note at which that operator's keyboard level scaling hinges"},
+    {"ids": [139, 140, 141, 142, 143, 144], "text": "Sets how much that operator's level falls for notes above the breakpoint"},
+    {"ids": [146, 147, 148, 149, 150, 151], "text": "Sets the shape of that operator's level scaling below the breakpoint"},
+    {"ids": [153, 154, 155, 156, 157, 158], "text": "Sets how much higher notes shorten that operator's envelope"},
+    {"ids": [160, 161, 162, 163, 164, 165], "text": "Sets the shape of that operator's level scaling above the breakpoint"},
+    {"ids": [166], "text": "Restarts the LFO at each new note"},
+    {"ids": [167], "text": "Restarts the operator oscillators at each new note"},
+    {"ids": [168], "text": "Selects the LFO waveform, named on the display beside it"},
+    {"ids": [169], "text": "Sets the LFO frequency"},
+    {"ids": [170], "text": "Delays the LFO after a note starts, so it fades in rather than arriving at full depth"},
+    {"ids": [171], "text": "Sets how far the LFO modulates pitch"},
+    {"ids": [172], "text": "Sets how far the LFO modulates amplitude"},
+    {"ids": [173, 174, 175, 176], "text": "Sets the rate of that segment of the pitch envelope"},
+    {"ids": [177, 178, 179, 180], "text": "Sets the level that segment of the pitch envelope moves to"},
+    {"ids": [181], "text": "Sets how far the modulation wheel and aftertouch reach the pitch through the LFO"},
+    {"ids": [182], "text": "Transposes the whole voice"},
+    {"ids": [183], "text": "Sets how much of the feedback operator's output is fed back into itself"},
+    {"ids": [184], "text": "Sets the level of the master output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to play, at 1V per octave"},
+    {"ids": [1], "text": "Starts and releases a note"},
+    {"ids": [2], "text": "The velocity of the note, which reaches the operators through their key velocity settings"},
+    {"ids": [3], "text": "Aftertouch pressure for the note"},
+    {"ids": [4], "text": "Pitch bend"},
+    {"ids": [5], "text": "Modulation wheel position"},
+    {"ids": [6], "text": "Retriggers the envelopes without a new note"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "A general modulation input, one of nine"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The whole voice, mixed to one mono signal"},
+    {"ids": [1, 2, 3, 4, 5, 6], "text": "That operator on its own"},
+    {"ids": [7], "text": "The pitch envelope as a voltage"},
+    {"ids": [8], "text": "The LFO as a voltage"}
+  ],
+  "notes": [
+    "no sound in this build: process sets the channel counts on the nine outputs and writes no voltage to them. The maker's README says the phase-modulation engine is written but not switched on",
+    "the module is marked hidden in the installed plugin.json, so it is not listed in Rack's module browser at all. It can only reach a rack inside a patch that already has one.",
+    "the large display is one widget, so nothing shown on it can be reached by clicking for help. The two encoders and the two buttons above it are what work it.",
+    "the voice is edited in a bank of 32. Saving a voice writes it back into the bank, and the bank can be read from and written to DX7 system exclusive files or the maker's own cartridge files.",
+    "the maker reports that on some Mac machines the panel artwork fails to draw at certain zoom levels."
+  ],
+  "menu": [
+    "Import DX7 (32-voice \"VMEM\" or single-voice \"VCED\") SysEx file... — under File, reads a DX7 bank or single voice into the module",
+    "Export to 32-voice DX7 \"VMEM\" SysEx file... — under File, writes all 32 voices out as a DX7 bank dump",
+    "Export VOICE # to single-voice DX7 \"VCED\" SysEx file... — under File, writes the voice now showing out on its own",
+    "Open \".6opdx\" cartridge file — under File, reads all 32 voices from one of the maker's own cartridge files",
+    "Save all 32 voices to \".6opdx\" cartridge file as... — under File, writes the whole bank to one of the maker's own cartridge files",
+    "LCD/OLED emulation: Genuine LCD, Backlit LCD retrofit, OLED retrofit — chooses how the module's display is drawn"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic"
+    }
+  }
+}

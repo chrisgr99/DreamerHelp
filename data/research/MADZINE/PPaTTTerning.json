@@ -1,0 +1,18 @@
+{
+  "plugin": "MADZINE",
+  "module": "PPaTTTerning",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/PPaTTTerning.cpp:318-325, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds; each rising edge takes the voltage of the knob this step is mapped to and moves on to the next step"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/PPaTTTerning.cpp:286-295, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds; a rising edge returns the sequence to its first step, rebuilds the step mapping and clears the delay buffer"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the CVD trimmer alone", "why": "src/PPaTTTerning.cpp:350-355, clamp(getVoltage(), 0, 10) scales the trimmer's 1000ms; unpatched the trimmer sets the time outright"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "src/PPaTTTerning.cpp:341, the chosen knob's own -10V to +10V value"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/PPaTTTerning.cpp:342, a 0.01f pulse at 10V"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "why": "src/PPaTTTerning.cpp:358-369, a knob voltage read back out of the delay buffer"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/PPaTTTerning.cpp:379, a 0.01f pulse at 10V"}
+    }
+  },
+  "comment": "The Density tooltip and the code disagree above three fifths of the knob's travel. The tooltip's DensityParamQuantity computes 28 + (value - 0.6) * 50, counting from 28 steps up to 48 (src/PPaTTTerning.cpp:20-22), while generateMapping computes 28 + (density - 0.2) * 60 and then clamps to 48, which is already past 48 at 0.6 (src/PPaTTTerning.cpp:207-210). So the tooltip reports a step count the sequence does not run. Above four fifths of the Density travel every few steps of the pattern are also shifted by two knobs (src/PPaTTTerning.cpp:253-258), which is not signposted anywhere on the panel. The panel prints CLK, RST, the digits 1 to 5 over the five knobs, MODE, DENSITY, CHAOS, CV OUT, TRIG, T2.DLY and CVD; the two lower output jacks carry no lettering of their own. Lettering is drawn in code at src/PPaTTTerning.cpp:472-551."
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Loom",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the body CV, ±5V, summed with the body knob"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the coupling CV, ±5V, summed with the coupling knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the decay CV, ±5V, summed with the decay knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the damping CV, ±5V, summed with the damping knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the pick hardness CV, ±5V, summed with the pick knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the strum spread CV, ±5V, summed with the spread knob"},
+      "6": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "loom.cpp names it a volt per octave snapped to semitones, summed with the root knob"},
+      "7": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "loom.cpp names it one volt per octave, summed with the octave knob"},
+      "8": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "loom.cpp:571 adds getVoltage() to the octave and root offsets as basePitch, the volts every string's frequency is derived from"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "why": "loom.cpp:580 gateTrig.process crosses 1V and calls strum; :626 the level is held too, so every switched-on string stays gated while it is above 1V"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "loom.cpp names this input polyphonic, 0-10V, with channel N setting string N's velocity"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "why": "loom.cpp:588 clockTrig.process crosses 1V and :594 calls autoStep, but only while the AUTO switch is on (:585)"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "why": "loom.cpp:574 resetTrig.process crosses 1V and :576 zeroes autoIdx, autoWalk and the internal phase, restarting the auto-player's pattern"},
+      "13": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "loom.cpp names it one volt per pattern, summed with the pattern knob"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "loom.cpp names it the density CV, ±5V, summed with the density knob"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "why": "loom.cpp:625 strTrig[i].process crosses 1V and plucks that string; :626 while the level stays above 1V the string is held gated"},
+      "16": {"family": "trigger"},
+      "17": {"family": "trigger"},
+      "18": {"family": "trigger"},
+      "19": {"family": "trigger"},
+      "20": {"family": "trigger"},
+      "21": {"family": "trigger"},
+      "22": {"family": "trigger"},
+      "23": {"family": "cv", "poly": true, "step": "stepped", "negative": "ignored", "normal": "0V", "why": "loom.cpp names it one volt per scale with 0V meaning free tuning; the shared scale bus carries a whole scale over the extra channels of the same jack"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "loom.cpp declares the left side of the mix, soft-clipped straight to 6V and approaching 10V"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": false, "why": "loom.cpp declares that string's own audio output"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "audio"},
+      "9": {"family": "audio"}
+    }
+  },
+  "comment": "Each string is a waveguide: a delay loop setting the pitch, a low-pass inside the loop so the high partials die first, four allpass sections giving the string stiffness, and a comb filter on the output tap setting where along the string it is picked. The damping control's cutoff is floored at ten times each string's own pitch rather than being absolute, because as an absolute figure it filtered a high string below its second partial and left almost nothing to hear. Six of the eighteen auto-player patterns are built from a wrapping four-bit adder walking the eight strings around a sixteen-step ring, and those six are shared with Slide."
+}

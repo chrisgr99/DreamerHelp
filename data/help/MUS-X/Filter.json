@@ -1,0 +1,38 @@
+{
+  "plugin": "MUS-X",
+  "module": "Filter",
+  "description": "A collection of virtual-analogue filters in one module: ladder and Sallen-Key shapes, comb filters and diode clippers, chosen from one knob, with a cutoff and a resonance control",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff, 20Hz at fully counter-clockwise to 20480Hz at fully clockwise, which is ten octaves"},
+    {"ids": [1], "text": "Sets the resonance, 0 to 1; on the non-resonant modes it does nothing, on the comb filters it is the feedback and on the diode clippers it is the drive"},
+    {"ids": [2], "text": "Chooses the filter: one and two-pole non-resonant shapes, two and four-pole ladders, Sallen-Key lowpass, bandpass and highpass, two comb filters, two diode clippers, plus bypass and mute"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Cutoff knob at one volt per octave; the knob spans exactly ten octaves so that this scaling comes out right"},
+    {"ids": [1], "text": "Added to the Resonance knob at a tenth of the knob's travel per volt"},
+    {"ids": [2], "text": "The audio to filter; its channel count sets the polyphony of the module"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered audio"}
+  ],
+  "notes": [
+    "the bypass mode passes the audio through but leaves the post-filter saturator in circuit, so the level is limited even there",
+    "the cutoff is clamped to at most a fifth of the oversampled sample rate, so a low oversampling setting limits how high the cutoff can reach"
+  ],
+  "menu": [
+    "Oversampling rate: 1x to 64x — runs the filter above the sample rate, which matters most on the resonant and non-linear modes",
+    "ODE Solver: 1st order Euler (low CPU), 2nd order Runge-Kutta, 4th order Runge-Kutta (best quality) — chooses how the filter's differential equations are solved",
+    "Integrator type: Linear, OTA with tanh, OTA with alternate saturator, Transistor with tanh, Transistor with alternate saturator — places the non-linearity within each integrator",
+    "Post-filter saturator — holds the output to about -10V and 10V, and stays in circuit even on the bypass mode"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "±10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic"
+    }
+  }
+}

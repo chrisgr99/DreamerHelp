@@ -1,0 +1,19 @@
+{
+  "plugin": "ALMFree",
+  "module": "MCO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "negative": "ignored", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "stepped"},
+      "1": {"family": "audio", "poly": false, "step": "continuous"},
+      "2": {"family": "audio", "poly": false, "step": "continuous"}
+    }
+  },
+  "comment": "Parameter 3, the Type control, exists but has no knob and no configParam. MCO::MCO calls configParam for indices 0, 1, 2 and 4 only; index 3 keeps the empty default quantity that Module::config creates, which is why the census records it with no name and no position. combine_cv_and_pot_data never reads params[3] either — only the Type jack, divided by the voltage range and clamped to that default 0 to 1. So the Type jack has no knob behind it at all and is the only way to change that setting. It gets no tag, because no click can reach the parameter.\n\nA second dead computation sits beside it: the fine-tune parameter is combined with the Sync jack's voltage as though that jack were a CV, clamped, and stored in a field nothing reads. The Sync jack's real use is the level comparison in process. The fine trim therefore has no CV input.\n\nThe frequency law is 165 * 2^coarse * fine. configParam gives the coarse control -2.75 to 2.75 with a display base of 2 and a display multiplier of 165, and the fine control 1 to 2 with a default of 1.5. Both use MCO::FreqParamQuantity, whose getDisplayValueString reads a frequency the process code stores back into it, so the tooltips show hertz.\n\nOutputs are scaled by 7/32767, so a full-scale sample leaves at 7V and the sub square is a hard ±7V.\n\nThe pulse output is not a plain square. The code divides the cycle into as many parts as the Type setting asks for, compares the position inside the current part against the pulse width, and outputs a flat 7V outside it and the wave itself inside it. With Type at one and the width at zero the jack sits at 7V.\n\nThe maker's product page for the hardware describes \"Voltage control of frequency, waveshape, pulse width and distribution\" and \"3 Outputs; wavetable, PWM'd wavetable & sub\", which matches; it quotes no figures, so none were taken from it."
+}

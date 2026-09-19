@@ -1,0 +1,41 @@
+{
+  "plugin": "ArhythmeticUnits-Fourier",
+  "module": "SpectrumAnalyzer",
+  "description": "A four-channel spectrum analyzer with the short-time Fourier transform laid out as controls: window, buffer length, hop rate, both axis scales, smoothing in time and frequency, and a display tilt.",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets the gain on that input before analysis, from silence up to 12dB; the colour beside it is the colour of the curve it draws."},
+    {"ids": [4], "text": "Stops and starts the buffering of fresh audio; switched off, the display holds the analysis it last made."},
+    {"ids": [5], "text": "Chooses one of fifteen window functions applied to the buffer before the transform, which trades frequency resolution against spectral leakage."},
+    {"ids": [6], "text": "Sets the size of the analysis buffer as a power of two, 128 samples up to 16384; a longer buffer resolves closer frequencies and costs more processing."},
+    {"ids": [7], "text": "Sets how much time passes between one analysis and the next, 5ms to 300ms, which is also how often the display is redrawn."},
+    {"ids": [8], "text": "Chooses whether the frequency axis is spaced linearly or logarithmically."},
+    {"ids": [9], "text": "Chooses whether the level axis runs linearly from 0% to 400% of headroom, or in decibels from -60dB or -120dB up to 12dB."},
+    {"ids": [10], "text": "Sets the time constant of the averaging applied across successive analyses, 0 to 2500ms; about 250ms suits music."},
+    {"ids": [11], "text": "Sets how wide a band of neighbouring frequency bins is averaged together, from none up to 2.5 octaves; 1/6 octave suits a buffer of 1024 samples or more."},
+    {"ids": [12], "text": "Sets the lowest frequency drawn, 0Hz up to half the sample rate."},
+    {"ids": [13], "text": "Sets the highest frequency drawn, 0Hz up to half the sample rate."},
+    {"ids": [14], "text": "Tilts the drawn spectrum about 1kHz, -9 to +9dB per octave, to offset the fall of high frequency energy in music; 4.5 or 3 is the usual choice."}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "One of four audio inputs; every channel of a polyphonic cable is summed into it, and 5V counts as full scale."}
+  ],
+  "notes": [
+    "The module has no outputs. Audio patched in is analysed and drawn, and nothing comes back out.",
+    "The ten green words along the bottom of the display are the controls themselves: drag one up or down to change it.",
+    "Randomize leaves every control alone, so it cannot scramble an analysis setting you are working with.",
+    "The low and high frequency limits and their defaults are rebuilt from the sample rate, so changing the engine rate resets the high limit to the new Nyquist frequency."
+  ],
+  "menu": [
+    "Filled Display — fills the area under each curve rather than drawing it as a line",
+    "Bezier Curve — draws each curve as a smooth spline rather than straight segments between bins",
+    "AC-coupled — passes each input through a DC blocker before the analysis"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

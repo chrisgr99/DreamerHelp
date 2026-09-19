@@ -1,0 +1,60 @@
+{
+  "plugin": "FrozenWasteland",
+  "module": "SeedsOfChange",
+  "description": "Four random voltages and four random gates grown from a numbered seed, so the same seed replays the same sequence",
+  "params": [
+    {"ids": [0], "text": "Sets the seed, a whole number from 0 to 9999; a new number takes effect only when the reseed button is pressed or a trigger reaches the reseed input"},
+    {"ids": [1], "text": "Loads the seed and starts the sequence again from its beginning"},
+    {"ids": [2], "text": "Switches the random numbers between an even spread and a gaussian one clustered around the middle"},
+    {"ids": [3, 4, 5, 6], "text": "Scales that row's random number, 0 to 10, before that row's offset is added"},
+    {"ids": [7, 8, 9, 10], "text": "Shifts that row's random voltage, -10V to 10V, after it has been scaled"},
+    {"ids": [11, 12, 13, 14], "text": "Sets the chance that row's gate fires on a clock, 0 to 100%"},
+    {"ids": [15, 16, 17, 18], "text": "Sets how far that row's MULTIPLY input moves the scaling, and in which direction"},
+    {"ids": [19, 20, 21, 22], "text": "Sets how far that row's OFFSET input moves the offset, and in which direction"},
+    {"ids": [23, 24, 25, 26], "text": "Sets how far that row's PROBABILITY input moves the chance, and in which direction"},
+    {"ids": [27, 28, 29, 30], "text": "Switches that row's gate output between following the clock and firing a short trigger"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the seed from a voltage instead of the knob, 0V to 10V covering the whole 0 to 9999 range"},
+    {"ids": [1], "text": "A trigger here loads the seed and starts the sequence again"},
+    {"ids": [2], "text": "Each rising edge here draws a fresh set of random voltages and gates"},
+    {"ids": [3], "text": "Above 5V the random numbers take a gaussian spread and below it an even one, overriding the GAUSSIAN button"},
+    {"ids": [4, 5, 6, 7], "text": "Voltage that moves that row's scaling, by the amount that row's attenuverter sets"},
+    {"ids": [8, 9, 10, 11], "text": "Voltage that moves that row's offset, by the amount that row's attenuverter sets"},
+    {"ids": [12, 13, 14, 15], "text": "Voltage that moves that row's gate chance, by the amount that row's attenuverter sets"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That row's random number scaled and offset, clamped between -10V and 10V, held until the next clock"},
+    {"ids": [4, 5, 6, 7], "text": "Fires when that row's chance allows it on a clock, carrying the clock voltage while the clock is high, or a short trigger with that row's MODE set to trigger"}
+  ],
+  "notes": [
+    "the lamp beside the seed reads green while the running sequence matches the seed shown and red once the seed has been changed but not yet loaded",
+    "nothing is drawn until a clock is patched into the clock input, and a new seed number takes effect only when the reseed button is pressed or a trigger arrives at the reseed input."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 5V · stepped · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "continuous · one channel only",
+      "11": "continuous · one channel only",
+      "12": "continuous · one channel only",
+      "13": "continuous · one channel only",
+      "14": "continuous · one channel only",
+      "15": "continuous · one channel only"
+    },
+    "outputs": {
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped"
+    }
+  }
+}

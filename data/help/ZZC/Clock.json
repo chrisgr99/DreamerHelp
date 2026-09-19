@@ -1,0 +1,71 @@
+{
+  "plugin": "ZZC",
+  "module": "Clock",
+  "description": "A master clock putting out both beat triggers and a rising phase ramp, with its own swing on the double- and quadruple-time divisions.",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo in whole beats per minute, 0 to 240, and the display reads it back."},
+    {"ids": [1], "text": "Swings the double-time output, 1 to 99; 50 places its extra trigger halfway through the beat and higher numbers push it later."},
+    {"ids": [2], "text": "Swings the quadruple-time output, 1 to 99; 50 spaces its four triggers evenly and higher numbers delay the second trigger of each half."},
+    {"ids": [3], "text": "Starts and stops the clock; while it is stopped every trigger output stays at 0V."},
+    {"ids": [4], "text": "Sends the phase back to 0 and fires a pulse from the RESET output."},
+    {"ids": [5], "text": "Runs the clock backwards, counting the phase down from 10V instead of up."},
+    {"ids": [6], "text": "Chooses how the tempo input is read: V/OCT doubles the tempo set by the BPM knob for every volt, V/BPS adds 60 BPM per volt. The word printed on the switch is the mode in use."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage here takes over the tempo, scaled either as V/OCT or as V/BPS according to the switch that labels it."},
+    {"ids": [1], "text": "A trigger here starts or stops the clock; with Run Input Mode set to Hold the clock instead runs for as long as this is above 1V."},
+    {"ids": [2], "text": "A trigger here sends the phase back to 0 and fires the RESET output."},
+    {"ids": [3], "text": "Patching a clock here makes the module follow it: the tempo is measured across three pulses and the phase is nudged into line on every pulse."},
+    {"ids": [4], "text": "Patching a 0-10V ramp here makes the module follow that ramp rather than run its own, and the tempo reading is worked out from how fast the ramp climbs."},
+    {"ids": [5], "text": "Bends the double-time swing away from its knob setting, reaching 1 at -5V and 99 at +5V."},
+    {"ids": [6], "text": "Bends the quadruple-time swing away from its knob setting, reaching 1 at -5V and 99 at +5V."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "One 1ms 10V trigger per beat, or a square that is high through the first half of each beat when Use Gates For has this output checked."},
+    {"ids": [1], "text": "A ramp climbing from 0V to 10V once per beat; this is the signal the rest of the ZZC clock modules divide."},
+    {"ids": [2], "text": "A trigger twice per beat, the second of the pair placed by the double-time swing knob."},
+    {"ids": [3], "text": "A trigger four times per beat, spaced by both swing knobs together."},
+    {"ids": [4], "text": "The running tempo as a voltage, one volt per beat per second."},
+    {"ids": [5], "text": "The length of one beat in seconds as a voltage, held at 10V or below."},
+    {"ids": [6], "text": "A 1ms 10V trigger each time the clock is started or stopped, or a gate held high for as long as it runs when Run Output Mode is set to Gate."},
+    {"ids": [7], "text": "A 1ms 10V trigger whenever the clock is reset."}
+  ],
+  "notes": [
+    "A Divider, Div or Div (Expander) touching either side of this module is handed the phase ramp directly, with no patch cable; that is how the ZZC clock family is meant to be chained.",
+    "With the pointer over the panel, the space bar starts and stops the clock.",
+    "What is patched sets the tempo source, in this order: a cable at the CLK input wins, then the phase input, then the tempo input, and with none of them the BPM knob runs the module alone.",
+    "A small lamp beside each of the four tempo-related inputs lights for the source actually in use."
+  ],
+  "menu": [
+    "Use Gates For: Main Clock Output, X2 Clock Output, X4 Clock Output — turns the named output from 1ms triggers into a square held high through the first half of each of its cycles",
+    "Reset on Start — sends the phase to 0 and fires the RESET output every time the clock is started",
+    "Reset on Stop — sends the phase to 0 and fires the RESET output every time the clock is stopped",
+    "Run Input Mode: Toggle, Hold — chooses whether a voltage at the run input flips the running state on each trigger, or holds the clock running while it is above 1V",
+    "Run Output Mode: Trigger, Gate — chooses whether the run output fires a 1ms trigger on each change or stays high for as long as the clock runs",
+    "Phase Output Range: -5V to +5V, 0V to +10V — subtracts 5V from the phase ramp or leaves it climbing from 0V",
+    "External Clock PPQN — sets how many pulses per quarter note the incoming clock sends, from 1 to 960, which is what the measured tempo is divided by",
+    "External CV Mode: V/OCT, V/BPS — sets how the tempo input is scaled, and moves the switch printed on the panel to match",
+    "Snap CV — rounds the tempo arrived at through the tempo input to a whole number of beats per minute"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads the BPM knob alone.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the RUN button alone; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the RST button alone; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads no external clock; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the clock's own phase.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads the swing knob alone.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads the swing knob alone."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

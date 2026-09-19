@@ -1,0 +1,15 @@
+{
+  "plugin": "NullSet",
+  "module": "PolyLFT",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "PolyLFT.cpp:46-48 reads getVoltage() with no channel and computes 24.995 times it plus 250.05 as the tempo, in place of the knob"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "PolyLFT.cpp:80-82 reads getVoltage() with no channel and uses it in place of the Min knob"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "PolyLFT.cpp:87-89 reads getVoltage() with no channel and uses it in place of the Max knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "PolyLFT.cpp:68-71 sets this port's channel count from the Poly knob and writes one voltage per channel"}
+    }
+  },
+  "comment": "Source read at commit 21bfcbf, the commit whose plugin.json carries the installed 2.0.0. The rate law (24.995 V + 250.05, PolyLFT.cpp:48) is not clamped, so a voltage outside ±10V runs past the knob's own 0.1 to 500 range. Min and Max are only the two ends of the wave: setting Min above Max turns the triangle upside down rather than doing nothing."
+}

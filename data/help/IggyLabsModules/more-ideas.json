@@ -1,0 +1,65 @@
+{
+  "plugin": "IggyLabsModules",
+  "module": "more-ideas",
+  "description": "An eight-bit elementary cellular automaton clocked one generation at a time, with a gate output for each bit and a CV output taken from the eight bits read as a number",
+  "params": [
+    {"ids": [0], "text": "Sets the rule number, 0 to 255, that turns each generation into the next one; it starts at 90"},
+    {"ids": [1], "text": "Sets the eight-bit number the run starts from, 0 to 255; it starts at 30, and moving it restarts the run"},
+    {"ids": [2], "text": "Sets one end of the range of scale steps the quantized CV output is drawn from, 0 to 28 steps up the scale"},
+    {"ids": [3], "text": "Sets the other end of the range of scale steps, 0 to 28, and may be set below the low knob without breaking the range"},
+    {"ids": [4], "text": "Chooses which of the eight bits drives the clock output and gates the CV output, 0 for the least significant bit and 7 for the most"},
+    {"ids": [5], "text": "Chooses the scale the quantized CV is snapped to: ionian, aeolian, dorian, phrygian, lydian, mixolydian, major pent, minor pent, shang, jiao, zhi, todi, purvi, marva, bhairav, ahirbhairav, chromatic"},
+    {"ids": [6], "text": "At thru the CV output takes a new value on every clock; at sel only on a clock where the chosen bit is high. The tooltip calls this Clock output mode, but the clock output is the same either way"},
+    {"ids": [7], "text": "Chooses what the CV output carries: at qnt a pitch snapped to the scale, at raw a plain voltage scaled to the span set on the menu; it comes up at qnt"},
+    {"ids": [8], "text": "Clears the run and works out the first generation from the seed again, which is one step on from the seed itself"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps the automaton on to the next generation on each rising edge, reading high at 1V and low again at 0.1V"},
+    {"ids": [1], "text": "Nothing in the module reads this jack; the run is restarted only by the reset button beside it"},
+    {"ids": [2], "text": "Adds its voltage to the rule number, one step per volt, with the total clamped to 0 and 255; polyphonic channels are summed first"},
+    {"ids": [3], "text": "Adds its voltage to the seed number, one step per volt, with the total clamped to 0 and 255; polyphonic channels are summed first"},
+    {"ids": [4], "text": "Moves that end of the range, adding nothing at -10V and all 28 steps at 10V on top of the low knob, so a cable resting at 0V adds 14 by itself"},
+    {"ids": [5], "text": "Moves that end of the range, adding nothing at -10V and all 28 steps at 10V on top of the high knob, so a cable resting at 0V adds 14 by itself"},
+    {"ids": [6], "text": "Moves the scale choice, adding nothing at -10V and all sixteen places at 10V on top of the scale knob, so a cable resting at 0V steps it on by eight"},
+    {"ids": [7], "text": "Moves the chosen bit, adding nothing at -10V and all seven places at 10V on top of the bit knob, so a cable resting at 0V adds three and a half before the total is rounded down"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries 10V while the clock input is high and its own bit of the current generation is 1, and 0V the rest of the time"},
+    {"ids": [8], "text": "The current generation read as a number and turned into a voltage: at qnt a pitch at 1V per octave with the bottom of the scale at C3, at raw the number spread across the span set on the menu"},
+    {"ids": [9], "text": "Carries 10V while the clock input is high and the bit named by the bit knob is 1, and 0V the rest of the time"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched to clock; the automaton takes one generation per rising edge there, and every output holds 0V while that jack is low",
+    "the eight gate outputs run from bit 0 at the top to bit 7 at the bottom, bit 0 being the least significant bit of the eight-bit generation",
+    "a rule of 0, or a seed of 0, gives generations that are all zero, so the gate outputs and the clock output stay at 0V however fast the clock runs",
+    "the picture on the panel is worked out from the rule and the seed alone and shows 64 generations of the run at once; it is redrawn when either knob moves, not on each clock",
+    "the white lamp beside each gate output shows that bit of the current generation, and the green lamp shows which bit the bit knob has chosen"
+  ],
+  "menu": [
+    "Raw CV output range: +/- 10V, +/- 5V, +/- 3V, +/- 1V, 0V - 10V, 0V - 5V, 0V - 3V, 0V - 1V — sets the span the CV output covers at raw, and changes nothing at qnt"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "one channel only",
+      "2": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "±10V · stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "5": "±10V · stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "6": "±10V · stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "7": "±10V · stepped · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "1V per octave · continuous · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pad2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Pad2.cpp reads this input per channel as the pitch and the outputs take their channel count from it"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 60V", "why": "Pad2.cpp:186-188 read it with getVoltage() and no channel loop, scale it by three and the Bandwidth CV knob, add the BW knob and clamp the total to 0.5..60"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 4V", "why": "Pad2.cpp:191-193 read it with getVoltage() and no channel loop, scale it by a fifth and the Bandwidth Scale CV knob, add the Scl knob and clamp the total to 0.5..4"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the faders", "why": "Pad2.cpp:177-181 read sixteen channels of this input, clamp each to 0..10 and write a tenth of it into the matching fader"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the faders", "why": "Pad2.cpp:177-181 read sixteen channels of this input, clamp each to 0..10 and write a tenth of it into the matching fader"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the faders", "why": "Pad2.cpp:177-181 read sixteen channels of this input, clamp each to 0..10 and write a tenth of it into the matching fader"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Pad2.cpp:296 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Pad2.cpp sets this output's channel count from the V/Oct jack"},
+      "1": {"family": "audio", "poly": true, "why": "Pad2.cpp sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The two jacks under the BW and Scl knobs are the inputs the maker never named, so both carry blank tooltips. The partial jacks write straight into the faders, Pad2.cpp:181, so a cable and the faders cannot disagree. The random fill, Pad2.cpp:296-297, is fired by the Generate button and by the Rnd Trigger jack alike, and it writes the faders rather than replacing them behind the scenes, so the sound can be adjusted afterwards. The wavetable is built on a background thread, which is what lets every control be moved while the sound plays."
+}

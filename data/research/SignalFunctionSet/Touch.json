@@ -1,0 +1,27 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Touch",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "touch.cpp:210 reads it with getVoltage as the note's pitch in volts (:228 req.pitchVolts); :218 a change of more than 0.04V under a held gate is itself a new note"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "touch.cpp:213 gateTrig.process crosses 1V for a new note, and :212 a level above 1V is what lets a pitch change count as one; :223 with nothing patched the pitch changes alone drive it"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "touch.cpp:201 accentTrig.process crosses 1V and holds for 3ms; :255 that hold, or a level above 1V, sets req.forceAttack so the note is struck rather than slid into"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "5V", "why": "touch.cpp:249 divides it by 10 and clamps to 0 to 1 as req.accent, read once at each new note; unpatched every note takes 0.5, which is what 5V would give"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "touch.cpp:184 clockTrig.process crosses 1V, :188 one-poles the measured period and :190 counts the clocks; :242 that count gives the note its beat strength and :262 the period sets the glide's deadline"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "why": "touch.cpp:192 barTrig.process crosses 1V and :195 takes clocksPerBar from the clocks counted since the last rise, then marks the next note a phrase start"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "touch.cpp:172 resetTrig.process crosses 1V and calls onReset"},
+      "7": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "touch.cpp:140 names it a volt per octave root for the scale-degree tests"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "touch.cpp:141 names it the morph CV, ±5V, summed with the morph knob"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "touch.cpp:142 names it the bias CV, ±5V, summed with the bias knob"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "touch.cpp:144 declares the pitch output with the trajectory and vibrato already applied"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "touch.cpp:145 declares a trigger that fires only on a fresh attack"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "touch.cpp:146 declares a gate that sustains across a slide"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "touch.cpp:147 declares the velocity output"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "touch.cpp:148 declares a 0-10V rise while a glide is in flight"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "touch.cpp:149 declares a pitch output that moves only on a pedal event"}
+    }
+  },
+  "comment": "The decision is made by a first-order Markov chain over articulations combined with context: the size and direction of the interval, the beat strength, the position in the phrase, how far the previous note has died away, the scale degree, and whether the slide physically fits in the time available. Hard physical limits are applied last as outright refusals, so no knob setting can buy an impossible articulation. The temperature control is kept off the panel on purpose, because what it actually does is convert committed slides into hedged ones and into rests rather than trading sliding for attack."
+}

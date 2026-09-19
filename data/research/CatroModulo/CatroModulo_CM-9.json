@@ -1,0 +1,13 @@
+{
+  "plugin": "CatroModulo",
+  "module": "CatroModulo_CM-9",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-9.cpp:96 multiplies the knob by getVoltage()*0.1, rounds and clamps to 0 and 7; one channel only"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-9.cpp:105 passes the raw voltage to a SchmittTrigger at Rack's default thresholds of 0V and 1V, and line 121 tests the same voltage against zero for the gate"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "CatroModulo_CM-9.cpp:101 reads this jack with getVoltage, channel 0 only, and passes the voltage unscaled to a dsp::SchmittTrigger left at Rack's defaults of 1V high and 0V low; a firing sends the stepper back to its first position. It sits behind two guards: line 99 runs the stepper only while the clk jack has a cable in it, and line 100 tests this jack's own isConnected, so with clk empty this jack does nothing."},
+      "3": {"poly": false, "step": "continuous", "negative": "swings", "why": "CatroModulo_CM-9.cpp:127 reads getVoltage() with no channel and writes it straight to the chosen output"}
+    }
+  },
+  "comment": "Read at commit d55cb70. The operating mode is a CM_OP widget at CatroModulo.hpp:906, a plain Button rather than a ParamWidget: it is saved in the patch, it changes what every output does, and because it has no ParamQuantity it can never be clicked for help. Whether the module routes one signal to eight or eight to one is decided by which jacks are patched rather than by any control: with no row inputs and no single input it makes gates instead. The reset jack is read only inside the branch that requires the clk jack to be patched, so a reset with no clock does nothing. Eight row inputs, eight row outputs and the single input and output carry whatever is patched through them, so none of them is given a family. Nothing here is polyphonic."
+}

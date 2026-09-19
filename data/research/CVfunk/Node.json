@@ -1,0 +1,20 @@
+{
+  "plugin": "CVfunk",
+  "module": "Node",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "Node.cpp:204 takes getChannels() on this input and Node.cpp:208 reads each voice with getPolyVoltage"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the left jack of that channel", "why": "Node.cpp:204 takes getChannels() on this input; Node.cpp:209 falls back to the left jack's voice when this one has no voice there"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "Node.cpp:232 takes getChannels() on this input and Node.cpp:236 reads each voice with getPolyVoltage"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "normal": "the left jack of that channel", "why": "Node.cpp:232 takes getChannels() on this input; Node.cpp:237 falls back to the left jack's voice when this one has no voice there"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "Node.cpp:205 takes getChannels() on this input and Node.cpp:213 reads it with getPolyVoltage, scaling by 0.1 and clamping to 0 to 1; Node.cpp:211 uses a multiplier of 1 when it is unpatched"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "Node.cpp:233 takes getChannels() on this input and Node.cpp:241 reads it with getPolyVoltage, scaling by 0.1 and clamping to 0 to 1; Node.cpp:239 uses a multiplier of 1 when it is unpatched"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "Node.cpp:173 reads it with getVoltage, so only channel 1, scales it by 0.2 and clamps to -1 to 1, then writes that straight into the crossfader knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Node.cpp:281 sets its channel count from the two channel inputs when Output poly instead of mix is on; Node.cpp:308 clamps the voltage to -10 to 10V"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "Node.cpp:282 sets its channel count from the two channel inputs when Output poly instead of mix is on; Node.cpp:309 clamps the voltage to -10 to 10V"}
+    }
+  },
+  "comment": "The crossfade CV writes into the crossfader knob itself (Node.cpp:174) and is then added to it again (Node.cpp:176), so a patched CV both moves the knob and doubles its own effect until the knob reaches an end stop. The output stage clamps the mix to 13.14V, divides by ten, applies an antiderivative-antialiased polynomial tanh and multiplies by 6.9 before the final clamp (Node.cpp:314)."
+}

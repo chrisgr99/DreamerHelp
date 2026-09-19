@@ -1,0 +1,21 @@
+{
+  "plugin": "Submit",
+  "module": "Sub",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Sub.cpp:148 adds getVoltage to the octave knob; Sub.cpp:150 turns the total into a frequency clamped to 12Hz to 5000Hz"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sub.cpp:132 compares getVoltage against 1V, dropping to 0.1V once high"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Sub.cpp:138-139 uses isConnected, divides getVoltage by 10 and clamps it to 0 to 1; Sub.cpp:200 adds three tenths of it to the envelope amount"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:205 divides getVoltage by 10, adds it to the FILTER knob and clamps the total to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:199 divides getVoltage by 10, adds it to the ENV AMT knob and clamps the total to 0 to 1"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:242 divides getVoltage by 10, adds it to the SUB knob and clamps the total to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:230 divides getVoltage by 10, adds it to the DRIVE knob and clamps the total to 0 to 1"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:157-161 divides getVoltage by 10, multiplies by the knob's own span and clamps the total to 0.03 to 4 seconds"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Sub.cpp:214 divides getVoltage by 10, adds it to the RES knob and clamps the total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Sub.cpp:268 sets the DC-blocked voice times 5"}
+    }
+  },
+  "comment": "A second output, Envelope, is configured at Sub.cpp:106 and written every sample at Sub.cpp:269 with ten times the amplitude envelope, but the widget adds no jack for it (Sub.cpp:296 lists the only output), so it cannot be patched or clicked. The manual lists only a mono audio output, correctly.\n\nEvery figure the manual gives checks out: nine octave positions from -4 to +4 (Sub.cpp:83), -100 to +100 cents of Tune on the upper layer alone (Sub.cpp:90, 149-152), and Drive as compensated asymmetric saturation rather than a volume control (Sub.cpp:229-239).\n\nThe six CV inputs are read without isConnected, which is harmless because an unpatched input reads 0V. Accent is the exception and is checked (Sub.cpp:138).\n\nBelow about 30Hz the sub layer's fundamental is progressively weakened, down to about a third, while its second and third harmonics are kept, so a very low note still carries pitch without the speaker excursion (Sub.cpp:256-259)."
+}

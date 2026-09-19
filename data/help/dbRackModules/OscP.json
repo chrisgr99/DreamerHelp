@@ -1,0 +1,39 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscP",
+  "description": "An additive pulse wave built from up to 512 partials, which makes it free of aliasing at any pitch",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -8 to 4 as a power of two around middle C, which is about 1Hz to 4186Hz"},
+    {"ids": [1], "text": "Sets the width of the pulse, 1 to 99 per cent of the cycle"},
+    {"ids": [2], "text": "Attenuates the voltage at the jack above it before it is added to the width knob, 0 to 1"},
+    {"ids": [3], "text": "Shifts the pitch by up to a tenth of an octave either way"},
+    {"ids": [4], "text": "Picks how the phases are set at a reset: 0 puts them all at the start, and WB and Chy draw them from a Weibull or a Cauchy distribution"},
+    {"ids": [5], "text": "Scatters the phases again at the setting chosen, which changes the sound without changing the harmonics"},
+    {"ids": [6], "text": "Sets how many partials are added, as a power of two from 1 to 512; fewer partials soften the wave and cost less to compute"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "Modulates the width, a tenth per volt scaled by the knob below it"},
+    {"ids": [2], "text": "A trigger here scatters the phases again at the setting chosen"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pulse wave, -5V to 5V"}
+  ],
+  "notes": [
+    "a pulse of any width is built as the difference of two saws, so the width can be moved right through without aliasing"
+  ],
+  "menu": [
+    "use thread — works the partials out on a background thread, which keeps them off the audio thread at the cost of some delay",
+    "Thread buffer size — sets how many samples that background thread works on at a time; a larger buffer glitches less and delays more"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

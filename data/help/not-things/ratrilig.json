@@ -1,0 +1,52 @@
+{
+  "plugin": "not-things",
+  "module": "ratrilig",
+  "description": "Ratrilig: passes or drops each incoming trigger by chance, with the chance shaped by a three-level grouping of clusters, phrases and cycles",
+  "params": [
+    {"ids": [0], "text": "Sets how many incoming triggers make one cluster, 1 to 32"},
+    {"ids": [1], "text": "Sets how many clusters make one phrase, 1 to 32"},
+    {"ids": [2], "text": "Sets how many phrases make one cycle, 1 to 32"},
+    {"ids": [3], "text": "Sets the chance that a whole cluster is skipped, 0 to 100%; a skipped cluster drops every trigger in it"},
+    {"ids": [4], "text": "Sets the chance that a whole phrase is skipped, 0 to 100%; a skipped phrase drops every trigger in it"},
+    {"ids": [5], "text": "Sets the chance that a whole cycle is skipped, 0 to 100%; a skipped cycle drops every trigger in it"},
+    {"ids": [6], "text": "Sets the base chance that a trigger is passed, 0 to 100%, before the three modifiers and any bias"},
+    {"ids": [7], "text": "Sets the spread of the random modifier drawn at the start of each cluster: at 15 the modifier falls between -15 and +15 percentage points"},
+    {"ids": [8], "text": "Sets the spread of the random modifier drawn at the start of each phrase, applied for the whole of it"},
+    {"ids": [9], "text": "Sets the spread of the random modifier drawn at the start of each cycle, applied for the whole of it"},
+    {"ids": [10], "text": "Sets how many percentage points are added to the chosen cluster of each phrase, 0 to 100; at 0 no cluster is biased"},
+    {"ids": [11], "text": "Picks which cluster of the phrase gets the bias, 0 for the first and 1 for the last"},
+    {"ids": [12], "text": "Sets how many percentage points are added to the chosen phrase of each cycle, 0 to 100; at 0 no phrase is biased"},
+    {"ids": [13], "text": "Picks which phrase of the cycle gets the bias, 0 for the first and 1 for the last"},
+    {"ids": [14], "text": "Steps the module on when clicked, as an incoming trigger would"},
+    {"ids": [15], "text": "Returns the module to the first cluster of the first phrase of the first cycle at the next trigger"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Passes or drops each rise to 1V; a passed trigger stays high as long as this one does"},
+    {"ids": [1], "text": "Returns the module to the start on each rise to 1V"},
+    {"ids": [2], "text": "Adds to the base chance, 20 percentage points per volt over -5V to 5V, with the total held to 0 to 100%"},
+    {"ids": [3], "text": "Adds to the cluster modifier spread, 20 percentage points per volt over -5V to 5V"},
+    {"ids": [4], "text": "Adds to the phrase modifier spread, 20 percentage points per volt over -5V to 5V"},
+    {"ids": [5], "text": "Adds to the cycle modifier spread, 20 percentage points per volt over -5V to 5V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the triggers that were passed, high at 10V for as long as the incoming trigger stays high"}
+  ],
+  "notes": [
+    "a biased cluster or phrase is never skipped, whatever its skip chance says; where both biases fall together the larger is applied in full and the smaller only half",
+    "a polyphonic cable on the trigger input runs one independent pattern per channel; a monophonic CV input then applies to all of them, and a polyphonic one is taken channel by channel",
+    "the three rings beside the output show whether the last trigger passed, the chance that was applied to it, and the random value drawn against that chance"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 100V.",
+      "3": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

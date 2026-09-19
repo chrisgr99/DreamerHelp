@@ -1,0 +1,41 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "Combine",
+  "description": "Two signals woven into one, in 2HP, by one of three rules deciding moment to moment which of them comes out",
+  "params": [
+    {"ids": [0], "text": "Sets the one figure the chosen rule uses: a breakpoint in U/L, a bias added to B in A>B, a minimum slope in R/F"},
+    {"ids": [1], "text": "Attenuates and inverts the parameter CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [2], "text": "Chooses the rule: U/L takes A while it is above the breakpoint, A>B takes A while it exceeds B plus the bias, R/F takes A while it is rising or steady after a rise"},
+    {"ids": [3], "text": "Sets the span the breakpoint is read over in U/L mode, -5V to 5V or 0V to 10V; the other two rules ignore it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the parameter, 10V covering the knob's full travel at full trim; a polyphonic signal here gives each channel its own parameter"},
+    {"ids": [1], "text": "The first of the two signals, and the one the rule tests"},
+    {"ids": [2], "text": "The second signal, taken whenever the rule turns away from A"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries A or B moment to moment, each channel decided on its own"},
+    {"ids": [1], "text": "Carries a high gate while A is the one coming out, or while B is, according to the menu; a red mark beside it shows the second of those"}
+  ],
+  "notes": [
+    "in R/F mode a saw is a poor choice for A, since a falling saw only counts as rising on the single sample where it jumps back to the top",
+    "with nothing patched into B, A>B mode compares A against the parameter voltage alone and puts out that voltage whenever A falls short"
+  ],
+  "menu": [
+    "High gate: On A selected (default), On B selected — chooses which of the two the gate output marks",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "polyphonic\n\nunpatched it reads 0V.",
+      "2": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "stepped · polyphonic"
+    }
+  }
+}

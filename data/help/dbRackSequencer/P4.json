@@ -1,0 +1,36 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "P4",
+  "description": "Address generator that walks a four-step permutation inside an address space of 2 to 32 steps",
+  "params": [
+    {"ids": [0], "text": "Shifts the whole permutation through the address space, 0 to 31 steps"},
+    {"ids": [1], "text": "Picks which of the 24 permutations of four steps is walked"},
+    {"ids": [2], "text": "X puts out the step number as it stands; Y swaps the row and column of the step number, which walks down a 4x4 grid in place of across it"},
+    {"ids": [3], "text": "Sets how many steps the address space holds, 2 to 32; use 16 to address TD4"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on to the next step of the permutation"},
+    {"ids": [1], "text": "A rising edge returns to the first step of the permutation and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Sets the offset, 1.6 steps per volt over 0-10V, and overrides the Ofs knob while patched"},
+    {"ids": [3], "text": "Selects the permutation, 2.4 permutations per volt over 0-10V, and overrides the Perm knob while patched"},
+    {"ids": [4], "text": "Picks X below 5V and Y at 5V and above, and overrides the switch while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current step as a voltage, with the whole address space spread over 0-10V"}
+  ],
+  "menu": [
+    "Reset on Offset Change — restarts the permutation whenever the Ofs input moves the offset"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 9.99V · continuous · one channel only",
+      "3": "0 to 9.99V · continuous · one channel only",
+      "4": "0 to 9.99V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

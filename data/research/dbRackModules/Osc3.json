@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc3",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Osc3.cpp:159 takes the channel count from this input and Osc3.cpp:164 adds it to the Freq knob"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "normal": "a flat wave", "why": "Osc3.cpp:147 reads the channel count of this input, holding it to two at least, and reads each channel as one point"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc3.cpp:168 and Osc3.cpp:170 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Osc3.cpp:201 sets this output's channel count from the V/Oct jack"},
+      "1": {"family": "audio", "poly": true, "why": "Osc3.cpp:199 sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The points are read from the Pts jack once per sample, Osc3.cpp:147, so a moving set of points changes the wave as it plays. Each output is written at 0V while Pts is empty, Osc3.cpp:184 and Osc3.cpp:195. Both outputs are passed through a DC blocker."
+}

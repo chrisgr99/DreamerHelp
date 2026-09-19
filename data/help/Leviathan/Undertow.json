@@ -1,0 +1,50 @@
+{
+  "plugin": "Leviathan",
+  "module": "Undertow",
+  "description": "An oscillator giving a sine wave, a morphing wave that grows a spike out of that sine, and a square one octave down",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, from 10Hz at the far left to 10000Hz at the far right, and starts at 261.63Hz"},
+    {"ids": [1], "text": "Detunes the oscillator by up to a hundred cents either side of the pitch set by FREQ"},
+    {"ids": [2], "text": "Sets how much of the voltage at the LIN FM jack reaches the frequency, none at the far left"},
+    {"ids": [3], "text": "Grows a triangular spike out of the trough of the sine on the MORPH output, wider and taller the further it is turned; at the far left the MORPH output is a plain sine"},
+    {"ids": [4], "text": "Snaps FREQ to whole octaves above and below middle C instead of letting it run smoothly, and starts off"},
+    {"ids": [5], "text": "Sets how sharply the spike meets the sine around it, a soft join at the far left and a hard corner at the far right, and starts at the halfway point"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch at a volt per octave, added to FREQ and FINE"},
+    {"ids": [1], "text": "Adds to the pitch at a volt per octave, with no attenuator of its own, so it does the same arithmetic as V/OCT"},
+    {"ids": [2], "text": "Modulates the frequency as a fraction of the current pitch, scaled by the LIN FM knob; the signal is stripped of any steady offset before it is used, so only its swing counts"},
+    {"ids": [3], "text": "Scales the MORPH knob rather than adding to it, reaching the full knob setting at 8V; while a cable is in this jack a voltage of 0V leaves the output a plain sine whatever the knob says"},
+    {"ids": [4], "text": "A rising edge above 1V restarts the waveform from the beginning of its cycle"},
+    {"ids": [5], "text": "A voltage above 1V lets the sub square run, and below that it holds the SUB output at 0V; with nothing patched the sub runs all the time"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A sine wave at the pitch the module is set to, swinging ±5V"},
+    {"ids": [1], "text": "The sine with the spike grown out of it by MORPH, clamped to ±5V"},
+    {"ids": [2], "text": "A square wave one octave below the pitch the module is set to, swinging ±5V; it flips on each cycle of the main waveform"}
+  ],
+  "notes": [
+    "the dark rectangle draws one cycle of the MORPH waveform as it is shaped; nothing on it can be clicked or dragged"
+  ],
+  "menu": [
+    "Coarse Tune: Continuous, Octave Stepped — the same choice the OCT button makes, between a freely swept FREQ knob and one that snaps to octaves",
+    "Asymmetry: Off, Rising, Falling — lifts one flank of the morph spike so the waveform is no longer symmetrical, on whichever side is chosen",
+    "Analog character — puts a soft, level-dependent saturation on the sine and morph outputs",
+    "Preview tracer — draws a moving marker on the waveform display showing where in the cycle the oscillator is"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "0 to 8V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 10V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only"
+    }
+  }
+}

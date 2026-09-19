@@ -1,0 +1,49 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "P16A",
+  "description": "Address sequencer holding 100 editable sixteen-step patterns, each step a number from 1 to 16 put out as a voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the address this step of the pattern points at, by clicking one of the sixteen cells in its column; the row marked 1 is address zero"},
+    {"ids": [16], "text": "Gives every step that is not held a new random number, between the Rnd Min and Rnd Max set in the menu"},
+    {"ids": [17], "text": "Sets how many steps are played before the pattern starts again, 2 to 16"},
+    {"ids": [18], "text": "Shifts where in the pattern the playing starts, 0 to 15 steps"},
+    {"ids": [19], "text": "Sets the address space the step numbers are spread over, 2 to 32; use 16 to address TD4"},
+    {"ids": [20], "text": "Picks which of the 100 patterns is played and edited"},
+    {"ids": [21], "text": "Copies the sixteen step numbers of the current pattern"},
+    {"ids": [22], "text": "Writes the copied step numbers into the current pattern"},
+    {"ids": [23], "text": "While on, the pattern is picked by hand and a cable in the pattern input no longer moves the selection"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39], "text": "While on, a randomise leaves this step of the pattern untouched"},
+    {"ids": [40], "text": "Turns the current pattern back to front, so its sixteen step numbers run in the opposite order"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on to the next step of the pattern"},
+    {"ids": [2], "text": "A rising edge returns to the first step and blocks the clock for 1ms"},
+    {"ids": [3], "text": "Selects the pattern, 0.1V per pattern over 0-10V; while it is patched the pattern cannot be picked by hand unless Lock is on"},
+    {"ids": [4], "text": "A trigger gives every step that is not held a new random number, between the Rnd Min and Rnd Max set in the menu"},
+    {"ids": [5], "text": "Sets the offset, 1.6 steps per volt over 0-10V, and overrides the Offset knob while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The step number the pattern has reached, as a voltage: the step number divided by the size, times 10"},
+    {"ids": [1], "text": "All sixteen step numbers of the current pattern at once, one per channel, with as many channels as the Length knob sets"}
+  ],
+  "menu": [
+    "DivBy10 — divides both outputs by ten, so a size of 16 gives 0.0625V per step in place of 0.625V",
+    "Insert Pattern — pushes the patterns after the current one along by one place and empties the current one; the hundredth pattern is lost",
+    "Delete Pattern — removes the current pattern and pulls every later pattern back one place",
+    "Rnd Min — sets the lowest step number a randomise can write, 0 to 15",
+    "Rnd Max — sets the highest step number a randomise can write, 0 to 15"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 9.99V · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "polyphonic"
+    }
+  }
+}

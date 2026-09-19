@@ -1,0 +1,69 @@
+{
+  "plugin": "Animatek",
+  "module": "ATEK303SEQ",
+  "description": "Acid pattern generator: a seed and a handful of musical controls make a repeatable pattern of notes, rests, ties, accents and slides, which mutation buttons then vary",
+  "params": [
+    {"ids": [0], "text": "Makes a new pattern from a new seed, or mutates all three layers of the current one while BLOCK is lit"},
+    {"ids": [1], "text": "Sets how many steps the loop plays before it wraps, 1 to 64, taking effect at once without regenerating anything"},
+    {"ids": [2], "text": "Sets the gate length of an ordinary note, 5% to 100% of the measured clock period, with a small gap kept before the next edge"},
+    {"ids": [3], "text": "Sets how much of a new pattern is notes rather than rests, 5% to 100%; it shapes the next generation rather than the pattern playing now"},
+    {"ids": [4], "text": "Sets how widely a new pattern spreads in pitch and octave, 0% to 100%; it shapes the next generation rather than the pattern playing now"},
+    {"ids": [5], "text": "Sets how much of a new pattern is accented, 0% to 100%; it shapes the next generation rather than the pattern playing now"},
+    {"ids": [6], "text": "Sets how much of a new pattern slides, 0% to 100%; a slide is kept only between adjacent notes of different pitch"},
+    {"ids": [7], "text": "Transposes playback to one of the twelve chromatic roots, at once and without regenerating the pattern"},
+    {"ids": [8], "text": "Picks the scale the pattern is read through: Acid minor pentatonic, Natural minor, Phrygian, Harmonic minor, Dorian, Blues, Major or Chromatic; changing it moves the notes that are playing now"},
+    {"ids": [9], "text": "Locks the seed, so that generating mutates the pattern instead of replacing it; the lamp and the menu's Lock seed are the same setting"},
+    {"ids": [10], "text": "Runs two mutation operations on the rest, note and tie layer, which can move an attack or change a note into a tie"},
+    {"ids": [11], "text": "Runs two mutation operations on the pitch family, which in this version moves notes between octaves"},
+    {"ids": [12], "text": "Runs three mutation operations on the accents and slides"},
+    {"ids": [13], "text": "Swaps the generation controls for the pattern editor in the same panel space, leaving the step lamps, jacks and mutation buttons where they are"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the pattern plays on; each rising edge advances one step, and there is no internal clock"},
+    {"ids": [1], "text": "A rising edge prepares step 1, which the next clock edge then plays; it does not change the pattern or the seed"},
+    {"ids": [2], "text": "A rising edge does what the generate button does: a new seed, or a mutation of all three layers while BLOCK is lit"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Pitch of the current step at a volt per octave, the scale degree plus the root and the base octave; during a rest it holds the previous pitch"},
+    {"ids": [1], "text": "10V while the current note sounds, its length set by the gate knob, held through a tie and, if the menu says so, across a slide"},
+    {"ids": [2], "text": "10V on an accented note, or a held velocity-style level when the menu switches this output to velocity"},
+    {"ids": [3], "text": "10V on a note that slides into the next one, and low for rests, ties and transitions that cannot form a slide"},
+    {"ids": [4], "text": "A 10V, 1ms pulse at step 1, including the very first clock edge after a reset or a patch load"}
+  ],
+  "notes": [
+    "an external clock is required; pressing generate changes the pattern but does not advance it, and the first clock edge starts step 1.",
+    "the sixteen lamps show the pattern: dark for a rest, green for an attack, blue for a tie, amber for a note that slides, red for an accent, and bright red on the step being played.",
+    "an ATEK303 placed immediately to the right receives pitch, gate, accent and slide without cables, and the sequencer's own glide switches off so that the voice performs the slide.",
+    "the editor's piano roll, its octave, gate, accent and slide rows and its page strip are drawn widgets rather than controls, so clicking them edits the pattern and cannot bring up help."
+  ],
+  "menu": [
+    "Lock seed — the same setting as the BLOCK button on the panel",
+    "Mutation scope: Current page (16 steps), Whole pattern (64 steps) — how much of the pattern the mutation buttons act on",
+    "Mutate time (2 operations) — the same action as the MUT TIME button",
+    "Mutate pitches / octaves (2 operations) — the same action as the MUT NOTE/OCT button",
+    "Mutate accents / slides (3 operations) — the same action as the MUT SLD/ACC button",
+    "Undo last mutation — puts back the pattern as it was before the last mutation; there is one level of it, and generating with a new seed clears it",
+    "Clear pattern — empties the pattern for drawing one in the editor, keeping the seed and leaving a note on step 1; it takes the undo slot, so it can be undone",
+    "Load MIDI file… — reads a standard MIDI file on a sixteenth-note grid and replaces the pattern with it, keeping the lowest note of any chord",
+    "Bar — appears once a loaded file runs past 16 steps, and moves between the file's bars without opening it again",
+    "Forget file — drops the reference to the loaded file; the pattern that came from it carries on playing",
+    "Gate held through slides (legato) — keeps the gate high across a slide instead of leaving a short gap for the next attack",
+    "Own glide on the V/Oct output (disables itself when ATEK303 is attached) — glides the pitch output after a slide, at a rate proportional to the clock",
+    "Base octave: C1 (-3), C2 (-2), C3 (-1), C4 (0), C5 (+1) — the octave the pattern is read in, which starts at C2",
+    "Accent as velocity CV — turns the accent output from a 10V gate into held velocity-style levels",
+    "Accent level: 10 V, 8 V, or 5 V — the voltage an accented note holds in velocity mode",
+    "Base level (unaccented note) — the voltage an unaccented note holds in velocity mode, 0V, 1V, 2V or 3V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

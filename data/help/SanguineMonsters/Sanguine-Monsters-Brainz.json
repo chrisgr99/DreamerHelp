@@ -1,0 +1,55 @@
+{
+  "plugin": "SanguineMonsters",
+  "module": "Sanguine-Monsters-Brainz",
+  "description": "A run control for recorders: it sends triggers at the start and end of its cycle and at the end of each of three timed steps, so separate recordings can be lined up afterwards",
+  "params": [
+    {"ids": [0], "text": "Chooses how the module runs its cycle: Bidirectional takes two run triggers, one for A-B-C and one for C-B-A; Forward runs A-B-C only; Backward runs C-B-A only"},
+    {"ids": [1], "text": "Switches the step logic off and on; off, the steps and metronome are ignored and a run trigger goes straight to the RUN output; on, the steps run and the RUN output is dead"},
+    {"ids": [2], "text": "Sets the metronome speed in beats per minute, 15 to 99; it comes up at 60"},
+    {"ids": [3], "text": "Sets how many metronome beats go out before the step ends, 5 to 99; it comes up at 10"},
+    {"ids": [4, 5, 6], "text": "Sets how long that step runs before it sends its trigger and hands on to the next, 1 to 99 seconds; it is ignored while that step follows the metronome"},
+    {"ids": [7, 8, 9], "text": "Takes that step out of the cycle when it is off; a disabled step is skipped whichever way the arrows point"},
+    {"ids": [10, 11, 12], "text": "Sends triggers to the 1, 2, 3 and 4 outputs at the end of that step as well as to that step's own output; it comes up off"},
+    {"ids": [13, 14, 15], "text": "Makes that step take its timing from the metronome rather than its own seconds timer, so the BPM and beat count knobs govern it and its own time display reads 0"},
+    {"ids": [16, 17], "text": "Chooses how the two steps either side of it follow one another: Bidirectional links them in both stages, Forward skips the earlier one in stage 2, and Backward skips the later one in stage 1"},
+    {"ids": [18], "text": "Starts the cycle, or stops it and returns the module to its ready state if a stage is already running; with the step logic off it sends a trigger to the RUN output instead"},
+    {"ids": [19], "text": "Returns the module to its ready state, drops the outputs to 0V, releases a finished one-shot cycle and sends a trigger to the RESET output"},
+    {"ids": [20], "text": "Makes a finished cycle hold until a reset arrives: run triggers are ignored in the meantime"},
+    {"ids": [21], "text": "Sends triggers to the 1, 2, 3 and 4 outputs at the start of a cycle; the panel prints S.T. and it comes up on"},
+    {"ids": [22], "text": "Sends triggers to the 1, 2, 3 and 4 outputs once every stage is done; the panel prints E.T. and it comes up on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger here starts and stops the cycle, as the run button does"},
+    {"ids": [1], "text": "A trigger here resets the module, as the reset button does"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the run trigger passed straight through, and only while the step logic is off; with the step logic on the jack is dead"},
+    {"ids": [1], "text": "Carries a 10V trigger every time the module is reset, whether from the button or the reset input"},
+    {"ids": [2], "text": "Carries a 10V pulse on each metronome beat, short enough to serve as an audible click in an audio recording; it is dead while the step logic is off"},
+    {"ids": [3, 4, 5, 6], "text": "Carries a 10V trigger at the start of the cycle, at its end and at the end of any step set to send them; it is dead while the step logic is off"},
+    {"ids": [7, 8, 9], "text": "Carries a 10V trigger when that step's timer or metronome count runs out"}
+  ],
+  "notes": [
+    "With the step logic switch off the module does nothing but pass run and reset triggers through; the metronome, the steps and the four numbered outputs are all dead.",
+    "The large light at the top right shows the module's state: ready, stage 1, stage 2, waiting for a reset, or step logic disabled.",
+    "Each step has two displays: one counts the seconds or beats elapsed, the other shows the time the knob is set to."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

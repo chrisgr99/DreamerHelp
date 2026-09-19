@@ -1,0 +1,43 @@
+{
+  "plugin": "HamptonHarmonics",
+  "module": "Arp",
+  "description": "An arpeggiator driven by a polyphonic keyboard: the notes whose gates are high make up the sequence, and one of them is played on each clock",
+  "params": [
+    {"ids": [0], "text": "Chooses the order the notes play in: Up, Down, Inclusive up and back with the end notes twice, Exclusive up and back with them once, Outside In from both ends inwards, Order as played, or Random"},
+    {"ids": [1], "text": "Sets the length of the output gate as a fraction of the measured clock interval, 0 to 1, with a floor of 1ms"},
+    {"ids": [2], "text": "Sets how many octaves the sequence spans, 1 to 4, each octave repeating the held notes a volt higher"},
+    {"ids": [3], "text": "Holds the notes in the sequence after the keys are released, and clears them when a new note arrives after every key has been let go"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the pattern chosen by the knob, one pattern per volt, with the total held between 1 and 7"},
+    {"ids": [1], "text": "Adds to the gate length set by the knob, a whole clock interval per volt, with the total held between 0 and 1"},
+    {"ids": [2], "text": "Adds to the octave span set by the knob, one octave per volt, with the total held between 1 and 4"},
+    {"ids": [3], "text": "A rising edge returns the sequence to its first note"},
+    {"ids": [4], "text": "Advances the sequence by one note on each rising edge, and the time between edges sets the gate length"},
+    {"ids": [5], "text": "The polyphonic pitches the sequence is built from; a channel joins the sequence only while its gate channel is high"},
+    {"ids": [6], "text": "The polyphonic gates saying which of the incoming pitches belong to the sequence; with every gate low and Latch off, the sequence returns to its first note"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 5V gate at each step, lasting the fraction of the clock interval set by the Gate knob"},
+    {"ids": [1], "text": "The pitch of the current step, 1V per octave"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched to the clock input and a polyphonic keyboard is patched to both the pitch and the gate inputs; a step is taken only on a clock edge",
+    "a note joins the sequence only while its gate channel is high, so with every gate low and Latch off the outputs stay at 0V"
+  ],
+  "menu": [
+    "Polyphonic output — moves each step on to the next of sixteen channels on both outputs, so a long envelope on one step is not cut off by the next"
+  ],
+  "expects": {
+    "inputs": {
+      "3": "stepped",
+      "4": "stepped",
+      "5": "continuous",
+      "6": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous"
+    }
+  }
+}

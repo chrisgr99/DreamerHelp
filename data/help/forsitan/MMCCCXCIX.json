@@ -1,0 +1,48 @@
+{
+  "plugin": "forsitan",
+  "module": "MMCCCXCIX",
+  "description": "An emulation of the PT2399 delay chip, the cheap echo IC behind a great many guitar pedals, with a send and return so an effect can be put inside its repeat path",
+  "params": [
+    {"ids": [0], "text": "Sets the delay, 35ms at the bottom of its travel to 1175ms at the top, with the short end stretched across more of the turn"},
+    {"ids": [1], "text": "Sets how much of the repeat is fed back into the line, 0% to 180%; above 100% it runs away into self-oscillation"},
+    {"ids": [2], "text": "Crossfades the output between the signal coming in and the delayed one, 0% dry and 100% delayed"},
+    {"ids": [3], "text": "Sets how much of the top end each repeat keeps, dark at the bottom of its travel and crisp at the top"},
+    {"ids": [4], "text": "Crossfades what is fed back between the delay's own signal and whatever comes back at the return jack, 0% for its own and 100% for the return; it changes nothing while that jack is empty"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be delayed"},
+    {"ids": [1], "text": "Added to the time knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [2], "text": "Added to the fb knob, 18 points of feedback per volt; the total is held between 0% and 180%"},
+    {"ids": [3], "text": "Added to the wet knob, ten points per volt; the total is held between 0% and 100%"},
+    {"ids": [4], "text": "Added to the bright knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [5], "text": "Added to the fb mix knob, ten points per volt; the total is held between 0% and 100%"},
+    {"ids": [6], "text": "The signal coming back from whatever the send jack was patched into; it goes into the feedback path rather than to the output, as far as the fb mix knob allows"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The delay crossfaded against the dry signal by the wet knob"},
+    {"ids": [1], "text": "The delay's own feedback signal, tapped before it goes round again, for feeding an effect and bringing it back to the return jack"}
+  ],
+  "notes": [
+    "the lower oversampling settings are closer to the chip's own hiss and grit, and changing the setting empties the delay line.",
+    "the send and return pair is inside the feedback loop, not across the output, so an effect put in it is heard on the repeats rather than on the first pass.",
+    "the lamp beside the return jack is lit whenever a cable is in it, which is the only sign that the fb mix knob is doing anything."
+  ],
+  "menu": [
+    "Delta-sigma oversampling: 1× (raw chip, lightest), 2×, 4×, 8× (default), 16× (cleanest, heaviest) — how many bits the emulation runs per clock of the chip's memory"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "±10V · continuous · one channel only\n\nunpatched it reads the delay's own feedback."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc6",
+  "description": "An oscillator that builds its wave with whole number arithmetic and bit logic, in the manner of a bytebeat, rather than from a waveform",
+  "params": [
+    {"ids": [0], "text": "Sets how many bits of the counter are used, 2 to 16; bits set in X or Y above this count take no part"},
+    {"ids": [1], "text": "Sets how far the counter is shifted down in the first X term, 0 to 32"},
+    {"ids": [2], "text": "Sets how far the counter is shifted down in the second X term, 0 to 32"},
+    {"ids": [3], "text": "Multiplies the counter in the first X term, 0 to 32; above zero the counter is squared, which is where the sound becomes complex"},
+    {"ids": [4], "text": "Multiplies the counter in the second X term, 0 to 32"},
+    {"ids": [5], "text": "Sets how far the counter is shifted down in the first Y term, 0 to 32"},
+    {"ids": [6], "text": "Sets how far the counter is shifted down in the second Y term, 0 to 32"},
+    {"ids": [7], "text": "Multiplies the counter in the first Y term, 0 to 32"},
+    {"ids": [8], "text": "Multiplies the counter in the second Y term, 0 to 32"},
+    {"ids": [9], "text": "Multiplies the whole Y part before it is applied to the X part, 0 to 32"},
+    {"ids": [10], "text": "Adds to the whole Y part before it is applied to the X part, 0 to 32"},
+    {"ids": [11], "text": "Puts the counter of every voice back to zero, which restarts the pattern"},
+    {"ids": [12], "text": "Sets the pitch, -8 to 4 as a power of two around middle C, which is about 1Hz to 4186Hz"},
+    {"ids": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28], "text": "While on, that bit of the X value is set; the X value is what the rising counter is masked against"},
+    {"ids": [29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44], "text": "While on, that bit of the Y value is set; the Y value is what the second term of the formula is masked against"},
+    {"ids": [45], "text": "Shifts the pitch by whole octaves, -8 to 8"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "Sets the bits of the X value from a cable, one channel per bit; a channel above 0V sets its bit, and the bits set here are added to those set by the switches"},
+    {"ids": [2], "text": "Sets the bits of the Y value from a cable, one channel per bit; a channel above 0V sets its bit, and the bits set here are added to those set by the switches"},
+    {"ids": [3], "text": "A trigger here puts the counter of every voice back to zero"},
+    {"ids": [4], "text": "Sets XA by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [5], "text": "Sets XB by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [6], "text": "Sets XC by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [7], "text": "Sets XD by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [8], "text": "Sets YA by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [9], "text": "Sets YB by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [10], "text": "Sets YC by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [11], "text": "Sets YD by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [12], "text": "Sets YM by cable, 3.2 steps per volt, and moves the knob while it is patched"},
+    {"ids": [13], "text": "Sets YP by cable, 3.2 steps per volt, and moves the knob while it is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave, -10V to 10V"}
+  ],
+  "notes": [
+    "the wave is the formula x and t times XC shifted right by XA, or t times XD shifted right by XB, all times YP plus the same shape built from the Y settings times YM",
+    "with every X and Y bit on and only XC and YP at one, which is the module's own starting point, the formula gives a saw wave; the factory presets are further starting points",
+    "with XC, YM and YC all above zero the counter is squared and the sound turns very complex, which is the heart of the module",
+    "going six octaves down turns the wave into a bytebeat pattern rather than a pitch"
+  ],
+  "menu": [
+    "Oversample — works the wave out sixteen times over per sample and filters it, which cuts the aliasing of the hard bit edges",
+    "block DC — takes the constant offset out of the output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 0V · stepped · polyphonic\n\nunpatched it reads the X switches alone.",
+      "2": "high above 0V · stepped · polyphonic\n\nunpatched it reads the Y switches alone.",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "5": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "6": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "7": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "8": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "9": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "10": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "11": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "12": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here.",
+      "13": "0 to 10V · stepped · one channel only\n\nunpatched it reads the knob above it; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic"
+    }
+  }
+}

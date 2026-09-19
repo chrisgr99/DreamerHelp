@@ -1,0 +1,35 @@
+{
+  "plugin": "Animatek",
+  "module": "OxiCv",
+  "description": "MIDI to CV interface for note, controller, clock and transport messages, with eight assignable controller outputs",
+  "outputs": [
+    {"ids": [0], "text": "Pitch of the current note at a volt per octave, MIDI note 60 giving 0V, with the global pitch bend added; one, four or eight channels depending on the play mode"},
+    {"ids": [1], "text": "10V while a note is held and 0V otherwise, with one channel per voice or per tracked MIDI channel"},
+    {"ids": [2], "text": "The note's MIDI velocity mapped from 0 to 127 onto 0 to 10V, held after the gate falls"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "The value of that output's assigned controller number, 0 to 127 mapped onto 0 to 10V"},
+    {"ids": [11], "text": "A 10V, 1ms pulse for every incoming MIDI clock tick, which is 24 of them to the quarter note"},
+    {"ids": [12], "text": "A 10V, 1ms pulse every so many MIDI clock ticks, the count set on the menu and starting at 24, which gives one pulse to the quarter note"},
+    {"ids": [13], "text": "10V after a MIDI start or continue message and 0V after a stop"}
+  ],
+  "notes": [
+    "nothing comes out until a MIDI driver and device are chosen in the module's menu; the display shows the play mode and the MIDI channel being received.",
+    "a note-on at velocity zero is treated as a note-off, controller 123 lowers every gate, and a MIDI stop lowers every gate and takes the run output low.",
+    "Multitrack and Matriceal read one note per MIDI channel and switch the input to Omni when they are chosen; check that Omni is set after loading a patch."
+  ],
+  "menu": [
+    "Play Mode: Mono, Poly, Chord, Multitrack, Matriceal — sets how incoming notes are spread across the voice outputs and how many channels they carry",
+    "Chord: unison gate — in Chord mode, makes all eight gate channels go high while any voice is playing rather than each gating on its own",
+    "Pitch Bend Range — how far a full pitch bend moves the pitch outputs, one to twelve semitones, starting at two",
+    "CLK/n Division — how many MIDI clock ticks pass between pulses on the divided clock output: 1, 2, 4, 8, 16 or 24",
+    "CC Assignments — one submenu per controller output, choosing which of the 128 MIDI controller numbers it follows; number 123 is kept for all-notes-off and produces no voltage"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · one channel only",
+      "11": "stepped",
+      "12": "stepped"
+    }
+  }
+}

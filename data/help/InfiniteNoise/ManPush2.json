@@ -1,0 +1,49 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "ManPush2",
+  "description": "Two sections in 2HP, each turning a button press or an incoming signal into a gate and a pair of triggers, one at the start and one at the end",
+  "params": [
+    {"ids": [0, 1], "text": "Raises that section's gate while it is held, or holds it until the next press when its latch button is on"},
+    {"ids": [2, 3], "text": "Makes the button beside it a toggle, one press taking the gate high and the next taking it low, in place of a gate that lasts while the button is held"},
+    {"ids": [4, 5], "text": "Chooses how that section reads its input: green treats it as a gate that the output follows, red treats it as a trigger that flips the output each time one arrives"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that drives that section when its button is not pressed, read as a gate or as a trigger according to the button beside it"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries 10V while that section is high and 0V while it is low"},
+    {"ids": [2, 3], "text": "Fires a 1ms pulse at the moment that section goes high"},
+    {"ids": [4, 5], "text": "Fires a 1ms pulse at the moment that section goes low"}
+  ],
+  "notes": [
+    "pressing the button overrides the input for as long as it is down, so the section goes high whatever is arriving",
+    "the two trigger outputs are each 1ms high followed by 1ms low, so an input gate shorter than 1ms produces one run-together pulse downstream rather than two"
+  ],
+  "menu": [
+    "Set buttons 1-2: Latched, Unlatched — sets both latch buttons at once",
+    "Push-1 Polyphony, Push-2 Polyphony: 1 (monophonic) up to 16 channels — sets how many channels that section's three outputs carry, all with the same signal",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Auto select process quality — picks the process quality from the dialled-in rate and from which ports are patched, and greys out the manual choice while it is on",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "stepped · polyphonic",
+      "3": "stepped · polyphonic",
+      "4": "stepped · polyphonic",
+      "5": "stepped · polyphonic"
+    }
+  }
+}

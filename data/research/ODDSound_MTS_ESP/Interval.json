@@ -1,0 +1,16 @@
+{
+  "plugin": "ODDSound_MTS_ESP",
+  "module": "Interval",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Interval.cpp:126 takes the channel count from this jack and line 128 reads each channel with getVoltage(c)"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "1, which is full scale", "why": "Interval.cpp:81-102 clamps the voltage to ±5V and multiplies by 0.2; with nothing patched every channel is set to 1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "1, which is full scale", "why": "Interval.cpp:81-102 clamps the voltage to ±5V and multiplies by 0.2; with nothing patched every channel is set to 1"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "±5V", "why": "Interval.cpp:135-136 clamps the shifted pitch to ±5V and line 139 sets the channel count from the pitch input"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Interval.cpp:129 writes the input voltage unchanged and line 138 sets the channel count from the pitch input"}
+    }
+  },
+  "comment": "The bend and transpose CV jacks are read wrongly for polyphonic cables: Interval.cpp:96-99 loops over the channels but reads getVoltage(0) inside the loop, so every channel takes the first channel's voltage, and channels above the cable's count are set to 1 rather than 0. The numerator and cents displays occupy the same place on the panel and only one is shown at a time, so a click reaches whichever the Interval Mode switch has chosen."
+}

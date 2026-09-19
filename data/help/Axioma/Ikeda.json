@@ -1,0 +1,30 @@
+{
+  "plugin": "Axioma",
+  "module": "Ikeda",
+  "description": "Chaotic CV source: the Ikeda map is stepped once per clock and the X and Y coordinates of each new point come out as voltages",
+  "params": [
+    {"ids": [0], "text": "Sets the u parameter of the map over 0.6 to 0.9, which sets how far each step rotates and contracts and how ragged the attractor becomes"},
+    {"ids": [1], "text": "Weights the angle term of the map over 0.25 to 3.5, which reshapes the attractor without changing the clock"},
+    {"ids": [2], "text": "Sets the rate of the internal clock, doubling per step from 15 bpm at -2 to 3840 bpm at 6, and it has no effect while EXT is patched"},
+    {"ids": [3], "text": "Sets the full-scale voltage of the X-CV output, 0 to 10V"},
+    {"ids": [4], "text": "Sets the full-scale voltage of the Y-CV output, 0 to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the u knob, a twentieth of a unit per volt, and the total is clamped to 0.6 to 0.9"},
+    {"ids": [1], "text": "Adds to the t knob, half a unit per volt, and the total is clamped to 0.25 to 3.5"},
+    {"ids": [2], "text": "A rising edge steps the map once and takes over from the internal clock; it reads high at 1V and low at 0V"},
+    {"ids": [3], "text": "Adds to the CLK knob, doubling the internal clock rate per volt, and it has no effect while EXT is patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The X coordinate of the newest point, 0V where x is -1.5 and rising to the full-scale voltage set by its LEVEL knob where x is 2.5, clamped outside that"},
+    {"ids": [1], "text": "The Y coordinate of the newest point, inverted: 0V where y is 2 and rising to the full-scale voltage set by its LEVEL knob where y is -2, clamped outside that"}
+  ],
+  "notes": [
+    "the internal clock runs from the moment the module is added, so the outputs move with nothing patched; a cable in EXT replaces that clock"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped"
+    }
+  }
+}

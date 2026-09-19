@@ -1,0 +1,35 @@
+{
+  "plugin": "Tyche",
+  "module": "Fate",
+  "description": "A Bernoulli gate: each gate that arrives is sent to one of two outputs by chance, with the odds set by a knob",
+  "params": [
+    {"ids": [0], "text": "Sets how likely an arriving gate is to go to the B output, never at 0% and always at 100%; the maker's README describes it the other way round"},
+    {"ids": [1], "text": "Picks which of 128 fixed random patterns this module follows, so the same seed can give a different run of decisions here"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the decision over from the knob entirely, -5V sending every gate to A and +5V sending every gate to B"},
+    {"ids": [1], "text": "The gate to be routed; it counts as high past 1V and is armed again below 0.1V"},
+    {"ids": [2], "text": "A rising edge past 1V sends the decisions back to the start of the pattern"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V for as long as the incoming gate is high, whenever the decision went this way"},
+    {"ids": [1], "text": "Carries 10V for as long as the incoming gate is high, whenever the decision went this way"}
+  ],
+  "notes": [
+    "without latch mode both outputs fall to 0V as soon as the incoming gate does, so the outputs copy the shape of what you feed in"
+  ],
+  "menu": [
+    "Latch mode — holds the chosen output at 10V after the incoming gate falls, until the next gate arrives and a new decision is taken"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads the knob's own position.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

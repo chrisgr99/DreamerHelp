@@ -1,0 +1,37 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Cron",
+  "description": "Interface between a MIDI to CV module and the rack: it taps the MIDI clock for a BPM voltage, follows the transport, and works out latency corrected timing for sixteen destinations",
+  "params": [
+    {"ids": [0], "text": "Selects which of the sixteen channels the latency knob edits, 1 to 16"},
+    {"ids": [1], "text": "Sets the latency correction for the selected channel, -100ms to 100ms"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The divided MIDI clock, used to line the local clock up with the MIDI clock"},
+    {"ids": [1], "text": "The MIDI clock at 24 pulses per beat, tapped to work out the tempo"},
+    {"ids": [2], "text": "A MIDI start message here sets the module running from the beginning"},
+    {"ids": [3], "text": "A MIDI stop message here takes the module out of the running state"},
+    {"ids": [4], "text": "A MIDI continue message here sets the module running without restarting"},
+    {"ids": [5], "text": "The reference timing threshold to be corrected, taken from the CMP output of Swing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Copies the CLK/N input"},
+    {"ids": [1], "text": "The tempo worked out from the MIDI clock, as a volt per octave BPM voltage"},
+    {"ids": [2], "text": "A reset trigger sent when a start message arrives"},
+    {"ids": [3], "text": "Held high for as long as the transport is running"},
+    {"ids": [4], "text": "Polyphonic timing thresholds, one channel per latency setting, for Gator instances to produce latency corrected gates"}
+  ],
+  "notes": [
+    "nothing is worked out until a MIDI to CV module is patched in: CLK takes the MIDI clock at 24 pulses per beat, and START, STOP and CONT take the transport messages"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped"
+    },
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

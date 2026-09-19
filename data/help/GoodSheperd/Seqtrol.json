@@ -1,0 +1,48 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "Seqtrol",
+  "description": "Turns a MIDI transport's start, continue and stop signals into a reset pulse and a divided clock for a sequencer",
+  "inputs": [
+    {"ids": [0], "text": "A trigger above 2V sets the clock divisor count back to zero and starts the clock; the Reset output then pulses on the first frame the Clock input is high"},
+    {"ids": [1], "text": "A trigger above 2V starts the clock without clearing the divisor count and without a pulse at the Reset output"},
+    {"ids": [2], "text": "A trigger above 2V stops the clock; the Clock output drops to 0V"},
+    {"ids": [3], "text": "The clock being divided; each pulse above 2V is counted, and this jack's own voltage is what the Clock output passes on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Pulses once after a trigger at Start, carrying the Clock input's voltage for the single frame it appears; patch it to a sequencer's reset input"},
+    {"ids": [1], "text": "The Clock input passed on while the clock is running, thinned to one pulse in every group set by the Clock divisor menu"}
+  ],
+  "notes": [
+    "the module comes up stopped and has no clock of its own; nothing appears at either output until a clock is patched to Clock and a trigger arrives at Start or Cont.",
+    "the note values printed in the Clock divisor menu assume the 96 pulses to a whole note that a MIDI clock sends, and the names ending in T are the triplet divisions.",
+    "patch the MIDI module's raw clock to the Clock input rather than a divided output, because the divisor menu does the dividing.",
+    "the green lamp near the top of the panel is lit while the clock is running."
+  ],
+  "menu": [
+    "1:1 (1/96) — passes every pulse to the Clock output",
+    "3:1 (1/32) — passes one pulse in every three",
+    "6:1 (1/16) — passes one pulse in every six",
+    "12:1 (1/8) — passes one pulse in every twelve",
+    "24:1 (1/4) — passes one pulse in every twenty-four",
+    "48:1 (1/2) — passes one pulse in every forty-eight",
+    "96:1 (1/1) — passes one pulse in every ninety-six",
+    "2:1 (1/32T) — passes one pulse in every two",
+    "4:1 (1/16T) — passes one pulse in every four",
+    "8:1 (1/8T) — passes one pulse in every eight",
+    "16:1 (1/4T) — passes one pulse in every sixteen",
+    "32:1 (1/2T) — passes one pulse in every thirty-two",
+    "64:1 (1/1T) — passes one pulse in every sixty-four"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

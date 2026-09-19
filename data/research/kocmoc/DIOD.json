@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "DIOD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "DIOD.cpp:106 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DIOD.cpp:117 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "DIOD.cpp:74 getChannels() here sets the loop bound; DIOD.cpp:127 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "DIOD.cpp:133 setVoltage(..., ii) per channel, DIOD.cpp:137 setChannels(channels)"}
+    }
+  },
+  "comment": "Feedback is diode.cpp:226, fb = 24.f * Resonance. Output compensation is DIOD.cpp:90, gainNormalization = 1 + 6 * log(1 + 0.75 * reso), applied at :133 with a fixed factor of 6. The two-pole tap is diode.cpp, DIODE_LOWPASS2_MODE returning 0.25f times the second decoupling state. The linear FM input is twice as sensitive as LADR's: DIOD.cpp:106 multiplies by 2.0f before dividing by ten."
+}

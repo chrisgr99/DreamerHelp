@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SWF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "SWF.cpp:47 takes the channel count from this input and SWF.cpp:49 reads it four channels at a time"},
+      "1": {"family": "audio", "poly": true, "why": "SWF.cpp:63 takes the channel count from this input and SWF.cpp:65 reads it four channels at a time"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "ignored", "normal": "0V", "sumRange": "±10V", "why": "SWF.cpp:50 takes the size of this jack with fabs, scales it by the Gain CV knob, adds the Gain knob and clamps the total to -10..10"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "SWF.cpp:51 reads it four channels at a time, scales it by half the Symmetry CV knob, adds the Symm knob and clamps the total to -5..5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SWF.cpp:59 sets this output's channel count from the InL jack"},
+      "1": {"family": "audio", "poly": true, "why": "SWF.cpp:75 sets this output's channel count from the InR jack"}
+    }
+  },
+  "comment": "The Gain jack is read through fabs, SWF.cpp:50, so its sign is thrown away before the CV knob is applied; that is why its negative behaviour is given as ignored even though the CV knob is an attenuverter. This is a port of the Sharp Wavefolder from the Agave plugin for Rack v1."
+}

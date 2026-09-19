@@ -1,0 +1,72 @@
+{
+  "plugin": "DHE-Modules",
+  "module": "Sequencizer4",
+  "description": "A sequencer of 4 steps, each generating a curve between two anchor voltages, with its own trigger, interrupt, sustain, shape, curvature and duration settings",
+  "params": [
+    {"ids": [0], "text": "Multiplies the duration of every step, 0 to 200%; no step is shortened below the minimum of the chosen duration range"},
+    {"ids": [1], "text": "Sets the range of every step's DUR knob: 1ms to 1 second, 10ms to 10 seconds, or 100ms to 100 seconds, with the knob centred giving a tenth of the maximum"},
+    {"ids": [2], "text": "Sends a gate for as long as it is held: from idle it starts the sequence, and the steps read it for their trigger condition"},
+    {"ids": [3], "text": "Scales every step's anchor LEVEL knob, 0 to 100%"},
+    {"ids": [4], "text": "Sets the range of every step's anchor LEVEL knob: 0-10V at UNI, or -5 to 5V at BI"},
+    {"ids": [5], "text": "Toggles looping; with it on the sequencer begins a new sequence as soon as one ends, and with it off the sequencer goes idle"},
+    {"ids": [6], "text": "Abandons any paused or running sequence while pressed; the sequencer then starts a new one or goes idle, according to RUN"},
+    {"ids": [7], "text": "Toggles the sequencer between running and paused; a sequence paused this way resumes from where it stopped"},
+    {"ids": [8], "text": "Sets how many steps the sequence runs for, counting on from the start step and wrapping round to step 1"},
+    {"ids": [9], "text": "Sets the step the sequence begins at"},
+    {"ids": [10, 11, 12, 13], "text": "Sets the curvature of that step's curve; centred is a straight line, clockwise pushes the steep part towards the end and counter-clockwise towards the start, and the extremes are nearly square"},
+    {"ids": [14, 15, 16, 17], "text": "Sets how long that step's curve takes, within the range chosen by the duration range switch and multiplied by the global DUR knob"},
+    {"ids": [18, 19, 20, 21], "text": "Enables that step; with it off the sequencer skips the step when advancing"},
+    {"ids": [22, 23, 24, 25], "text": "Sets the voltage of that step's end anchor while LEVEL is the anchor's chosen source, within the range set by the UNI/BI switch and scaled by the global LEVEL knob"},
+    {"ids": [26, 27, 28, 29], "text": "Chooses how that step's end anchor reads its source: SMPL takes one reading when the step starts and holds it, TRACK follows the source for as long as the step runs"},
+    {"ids": [30, 31, 32, 33], "text": "Chooses where that step's end anchor takes its voltage: its own LEVEL knob, the A, B or C input, or the OUT jack"},
+    {"ids": [34, 35, 36, 37], "text": "Chooses whether a trigger cuts that step short while it is generating its curve and advances the sequence, or is ignored until the curve finishes"},
+    {"ids": [38, 39, 40, 41], "text": "Chooses the shape of that step's curve: a J curve that steepens at one end, or an S curve that steepens through the middle"},
+    {"ids": [42, 43, 44, 45], "text": "Sets the voltage of that step's start anchor while LEVEL is the anchor's chosen source, within the range set by the UNI/BI switch and scaled by the global LEVEL knob"},
+    {"ids": [46, 47, 48, 49], "text": "Chooses how that step's start anchor reads its source: SMPL takes one reading when the step starts and holds it, TRACK follows the source for as long as the step runs"},
+    {"ids": [50, 51, 52, 53], "text": "Chooses where that step's start anchor takes its voltage: its own LEVEL knob, the A, B or C input, or the OUT jack"},
+    {"ids": [54, 55, 56, 57], "text": "Chooses whether that step holds its end anchor voltage once the curve finishes until a trigger arrives, or advances to the next step straight away"},
+    {"ids": [58, 59, 60, 61], "text": "Chooses what makes that step fire its own trigger: the GATE rising, falling, either rising or falling, being high, or being low"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the duration multiplier; every 1V here turns the DUR knob a tenth of its travel clockwise"},
+    {"ids": [1], "text": "Starts the sequence when it rises while the sequencer is idle, and the steps read it for their trigger condition; it reads high above 1V"},
+    {"ids": [2, 3, 4], "text": "A signal that any step's start or end anchor can sample or track"},
+    {"ids": [5], "text": "Modulates the level multiplier; every 1V here turns the LEVEL knob a tenth of its travel clockwise"},
+    {"ids": [6], "text": "While this gate is high the sequencer begins a new sequence as soon as one ends; it reads high above 1V"},
+    {"ids": [7], "text": "A rising edge abandons any paused or running sequence; the sequencer then starts a new one or goes idle, according to RUN"},
+    {"ids": [8], "text": "While this gate is high the sequencer runs, and while it is low a sequence in progress pauses where it is; it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the active step is generating its curve, and 0V otherwise"},
+    {"ids": [1], "text": "Carries 10V while the active step is sustaining, and 0V otherwise"},
+    {"ids": [2], "text": "Carries the voltage generated by the active step"},
+    {"ids": [3], "text": "Carries a 0.9ms 10V pulse when the sequence starts or loops, despite the manual giving the pulse as 10ms"},
+    {"ids": [4], "text": "Carries a 0.9ms 10V pulse each time a step finishes, despite the manual giving the pulse as 10ms"},
+    {"ids": [5], "text": "Carries the number of the active step, 10V divided by the module's step count for each step, and 0V while the sequencer is idle"}
+  ],
+  "notes": [
+    "the light above each step shows how far that step has progressed, running from red at the start of its curve to green at the end",
+    "the module comes up with RUN on and the sequencer idle: a sequence begins when the GATE button is pressed or a trigger reaches the GATE input, and with RUN off nothing runs at all",
+    "the module is mono: it reads the first channel of a polyphonic cable and ignores the rest, and every output carries a single channel"
+  ],
+  "menu": [
+    "Preset — Rack's own submenu on the module menu, holding Sample and Hold 100ms, Sample and Hold Gated, Steps 1s, Steps Gated, and twelve envelope shapes named by their stage letters"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "unipolar · continuous · one channel only",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

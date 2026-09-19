@@ -1,0 +1,41 @@
+{
+  "plugin": "Ahornberg",
+  "module": "XGlide",
+  "description": "Merges pairs of polyphonic notes into one voice and slides between them: as the volume moves from one note to the other, the pitch and the modulation follow it across",
+  "params": [
+    {"ids": [0, 1], "text": "Sets one end of the range of intervals that may glide, 1 to 127 semitones. With the minimum at or above the maximum the range inverts, the red lamp lights, and the intervals between are left out."},
+    {"ids": [2, 3], "text": "Sets one end of the range of notes that may glide. With the lowest-note knob at or above the highest-note knob the range inverts, the red lamp lights, and the notes between them are left out."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "How loud each note is, one polyphonic channel per note; the balance between two notes' volumes is how far their glide has travelled, and this jack sets the channel count of all three outputs"},
+    {"ids": [1], "text": "The pitches of the notes, one volt per octave, one polyphonic channel per note"},
+    {"ids": [2], "text": "While a cable is here, a new note only joins a glide if the voltage is above 0V; with nothing patched every new note may join one"},
+    {"ids": [3], "text": "A modulation value for each note, one polyphonic channel per note, carried across the glide in step with the pitch"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The volume of each merged voice, the two notes added together"},
+    {"ids": [1], "text": "The pitch of each merged voice, one volt per octave, moving between the two notes in proportion to their volumes"},
+    {"ids": [2], "text": "The modulation of each merged voice, moving between the two notes in proportion to their volumes"}
+  ],
+  "notes": [
+    "nothing comes out until the volume input is patched, together with either the pitch input and pitch output or the modulation input and modulation output.",
+    "with less than that patched, the module clears its note mapping and sets every output to no channels.",
+    "a glide starts when a second note arrives over a sounding one, both notes fall inside the note range, and the interval between them falls inside the interval range.",
+    "the two notes then share one output channel until the first of them is released.",
+    "the two red lamps light to say their range has been turned inside out; they are not controls and cannot be clicked.",
+    "the module has no menu of its own beyond Rack's."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "high above 0V · stepped · one channel only\n\nunpatched it reads every note may join a glide.",
+      "3": "±100V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

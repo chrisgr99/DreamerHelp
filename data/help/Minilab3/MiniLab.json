@@ -1,0 +1,37 @@
+{
+  "plugin": "Minilab3",
+  "module": "MiniLab",
+  "description": "Turns the knobs, faders, wheel and bend of an Arturia MiniLab 3 into control voltages, and hands the same surfaces over to a chain of MiniPad expanders whenever one of the controller's pads is held",
+  "outputs": [
+    {"ids": [0], "text": "Carries 5V while a MIDI device is chosen and no pad on the controller is being held, and 0V while a pad is held or no device is chosen, so it says which module in the chain the knobs are reaching"},
+    {"ids": [2], "text": "Follows the controller's pitch bend wheel, -5V fully down, 0V at rest and 5V fully up"},
+    {"ids": [3], "text": "Follows the controller's modulation wheel, 0V to 10V"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "The value piled up by turning that numbered knob on the controller: each click of the encoder moves it by the turn speed set on this jack's own right-click menu, and the total is scaled to 0V to 10V"},
+    {"ids": [13, 14, 15, 16], "text": "Follows that numbered fader on the controller, 0V to 10V, and the faders are read whether or not a pad is being held"}
+  ],
+  "notes": [
+    "nothing comes out until a MIDI driver, device and channel are chosen in the display at the top of the panel; with none chosen the status light is dim and every jack stays where it was",
+    "channel 16 is reserved: the module uses it to talk to the MiniPad expanders, so choosing it here puts the channel back to all channels",
+    "MiniPad expanders go immediately to the right, chained one after another, and each takes the driver, device and channel from here; a MiniLog goes immediately to the left",
+    "while any pad on the controller is held, this module stops following the knobs, wheel, bend and aftertouch and that pad's expander follows them instead; the faders always come out here",
+    "the velocity and aftertouch outputs exist in the module but have no jack on this panel; they are on the MiniPad expanders instead"
+  ],
+  "menu": [
+    "Slew limit — a slider on each output jack's own right-click menu, setting how long that jack takes to reach a new value, from none up to 2 seconds",
+    "Mode: 0V:1V, 0V:5V, 0V:10V, -1V:1V, -5V:5V, -10V:10V — on each output jack's own right-click menu, setting the voltage range that jack's value is scaled into",
+    "Resolution: Two, Three, Four, Five, Eight, Twelve, Low, Medium, High — on a knob jack's own right-click menu, setting how many steps the knob's travel is divided into, two up to 8192",
+    "Turn Speed: 1, 2, 10, 1%, 2%, 5%, 10%, 25%, 50%, Toggle — on a knob jack's own right-click menu, setting how far one click of the encoder moves the value"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "0 to 5V · one channel only",
+      "2": "±5V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "13": "0 to 10V · one channel only",
+      "14": "0 to 10V",
+      "15": "0 to 10V",
+      "16": "0 to 10V"
+    }
+  }
+}

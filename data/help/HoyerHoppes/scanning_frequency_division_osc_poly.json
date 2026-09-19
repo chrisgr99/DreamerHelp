@@ -1,0 +1,60 @@
+{
+  "plugin": "HoyerHoppes",
+  "module": "scanning_frequency_division_osc_poly",
+  "description": "A polyphonic oscillator that gives its own pitch and three frequency-divided versions of that pitch at the same time, with through-zero FM and a choice of hard or windowed sync",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch in volts, -5 to 5, added to the v/oct input; 0 gives C4 at 261.63Hz"},
+    {"ids": [1], "text": "Divides 0 to 1 into as many regions as there are active divisors and picks the divisor whose region the setting falls in; the scan input's voltage is added to this knob before that choice is made"},
+    {"ids": [2], "text": "Blends the wave across its travel from sine through triangle and saw to square"},
+    {"ids": [3], "text": "Sets how far the FM input moves the frequency, -2 to 2, with negative settings inverting it; the modulation is added to the frequency rather than multiplying it, so it passes through zero"},
+    {"ids": [4], "text": "Sets how deeply the window inverts the part of the wave inside it, and does nothing while the window button is unlit or the sync input is empty"},
+    {"ids": [5], "text": "Turns the sync input's plain hard sync into windowed sync while it is lit: the wave is multiplied by a window taken from the sync voltage, which softens the step that hard sync alone leaves"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13], "text": "Adds this button's divisor to the list of active divisors while it is on; the scan, refl. and low outputs choose from that list and from nothing else"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the scan knob, 0-10V covering the whole of that knob's travel"},
+    {"ids": [1], "text": "Sets the pitch at 1V per octave, added to the freq knob; the number of channels patched here is the number the module runs and the number every wave output carries"},
+    {"ids": [2], "text": "Adds to the sine-square knob, 0-10V covering the whole of that knob's travel, and the total is clamped to it"},
+    {"ids": [3], "text": "The signal that modulates the frequency, scaled by the depth knob and by the depth input"},
+    {"ids": [4], "text": "Scales the depth knob while patched, its 0-10V multiplied by that knob's setting"},
+    {"ids": [5], "text": "Resets all four of the module's phases on each rising edge; with the window button lit the wave is also multiplied by a window taken from this voltage"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13], "text": "Turns its divisor on while this rises above 0.9V and off again when it falls below 0.1V, and has no effect while that divisor's button is already on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The wave at the pitch set by freq and v/oct, undivided, ±5V"},
+    {"ids": [1], "text": "The wave at the pitch set by freq and v/oct divided by the divisor scan has chosen, ±5V"},
+    {"ids": [2], "text": "The wave at the pitch divided by the divisor at the mirror image of the scan setting: scan at 0 gives what scan at 1 would pick"},
+    {"ids": [3], "text": "The wave at the pitch divided by the largest active divisor, which is the lowest pitch the module produces"},
+    {"ids": [4], "text": "A 10V trigger each time scan moves into a new region and the divisor it has chosen changes"}
+  ],
+  "notes": [
+    "with no divisor button on at all, the scan, refl. and low outputs run at the undivided pitch that the freq output carries",
+    "the channel count comes from the v/oct input alone; the sine-square input and the eight divisor gates are read on their first channel only, and the trig output is always one channel",
+    "each channel is computed four times, once per wave output, so this oscillator costs more processor time than one that produces a single wave"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V.",
+      "5": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "6": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "8": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "9": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "10": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "12": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

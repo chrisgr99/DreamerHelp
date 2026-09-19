@@ -1,0 +1,44 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "PolyShuffle",
+  "description": "Channels added to, removed from or reordered in a polyphonic signal, in 2HP, with a trigger that shifts or shuffles the order",
+  "params": [
+    {"ids": [0], "text": "Makes the channel knob follow the input while it is green, and lets you set the count by hand while it is dark"},
+    {"ids": [1], "text": "Sets how many channels come out, 1 to 16, and is ignored while the button above it is green"},
+    {"ids": [2], "text": "Chooses what fills a channel added beyond the input: Vl uses the value knob, Rp repeats the input channels round again"},
+    {"ids": [3], "text": "Sets the voltage of channels added beyond the input, -10V to +10V, and fills every channel when nothing is patched"},
+    {"ids": [4], "text": "Puts the channel order back to the order of the input"},
+    {"ids": [5], "text": "Chooses what a trigger does to the order: Nxt shifts the channels up, Prv shifts them down, Shfl rearranges them at random"},
+    {"ids": [6], "text": "Shifts or shuffles the channel order by hand, exactly as a trigger does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The polyphonic signal whose channels are counted and reordered"},
+    {"ids": [1], "text": "A rising edge puts the channel order back to the order of the input"},
+    {"ids": [2], "text": "A rising edge shifts or shuffles the channel order, according to the order switch"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the input's channels at the count and in the order set here"}
+  ],
+  "notes": [
+    "the sixteen lights across the top are the output channels; the colour runs green to red to show which input channel each one is carrying, and hovering one names that channel",
+    "a light at half brightness marks a channel added beyond what the input has",
+    "with the count set above the input and the order shuffled, a downstream module reading only channel 1 gets a probability switch, the odds being the input count over the output count"
+  ],
+  "menu": [
+    "Light brightness-scale: 5V (e.g. bipolar -5V to +5V), 10V (e.g. unipolar 0V to +10V) — sets the voltage the channel lights are scaled against",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

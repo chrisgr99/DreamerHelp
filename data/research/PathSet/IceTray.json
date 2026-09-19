@@ -1,0 +1,22 @@
+{
+  "plugin": "PathSet",
+  "module": "IceTray",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "IceTray.cpp:566 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, into the left recording channel"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "IceTray.cpp:536 tests this input against 2V with getVoltage() alone; IceTray.cpp:532 also forces the buffer to its full length whenever a cable is present"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "IceTray.cpp:548 tests this input against 2V with getVoltage() alone"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "IceTray.cpp:555 multiplies this input by its attenuverter, adds the knob and rounds the total, and IceTray.cpp:557 raises anything below 1 to 1"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "normal": "1V", "why": "IceTray.cpp:852 reads this input with getNormalVoltage(1.0), takes its absolute value, multiplies by the knob and rounds the result"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "10V", "why": "IceTray.cpp:881 reads this input with getNormalVoltage(10.0), divides by 10 and multiplies by the knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "IceTray.cpp:936 divides this input by 10, multiplies by the attenuverter and adds the knob, whose own span is 0 to 1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "IceTray.cpp:562 divides this input by 10, multiplies by the attenuverter and adds the knob, whose own span is 0 to 1"},
+      "9": {"family": "audio", "poly": true, "step": "continuous", "why": "IceTray.cpp:566 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, into the right recording channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The Denominator CV input is read nowhere in the 2.5.0 source: IceTray.cpp line 558 computes the denominator from SPEED_NUM_CV_INPUT, the same jack the numerator uses. Panel, tooltips and manual all present it as a working denominator CV."
+}

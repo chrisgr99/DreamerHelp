@@ -1,0 +1,73 @@
+{
+  "plugin": "forsitan",
+  "module": "materiae",
+  "description": "A percussion voice made of two naive square waves and whatever can be read from the relation between them: cross-modulation, one of five logic operators, a filter and two envelopes",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the first oscillator, two octaves below to seven above C1"},
+    {"ids": [1], "text": "Sets the second oscillator as a ratio of the first, nineteen steps: twelve whole-number ratios, a unison, a unison detuned by one per cent, and four irrational ones"},
+    {"ids": [2], "text": "Skews the pulse widths, widening the first oscillator and narrowing the second together; both are square at the centre"},
+    {"ids": [3], "text": "Sets the rate the logic core runs at, from four times the host rate down to 250Hz"},
+    {"ids": [4], "text": "Divides the first oscillator by a flip-flop chain: straight through, by two, four, eight or sixteen, each division a half-duty square a subharmonic below"},
+    {"ids": [5], "text": "Sets how deeply the two oscillators modulate each other, up to four octaves"},
+    {"ids": [6], "text": "Sets which way that modulation goes: both at full depth at the centre, where the feedback is, the first modulating the second fully anticlockwise, the reverse fully clockwise"},
+    {"ids": [7], "text": "Chooses what the modulation changes: frequency, amplitude, or both"},
+    {"ids": [8], "text": "Chooses which operator reads the two oscillators, crossfading between neighbours rather than switching: and, sum, ring, flip or noise"},
+    {"ids": [9], "text": "Crossfades between the first oscillator alone and the operator's output"},
+    {"ids": [10], "text": "Sets the filter cutoff, 20Hz to 12000Hz"},
+    {"ids": [11], "text": "Sets the filter resonance, up to a ringing that lasts seconds; a trigger pings it"},
+    {"ids": [12], "text": "Chooses whether the filter is a low-pass or a band-pass"},
+    {"ids": [13], "text": "Drives the saturator that ends the chain, 0 to +24dB; it is not a volume control"},
+    {"ids": [14], "text": "Sets how long the modulation envelope takes to fall"},
+    {"ids": [15], "text": "Bends the fall of the modulation envelope, from convex through linear to concave"},
+    {"ids": [16], "text": "Sets how long the amplitude envelope takes to rise"},
+    {"ids": [17], "text": "Sets how long the amplitude envelope takes to fall, reaching exactly zero so a hit ends in silence"},
+    {"ids": [18], "text": "Bends the amplitude envelope, from convex, which is slow to leave the peak, through linear to concave, which drops away like an exponential"},
+    {"ids": [19], "text": "Sets how far the modulation envelope moves the pitch, either way"},
+    {"ids": [20], "text": "Sets how far the modulation envelope walks the relation control up or down the list of operators"},
+    {"ids": [21], "text": "Sets how far the modulation envelope moves the filter cutoff, either way"},
+    {"ids": [22], "text": "Strikes the voice by hand"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge strikes the voice: it resets both oscillator phases, restarts the modulation envelope and pings the filter"},
+    {"ids": [1], "text": "Added to the pitch knob, one volt per octave"},
+    {"ids": [2], "text": "Added to the ratio knob, a step of the table per two volts"},
+    {"ids": [3], "text": "Added to the xmod knob, a fifth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [4], "text": "Added to the relation knob, two fifths of a step per volt"},
+    {"ids": [5], "text": "Added to the cutoff knob, one volt per octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modulation envelope, 0V to 10V"},
+    {"ids": [1], "text": "The voice taken before the amplitude envelope, through the filter and the saturator with the amplifier held open, so the module drones instead of striking"},
+    {"ids": [2], "text": "The voice, everything through the amplifier"}
+  ],
+  "notes": [
+    "the operators are: and, the smaller of the two, high only when both are; sum, their average, three-valued; ring, their product, an exclusive-or for two bipolar squares.",
+    "the other two are flip, a latch the first oscillator sets and the second clears, and noise, an eight-bit shift register clocked by the first and fed against the second.",
+    "the engine idles when nothing is sounding, so patching the drone jack is what tells it to keep running; unpatched it costs nothing.",
+    "a trigger does everything it normally does while the drone is running, so the drone jack is the place to hear what a hit does to the sound with the amplitude envelope out of the way."
+  ],
+  "menu": [
+    "Oscillator phase on trigger — Reset (repeatable hits), or Free-running (every hit differs)",
+    "Osc B phase offset — where the second oscillator starts when the phases are reset: 0 deg, 90 deg, 180 deg or 270 deg",
+    "Env 2 on retrigger — Retrigger, or Free (finish the running one)",
+    "Ratio knob — Table (19 steps), or Free (0.25x - 4x)",
+    "Cutoff tracks pitch — makes the filter follow the pitch jack",
+    "Velocity from trigger height — takes the level of the hit from how high the trigger goes",
+    "Output level — 5 Vpp, 10 Vpp or 14 Vpp"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "bipolar · stepped · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "ALMFree",
+  "module": "PipSlope",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "negative": "ignored", "normal": "0V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "negative": "ignored", "normal": "0V"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped"},
+      "1": {"family": "cv", "poly": false, "step": "continuous"}
+    }
+  },
+  "comment": "The code and ALM's own hardware page disagree about the output level. The page for the ALM028 says \"Selectable 5v or 8v max envelope level output\"; the menu here, named \"Voltage Range\", offers 10V and 5V, and the setter stores 10 or 5 into the same member the output scaling reads. The Slope Out line carries that clause; a patch built around the hardware's 8V will be a third too loud here at the default setting.\n\nThe Loop control's bands come from MillisecondCallback, which reads the knob as a 0 to 4095 number and picks a mode: below 1001 one shot, 1001 and above a mode that halves the peak each repeat, 2001 and above a mode that runs four to ten repeats at shortening rates taken from a table, and 3401 and above a mode that retriggers itself every millisecond, which also lights a lamp. ALM's page describes the hardware's three loop modes as \"Decreasing amplitude, decreasing time, and regular loop\", which is the same set.\n\nThe Gate input really does sustain. ManageHardware records only its rising edge, but slope_yield reads the jack's level directly and freezes the envelope while it is above 3V.\n\nThe knobs are read as 12-bit numbers exactly as the hardware's firmware would see them: ManageHardware scales each 0-to-1 parameter by 4095.5 and offsets the two time controls by 8191.5, and MillisecondCallback subtracts 8190 and clamps to 0..4094. The lamp is set to a brightness of 2, which Rack clamps to full.\n\nNothing was taken from the hardware manual PDF, which was not opened."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "I",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/I.cpp:50-57 and 96-97, the channel count is taken from this jack and each channel is rescaled into a dsp::SchmittTrigger"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/I.cpp:93-94, getVoltageSum across the channels then rescaled into a dsp::SchmittTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/I.cpp:55 and 130, forced to one channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/I.cpp:56 and 131, forced to one channel"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/I.cpp:52-53 and 125"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/I.cpp:52-53 and 125"},
+      "4": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/I.cpp:52-53 and 125"},
+      "5": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/I.cpp:52-53 and 128"}
+    }
+  },
+  "comment": "The downbeat and remainder outputs are forced to one channel whatever the clock carries (src/I.cpp:55-56). The phase knob is turned into a whole step number by multiplying the percentage by the ratio less a half and truncating (src/I.cpp:89), so a ratio of 1 always has phase 0 and the knob does nothing at that setting. The reset is a level rather than an edge: the count is held at zero for as long as it stays high (line 107). The master count wraps at 360 times 7 times 11 times 13, a number divisible by every ratio from 1 to 16, so the dividers stay in phase across the wrap (src/I.cpp:60 and 113). The panel prints D1, D2, D3, P1, P2, P3, CLK, RST, DWN, SANS, O1, O2, O3 and XOR."
+}

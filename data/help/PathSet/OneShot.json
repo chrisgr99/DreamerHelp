@@ -1,0 +1,44 @@
+{
+  "plugin": "PathSet",
+  "module": "OneShot",
+  "description": "One-shot sequencer of four values that interrupts the sequencer patched through it and plays a short sequence of its own",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets one of the four values this sequencer plays; the knobs span -1V to 1V until the range is changed on the menu"},
+    {"ids": [4], "text": "Sets how many steps the sequence plays, 1 to 16; the first value always plays first and the fourth last, so short lengths skip values and long lengths repeat them"},
+    {"ids": [5], "text": "Sets whether the sequence starts from the same position each time it plays, or carries on from where it left off so that each play differs from the last"},
+    {"ids": [6], "text": "Sets how often a value is swapped for another at random, 0 to 100%, coming out differently each time the sequence plays"},
+    {"ids": [7], "text": "Sets how varied the order of the values is, 0 to 100%, in a pattern that repeats the same way each time the sequence cycles"},
+    {"ids": [8], "text": "Starts the sequence on the next clock; either the clock input or the gate input has to be running for it to play"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge starts the sequence on the next clock"},
+    {"ids": [1], "text": "Steps this sequence; with nothing patched here the gate input steps it instead"},
+    {"ids": [2], "text": "Gate from the sequencer up the chain, passed to the gate output whenever this sequence is not playing"},
+    {"ids": [3], "text": "CV from the sequencer up the chain, passed to the CV output whenever this sequence is not playing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V for the step after this sequence finishes"},
+    {"ids": [1], "text": "Carries the clock while this sequence is playing, and 0V at every other time"},
+    {"ids": [2], "text": "Carries the clock while this sequence is playing, and the gate input at every other time"},
+    {"ids": [3], "text": "Carries the value being played while this sequence is playing, and the CV input at every other time"}
+  ],
+  "notes": [
+    "Nothing plays unless a clock is arriving at the clock input or a gate is arriving at the gate input; the sequence then starts on the next clock after the play button or the trigger",
+    "Bypassing this module connects the gate input to the gate output and the CV input to the CV output"
+  ],
+  "menu": [
+    "Range — sets the voltage the four knobs span, choosing among +/-10V down to +/-1V and 0V-10V down to 0V-1V, or Custom; changing it moves the output values without moving the knobs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads the GATE IN jack.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Phase",
+  "description": "Two sample loops playing the same or different audio, each with its own drift, so the two gradually slip out of step with each other after the Steve Reich phase pieces",
+  "params": [
+    {"ids": [0, 3], "text": "Sets how far that loop drifts each cycle, -500ms to 500ms; in sleep mode that is silence added or taken off the end of the cycle, and in rotate mode a small speed offset"},
+    {"ids": [1, 4], "text": "Sets that loop's playback speed and direction, -4 to 4 times; at the centre the loop is stopped"},
+    {"ids": [2, 5], "text": "Places that loop across the stereo pair, hard left to hard right, with an equal-power law"},
+    {"ids": [6], "text": "Starts and stops both loops on each press"},
+    {"ids": [7, 8], "text": "Switches that loop between waiting out the drift as silence at the end of each cycle and running on without a gap while the content rotates inside the loop"},
+    {"ids": [9], "text": "Returns both loops to their start on each press"},
+    {"ids": [10, 11], "text": "Arms and disarms recording into that loop's buffer on each press; the lamp is dim while it is armed and waiting and bright while it is recording"},
+    {"ids": [12], "text": "Makes one click on either record button start and stop both"}
+  ],
+  "inputs": [
+    {"ids": [0, 4], "text": "Changes that loop's drift, 50ms per volt added to its drift knob"},
+    {"ids": [1, 5], "text": "Changes that loop's speed, 0.8 times per volt added to its speed knob"},
+    {"ids": [2, 6], "text": "Moves that loop across the stereo pair, a fifth of the width per volt added to its pan knob"},
+    {"ids": [3, 7], "text": "A rise moves that loop's playhead to the next detected transient inside the loop region"},
+    {"ids": [8], "text": "A rise returns both loops to their start"},
+    {"ids": [9], "text": "A gate at or above 1V plays both loops, taking the play button's place"},
+    {"ids": [10, 12], "text": "Sets where that loop starts in the sample, 0-10V for the whole length"},
+    {"ids": [11, 13], "text": "Sets how much of the rest of the sample that loop covers, 0-10V for all of it"},
+    {"ids": [14], "text": "The audio recorded into that loop's buffer"},
+    {"ids": [15], "text": "While this gate is high that loop's buffer is recorded into, replacing what was there; it takes the record button's place while a cable is present"},
+    {"ids": [16], "text": "The audio recorded into that loop's buffer; with nothing patched it carries the other loop's record input"},
+    {"ids": [17], "text": "While this gate is high that loop's buffer is recorded into; with nothing patched it follows the other loop's record gate"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the two loops mixed and panned"},
+    {"ids": [1], "text": "The right side of the two loops mixed and panned"}
+  ],
+  "notes": [
+    "nothing plays until a sample is loaded from the menu or recorded in through the record inputs; an empty module is silent",
+    "loading only the first sample sends it to the second loop as well, which is the usual starting point for a phase piece; loading the second one separately breaks that",
+    "while a loop is recording its playback is suppressed and the incoming audio is passed through dry at that loop's pan position, so the buffer cannot feed back into itself",
+    "the display is the editing surface: the loop start and end brackets are dragged there, and it cannot be reached by clicking for help"
+  ],
+  "menu": [
+    "Samples — a label over the sample items below it",
+    "Load Sample A — reads a WAV file into the first loop's buffer, resampled to 48kHz and mixed to mono, up to ten minutes long",
+    "Load Sample B — reads a WAV file into the second loop's buffer, which also stops the first sample cascading into it",
+    "Clear Sample A — empties the first loop's buffer",
+    "Clear Sample B — empties the second loop's buffer",
+    "Clear A&B — empties both buffers at once"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "12": "0 to 10V",
+      "13": "0 to 10V",
+      "14": "±5V · continuous · one channel only",
+      "15": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "16": "±5V · continuous · one channel only\n\nunpatched it reads the A record input.",
+      "17": "high above 1V · stepped · one channel only\n\nunpatched it reads the A record gate; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "plugin": "tapestry",
+  "module": "Korupt",
+  "description": "A fuzz and phase-locked-loop harmoniser: the input is squared into a fuzz, a tracking oscillator follows its pitch at a chosen interval, and a divider adds a subharmonic, the three then mixed together",
+  "params": [
+    {"ids": [0], "text": "Sets the level of the squared fuzz voice in the mix, on an audio taper"},
+    {"ids": [1], "text": "Sets the level of the subharmonic voice in the mix, on an audio taper"},
+    {"ids": [2], "text": "Sets the level of the tracking oscillator's voice in the mix, on an audio taper"},
+    {"ids": [3], "text": "Sets the gain applied to the mix, 0.02 fully left rising to 1.74 fully right, after which the output is clipped"},
+    {"ids": [4], "text": "Chooses the subharmonic interval by dividing its clock by 2 to 9: an octave down at the first position, three octaves and a major second down at the last"},
+    {"ids": [5], "text": "Chooses what clocks the subharmonic divider: the squared input, or the tracking oscillator"},
+    {"ids": [6], "text": "Chooses what the loop's control voltage does: glide, where it slews towards the tracked pitch, or vibrato, where a triangle is added to it as well"},
+    {"ids": [7], "text": "Sets the speed of the frequency modulator, about 0.45Hz to 95Hz of glide or 0.55Hz to 18.5Hz of vibrato, and with it how hard the loop is pumped towards the tracked pitch"},
+    {"ids": [8], "text": "Chooses the oscillator's interval by multiplying the tracked pitch by 1 to 8: unison at the first position, three octaves up at the last"},
+    {"ids": [9], "text": "Divides the input's edges by one, two or four before the loop compares them, so the oscillator tracks an octave or two octaves lower"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal the module processes, with ±5V taken as full scale, despite the panel printing CV IN"},
+    {"ids": [1], "text": "Shifts the level of the squared voice, 10V covering the whole of the SQR MIX knob's travel; the total is held inside that travel"},
+    {"ids": [2], "text": "Shifts the level of the subharmonic voice, 10V covering the whole of the SUB MIX knob's travel; the total is held inside that travel"},
+    {"ids": [3], "text": "Shifts the level of the oscillator voice, 10V covering the whole of the OSC MIX knob's travel; the total is held inside that travel"},
+    {"ids": [4], "text": "Shifts the frequency modulator's speed, 10V covering the whole of the RATE knob's travel; the total is held inside that travel"},
+    {"ids": [5], "text": "Steps the subharmonic interval, 10V covering all eight positions of the SUB PGM knob; the total is rounded to a position and held inside them"},
+    {"ids": [6], "text": "Steps the oscillator's interval, 10V covering all eight positions of the OSC PGM knob; the total is rounded to a position and held inside them"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The three voices mixed and scaled by VOLUME, ±5V at full scale and never beyond ±6.75V, despite the panel printing CV OUT"},
+    {"ids": [1], "text": "The squared fuzz voice on its own at ±5V, taken before the mix knobs"},
+    {"ids": [2], "text": "The subharmonic voice on its own at ±5V, taken before the mix knobs"},
+    {"ids": [3], "text": "The tracking oscillator's voice on its own at ±5V, taken before the mix knobs"},
+    {"ids": [4], "text": "How firmly the loop is locked, 0V when it is not tracking and rising to 10V when the oscillator reaches the multiple of the input pitch set by OSC PGM"}
+  ],
+  "notes": [
+    "every voice is scaled by an envelope follower on the input, so all of them fall silent when the input does and the module makes no sound of its own",
+    "three lamps report the loop: green that the input is loud enough to track, blue how firm the lock is, red how far the loop is from it",
+    "the pitch is taken from the rising edges of the heavily squared input, so the module follows one note at a time",
+    "the number of channels at the audio input sets the channel count of every output, with a separate loop and divider run for each channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic"
+    }
+  }
+}

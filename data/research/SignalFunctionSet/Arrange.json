@@ -1,0 +1,42 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Arrange",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "arrange.cpp:148 barTrig.process crosses 1V and :152 advances barInPhase, moving to the next active phrase once the phrase's bar count is reached"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "arrange.cpp declares the master clock, which each channel divides down"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "arrange.cpp:144 resetTrigIn.process crosses 1V and calls doReset, which returns to the first active phrase"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "arrange.cpp:108 declares the phrase index output at one volt per phrase, with the first phrase at 0V"},
+      "1": {"family": "cv", "poly": false, "why": "arrange.cpp declares the tempo output at a hundredth of a volt per beat per minute"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "arrange.cpp declares the root output as a volt per octave snapped to semitones"},
+      "3": {"family": "cv", "poly": false, "why": "arrange.cpp declares the scale output at one volt per scale"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "arrange.cpp declares that channel's bar output, silenced on phrases where the channel is off"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "arrange.cpp declares that channel's divided clock output, silenced on phrases where the channel is off"},
+      "9": {"family": "trigger"},
+      "10": {"family": "trigger"},
+      "11": {"family": "trigger"},
+      "12": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "arrange.cpp declares that channel's reset output, fired on a master reset and when the channel re-enables"},
+      "13": {"family": "trigger"},
+      "14": {"family": "trigger"},
+      "15": {"family": "trigger"},
+      "16": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "arrange.cpp declares that channel's end-of-cycle output, fired when the arrangement wraps"},
+      "17": {"family": "trigger"},
+      "18": {"family": "trigger"},
+      "19": {"family": "trigger"},
+      "20": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "arrange.cpp declares that phrase's gate output, held high while the phrase is playing"},
+      "21": {"family": "trigger"},
+      "22": {"family": "trigger"},
+      "23": {"family": "trigger"},
+      "24": {"family": "trigger"},
+      "25": {"family": "trigger"},
+      "26": {"family": "trigger"},
+      "27": {"family": "trigger"}
+    }
+  },
+  "comment": "Linking is exact inheritance rather than an offset: a linked phrase takes its group leader's value and its own trimmer is ignored entirely, so a stale trimmer position can never transpose a phrase. For the tempo output to set the tempo rather than nudge it, the Meter it feeds must have its own \"BPM CV absolute\" menu item turned on. A channel switched off in a phrase has its clock and bar outputs silenced rather than being muted downstream, and its reset output fires when it comes back."
+}

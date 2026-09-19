@@ -1,0 +1,46 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "Mute2",
+  "description": "Two mute sections in 2HP, each switched by a button or by an incoming gate or trigger, plus a Both control that mutes the pair",
+  "params": [
+    {"ids": [0], "text": "Mutes both sections while it is held, or until the next press when its latch button is on"},
+    {"ids": [1, 2], "text": "Mutes that section while it is held, or until the next press when its latch button is on"},
+    {"ids": [3, 4, 5], "text": "Makes the button beside it a toggle, one press muting and the next unmuting, in place of a mute that lasts while the button is held"},
+    {"ids": [6, 7, 8], "text": "Chooses how that mute input is read: green treats it as a gate that mutes while it is high, red treats it as a trigger that flips the mute each time one arrives"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Mutes both sections from outside, read as a gate or as a trigger according to the button beside it"},
+    {"ids": [1, 2], "text": "Mutes that section from outside, read as a gate or as a trigger according to the button beside it"},
+    {"ids": [3, 4], "text": "The signal that section passes or mutes"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries that section's input while it is unmuted and the mute voltage while it is muted; a small red light beside it shows when it is muted"}
+  ],
+  "notes": [
+    "every mute control is combined with OR, so a section is muted by its own button, its own input, the Both button or the Both input, whichever acts first",
+    "the B input reads the A input when its own jack is empty, so one signal can go to two places and be muted separately",
+    "a mute set by a trigger is cleared by pulling the cable out of that trigger input and putting it back, or by initialising the module"
+  ],
+  "menu": [
+    "Gate mute-mode: High-gate will mute, Low-gate will mute — chooses which way round a gate input reads in gate mode",
+    "Mute voltage — sets the voltage a muted output carries, 0V unless you change it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "polyphonic\n\nunpatched it reads 0V.",
+      "4": "polyphonic\n\nunpatched it reads the A-CV input."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

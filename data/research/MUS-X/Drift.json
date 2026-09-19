@@ -1,0 +1,13 @@
+{
+  "plugin": "MUS-X",
+  "module": "Drift",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "normal": "one channel", "why": "Drift.cpp:73 uses only this input's channel count and never reads a voltage from it, so what is patched here does not matter"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "Drift.cpp:74 sets this output's channel count from the Poly input; DriftBlock.hpp:90 clamps the result to ±10V"}
+    }
+  },
+  "comment": "Read from src/Drift.cpp and src/blocks/DriftBlock.hpp at the tag release/v2.1.1, commit f622217, which is the installed 2.1.1. The Poly input is read for its channel count alone (Drift.cpp:73), so it takes any cable and its voltage is never looked at; it is given no family for that reason. The Const and Drift knobs are squared before use (Drift.cpp:94 and 95), which puts most of the useful travel near the bottom. The fixed offsets are ±5V before the Const amount scales them (DriftBlock.hpp:33). The rate knob spans 0.01Hz to 1000Hz (Drift.cpp:29 and 30)."
+}

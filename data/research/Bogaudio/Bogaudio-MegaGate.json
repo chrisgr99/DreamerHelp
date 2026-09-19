@@ -1,0 +1,29 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-MegaGate",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "MegaGate.cpp:72 through slew_common.cpp:6 timeMS(), clamp(getPolyVoltage(c)/10,0,1)"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "MegaGate.cpp:76 through slew_common.cpp:6 timeMS(), clamp(getPolyVoltage(c)/10,0,1)"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "MegaGate.cpp:94 clamp(getPolyVoltage(c)/10,0,1)"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:131 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "MegaGate.cpp:122 clamp(getPolyVoltage(c)/10,0,1)"},
+      "5": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:81 through slew_common.cpp:17 shape(), getPolyVoltage(c)/5 added to the shape knob"},
+      "6": {"family": "audio", "poly": true, "step": "continuous", "why": "MegaGate.cpp:219 getPolyVoltage(c) into the gate"},
+      "7": {"family": "audio", "poly": true, "step": "continuous", "why": "MegaGate.cpp:240 getPolyVoltage(c) into the gate"},
+      "8": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "MegaGate.cpp:54 channels() reads getChannels() here; :90 getPolyVoltage(c) into a bogaudio Trigger, thresholds 1V and 0.1V in rack_overrides.hpp:13"},
+      "9": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:147 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "10": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:153 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "11": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:162 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "12": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:168 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "13": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:180 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "14": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "MegaGate.cpp:186 clamp(getPolyVoltage(c)/5,-1,1)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "MegaGate.cpp:288-289 setChannels(_channels) then a per-channel write of the 0..1 envelope times 10V; channels() takes the width from the GATE input"},
+      "1": {"family": "audio", "poly": true, "why": "MegaGate.cpp:290-291 setChannels(_channels) then a per-channel write; channels() takes the width from the GATE input"},
+      "2": {"family": "audio", "poly": true, "why": "MegaGate.cpp:292-293 setChannels(_channels) then a per-channel write; channels() takes the width from the GATE input"}
+    }
+  },
+  "comment": "The VCA BIAS CV jack is read only while the VCA ENV CV jack is also patched: MegaGate.cpp:184 tests VCA_ENV_INPUT where the LPF and HPF bias blocks test their own bias input. That is the maker's source at 2.6.47, not a panel misprint."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "NocturnalEncoder",
+  "module": "AMDecoder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/AMDecoder.cpp:70 reads this input with getVoltage(), which is channel 1 alone, and src/AMDecoder.cpp:118 gates the whole channel's output on isConnected"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/AMDecoder.cpp:70 reads this input with getVoltage(), which is channel 1 alone, and src/AMDecoder.cpp:118 gates the whole channel's output on isConnected"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±15V", "why": "src/AMDecoder.cpp:120 writes this output with setVoltage(), clamped to -15 and 15"},
+      "1": {"family": "cv", "poly": false, "range": "±15V", "why": "src/AMDecoder.cpp:120 writes this output with setVoltage(), clamped to -15 and 15"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/AMDecoder.cpp:122 and 125 write 10 or 0 to this output with setVoltage(), which is channel 1 alone"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/AMDecoder.cpp:122 and 125 write 10 or 0 to this output with setVoltage(), which is channel 1 alone"}
+    }
+  },
+  "comment": "Read from src/AMDecoder.cpp at commit 7008233, version 2.0.0 and the head of the repository. The follower is the Befaco Rampage slew shape with its shape fixed at 0, so it is always linear. The knob range comes out of two steps: paramToMinTime at src/AMDecoder.cpp:145 maps the knob onto 1e-3 to 1e-1 seconds, and src/AMDecoder.cpp:91 multiplies that by two raised to the knob value, giving 1ms at the bottom and about 0.2 seconds at the top. The switch's default branch, which would return 1.0, cannot be reached, because the knob is clamped to 0 and 1 and so the index never exceeds 5. The gate threshold is a fixed 2V on the finished output, at src/AMDecoder.cpp:121, not the half-range point the README describes. The endOfCyclePulse, trigger and mode_button_trigger members declared at src/AMDecoder.cpp:40 to 42 are never used. Both output jacks are written only inside the isConnected test at src/AMDecoder.cpp:118, so unplugging the input leaves them frozen."
+}

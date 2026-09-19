@@ -1,0 +1,16 @@
+{
+  "plugin": "Ondas",
+  "module": "Logistic",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Logistic.cpp Logistic::process: a Rack SchmittTrigger at its default 0.1V and 1V thresholds on getVoltage() with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Logistic.cpp Logistic::process: rCV = getVoltage() * attenuator, then clamp(r + rCV, 1.1f, 3.9f), so a negative voltage pulls r down to its 1.1 floor, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Logistic.cpp Logistic::process: a Rack SchmittTrigger at its default thresholds on getVoltage() with no channel argument, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"},
+      "3": {"why": "Logistic.cpp: SLEW_INPUT is declared in the InputId enum and given a jack in LogisticWidget, but process() never reads inputs[SLEW_INPUT], commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "continuous", "why": "Logistic.cpp Logistic::process: setVoltage(n * 5.f) with no channel argument, n held in 0 to 1 by the map, commit 05c0768, tagged v2.1.0, whose plugin.json carries the installed 2.1.0 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The slew jack is dead: SLEW_INPUT has an enum entry and a panel jack but is never read in process(). The README documents it as a working CV input. The reset button is momentary and forces n to the reset value on every sample it is held, so the map is frozen while it is down. The slew law is rate = 10 + (20000 - 10) * (1 - slew)^6 per second."
+}

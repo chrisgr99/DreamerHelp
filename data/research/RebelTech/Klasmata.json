@@ -1,0 +1,16 @@
+{
+  "plugin": "RebelTech",
+  "module": "Klasmata",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Klasmata.cpp:148 resets the sequence on resetTrigger.process(rescale(voltage, 0.1f, 2.f, 0.f, 1.f)), read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Klasmata.cpp:155-157 clamps voltage/10 to ±1, scales it by the attenuator, multiplies by 31 and adds it to the length knob, the sum held between 1 and 32; read at voltages[0] with no channel loop"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "normal": "0V", "why": "Klasmata.cpp:160-162 clamps voltage/10 to ±1, scales it by the attenuator and adds it to the fill knob, the sum held between 0 and 1; read at voltages[0] with no channel loop"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Klasmata.cpp:178-179 advances the sequence on clockTrigger.process(rescale(voltage, 0.1f, 2.f, 0.f, 1.f)) and line 178 reads its raw voltage as the output level; read at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "Klasmata.cpp:198 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Klasmata's mode enum is LATCHED, NORMAL, MUTE (Klasmata.cpp:90-94) with NORMAL the default, the opposite order to Stoicheia's, and its tooltip labels match the code. In the NORMAL setting line 192 puts out state times the clock input's own voltage, so the output level follows the clock rather than being a fixed 10V. In the LATCHED setting line 195 puts out a toggle that flips whenever the pattern changes between filled and empty, which is a divided gate rather than a step-long one. The panel prints no words, only the Greek letter gamma and a set of symbols, so no line carries a panel label."
+}

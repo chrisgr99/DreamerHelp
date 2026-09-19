@@ -1,0 +1,50 @@
+{
+  "plugin": "CountModula",
+  "module": "Arpeggiator",
+  "description": "Arpeggiator taking a polyphonic chord and playing its notes one at a time in a chosen pattern, with programme, octave and modify settings per step",
+  "params": [
+    {"ids": [0], "text": "Sets how many of the programme, octave and modify rows are used, from 1 to 8"},
+    {"ids": [1], "text": "Picks the arpeggiation pattern: forward, reverse, pendulum, random, middle-out, outside-in, skip-and-back, or P to follow the programme buttons"},
+    {"ids": [2], "text": "Sorts the incoming notes low to high or high to low, or leaves them in the order they arrive, before the pattern is applied"},
+    {"ids": [3], "text": "Sets the glide time given to a note whose modify row has glide switched on, up to half a second"},
+    {"ids": [4], "text": "Turns the octave row on, so each step can shift its note an octave up or down"},
+    {"ids": [5], "text": "Turns the modify row on, so each step can switch on glide or accent"},
+    {"ids": [6], "text": "Locks the arpeggiator onto the chord that is playing, so changes at the V/OCT and GATE inputs are ignored; every other control keeps working"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The gates for the incoming chord, read at the start of each clock pulse; the number of channels here sets how many notes are arpeggiated"},
+    {"ids": [1], "text": "The chord to arpeggiate, one note per channel at a volt per octave, read at the start of each clock pulse"},
+    {"ids": [2], "text": "Each pulse moves the arpeggio on to the next note"},
+    {"ids": [3], "text": "A trigger here restarts the pattern at its first note"},
+    {"ids": [4], "text": "A high gate here locks the arpeggiator onto the chord that is playing, and while a cable is patched the HOLD button follows this input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Goes high for the note being played, and stays low on a step programmed as a rest"},
+    {"ids": [1], "text": "The pitch of the note being played, at a volt per octave"},
+    {"ids": [2], "text": "A 10V gate on any note whose modify row has accent switched on"}
+  ],
+  "notes": [
+    "a gate at GATE is what plays each note; with nothing patched there the arpeggiator plays nothing, whatever is at V/OCT",
+    "a PROGRAMME button responds to a click only while SEQUENCE is set to P, an OCTAVE button only while OCT is on and a MODIFY button only while MOD is on",
+    "a button on a row past the LENGTH setting does nothing, and clicking a lit PROGRAMME or OCTAVE button puts that step back to its default",
+    "the programme, octave and modify rows run independently of the notes, so setting a row length that differs from the number of notes phases the two against each other"
+  ],
+  "menu": [
+    "Polyphonic Outputs — sends each note out on its own channel rather than one at a time",
+    "Monophonic gate input — takes the number of notes from the V/OCT input, so that one gate can drive a whole chord"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous",
+      "2": "stepped"
+    }
+  }
+}

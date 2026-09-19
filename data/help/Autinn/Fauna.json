@@ -1,0 +1,48 @@
+{
+  "plugin": "Autinn",
+  "module": "Fauna",
+  "description": "Two four-pole transistor ladder low-pass filters built with zero-delay feedback, sharing one set of controls",
+  "params": [
+    {"ids": [0], "text": "Sets the corner frequency, from 20Hz to 20000Hz, spaced by ear so that each turn covers about the same musical interval"},
+    {"ids": [1], "text": "Scales what the cutoff jack does, reaching one octave per volt at its maximum"},
+    {"ids": [2], "text": "Sets the resonance, from none to the point where the filter rings on its own"},
+    {"ids": [3], "text": "Scales what the resonance jack does, 5V covering the whole resonance range at its maximum"},
+    {"ids": [4], "text": "Sets how hard the signal is pushed into the transistor stages, from silence to 12dB above unity, with 0dB in the middle of its travel"},
+    {"ids": [5], "text": "Scales what the drive jack does, 5V covering the whole drive range at its maximum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two signals to be filtered; it is filtered on its own and reaches only the output on its own side"},
+    {"ids": [1], "text": "Moves the corner frequency, an octave per volt with its attenuator at maximum"},
+    {"ids": [2], "text": "Adds to the resonance, scaled by its attenuator, with the total clamped between none and full"},
+    {"ids": [3], "text": "Adds to the drive, scaled by its attenuator, with the total clamped between silence and 12dB"},
+    {"ids": [4], "text": "One of the two signals to be filtered; it is filtered on its own and reaches only the output on its own side"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered version of the input on the same side"},
+    {"ids": [1], "text": "The filtered version of the input on the same side"}
+  ],
+  "notes": [
+    "the two halves share every knob and every CV jack; only the signal path is separate, so this is a stereo filter rather than two independent ones.",
+    "each half is mono: a polyphonic cable is read as its first channel.",
+    "a half whose output is unpatched is not computed at all and its output is held at 0V, so patching only one side halves the work.",
+    "the corner frequency is pre-warped through a tangent, so it stays in tune close to half the sample rate where an ordinary ladder model goes flat.",
+    "the filter runs at twice the sample rate whatever Rack's engine rate is.",
+    "each of the three large knobs draws a gold arc from its own position round to where its CV jack and attenuator have moved it."
+  ],
+  "menu": [
+    "Auto level — divides the output by the drive setting, so that turning the drive up adds saturation without adding loudness"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Osc22",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Osc22.cpp:140 takes the channel count from this input and adds it to the Freq A knob"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "Osc22.cpp reads it four channels at a time and adds it to the Freq B knob"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc22.cpp scales it by the FM A knob, into the frequency with Linear A on and into the pitch with it off"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc22.cpp scales it by the FM B knob, into the frequency with Linear B on and into the pitch with it off"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 2V", "normal": "0V", "why": "Osc22.cpp reads it four channels at a time into a Schmitt trigger with thresholds of 0.1V and 2V"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc22.cpp scales it by the FM A 2 knob and adds it to the first oscillator"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Osc22.cpp scales it by the FM B 2 knob and adds it to the second oscillator"},
+      "7": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the Mix knob alone", "why": "Osc22.cpp:186-187 clamp this jack to -5..5, map it onto 0 to 1 and multiply the Mix knob by it"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Osc22.cpp:185 scales it by a tenth and the Phs CV knob and adds it to the Phs knob, clamping the total"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Osc22.cpp:82 writes this output and the channel count is set from the V/Oct A jack"},
+      "1": {"family": "audio", "poly": true, "why": "Osc22.cpp:84 writes this output and the channel count is set from the V/Oct A jack"},
+      "2": {"family": "audio", "poly": true, "why": "Osc22.cpp:85 writes this output and the channel count is set from the V/Oct A jack"},
+      "3": {"family": "audio", "poly": true, "why": "Osc22.cpp:80 writes this output and the channel count is set from the V/Oct A jack"},
+      "4": {"family": "audio", "poly": true, "why": "Osc22.cpp:76 writes this output and the channel count is set from the V/Oct A jack"},
+      "5": {"family": "audio", "poly": true, "why": "Osc22.cpp:78 writes this output and the channel count is set from the V/Oct A jack"},
+      "6": {"family": "audio", "poly": true, "why": "Osc22.cpp:81 writes this output and the channel count is set from the V/Oct A jack"},
+      "7": {"family": "audio", "poly": true, "why": "Osc22.cpp:77 writes this output and the channel count is set from the V/Oct A jack"},
+      "8": {"family": "audio", "poly": true, "why": "Osc22.cpp:79 writes this output and the channel count is set from the V/Oct A jack"},
+      "9": {"family": "cv", "poly": true, "range": "±5V", "why": "Osc22.cpp:83 writes 5V or -5V and the channel count is set from the V/Oct A jack"},
+      "10": {"family": "audio", "poly": true, "why": "Osc22.cpp:75 writes this output and the channel count is set from the V/Oct A jack"}
+    }
+  },
+  "comment": "The LT output carries the tooltip EQ, the same as the output beside it, because Osc22.cpp:107 passes the wrong name. The EQ output is a sample and hold: it takes the value of the first wave whenever the two waves come within the Win setting of each other, Osc22.cpp:208-209, and the window is divided by sixteen while Oversample is on, Osc22.cpp:168. The Mix jack multiplies the Mix knob rather than adding to it, Osc22.cpp:187. The channel count of every output comes from the V/Oct A jack."
+}

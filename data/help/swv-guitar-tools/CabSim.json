@@ -1,0 +1,47 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "CabSim",
+  "description": "Cabinet simulator: it convolves a mono signal with up to two impulse responses loaded from WAV files, fades between them, and puts a high-pass and a low-pass filter on the result",
+  "params": [
+    {"ids": [0], "text": "With both impulse responses loaded, fades from the first fully anticlockwise to the second fully clockwise; with only one loaded, fades from the unprocessed signal to the convolved one"},
+    {"ids": [1], "text": "Sets the corner of the 2-pole low-pass filter on the output, 1000Hz fully anticlockwise to 20000Hz fully clockwise, on a logarithmic scale"},
+    {"ids": [2], "text": "Sets the corner of the 2-pole high-pass filter on the output, 20Hz fully anticlockwise to 2000Hz fully clockwise, on a logarithmic scale"},
+    {"ids": [3], "text": "Sets the output gain, from silence to double"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be convolved, mono, with 5V taken as full scale"},
+    {"ids": [1], "text": "Takes over the BLEND control while patched, -5V for one end of the fade and 5V for the other; the knob does nothing while a cable is in here"},
+    {"ids": [2], "text": "Takes over the LP corner while patched, -5V for 1000Hz and 5V for 20000Hz; the knob does nothing while a cable is in here"},
+    {"ids": [3], "text": "Takes over the HP corner while patched, -5V for 20Hz and 5V for 2000Hz; the knob does nothing while a cable is in here"},
+    {"ids": [4], "text": "Takes over the output gain while patched, -5V for silence and 5V for double; the knob does nothing while a cable is in here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered, convolved signal, mono"}
+  ],
+  "notes": [
+    "with no impulse response loaded the module passes its input through the two filters and the output gain, and nothing else; load one from the right-click menu",
+    "an impulse response is cut to one second and resampled to the engine's rate as it loads, and is reloaded from its file whenever the engine's sample rate changes",
+    "the panel prints IR1 and IR2 beside the two lamps, while the menu calls the same two slots IR A and IR B; a lit lamp means that slot holds an impulse response",
+    "the menu prints a line under the two slots saying what the blend control is doing: a crossfade between the two responses when both are loaded, or a dry-to-wet fade when only one is"
+  ],
+  "menu": [
+    "Load IR A... — opens a file dialogue for a WAV impulse response to put in the first slot",
+    "Unload IR A — empties the first slot, greyed out when nothing is in it",
+    "Normalize IR A — scales the first impulse response to full scale as it is loaded, which evens out the level between different files",
+    "Load IR B... — opens a file dialogue for a WAV impulse response to put in the second slot",
+    "Unload IR B — empties the second slot, greyed out when nothing is in it",
+    "Normalize IR B — scales the second impulse response to full scale as it is loaded, which evens out the level between different files"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the BLEND knob.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads the LP knob.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads the HP knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads the OUTPUT knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

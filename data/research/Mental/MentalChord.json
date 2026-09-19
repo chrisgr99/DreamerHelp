@@ -1,0 +1,34 @@
+{
+  "plugin": "Mental",
+  "module": "MentalChord",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/MentalChord.cpp:71-77, the octave rounded off and the remainder kept"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalChord.cpp:74-75, divided by 1.5, added to the knob and rounded to a semitone"},
+      "2": {"family": "cv", "poly": false, "range": "-3 to 9V", "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalChord.cpp:80-83, divided by 3, added to the knob, rounded and clamped to -1 and 2"},
+      "3": {"family": "cv", "poly": false, "range": "±6V", "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/MentalChord.cpp:85-88, divided by 3, added to the knob, rounded and clamped to -2 and 2"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:99, compared against 0"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:100 anything above 0 sets the fifth to 6 semitones above the root; :101 and :106 are read later, so a sharp 5 or a 6 for 5 overrides it"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:102 anything above 0 sets the seventh to 10 semitones above the root; :107 and :111 are read later, so a 6 for 7 or a 1 for 7 overrides it"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:104 anything above 0 moves the chord's first voice from the root to 2 semitones above it; :109 and :110 are read later, so a flat 9 or a sharp 9 overrides it"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:105 anything above 0 sets the third to 5 semitones above the root"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:106 anything above 0 sets the fifth to 9 semitones above the root, overriding the flat 5 and sharp 5 jacks read at :100 and :101"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:111 anything above 0 sets the seventh to 12 semitones above the root, and being read last it overrides every other seventh jack"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:109 anything above 0 moves the chord's first voice to 1 semitone above the root, overriding the sus 2 jack read at :104; :110 a sharp 9 overrides it in turn"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:110 anything above 0 moves the chord's first voice to 3 semitones above the root, overriding the sus 2 and flat 9 jacks read at :104 and :109"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:107 anything above 0 sets the seventh to 9 semitones above the root, overriding the flat 7th jack read at :102; :111 a 1 for 7 overrides it in turn"},
+      "14": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalChord.cpp:101 anything above 0 sets the fifth to 8 semitones above the root, overriding the flat 5th jack read at :100; :106 a 6 for 5 overrides it in turn"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:160"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:161"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:162"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:163"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:113"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:114"},
+      "6": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:115"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/MentalChord.cpp:116"}
+    }
+  },
+  "comment": "The panel prints Offset, Inversion, Voicing, Pitch In, Outs, Root, and then b3, b5, b7, sus 2, sus 4, add 6, 1 for 7, b9, #9 down the gate column with bb7 and #5 beside the last two. Precedence between the gate inputs comes from the order they are tested in (src/MentalChord.cpp:99-111): add 6 overrides b5 and #5 for the fifth, #5 overrides b5, 1 for 7 overrides bb7 and b7 for the seventh, and #9 overrides b9 and sus 2 for the substituted root. The ranges given for the inversion and voicing CV inputs are the voltages that cover the whole of the clamped setting from a centred knob; both are clamped after the knob is added, so the field describes the jack and the knob together. The offset CV has no clamp, so no range is given for it. The knob travel reaches its top setting over a whole quarter or fifth of its arc because the configured range runs past the clamp (src/MentalChord.cpp:60-62 with lines 82-88)."
+}

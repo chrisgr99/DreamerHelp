@@ -1,0 +1,36 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Ratio",
+  "description": "One signal and one level CV sent to four outputs, each output taking its own share of that CV, with a slew and a mute on every one",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets that output's share of the level CV, -1 to 1; negative shares invert the CV, so one output can open as another closes"},
+    {"ids": [4, 5, 6, 7], "text": "Sets how long that output's gain takes to reach a new level, from under a millisecond to about 0.6 seconds"},
+    {"ids": [8, 9, 10, 11], "text": "Silences that output on each press and restores it on the next, fading over that output's slew time; the lamp beside it is lit while it is silent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal sent to all four outputs"},
+    {"ids": [1], "text": "The level all four outputs take their share of, 0-10V for silence to full; with nothing patched it counts as 10V, so the ratio knobs alone set the levels"},
+    {"ids": [2, 3, 4, 5], "text": "Changes that output's share, added to its ratio knob at a fifth per volt and clamped to -1 to 1"},
+    {"ids": [6, 7, 8, 9], "text": "Any voltage at or above 1V silences that output, on top of its mute button"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That output's share of the signal: the input multiplied by the level CV and that output's ratio, slewed"}
+  ],
+  "notes": [
+    "with nothing in the CV jack the module is four separate attenuverters on one signal; patching CV turns the four ratio knobs into shares of a single moving level"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 10V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±1V.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped"
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

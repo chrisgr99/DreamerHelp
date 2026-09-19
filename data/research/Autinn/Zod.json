@@ -1,0 +1,21 @@
+{
+  "plugin": "Autinn",
+  "module": "Zod",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "Zod.cpp:369 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "audio", "poly": false, "why": "Zod.cpp:370 reads this input with getVoltage, which is channel 0 only"},
+      "2": {"poly": false, "step": "continuous", "negative": "swings", "why": "Zod.cpp:308 to :311 read this input with getVoltage and write the size of the voltage, as a level in dB, into the noise gate parameter, so a negative voltage acts as its positive twin"},
+      "3": {"poly": false, "step": "continuous", "negative": "swings", "why": "Zod.cpp:313 to :316 read this input with getVoltage and write the size of the voltage, as a level in dB, into the expander parameter"},
+      "4": {"poly": false, "step": "continuous", "negative": "swings", "why": "Zod.cpp:318 to :321 read this input with getVoltage and write the size of the voltage, as a level in dB, into the compressor parameter"},
+      "5": {"poly": false, "step": "continuous", "negative": "swings", "why": "Zod.cpp:323 to :326 read this input with getVoltage and write the size of the voltage, as a level in dB, into the limiter parameter"},
+      "6": {"family": "audio", "poly": false, "why": "Zod.cpp:404 reads this input with getVoltage, which is channel 0 only"},
+      "7": {"family": "audio", "poly": false, "why": "Zod.cpp:404 reads this input with getVoltage, which is channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Zod.cpp:483 writes this output with setVoltage and no channel index"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Zod.cpp:484 writes this output with setVoltage and no channel index"}
+    }
+  },
+  "comment": "Levels are measured against 5V as 0dB. The expander ratio parameter is configured with its minimum at 1 and its maximum at 0.25 (Zod.cpp:156), so the knob reads OFF at its left end; the compressor ratio runs the other way from 1 to 10 (Zod.cpp:157) and also reads OFF at its left end. The noise gate is skipped entirely while its knob is within a thousandth of a decibel of -70dB (Zod.cpp:526). Detection runs at four times the sample rate with 4ms of lookahead (Zod.cpp:142, :45). All four threshold jacks write their parameter with setValue rather than being summed with it (Zod.cpp:311, :316, :321, :326), so each takes its knob over for as long as it is patched. No range is given for those four jacks because their scale is a level in volts rather than one of the four standard shapes. A comment at Non.cpp:318 to :324 records the maker's intention to deprecate Zod."
+}

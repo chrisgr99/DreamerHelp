@@ -1,0 +1,16 @@
+{
+  "plugin": "dbRackModules",
+  "module": "PRB",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "PRB.cpp:110 takes the channel count from this input and PRB.cpp:118 adds it to the Freq knob"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "normal": "0V", "why": "PRB.cpp:130 reads it four channels at a time into a Schmitt trigger with thresholds of 0.1V and 2V"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "PRB.cpp:122 and PRB.cpp:124 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "PRB.cpp:112 takes the channel count from this input when it is connected and reads it as the phase"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "PRB.cpp:137 sets this output's channel count"}
+    }
+  },
+  "comment": "The degree knob is snapped to whole numbers 2 to 17, PRB.cpp:94. The frequency is held to half the sample rate. The module is a very cheap oscillator, which is what the polynomial construction is for; there is no anti-aliasing, so high degrees at high pitches alias."
+}

@@ -70,7 +70,7 @@ Mechanical checks run over the whole database continuously: the schema, the perm
 
 ## How it is maintained
 
-The database is `data/plugins/<PluginSlug>.yaml`, one file per VCV plugin, named after the plugin's slug.
+The database is two JSON files per module: its help in `data/help/<PluginSlug>/<ModuleSlug>.json`, which ships, and the research it was worked out from, with a citation for every fact, in `data/research/`, which does not.
 
 **Anyone can contribute by pull request.** Fix a description, add a missing module, supply a range nobody could verify. `CONTRIBUTING.md` has the format, the schema, and the one rule about quoting that will otherwise catch you out.
 
@@ -82,17 +82,13 @@ The database is `data/plugins/<PluginSlug>.yaml`, one file per VCV plugin, named
 
 ## How it is updated
 
-**The database ships inside the plugin.** `src/HelpText.cpp` is generated from the YAML and committed, so a build needs nothing but the Rack SDK, and a user gets database updates the same way they get any other plugin update — through the VCV library, automatically. There is no separate download and no version skew between the plugin and its data.
+**The database ships inside the plugin.** `data/help/` is committed, one JSON file per module, so a build needs nothing but the Rack SDK, and a user gets database updates the same way they get any other plugin update — through the VCV library, automatically. There is no separate download and no version skew between the plugin and its data.
 
 That makes the release cadence the update cadence. New plugins appear in the library continuously, so a release whenever a batch of new coverage is ready is the natural rhythm. It also gives every contribution a window in which to be caught: nothing reaches users until a build ships.
 
-## Proposed, not yet built
+## A maker's own file
 
-**A maker's own file, shipped with their plugin.** A plugin could carry its help beside its panel art, and the Help module could prefer it over the database. That solves two problems at once: the file is always the right version, because it ships with the code it describes; and it gives a maker a place to say what only they know, without a pull request to anyone.
-
-This is deliberately deferred. The pull-request route is simpler, it works now, and the experience of real contributions is what should decide the design of anything automatic. Building the automation first would mean guessing at what contributors need.
-
-If it is built, two things follow from what is already here. The file should be **JSON**, because Rack bundles a JSON parser and no YAML parser — a maker may author in whatever they like and convert. And a maker's file should be merged **per field** rather than replacing an entry wholesale, since the same per-field provenance that makes the database reviewable is what makes two sources safe to combine.
+A plugin can carry its own help, in a `help` folder beside its panel art, and the Help module prefers it over the database, item by item. The file is always the right version, because it ships with the code it describes; and it gives a maker a place to say what only they know, without a pull request to anyone. A user can write the same kind of file for a module whose maker has not, and send it to be folded into the database. See [docs/help-files.md](docs/help-files.md) and [design/help-database.md](design/help-database.md).
 
 ## A note on scope
 

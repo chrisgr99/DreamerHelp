@@ -1,0 +1,31 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Poppy-fields",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Poppy-Fields.cpp:830 reads this input with getVoltage(0), which is channel 1 alone; Poppy-Fields.cpp:837 puts it through a Schmitt trigger rising at 1V and falling at 0.8V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "Clock In", "why": "Poppy-Fields.cpp:833 falls back to the clock input when this one is unconnected; Poppy-Fields.cpp:834 reads it with getVoltage(0); Poppy-Fields.cpp:861 puts it through a Schmitt trigger rising at 1V and falling at 0.8V"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Poppy-Fields.cpp:554 reads this input with getVoltage(0); LydCommon.h:135 makes momentButton fire on the rise past 1V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Poppy-Fields.cpp:561 reads this input with getVoltage(0); LydCommon.h:145 makes latchButton flip on the rise past 1V"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 5V", "negative": "ignored", "normal": "the length knob", "why": "Poppy-Fields.cpp:569 reads this input with getVoltage(0), truncates it to whole volts, clamps that to 0 to 5 and maps it onto 1 to 64 steps"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 5V", "negative": "ignored", "normal": "the Start knob", "why": "Poppy-Fields.cpp:574 reads this input with getVoltage(0), truncates it to whole volts, clamps that to 0 to 5 and maps it onto steps 0 to 64"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "the X Smooth knob", "why": "Poppy-Fields.cpp:690 reads this input with getVoltage(0) and clamps it to 0 to 5V before it replaces the knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "the Y Smooth knob", "why": "Poppy-Fields.cpp:696 reads this input with getVoltage(0) and clamps it to 0 to 5V before it replaces the knob"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Poppy-Fields.cpp:590 reads this input with getVoltage(0); Poppy-Fields.cpp:592 maps ±5V onto ±1, adds the knob and clamps the total to ±1.5"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Poppy-Fields.cpp:591 reads this input with getVoltage(0); Poppy-Fields.cpp:593 maps ±5V onto ±1, adds the knob and clamps the total to ±1.5"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Poppy-Fields.cpp:597 reads this input with getVoltage(0) and divides it by 5 before adding the knob"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Poppy-Fields.cpp:598 reads this input with getVoltage(0), negates it and divides it by 5 before adding the knob"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "normal": "0V", "why": "Poppy-Fields.cpp:585 reads this input with getVoltage(0) and takes its absolute value before adding it to the knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "Poppy-Fields.cpp:473 sets every output to one channel"},
+      "1": {"family": "cv", "poly": false, "why": "Poppy-Fields.cpp:473 sets every output to one channel"},
+      "2": {"family": "cv", "poly": false, "why": "Poppy-Fields.cpp:473 sets every output to one channel"},
+      "3": {"family": "cv", "poly": false, "why": "Poppy-Fields.cpp:473 sets every output to one channel"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "Poppy-Fields.cpp:473 sets every output to one channel; Poppy-Fields.cpp:856 writes 5V while the clock trigger is high"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "Poppy-Fields.cpp:473 sets every output to one channel; Poppy-Fields.cpp:882 writes 5V while the clock trigger is high"},
+      "6": {"family": "cv", "poly": false, "why": "Poppy-Fields.cpp:473 sets every output to one channel"}
+    }
+  },
+  "comment": "Read from src/Poppy-Fields.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. Four places where the code and Manual-Poppy_Fields.md disagree. The Smooth inputs run the opposite way from the Smooth knobs: the knob value is subtracted from 1 (line 688) while the input is used as it stands (line 690), so 0V at the jack gives the most slew where a knob at 0 gives none; the manual says only that the inputs replace the knobs. The length and Start inputs are truncated with int() before being scaled (lines 569 and 574), so only whole volts count and only six values can be reached, which the manual does not mention. Zoom shrinks the drawn window as 2 divided by the square of the setting (lines 635 and 636), which at the maximum of 15 is about 225 times rather than the 50 the manual names. The manual says the Petals input adds a small offset along with the absolute value; line 585 adds no offset. The Mutagens knobs are configured from -1.8 to 1.8 (lines 279 and 280) but the value is clamped to ±1.5 (lines 592 and 593), so the ends of their travel do nothing. The panel-theme submenu is plugin-wide and cosmetic, so it has no line."
+}

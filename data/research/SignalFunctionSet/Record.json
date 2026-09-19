@@ -1,0 +1,17 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Record",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "why": "record.cpp:264 divides it by 10 and clamps to ±1 as the signal measured for each capture, and :265 normals it to the right channel while R is unpatched"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±10V", "why": "record.cpp:265 divides it by 10 and clamps to ±1 as the right channel of each capture, falling back to the left jack while unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "record.cpp:157 declares the pitch output, which drives the voice being sampled"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "record.cpp:158 declares the gate output, held for the sustain time or sent as a pulse under the menu setting"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "record.cpp:159 declares the velocity output, which drives the voice being sampled"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "record.cpp:160 declares the done trigger, fired when the sweep has finished"}
+    }
+  },
+  "comment": "The handoff to Play is files on disk rather than an expander connection, so what is captured belongs to the user rather than to the patch. The sweep holds the gate for the sustain time, records the tail after release, waits for silence if the menu says so, then moves on; at the end the files are trimmed and normalised according to the menu settings before being written with an SFZ file beside them."
+}

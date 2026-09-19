@@ -1,0 +1,43 @@
+{
+  "plugin": "DrumKit",
+  "module": "OpenHiHat",
+  "description": "Two independent open hi-hat voices, each playing back one of 14 recorded samples, with a choke input that fades the sample away.",
+  "params": [
+    {"ids": [0, 1], "text": "Chooses which of that voice's 14 samples plays, stepping between whole numbers from 0 to 13; 0 and 1 both give the first sample and the last of the 14 can never be reached."},
+    {"ids": [16, 17], "text": "Sets the playback rate of that voice's sample, from 0.2x to 1.8x of the recorded speed, which shifts its pitch and its length together."},
+    {"ids": [32, 33], "text": "Sets how long the choke fade takes to silence that voice, from 0.05 seconds to 0.5 seconds."}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "Adds to the SELECT knob at 1.4 samples per volt, with the total clamped between 0 and 14; a total of 14 or more gives the first sample instead."},
+    {"ids": [16, 17], "text": "Restarts that voice's sample from its first frame whenever the voltage rises through 0.5V."},
+    {"ids": [32, 33], "text": "Adds to the TUNE knob at 1x of playback rate per volt, with the total clamped between 0.2x and 1.8x."},
+    {"ids": [48, 49], "text": "Adds to the TIME knob at 0.049 seconds per volt, with the total clamped between 0.01 and 0.5 seconds; the manual's figure of 0.25 seconds per volt does not match the code."},
+    {"ids": [64, 65], "text": "Fades that voice's sample to silence over the TIME the knob sets, starting each time the voltage rises through 0.5V; a second rise during a fade returns the sample to full level first."}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The audio of that voice's sample, played once through at the rate TUNE sets and then silent."}
+  ],
+  "notes": [
+    "a voice is only computed while there is a cable in its OUT jack, so with nothing patched there the gate input produces nothing.",
+    "the panel carries two voices with their own select, tune, gate and output; they run at the same time and share no controls.",
+    "a gate at GATE cancels any choke in progress and restarts the sample at full level."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "16": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "17": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "32": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "33": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "48": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "49": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "64": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "65": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

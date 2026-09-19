@@ -1,0 +1,50 @@
+{
+  "plugin": "dbRackModules",
+  "module": "MVerb",
+  "description": "A reverb built as a five by five mesh of waveguides, each with a frequency of its own",
+  "params": [
+    {"ids": [0], "text": "Picks the pattern of early reflections heard before the mesh; the change is made when the knob is let go"},
+    {"ids": [1], "text": "Sets how loud the early reflections are, 0 to 1"},
+    {"ids": [2], "text": "Sets how much of the mesh is fed back into itself, 0 to 1; higher settings give a longer tail"},
+    {"ids": [3], "text": "Sets how much reverb is heard against the untouched signal, 0 to 1"},
+    {"ids": [4], "text": "Scales both mesh frequency jacks before they are added to the mesh knobs, 0 to 100 per cent"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "text": "Sets the frequency of one point of the mesh, 2Hz to 16384Hz as a power of two; the delay of that waveguide is one cycle at that frequency"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the frequencies of the first sixteen mesh points, one channel of this jack per point, scaled by the Amt knob"},
+    {"ids": [1], "text": "Shifts the frequencies of the last nine mesh points, one channel of this jack per point counting from the seventeenth, scaled by the Amt knob"},
+    {"ids": [2], "text": "The left signal to be reverberated"},
+    {"ids": [3], "text": "The right signal to be reverberated; with nothing patched here the left signal is used for both"},
+    {"ids": [4], "text": "Sets that balance by cable in place of the Wet knob, 0-10V across dry to wet"},
+    {"ids": [5], "text": "Sets the feedback by cable in place of the FB knob, 0-10V across none to full"},
+    {"ids": [7], "text": "Sets the early reflection level by cable in place of the ERAmp knob, 0-10V across none to full"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left output of the mesh"},
+    {"ids": [1], "text": "The right output of the mesh"}
+  ],
+  "notes": [
+    "nothing is computed and neither output is written until a cable is patched into InL",
+    "with Wet at 0 the mesh is not run at all and the two inputs pass straight through, which is a way to switch the reverb off without unpatching it",
+    "the module ships with the standard MVerb settings as factory presets, which are a quicker starting point than the twenty-five mesh knobs"
+  ],
+  "menu": [
+    "Use Thread — moves the reverb onto a background thread, which keeps it off the audio thread at the cost of some delay",
+    "Thread buffer size — sets how many samples that background thread works on at a time; a larger buffer glitches less and delays more"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only\n\nunpatched it reads the InL jack.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Wet knob; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads the FB knob; a negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads the ERAmp knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

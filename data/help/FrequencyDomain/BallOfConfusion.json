@@ -1,0 +1,69 @@
+{
+  "plugin": "FrequencyDomain",
+  "module": "BallOfConfusion",
+  "description": "Wavetable oscillator whose tables are spread over a sphere: turning the sphere brings different tables to the point being played, and the four nearest are morphed together",
+  "params": [
+    {"ids": [0], "text": "Turns the sphere about its yaw axis, -100% to 100%, bringing different wavetables to the point being played"},
+    {"ids": [1], "text": "Turns the sphere about its pitch axis, -100% to 100%, bringing different wavetables to the point being played"},
+    {"ids": [2], "text": "Turns the sphere about its roll axis, -100% to 100%, bringing different wavetables to the point being played"},
+    {"ids": [6], "text": "Attenuates the FM input before it is added to the pitch, 0 to 100%"},
+    {"ids": [7], "text": "Sets the pitch, -54 to 54 semitones from C4 at 261.63Hz"},
+    {"ids": [8], "text": "Cycles what a sync does: hard restarts the wave at every zero crossing, soft restarts it only when the phase is before the sync position, and soft reverse runs the wave backwards from there instead"},
+    {"ids": [9], "text": "Cycles how the four nearest wavetables are combined: interpolated by distance, their spectra averaged, their spectra averaged ignoring phase, or three of them used as a transfer function on the first"},
+    {"ids": [10], "text": "Sets the phase a soft sync acts before, 0 to 100% of the cycle, drawn as the gold line"},
+    {"ids": [11], "text": "Shifts which values of the four wavetables are combined in the interpolate and transfer modes, and which frequency bands are combined in the spectral modes, -64 to 64 steps"},
+    {"ids": [12], "text": "Sets how hard the output wave is folded back on itself, 1 to 4"},
+    {"ids": [13], "text": "Chooses what happens to the part of the wave past the fold: it is turned back on itself, or decimated"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the yaw rotation, 10V covering the whole turn"},
+    {"ids": [1], "text": "Adds to the pitch-axis rotation, 10V covering the whole turn"},
+    {"ids": [2], "text": "Adds to the roll rotation, 10V covering the whole turn"},
+    {"ids": [3], "text": "Adds to the pitch at one volt per octave, and its channel count sets the polyphony of the whole oscillator"},
+    {"ids": [4], "text": "Modulates the pitch through the FM AMT knob, at a volt per octave when that knob is full; polyphonic"},
+    {"ids": [5], "text": "Adds to the FM amount, 10V covering 0 to 100%"},
+    {"ids": [6], "text": "Sets the phase the wave is read from, 0-5V covering the whole cycle"},
+    {"ids": [7], "text": "Syncs the oscillator as the SYNC TYPE button is set, acting on the upward zero crossings; patching anything here turns syncing on"},
+    {"ids": [8], "text": "Adds to the sync position, 10V covering the whole cycle"},
+    {"ids": [9], "text": "Adds to the spectrum shift, 10V covering -64 to 64 steps"},
+    {"ids": [10], "text": "Adds to the fold amount, 10V covering 1 to 4"},
+    {"ids": [11], "text": "Slides the HARMONICS drawing across the sixteen harmonics, 5V covering all sixteen"},
+    {"ids": [12], "text": "Adds an offset to every level drawn on the HARMONICS grid, 5V covering the whole range; the grid acts in the two spectral morph modes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator, ±5V, with as many channels as the V/Oct input"}
+  ],
+  "notes": [
+    "the sphere is empty when the module is placed and the outputs stay at 0V; a wavetable has to be read in with Load WaveTable, Add WaveTable or Load Directory first",
+    "the harmonic grid is drawn on by dragging across it, and holding shift while dragging keeps the drag on the harmonic it started on",
+    "the harmonic grid is one display rather than one control per harmonic, so no harmonic can be clicked for a line of its own",
+    "right-clicking the harmonic grid opens that grid's own menu rather than the module's: All Maximum, All Minimum, All Half, Triangle, Sine, Ramp and Random fill it with that shape",
+    "the harmonic grid's own right-click menu also carries Flip Horizontal, Flip Vertical, Reduce By Half, Shift Up and Shift Down, which rework what is already drawn on it"
+  ],
+  "menu": [
+    "Load WaveTable — replaces the sphere with the tables of one Serum-style wavetable file, read as 2048 points per table",
+    "Add WaveTable — reads another wavetable file onto the sphere alongside the tables already there",
+    "Load Directory — reads every wavetable file in a folder onto the sphere",
+    "Sample Scatter — a slider, 0 to 100%, moving tables that came from the same file further apart on the sphere"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "0 to 5V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "7": "stepped · polyphonic",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "11": "±5V · continuous · one channel only",
+      "12": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

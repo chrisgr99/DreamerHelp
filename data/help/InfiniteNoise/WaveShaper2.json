@@ -1,0 +1,42 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "WaveShaper2",
+  "description": "Two signals bent by one of three shaping curves, in 2HP, with the amount of bend under one knob and CV",
+  "params": [
+    {"ids": [0], "text": "Sets how far the shaping goes, straight through in the centre, one way counter-clockwise and the other clockwise"},
+    {"ids": [1], "text": "Attenuates and inverts the modulation CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [2], "text": "Chooses the curve: 5Sine thins the peaks one way and rounds them the other, Knee bends the signal about a hard corner, Clamp/Fold flattens the peaks one way and folds them the other"},
+    {"ids": [3], "text": "Chooses what range the shaping is worked out over: A learns it from the signal as it arrives, B fixes it at -5V to 5V, U fixes it at 0V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the shaping, 5V covering half the knob's travel at full trim; a polyphonic signal here shapes each channel by its own amount"},
+    {"ids": [1], "text": "A rising edge throws away the range learnt so far in the A position, so it is learnt again from what arrives next"},
+    {"ids": [2, 3], "text": "One of the two signals to be shaped"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries that input shaped, with the same number of channels"}
+  ],
+  "notes": [
+    "with the shaping knob centred and no CV, the module passes the input through unchanged apart from the clipping range",
+    "in the A range position the curve depends on what the module has heard so far, so a signal that was loud and then goes quiet needs a reset"
+  ],
+  "menu": [
+    "Auto Scale/offset-mode: Individual (per section), Common (both sections) — chooses whether the two sections learn their ranges separately or share one, which suits a stereo pair",
+    "Oversampling mode: Single sample, 2x oversampling — runs the shaping at twice the sample rate, which is worth it on audio and off unless you turn it on",
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "polyphonic\n\nunpatched it reads 0V.",
+      "3": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

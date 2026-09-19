@@ -1,0 +1,15 @@
+{
+  "plugin": "SickoCV",
+  "module": "HolderCompact",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "HolderCompact.cpp takes getChannels() from this jack to choose the monophonic or polyphonic path, reads getVoltage(cT) per channel and takes the rising edge at 1V"},
+      "1": {"poly": true, "step": "continuous", "normal": "a ±5V noise source", "why": "HolderCompact.cpp tests isConnected() on this jack, takes getChannels() from it as the loop bound, and generates noise instead when it is empty"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "±10V", "why": "HolderCompact.cpp clamps the held value to ±10V and sets the channel count from the input or the trigger"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "HolderCompact.cpp sets this port to one channel and writes either a 1ms pulse or a held gate"}
+    }
+  },
+  "comment": "This version has no attenuverters and no CV jacks for probability, scale or offset. The MODE switch is configured Sample & Hold, Track & Hold and comes up in Sample & Hold. The signal jacks carry whatever is patched, so the IN and OUT jacks get no family."
+}

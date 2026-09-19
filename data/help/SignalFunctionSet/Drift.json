@@ -1,0 +1,43 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Drift",
+  "description": "Four low-frequency oscillators sharing one phase and spread around the cycle, with a shape control morphing through sine, triangle, sawtooth, square and a random walk",
+  "params": [
+    {"ids": [0], "text": "Morphs the wave through sine, triangle, sawtooth, square and a random walk, blending between neighbours all the way"},
+    {"ids": [1], "text": "Sets how far a Lorenz attractor pulls each output's phase, level and rate about; fully clockwise leaves the waves clean and turning it down lets them wander, each output on its own attractor"},
+    {"ids": [2], "text": "Sets the rate, about 0.03Hz at one end of the travel to about 10Hz at the other, shown in hertz on the tooltip"},
+    {"ids": [3], "text": "Spreads the four outputs around the cycle: fully anticlockwise puts all four in phase and fully clockwise puts them a quarter cycle apart"},
+    {"ids": [4], "text": "Shifts every output, -5V to 5V"},
+    {"ids": [5], "text": "Sets how far every output swings either side of the centre, 0 to 5V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Changes the shape, scaled by a tenth and added to the shape knob, the total clamped to the knob's travel"},
+    {"ids": [1], "text": "Changes the stability, scaled by a tenth and added to the stability knob, the total clamped to the knob's travel"},
+    {"ids": [2], "text": "Sets the rate from the time between two rises, in place of the frequency knob, and snaps output A's phase back to the start on each rise; the panel prints FREQ but the maker's port name is Clock"},
+    {"ids": [3], "text": "Changes the phase spread, scaled by a tenth and added to the spread knob, the total clamped to the knob's travel"},
+    {"ids": [4], "text": "Shifts every output, added to the centre knob and clamped to -5 to 5V"},
+    {"ids": [5], "text": "Changes how far every output swings, added to the swing knob and clamped to 0 to 5V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowest of the four outputs at each moment"},
+    {"ids": [1], "text": "The highest of the four outputs at each moment"},
+    {"ids": [2, 3, 4, 5], "text": "One of the four waves, centred and scaled by the two spread controls"}
+  ],
+  "notes": [
+    "patching the clock jack takes the rate away from the frequency knob and measures it from the cable instead, holding it between 0.1Hz and 100Hz"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "stepped · one channel only",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 5V."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "2": "one channel only"
+    }
+  }
+}

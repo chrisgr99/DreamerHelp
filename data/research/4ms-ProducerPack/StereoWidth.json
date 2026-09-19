@@ -1,0 +1,17 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "StereoWidth",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "StereoWidth.cpp:36 getVoltage() * 0.1 added to the 0-1 knob, then clamped 0 to 1"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "StereoWidth.cpp:60 getVoltage() * 10 added to the -50..50 knob, then clamped"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "StereoWidth.cpp:23 getVoltage(), channel 0 only"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "normal": "0V", "why": "StereoWidth.cpp:24 plain getVoltage() with no isConnected test, so an empty jack reads 0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "StereoWidth.cpp:84 setVoltage with no channel argument"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "This is the one module in the pack with no left-to-right normalling: every other stereo module here falls back to the left input when the right jack is empty, and this one reads 0V (StereoWidth.cpp:24). Below the halfway point the two channels are crossfaded against their own average; above it the half-difference is added and subtracted, at full strength from 75% of the travel, with a gain of up to 2 on it beyond that (StereoWidth.cpp:38-45)."
+}

@@ -1,0 +1,34 @@
+{
+  "plugin": "MSM",
+  "module": "OSCiX",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "VCO.cpp:508 multiplies this jack by twelve into a semitone pitch"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "VCO.cpp:590 multiplies this jack by twelve into a semitone pitch"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "VCO.cpp:611 adds this jack over ten to the width knob, and setPulseWidth at VCO.cpp:130 clamps the sum to 0.01 to 0.99"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "why": "VCO.cpp:511 adds this jack, scaled by its attenuator, to the same semitone pitch the volt per octave jack feeds", "polarity": "bipolar"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "why": "VCO.cpp:524 clamps this jack, scaled by its attenuator, to 0 to 2 before raising the exponential base to it"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "why": "VCO.cpp:593 adds this jack, scaled by its attenuator, to the same semitone pitch the volt per octave jack feeds", "polarity": "bipolar"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "why": "VCO.cpp:601 clamps this jack, scaled by its attenuator, to 0 to 2 before raising the exponential base to it"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.01V", "why": "VCO.cpp:150-151 subtract 0.01 from this jack's voltage and reset the oscillator phase when the result rises above zero with the previous sample at or below it, so the sync point is 0.01V"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.01V", "why": "VCO.cpp:150-151 subtract 0.01 from this jack's voltage and reset the oscillator phase when the result rises above zero with the previous sample at or below it, so the sync point is 0.01V"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "why": "VCO.cpp:640 reads this jack as the signal fed to the folder in place of the oscillators"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "VCO.cpp:658 clamps the fold gain knob plus this jack over ten at zero"},
+      "14": {"family": "cv", "poly": false, "step": "stepped", "range": "high above 0V", "why": "VCO.cpp:550 adds this jack to the hardsync switch and takes the sum as on above zero"},
+      "15": {"family": "cv", "poly": false, "step": "stepped", "range": "high above 0V", "why": "VCO.cpp:613 adds this jack to the hardsync switch and takes the sum as on above zero"},
+      "16": {"family": "cv", "poly": false, "step": "continuous", "why": "VCO.cpp:511 adds this jack to the FM index knob and multiplies the whole frequency modulation term by the result, with nothing bounding it below", "negative": "swings"},
+      "17": {"family": "cv", "poly": false, "step": "continuous", "why": "VCO.cpp:648 multiplies this jack by its attenuator into the fold shape"},
+      "18": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "VCO.cpp:650 adds this jack over 2.5 to the knob and clamps the sum to 0 to 4"},
+      "19": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "VCO.cpp:652 adds this jack over 2.5 to the knob and clamps the sum to 0 to 4"}
+    },
+    "outputs": {
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio", "poly": false, "range": "±10V", "why": "VCO.cpp:660 passes the fold output through saturate(), which Resources.hpp:23 fixes at ten"}
+    }
+  },
+  "comment": "Parameter 30 is an unmarked button over the OSCiX lettering, the easter egg the manual hints at. Parameters 1, 2, 7 to 13 and 18, inputs 2, 8 and 9, and outputs 0 and 1 are declared in the code but are not placed on the panel, so they carry no line. The two linear FM inputs are exponential. VCO.cpp:511 and 593 add them, scaled by their attenuators, to the same semitone pitch figure the volt per octave jacks feed, so they shift pitch by the same doubling law rather than adding to frequency."
+}

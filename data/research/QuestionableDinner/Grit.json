@@ -1,0 +1,16 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Grit",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "why": "src/Grit.cpp:68 reads it with getVoltageSum() divided by getChannels(), which averages every channel into one value"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the module's own white noise", "why": "src/Grit.cpp:78 takes the loop bound from its getChannels(); line 84 reads getNormalVoltage(noise/100.f, i) and divides by 5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Grit.cpp:79 setChannels from the rasp input; line 108 sets a voltage per channel"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "src/Grit.cpp:80 setChannels from the rasp input; lines 93 and 99 set a voltage per channel"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "src/Grit.cpp:81 setChannels from the rasp input; line 109 sets a voltage per channel"}
+    }
+  },
+  "comment": "The panel calls this module GRAZE and the slug is Grit; the maker's manual uses Graze. Index order is not panel order on the outputs: OUT is output 0, AUX is output 2 and ENV is output 1, left to right. The panel prints MODE for the rasp mode switch and B-SPL for the bass split. Bypassing the module passes the audio input to the OUT jack only."
+}

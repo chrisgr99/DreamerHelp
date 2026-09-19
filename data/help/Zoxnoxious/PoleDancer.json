@@ -1,0 +1,40 @@
+{
+  "plugin": "Zoxnoxious",
+  "module": "PoleDancer",
+  "description": "A four-pole ladder filter whose response is set by a five-channel signal at the FILTER TOPOLOGY jack: a dry level and a level for each pole, mixed to make any filter shape",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff over ten octaves with C4 at 261.63Hz in the middle, one octave to a turn of the dial, held between 1Hz and 18% of the sample rate"},
+    {"ids": [1], "text": "Sets the resonance, 0 to 1 on the dial; the figure is squared and multiplied by ten inside, so self-oscillation comes only near the top"},
+    {"ids": [2], "text": "Scales the voltage at the cutoff CV jack, -1 to +1, before it is added to the cutoff in octaves"},
+    {"ids": [3], "text": "Scales the voltage at the resonance CV jack, -1 to +1, before a tenth of it is added to the resonance"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the cutoff at one octave per volt, scaled by the trimpot above it"},
+    {"ids": [1], "text": "Shifts the resonance, 10V covering the whole of the dial's travel through the trimpot above it; the total is held between 0 and 1"},
+    {"ids": [2], "text": "The signal to be filtered, with ±5V taken as full scale"},
+    {"ids": [3], "text": "A five-channel signal setting the filter response: the first channel is the dry level and the next four are the level of each pole; with nothing patched the filter is a four-pole lowpass"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered signal at ±5V, soft-clipped on the way out"}
+  ],
+  "notes": [
+    "with nothing patched to FILTER TOPOLOGY this is a plain four-pole lowpass; a Personality module on that jack is what makes it anything else",
+    "the topology signal is read every sample, so crossfaders, switches and slew limiters can morph the filter shape on the way in",
+    "0.3125V on a topology channel is unity for that pole, since the mix is divided by ten thirty-seconds before it is clipped",
+    "the number of channels at the audio input sets the channel count of the output"
+  ],
+  "menu": [
+    "Add Morphscope (right side) — places a Morphscope expander immediately to the right of this module"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads a four-pole lowpass."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

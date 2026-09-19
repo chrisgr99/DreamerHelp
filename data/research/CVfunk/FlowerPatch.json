@@ -1,0 +1,18 @@
+{
+  "plugin": "CVfunk",
+  "module": "FlowerPatch",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "FlowerPatch.cpp:205 reads it with getVoltage, so only channel 1, and scales it by a tenth into the analysis buffer"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "FlowerPatch.cpp:358 reads it with getVoltage, so only channel 1, and scales it by a tenth before adding it to the hue knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "FlowerPatch.cpp:363 reads it with getVoltage, so only channel 1, and scales it by a tenth; the knob-plus-input total is clamped to -1 to 1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±5V", "why": "FlowerPatch.cpp:209 reads it with getVoltage, so only channel 1, and clamps the knob-plus-input total to -5 to 5V"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "FlowerPatch.cpp:222 reads it with getVoltage, so only channel 1, and scales it by a tenth; the total is clamped to -1 to 1.1"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "FlowerPatch.cpp:302 sets six channels on this output and FlowerPatch.cpp:318 writes one peak pitch per channel"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "FlowerPatch.cpp:303 sets six channels on this output and FlowerPatch.cpp:319 writes each peak's level scaled by 10"}
+    }
+  },
+  "comment": "The pitch output is quantized to the nearest of seventy-two named scale frequencies rather than carrying the raw bin frequency (FlowerPatch.cpp:311), and the reference used is 0.75V for 440Hz, which is the standard volt-per-octave reference. The hue, fill and flower CVs are read inside the drawing code rather than in process(), so they change what is drawn but nothing that comes out of the jacks."
+}

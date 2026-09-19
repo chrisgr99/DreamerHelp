@@ -1,0 +1,17 @@
+{
+  "plugin": "Leviathan",
+  "module": "Iris",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "negative": "swings", "step": "continuous", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: process() takes the channel count from getChannels() on V/Oct and Scan CV, sets both outputs to it, and reads this jack with getPolyVoltage(channel) inside that loop; the voltage is summed into a pitch in octaves relative to C4 and clamped to -24 to +16 octaves"},
+      "1": {"family": "audio", "poly": true, "negative": "swings", "step": "continuous", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: process() takes the channel count from getChannels() on V/Oct and Scan CV, sets both outputs to it, and reads this jack with getPolyVoltage(channel) inside that loop; acCoupledLinFm removes the steady part, drivenLinFm scales it by the LIN FM knob, and it multiplies the base frequency"},
+      "2": {"family": "cv", "poly": true, "range": "±10V", "negative": "swings", "step": "continuous", "sumRange": "0 to 10V", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: scan = scanKnob + voltage * 0.1 * attenuverter, then clamped to 0 to 1, so 10V is the full sweep and the knob-plus-jack total is held inside the table"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "negative": "ignored", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: process() takes the channel count from getChannels() on V/Oct and Scan CV, sets both outputs to it, and reads this jack with getPolyVoltage(channel) inside that loop; the voltage goes into dsp::SchmittTrigger at its default 0.1V/1V thresholds, rising edge only"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: setChannels(channels) from the V/Oct and Scan channel counts, and setVoltage(5.f * wave, channel)"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "Leviathan 2.9.1 source (commit c37193d, branch puffy-rc3), src/Iris.cpp: setChannels(channels) from the V/Oct and Scan channel counts, and setVoltage(5.f * quadWave, channel) where quadWave is the table sampled a quarter cycle ahead"}
+    }
+  },
+  "comment": "The scan total is a sum of knob and attenuated jack clamped to the ends of the table, so the attenuverter at centre leaves the SCAN jack inert; that is the one place a patched cable looks dead. The SCAN sumRange is written as the voltage the knob-plus-jack total is worth, since the clamp itself is on the row index. Three of the panel's buttons open menus of their own rather than doing anything themselves, and the lines written as Menu items for them say so: the smoothing, normalize, row order, trim, DC removal and invert items are all on the image-options button's menu, not on the module's right-click menu. The FREQ knob covers 10Hz to 10000Hz, or 0.01Hz to 100Hz in LFO mode, while the pitch as a whole is clamped to 8Hz to 20000Hz and to 45 per cent of the sample rate. The wavetable is never empty: the constructor fills it with a sine-triangle-saw-square sweep, so the module makes sound with no file loaded. Nautiloid is read from leftExpander, so it goes to the left of Iris. The picture preview, the waveform display and the preview toggle beside them are plain widgets with no parameter behind them."
+}

@@ -1,0 +1,46 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "NonlinearIntegrator",
+  "description": "A state-variable filter with lowpass, bandpass, highpass and notch outputs at once, a trigger input for striking it, and enough resonance to ring on its own",
+  "params": [
+    {"ids": [0], "text": "Scales the signal input, from silence to the whole of it"},
+    {"ids": [1], "text": "Sets the filter frequency, an octave a step from 0.0625Hz to 8192Hz"},
+    {"ids": [2], "text": "Sets the resonance; near the top the filter rings and the outputs can reach 12V either way, so raise it a little at a time"},
+    {"ids": [3], "text": "Scales the FREQ control input, -1 to +1, before it is added to the frequency"},
+    {"ids": [4], "text": "Scales the RES control input, -2 to +2, before it is added to the resonance"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Strikes the filter on each rise past 1.8V by sending a short 6V pulse through it, which rings the filter like a struck object"},
+    {"ids": [1], "text": "Added to the filter frequency with no attenuation of its own, a volt an octave"},
+    {"ids": [2], "text": "Added to the filter frequency through its attenuverter, a volt an octave"},
+    {"ids": [3], "text": "Added to the resonance through its attenuverter"},
+    {"ids": [4], "text": "The signal to be filtered, scaled by its attenuator; audio and slow control voltages both work"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowpass output, -12V to +12V"},
+    {"ids": [1], "text": "The bandpass output, -12V to +12V"},
+    {"ids": [2], "text": "The highpass output, -12V to +12V"},
+    {"ids": [3], "text": "The notch output, -12V to +12V"}
+  ],
+  "notes": [
+    "the input attenuator starts fully down, so a fresh module passes nothing until it is turned up",
+    "patch BAND back into IN and raise the input attenuator and the resonance until it sings, and the four outputs give the same sine wave a quarter cycle apart",
+    "at high resonance the outputs can reach 24V peak to peak, which is far above what most modules expect, so bring the resonance up gradually",
+    "every input in this module reads one channel, so polyphonic cables are cut down to their first channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1.8V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only\n\nthe knob and this input are summed and the total held to 1V per octave.",
+      "3": "bipolar · continuous · one channel only",
+      "4": "±12V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±12V · continuous · one channel only",
+      "1": "±12V · continuous · one channel only",
+      "2": "±12V · continuous · one channel only",
+      "3": "±12V · continuous · one channel only"
+    }
+  }
+}

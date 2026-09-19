@@ -1,0 +1,29 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "LCMP2",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "normal": "the True output level from the menu", "why": "LCMP2.cpp:196 reads getPolyVoltage(c) when patched and falls back to the menu voltage at LCMP2.cpp:197"},
+      "1": {"poly": true, "normal": "the False output level from the menu", "why": "LCMP2.cpp:199 reads getPolyVoltage(c) when patched and falls back to the menu voltage at LCMP2.cpp:200"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V, read as low", "why": "LCMP2.cpp:208 compares getPolyVoltage(c) against the gate-detect level and treats an unpatched jack as low"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V, read as low", "why": "LCMP2.cpp:208 compares getPolyVoltage(c) against the gate-detect level and treats an unpatched jack as low"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the A OR B output", "why": "LCMP2.cpp:234 tests this jack with isConnected; with a cable in it line 235 reads it with getPolyVoltage per channel and calls that channel true when the voltage is at or above the gate-detect level, which the module menu sets and which starts at 1V. With the jack empty line 236 uses that channel's A OR B result instead. The C invert button is applied to whichever it was, and line 232 runs the whole block only while one of the C/D outputs has a cable in it."},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the A AND B output", "why": "LCMP2.cpp:239 tests this jack with isConnected; with a cable in it line 240 reads it with getPolyVoltage per channel and calls that channel true when the voltage is at or above the gate-detect level, which the module menu sets and which starts at 1V. With the jack empty line 241 uses that channel's A AND B result instead. The D invert button is applied to whichever it was, and line 232 runs the whole block only while one of the C/D outputs has a cable in it."}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "1": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "2": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "3": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "4": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "5": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "6": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "7": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "8": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "9": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "10": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"},
+      "11": {"poly": true, "why": "LCMP2.cpp:145 and LCMP2.cpp:167 set each section's six outputs to the larger of that section's two input channel counts"}
+    }
+  },
+  "comment": "MAKER BUG: the tests at LCMP2.cpp:135 and LCMP2.cpp:155 ask whether the six outputs are connected but index the inputs vector with output enum values. The inputs vector holds six entries, so the second block reads past its end. In practice the module decides it has work to do whenever any input jack is patched.\nThe outputs carry whatever is patched to True and False, so they are left without a family colour; the four logic inputs are gates."
+}

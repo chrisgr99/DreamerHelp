@@ -1,0 +1,89 @@
+{
+  "plugin": "FrequencyDomain",
+  "module": "DelayedReaction",
+  "description": "Spectral delay: the input is split into 128 frequency bands, and each band has its own level, delay time, feedback and stereo placement drawn on the grids",
+  "params": [
+    {"ids": [1], "text": "Cycles the longest delay a full-height bar on the DELAY TIME grid reaches, each step twice the one before it: 0.4, 0.8, 1.5, 3.0, 6.0 and 11.9 seconds at a 44.1kHz sample rate"},
+    {"ids": [2], "text": "Cycles the pin mode for the ATTENUATION grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [3], "text": "Cycles the pin mode for the DELAY TIME grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [4], "text": "Reads every band out of its delay backwards"},
+    {"ids": [5], "text": "Cycles the pin mode for the FEEDBACK grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [6], "text": "Cycles the pin mode for the PANNING grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [7], "text": "Makes the attenuation grid follow the one drawn on a Delayed Reaction placed immediately to the left, so one drawing can be copied across several of them"},
+    {"ids": [8], "text": "Makes the delay time grid follow the one drawn on a Delayed Reaction placed immediately to the left, so one drawing can be copied across several of them"},
+    {"ids": [9], "text": "Makes the feedback grid follow the one drawn on a Delayed Reaction placed immediately to the left, so one drawing can be copied across several of them"},
+    {"ids": [10], "text": "Sets the balance between the input delayed by one analysis frame and the delayed bands, 0 to 100% of the bands"},
+    {"ids": [11], "text": "Sets where the pin lies across the range of the ATTENUATION grid, 0 to 100%"},
+    {"ids": [12], "text": "Sets where the pin lies across the range of the DELAY TIME grid, 0 to 100%"},
+    {"ids": [13], "text": "Sets where the pin lies across the range of the FEEDBACK grid, 0 to 100%"},
+    {"ids": [14], "text": "Sets where the pin lies across the range of the PANNING grid, 0 to 100%"},
+    {"ids": [15], "text": "Scales every value on the ATTENUATION grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"},
+    {"ids": [16], "text": "Scales every value on the DELAY TIME grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"},
+    {"ids": [17], "text": "Scales every value on the FEEDBACK grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"},
+    {"ids": [18], "text": "Scales every value on the PANNING grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal into the delay"},
+    {"ids": [1], "text": "Replaces the internal feedback path with what is patched here, so the SEND can be processed and brought back"},
+    {"ids": [2], "text": "Adds an offset to every value drawn on the ATTENUATION grid, 5V covering the whole range"},
+    {"ids": [3], "text": "Slides the ATTENUATION drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [4], "text": "Adds an offset to every value drawn on the DELAY TIME grid, 5V covering the whole range"},
+    {"ids": [5], "text": "Slides the DELAY TIME drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [6], "text": "Adds an offset to every value drawn on the FEEDBACK grid, 5V covering the whole range"},
+    {"ids": [7], "text": "Slides the FEEDBACK drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [8], "text": "Adds an offset to every value drawn on the PANNING grid, 5V covering the whole range"},
+    {"ids": [9], "text": "Slides the PANNING drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [10], "text": "Adds to the mix, 10V covering dry to fully delayed"},
+    {"ids": [11], "text": "Adds to the pin position on the ATTENUATION grid, 10V covering the whole range"},
+    {"ids": [12], "text": "Adds to the pin position on the DELAY TIME grid, 10V covering the whole range"},
+    {"ids": [13], "text": "Adds to the pin position on the FEEDBACK grid, 10V covering the whole range"},
+    {"ids": [14], "text": "Adds to the pin position on the PANNING grid, 10V covering the whole range"},
+    {"ids": [15], "text": "Adds to the rotation of the ATTENUATION grid, 5V being 180 degrees"},
+    {"ids": [16], "text": "Adds to the rotation of the DELAY TIME grid, 5V being 180 degrees"},
+    {"ids": [17], "text": "Adds to the rotation of the FEEDBACK grid, 5V being 180 degrees"},
+    {"ids": [18], "text": "Adds to the rotation of the PANNING grid, 5V being 180 degrees"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the delay, carrying the whole unpanned mix while the right output is unpatched"},
+    {"ids": [1], "text": "The right channel of the delay"},
+    {"ids": [2], "text": "The fed-back bands added together, for processing outside the module before they return"}
+  ],
+  "notes": [
+    "a grid is drawn on by dragging across it, and holding shift while dragging keeps the drag on the band it started on, so one band can be set without disturbing its neighbours",
+    "each grid is one display rather than one control per band, so no band can be clicked for a line of its own",
+    "right-clicking a grid opens that grid's own menu rather than the module's, and All Maximum, All Minimum, All Half, Triangle, Sine, Ramp and Random fill the grid with that shape",
+    "a grid's own right-click menu also carries Flip Horizontal, Flip Vertical, Reduce By Half, Shift Left and Shift Right, which rework what is already drawn on it"
+  ],
+  "menu": [
+    "# of Frequency Bands — sets the analysis to 1024, 2048 or 4096 bands",
+    "Window Function — picks the shape each frame is multiplied by before analysis: None, Triangle, Welch, Sine, Hanning, Blackman, Nutall or Kaiser"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the FB SEND output.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only",
+      "9": "±5V · continuous · one channel only",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "11": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "13": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "14": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "15": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "16": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "17": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "18": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "±10V · continuous · one channel only"
+    }
+  }
+}

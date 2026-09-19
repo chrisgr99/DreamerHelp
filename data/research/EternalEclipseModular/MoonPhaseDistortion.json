@@ -1,0 +1,16 @@
+{
+  "plugin": "EternalEclipseModular",
+  "module": "MoonPhaseDistortion",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "MoonPhaseDistortion.cpp:87-89 divides the jack by 10, adds it to the knob and wraps the result"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "0V", "why": "MoonPhaseDistortion.cpp:103-110 takes the channel count from this jack and reads each channel with getVoltage(c)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "normal": "the jack beside it", "why": "MoonPhaseDistortion.cpp:111 reads each channel with getVoltage(c), falling back to the left jack when empty"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "MoonPhaseDistortion.cpp:105-134 calls setChannels with the input's channel count and writes each channel"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "MoonPhaseDistortion.cpp:106-135 calls setChannels with the input's channel count and writes each channel"}
+    }
+  },
+  "comment": "The module declares a bypass route from each input to the output below it, so Rack's bypass passes the stereo pair through."
+}

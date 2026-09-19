@@ -1,0 +1,55 @@
+{
+  "plugin": "NYSTHI",
+  "module": "InfiniteMelody",
+  "description": "A melody generator after the CGS Infinite Melody: one bit shift register feeding four analogue shift registers, whose bits are weighted and summed into voltages",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Scales the voltage leaving that stage's output"},
+    {"ids": [3], "text": "Sets the level the incoming signal is compared against: the comparator reads a one above it and a zero below"},
+    {"ids": [4], "text": "Chooses how an ADVANCE pulse fills the four shift registers: either the contents shift along the chain a register per pulse, or the second, third and fourth take theirs every two, four and eight"},
+    {"ids": [5], "text": "Chooses between a major and a minor scale"},
+    {"ids": [6, 7, 8], "text": "Switches that bit of the register on and off"},
+    {"ids": [9, 10, 11, 12, 13, 14], "text": "How much that bit of the register contributes to the summed output"},
+    {"ids": [15], "text": "Sets the base voltage the melody is built on, in octaves"},
+    {"ids": [16], "text": "Sets the voltage between one step of the melody and the next"},
+    {"ids": [17], "text": "Trims the base voltage, -1V to +1V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage setting the spacing between one step of the melody and the next"},
+    {"ids": [1], "text": "A voltage sets the level the incoming signal is compared against, in place of the SENSE knob"},
+    {"ids": [2], "text": "The signal the bits are read from. A lamp lights while the signal is above the comparison level, which is the one written into the register at the next clock"},
+    {"ids": [3], "text": "A voltage setting the base the melody is built on, at 1V per octave"},
+    {"ids": [4], "text": "A voltage chooses the way an ADVANCE pulse fills the four shift registers, in place of the MODE switch"},
+    {"ids": [5], "text": "A gate chooses between a major and a minor scale"},
+    {"ids": [6], "text": "A pulse moves the bit register's contents on into the four shift registers, in the way MODE sets"},
+    {"ids": [7], "text": "A pulse shifts the bit register one place along and writes the comparator's current state into the first bit"},
+    {"ids": [8, 9, 10], "text": "A gate switches that bit of the register on and off"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A melody voltage from one of the module's three stages, at the level set by that stage's trimmer"},
+    {"ids": [3], "text": "The melody voltage quantised to a diatonic scale"},
+    {"ids": [4], "text": "The six bits of the register summed at the weights set in the bit mixer"}
+  ],
+  "notes": [
+    "a signal has to be patched to the noise input and a clock to the clock input before any melody appears",
+    "the clock writes one bit into the register each pulse: a one while the signal is above the SENSE level, a zero while it is below",
+    "the four shift registers are filled only by pulses at the ADVANCE input, which is a second clock separate from the one that fills the bit register."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "stepped · one channel only",
+      "10": "stepped · one channel only"
+    },
+    "outputs": {
+      "3": "continuous"
+    }
+  }
+}

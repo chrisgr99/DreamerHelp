@@ -1,0 +1,69 @@
+{
+  "plugin": "FrequencyDomain",
+  "module": "Morphology",
+  "description": "Spectral vocoder: two inputs are analysed into 1024 frequency bands and each band of one is multiplied by a band of the other, with the pairing and the stereo placement drawn on the grids",
+  "params": [
+    {"ids": [1], "text": "Turns inversion on for the first input: every band louder than the threshold is replaced by the loudest band's level minus its own"},
+    {"ids": [2], "text": "Turns inversion on for the second input: every band louder than the threshold is replaced by the loudest band's level minus its own"},
+    {"ids": [3], "text": "Multiplies the BAND SHIFT drawing into a number of bands, -1024 to 1024, so a full-height bar moves that band of the second input that far before it is paired"},
+    {"ids": [4], "text": "Cycles the pin mode for the BAND SHIFT grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [5], "text": "Cycles the pin mode for the PANNING grid: off, hold values below the pin up to it, leave values below the pin alone, hold values above the pin down to it, or leave values above the pin alone"},
+    {"ids": [6], "text": "Sets where the pin lies across the range of the BAND SHIFT grid, 0 to 100%"},
+    {"ids": [7], "text": "Sets where the pin lies across the range of the PANNING grid, 0 to 100%"},
+    {"ids": [8], "text": "Scales every value on the BAND SHIFT grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"},
+    {"ids": [9], "text": "Scales every value on the PANNING grid by the cosine of this angle about the pin, 0 to 180 degrees either way, so half a turn flattens the drawing onto the pin and a whole turn mirrors it"},
+    {"ids": [10], "text": "Sets how loud a band of the first input must be before inversion changes it, 0 to 50; at 0 every band is inverted and the sound becomes very noisy"},
+    {"ids": [11], "text": "Sets how loud a band of the second input must be before inversion changes it, 0 to 50; at 0 every band is inverted and the sound becomes very noisy"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The first signal into the vocoder, whose bands are paired with bands of the second"},
+    {"ids": [1], "text": "The second signal into the vocoder, whose bands are paired with bands of the first"},
+    {"ids": [2], "text": "Adds an offset to every value drawn on the BAND SHIFT grid, 5V covering the whole range"},
+    {"ids": [3], "text": "Slides the BAND SHIFT drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [4], "text": "Adds an offset to every value drawn on the PANNING grid, 5V covering the whole range"},
+    {"ids": [5], "text": "Slides the PANNING drawing up and down the frequency bands, 5V covering the whole height of the grid"},
+    {"ids": [6], "text": "Adds to the band spread, 10V covering the whole -1024 to 1024 range"},
+    {"ids": [7], "text": "Adds to the pin position on the BAND SHIFT grid, 10V covering the whole range"},
+    {"ids": [8], "text": "Adds to the pin position on the PANNING grid, 10V covering the whole range"},
+    {"ids": [9], "text": "Adds to the rotation of the BAND SHIFT grid, 5V being 180 degrees"},
+    {"ids": [10], "text": "Adds to the rotation of the PANNING grid, 5V being 180 degrees"},
+    {"ids": [11], "text": "Adds to the inversion threshold of the first input, 10V covering 0 to 50"},
+    {"ids": [12], "text": "Adds to the inversion threshold of the second input, 10V covering 0 to 50"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the vocoded result, where a band the PANNING grid moves left is up to twice as loud and one moved fully right is silent"},
+    {"ids": [1], "text": "The right channel of the vocoded result, where a band the PANNING grid moves right is up to twice as loud; moving a band left does not quieten it here"}
+  ],
+  "notes": [
+    "each band of the first input is multiplied by a band of the second, so both inputs have to be patched; with one of them empty the outputs stay silent",
+    "a grid is drawn on by dragging across it, and holding shift while dragging keeps the drag on the band it started on, so one band can be set without disturbing its neighbours",
+    "each grid is one display rather than one control per band, so no band can be clicked for a line of its own",
+    "right-clicking a grid opens that grid's own menu rather than the module's, and All Maximum, All Minimum, All Half, Triangle, Sine, Ramp and Random fill the grid with that shape",
+    "a grid's own right-click menu also carries Flip Horizontal, Flip Vertical, Reduce By Half, Shift Left and Shift Right, which rework what is already drawn on it"
+  ],
+  "menu": [
+    "# of Frequency Bands — sets the analysis to 1024, 2048 or 4096 bands",
+    "Window Function — picks the shape each frame is multiplied by before analysis: None, Triangle, Welch, Sine, Hanning, Blackman, Nutall or Kaiser"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "11": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

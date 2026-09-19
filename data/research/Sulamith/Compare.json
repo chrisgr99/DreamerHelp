@@ -1,0 +1,17 @@
+{
+  "plugin": "Sulamith",
+  "module": "Compare",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "sumRange": "±10V", "why": "Compare.cpp Compare::process: clamp(knob + getVoltage(i) * attenuator, -10.f, 10.f) inside the per-channel loop, so each channel of this jack is read against the matching channel of the signal, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"poly": true, "step": "continuous", "why": "Compare.cpp Compare::process: getChannels() on this jack sets all four outputs' channel counts and the loop bound, and getVoltage(i) is read per channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "Compare.cpp Compare::process: setChannels then setVoltage(10.0 or 0.0, i) per channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "Compare.cpp Compare::process: setChannels then setVoltage(10.0 or 0.0, i) per channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "2": {"poly": true, "step": "continuous", "why": "Compare.cpp Compare::process: setChannels then setVoltage of the input's own voltage or 0.0, per channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"},
+      "3": {"poly": true, "step": "continuous", "why": "Compare.cpp Compare::process: setChannels then setVoltage of the input's own voltage or 0.0, per channel, commit 086d8c4, whose plugin.json carries the installed 2.3.2 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The signal input and the two signal outputs carry whatever is patched in, so no family is set for them. The comparison is strictly greater-than, so a channel exactly at the threshold counts as below. Both lamps are written inside the per-channel loop without being combined, so they end each sample showing the state of the highest channel only."
+}

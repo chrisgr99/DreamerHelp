@@ -1,0 +1,55 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Key",
+  "description": "A four-channel quantizer that takes its key as control voltage and hands the same key back out, so one change of root or scale moves every module in the patch that speaks the same convention",
+  "params": [
+    {"ids": [0], "text": "Sets the root of the key, C through B"},
+    {"ids": [1], "text": "Picks the scale, from the shared list of nineteen plus a loaded Scala file"},
+    {"ids": [2, 3, 4, 5], "text": "Shifts that channel's quantized note, -12 to 12; by default that is steps of the scale rather than semitones, so the note stays in key"},
+    {"ids": [6, 7, 8, 9], "text": "Picks which scale that channel quantizes to: the whole scale, or one of the three sub-scales edited on the display"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the root as a volt per octave snapped to semitones, added to the root knob"},
+    {"ids": [1], "text": "Picks the scale, one volt per scale, added to the scale knob; a cable from another Key or Note carries the whole scale over its extra channels rather than only its number"},
+    {"ids": [2], "text": "Turns the module into a sample and hold: with a cable here the quantized notes change only on a rise, and a polyphonic cable gives each channel its own trigger"},
+    {"ids": [3, 4, 5, 6], "text": "The pitch that channel quantizes, a volt per octave and polyphonic to sixteen voices"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That channel's quantized pitch, with its offset applied, on as many channels as its input carries"},
+    {"ids": [8], "text": "The root in force as a volt per octave, for driving another module's root input"},
+    {"ids": [9], "text": "The scale in force: the first channel is the scale number, the second the period in volts, the rest the degrees as offsets from the root, so a microtonal scale travels whole"}
+  ],
+  "notes": [
+    "the three sub-scales are masks over the scale's degree numbers rather than over fixed pitches, so a triad picked in one key stays a triad when the root or the scale changes",
+    "an empty sub-scale falls back to the whole scale rather than falling silent",
+    "the display is the editing surface: clicking a key forks a custom scale of your own, and clicking a sub-scale cell adds or removes that degree; none of it can be reached by clicking for help",
+    "the display shows a keyboard when the scale repeats at the octave and every degree lands on a semitone, and a linear region strip otherwise, whose gaps are the snap regions"
+  ],
+  "menu": [
+    "Load Scala file (.scl)… — reads a Scala tuning file into the last scale slot, leaving the canonical list untouched; the parsed scale is saved into the patch",
+    "Offset in scale degrees — makes the offset knobs count steps of the scale; turning it off makes them count semitones",
+    "Rounding: Nearest, Down, Up — picks which way a pitch falling between two degrees is sent",
+    "Sub-scales may leave the key — lets a sub-scale hold a note outside the scale, stored as semitones from the root so it transposes with the root and stays put when the scale changes",
+    "Hysteresis — sets how far a pitch has to move before the output will change, 12 cents by default, which stops a note on a boundary flickering",
+    "Revert keyboard to the selected scale — throws away a forked custom scale and goes back to the scale the knob names"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "2": "stepped · polyphonic",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "1V per octave · continuous · polyphonic",
+      "6": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "8": "1V per octave · continuous · one channel only",
+      "9": "polyphonic"
+    }
+  }
+}

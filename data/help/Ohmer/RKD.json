@@ -1,0 +1,51 @@
+{
+  "plugin": "Ohmer",
+  "module": "RKD",
+  "description": "A clock divider with eight outputs, each on its own ratio, and a control voltage that rotates which ratio each output carries",
+  "params": [
+    {"ids": [0], "text": "One of the six jumpers on the circuit board; installed, the outputs count down-beat and all eight fire on the first clock pulse. Removed, they count up-beat, each firing after its own count"},
+    {"ids": [1], "text": "One of the six jumpers; installed, the outputs hold a gate that changes state on each count. Removed, they send a short trigger"},
+    {"ids": [2], "text": "One of the six jumpers, and one of the two that set the largest divider between them: with both installed the largest is 8, with both removed 64, and with this one alone removed 32"},
+    {"ids": [3], "text": "One of the six jumpers, and one of the two that set the largest divider between them: with both installed the largest is 8, with both removed 64, and with this one alone removed 16"},
+    {"ids": [4], "text": "One of the six jumpers; installed, the dividers are spread across the whole range the two Max Div jumpers allow instead of bunching at the low end"},
+    {"ids": [5], "text": "One of the six jumpers; installed, the module resets itself every time twice the largest divider has been counted, which brings odd dividers back into step"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A steady voltage from 0V to 5V rotates the table, moving every output onto a different ratio; negative voltages and an unpatched jack count as 0V, and anything above 5V counts as 5V"},
+    {"ids": [1], "text": "A rising edge above 3.5V restarts the count on every output; the jack rearms below 0.2V"},
+    {"ids": [2], "text": "The clock every output divides, counted on a rising edge above 3.5V and rearmed below 0.2V; with nothing patched here all eight displays read two dashes and the lamp by RESET turns red"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "A 5V trigger or gate at the ratio the display beside it shows"}
+  ],
+  "notes": [
+    "the six jumpers are hidden until you tick Access jumpers (located on PCB) in the right-click menu, which turns the panel into a circuit board; the panel shows nothing of them otherwise",
+    "the module does nothing at all until a clock is patched into CLK",
+    "the two-digit display beside each output jack shows that output's current divider and follows the rotation as it changes",
+    "the lamp beside the RESET jack is red when no clock is patched, orange on a reset arriving at the jack, and blue on a reset the module gave itself",
+    "the Max Div and Spread jumpers apply only to the Manufacturer table; the other four tables ignore them",
+    "with Max Div at 8 and Spread installed the largest divider becomes 16 and the eight ratios come out as triplets and sixteenths, 2, 3, 4, 6, 8, 12 and 16",
+    "a BRK expander placed against either side of this module drives these six jumpers from switches, so the circuit board never has to be opened"
+  ],
+  "menu": [
+    "Access jumpers (located on PCB) — swaps the panel for a view of the circuit board, where the six jumpers can be clicked",
+    "Dividers table: Manufacturer, Prime numbers, Perfect squares, Fibonacci sequence, Triplet & 16ths — chooses the eight ratios the outputs start from"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 3.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 3.5V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "0 to 5V · stepped · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "0 to 5V · stepped · one channel only",
+      "4": "0 to 5V · stepped · one channel only",
+      "5": "0 to 5V · stepped · one channel only",
+      "6": "0 to 5V · stepped · one channel only",
+      "7": "0 to 5V · stepped · one channel only"
+    }
+  }
+}

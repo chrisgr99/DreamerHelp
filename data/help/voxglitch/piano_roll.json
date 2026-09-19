@@ -1,0 +1,64 @@
+{
+  "plugin": "voxglitch",
+  "module": "piano_roll",
+  "description": "Piano Roll: an eight-track note sequencer with a piano-roll editor, notes drawn on a pitch against time grid or captured as you play, and a pitch, gate and velocity output per track",
+  "inputs": [
+    {"ids": [0], "text": "Advances the pattern one sixteenth-note step per rising edge, reading high at 2V and low at 0.1V; there is no division here, so feed it sixteenths"},
+    {"ids": [1], "text": "A rising edge returns the pattern to its start and silences every voice"},
+    {"ids": [2], "text": "The pitch recorded into the active track, read as a volt per octave with 0V at C4; a monophonic cable here is used by every channel of the gate input"},
+    {"ids": [3], "text": "The gate that marks out the notes to record: a rising edge starts a note in the active track and the fall ends it, and its channel count sets how many notes can be recorded at once"},
+    {"ids": [4], "text": "The velocity recorded with each note, 0 to 10V, sampled once as that note's gate rises; unpatched, recorded notes take the default velocity"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The pitch of the notes sounding on that track, a volt per octave with 0V at C4, one channel per note sounding at once"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Carries 10V while a note on that track sounds, one channel per note sounding at once; back-to-back notes get a short dip between them so an envelope retriggers"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "The velocity of the notes sounding on that track, 0 to 10V, channel for channel with the pitch and gate; the level holds after the gate falls, so an envelope in its release reads it"}
+  ],
+  "notes": [
+    "a track's channel count is the largest number of its notes that sound at once anywhere in the pattern, so a monophonic line gives one channel and a six-note chord six",
+    "click an empty cell in the grid to paint a note, drag right while painting to set its length, drag a note's body to move it and either end to resize it",
+    "the grid, the piano keys, the ruler, the velocity lane and the control bar across the top are one display widget, so none of the controls in them can be clicked for help",
+    "the control bar carries SNAP, the editing grid; a scale lock; the eight numbered track squares choosing which track is edited; LOCK, which freezes editing; and REC, which arms recording",
+    "recording writes what arrives at the record inputs over the top of the active track, quantised to the sixteenth grid, and captures nothing until a running clock has told it how long a step is",
+    "the amber marker in the ruler is where the pattern wraps; a note starting after it is drawn as an outline and never plays",
+    "click a key in the column at the left to hear that pitch through the active track's outputs, and drag up and down to slide it under one held gate; the pattern is not changed",
+    "with the pointer over the grid, Delete removes the selection, Ctrl+C and Ctrl+V copy and paste, Esc deselects and Ctrl+Z undoes; the clipboard is shared between Piano Roll modules"
+  ],
+  "menu": [
+    "Lock Editor — freezes editing so the pattern cannot be painted, moved, resized, deleted, pasted, imported or recorded into; the same switch as the LOCK button",
+    "Record armed — arms recording, the same switch as the REC button",
+    "Snap: 1/16, 1/8, 1/4, 1/2, Bar, Off — the grid that painting, moving, resizing and pasting land on",
+    "Loop length: 1 bar, 2 bars, 4 bars, 8 bars, 16 bars — where the pattern wraps, the same setting as the marker in the ruler",
+    "Quantize track, or Quantize selection, in the grid's own right-click menu — moves note pitches to the nearest note of a chosen root and scale, leaving their timing alone",
+    "Shift left and Shift right, in the grid's own right-click menu — rotate notes in time by a musical amount, wrapping around the loop",
+    "Select all on track, Delete selection, Delete all on track, in the grid's own right-click menu — act on the active track, leaving the other seven alone",
+    "Import MIDI... and Export MIDI..., in the grid's own right-click menu — read a standard MIDI file over the pattern, quantised to the sixteenth grid, or write the pattern out as one"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "high above 2V · stepped · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the default velocity; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous",
+      "5": "1V per octave · continuous",
+      "6": "1V per octave · continuous",
+      "7": "1V per octave · continuous",
+      "16": "0 to 10V",
+      "17": "0 to 10V",
+      "18": "0 to 10V",
+      "19": "0 to 10V",
+      "20": "0 to 10V",
+      "21": "0 to 10V",
+      "22": "0 to 10V",
+      "23": "0 to 10V"
+    }
+  }
+}

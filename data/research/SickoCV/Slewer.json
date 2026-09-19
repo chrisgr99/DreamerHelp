@@ -1,0 +1,18 @@
+{
+  "plugin": "SickoCV",
+  "module": "Slewer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Slewer.cpp:209 getVoltage() times the attenuverter added to the rise time in seconds, floored at the 1ms minimum at :211-212"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Slewer.cpp:229 getVoltage() times the attenuverter added to the fall time in seconds, floored at the 1ms minimum at :231-232"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Slewer.cpp reads this jack with getVoltage(), scales it by the trimpot and adds it to the curve knob"},
+      "3": {"poly": true, "step": "continuous", "why": "Slewer.cpp:152 and :280 take getChannels() from this jack as the loop bound and read getVoltage(c) inside it"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "Slewer.cpp:155 and :526 setChannels(chan) taken from the signal input, with setVoltage(value, c) per channel"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Slewer.cpp:350 setVoltage(10, c) while rising and :342 setVoltage(0, c) otherwise"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Slewer.cpp:412 setVoltage(10, c) while falling and :344 setVoltage(0, c) otherwise"}
+    }
+  },
+  "comment": "The attack and decay CVs are added as seconds directly, so one volt at a full attenuverter adds one second; the commented-out line beside each (Slewer.cpp:208 and :228) shows a tenth-scaled version the maker dropped. The two gate outputs are printed ATT and DEC on the panel, the same words as the two time knobs. The IN and OUT jacks carry whatever is patched, so they get no family."
+}

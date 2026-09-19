@@ -1,0 +1,24 @@
+{
+  "plugin": "forsitan",
+  "module": "perge",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/perge.cpp:602, the voltage is scaled by 0.2 so ±5V is full scale"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "normal": "the left input", "why": "src/perge.cpp:602-604, the right side reads getVoltage() times 0.2 only while a cable is in and otherwise takes the already-scaled left sample"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/perge.cpp:525, the voltage times 0.2 is added to a knob spanning -1 to 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/perge.cpp:528, the voltage times 0.1 is added to a knob spanning 0 to 1"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/perge.cpp:530, the voltage times 0.2 is added to a knob spanning -1 to 1"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/perge.cpp:532, the voltage times 0.2 is added to a knob spanning -1 to 1"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/perge.cpp:696 and 704, clockTrigger.process(getVoltage(), 0.1f, 1.f) times the edges, and the tempo follows the measured period only while a cable is in"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/perge.cpp:619, high is 1V or more, read as a level"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/perge.cpp:627, high is 1V or more, read as a level"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "src/perge.cpp:562, the voltage times 0.1 is added to a knob spanning 0 to 1"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/perge.cpp:646-652, capGateTrigger.process(getVoltage(), 0.1f, 1.f) starts a capture on the rising edge, isHigh() holds it open whatever the level does, and the falling edge commits it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "normal": "sums both sides when the right jack is empty", "why": "src/perge.cpp:925-930, the signal is clamped to ±2 and multiplied by 5"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "src/perge.cpp:925 and 931, the signal is clamped to ±2 and multiplied by 5"}
+    }
+  },
+  "comment": "The threshold knob is scaled so that its display reads volts directly, 25mV to 5V, and it starts at playing level rather than at zero. The attack and release knobs are square-law, so the short times are reachable. The repeats run on a pool of sixteen voices; a fast clock with a long release steals the voice nearest the end of its envelope, with a short fade to stop the click. Freeze latches, tilt is momentary, and both have a gate jack that does the same job. Only the left output sums; patching both keeps them separate. configBypass passes each input to the output on its side. The module is a from-scratch homage to the AC noises CONTINUA pedal, rebuilt from that pedal's public documentation rather than from a schematic. The panel prints perge, mix, tempo, pitch, sustain, glt/dim, lofi/crs, rvrb/smr, lp/hp, sens, thrs, atk, rel, mod, dcay, sprd, infx, tempo, pitch, sust, glit, filt, in l, in r, capt, clock, frz, tilt, mode, L and R."
+}

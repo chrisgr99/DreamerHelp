@@ -1,0 +1,26 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Fluctus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "fluctus.cpp:302 tests this input against 1V with getVoltage() and ORs the result with the freeze button"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:221 reads this input with getVoltage(), fluctus.cpp:280 divides it by 5 and adds the slider, and fluctus.cpp:290 clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:222 reads this input with getVoltage(), fluctus.cpp:280 divides it by 5 and adds the slider, and fluctus.cpp:290 clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:223 reads this input with getVoltage(), fluctus.cpp:280 divides it by 5 and adds the slider, and fluctus.cpp:290 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:224 reads this input with getVoltage(), fluctus.cpp:280 divides it by 5 and adds the slider, and fluctus.cpp:290 clamps the total to 0..1"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "fluctus.cpp:303 adds this input to the pitch knob, multiplies by 12 and clamps the result to ±48 semitones; fluctus.cpp:309 reads the same input a second time, divided by 5, as the beat repeater's playback speed"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "fluctus.cpp:215 tests this input against 1V with getVoltage() alone"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:260 reads this input with getVoltage(), fluctus.cpp:265 divides it by 5, fluctus.cpp:267 adds the knob and fluctus.cpp:272 clamps the total to 0..1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:261 reads this input with getVoltage(), fluctus.cpp:265 divides it by 5, fluctus.cpp:268 adds the knob and fluctus.cpp:272 clamps the total to 0..1"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:262 reads this input with getVoltage(), fluctus.cpp:265 divides it by 5, fluctus.cpp:269 adds the knob and fluctus.cpp:272 clamps the total to 0..1"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "fluctus.cpp:263 reads this input with getVoltage(), fluctus.cpp:265 divides it by 5, fluctus.cpp:270 adds the knob and fluctus.cpp:272 clamps the total to 0..1"},
+      "11": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "fluctus.cpp:208 reads this input with getVoltageSum(), which folds every channel into one, and divides it by 5 through the input gain knob"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "the left input", "why": "fluctus.cpp:209 reads this input with getVoltageSum() when it is connected and substitutes the left channel's sample when it is not"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "fluctus.cpp:354 multiplies the processor's sample by 5"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "fluctus.cpp:358 multiplies the processor's sample by 5"}
+    }
+  },
+  "comment": "The DSP is the Kammerl Kaske alternative firmware for Clouds, vendored at alt_firmware/kammerl, in the Monsoon layout; src/fluctus.cpp is the Rack wrapper, resampling to the hardware's 32kHz. It replaces Nebulae's spectral mode with spectral clouds, a banded filter with randomly modulated bands, and adds the Kammerl beat repeater; in that last mode the four right-hand knobs and the pitch control are all re-read as slice probability, clock divider, pitch modulation, feedback and playback speed. The pitch jack is read twice: as one volt per octave at fluctus.cpp:303, and again at fluctus.cpp:309, divided by 5 and clamped to 0..1, as the beat repeater's playback speed; the source carries a TODO there saying the firmware subtracts 0.5 from the incoming voltage and the wrapper does not. Every jack is read with getVoltage() or getVoltageSum(), so nothing here is polyphonic, and the right audio input is normalled to the left at fluctus.cpp:209. The freeze gate and the trigger both read high at 1V. The hardware's ability to save and load the audio buffer is not implemented."
+}

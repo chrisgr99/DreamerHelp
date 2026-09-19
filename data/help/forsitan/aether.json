@@ -1,0 +1,60 @@
+{
+  "plugin": "forsitan",
+  "module": "aether",
+  "description": "A transmission line with something wrong with it: the signal becomes a pulse train on one clock and is recovered by a phase-locked loop on another, and the disagreement is the sound",
+  "params": [
+    {"ids": [0], "text": "Attenuates the signal at the in jack, 0% to 100%; with nothing patched there it attenuates a +5V bias instead, which is what makes the module oscillate on its own"},
+    {"ids": [1], "text": "Sets the transmitting clock, 20Hz to 328000Hz, fourteen octaves, with 2500Hz at noon"},
+    {"ids": [2], "text": "Attenuates the voltage at the carrier CV jack beside it, 0% to 100%"},
+    {"ids": [3], "text": "Sets the receiving clock over the same fourteen octaves"},
+    {"ids": [4], "text": "Attenuates the voltage at the demodulator CV jack beside it, 0% to 100%"},
+    {"ids": [5], "text": "Sets the threshold the comparator on the error output works to, ±5V"},
+    {"ids": [6], "text": "Sets one passive filter pole, 60Hz to 12000Hz; it is both inside the loop and on the output, so it is as much a tracking control as a tone control"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the tone CV jack, so the same volts can darken instead of brighten"},
+    {"ids": [8], "text": "Chooses which phase comparator the loop runs on: an exclusive-or, which locks to harmonics, a phase-frequency detector, which is quiet when unlocked, or a set-reset latch"},
+    {"ids": [9], "text": "Crossfades the out jack between the signal coming in and the recovered one, wet by default"},
+    {"ids": [10], "text": "Crossfades the error jack between the signal coming in and the comparator's output, wet by default"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to transmit; with nothing patched here the module runs on a +5V bias instead"},
+    {"ids": [1], "text": "Moves the carrier clock through the attenuator beside it, one volt per octave with it fully open; unpatched, the signal itself is fed to it and that attenuator becomes a modulation depth"},
+    {"ids": [2], "text": "A signal whose zero crossings replace the carrier's own clock; while it is patched the carrier CV jack does nothing"},
+    {"ids": [3], "text": "Moves the demodulator clock through the attenuator beside it, one volt per octave with it fully open; with nothing patched here the signal itself is fed to it"},
+    {"ids": [4], "text": "A signal whose zero crossings replace the demodulator's own clock; while it is patched the demodulator CV jack does nothing"},
+    {"ids": [5], "text": "Moves the tone through the trimmer beside it, one volt per octave with it fully open, held inside the knob's own 60Hz to 12000Hz span"},
+    {"ids": [6], "text": "Sets the out jack's dry-wet crossfade, 0V dry to 10V wet, with the trimmer beside it acting as its attenuator"},
+    {"ids": [7], "text": "Sets the error jack's dry-wet crossfade, 0V dry to 10V wet, with the trimmer beside it acting as its attenuator"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The recovered signal"},
+    {"ids": [1], "text": "A comparator across the signal going in and the one coming out"},
+    {"ids": [2], "text": "The carrier clock as a wide-range square; it is not one volt per octave"},
+    {"ids": [3], "text": "The demodulator clock as a wide-range square; it is not one volt per octave"}
+  ],
+  "notes": [
+    "with nothing patched into the in jack the module is an oscillator rather than an effect: the level knob attenuates a fixed +5V bias and the two clocks beat against each other.",
+    "the two clock outputs keep running while something is patched into the clock inputs beside them. The external clock takes over the converter's ticks, not the oscillator.",
+    "the maker records that no schematic of the original is public and that the module was rebuilt from published descriptions of its parts, so the figures here are this module's own."
+  ],
+  "menu": [
+    "Oversampling — 1× (rawest, lightest), 2×, 4× (default), 8× or 16× (cleanest)"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads a fixed +5V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads the signal itself.",
+      "2": "bipolar · stepped · one channel only",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads the signal itself.",
+      "4": "bipolar · stepped · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "stepped · one channel only",
+      "3": "stepped"
+    }
+  }
+}

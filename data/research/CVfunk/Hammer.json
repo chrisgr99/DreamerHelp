@@ -1,0 +1,27 @@
+{
+  "plugin": "CVfunk",
+  "module": "Hammer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Hammer.cpp:330 reads it with getVoltage, so only channel 1, and scales it by 10 BPM per volt through the attenuverter; Hammer.cpp:325 reads it as a volt per octave instead when Clock CV as V/oct is on"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Hammer.cpp:268 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter before it is turned into a whole number of channels of rotation"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "Hammer.cpp:280 reads it with getVoltage, so only channel 1, into a Schmitt trigger and measures the time between rises; Hammer.cpp:284 also tests it against the three chaining levels"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "Hammer.cpp:361 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "Hammer.cpp:391 reads it with getVoltage, so only channel 1, into a Schmitt trigger"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Hammer.cpp:560 writes one channel with setVoltage, 10V or 0V, or a 0-10V ramp at Hammer.cpp:546 in phasor mode"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Hammer.cpp:560 writes one channel with setVoltage, 10V or 0V, or a 0-10V ramp at Hammer.cpp:546 in phasor mode"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "trigger"},
+      "9": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Hammer.cpp:446 sets sixteen channels on this output and Hammer.cpp:562 writes the eight upright gates and their eight inverses into them"},
+      "10": {"poly": false, "range": "0 to 10V", "why": "Hammer.cpp:604 writes one channel with setVoltage, 5V on a beat and 10.42V, 10.69V or 10.86V for the three chaining messages"}
+    }
+  },
+  "comment": "The multipliers and divisors are module state rather than parameters (Hammer.cpp:75), so they are not reset or randomized by Rack's own commands but by the module's own handlers, which set every ratio to one on a reset and draw a multiplier of 0 to 12 and a divisor of 1 to 9 on a randomize (Hammer.cpp:236). Each channel reads the ratio at its rotated position (Hammer.cpp:527), so a button at one row can be driving another row's output once ROTATE is turned. A channel whose multiplier is 0 holds its output at 0V (Hammer.cpp:566)."
+}

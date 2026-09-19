@@ -1,0 +1,50 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Arp32",
+  "description": "Arpeggiator that builds a pattern of intervals around one root pitch, one note per clock",
+  "params": [
+    {"ids": [0], "text": "Chooses the shape of the pattern: Diverge, Converge, Return, Bounce, Rez or On The Run, and the chosen name is shown on the display"},
+    {"ids": [1], "text": "Sets how many steps the pattern runs for, 1 to 16"},
+    {"ids": [2], "text": "Sets the size of each step, -24 to 24; a positive value raises the pitch step by step and a negative value lowers it"},
+    {"ids": [3], "text": "Chooses what one step means: a semitone, a step of the major scale or a step of the minor scale"},
+    {"ids": [4], "text": "Sets how many steps into the pattern playing starts, 0 to 10"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge moves the pattern on to its next note, and the module plays nothing until something is patched here"},
+    {"ids": [1], "text": "The 1V/octave root pitch the pattern is measured from, read at the start of each pass; with nothing patched 0V is used"},
+    {"ids": [2], "text": "A voltage here chooses the shape of the pattern, in place of the PATT knob; whole volts from 0V to 5V pick the six shapes"},
+    {"ids": [3], "text": "A voltage here sets how many steps the pattern runs for, in place of the LEN knob; whole volts from 1V to 16V"},
+    {"ids": [4], "text": "A voltage here sets the size of each step, in place of the STEPS knob; whole volts from -24V to 24V"},
+    {"ids": [5], "text": "A positive voltage holds the pattern as it is and blocks changes to it, while randomisation triggers are accepted; a negative voltage blocks randomisation as well"},
+    {"ids": [6], "text": "A trigger swaps two notes of the running pattern with each other, either of which may already have been played"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The 1V/octave pitch of the note being played, clamped to -10V to 10V"},
+    {"ids": [1], "text": "Carries 10V on each note of the pattern, as a 1ms trigger, a retrigger or a continuous gate according to the menu"},
+    {"ids": [2], "text": "A 1ms trigger on the clock edge that follows the last note of the pattern"}
+  ],
+  "notes": [
+    "the module has no clock of its own, so nothing plays until a clock is patched into CLOCK.",
+    "the display reads the pattern name, then in brackets the length in steps, the step size with st for semitones, M for major-scale steps or m for minor-scale steps, and the start offset."
+  ],
+  "menu": [
+    "Gate Mode — what the GATE output carries: Trigger, a 1ms trigger on each note; Retrigger, a gate dropping low for 1ms between notes; Continuous, a gate held high while the pattern runs",
+    "Play last note in cyclical patterns — Play last note sounds the note at the turn of a Return pattern twice; Omit last note leaves that repeat out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "1 to 16V · stepped · one channel only",
+      "4": "±24V · stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

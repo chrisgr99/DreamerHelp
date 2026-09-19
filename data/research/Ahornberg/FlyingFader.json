@@ -1,0 +1,15 @@
+{
+  "plugin": "Ahornberg",
+  "module": "FlyingFader",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "FlyingFader.cpp process() takes getChannels() from this jack and loops setVoltageSimd over them unless the poly mode is Poly In - Mono Out"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the fader stays where it is put", "why": "process() multiplies the stored fader value by getVoltage() * 0.1 and clamps the result to 0 and PLUS_6_DB, so a negative voltage drives it to silence"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "setChannels(channels) from the audio input's channel count in FlyingFader.cpp"},
+      "1": {"family": "cv", "poly": false, "why": "setVoltage with no channel argument in FlyingFader.cpp"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3a9441f and manuals/README.md. PLUS_6_DB is 1.41253757 in src/util/Knobs.hpp, and the audio gain is the square of the fader value, which is why the parameter displays as 40 times the base-ten logarithm of its position. The MindMeld law is pow(value * 22.3606765, 1 / 1.5). When the CV input goes from unpatched to patched the module divides the fader value it had by the incoming voltage over ten and keeps that as the reference, which is what makes 10V hold the fader still. Four of this module's five parameters are internal state with no widget and cannot be clicked."
+}

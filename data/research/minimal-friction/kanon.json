@@ -1,0 +1,16 @@
+{
+  "plugin": "minimal-friction",
+  "module": "kanon",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/kanon.cpp process() reads inputs[VOCT_INPUT].getVoltage() only, and adds it to the knob pitch through volt2freq"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/kanon.cpp process() ends with setVoltage(5.f * waveshape(phase)) and never sets a channel count"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/kanon.cpp process() ends with setVoltage(5.f * waveshape(phase)) and never sets a channel count"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "src/kanon.cpp process() ends with setVoltage(5.f * waveshape(phase)) and never sets a channel count"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/kanon.cpp process() ends with setVoltage(5.f * waveshape(phase)) and never sets a channel count"}
+    }
+  },
+  "comment": "A second input is declared in the source as FINE_INPUT, but it is never configured, never read and has no jack on the panel, so it gets no line and no tag. The plugin manifest tags the module Polyphonic and calls it a polyphonic oscillator; the four voices are four mono jacks and no polyphonic cable is produced or read. The assignment test in process() compares the input to the previous frame's voltage, which is why a moving input assigns nothing."
+}

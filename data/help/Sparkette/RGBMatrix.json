@@ -1,0 +1,54 @@
+{
+  "plugin": "Sparkette",
+  "module": "RGBMatrix",
+  "description": "A 32 by 32 grid of coloured lamps that paints itself one pixel at a time, reading the red, green and blue jacks at each pixel in turn and reporting the position it has reached on the X and Y outputs",
+  "params": [
+    {"ids": [0], "text": "Sets the range of the X output: unipolar runs 0V to 10V across the width of the grid, bipolar runs -5V to 5V"},
+    {"ids": [1], "text": "Sets the range of the Y output: unipolar runs 0V to 10V down the height of the grid, bipolar runs -5V to 5V"},
+    {"ids": [2], "text": "Sets how many samples the scan spends on each pixel before moving on, 1 to 30, so a whole frame takes that many samples times 1024 pixels"},
+    {"ids": [3], "text": "Scales the red input before the red offset is added, -1 to 1; at 1 a 10V signal gives full red"},
+    {"ids": [4], "text": "Sets the red of every pixel on its own while nothing is patched to the red jack, and is added to that jack when something is; 0 for none and 1 for full"},
+    {"ids": [5], "text": "Scales the green input before the green offset is added, -1 to 1; at 1 a 10V signal gives full green"},
+    {"ids": [6], "text": "Sets the green of every pixel on its own while nothing is patched to the green jack, and is added to that jack when something is; 0 for none and 1 for full"},
+    {"ids": [7], "text": "Scales the blue input before the blue offset is added, -1 to 1; at 1 a 10V signal gives full blue"},
+    {"ids": [8], "text": "Sets the blue of every pixel on its own while nothing is patched to the blue jack, and is added to that jack when something is; 0 for none and 1 for full"},
+    {"ids": [9], "text": "Starts a new frame while a cable is patched to the trigger jack; with that jack empty a new frame begins on its own as soon as the last one ends and this button changes nothing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the red of the pixel the scan has reached, through the red scale and offset knobs"},
+    {"ids": [1], "text": "Sets the green of the pixel the scan has reached, through the green scale and offset knobs"},
+    {"ids": [2], "text": "Sets the blue of the pixel the scan has reached, through the blue scale and offset knobs"},
+    {"ids": [3], "text": "Starts a new frame on each rising edge above 1V; with this jack empty a new frame begins on its own as soon as the last one ends"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The horizontal position of the pixel being painted, a staircase of 32 steps across the width of the grid"},
+    {"ids": [1], "text": "A square wave that rises for the first half of the samples spent on each pixel and falls for the second half; with the sample knob at 1 it alternates from one pixel to the next instead"},
+    {"ids": [2], "text": "The vertical position of the pixel being painted, a staircase of 32 steps down the height of the grid"},
+    {"ids": [3], "text": "10V while the scan is in the left half of a row and 0V while it is in the right half, which gives one cycle per row"},
+    {"ids": [4], "text": "10V while the scan is on the last pixel of a frame and 0V for the rest of the frame"}
+  ],
+  "notes": [
+    "the grid stays black until something is patched to the red, green or blue jacks or one of the offset knobs is turned up; the scan itself runs whether or not anything is patched",
+    "the lamp is red while no frame is being painted, flashes green as each frame starts, and carries blue while polyphonic mode is on"
+  ],
+  "menu": [
+    "Polyphonic mode — paints sixteen pixels at once, taking one from each channel of the red, green and blue jacks, and gives the X and Y outputs sixteen channels",
+    "Double-buffered — holds a new frame back until it is complete, so the grid changes all at once instead of being painted across",
+    "Fade lights — lets each lamp slide towards its new colour instead of jumping to it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the red offset knob.",
+      "1": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the green offset knob.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the blue offset knob.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads a frame starts by itself; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "plugin": "BlushAudio",
+  "module": "BuffMix",
+  "description": "A mixer in two banks of three whose routing changes with which outputs are patched, dividing the sum by the number of patched inputs",
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "One of the three inputs summed into OUTPUT 1 whenever OUTPUT 1 is patched, and into OUTPUT 2 when OUTPUT 1 is empty"},
+    {"ids": [3, 4, 5], "text": "One of the three inputs summed into OUTPUT 2, and dropped entirely when OUTPUT 1 is patched and OUTPUT 2 is not"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "INPUT 1, INPUT 2 and INPUT 3 summed and divided by the number of patched inputs"},
+    {"ids": [1], "text": "INPUT 4, INPUT 5 and INPUT 6 summed while OUTPUT 1 is patched, or all six inputs summed while it is empty, divided by the number of patched inputs"}
+  ],
+  "notes": [
+    "what is mixed depends on which outputs are patched: OUTPUT 2 alone takes all six inputs, OUTPUT 1 alone takes inputs 1 to 3 and drops the rest, and with both patched the two banks stay apart",
+    "the sum is divided by the number of patched inputs, so patching another cable makes every input already there quieter",
+    "with both outputs patched the divisor counts only the cables in INPUT 1 to INPUT 3 but is applied to both outputs, so INPUT 4 to INPUT 6 are scaled by a count that has nothing to do with them",
+    "with both outputs patched the polyphonic channel count is read only from INPUT 4 to INPUT 6, so a polyphonic cable in INPUT 1 to INPUT 3 is cut down to however many channels the lower bank has",
+    "the jacks are not specific to any one signal; audio, gates and slow control voltages all sum alike"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

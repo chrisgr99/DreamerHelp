@@ -1,0 +1,49 @@
+{
+  "plugin": "moDllz",
+  "module": "MIDIpolyMPE",
+  "description": "Turns incoming MIDI into polyphonic pitch, gate and velocity, with eight assignable controller outputs and a full MPE mode",
+  "params": [
+    {"ids": [0], "text": "Steps the selected display field down by one"},
+    {"ids": [1], "text": "Steps the selected display field up by one"},
+    {"ids": [2], "text": "Holds notes on for as long as the sustain pedal controller is down, instead of ending them when the key is released"},
+    {"ids": [3], "text": "Chooses when the gate is dropped briefly to retrigger an envelope: on the first note of a phrase only, on every note, or on every note including those recovered from the held stack"},
+    {"ids": [4], "text": "Changes the value of whichever field is selected on the displays"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note pitch at 1V per octave, with transpose and the master pitch bend already folded in, one poly channel per voice"},
+    {"ids": [1], "text": "In the polyphonic modes, a second copy of the pitch offset by the random detune amount; in the MPE modes it carries the MPE Y axis controller instead"},
+    {"ids": [2], "text": "The per-note aftertouch of that voice in the polyphonic modes, and the MPE pressure axis in the MPE modes, 0V to 10V"},
+    {"ids": [3], "text": "The note-on velocity of that voice, 0V to 10V"},
+    {"ids": [4], "text": "The note-off velocity of that voice, 0V to 10V; in the MPE modes it can be switched to carry that voice's own pitch bend"},
+    {"ids": [5], "text": "10V while that voice is sounding, dropping for a millisecond when a note retriggers"},
+    {"ids": [6], "text": "The pitch bend of the master channel, -5V at the bottom of the wheel and +5V at the top, on one channel; the same bend is already applied to the pitch output"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13, 14], "text": "Whichever MIDI controller the display above it is set to, as 0V to 10V, smoothed"}
+  ],
+  "notes": [
+    "Nothing comes out until a MIDI device is chosen: click the display at the top of the panel to pick a driver, a device and a channel",
+    "There is no right-click menu. Every setting is a field on the panel's displays: click one to select it, then turn the data knob or press the minus and plus buttons",
+    "Those fields cover the polyphony mode and voice count, the note and velocity ranges, the two pitch bend spans, detune, transpose, and which controller each of the eight outputs follows",
+    "A controller field can also learn: click it, then move a control on the MIDI device and the field takes that controller number",
+    "The pitch, second pitch, aftertouch, velocity, release velocity and gate jacks are poly cables whose channel count follows the voice setting; the other jacks are single channel",
+    "An Xpand module anywhere in the patch carries the voices above this module's own count, or a duplicate set of outputs, once the xpander field is set to its letter"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · polyphonic",
+      "4": "0 to 10V · polyphonic",
+      "5": "0 to 10V · polyphonic",
+      "6": "±5V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · one channel only",
+      "9": "0 to 10V · one channel only",
+      "10": "0 to 10V · one channel only",
+      "11": "0 to 10V · one channel only",
+      "12": "0 to 10V · one channel only",
+      "13": "0 to 10V · one channel only",
+      "14": "0 to 10V · one channel only"
+    }
+  }
+}

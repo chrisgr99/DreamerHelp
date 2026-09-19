@@ -1,0 +1,22 @@
+{
+  "plugin": "forsitan",
+  "module": "scando",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/scando.cpp:188-190, the voltage is added to the frequency and fine parameters, which are in volts"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/scando.cpp:164, exciteTrigger.process(getVoltage(), 0.1f, 1.f)"},
+      "2": {"family": "audio", "poly": false, "range": "±10V", "why": "src/scando.cpp:170-171, getVoltage() scaled by 0.1 and then by the in lvl knob"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 138, knobCV() adds getVoltage() times 0.2 to the 0..1 mass knob and clamps, so ±5V covers the whole travel"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 139, knobCV() adds getVoltage() times 0.2 to the 0..1 stiffness knob and clamps, so ±5V covers the whole travel"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 140, knobCV() adds getVoltage() times 0.2 to the 0..1 damping knob and clamps, so ±5V covers the whole travel"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 141, knobCV() adds getVoltage() times 0.2 to the 0..1 centering knob and clamps, so ±5V covers the whole travel"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 142, knobCV() adds getVoltage() times 0.2 to the 0..1 shape knob and clamps, so ±5V covers the whole travel"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 143, knobCV() adds getVoltage() times 0.2 to the 0..1 strength knob and clamps, so ±5V covers the whole travel"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/scando.cpp:127-132 and 144, knobCV() adds getVoltage() times 0.2 to the 0..1 update rate knob and clamps, so ±5V covers the whole travel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/scando.cpp:198, the scanned value multiplied by 5 after the limiter"}
+    }
+  },
+  "comment": "Seven of the ten knobs share one helper, knobCV, which adds a fifth of the jack's voltage to the knob and clamps to 0..1, so ±5V covers the whole knob (src/scando.cpp:125-131). The in lvl knob has no jack of its own. The update rate is 500Hz times 16 raised to the knob, which is 500Hz to 8000Hz. Damping runs from 0.006 down to -0.0008, so the top of the knob feeds a little energy back in rather than removing it, which is why it approaches self-oscillation. A faint broadband noise rides along with strength only, so the string is exactly silent when strength is at zero. The technique is credited to Verplank, Mathews and Shaw at Interval Research, 1998 to 2000. The panel prints scando, fine, freq, shape, mass, stiff, strength, center, damp, rate, in lvl, excite, exc, inj, and the seven CV jack names, with v/oct and out at the bottom."
+}

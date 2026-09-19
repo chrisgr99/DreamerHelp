@@ -1,0 +1,13 @@
+{
+  "plugin": "Ahornberg",
+  "module": "MIDIController",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "normal": "nothing; the jack is never read", "why": "MIDIController.cpp process() contains no reference to inputs at all"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "cvData is clamped to 0 and 10 in MIDIController.cpp before setVoltage, with no channel argument"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 3a9441f. The Test input is proved dead: the word inputs does not appear in MIDIController.cpp outside the enum and configInput. The knob named Test Parameter is written from every incoming controller but is only read back for controller 10. The voltage moves by the Adjust Movement knob times 250 divided by the number of frames since the last message for that controller, so the faster the encoder is turned the further it goes. After 5000 frames with no message the module sends the controller's value back out as a control change of the voltage times 12.7. The module has no entry in the maker's manual."
+}

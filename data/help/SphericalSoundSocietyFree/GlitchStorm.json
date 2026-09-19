@@ -1,0 +1,51 @@
+{
+  "plugin": "SphericalSoundSocietyFree",
+  "module": "GlitchStorm",
+  "description": "A bytebeat oscillator: a counter is driven at an audio rate through one of 21 short integer equations, and the byte that falls out of the equation is the waveform",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the counter advances, from 3072Hz to 44100Hz"},
+    {"ids": [1], "text": "Picks which of the 21 equations runs, numbered 0 to 20, and snaps to whole numbers"},
+    {"ids": [2], "text": "Sets A, one of three whole numbers from 0 to 15 that the running equation uses in its shifts and masks"},
+    {"ids": [3], "text": "Sets B, one of three whole numbers from 0 to 15 that the running equation uses in its shifts and masks"},
+    {"ids": [4], "text": "Sets C, one of three whole numbers from 0 to 15 that the running equation uses in its shifts and masks"},
+    {"ids": [5], "text": "Scales the voltage at the A CV jack, -100% to +100%, before it is added to the A knob; at the centre that jack changes nothing"},
+    {"ids": [6], "text": "Scales the voltage at the B CV jack, -100% to +100%, before it is added to the B knob; at the centre that jack changes nothing"},
+    {"ids": [7], "text": "Scales the voltage at the C CV jack, -100% to +100%, before it is added to the C knob; at the centre that jack changes nothing"},
+    {"ids": [8], "text": "Reads the equation's byte as a phase and gives a sine at that phase; switched off, the byte itself is the waveform and the output is stepped"},
+    {"ids": [9], "text": "Switches on the drawing of the mono output in the black display; with it off the display stays empty"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates A through its attenuverter; at a full attenuverter 10V adds 15, and the total with the knob is held between 0 and 15"},
+    {"ids": [1], "text": "Modulates B through its attenuverter; at a full attenuverter 10V adds 15, and the total with the knob is held between 0 and 15"},
+    {"ids": [2], "text": "Modulates C through its attenuverter; at a full attenuverter 10V adds 15, and the total with the knob is held between 0 and 15"},
+    {"ids": [3], "text": "Adds to the PROGRAM knob, 10V moving the whole span of 21 equations, and the total is held between 0 and 20"},
+    {"ids": [4], "text": "Sets the counter rate on its own, 0V giving 3072Hz and 10V giving 44100Hz; while a cable is patched here the RATE knob changes nothing"},
+    {"ids": [7], "text": "Holds the counter at zero for as long as the voltage here stays above 1V, so the equation restarts from the beginning when that voltage falls"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The equation's output as audio, swinging from -15V to +5V rather than around zero"},
+    {"ids": [1], "text": "Carries the mono signal at full level while the equation's byte is in the lower half of its range, fading to silence as the byte climbs to the top"},
+    {"ids": [2], "text": "Carries the mono signal at full level while the equation's byte is in the upper half of its range, fading to silence as the byte falls to the bottom"},
+    {"ids": [3], "text": "Goes to 10V for one step of the counter each time the counter reaches a multiple of 1024, and rests at 0V in between"}
+  ],
+  "notes": [
+    "a gold arc drawn around PROGRAM, RATE or one of the three number knobs shows how far the voltage at that knob's jack has moved the value away from the knob's own setting",
+    "the module sounds as soon as it is placed, because the counter free-runs at the rate set by RATE with nothing patched"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "-15 to 5V · continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

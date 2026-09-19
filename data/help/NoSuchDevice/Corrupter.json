@@ -1,0 +1,76 @@
+{
+  "plugin": "NoSuchDevice",
+  "module": "Corrupter",
+  "description": "A stereo buffer holding the last 30 seconds of what was played into it, replaying a slice of that over and over while mangling it with rate jumps, chopping and a choice of five kinds of damage",
+  "params": [
+    {"ids": [0], "text": "Sets how long a slice of the buffer is replayed, 12.5ms at the far left to 16 seconds at the far right; with a cable at CLOCK it divides or multiplies that clock instead"},
+    {"ids": [1], "text": "Divides the slice into equal subsections, one at the far left rising to 32 at the far right; the chosen subsection loops until the next clock tick, so a high setting gives a short stuttering loop"},
+    {"ids": [2], "text": "Crossfades the dry input against the replayed buffer, equal power, dry at the far left and fully replayed at the far right; a freshly placed module arrives fully replayed"},
+    {"ids": [3], "text": "Sets the amount of rate mangling: in macro mode how wide the random jump taken at each clock tick is, as much as three octaves; in micro mode the rate itself, centre normal speed"},
+    {"ids": [4], "text": "Sets the amount of chopping: in macro mode how far the subsection and its subdivision are randomised at each tick and how much of each loop falls silent; in micro mode it picks the subsection"},
+    {"ids": [5], "text": "Sets how hard the chosen damage algorithm is applied to the replay, untouched at the far left and full at the far right"},
+    {"ids": [6], "text": "Scales the voltage at the BEND CV jack before it reaches the BEND setting, from none of it to all of it; a freshly placed module arrives at full"},
+    {"ids": [7], "text": "Scales the voltage at the BREAK CV jack before it reaches the BREAK setting, from none of it to all of it; a freshly placed module arrives at full"},
+    {"ids": [8], "text": "Scales the voltage at the CORRUPT CV jack before it reaches the CORRUPT setting, from none of it to all of it; a freshly placed module arrives at full"},
+    {"ids": [9], "text": "Sets the raised-cosine fade at each end of a loop, from a fiftieth of the subsection at the far left to half of it at the far right, never shorter than 16 samples"},
+    {"ids": [10], "text": "Switches the rate mangling on and off; unlit in macro mode, playback runs forwards at normal speed whatever the BEND knob is set to. A freshly placed module has it unlit"},
+    {"ids": [11], "text": "Switches the chopping on and off while MODE is macro; in micro mode the BREAK knob picks a subsection whether this is lit or not. A freshly placed module has it unlit"},
+    {"ids": [12], "text": "Stops the buffer being written, so the replay keeps circling the audio already captured; the write fades out over 128 samples rather than cutting. A freshly placed module has it unlit"},
+    {"ids": [13], "text": "Switches between macro, where every clock tick re-randomises rate, direction and chopping, and micro, where BEND and BREAK set those directly; the lamp below is green for macro and red for micro"},
+    {"ids": [14], "text": "Steps through the five damage algorithms in turn, DECIMATE, DROPOUT, DESTROY, DJ FILTER and VINYL SIM, and the display prints the name of the one in use"},
+    {"ids": [16], "text": "Switches the BREAK knob in micro mode from choosing which subsection plays to setting how much of the loop is silenced, as much as nine tenths of it; it changes nothing while MODE is macro"},
+    {"ids": [17], "text": "Gives the right channel its own random rate, direction and chopping instead of copying the left; it changes nothing while MODE is micro, and a freshly placed module has it unlit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, scaled so that 5V is full level into the buffer"},
+    {"ids": [1], "text": "The right audio input; with nothing patched here the left input feeds both channels of the buffer"},
+    {"ids": [2], "text": "Shifts the TIME setting, 5V covering the knob's whole travel and the total clamped to that travel; no attenuator stands between this jack and the knob"},
+    {"ids": [3], "text": "Shifts the REPEATS setting, 5V covering the knob's whole travel and the total clamped to that travel; no attenuator stands between this jack and the knob"},
+    {"ids": [4], "text": "Shifts the MIX setting, 5V covering the knob's whole travel and the total clamped to that travel; no attenuator stands between this jack and the knob"},
+    {"ids": [5], "text": "Shifts the BEND setting through its own attenuator: 5V covers the knob's whole travel in macro mode, and in micro mode the voltage is read as 1V per octave of playback rate"},
+    {"ids": [6], "text": "Shifts the BREAK setting through its own attenuator, 5V covering the knob's whole travel and the total clamped to that travel"},
+    {"ids": [7], "text": "Shifts the CORRUPT setting through its own attenuator, 5V covering the knob's whole travel; any voltage other than zero here also switches the damage stage on with the knob at the far left"},
+    {"ids": [8], "text": "Switches the rate mangling from outside: by default a rising edge past 0.4V flips it on or off, and with Gate Mode set to Momentary it is on only while the gate is high"},
+    {"ids": [9], "text": "Switches the chopping from outside: by default a rising edge past 0.4V flips it on or off, and with Gate Mode set to Momentary it is on only while the gate is high"},
+    {"ids": [10], "text": "Freezes the buffer from outside: by default a rising edge past 0.4V flips the freeze at the next clock tick, and with Gate Mode set to Momentary it freezes only while the gate is high"},
+    {"ids": [11], "text": "An external clock for the slice: with a cable here the internal clock is dropped, and the interval between rising edges past 0.4V becomes the period that the TIME knob then divides or multiplies"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left audio output, 5V at full level, running 256 samples behind the input because the engine works a block at a time"},
+    {"ids": [1], "text": "The right audio output, 5V at full level; it carries its own rate and chopping only while ST MODE is lit and MODE is macro"}
+  ],
+  "notes": [
+    "nothing is heard until audio is patched into IN L: the replay is assembled from what has been recorded, and the buffer starts empty",
+    "a freshly placed module has BEND, BREAK and FREEZE all unlit and CORRUPT at zero, so it plays a plain repeating loop of the last slice until one of those is turned on",
+    "with nothing at CLOCK the module runs its own clock; plugging a cable in switches to the external one and unplugging it switches back",
+    "with nothing at CLOCK the module runs its own clock; plugging a cable in switches to the external one and unplugging it switches back, with no menu or button involved",
+    "while FREEZE is on, a MIX setting at the very bottom of its travel is overridden to fully replayed, so the frozen loop is heard rather than the dry input",
+    "the display draws the peak level of the left output across the buffer with a white marker at the write point, and prints BND, BRK and FRZ for the stages that are on",
+    "the buffer holds 30 seconds; a TIME setting longer than that is capped to the length of the buffer"
+  ],
+  "menu": [
+    "Gate Mode: Latching, Momentary — chooses whether the three gate jacks flip their stage on and off at a rising edge, or hold it on only while the gate is high",
+    "Scale: None (free), Chromatic, Major, Minor, Pentatonic Major, Pentatonic Minor, Whole Tone, Octaves, Fifths — quantises the playback rate BEND produces to that set of intervals",
+    "Root: C, C#, D, D#, E, F, F#, G, G#, A, A#, B — sets the note the Scale quantiser is built from"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "high above 0.4V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "9": "high above 0.4V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "10": "high above 0.4V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "11": "high above 0.4V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

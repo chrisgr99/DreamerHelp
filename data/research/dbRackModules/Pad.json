@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pad",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Pad.cpp:243 takes the channel count from this input and Pad.cpp:246 reads it per channel as the pitch"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Pad.cpp:226 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Pad.cpp:262 sets this output's channel count from the V/Oct jack"},
+      "1": {"family": "audio", "poly": true, "why": "Pad.cpp:263 sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The trigger input is the one the maker never named, so its tooltip is blank; it rebuilds the table ten samples after the trigger, Pad.cpp:226-235. A Frequency parameter for the fundamental of the table is configured at Pad.cpp:224 but has no widget on this panel, so it gets no line; Pad2 and MPad2 bring it out as Fund. The table is read at a pitch an octave below the voltage at V/Oct, Pad.cpp:247, which the table's own length makes up for."
+}

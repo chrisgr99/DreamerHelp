@@ -1,0 +1,68 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "AY_3_8910",
+  "description": "The three pulse voices of the General Instrument AY-3-8910, with the chip's shared noise generator and looping envelope",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets the pitch of that pulse, five octaves either side of C4"},
+    {"ids": [3], "text": "Sets the rate of the shared envelope generator, from a fraction of a hertz to several hundred hertz"},
+    {"ids": [4, 5, 6], "text": "Attenuates the voltage at that pulse's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [8, 9, 10], "text": "Sets the level of that pulse, 0 to 15"},
+    {"ids": [11, 12, 13], "text": "Switched on, the pulse tone is mixed into that voice"},
+    {"ids": [14, 15, 16], "text": "Switched on, the shared noise is mixed into that voice"},
+    {"ids": [17, 18, 19], "text": "Switched on, that voice takes its level from the shared envelope generator instead of its AMP setting"},
+    {"ids": [20], "text": "Sets the pitch of the shared noise, 0 to 31, with the highest setting giving the shortest period and so the brightest hiss"},
+    {"ids": [21], "text": "Steps the shared envelope through its eight shapes in turn, and the lamp below shows which one by colour"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Raises the pitch of that pulse by a volt per octave; unpatched it reads the VOCT jack of the pulse before it, and the first pulse reads 0V"},
+    {"ids": [3], "text": "Sets the rate of the shared envelope at a volt per octave; unpatched it reads pulse C's VOCT jack"},
+    {"ids": [4, 5, 6], "text": "Modulates the pitch of that pulse, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the pulse before it, and the first pulse reads 5V"},
+    {"ids": [8, 9, 10], "text": "Scales that pulse's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the pulse before it, and the first pulse reads 10V"},
+    {"ids": [11, 12, 13], "text": "Flips that voice's TONE switch while it is above 2V"},
+    {"ids": [14, 15, 16], "text": "Flips that voice's NOISE switch while it is above 2V"},
+    {"ids": [17, 18, 19], "text": "Flips that voice's ENV switch while it is above 2V"},
+    {"ids": [20], "text": "Moves the shared noise pitch, 7V spanning all thirty-two settings"},
+    {"ids": [22, 23, 24], "text": "Restarts that pulse from the beginning of its cycle on each rise past 2V; unpatched it reads the SYNC jack of the pulse before it"},
+    {"ids": [25], "text": "Restarts the shared envelope on each rise past 2V; unpatched it reads pulse C's SYNC jack"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "Carries that pulse's audio, hard clipped at 5V, with the audio of any earlier pulse whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "turning a voice's TONE and NOISE switches both off puts it into the chip's four-bit converter mode: its AMP jack becomes an audio input, its VOCT an offset and its MOD a scaling",
+    "the three outputs are chained: a pulse whose output is left unpatched is summed into the next output along, so patching only the third output gives a mix of all three"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "1V per octave · continuous · polyphonic\n\nunpatched it reads pulse C's VOCT jack.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "8": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "11": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "12": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "13": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "14": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "15": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "16": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "17": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "18": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "19": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "20": "0 to 7V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "22": "high above 2V · stepped · polyphonic\n\nunpatched it reads the SYNC jack before it.",
+      "23": "high above 2V · stepped · polyphonic\n\nunpatched it reads the SYNC jack before it.",
+      "24": "high above 2V · stepped · polyphonic\n\nunpatched it reads the SYNC jack before it.",
+      "25": "high above 2V · stepped · polyphonic\n\nunpatched it reads pulse C's SYNC jack."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic"
+    }
+  }
+}

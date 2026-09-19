@@ -1,0 +1,22 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoCrosser",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "why": "SickoCrosser.cpp:99 tests this jack when the PLY knob is above 1, and :105-106 and :141-142 read getVoltage(n) on individual channels of it"},
+      "1": {"poly": false, "step": "continuous", "why": "SickoCrosser.cpp:176 getVoltage() on channel 0 only"},
+      "2": {"poly": false, "step": "continuous", "why": "SickoCrosser.cpp reads this jack with getVoltage() on channel 0 only"},
+      "3": {"poly": false, "step": "continuous", "why": "SickoCrosser.cpp reads this jack with getVoltage() on channel 0 only"},
+      "4": {"poly": true, "step": "continuous", "normal": "the jack to its left", "why": "SickoCrosser.cpp:108 isConnected() test, :113 falls back to the left jack of that row; read per channel at :110-111 in polyphonic mode"},
+      "5": {"poly": false, "step": "continuous", "normal": "the jack to its left", "why": "SickoCrosser.cpp:177 isConnected() test with a fallback to the left jack of that row"},
+      "6": {"poly": false, "step": "continuous", "normal": "the jack to its left", "why": "SickoCrosser.cpp isConnected() test with a fallback to the left jack of that row"},
+      "7": {"poly": false, "step": "continuous", "normal": "the jack to its left", "why": "SickoCrosser.cpp isConnected() test with a fallback to the left jack of that row"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "SickoCrosser.cpp:90 getVoltage() * 0.1 added to the knob, the sum clamped to 0-1 at :92-95"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "SickoCrosser.cpp:294 setVoltage() with no setChannels anywhere in the file"},
+      "1": {"poly": false, "why": "SickoCrosser.cpp:295 setVoltage() with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The xFD CV sumRange is a sweep position, not a voltage: knob plus CV is clamped to 0-1, which is 0% to 100%. Polyphony is consumed rather than passed on — the outputs are always single-channel, and with the PLY knob above 1 the sweep runs across the channels of the IN1 cable instead of across the four input rows. The signal jacks carry whatever is patched, so they get no family."
+}

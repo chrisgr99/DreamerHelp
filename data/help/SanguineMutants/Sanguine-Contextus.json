@@ -1,0 +1,74 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Contextus",
+  "description": "Polyphonic digital oscillator with 57 synthesis models, from analogue waveforms and noise through robot speech to physical models, chords and drums, plus a quantiser and an AD envelope",
+  "params": [
+    {"ids": [0], "text": "Detunes by up to a semitone either way"},
+    {"ids": [1], "text": "Sets the pitch in large steps, across the span the RANGE knob chooses"},
+    {"ids": [2], "text": "Attenuverts the FM input, an octave per volt at full clockwise and the same inverted at full counter-clockwise"},
+    {"ids": [3], "text": "Sets the first shaping parameter of the model in use, which is the main movement of its timbre"},
+    {"ids": [4], "text": "Attenuverts the TIMBRE input, 5V covering the whole TIMBRE knob range at full travel"},
+    {"ids": [5], "text": "Sets the second shaping parameter of the model in use, which is a second dimension of its tone"},
+    {"ids": [6], "text": "Steps through the 57 synthesis models; the display spells the four-letter code of the one in use, and the knob lights in a colour that follows the model"},
+    {"ids": [7], "text": "Sets what the COARSE knob covers: four octaves around the V/OCT input, four octaves around C3, an extended range that gives up accurate tracking, a fixed 440Hz, or an LFO range"},
+    {"ids": [8], "text": "Transposes by whole octaves, two either way"},
+    {"ids": [9], "text": "Delays the strike of the physical models after a trigger arrives, in seven steps"},
+    {"ids": [10], "text": "Sets the attack of the internal AD envelope"},
+    {"ids": [11], "text": "Sets the decay of the internal AD envelope"},
+    {"ids": [12], "text": "Sets how much of the internal AD envelope is added to the TIMBRE knob"},
+    {"ids": [13], "text": "Sets how much of the internal AD envelope is added to the pitch"},
+    {"ids": [14], "text": "Sets how much of the internal AD envelope is added to the COLOR knob"},
+    {"ids": [15], "text": "Sets the sample rate the output is reduced to, in seven steps"},
+    {"ids": [16], "text": "Sets the bit depth the output is reduced to, in seven steps"},
+    {"ids": [17], "text": "Switches the quantiser on and picks its scale from forty-eight of them, from semitones and church modes to blues, gamelan and Indian ragas; the display flashes the four-letter code of the choice"},
+    {"ids": [18], "text": "Sets the root note the quantiser builds its scale on; it is read only while a scale is chosen"},
+    {"ids": [20], "text": "Switches the internal AD envelope on, so a trigger opens an amplifier shaped by the ATK and DCY knobs; with it off the trigger input resets the oscillator phase instead"},
+    {"ids": [21], "text": "Sets how far the oscillator drifts out of tune, from off to full, imitating a poorly behaved analogue circuit"},
+    {"ids": [22], "text": "Detunes the oscillator at the low and the high ends of its range, imitating the tuning errors of an analogue circuit"},
+    {"ids": [23], "text": "Sets how much of the signature wave shaper is mixed in, from off to full, which adds grunge and glitches"},
+    {"ids": [24], "text": "Makes a change of more than a semitone at V/OCT produce a trigger of its own, so the physical models and the internal envelope can be played from a pitch cable alone"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage of 1V or more strikes the physical models, resets the phase of the others, and starts the internal AD envelope while VCA is on"},
+    {"ids": [1], "text": "Sets the pitch, one volt per octave, quantised to the scale the QNTZ knob selects"},
+    {"ids": [2], "text": "Shifts the pitch through the FM attenuverter, an octave per volt at full clockwise"},
+    {"ids": [3], "text": "Adds to the TIMBRE knob through the MOD attenuverter, 5V covering the whole knob range"},
+    {"ids": [4], "text": "Adds to the COLOR knob, 5V covering the whole knob range"},
+    {"ids": [5], "text": "Shifts the model up or down from the one the knob picks, 10V covering the whole list, with each polyphonic channel taking its own offset"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator, ±5V, though loudness differs from one model to the next"}
+  ],
+  "notes": [
+    "the module is polyphonic: the channel count comes from whichever of V/OCT and TRIG carries more channels, and each channel runs its own oscillator.",
+    "the COLOR input has no attenuverter: it is added to the COLOR knob at a fixed scale, where the TIMBRE input passes through the MOD knob first.",
+    "the signature wave shaper sounds different in every copy of the module, because its seed is taken from that module's own identifier; the menu can fix or replace the seed.",
+    "with nothing patched to TRIG and the AUTO button off, the physical and percussive models stay silent: they need a strike before they sound.",
+    "the two speech models play one of sixteen words on each trigger, TIMBRE scrubbing through the word and COLOR choosing which word; with nothing at TRIG they stay silent.",
+    "the five chord models follow the quantiser: with a scale chosen the chords stay in key and COLOR sets the extensions; with the quantiser off COLOR blends through sixteen fixed chords."
+  ],
+  "menu": [
+    "Model — picks the synthesis model from a list giving each one's four-letter display code and its full name",
+    "Scale — picks the scale the quantiser uses, or switches the quantiser off",
+    "Options — the submenu holding the display and processing settings",
+    "Display channel — picks which polyphonic channel the model display reports. It is on the Options submenu",
+    "Low CPU (disable resampling) — runs the oscillator at the engine sample rate instead of resampling, costing less processing and adding aliasing. It is on the Options submenu",
+    "Signature wave shaper (SIGN) — the submenu for the seed the SIGN knob's wave shaper works from",
+    "Instance seed — takes the wave shaper seed from the module's own identifier, so that each copy sounds different; switching it off uses a seed of zero, as older versions did",
+    "Random seed — replaces the wave shaper seed with a new random one, and appears only while Instance seed is on",
+    "User seed — takes a seed typed into a text field, from 0 to 4294967295, entered with the return key, and appears only while Instance seed is on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "bipolar · continuous · polyphonic",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "4": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "5": "±10V · stepped · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic"
+    }
+  }
+}

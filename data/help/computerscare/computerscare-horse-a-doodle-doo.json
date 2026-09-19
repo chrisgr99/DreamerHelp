@@ -1,0 +1,53 @@
+{
+  "plugin": "computerscare",
+  "module": "computerscare-horse-a-doodle-doo",
+  "description": "A repeatable trigger and CV sequencer with no randomness in it: one knob picks the whole sequence, and the polyphonic channels can be spread away from that sequence.",
+  "params": [
+    {"ids": [0], "text": "Picks the trigger and CV sequence, 0 to 10, a small change giving a completely different sequence."},
+    {"ids": [1], "text": "Attenuates and inverts the pattern CV, -1 to +1."},
+    {"ids": [2], "text": "Sets how many steps the sequence has, 2 to 64."},
+    {"ids": [3], "text": "Attenuates and inverts the step count CV, -1 to +1."},
+    {"ids": [4], "text": "Sets how many of the steps carry a trigger, 0 percent giving none at all and 100 percent giving one on every clock."},
+    {"ids": [5], "text": "Attenuates and inverts the density CV, -1 to +1."},
+    {"ids": [8], "text": "Sets how many channels the outputs carry, 1 to 16, or automatic at the far left, which follows the greatest channel count among the clock and CV inputs."},
+    {"ids": [9], "text": "Steps through Independent, each channel on its own sequence; Ch. 1 Trigger, all fired by channel 1; Trigger Cascade, each fired by the channel before; and EOC Cascade, by its end of cycle."},
+    {"ids": [10], "text": "Returns every channel's sequence to its first step."},
+    {"ids": [11], "text": "Sets how far the pattern changes from one polyphonic channel to the next, 0 percent giving every channel the same sequence."},
+    {"ids": [12], "text": "Sets how the step count changes across the polyphonic channels, positive giving higher channels more steps and negative giving them fewer, down to two."},
+    {"ids": [13], "text": "Sets how the density changes across the polyphonic channels, positive giving higher channels more triggers and negative giving them fewer."},
+    {"ids": [14], "text": "Advances every channel's sequence by one step."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger advances the sequences; each channel of a polyphonic clock drives its own sequence."},
+    {"ids": [1], "text": "A trigger returns every sequence to its first step."},
+    {"ids": [2], "text": "Adds to the pattern knob through the pattern attenuverter."},
+    {"ids": [3], "text": "Adds to the step count knob through the step count attenuverter."},
+    {"ids": [4], "text": "Adds to the density knob through the density attenuverter."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Sends 10V on the steps the sequence calls for, either as a copy of the clock pulse or as a gate whose length varies from step to step."},
+    {"ids": [1], "text": "Sends 10V on the clock that brings a channel's sequence back to its first step."},
+    {"ids": [2], "text": "Carries the sequence's voltage for the step it has reached, changing only on steps that trigger."},
+    {"ids": [3], "text": "Carries a second voltage sequence on the same steps as the first, with its own scale, offset and variation."}
+  ],
+  "menu": [
+    "CV 1 Configuration — holds CV Scale and CV Offset, which set the range of the CV output, and CV Variation, which changes its voltages while the trigger sequence stays as it was.",
+    "CV 2 Configuration — holds CV2 Scale, CV2 Offset and CV2 Variation, the same three settings for the CV2 output.",
+    "Gate Output Mode — switches the trigger output between a copy of the clock pulse and gates whose length varies from step to step.",
+    "Gate Length Configuration — holds Gate Length Scaling, Gate Length Minimum and Gate Length Variation, which set how long the gates run.",
+    "Polyphonic Triggering Mode — the same setting as the mode switch on the panel: Independent, Ch. 1 Trigger, Trigger Cascade or EOC Cascade."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

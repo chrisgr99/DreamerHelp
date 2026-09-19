@@ -1,0 +1,43 @@
+{
+  "plugin": "voxglitch",
+  "module": "autobreak",
+  "description": "Breakbeat player: a loaded drum loop is split into sixteen slices and played in an order set by a voltage, in time with an incoming clock",
+  "params": [
+    {"ids": [0], "text": "Picks which of the five loaded loops plays"},
+    {"ids": [1], "text": "Attenuates the SAMPLE selection CV, from nothing through to its full range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the loop follows, taken at sixteenth notes; the tempo is worked out from the time between two rising edges"},
+    {"ids": [1], "text": "A rising edge returns playback to the start of the loop"},
+    {"ids": [2], "text": "Picks which of the sixteen slices plays next, 0-10V across the loop; below about 0.6V the playback runs on undisturbed"},
+    {"ids": [3], "text": "Adds to the loop selection after its attenuator, 0-10V spanning the five loops"},
+    {"ids": [4], "text": "A rising edge jumps to the slice chosen by SEQ without waiting for the next clock, which is how a slice is repeated within a beat"},
+    {"ids": [5], "text": "Above 5V playback runs backwards through the loop"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the loop being played"},
+    {"ids": [1], "text": "The right channel of the loop being played"}
+  ],
+  "notes": [
+    "the outputs stay silent until a loop is loaded into one of the five slots under Samples in the right-click menu",
+    "a loaded loop is treated as eight beats long whatever its actual length, so a loop of another length plays at the wrong speed"
+  ],
+  "menu": [
+    "Samples — the five numbered items under this label each load a WAV file into that slot, and each prints the filename it holds",
+    "Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "high above 2V · stepped · one channel only",
+      "5": "high above 5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

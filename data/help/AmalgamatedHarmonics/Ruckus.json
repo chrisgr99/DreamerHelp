@@ -1,0 +1,45 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Ruckus",
+  "description": "Trigger sequencer built from sixteen clock dividers in a four by four grid, with the triggers of each row and each column summed to one output",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the division for that cell, 0 to 64; at 0 the cell is switched off and never fires"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets the chance that the cell fires when its division comes round, 0 to 100%"},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Moves that cell's triggers earlier or later against the master clock, -64 to 64 beats"},
+    {"ids": [48, 49, 50, 51], "text": "Switches that column's output on and off, one press each way, and the lamp is lit while the output is passing triggers"},
+    {"ids": [64, 65, 66, 67], "text": "Switches that row's output on and off, one press each way, and the lamp is lit while the output is passing triggers"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the beat count that every divider is measured against"},
+    {"ids": [1], "text": "A trigger sets the beat count back to zero"},
+    {"ids": [2], "text": "A polyphonic cable added to the division knobs at 6.4 divisions per volt; channel 1 reaches the top left cell and the channels run left to right, then down a row"},
+    {"ids": [3], "text": "A polyphonic cable added to the probability knobs, 10V covering the whole range; channel 1 reaches the top left cell and the channels run left to right, then down a row"},
+    {"ids": [4], "text": "A polyphonic cable added to the shift knobs at 12.8 beats per volt; channel 1 reaches the top left cell and the channels run left to right, then down a row"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 1ms trigger whenever any cell in that column fires"},
+    {"ids": [4, 5, 6, 7], "text": "A 1ms trigger whenever any cell in that row fires"}
+  ],
+  "notes": [
+    "nothing fires until a clock is patched into CLOCK and at least one of the sixteen division knobs is turned up; each of them starts at 0, which switches its cell off."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "stepped · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "bipolar · stepped · polyphonic\n\nthe knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped"
+    }
+  }
+}

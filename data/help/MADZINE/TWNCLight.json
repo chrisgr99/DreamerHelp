@@ -1,0 +1,44 @@
+{
+  "plugin": "MADZINE",
+  "module": "TWNCLight",
+  "description": "Two Euclidean tracks of the one length, one driving a drum envelope with an accent envelope beside it, the other driving hats that do not start until the accent has fired",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps both patterns run for, 1 to 32"},
+    {"ids": [1], "text": "Sets what share of the pattern's steps the drum fires on, 0% to 100%"},
+    {"ids": [2], "text": "Chooses which of every four clocks fires the accent envelope, counting from 1 to 7 round the four"},
+    {"ids": [3], "text": "Sets how long the accent envelope takes to fall, 10ms to 2 seconds"},
+    {"ids": [4], "text": "Sets how long the drum's envelope takes to fall, 10ms to 2 seconds; its FM envelope falls in half that"},
+    {"ids": [5], "text": "Bends the fall of the drum's FM envelope: at the bottom of its travel it collapses almost at once, at the top it falls close to a straight line"},
+    {"ids": [6], "text": "Sets what share of the pattern's steps the hats fire on, 0% to 100%"},
+    {"ids": [7], "text": "Divides or multiplies the hats clock, from a quarter of the incoming rate through it to four times it"},
+    {"ids": [8], "text": "Sets how long the hats envelope takes to fall, 5ms to 1 second"},
+    {"ids": [9], "text": "Bends the fall of the hats envelope: at the bottom of its travel it collapses almost at once, at the top it falls close to a straight line"},
+    {"ids": [10], "text": "Holds the hats back by that many clocks after the accent first fires, 1 to 4; moving it puts the hats back to not yet started"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge through 2V advances both tracks; the gap between edges is the tempo the hats divider works from, and every thirty-second edge puts both tracks back to their first step"},
+    {"ids": [2], "text": "Added to the drum's DECAY knob, a tenth of a second per volt; the total is held between 10ms and 2 seconds"},
+    {"ids": [4], "text": "Added to the hats DECAY knob, a twentieth of a second per volt; the total is held between 5ms and 1 second"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The accent envelope, 0V to 10V, falling in the time set by A.DEC"},
+    {"ids": [1], "text": "The drum's FM envelope, 0V to 10V"},
+    {"ids": [2], "text": "The hats envelope, 0V to 10V"}
+  ],
+  "notes": [
+    "nothing steps and no envelope fires until a clock reaches CLK.",
+    "the hats stay silent until the accent envelope has fired once and the number of clocks set by SHIFT has gone by after it."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

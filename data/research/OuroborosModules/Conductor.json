@@ -1,0 +1,17 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "Conductor",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Conductor.cpp:269 reads this input with getVoltage() and hands it to the clock handler, which passes it on as the 10V of the boolToGate macro"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Conductor.cpp:282 reads this input with getVoltage() into a Schmitt trigger set to 0.1V and 2V by Constants.hpp:147 and 148"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Conductor.cpp:278 reads this input with getVoltage() into a Schmitt trigger set to 0.1V and 2V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Conductor.cpp:269 writes channel 1 alone, at the 10V the boolToGate macro at Utils.hpp:28 gives"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Conductor.cpp:294 writes channel 1 alone, at the 10V the boolToGate macro at Utils.hpp:28 gives"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Conductor.cpp:297 writes channel 1 alone, a voltage spread over the range the CV RANGE knob sets, at most 10V"}
+    }
+  },
+  "comment": "Read from src/Conductor at commit 37a37b0, the commit whose plugin.json carries the installed 2.2.3, alongside the plugin's wiki page for Conductor. The wiki names the menu item Ignore first clock within 10ms after reset; the item itself prints 1ms (Widget.cpp:109), and the body of the wiki page also says 1ms, so the menu list in it is the part that is wrong. Two parameters are declared with no widget, Pattern output offset and Clock delay (Conductor.cpp:105 and 107), so no click can reach them; they are sliders on the context menu. The clock delay runs 0 to 50 samples from Conductor.hpp:31. The three knobs that name patterns are configured 0 to 1 and turned into pattern numbers by their own quantities, so their hover text reads a pattern rather than a fraction."
+}

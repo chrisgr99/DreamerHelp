@@ -1,0 +1,37 @@
+{
+  "plugin": "AlgoritmArte",
+  "module": "MusiFrog",
+  "description": "Deterministic pseudo-random sequence generator in which a frog jumps around sixteen stones, each holding a jump value and a note of the chosen scale",
+  "params": [
+    {"ids": [0], "text": "Lit, a jump onto the same note as the one before produces no trigger"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "text": "Sets the initial jump value of that stone, 0 to 15, the number of stones the frog moves on from it; in PRG mode it sets that stone's note, 0 for silence, 1 for C, 2 for C sharp and on up"},
+    {"ids": [17], "text": "PRG walks the stones in order on an internal 120 BPM clock and hands the jump knobs over to editing the notes of the current scale; RUN plays the jumping sequence"},
+    {"ids": [18], "text": "Sets the base note of the scale as a MIDI note number, 21 to 96, with 60 putting the first note of the scale at 0V"},
+    {"ids": [19], "text": "Puts the frog on the first stone and refills every stone with the jump value set by its knob"},
+    {"ids": [20], "text": "Chooses one of four scales: C ionian, A aeolian, a pentatonic up and down, or E phrygian up and down"},
+    {"ids": [21], "text": "Sets how many stones the frog uses, 1 to 16; in PRG mode it picks which of three octaves the jump knobs write into"},
+    {"ids": [22], "text": "Lit, the trigger output rests at 10V and drops to 0V for 1ms at each note, which the maker's tooltip calls gate mode; unlit it rests at 0V and pulses to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge makes the frog jump and play the note of the stone it lands on"},
+    {"ids": [1], "text": "A rising edge above 1V puts the frog on the first stone and refills every stone with the jump value set by its knob"},
+    {"ids": [2], "text": "Adds its voltage, rounded to whole volts, to the scale chosen by the SCALE knob, one scale per volt, wrapping round the four scales"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the note being played, 1V per octave"},
+    {"ids": [1], "text": "A 1ms 10V pulse at each note played, which the button below it inverts into a 1ms drop from 10V"}
+  ],
+  "notes": [
+    "In RUN mode the frog moves only on a rising edge at the CLK input, so with nothing patched there nothing is played"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped"
+    }
+  }
+}

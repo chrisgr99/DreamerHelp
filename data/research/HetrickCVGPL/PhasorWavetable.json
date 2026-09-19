@@ -1,0 +1,14 @@
+{
+  "plugin": "HetrickCVGPL",
+  "module": "PhasorWavetable",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "src/PhasorWavetable/PhasorWavetable.hpp:541 takes the channel count from this jack and line 547 reads each channel with getPolyVoltage, then passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (src/DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/PhasorWavetable/PhasorWavetable.hpp:551 reads getPolyVoltage(c), multiplies it by the trimpot and by 0.1, adds the knob and clamps the total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"poly": true, "step": "continuous", "why": "src/PhasorWavetable/PhasorWavetable.hpp:588 writes each channel with setVoltage(out*5, c) and line 597 calls setChannels with the phasor input's channel count"}
+    }
+  },
+  "comment": "Read from the repository at commit 56bf82b, the tip of the default branch, whose plugin.json is byte-for-byte the installed one at version 2.0.0.\n\nThis module does follow the HetrickCV pattern its sibling breaks: the jacks are read with getPolyVoltage, bounded by the phasor input's channel count, so it is polyphonic to 16 channels, and the phasor wraps rather than clamping.\n\nThe output is given no range in the port fields because it has two: the wave is multiplied by 5 after an optional offset of 1 (PhasorWavetable.hpp:586-588), giving -5V to +5V with the switch at Bipolar and 0V to 10V at Unipolar.\n\nThe Mode switch and the Mode menu item set the same parameter (PhasorWavetable.cpp:41-43), so the menu item is worth a line: it is the only place the two settings are spelled out in words.\n\nVCO mode measures the phasor's rate of change sample by sample and picks a bandlimited octave of the wavetable from it (PhasorWavetable.hpp:561-578), so a phasor that jumps about will change the brightness of the tone as well as the position in the wave.\n\nWhen the wavetable is still loading, or the wave is shorter than two points, the output is forced to 0V (PhasorWavetable.hpp:544 and 592-594).\n\nThe panel prints Position beside the knob, a minus and a plus either side of the trimpot, VCO and LFO beside the upper switch, Unipolar and Bipolar beside the lower one, and In and Out beside the two jacks."
+}

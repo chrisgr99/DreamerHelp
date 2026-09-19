@@ -1,0 +1,15 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "ChanOut",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/ChanOut.cpp:788 getVoltage, one channel only"},
+      "1": {"family": "audio", "poly": false, "normal": "the left input", "why": "src/ChanOut.cpp:789 isConnected else left"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/ChanOut.cpp:911-912 setVoltage after trim; engines clamp to ±10V before it, e.g. src/ChanOutCleanEngine.hpp:113"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "src/ChanOut.cpp:911-912 setVoltage after trim; engines clamp to ±10V before it, e.g. src/ChanOutCleanEngine.hpp:113"}
+    }
+  },
+  "comment": "DRIVE and CHAR are both inert on the default settings. ChanOutCleanEngine::process takes drive but computes driveAmount = (outputMode == 1) ? drive * 0.1f : 0.0f (src/ChanOutCleanEngine.hpp:117-125), so in Master Output mode, which is the default, the knob does nothing; in Channel Output mode full drive is a gain of 1.1, about 0.83dB. The clean engine's process() takes no character argument at all (src/ChanOut.cpp:845-847), so CHAR is read by nothing on the Standard engine. The pan law is the other way round from the README, which says Master is linear and Channel is equal power: applyPan uses cos/sin in both modes and multiplies by sqrt(2) only in Channel mode, so Master loses 3dB at centre and Channel is unity at centre (src/ChanOut.cpp, applyPan). The character engines are selected by four custom squares as well as by the menu. DISPLAY_ENABLE_PARAM has no ParamWidget and cannot be clicked for help. The mute and dim slews are both 125 units per second."
+}

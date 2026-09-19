@@ -1,0 +1,23 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Note",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "note.cpp reads it with getVoltage, so only channel 1, into a Schmitt trigger for the step advance"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "note.cpp reads it with getVoltage, so only channel 1, into a Schmitt trigger for the bar count"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "note.cpp reads it with getVoltage, so only channel 1, into a Schmitt trigger for the reset"},
+      "3": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "note.cpp:212 names it a volt per octave snapped to semitones and it is summed with the root knob"},
+      "4": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "scale-bus.hpp carries the scale over the extra channels of this jack, the first channel being the scale number; note.cpp:213 sums that number with the scale knob"},
+      "5": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "note.cpp:214 names it a volt per octave and it is summed with the octave knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "note.cpp:459 writes one channel with setVoltage, 10V while the gate is high"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "note.cpp:462 writes one channel with setVoltage from the quantized pitch"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "note.cpp:460 writes one channel with setVoltage from the held velocity scaled by 10"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "note.cpp:461 writes one channel with setVoltage, 10V while the accent pulse is high"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "note.cpp:465 writes one channel with setVoltage, the root as a twelfth of a volt per semitone"},
+      "5": {"family": "cv", "poly": true, "why": "note.cpp:468 writes the scale over several channels through the shared scale-bus encoder"}
+    }
+  },
+  "comment": "The scale output is polyphonic on purpose: channel one carries the scale number, channel two the period in volts and the channels after that the degrees as offsets from the root (scale-bus.hpp), so a scale that no single number can name travels whole. A module that reads only the first channel keeps working unchanged. Every step of every pattern is edited on the display, which holds no parameters and so cannot be reached by clicking for help."
+}

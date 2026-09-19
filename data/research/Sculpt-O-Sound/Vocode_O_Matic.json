@@ -1,0 +1,17 @@
+{
+  "plugin": "Sculpt-O-Sound",
+  "module": "Vocode_O_Matic",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "src/Vocode_O_Matic.cpp process() reads inputs[CARR_INPUT].getVoltage() once per frame with no channel loop"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "src/Vocode_O_Matic.cpp process() reads inputs[MOD_INPUT].getVoltage() once per frame with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Vocode_O_Matic.cpp process() passes inputs[SHIFT_RIGHT_INPUT].getVoltage() to SynthDevKit::CV(0.1f), whose update() fires on the first sample at or above the threshold"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Vocode_O_Matic.cpp process() passes inputs[SHIFT_LEFT_INPUT].getVoltage() to SynthDevKit::CV(0.1f), whose update() fires on the first sample at or above the threshold"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Vocode_O_Matic.cpp process() accumulates the band sum with setVoltage() and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "src/Vocode_O_Matic.cpp process() accumulates the band sum with setVoltage() and never calls setChannels"}
+    }
+  },
+  "comment": "PANNING_PARAM (index 8) is configured with a name and a range but its addParam sits inside #ifdef PANNING, which Vocode_O_Matic.cpp:26 leaves commented out, so there is no knob on the panel and nothing reads it; the census records no position for it and it is left untagged. DEBUG_PARAM (index 0) likewise has no widget and no configParam. The panel prints Mod Gain under the knob the code wires to CARRIER_GAIN_PARAM and Carr Gain under the one it wires to MODULATOR_GAIN_PARAM (Vocode_O_Matic.cpp:430-431 against the lettering in res/Sculpt-O-Sound-_-Vocode_O_Matic_v0.4.svg); the two labels are swapped, while the Carrier and Modulator labels under the jacks below them are the right way round. The README says the even modulator bands are sent to the left output and the odd ones to the right; init_pan_and_level in pan_and_level.cpp gives every band a non-zero gain into both outputs, with the even bands weighted more toward the left, so the split is a lean and not a separation. The matrix buttons are configured over a range of 0.1 to 24 with a default of 1, which is inherited from the level slider code and never read: a button's state is held in the module's own arrays and saved to the patch, not in the parameter."
+}

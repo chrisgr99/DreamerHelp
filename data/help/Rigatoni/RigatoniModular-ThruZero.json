@@ -1,0 +1,43 @@
+{
+  "plugin": "Rigatoni",
+  "module": "RigatoniModular-ThruZero",
+  "description": "Emulates through-zero FM: it reverses the direction of a ramp wave fed into it whenever a modulator crosses a threshold, and reflects that modulator about the threshold to drive the carrier's FM input",
+  "params": [
+    {"ids": [0], "text": "Sets the modulator voltage at which the carrier reverses, from -5V to 5V; the THRESH input is added to it and the total is held inside that range"},
+    {"ids": [1], "text": "Scales the ramp input, from -2 at full counter-clockwise through 0 at noon to 2 at full clockwise, inverting the ramp below 0; the panel's arc is marked -5 and +5 but the knob reaches only -2 and 2"},
+    {"ids": [2], "text": "ON puts the ramp output through a spike remover, a lowpass dropping from 20000Hz to 500Hz whenever the input ramp's own edge is found, and puts the sine output through a second one; OFF leaves both in"},
+    {"ids": [3], "text": "ENJ reverses the ramp's direction and shifts its phase to match, the more faithful through-zero sound; XWY inverts the whole ramp while the modulator is below the threshold, and works on any waveform"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the input level knob at 0.4 per volt, the total held between -2 and 2"},
+    {"ids": [1], "text": "Adds to the threshold knob volt for volt, the total held between -5V and 5V"},
+    {"ids": [2], "text": "The modulator: the carrier reverses whenever this voltage crosses the threshold, and this is the signal reflected to CV OUT"},
+    {"ids": [3], "text": "The carrier ramp wave, rising or falling; aim for 10V peak to peak after IN LVL, which is what the phase shifter is built around"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the modulator is at or above the threshold and 0V below it, which also makes the module a comparator; mixing it into the other outputs strengthens the fundamental"},
+    {"ids": [1], "text": "The modulator reflected about the threshold, so it turns back where it would have crossed; patch it to the carrier oscillator's FM input"},
+    {"ids": [2], "text": "The ramp output put through a quadratic sine shaper and scaled to three quarters"},
+    {"ids": [3], "text": "The phase-shifted ramp, held between -5V and 5V"}
+  ],
+  "notes": [
+    "there is no oscillator here: patch a ramp wave to the ramp input and a modulator to CV IN, and take the ramp or sine output back out",
+    "every jack on the module reads or writes one channel, so a polyphonic cable is reduced to its first channel",
+    "the two lights show how far the modulator is from the threshold, the green one while it is above and the red one while it is below",
+    "keep THRESHOLD at noon for the steadiest behaviour, and run the carrier above the modulator in frequency for the strongest timbral effect"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "±5V · continuous · one channel only"
+    }
+  }
+}

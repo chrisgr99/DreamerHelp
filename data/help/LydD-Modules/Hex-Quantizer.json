@@ -1,0 +1,50 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Hex-Quantizer",
+  "description": "Four-channel quantizer whose scale is set by twelve hexagon buttons, either as one chromatic octave repeated everywhere or as a Tonnetz page of absolute notes, with eight stored note sets",
+  "params": [
+    {"ids": [0], "text": "Shifts the incoming pitch by -12 to 12 semitones; in Page mode it chooses which page the twelve hexagons stand for instead, and the hover text then reads that page number"},
+    {"ids": [1], "text": "Switches between quantizing to a twelve-note scale repeated in every octave and the Page layout, where each hexagon stands for one absolute note"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "text": "Turns that note on or off in the scale; in Page mode it turns on the hexagon of that name on whichever page the knob has chosen"},
+    {"ids": [14], "text": "Chooses one of eight stored note sets, 0 to 7; moving it loads that set over whatever the hexagons are showing"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every channel patched here turns on the note its voltage names, on top of whatever the hexagons have on, and lets go of it when that channel moves to another note"},
+    {"ids": [1], "text": "Added to the incoming pitch at one volt per octave, on top of the Transpose knob, in both modes"},
+    {"ids": [2, 3, 4, 5], "text": "A pitch to quantize, one volt per octave, with the Transpose setting added before the quantizing"},
+    {"ids": [6], "text": "Truncated to whole volts and added to the Bank knob, the total clamped to 7"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "The nearest enabled note to the pitch on its own input, one volt per octave"},
+    {"ids": [4, 5, 6, 7], "text": "A 10V pulse 8 milliseconds long each time the quantized note on its own channel changes"}
+  ],
+  "notes": [
+    "until at least one note is turned on, every Quantized output is held at C",
+    "in Page mode the twelve hexagons are laid out as a Tonnetz, five of them standing for notes an octave below the page and one an octave above, so a page spans more than one octave",
+    "the note set is written back to the current bank the moment a note is turned on or off, so there is nothing to press to save; moving the Bank control loads that bank over what is showing",
+    "in Page mode the incoming pitch is clamped to -3V and 3V before it is quantized, and in the other mode it is not clamped at all",
+    "in Page mode the Transpose knob no longer transposes; the transposition freezes at whatever it was when the mode was switched, and only the Transpose jack moves it after that",
+    "only the Poly In jack reads more than one channel; the four Pitch inputs and all eight outputs are monophonic"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 7V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 7V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

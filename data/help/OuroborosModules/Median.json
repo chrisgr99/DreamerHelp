@@ -1,0 +1,37 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "Median",
+  "description": "Three-element voltage sorter: it takes three voltages and puts out the smallest, the middle one and the largest, each with its own attenuverter and offset on the way in",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Attenuates and inverts its input, -1 to 1, before the offset is added"},
+    {"ids": [3, 4, 5], "text": "Adds a fixed voltage to its input after the attenuverter, -10V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "One of the three voltages to sort; it is scaled, offset and then clamped to -10V and 10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The smallest of the three voltages at that moment"},
+    {"ids": [1], "text": "The middle one of the three voltages at that moment"},
+    {"ids": [2], "text": "The largest of the three voltages at that moment"}
+  ],
+  "notes": [
+    "the three voltages cross over each other as they rise and fall, so on audio the outputs are the input waves cut into layers rather than three copies of one wave",
+    "the channel count of all three outputs is the largest of the three inputs, and an input with fewer channels has its last channel used for the rest",
+    "all three outputs go quiet and the lamps clear whenever none of the three has a cable, which saves the work of sorting nothing"
+  ],
+  "menu": [
+    "Oversampling: Off, 2x, 4x, 8x, 16x — runs the sorting above the sample rate to keep the corners from aliasing, which costs processor time and is only worth it on audio"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "±10V · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±10V · polyphonic",
+      "1": "±10V · polyphonic",
+      "2": "±10V · polyphonic"
+    }
+  }
+}

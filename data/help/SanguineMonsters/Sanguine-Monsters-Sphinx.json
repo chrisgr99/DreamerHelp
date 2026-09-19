@@ -1,0 +1,53 @@
+{
+  "plugin": "SanguineMonsters",
+  "module": "Sanguine-Monsters-Sphinx",
+  "description": "A euclidean sequencer that spreads a number of active steps around a ring of up to 32, with accents, rotation and padding, and four ways of placing the steps",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the pattern holds, 1 to 32; it comes up at 16"},
+    {"ids": [1], "text": "Sets how many of the pattern's steps are active, read as a fraction of the LENGTH: one step at the bottom of the knob and every step at the top"},
+    {"ids": [2], "text": "Turns the whole pattern clockwise, carrying triggers and accents together, from no shift up to one step short of a full turn"},
+    {"ids": [3], "text": "Moves the accents round among the active steps, from no shift up to one short of the number of active steps"},
+    {"ids": [4], "text": "Adds inactive steps after the pattern, enough to fill 32 steps in all, which pushes the active steps out of their even spacing"},
+    {"ids": [5], "text": "Sets how many of the active steps are accented, from none up to all of them"},
+    {"ids": [6], "text": "Cycles through the four ways of placing the active steps — Euclidean, Random, Fibonacci and Linear — and recolours itself and the display to match"},
+    {"ids": [7], "text": "Cycles the GATE output through Trigger, Gate and Turing"},
+    {"ids": [8], "text": "Runs the pattern counter-clockwise; the panel prints RV"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the number of active steps; the voltage is divided by 9 and added to the STEPS knob"},
+    {"ids": [1], "text": "Shifts the LENGTH: 10V adds 31 steps and -10V takes 31 away, the total held between 1 and 32"},
+    {"ids": [2], "text": "Shifts the pattern rotation; the voltage is divided by 9 and added to the ROT knob"},
+    {"ids": [3], "text": "Shifts the accent rotation; the voltage is divided by 9 and added to the ACC ROT knob"},
+    {"ids": [4], "text": "Shifts the accent count; the voltage is divided by 9 and added to the ACC knob"},
+    {"ids": [5], "text": "Shifts the padding; the voltage is divided by 9 and added to the PAD knob"},
+    {"ids": [6], "text": "A rising edge advances the pattern by one step"},
+    {"ids": [7], "text": "A trigger sets the pattern back to its first step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "In Trigger mode a 1ms 10V pulse on each active step, in Gate mode 10V held from an active step until an inactive one, and in Turing mode a voltage read off the whole pattern as a binary number"},
+    {"ids": [1], "text": "A 10V trigger or gate on each active step that is also an accent, following the gate mode; in Turing mode a 1ms 10V pulse on every active step"},
+    {"ids": [2], "text": "A 1ms 10V pulse each time the pattern comes back round to its first step"}
+  ],
+  "notes": [
+    "Nothing moves until a clock is patched: the pattern only advances on a rising edge at the clock input.",
+    "The display draws the pattern as a ring of circles, active steps bright on the inner ring and accents promoted to the outer one, with the current step drawn larger.",
+    "The reverse button is the one control the maker left unnamed, so hovering it shows no tooltip."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "1": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

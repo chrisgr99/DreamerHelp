@@ -1,0 +1,61 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "Automata",
+  "description": "Sequencer built on Conway's Game of Life: a 32 by 20 wrapping board is stepped by a clock, and marked cells on it drive eight trigger outputs, with other Life-like rules available",
+  "params": [
+    {"ids": [0], "text": "Advances the simulation by one step"},
+    {"ids": [1], "text": "Returns the board to the seed, or randomises it if the menu says so"},
+    {"ids": [2], "text": "Randomises the board's current state without changing the seed"},
+    {"ids": [3], "text": "Sets how full a randomised board is, 0 to 1"},
+    {"ids": [4], "text": "Attenuates and inverts the RND % CV jack, -1 to 1, before that voltage is added to the density knob"},
+    {"ids": [5], "text": "Turns the automatic reset on and off"},
+    {"ids": [6], "text": "Sets how many steps run before the board resets itself, 1 to 64"},
+    {"ids": [7], "text": "Attenuates and inverts the LEN CV jack, -1 to 1, before that voltage is added to the length knob"},
+    {"ids": [8], "text": "Chooses what clicking the display does: Play ignores clicks, Edit seed draws the starting board, and the eight remaining positions each mark cells for one trigger set"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise past 2V advances the simulation by one step"},
+    {"ids": [1], "text": "A rise past 2V returns the board to the seed, or randomises it if the menu says so"},
+    {"ids": [2], "text": "Divided by 10, scaled by its attenuverter and added to the density knob"},
+    {"ids": [3], "text": "A rise past 2V randomises the board's current state without changing the seed"},
+    {"ids": [4], "text": "A rise past 2V turns the automatic reset on and off; the menu can make it a plain gate instead, on while the voltage is high"},
+    {"ids": [5], "text": "Divided by 10, multiplied by 64 and by its attenuverter, then added to the length knob, the total clamped to 1 and 64"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Its trigger set: a 10V pulse whenever any cell marked for that set becomes active, or a voltage from 0V to 10V for the share of that set's cells that are active, depending on the menu"},
+    {"ids": [8], "text": "A 10V pulse when the automatic reset length is reached"}
+  ],
+  "notes": [
+    "the board is drawn on the display and edited by clicking it, which does nothing until the MODE knob is off Play; the display is not a control, so clicking it reaches no help line",
+    "the trigger sets work by marking cells as watch points; a set with no marked cells never puts anything out",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Rule options — edits the birth and survival rule the simulation runs, with a list of the common Life-like rules to pick from",
+    "Trigger set options — per set: whether a marked cell counts while alive or only on the step it is born, whether its jack sends a trigger or a percentage, and a way to clear its marks",
+    "Randomize on manual reset — makes the reset button and jack randomise the board instead of returning it to the seed",
+    "Randomize on automatic reset — makes the automatic reset randomise the board instead of returning it to the seed",
+    "Momentary length enable input — makes the LEN TGL jack a plain gate rather than a toggle"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "high above 2V · stepped · one channel only",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 1 to 64V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

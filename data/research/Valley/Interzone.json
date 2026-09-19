@@ -1,0 +1,39 @@
+{
+  "plugin": "Valley",
+  "module": "Interzone",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "Interzone.cpp:119 takes getChannels() on this input to set the voice count and Interzone.cpp:222 reads it with getPolyVoltageSimd into the oscillator pitch"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "Interzone.cpp:120 takes getChannels() on this input to set the voice count and Interzone.cpp:223 adds it to the first V/Oct jack"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "Interzone.cpp:258 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks, then scales it by -0.1 into the pulse width"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Interzone.cpp:225 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks; VecLoopingADSR.cpp:18 opens the envelope when the gate is 1V or more"},
+      "4": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Interzone.cpp:227 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks; VecLoopingADSR.cpp:26 retriggers the envelope when the trigger is 1V or more"},
+      "5": {"family": "audio", "poly": true, "step": "continuous", "why": "Interzone.cpp:284 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks, then mixes it in at the EXT level"},
+      "6": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "sumRange": "0 to 10V", "why": "Interzone.cpp:239 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks; VecOTAFilter.cpp:92 clamps the cutoff total to 0..10V and VecOTAFilter.cpp:148 takes 440Hz times 2 to the power of that voltage minus 5"},
+      "7": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "sumRange": "0 to 10V", "why": "Interzone.cpp:240 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks; VecOTAFilter.cpp:92 clamps the cutoff total to 0..10V and VecOTAFilter.cpp:148 takes 440Hz times 2 to the power of that voltage minus 5"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Interzone.cpp:247 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks and adds it to the resonance knob; VecOTAFilter.cpp:135 clamps the total to 0..10V"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "1V per octave", "why": "Interzone.cpp:142 adds this input to the rate and fine knobs and raises 2 to the sum, so the LFO doubles its rate per volt"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "Interzone.cpp:194 passes this input to DLFO::trigger, which takes a new sample and hold value when it crosses 0.1V (DLFO.hpp:90)"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.1V", "why": "Interzone.cpp:193 passes this input to DLFO::sync, which restarts the LFO when it crosses 0.1V (DLFO.hpp:80)"},
+      "13": {"family": "cv", "poly": true, "step": "continuous", "why": "Interzone.cpp:231 reads this input with getPolyVoltageSimd, four voices at a time, and Interzone.cpp:119 sets the voice count from the two V/Oct jacks, scales it by the VCA CV knob and Interzone.cpp:234 clamps the total level to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "audio"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"}
+    }
+  },
+  "comment": "Input 9 (FILTER_INPUT) is declared in the code with no widget on the panel. The LFO slew knob only smooths the LFO value used for internal modulation; the seven LFO output jacks carry the unsmoothed shapes."
+}

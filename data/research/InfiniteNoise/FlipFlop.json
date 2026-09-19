@@ -1,0 +1,19 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "FlipFlop",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V, read as low", "why": "FlipFlop.cpp:273 reads getVoltage() with no channel index"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "the T/D input", "why": "FlipFlop.cpp:275 tests this jack with isConnected and line 276 reads it with getVoltage, channel 0 only; with the jack empty line 277 uses the T/D jack's voltage instead, which is itself 0V when that jack is empty too. Line 278 puts the result through a Schmitt trigger whose low and high levels come from the module menu and start at 0.1V and 1V. The branch is reached only when neither the Set nor the Reset gate is high, so either of those holds the output and this jack is not read."},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V, read as low", "why": "FlipFlop.cpp:237 reads getVoltage() with no channel index"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V, read as low", "why": "FlipFlop.cpp:244 reads getVoltage() with no channel index"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "enabled", "why": "FlipFlop.cpp:217 and FlipFlop.cpp:223 read getVoltage() as a trigger or a gate, and the module stays enabled when the jack is empty"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "FlipFlop.cpp:296 writes all three outputs with setVoltage and no channel index"},
+      "1": {"family": "trigger", "poly": false, "why": "FlipFlop.cpp:296 writes all three outputs with setVoltage and no channel index"},
+      "2": {"family": "trigger", "poly": false, "why": "FlipFlop.cpp:296 writes all three outputs with setVoltage and no channel index"}
+    }
+  },
+  "comment": "The panel prints T/D, Clock, Set, Reset, En/Dis, Q, !Q and ChQ. Set and Reset take priority over the clock and T/D at all times, and the disable state suppresses everything."
+}

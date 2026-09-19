@@ -1,0 +1,54 @@
+{
+  "plugin": "MADZINE",
+  "module": "EuclideanRhythm",
+  "description": "Three Euclidean trigger sequencers driven from one clock, each with its own step count, density, rotation and clock division, plus outputs that hand the pattern from one track to another",
+  "params": [
+    {"ids": [0], "text": "Returns all three tracks to the start of their patterns and restarts the clock measurement"},
+    {"ids": [1, 8, 15], "text": "Divides or multiplies the clock for that track, from a quarter speed through the clock's own rate to four times it"},
+    {"ids": [2, 9, 16], "text": "Sets how many steps that track's pattern runs for, 1 to 32"},
+    {"ids": [3, 10, 17], "text": "Sets what share of that track's steps carry a hit, 0% to 100%, the hits spread as evenly through the pattern as the count allows"},
+    {"ids": [4, 11, 18], "text": "Rotates that track's pattern, up to 31 steps, moving where the hits fall without changing how many there are"},
+    {"ids": [5, 12, 19], "text": "Attenuates and inverts the voltage at the length jack above it, -1 to +1"},
+    {"ids": [6, 13, 20], "text": "Attenuates and inverts the voltage at the fill jack above it, -1 to +1"},
+    {"ids": [7, 14, 21], "text": "Attenuates and inverts the voltage at the shift jack above it, -1 to +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock every track counts; the interval between two edges here is the tempo the per-track dividers and multipliers work from"},
+    {"ids": [1], "text": "A rising edge returns all three tracks to the start of their patterns and restarts the clock measurement"},
+    {"ids": [2, 5, 8], "text": "Added to that track's LEN knob through the trimmer below it, one step per volt; the total is held between 1 and 32"},
+    {"ids": [3, 6, 9], "text": "Added to that track's FILL knob through the trimmer below it, 10% per volt; the total is held between 0% and 100%"},
+    {"ids": [4, 7, 10], "text": "Added to that track's SHFT knob through the trimmer below it, one step per volt; the total is held between 0 and one step short of the pattern length"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A 10ms trigger at 10V on every step of that track that carries a hit"},
+    {"ids": [3], "text": "Goes to 10V whenever any of the three track outputs is high"},
+    {"ids": [4], "text": "Plays track 1 for one full pass of its pattern, then track 2 for one full pass, and repeats"},
+    {"ids": [5], "text": "Plays track 2 for one full pass of its pattern, then track 3 for one full pass, and repeats"},
+    {"ids": [6], "text": "Plays one full pass each of track 1, track 2, track 1 again and track 3, then repeats"}
+  ],
+  "notes": [
+    "no track steps and the three chain outputs stay at 0V until a clock reaches CLK. The tempo is measured from the gap between clock edges, so the first edge after a reset produces nothing."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "±10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "±10V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "stepped · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · one channel only"
+    }
+  }
+}

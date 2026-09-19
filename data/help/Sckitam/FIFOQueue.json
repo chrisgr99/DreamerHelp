@@ -1,0 +1,32 @@
+{
+  "plugin": "Sckitam",
+  "module": "FIFOQueue",
+  "description": "Three first-in first-out queues written and read by triggers, each holding up to 128 values, so a run of voltages can be stored and played back in the order it arrived",
+  "inputs": [
+    {"ids": [0], "text": "A trigger above 1V stores the voltage at each of the three In jacks as one more entry, and is ignored once 128 entries are held"},
+    {"ids": [1], "text": "A trigger above 1V takes the oldest entry out of each queue and holds it at the Out jacks; on an empty queue nothing is read and no trigger is sent"},
+    {"ids": [2], "text": "Above 0V, every entry read out is written back onto the end of the queue, so the stored run repeats"},
+    {"ids": [3], "text": "A trigger above 1V empties all three queues"},
+    {"ids": [4, 5, 6], "text": "The voltage stored in its own queue each time a write trigger arrives, and returned at the matching Out jack"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger 1ms long each time an entry is actually read out"},
+    {"ids": [1], "text": "Carries 10V while the queues are empty and 0V while they hold anything"},
+    {"ids": [2, 3, 4], "text": "The entry read out of its own queue, held until the next read trigger"}
+  ],
+  "notes": [
+    "the figure printed on the panel counts the entries now held, out of a maximum of 128, and the lamp column shows the same count as a bar",
+    "The Out jacks rest at 0V until a write trigger has stored something and a read trigger has taken it out; a read on an empty queue does nothing at all"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped",
+      "1": "high above 1V · stepped",
+      "2": "high above 0V · stepped",
+      "3": "high above 1V · stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

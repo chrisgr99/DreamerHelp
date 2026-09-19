@@ -1,0 +1,84 @@
+{
+  "plugin": "nullpath",
+  "module": "supersaw",
+  "description": "Three-oscillator supersaw voice with a noise source and a built-in ADSR envelope, detunable per wave and with the envelope routable to the noise and to the middle wave's shape",
+  "params": [
+    {"ids": [0], "text": "Shifts the pitch of all three waves in whole octaves, -2 to +2"},
+    {"ids": [1], "text": "Shifts the pitch of all three waves smoothly, one octave down to one octave up"},
+    {"ids": [2], "text": "Chooses what the middle wave is: a pulse, or a shape that runs between saw and triangle"},
+    {"ids": [3], "text": "Detunes wave A on its own, about a quarter of a semitone either way"},
+    {"ids": [4], "text": "Detunes wave B on its own, about a quarter of a semitone either way"},
+    {"ids": [5], "text": "Detunes wave C on its own, about a quarter of a semitone either way"},
+    {"ids": [6], "text": "Holds each random noise sample for up to a thousandth of a second before drawing a new one, which makes the noise coarser as it is raised"},
+    {"ids": [7], "text": "Mixes noise into the final output, from none up to half the level of the three waves"},
+    {"ids": [8], "text": "Sets the shape of the middle wave: with the pulse selected it is the pulse width, and with the other shape it runs from saw to triangle; it is held between 0.1 and 0.9"},
+    {"ids": [9], "text": "Sets how long the envelope takes to reach full, 0.001 to 5 seconds"},
+    {"ids": [10], "text": "Sets how long the envelope takes to fall from full to the sustain level, 0.01 to 5 seconds"},
+    {"ids": [11], "text": "Sets the level the envelope holds at while the gate stays high, 0 to 1"},
+    {"ids": [12], "text": "Sets how long the envelope takes to fall to silence after the gate drops, 0.01 to 5 seconds"},
+    {"ids": [13, 14, 15], "text": "Sets the level of that wave in the mix and at its own output, 0 to 1"},
+    {"ids": [16], "text": "Sets the level of the finished mix, 0 to 1"},
+    {"ids": [17], "text": "Switches the envelope through to the noise duration"},
+    {"ids": [18], "text": "Switches the envelope through to the noise mix"},
+    {"ids": [19], "text": "Switches the envelope through to the middle wave's shape"},
+    {"ids": [20], "text": "Sets how much of the envelope reaches the noise duration, -1 to +1, and inverts it below centre; it does nothing until the switch beside it is on"},
+    {"ids": [21], "text": "Sets how much of the envelope reaches the noise mix, 0 to 1; it does nothing until the switch beside it is on"},
+    {"ids": [22], "text": "Sets how much of the envelope reaches the middle wave's shape, -1 to +1, and inverts it below centre; it does nothing until the switch beside it is on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of all three waves at a volt per octave, and its channel count sets how many voices the module runs"},
+    {"ids": [1], "text": "Multiplies the attack time by its own voltage over ten, held between a thousandth and the whole knob value, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [2], "text": "Multiplies the decay time by its own voltage over ten, held between a thousandth and the whole knob value, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [3], "text": "Multiplies the sustain level by its own voltage over ten, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [4], "text": "Multiplies the release time by its own voltage over ten, held between a thousandth and the whole knob value, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [5, 6, 7], "text": "Multiplies that wave's level by its own voltage over ten, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [8], "text": "Multiplies the final level by its own voltage over ten, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [9], "text": "Multiplies the noise duration by its own voltage over ten, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [10], "text": "Adds its own voltage over ten to the middle wave's shape, and the total is held between 0.1 and 0.9; it is added whether or not the knob is turned"},
+    {"ids": [11], "text": "A rising edge past 1V starts the envelope, and dropping to 0.5V or below releases it"},
+    {"ids": [12], "text": "Multiplies the noise mix by its own voltage over ten, so the knob becomes an attenuator while a cable is here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The three waves mixed with the noise, scaled by the final level and shaped by the envelope while a cable is in the gate input"},
+    {"ids": [1, 2, 3], "text": "That wave on its own at ±5V, scaled by its own level knob but not by the envelope or the final level"},
+    {"ids": [4], "text": "The raw noise at ±5V, before the noise mix knob and before the envelope"},
+    {"ids": [5], "text": "The envelope on its own, 0V to 10V"}
+  ],
+  "notes": [
+    "with a cable in the gate input the module is silent until a gate arrives; with the gate input empty the three waves run continuously and the envelope never opens.",
+    "every CV jack here multiplies its knob rather than adding to it, so a jack sitting at 0V silences or shortens whatever it controls.",
+    "the one jack that adds rather than multiplies is the middle wave's shape CV, and it is added whether or not a cable is in it.",
+    "the envelope, the noise and the envelope and noise outputs are single-channel; the main output and the three wave outputs follow the channel count of the pitch input.",
+    "each oscillator's phase is advanced twice per sample, once for the mix and once for its own output, so the sounding pitch is an octave above the 130.81Hz base in the code.",
+    "0V at the pitch input, with the octave and pitch knobs centred, gives about 261.6Hz.",
+    "with nothing patched into the gate input the final level CV is applied twice over, so its effect on the output is squared."
+  ],
+  "menu": [
+    "Linear envelope — makes the envelope's attack, decay and release straight lines instead of the curved default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "6": "0 to 10V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "8": "0 to 10V · continuous · polyphonic\n\na negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0.1 to 0.9V.",
+      "11": "high above 1V · stepped · one channel only",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only"
+    }
+  }
+}

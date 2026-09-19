@@ -1,0 +1,24 @@
+{
+  "plugin": "NLS",
+  "module": "CrossSeq2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:91 passes this jack raw to CrossSeq2_setFreq; src/CrossSeq2.vult:101 adds it to the freq knob, whose own range is 0 to 10, and :92 multiplies that sum into each LFO rate"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:93 divides this jack by 10 and multiplies by the cvrate1 attenuverter; src/CrossSeq2.vult:107 adds that to the rate1 knob"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:94 divides this jack by 10 and multiplies by the cvrate2 attenuverter; src/CrossSeq2.vult:110 adds that to the rate2 knob"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:97 divides this jack by 10 and multiplies by the cvshape1 attenuverter; src/CrossSeq2.vult:126 adds that to the shape1 knob, which :63 lerps between waveforms"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:98 divides this jack by 10 and multiplies by the cvshape2 attenuverter; src/CrossSeq2.vult:129 adds that to the shape2 knob, which :63 lerps between waveforms"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:95 divides this jack by 10 and multiplies by the cvamount1 attenuverter; src/CrossSeq2.vult:120 adds that to the amount1 knob and clips the sum to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/CrossSeq2Module.cpp:96 divides this jack by 10 and multiplies by the cvamount2 attenuverter; src/CrossSeq2.vult:123 adds that to the amount2 knob and clips the sum to 0 to 1"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CrossSeq2Module.cpp:92 passes this jack raw to CrossSeq2_setSync; src/CrossSeq2.vult:55 tests it above 0V and :57 resets both LFO phases to 1.0 on the rising edge"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/CrossSeq2Module.cpp:109"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "src/CrossSeq2Module.cpp:110"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "why": "src/CrossSeq2Module.cpp:111"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "why": "src/CrossSeq2Module.cpp:112"}
+    }
+  },
+  "source": "https://github.com/michelezaccagnini/NLS/blob/main/README.md",
+  "comment": "Written from the maker's source at commit 5ebe71e, the last of the three commits whose plugin.json carries 2.1.6.0; the installed manifest's authorUrl, 'https://linktr.ee/michelezac', matches 9d79d54 and 5ebe71e rather than the earlier a903f08, and no DSP file differs between any of those three or the repository head. The DSP is written in Vult and compiled to C++; CrossSeq2.vult is the readable form and CrossSeq2.cpp the generated one. The panel prints only the row labels rt, am, sh, ph and pw, with the left column belonging to LFO 1 and the right to LFO 2; the individual knobs carry no lettering. The freq input is the only CV input with no attenuverter, and it is the only one added at full voltage rather than divided by ten. Nothing in the module clamps the master frequency, so a negative freq input drives the phase increment negative, and the phase wrap in lfo_interp only wraps downward from above 2.0."
+}

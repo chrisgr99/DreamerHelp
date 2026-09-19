@@ -1,0 +1,17 @@
+{
+  "plugin": "SIM",
+  "module": "Tie",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "the glide time knob", "why": "Tie.cpp:129 multiplies the jack by the knob and divides by 10, clamped to 0 to 1, when the jack is patched"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "Tie.cpp:127 getPolyVoltage reads this jack per channel and :162 writes it to the pitch output, glided; :105 gives every output no channels while it is unpatched"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Tie.cpp:126 reads below 1V as no gate and :125 any rise above the previous sample as a new note; :114 with nothing patched the pitch passes through unglided"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Tie.cpp:112 gives the output the channel count of the pitch input"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Tie.cpp:167 writes 10V while the glide is running and 0V otherwise"},
+      "2": {"family": "trigger", "poly": true, "why": "Tie.cpp:171 gives the delayed gate output the same channel count as the others"}
+    }
+  },
+  "comment": "The third output is never given a name by the maker: configOutput is called for the pitch and active outputs only, so this jack has no tooltip of its own. It carries the gate input delayed by the sample-delay knob. A fourth parameter, BIAS_PARAM, is declared in the code but never configured and never given a widget, so it can neither be seen nor clicked."
+}

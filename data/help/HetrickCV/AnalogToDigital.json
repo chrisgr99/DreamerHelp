@@ -1,0 +1,25 @@
+{
+  "plugin": "HetrickCV",
+  "module": "AnalogToDigital",
+  "description": "Encodes a signal as an eight-bit number and puts each bit on its own gate output",
+  "params": [
+    {"ids": [0], "text": "Scales the input before encoding, -1 to +1, and starts at 0.2 so that a 5V signal fills the range"},
+    {"ids": [1], "text": "Adds an offset of -5V to 5V to the scaled input, shifting which bits come on"},
+    {"ids": [2], "text": "Cycles the encoder: Uni. 8 encodes positive voltages with bit 8 most significant, Bi. Off. shifts a bipolar signal up first, Bi. Sig. gives the sign on bit 8 and makes bit 7 most significant"},
+    {"ids": [3], "text": "Cycles the rectifier ahead of the encoder: None passes the signal, Half replaces negative voltages with 0V, Full takes the absolute value"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal being encoded"},
+    {"ids": [1], "text": "A rising gate here updates the bits; with nothing patched they are recalculated every sample"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "The state of that bit, 10V when it is 1 and 0V when it is 0; bit 1 is the least significant"},
+    {"ids": [8], "text": "All eight bits on one polyphonic cable, bit 1 on channel 1"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only"
+    }
+  }
+}

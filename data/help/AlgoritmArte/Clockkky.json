@@ -1,0 +1,35 @@
+{
+  "plugin": "AlgoritmArte",
+  "module": "Clockkky",
+  "description": "Clock generator with three eight-step gate sequencers driven by it",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock, 15 to 3840 BPM"},
+    {"ids": [1], "text": "Joins the three tracks into one 24-step sequence at 1x24, where only the T1 output carries pulses, or runs them as three independent eight-step tracks at 3x8"},
+    {"ids": [2], "text": "Restarts every track from its first step"},
+    {"ids": [3], "text": "Starts and stops the clock; while it is stopped the clock output and all three track outputs stay at 0V"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27], "text": "Turns that step of the track on or off; an active step sends a pulse from its track output when the sequencer reaches it"},
+    {"ids": [28, 29, 30], "text": "Sets how many of the eight steps that track plays, 0 to 8; at 0 that track's output stays at 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Clocks all three tracks from an external source, and stops the internal clock while a cable is patched"},
+    {"ids": [1], "text": "A rising edge above 1V restarts every track from its first step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate lasting half of each clock period, at 0V while the clock is stopped"},
+    {"ids": [1], "text": "Carries a 10V pulse, half a clock period long, when an active step of track 1 comes round; in 1x24 mode it carries the pulses of all 24 steps"},
+    {"ids": [2], "text": "Carries a 10V pulse, half a clock period long, when an active step of track 2 comes round, and stays at 0V in 1x24 mode"},
+    {"ids": [3], "text": "Carries a 10V pulse, half a clock period long, when an active step of track 3 comes round, and stays at 0V in 1x24 mode"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "high above 1V · stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

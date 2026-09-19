@@ -1,0 +1,15 @@
+{
+  "plugin": "Autinn",
+  "module": "Au",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "Au.cpp:60 reads this input with getVoltage, which is channel 0 only, and uses it as the root pitch"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Au.cpp:97 takes getChannels() on this input and Au.cpp:120 reads channel targetIdx with getPolyVoltage"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "Au.cpp:77 reads this input with getVoltage; Au.cpp:83 to :91 treat anything at or below 0.1V as full convergence, so a negative voltage does nothing a 0V reading would not"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Au.cpp:99 sets this output to sixteen channels whatever is patched"}
+    }
+  },
+  "comment": "The chord channels are read in reverse (Au.cpp:119), so voice 1 takes the top channel of the chord. A micro-detune term is computed at Au.cpp:101 and then multiplied by an integer fixed at 0 (Au.cpp:102, :105), so it has no effect on the output; no line claims any detune. The module's slug is Au but its class is named Converge and its panel prints AU."
+}

@@ -1,0 +1,42 @@
+{
+  "plugin": "Ahornberg",
+  "module": "MIDIPolyExpression",
+  "description": "Turns MPE from a MIDI keyboard into polyphonic control voltages, one polyphonic channel for each MIDI channel, with its own envelope shaping the pressure",
+  "params": [
+    {"ids": [0], "text": "Sets the first MIDI channel read, 1 to 16"},
+    {"ids": [1], "text": "Sets how many MIDI channels are read, and so how many channels every output carries; the count is trimmed so it never runs past MIDI channel 16"},
+    {"ids": [3], "text": "Sets how slowly the volume falls away after a note held for less than about an eighth of a second; the higher the setting the longer the tail"},
+    {"ids": [4], "text": "Sets how slowly the volume falls away after a note held for more than about a fifth of a second; the higher the setting the longer the tail"},
+    {"ids": [5], "text": "Pulls pitch bend towards whole semitones: at the left the bend passes through untouched, and turning it right narrows the band between semitones until the bend snaps from one to the next"},
+    {"ids": [6], "text": "Bends the note-on velocity curve, from one raised in its middle at the left to one hollowed in its middle at the right"},
+    {"ids": [7], "text": "Lengthens the fall after a short note in proportion to the modulation value, so a note played further up the key holds on longer"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while a note is held on that MIDI channel, on one polyphonic channel per MIDI channel; with Gate Velocity Mode on it carries the note-on velocity instead"},
+    {"ids": [1], "text": "The pressure of the note through the envelope, taken from channel aftertouch, polyphonic aftertouch or control change 11, raised to the power of 1.3 and halved"},
+    {"ids": [2], "text": "The note's pitch with the pitch bend added, one volt per octave, with 0V for MIDI note 60"},
+    {"ids": [3], "text": "Control change 1 or 74 on that MIDI channel, 0 to 10V, smoothed"},
+    {"ids": [4], "text": "The note's pitch without any pitch bend, one volt per octave, with 0V for MIDI note 60"},
+    {"ids": [5], "text": "The pitch bend on its own, one volt per octave; a full bend is 4V, which is 48 semitones"}
+  ],
+  "notes": [
+    "nothing comes out until a MIDI device is chosen with the button at the top of the panel. That button is not a parameter, so clicking it for help gives nothing.",
+    "the panel marks the outputs W, X, Y and Z after the MPE dimensions: W the gate, X the three pitch jacks, Y the modulation and Z the volume.",
+    "the green lamp at the bottom lights while the volume is arriving as 14-bit control change, that is control change 11 with control change 43 carrying its lower half."
+  ],
+  "menu": [
+    "Gate Velocity Mode — puts the shaped note-on velocity on the gate output in place of a flat 10V",
+    "Preserve Pitch after Note-Off — keeps the pitch bend applied once the note has ended, instead of dropping the pitch output back to the plain note",
+    "Panic — clears every note, gate, bend and modulation and re-opens the MIDI port"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "stepped · polyphonic",
+      "1": "polyphonic",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "0 to 10V · polyphonic",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

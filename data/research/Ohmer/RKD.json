@@ -1,0 +1,22 @@
+{
+  "plugin": "Ohmer",
+  "module": "RKD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/RKD.cpp:422 reads this input with getVoltage and clamps it to 0 to 5; :420 leaves it at zero when unpatched"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 3.5V", "step": "stepped", "negative": "ignored", "why": "src/RKD.cpp:671 RESET_Port.process on rescale(getVoltage, 0.2, 3.5, 0, 1) fires above 3.5V; :688 zeroes every divider counter only on the next rising clock edge"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 3.5V", "step": "stepped", "negative": "ignored", "why": "src/RKD.cpp:590 puts this input through a Schmitt trigger after rescaling 0.2V to 3.5V onto 0 to 1, and :645 tests the same voltage against 0.2 for the falling edge"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/RKD.cpp:263 writes every output as 5V or 0V on one channel"}
+    }
+  },
+  "comment": "The six parameters are jumpers drawn on a circuit-board view of the panel, hidden until the menu item is ticked (src/RKD.cpp:997-1002 for the item, :1137-1142 for the hiding). They are at src/RKD.cpp:1107-1123 in left-to-right order, so index 0 is J1 and index 5 is J6, matching the manual's numbering. The Max Div table is at :324-332: both Max Div jumpers installed gives 8, Max Div 32 removed gives 16, Max Div 16 removed gives 32, both removed gives 64, and the pair with Spread installed gives 16. Extra tables force Max Div to 64 at :334. Auto-reset fires at twice the largest divider (:708, :767). The RESET lamp colours are at :785-810; the manual calls the third colour purple in one place and the code names the light PURPLE while the comment calls it blue. Clock and reset thresholds are 3.5V rising and 0.2V falling (:590, :645, :671), matching the manual. The eight outputs are genuinely identical in function and differ only by their ratio, so one line covers them and all eight tags point at it; the panel prints each one as 1+R through 8+R and each carries its own display. The ROTATE jack is not a pitch or a gate input: it is a stepped selector read as a level, which is why it is given the cv family."
+}

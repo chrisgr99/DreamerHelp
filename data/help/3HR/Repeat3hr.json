@@ -1,0 +1,56 @@
+{
+  "plugin": "3HR",
+  "module": "Repeat3hr",
+  "description": "A mono delay meant to be swept: the feedback path is bit-crushed and downsampled, the feedback fades out and back in around every wrap so the time can be moved without clicking",
+  "params": [
+    {"ids": [0], "text": "Scales the TIME control input before it is added to the TIME knob"},
+    {"ids": [1], "text": "Trims the delay time by up to 99 milliseconds either way, added to the TIME knob"},
+    {"ids": [2], "text": "Scales the FINE control input before it is added to the FINE knob"},
+    {"ids": [3], "text": "Sets the delay time, 0.1 to 4 seconds"},
+    {"ids": [4], "text": "Sets how coarsely the feedback path is quantised: fully up leaves it alone, and turning down steps the signal to fewer and fewer levels"},
+    {"ids": [5], "text": "Scales the CRUSH control input, which is subtracted from the CRUSH knob rather than added to it"},
+    {"ids": [6], "text": "Scales the FB control input before it is added to the FB knob"},
+    {"ids": [7], "text": "Sets how much of the delay line is fed back into itself; the knob is squared before use and reaches a little past unity, so the repeats can build rather than only fade"},
+    {"ids": [8], "text": "Sets how much of the incoming signal is written into the delay line"},
+    {"ids": [9], "text": "Scales the INPUT control input before it is added to the INPUT knob"},
+    {"ids": [10], "text": "Scales the DRY control input before it is added to the DRY knob"},
+    {"ids": [11], "text": "Sets how much of the untouched input reaches the output"},
+    {"ids": [12], "text": "Adds its own value squared to the WET knob, and only while a cable is in the WET control input; the voltage on that cable is never read"},
+    {"ids": [13], "text": "Sets how much of the delay line reaches the output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the TIME knob through the TIME CV knob, 0.98 seconds per volt at full amount"},
+    {"ids": [1], "text": "Added to the FINE knob through the FINE CV knob, about 20ms per volt at full amount"},
+    {"ids": [2], "text": "Subtracted from the CRUSH knob through the CRUSH CV knob, 0.8 of a step per volt at full amount"},
+    {"ids": [3], "text": "Added to the FB knob through the FB CV knob, 0.12 per volt at full amount, before the total is squared"},
+    {"ids": [4], "text": "Added to the INPUT knob through the INPUT CV knob, a tenth per volt at full amount"},
+    {"ids": [5], "text": "Added to the DRY knob through the DRY CV knob, a tenth per volt at full amount"},
+    {"ids": [6], "text": "The voltage here is never read; patching any cable into it makes the WET CV knob add its own square to the WET knob, and that is all it does"},
+    {"ids": [7], "text": "The signal to be delayed, summed to one channel if the cable is polyphonic"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The dry and delayed signals mixed by the DRY and WET knobs, one channel"},
+    {"ids": [1], "text": "A 1ms trigger each time the delay line wraps round, for firing envelopes in step with the repeats"}
+  ],
+  "notes": [
+    "the CRUSH control input reaches only the sample-rate reduction in the feedback path; the bit-depth quantisation is taken straight from the knob, so no cable can change it",
+    "the feedback is faded to nothing over the samples left before the delay line wraps and faded back in over the next 250 samples, which is what lets the TIME knob be swept without clicks",
+    "the module is monophonic: a polyphonic input is summed and both outputs carry one channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "bipolar · continuous · one channel only",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "one channel only",
+      "7": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

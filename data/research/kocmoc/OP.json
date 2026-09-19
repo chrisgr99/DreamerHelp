@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "OP",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "OP.cpp:86 getVoltage(ii) per channel; :109 multiplied by 32 times the cubed index"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 0V", "step": "stepped", "negative": "ignored", "why": "OP.cpp:98 compares this channel's voltage with its value on the previous sample and resets the oscillator phase when it crosses above 0V, so the sync point is 0V and no Schmitt trigger is involved"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "why": "OP.cpp:68 getChannels() here sets the loop bound; :85 volts plus offset over twelve, :93 clipped at zero, :106 pow(2, cv)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "OP.cpp:115 10.0 * sin(phase) per channel; :119 setChannels(channels)"}
+    }
+  },
+  "comment": "The SCALE and OFFSET knobs are read through int(), so they step whole numbers even though neither is a snap knob. Base frequency is OP.cpp:106, (440.0/128.0) * pow(2, cv). The panel prints minus and plus marks over the left trimpot only; the right trimpot, the phase offset, carries no marking of any kind."
+}

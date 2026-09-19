@@ -1,0 +1,64 @@
+{
+  "plugin": "Corpus",
+  "module": "JamPG",
+  "description": "A sequencer driven by a picture: a playhead steps through a loaded image one pixel at a time, and the red, green and blue values of the pixel it lands on become three gates and three control voltages.",
+  "params": [
+    {"ids": [0], "text": "Scales the red control voltage output, 0 to 100%; the red gate is taken from the raw pixel and is not affected."},
+    {"ids": [1], "text": "Scales the green control voltage output, 0 to 100%; the green gate is taken from the raw pixel and is not affected."},
+    {"ids": [2], "text": "Scales the blue control voltage output, 0 to 100%; the blue gate is taken from the raw pixel and is not affected."},
+    {"ids": [3], "text": "Sets the brightness a colour channel of the current pixel must exceed for that channel's gate to go high, 0 to 100%."},
+    {"ids": [4], "text": "Sets how many pixels the playhead moves along the row on each clock pulse, 1 to 32; the same figure is how many rows it drops when it reaches the end of one."},
+    {"ids": [5], "text": "Opens a file dialog to choose the image, in JPEG, PNG or BMP."},
+    {"ids": [6], "text": "Returns the playhead to the top left pixel."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Steps the playhead on, on a rising edge; the playhead moves and the new pixel is read only while a cable is in this jack."},
+    {"ids": [1], "text": "Returns the playhead to the top left pixel, on a rising edge."},
+    {"ids": [2], "text": "Adds to the red level, a tenth of the knob's full travel per volt, with the total held between 0 and 100%."},
+    {"ids": [3], "text": "Adds to the green level, a tenth of the knob's full travel per volt, with the total held between 0 and 100%."},
+    {"ids": [4], "text": "Adds to the blue level, a tenth of the knob's full travel per volt, with the total held between 0 and 100%."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V for as long as the red value of the current pixel is above THRESH, 0V otherwise."},
+    {"ids": [1], "text": "10V for as long as the green value of the current pixel is above THRESH, 0V otherwise."},
+    {"ids": [2], "text": "10V for as long as the blue value of the current pixel is above THRESH, 0V otherwise."},
+    {"ids": [3], "text": "The red value of the current pixel as 0-10V, scaled by the red level."},
+    {"ids": [4], "text": "The green value of the current pixel as 0-10V, scaled by the green level."},
+    {"ids": [5], "text": "The blue value of the current pixel as 0-10V, scaled by the blue level."},
+    {"ids": [6], "text": "The playhead's column as 0-10V across the width of the image."},
+    {"ids": [7], "text": "The playhead's row as 0-10V across the height of the image."},
+    {"ids": [8], "text": "A 10V trigger 1ms long each time the playhead reaches the end of a row and drops to the next."},
+    {"ids": [9], "text": "A 10V trigger 1ms long each time the playhead reaches the end of the image and wraps to the top left."}
+  ],
+  "notes": [
+    "The module does nothing until an image is loaded with the LOAD button and a clock is patched to CLK.",
+    "The pixel is sampled only on a clock edge, so every gate and every control voltage reads 0V until the first clock pulse after an image is loaded.",
+    "The path of the image is saved with the patch and the file is read from disk again when the patch is opened, so moving or deleting the file leaves the module empty.",
+    "Initialize clears the loaded image as well as the knobs, and the display returns to NO SIGNAL.",
+    "The display shows the loaded image with a crosshair on the current pixel, a swatch of its colour, and a bar marking how far along the row the playhead is. Nothing on it can be clicked."
+  ],
+  "menu": [
+    "Load Image... — opens the same file dialog as the LOAD button."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads nothing; the playhead never moves; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads nothing; only the RST button resets; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

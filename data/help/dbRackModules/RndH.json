@@ -1,0 +1,40 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndH",
+  "description": "Draws a random voltage on each clock from a seedable random source, with three outputs carrying three different distributions",
+  "params": [
+    {"ids": [0], "text": "While on, the values are drawn over -5V to 5V; while off, over 0-10V"},
+    {"ids": [1], "text": "Sets how many uniform draws each value is made from, 1 to 20; at 1 every output carries a plain uniform distribution"},
+    {"ids": [2], "text": "Sets how many channels the outputs carry, 1 to 16"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that draws a new set of values"},
+    {"ids": [1], "text": "A trigger here reseeds the random source from the voltage at Seed and draws a value at once, so the same run of values is drawn again"},
+    {"ids": [2], "text": "Sets the seed, 0-10V across the seed range, read only at the instant a trigger arrives at Rst; at 0V, and with nothing patched, the seed is taken from the computer's clock instead"},
+    {"ids": [3], "text": "Sets the number of draws by voltage in place of the Sth knob, 0-10V mapped onto 1 to 20, one channel per output channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The smallest of the draws, which crowds the values towards the bottom of the range as Sth is raised"},
+    {"ids": [1], "text": "A Weibull distribution with its density set by Sth"},
+    {"ids": [2], "text": "The average of the draws, which crowds the values towards the middle of the range as Sth is raised and approaches a normal distribution"}
+  ],
+  "notes": [
+    "with nothing patched into Clk a new value is drawn every sample, giving noise at audio rate, and the values are then drawn over -5V to 5V whatever the BiP button is set to"
+  ],
+  "menu": [
+    "Round Seed — cuts the voltage at Seed to four decimal places before it is turned into a seed, so a seed set by hand can be hit again"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads half the Sth knob; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

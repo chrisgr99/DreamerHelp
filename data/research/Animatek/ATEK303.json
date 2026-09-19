@@ -1,0 +1,22 @@
+{
+  "plugin": "Animatek",
+  "module": "ATEK303",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "normal": "the attached sequencer, or 0V", "why": "Atek303.cpp:364-365 read this jack with getVoltage() while it is patched and fall back to the expander's pitch, then to 0V, when it is not; :347-348 round the volts times twelve to a MIDI note and :341-342 keep the remainder as a micro-bend"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the attached sequencer", "why": "Atek303.cpp:378 tests this jack against 1V while the gate is low and 0.1V while it is high, a hand-rolled hysteresis rather than a dsp::SchmittTrigger; :372-373 fall back to the expander's gate when the jack is empty"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the attached sequencer", "why": "accent is read as 1V or above at the note's start, per the manual's ACC section"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "the attached sequencer", "why": "Atek303.cpp:379 tests this jack against 1V while slide is low and 0.1V while it is high, a hand-rolled hysteresis rather than a dsp::SchmittTrigger; :374-375 fall back to the expander's slide when the jack is empty"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Atek303.cpp:261 knob + attenuverter * voltage * 0.2, the total clamped to the control's range"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±12V", "why": "the output is clamped at ±12V, per the manual's OUT section"}
+    }
+  },
+  "comment": "The six modulation jacks are identical in the code (Atek303.cpp:258-263 modKnob), so one line covers them and one covers the six attenuverters. Menu wording is taken from the source rather than the manual, which shortens several of the names; every Fine tuning item lives inside that one submenu."
+}

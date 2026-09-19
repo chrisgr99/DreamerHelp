@@ -1,0 +1,71 @@
+{
+  "plugin": "Bidoo",
+  "module": "cANARd",
+  "description": "Sampler that records what is patched into it, cuts the recording into slices, and plays them back",
+  "params": [
+    {"ids": [0], "text": "Starts recording on the first press and stops on the second, keeping what was recorded"},
+    {"ids": [1], "text": "Sets where in the sample playback starts"},
+    {"ids": [2], "text": "Sets how much of the sample is played from that start point"},
+    {"ids": [3], "text": "Steps through the three ways a slice is read: forwards, backwards, and ping-pong"},
+    {"ids": [4], "text": "Sets how fast the sample is read, -4 to +4 times, so the lower half of its travel plays the sample backwards"},
+    {"ids": [5], "text": "Fades the ends of the loop in and out, up to half its length, which takes the click off a loop point"},
+    {"ids": [6], "text": "Switches what a recording does when it stops: replacing everything recorded before, or adding to the end of it as a new slice"},
+    {"ids": [7], "text": "Picks which slice is played, across however many slices the sample has been cut into"},
+    {"ids": [8], "text": "Clears the recording and every slice marker with it"},
+    {"ids": [9], "text": "Sets how loud a jump in level has to be to count as a transient when the sample is cut up automatically"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left channel being recorded"},
+    {"ids": [1], "text": "The right channel being recorded"},
+    {"ids": [2], "text": "A trigger here starts playing the slice from its start point, and while anything is patched here playing is trigger-driven"},
+    {"ids": [3], "text": "A gate here plays the slice for as long as it is held, and it is only used when nothing is patched to the trigger jack"},
+    {"ids": [4], "text": "Added to the start point, 10V being the whole sample"},
+    {"ids": [5], "text": "Added to the loop length, 10V being the whole sample"},
+    {"ids": [6], "text": "Steps the reading mode on, 0V to 10V across forwards, backwards and ping-pong"},
+    {"ids": [7], "text": "Added to the speed, a volt for each 1 of the ratio"},
+    {"ids": [8], "text": "A trigger here starts or stops recording"},
+    {"ids": [9], "text": "Added to the fade length, 10V being its whole range"},
+    {"ids": [10], "text": "Added to the slice number, 10V reaching the last slice"},
+    {"ids": [11], "text": "A trigger here clears the recording and every slice marker"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel being played back"},
+    {"ids": [1], "text": "The right channel being played back"},
+    {"ids": [2], "text": "A 10V pulse when the slice reaches its end"}
+  ],
+  "notes": [
+    "the module comes up empty: record something into it with the REC button, or load a sample with Load sample from the right-click menu or by dropping a wav or aiff file onto the panel",
+    "the slice items in the menu work on the point last clicked in the waveform, so click the display to pick a point and then choose the item",
+    "drag up and down on the waveform to zoom and sideways to scroll, holding shift while dragging to zoom faster; shift and right-click on the waveform opens the module's own menu",
+    "shift-click the transient threshold trimpot to cut the sample at its transients, which is what the Detect transients menu item does"
+  ],
+  "menu": [
+    "Delete slice — takes the slice the waveform was last clicked in out of the sample, audio and all",
+    "Delete slice marker — removes the slice marker before the point the waveform was last clicked at",
+    "Add slice marker — puts a slice marker at the point the waveform was last clicked at",
+    "Detect transients — cuts the sample into slices at every jump in level above the transient threshold",
+    "Load sample — opens a wav or aiff file and loads it in place of the recording",
+    "Save sample — writes what has been recorded out as a wav file"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 0V · stepped · one channel only",
+      "4": "continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "5": "continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "continuous · one channel only",
+      "8": "stepped · one channel only",
+      "9": "continuous · one channel only\n\nthe knob and this input are summed and the total held to 0 to 10V.",
+      "10": "stepped · one channel only",
+      "11": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "stepped"
+    }
+  }
+}

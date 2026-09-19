@@ -1,0 +1,44 @@
+{
+  "plugin": "Noise86",
+  "module": "TransQuant",
+  "description": "Three-channel quantizer with a transposition that triggers step up and down by a set interval",
+  "params": [
+    {"ids": [0], "text": "Adds a whole number of semitones, 0 to 11, to the transposition; on its own a setting of 6 or more moves the pitch down by that many semitones rather than up"},
+    {"ids": [1], "text": "Sets the step the transpose triggers move by, a whole number of semitones from 0 to 20"},
+    {"ids": [2], "text": "Picks the scale notes are quantized to: chromatic, blues, major, Dorian, Phrygian, Lydian, Mixolydian, minor or Locrian"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge adds the interval to the running transposition"},
+    {"ids": [1], "text": "A rising edge subtracts the interval from the running transposition"},
+    {"ids": [2], "text": "Volts added to the transposition, a volt to the octave"},
+    {"ids": [3], "text": "Sets the step the transpose triggers move by at 12 semitones to the volt, and the interval knob is ignored while anything is patched here"},
+    {"ids": [4], "text": "Picks the scale by whole volts, 0V for chromatic through 8V for Locrian, and the Mode knob is ignored while anything is patched here"},
+    {"ids": [5, 6, 7], "text": "Pitch into that channel, a volt to the octave"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A 1ms 10V pulse each time the quantized note on that channel changes"},
+    {"ids": [3, 4, 5], "text": "The pitch on that channel, transposed and then quantized to the chosen scale"}
+  ],
+  "notes": [
+    "only the fractional part of the transposition is used, and once it reaches half an octave the pitch moves down by it instead of up, so 7 semitones of transposition sounds 7 semitones lower"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "1V per octave · continuous",
+      "3": "continuous",
+      "5": "1V per octave · continuous",
+      "6": "1V per octave · continuous",
+      "7": "1V per octave · continuous"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous"
+    }
+  }
+}

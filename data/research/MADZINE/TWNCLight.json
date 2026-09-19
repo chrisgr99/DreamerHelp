@@ -1,0 +1,17 @@
+{
+  "plugin": "MADZINE",
+  "module": "TWNCLight",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "why": "src/TWNCLight.cpp:441, clockTrigger.process(v, 0.1f, 2.0f)"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNCLight.cpp:544-551, decayParam += getVoltage()/10, then clamp(0.01, 2)"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNCLight.cpp:566-573, decayParam += getVoltage()/10, then clamp(0.01, 2), then halved"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNCLight.cpp:560, mainVCAOutput * 10"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNCLight.cpp:561, envelopeOutput * 10"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNCLight.cpp:578, vcaEnvelopeOutput * 10"}
+    }
+  },
+  "comment": "Inputs 1 and 3, named Drum Frequency CV and Hats Frequency CV, are declared but have no PortWidget on the panel, so no click can reach them and they get no line, no tag and no props. Neither is read in process() either. The decay jacks add a tenth of a second per volt, which is not one of the four range shapes, so range is left off them. The drum's own amplitude envelope is computed at src/TWNCLight.cpp:556 and never sent anywhere. The panel prints CLK, LEN, Drum, ACCNT, SHAPE, FILL, A.DEC, DECAY, D.D, HATs, FILL, SHIFT, D/M, DECAY, SHAPE, H.D and ENVs; the three output jacks share the one ENVs heading. Lettering is drawn in code at src/TWNCLight.cpp:601-659."
+}

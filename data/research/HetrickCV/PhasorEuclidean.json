@@ -1,0 +1,20 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorEuclidean",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorEuclidean.cpp:241 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"poly": true, "step": "continuous", "why": "PhasorEuclidean.cpp:173 clamps the knob plus this CV to 1 to 64 beats and passes the float to setBeats"},
+      "2": {"poly": true, "step": "continuous", "why": "PhasorEuclidean.cpp:175 clamps the knob plus this CV to 0 to 64 and passes the float to setFill"},
+      "3": {"poly": true, "range": "±5V", "step": "continuous", "why": "PhasorEuclidean.cpp:238 clamps the knob plus this CV to plus or minus 5V"},
+      "4": {"poly": true, "range": "±5V", "step": "continuous", "why": "PhasorEuclidean.cpp:234 clamps the knob plus this CV to plus or minus 5V"},
+      "5": {"poly": true, "step": "stepped", "why": "PhasorEuclidean.cpp:177 multiplies this voltage by fillCVDepth and adds it to the fill mode knob, clamped to 0 to 5; fillCVDepth comes from FILL_SCALE_PARAM at :149, scaled by BEATS_CV_SCALE of 64/5, so one fill mode is a step of about 0.39V at full fill depth. The module's own Fill Limit Mode CV Depth knob is read into fillModeCVDepth at :157 and used nowhere"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorEuclidean.cpp:141 and 244 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write; HCVPhasorEffects.h:125 and 150 scale the phasor by HCV_PHZ_UPSCALE, 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorEuclidean.cpp:245 writes the euclidean gate per channel; HCVPhasorAnalyzers.h:121 makes it HCV_PHZ_GATESCALE or 0V, HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorEuclidean.cpp:246 writes the clock gate per channel; HCVPhasorAnalyzers.h:121 makes it HCV_PHZ_GATESCALE or 0V, HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"}
+    }
+  },
+  "comment": "The Phasor input is read with getVoltage per channel rather than getPolyVoltage, so a one-channel cable feeds channel one and leaves the rest of a polyphonic patch at 0V. PhasorEuclidean.cpp:157 reads FILLMODE_SCALE_PARAM into fillModeCVDepth and never uses it; :177 scales the Fill Mode CV jack by fillCVDepth, the Fill CV Depth knob times 64/5, so the Fill Limit Mode CV Depth knob does nothing and the fill mode jack is attenuated by the fill knob and dead when that knob sits at zero."
+}

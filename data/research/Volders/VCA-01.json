@@ -1,0 +1,14 @@
+{
+  "plugin": "Volders",
+  "module": "VCA-01",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "VCA-01.cpp:59 channels = inputs[IN_INPUT].getChannels() and line 93 getVoltage(c) per channel"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "gain left to the LEVEL knob", "why": "VCA-01.cpp:71-79 skips the CV entirely when the jack is empty, otherwise gain *= clamp(getPolyVoltage(c)/10.f, 0.f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "VCA-01.cpp:96 outputs[OUT_OUTPUT].setChannels(channels) taken from the signal input"}
+    }
+  },
+  "comment": "Read from the source at tag 2.1.2 (commit d57e97e), which is the installed build. The module adds nothing to Rack's right-click menu, so there are no menu lines. configBypass(IN_INPUT, OUT_OUTPUT) at line 52 is why a bypassed VCA-01 still passes signal. The exponential curve is the linear gain to the fourth power (line 87); the maker's comment calls that roughly -60dB at the bottom of the dial, which is a derived figure and is not quoted in a line."
+}

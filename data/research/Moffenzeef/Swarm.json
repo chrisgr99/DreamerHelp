@@ -1,0 +1,19 @@
+{
+  "plugin": "Moffenzeef",
+  "module": "Swarm",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Swarm.cpp:125 and 128: timeCV = clamp(inputs[TIMECVIN_INPUT].getVoltage(), -5.f, 5.f), summed with the knobs and clamped to -5..5; mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "negative": "subtracts", "why": "Moffenzeef 2.6.1 source (github.com/moffenzeefmodular/VCVrack-submission commit e6a0c67), src/Swarm.cpp:126 and 137: widthCV = clamp(inputs[WIDTHCVIN_INPUT].getVoltage(), -5.f, 5.f) then pulseWidth = clamp(pulseWidthParam + widthCV * 0.1f, 0.05f, 0.5f); mono: the plugin reads every input with getVoltage() and the only setChannels in src is Kleztizer.cpp:305", "docRange": "±5V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "audio"}
+    }
+  },
+  "comment": "Read from the maker's source at 2.6.1, commit e6a0c67. The clock period is clamp(82.5 - 13.5*x, 15, 150) milliseconds in the fast position and clamp(325 - 150*x, 150, 500) in the slow one, where x runs -5 to 5 from the two speed knobs and the TIME CV. The four channels run at 1.3, 3.7, 5.5 and 7.9 times that period, which is what makes them drift apart. With a channel's loop switch off, each step writes a new value into a random slot of a pattern whose length is set at random between 1 and 64, and a slot is set high about one time in five. The oscillator frequency is clamp(120 + 16*x, 40, 200) in the slow position and clamp(8000 + 1400*x, 1000, 15000) in the fast one; those two upper figures are built by immediate instructions rather than stored as constants, so the line keeps to the ones that can be matched in the data. The slow-range clock period was written here as 325 - 150*x; the source gives rescale(x, -5, 5, 500, 150), which is 325 - 35*x."
+}

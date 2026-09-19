@@ -1,0 +1,53 @@
+{
+  "plugin": "Coalescent",
+  "module": "Haptik",
+  "description": "A scanned-synthesis oscillator: a ring of masses on springs is set moving, and a read head sweeps the ring at audio rate, reading each mass's displacement as the waveform.",
+  "params": [
+    {"ids": [0], "text": "Sets how many masses make up the ring, 8 to 128, which is also the length of the scanned table."},
+    {"ids": [1], "text": "Sets the rate the read head sweeps the ring, over ±4 octaves, with the centre giving C4 at 261.63Hz."},
+    {"ids": [2], "text": "Sets the rate of the restoring force that pulls each mass back to rest, 0.05Hz to 30Hz."},
+    {"ids": [3], "text": "Sets the spring stiffness between neighbouring masses, 0 to 0.9, which is the main control over the timbre."},
+    {"ids": [4], "text": "Sets how fast the ring loses energy, 0 to 1; at 0 the motion never decays."},
+    {"ids": [5], "text": "Sets how hard an excitation kicks the ring, 0 to 1, and the gain applied to the external force."},
+    {"ids": [6], "text": "Chooses what a trigger does: Impulse kicks one mass, Bump raises a Hann-windowed hump, Noise perturbs every mass, and Continuous ignores triggers and feeds a quiet random force."},
+    {"ids": [7], "text": "Stops the ring physics and plays the shape held at that moment as a fixed waveform."},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, scaling the CV into the centering rate."},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, scaling the CV into the coupling stiffness."},
+    {"ids": [10], "text": "An attenuverter, -1 to +1, scaling the CV into the damping."},
+    {"ids": [11], "text": "An attenuverter, -1 to +1, scaling the CV into the injection amount."},
+    {"ids": [12], "text": "Sets where around the ring the excitation and the external force enter, 0 to 100% of the way round."},
+    {"ids": [13], "text": "Chooses Fast, which steps the ring physics once per sample, or Slow, which steps it once every 256 samples and interpolates between frames."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the PITCH knob at 1V per octave, setting the rate the read head sweeps the ring."},
+    {"ids": [1], "text": "Modulates the centering rate in the log domain, a tenth of an octave per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the coupling stiffness, at a tenth per volt through its attenuverter."},
+    {"ids": [3], "text": "Modulates the damping, at a tenth per volt through its attenuverter."},
+    {"ids": [4], "text": "Modulates the injection amount, at a tenth per volt through its attenuverter."},
+    {"ids": [5], "text": "A rising edge past 1V re-excites the ring with the shape EXCITE is set to; the edge is armed again below 0.1V, and nothing is injected while FREEZE is on."},
+    {"ids": [6], "text": "Injects an external signal as a force at the driver mass, scaled by INJECT; a polyphonic cable is summed to mono."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The scanned waveform, high-passed at 20Hz and soft-clipped to ±5V."},
+    {"ids": [1], "text": "The displacement of mass 0, a fixed point on the ring rather than the driver mass, as an audio-rate CV clamped to ±5V and not high-passed."}
+  ],
+  "notes": [
+    "The ring is given a full bump whenever the number of masses changes and when the module is created, so it sounds without a trigger patched.",
+    "The screen draws the masses as vertices on a circle, each pushed outward by its displacement; the orange node marks the driver mass and the sweeping dot the read head."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · one channel only"
+    }
+  }
+}

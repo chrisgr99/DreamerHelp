@@ -1,0 +1,18 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Spiquencer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "Spiquencer.cpp Spiquencer::process: gateTrigger.process(getVoltage(), 0.1f, 2.f), a Rack SchmittTrigger with the thresholds given explicitly, and no channel argument, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "Spiquencer.cpp Spiquencer::process: resetTrigger.process(getVoltage(), 0.1f, 2.f) calling onReset(), with no channel argument, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the probability knob", "why": "Spiquencer.cpp Spiquencer::process: prob_mod_Input = getVoltage() * 0.1f compared against random::uniform() and written back into PROBABILITY_PARAM, inside an isConnected() branch that otherwise reads the knob, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "3": {"family": "pitch", "poly": false, "range": "0 to 1V", "step": "stepped", "normal": "the Root Note menu", "why": "Spiquencer.cpp Spiquencer::process: ((int)(100.f * getVoltage())) % 100 matched against 0, 8, 16, 25, 33, 41, 50, 58, 66, 75 and 83, with anything else falling through to 11, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "normal": "the Scale/Arp menu", "why": "Spiquencer.cpp Spiquencer::process: rootScale = 0.1f * (NO_ALL_SCALES_AND_ARPS - 0.1f) * getVoltage() inside an isConnected() branch that otherwise reads the menu, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "±5V", "step": "stepped", "why": "Spiquencer.cpp Spiquencer::process: setVoltage of the current knob's value, the knobs being configured -4.f to 6.f, with no channel argument, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "Spiquencer.cpp Spiquencer::process: setVoltage(10.f) while gateTrigger.isHigh() after an accepted gate, and setVoltage(0.f) once it falls, with no channel argument, commit 55aa542, the 2.4.1 release commit, whose plugin.json carries the installed 2.4.1 and whose res/ matches the installed panels"}
+    }
+  },
+  "comment": "The knobs are configured -4.f to 6.f, which is wider than the ±5V spelling the range field allows; the output's real span is -4V to 6V. The whole grid is rewritten from ALL_SCALES_AND_ARPS whenever the root note, scale, direction, transpose or octave count changes, so hand-set knobs do not survive a menu change. A reset trigger calls onReset(), which is the module's initialise path and also forces the probability parameter back to 1. The root-note CV is matched against exact integer hundredths of a volt with no tolerance, so only the precise voltages a quantised C4-to-B4 source gives will select anything but B."
+}

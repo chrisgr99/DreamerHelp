@@ -1,0 +1,52 @@
+{
+  "plugin": "acModules",
+  "module": "CRBViXL",
+  "description": "A wide two-dimensional performance pad: dragging across it puts out a note voltage from the horizontal position and a level from the vertical one, with a modulation input that can be routed to either.",
+  "params": [
+    {"ids": [0], "text": "Sets the octave the left edge of the pad starts at, -5 to +4."},
+    {"ids": [1], "text": "Sets how many octaves the pad covers, 1 to 5."},
+    {"ids": [2], "text": "Chooses the shape mapping the vertical position to the level: straight, two eased curves, a sine, and a step that jumps to full as soon as the pad is touched."},
+    {"ids": [3], "text": "Quantises the note output to the guide the menu is set to, instead of sliding smoothly across the pad."},
+    {"ids": [4], "text": "Sets how much of the modulation is added to the note output, -1 to +1, at half a semitone per unit."},
+    {"ids": [5], "text": "Sets how much of the modulation is added to the level output, -1 to +1; it only has an effect while the pad is being dragged."},
+    {"ids": [6], "text": "Passes the modulation going to the note output through the curve as well, scaled by where the finger is vertically."},
+    {"ids": [7], "text": "Passes the modulation going to the level output through the curve as well."},
+    {"ids": [8], "text": "Applies the level modulation to the VCA output too, multiplying the gain by it."},
+    {"ids": [9], "text": "Tells the module what span the modulation voltage covers so it can be scaled to plus or minus one: -5V to +5V, 0V to +10V or 0V to +5V."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "An external signal for the pad to act as a VCA on, polyphonic."},
+    {"ids": [1], "text": "The modulation source; a polyphonic cable uses its first channel for the note routing and its second for the level routing."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note from the horizontal position at 1V per octave plus any note modulation, clamped to ±10V."},
+    {"ids": [1], "text": "The level from the vertical position with the curve applied, 0V to 10V unless the menu says otherwise."},
+    {"ids": [2], "text": "10V while the pad is being dragged and 0V when it is let go."},
+    {"ids": [3], "text": "The external input passed through the pad's vertical position as a VCA, clamped to ±5V, with the same number of channels; it is silent while the pad is not being dragged."},
+    {"ids": [4], "text": "Five channels: the note, the level with the curve applied, the gate, the raw horizontal position at 0V to 10V and the raw vertical position."}
+  ],
+  "notes": [
+    "Nothing comes out until you drag on the pad with the mouse. The gate is high only while the button is held down.",
+    "The pad is the instrument: the bars drawn across it are note guides, and the left-to-right position sets the pitch while the up-and-down position sets the level.",
+    "The modulation routings do nothing without a cable in MOD IN, and the level routing does nothing unless the pad is being dragged."
+  ],
+  "menu": [
+    "Show Guides — draws the note guide bars on the pad; turning it off leaves a plain surface.",
+    "Guide Type...: Semitones, Quartertones, Octaves — sets what the guide bars mark out, and with snapping on, what the note output snaps to.",
+    "Y-Axis Range (Non-VCA): 0V to 10V (Default), 0V to 5V, -5V to 5V — sets the span of the volume output; it does not change the VCA output.",
+    "Show Modulation While Playing — draws where the modulation is moving the note and the level while the pad is dragged."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "high above 1V · one channel only",
+      "3": "±5V · polyphonic",
+      "4": "0 to 10V · polyphonic"
+    }
+  }
+}

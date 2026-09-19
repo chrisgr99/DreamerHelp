@@ -1,0 +1,61 @@
+{
+  "plugin": "8Mode",
+  "module": "softSN",
+  "description": "An emulation of the 1978 Texas Instruments SN76477 sound chip, with the resistors and capacitors that surrounded it turned into knobs: three sources, an envelope and the multiplexer that combines them",
+  "params": [
+    {"ids": [0], "text": "The clock rate of the noise generator, about 97kHz fully left falling to about 490Hz fully right"},
+    {"ids": [1], "text": "The corner of the low-pass filter on the noise, wide open fully left and almost shut fully right"},
+    {"ids": [2], "text": "How long the envelope takes to fall, instant fully left and about 1 second fully right"},
+    {"ids": [3], "text": "How long the envelope takes to rise, instant fully left and about a quarter of a second fully right"},
+    {"ids": [4], "text": "The frequency of the main oscillator, four octaves either side of its centre"},
+    {"ids": [5], "text": "The duty cycle of the main oscillator, 18 per cent fully left, 50 per cent at the centre and close to 100 per cent fully right, which leans the TRI output over towards a sawtooth"},
+    {"ids": [6], "text": "The frequency of the super low frequency oscillator, eight octaves either side of its centre"},
+    {"ids": [7], "text": "Puts the main oscillator into the multiplexer"},
+    {"ids": [8], "text": "Puts the super low frequency oscillator into the multiplexer"},
+    {"ids": [9], "text": "Puts the noise source into the multiplexer"},
+    {"ids": [10], "text": "Chooses what opens and closes the envelope: VCO the main oscillator, 1 SHOT the one-shot, MIXER nothing at all so the multiplexer stays open, VCO/ALT the main oscillator on alternate cycles"},
+    {"ids": [11], "text": "Chooses what drives the main oscillator: at EXT its own Freq knob and V/OCT input, at SLF the super low frequency oscillator sweeping it"},
+    {"ids": [12], "text": "Starts the one-shot, restarting it on every sample for as long as it is held down"},
+    {"ids": [13], "text": "How long the one-shot runs, about 40ms fully left and about 8 seconds fully right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the main oscillator by one octave per volt"},
+    {"ids": [1], "text": "Shifts the super low frequency oscillator by one octave per volt"},
+    {"ids": [2], "text": "A rising edge above 1V starts the one-shot"},
+    {"ids": [3], "text": "Adds to the Attack knob, 5V covering the knob's whole travel and a negative voltage taking it below its lowest setting"},
+    {"ids": [4], "text": "Adds to the Decay knob, 5V covering the knob's whole travel and a negative voltage taking it below its lowest setting"},
+    {"ids": [5], "text": "Adds to the NOISE Freq knob, 5V covering the knob's whole travel and a negative voltage taking the noise below the rate at which it stops clocking"},
+    {"ids": [6], "text": "Adds to the NOISE Filter knob, 5V covering the knob's whole travel"},
+    {"ids": [7], "text": "Adds to the Length knob, 5V covering the knob's whole travel"},
+    {"ids": [8], "text": "Adds to the Width knob, 5V covering the knob's whole travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The multiplexed and enveloped output of the chip, which is the module's voice"},
+    {"ids": [1], "text": "The main oscillator's capacitor voltage, a triangle that leans towards a sawtooth as Width is opened, scaled by an automatic gain control"}
+  ],
+  "notes": [
+    "the NOISE Freq and NOISE Filter knobs come up at zero, below their own lowest settings, and the noise source makes nothing at all until NOISE Freq has been moved into its range.",
+    "with all three MIXERS switches off the multiplexer is inhibited and the main output goes quiet; two or three switched on are combined by logical AND rather than mixed.",
+    "the TRI output has a fixed -190V taken off it while OSC is at EXT, and its gain control comes up at zero, so that jack reads exactly -190V for the first 16000 samples after the module is added.",
+    "the main output has 1.3V added to it, so it swings about 1.3V rather than about zero.",
+    "moving OSC to SLF raises both oscillators by about 6.2 octaves as well as changing what drives the main one.",
+    "the one-shot only opens the envelope while ENVELOPE is at 1 SHOT; with any other envelope setting the Trigger button and the TRIG input change nothing you can hear."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "Biset",
+  "module": "Biset-Tracker-Control",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 5V", "negative": "ignored", "normal": "0V", "why": "TrackerControl.cpp:102 reads this jack with getVoltage, channel 0 only, and compares the level itself: 5V or more starts the timeline and anything below stops it, so in gate mode this is a level and not an edge, and a patched cable resting at 0V holds the tracker stopped. With the run switch set to trigger instead, line 113 puts the same jack through a dsp::TSchmittTrigger left at Rack's defaults of 1V high and 0V low and each edge toggles between running and stopped."},
+      "1": {"poly": false, "normal": "0V", "why": "TrackerControl.cpp:129 reads this input as a voltage divided by 10 in Phase mode and line 148 puts it through a Schmitt trigger in the three pulse modes, so what it wants depends on the CLOCK MODE switch"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TrackerControl.cpp:172 reads this jack with getVoltage, channel 0 only, into a dsp::TSchmittTrigger left at Rack's defaults of 1V high and 0V low. An edge calls the timeline's stop and then resets the clock, so it halts playback and puts the clock back to zero rather than restarting the song."},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TrackerControl.cpp:178-180 puts this input, added to its button, through a Schmitt trigger at its default 1V threshold"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TrackerControl.cpp:188-190 puts this input, added to its button, through a Schmitt trigger at its default 1V threshold"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "TrackerControl.cpp:198-200 puts this input, added to its button, through a Schmitt trigger at its default 1V threshold"}
+    }
+  },
+  "comment": "The clock input is left without a family on purpose: in the three pulse modes it wants rising edges and in Phase mode it wants a ramp from 0V to 10V, so no one colour is true of it. The three pattern buttons and their three jacks are not in index order: previous is index 4 and 4, next is index 3 and 3, random is index 5 and 5, and on the panel they read previous, next, random from left to right. Only the first TrackerControl in the patch is honoured (TrackerControl.cpp:66-69). Changing which pattern is selected changes what Play pattern loops; it does not change the timeline."
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "Geodesics",
+  "module": "Ions",
+  "description": "A dual CV sequencer whose fifteen step knobs form two eight-step rings sharing one knob, with either voice able to jump from one ring to the other",
+  "params": [
+    {"ids": [0], "text": "Starts and stops both voices"},
+    {"ids": [1], "text": "Returns both voices to the shared first step"},
+    {"ids": [2], "text": "Sets the voltage of the first step of both rings, read by whichever voice has reached that step"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9], "text": "Sets the voltage of that step of the blue ring, spread over the blue range and quantized while the blue Planck constant is on"},
+    {"ids": [10, 11, 12, 13, 14, 15, 16], "text": "Sets the voltage of that step of the yellow ring, spread over the yellow range and quantized while the yellow Planck constant is on"},
+    {"ids": [17], "text": "Sets the chance of a voice jumping to the other ring when a jump is offered, none fully anticlockwise and certain fully clockwise"},
+    {"ids": [18, 19], "text": "Steps the voltage that voice's step knobs cover: 0-1V, minus 1V to 2V or minus 2V to 3V while its Planck constant is on, and plus or minus 1V, 5V or 10V while it is off"},
+    {"ids": [20], "text": "Offers a jump to the other ring at every step instead of only at the last step of a ring"},
+    {"ids": [21, 22], "text": "Steps which clock advances that voice: the global clock, that voice's own local clock, or both of them"},
+    {"ids": [23, 27], "text": "Quantizes that voice's output to semitones, and narrows the voltage its range covers"},
+    {"ids": [24], "text": "Makes a pulse at a local clock input advance its voice by a weighted random 1 to 8 steps instead of one"},
+    {"ids": [25], "text": "Returns both voices to the shared first step whenever run is switched on"},
+    {"ids": [26], "text": "Advances both voices by one step for each press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here advances every voice set to take the global clock, unless that voice's local clock fired on the same sample"},
+    {"ids": [1, 2], "text": "A rising edge here advances that voice while it is set to take its local clock, by one step, or by a weighted random 1 to 8 steps while uncertainty is on"},
+    {"ids": [3], "text": "A trigger here starts and stops both voices"},
+    {"ids": [4], "text": "A rising edge here returns both voices to the shared first step"},
+    {"ids": [5], "text": "Every volt here adds a tenth to the chance of a jump, on top of the probability knob"},
+    {"ids": [6, 7], "text": "Sets the range of that voice and overrides its button: 1V and above the widest, minus 1V and below the narrowest, and between them the middle one"},
+    {"ids": [8, 9], "text": "Sets which clock advances that voice and overrides its button: 1V and above the global clock, minus 1V and below the local one, and between them both"},
+    {"ids": [10], "text": "A trigger here turns the jump at every step on and off"},
+    {"ids": [11], "text": "A trigger here turns the random step count on and off"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voltage of the knob the blue voice has reached, in whichever ring it is travelling"},
+    {"ids": [1], "text": "The voltage of the knob the yellow voice has reached, in whichever ring it is travelling"},
+    {"ids": [2, 3], "text": "A 1ms 10V pulse each time that voice jumps from one ring to the other"}
+  ],
+  "notes": [
+    "the sequence does not advance until a clock arrives; the module comes up running, and the run button stops and starts it",
+    "with the jump probability at zero the module is two independent eight-step sequences, and with it fully clockwise the two voices share one sixteen-step sequence",
+    "the step button advances the sequence whether or not the module is running, which is how the step voltages are set and heard one at a time while it is stopped"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    },
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

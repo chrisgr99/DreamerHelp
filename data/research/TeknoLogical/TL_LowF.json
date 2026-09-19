@@ -1,0 +1,17 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_LowF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "src/TL_LowF.cpp:131-132 clamp(getVoltage(), 0, 10)*0.5, replacing the knob"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "src/TL_LowF.cpp:115-117 clamp(getVoltage(), 0, 10)*1.8 - 8, replacing the knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "src/TL_LowF.cpp:194 wave*amplitude, amplitude at most 5V"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "src/TL_LowF.cpp:194"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "why": "src/TL_LowF.cpp:194"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "why": "src/TL_LowF.cpp:194"}
+    }
+  },
+  "comment": "The manual calls the four outputs OUT 1 to OUT 4; the panel prints them as 2π, π/2, π and 3π/2. The first is the base phase with an offset of exactly zero, so the panel's 2π means a full turn rather than a different phase. The four multiplier switches share one line and the four wave switches share another: each set differs only by which output it belongs to. Both CV inputs substitute for their knob rather than summing with it, which the manual does state. Every jack is read with getVoltage(), so nothing is polyphonic. The phase offset is added before the multiplier (TL_LowF.cpp:190), so at a multiplier above one the quarter-turn relationship between outputs no longer holds; the manual says the outputs are \"permanently spaced by 90 degrees\"."
+}

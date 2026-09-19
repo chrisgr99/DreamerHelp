@@ -1,0 +1,19 @@
+{
+  "plugin": "JulioChaos",
+  "module": "JulioChua",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioChua.cpp line 100, getVoltage multiplied by the attenuverter and by rateScale*0.037/sr, then the sum clamped"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioChua.cpp line 104, getVoltage multiplied by the attenuverter and by 0.5, then the sum clamped to 0.98 to 1.9"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioChua.cpp line 108, getVoltage multiplied by the attenuverter and by -0.04, then the sum clamped to -1.23 to -1.143"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "JulioChua.cpp lines 102, 106 and 110, the one voltage read three times and applied to three constants, each clamped separately"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "JulioChua.cpp line 124, resetTrigger.process(signal, 0.1f, 2.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "JulioChua.cpp line 149, 2.5 times the direct-voltage-blocked x"},
+      "1": {"family": "audio", "poly": false, "why": "JulioChua.cpp line 150, 8.5 times the direct-voltage-blocked y"},
+      "2": {"family": "audio", "poly": false, "why": "JulioChua.cpp line 151, 1.8 times the direct-voltage-blocked z"}
+    }
+  },
+  "comment": "Read from the repository at commit 39d9429, whose plugin.json carries the installed 2.1.0. The panel's three constant knobs are not one knob to one constant: P1 sets C2, P2 sets the inner slope m0, and P3 sets C1, C3 and the outer slope m1 together, at lines 88 to 92. The P3 input is likewise read three times, once for each of those. That is why P3 is the knob that changes the character most. The maker's comment beside C3 reads 27.6 to 28.5 while the line computes 27.9 to 28.5, so the comment is wrong and the line above follows the code. No output range is given because none is clamped: the three coordinates are multiplied by 2.5, 8.5 and 1.8 after a direct-voltage blocker, and how far each swings depends on where the constants sit. The runaway guard at line 122 tests each coordinate against 12 and drops the system back to x 0.1, y 0 and z 0. Every port is single channel."
+}

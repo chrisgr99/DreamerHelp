@@ -1,0 +1,65 @@
+{
+  "plugin": "LomasModules",
+  "module": "AdvancedSampler",
+  "description": "A one-voice player for the .wav files in a folder on disk, with a recorder for capturing a new one into the same list",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the loaded .wav files plays, sweeping the whole folder from the first file at the left to the last at the right"},
+    {"ids": [1], "text": "Shifts the playback speed, marked in semitones and running ±24 semitones; 0 plays the file at its written pitch"},
+    {"ids": [2], "text": "Sets the rise time of the amplitude envelope, 1ms at the left and 1 second at the centre; at the far right the rise never completes and nothing is heard. With Hold / Decay chosen it sets a hold time"},
+    {"ids": [3], "text": "Sets the fall time of the amplitude envelope, 1ms at the left and 1 second at the centre; at the far right the level holds and the sample plays through without fading"},
+    {"ids": [4], "text": "Sets where playback begins, 0 to 100 per cent of the sample's length; for a sample under 2 seconds the knob is squared, giving finer control near the start"},
+    {"ids": [5], "text": "Sets where playback ends, 0 to 100 per cent of the sample's length; set below START and the sample is read backwards"},
+    {"ids": [6], "text": "Opens a file browser; pick any file and every .wav file in that folder is read into memory, up to 256 of them"},
+    {"ids": [7], "text": "Turns looping on and off: with it on the sample jumps back to START each time it reaches END instead of stopping"},
+    {"ids": [8], "text": "Starts the sample from its START position; pressing it again restarts from there. It does nothing until a sample is loaded"},
+    {"ids": [9], "text": "Starts recording what arrives at IN, and a second press stops it; the press is ignored unless IN is patched"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the SAMPLE knob at 10% of the folder per volt, moving the choice of file"},
+    {"ids": [1], "text": "Added to the TUNE knob at one volt per octave of playback speed, with the total held between -4 and +4 octaves"},
+    {"ids": [2], "text": "Added to the ATTACK knob at 10% of its travel per volt"},
+    {"ids": [3], "text": "Added to the DECAY knob at 10% of its travel per volt"},
+    {"ids": [4], "text": "Added to the START knob at 10% of the sample per volt"},
+    {"ids": [5], "text": "Added to the END knob at 10% of the sample per volt"},
+    {"ids": [6], "text": "The signal recorded into the current slot, read as ±5V and clipped there"},
+    {"ids": [7], "text": "A pulse here starts recording, and the next pulse stops it; it is ignored unless IN is patched"},
+    {"ids": [8], "text": "A pulse here starts the sample from its START position"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse at 10V each time playback reaches the END position, whether it then loops or stops"},
+    {"ids": [1], "text": "The sample, scaled to ±5V and shaped by the attack and decay envelope; 0V while nothing is playing"}
+  ],
+  "notes": [
+    "nothing plays until a folder is loaded: click LOAD and pick any file, and every .wav file beside it is read in.",
+    "only the first channel of each .wav file is read, so a stereo file plays as its left channel alone.",
+    "pressing REC moves the SAMPLE knob to the far right and records into a new slot after the last loaded file.",
+    "a recording stops on its own after 441000 samples, which is 10 seconds at a 44.1kHz engine rate and shorter at a higher one.",
+    "a file whose own sample rate differs from the engine rate is corrected as it plays, so it sounds at its written pitch.",
+    "the screen draws the sample's name, its number in the folder, its waveform, the START and END markers and the play position. It is a drawing only, and nothing on it can be clicked or dragged."
+  ],
+  "menu": [
+    "Envelope: Attack / Decay, Hold / Decay — chooses whether the ATTACK knob sets a rise time or a time the envelope holds at full level before the decay",
+    "Interpolation: None, Linear, Hermite, BSPLine — sets how a value between two stored samples is worked out when TUNE moves playback off the file's own rate",
+    "Slice mode — quantises START and END to sixteenths of the sample and draws the division marks on the screen",
+    "Low cpu mode — nothing in the module reads this setting and it is not written into the patch, so turning it on changes nothing",
+    "Trim sample — shortens the sample in memory to the section between START and END; with START above 0 the copy runs past the end of its own buffer, so the result cannot be relied on",
+    "Save sample — writes the sample in memory into the loaded folder as a new 32-bit mono .wav file"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±4V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

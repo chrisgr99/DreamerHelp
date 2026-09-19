@@ -1,0 +1,29 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Chance",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "chance.cpp declares the clock input; a rise advances the walk one step"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "chance.cpp:520 resetTrigIn.process crosses 1V and :521 zeroes curStep, drops back to the first active pattern and closes the gate"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "chance.cpp:516 randTrigIn.process crosses 1V and :517 gives the playing pattern a fresh random::u32 seed, then recomputes its cycle"},
+      "3": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "chance.cpp names it a volt per octave snapped to semitones, summed with the root knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±1V", "why": "chance.cpp:389 divides it by 10 and clamps the knob-plus-input total to the knob's own range"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:389 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:389 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "7": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "chance.cpp declares the scale select CV at one volt per scale; the shared scale bus carries a whole scale over the extra channels of the same jack"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:389 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:390 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:391 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "chance.cpp:392 divides it by 10 and clamps the knob-plus-input total to 0 to 1"},
+      "12": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "chance.cpp:287 adds getVoltage() to the start trimmer, rounds the total and clamps it to the node count — one volt per step, which no range spelling fits"},
+      "13": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "chance.cpp:288 adds getVoltage() to the end trimmer, rounds the total and clamps it to the node count — one volt per step; an end below the start plays the window backwards"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "chance.cpp declares the quantized pitch output"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "chance.cpp declares the gate output, of the length set by the menu slider"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "chance.cpp declares the second voice's pitch output"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "chance.cpp declares the second voice's gate output"}
+    }
+  },
+  "comment": "Sixteen parameters holding each pattern's active flag and repeat count are declared with no widget (chance.cpp:220), because they are edited on the display instead; the gate length and glide parameters have no widget either and are reached from the menu. The maker's manual still describes a HOLD control that spans two to four clocks, but the code has replaced it with the even-note rests knob: chance.cpp:440 fixes every step's duration at one and its comment reads \"Hold removed (replaced by Even rests)\". The manual is out of date on that one control."
+}

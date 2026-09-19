@@ -1,0 +1,14 @@
+{
+  "plugin": "gwrthiant",
+  "module": "nilyniant",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "negative": "ignored", "normal": "0V", "why": "nilyniant.cpp:49-52 reads getVoltage() with no channel; lines 55 and 59 clamp both results to a floor of 0, so any negative note voltage gives the same output as C4"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "nilyniant.cpp:54-56 scales the note by 12 and by two thirds, clamped to 0 and 10, after setChannels(1) at line 62"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "nilyniant.cpp:58-60 scales the note by 12 and by one third, subtracts 0.171 and clamps to 0 and 10, after setChannels(1) at line 63"}
+    }
+  },
+  "comment": "Source read at commit c13145d. Neither output is rounded, so the voltage rises smoothly between notes rather than in steps; it is the receiving sequencer that quantises it to a sequence number. The Seq32 output subtracts a fixed 0.171 before clamping, which places C4 at the floor of the range."
+}

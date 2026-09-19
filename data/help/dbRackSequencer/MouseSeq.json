@@ -1,0 +1,60 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "MouseSeq",
+  "description": "Sequencer played by dragging the mouse over a 32 by 32 pad, recording what is played into one of 100 patterns and playing it back on a clock",
+  "params": [
+    {"ids": [0], "text": "Plays the current pattern back from its start, with the gate high until it ends"},
+    {"ids": [1], "text": "Picks which of the four scales the pad is quantised to"},
+    {"ids": [2], "text": "Picks which of the four clock inputs drives the module"},
+    {"ids": [3], "text": "Shifts the whole output up or down in octaves, -4 to 4"},
+    {"ids": [4], "text": "Shifts the whole output up in semitones, 0 to 11"},
+    {"ids": [5], "text": "Takes the note, velocity and gate from the X, Y and Gate inputs in place of the mouse, so another module can play and record into the pad"},
+    {"ids": [6], "text": "Picks which of the 100 patterns is recorded into and played back"},
+    {"ids": [7], "text": "While on, the pattern is picked by hand and a cable in the pattern input no longer moves the selection"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "One of the four clock inputs; only the selected one is read, and every step of playing and recording happens on its rising edge"},
+    {"ids": [4], "text": "Sets the semitone shift, 1.2 semitones per volt"},
+    {"ids": [5], "text": "Sets the octave shift, one octave per volt"},
+    {"ids": [6], "text": "Sets the column, and so the velocity, while Mode is on, 0-10V across the 32 columns"},
+    {"ids": [7], "text": "Sets the row, and so the note, while Mode is on, 0-10V across the 32 rows"},
+    {"ids": [8], "text": "Starts and stops a note while Mode is on: above 5V is a note held, below is silence, and the recording of a pattern runs while it is high"},
+    {"ids": [9], "text": "A rising edge plays the current pattern back from its start"},
+    {"ids": [10], "text": "Selects the scale, 2.5V per scale, and overrides the scale selector while patched"},
+    {"ids": [11], "text": "Selects the clock input, 2.5V per input, and overrides the clock selector while patched"},
+    {"ids": [12], "text": "Selects the pattern, 0.1V per pattern over 0-10V; while it is patched the pattern cannot be picked by hand unless Lock is on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note under the play position as a pitch, quantised to the selected scale and shifted by the Octave and Semitone controls"},
+    {"ids": [1], "text": "The column of the play position as a voltage, 0-10V across the pad, which is the velocity of the note"},
+    {"ids": [2], "text": "Carries 10V while a note is held and while a pattern is playing back"},
+    {"ids": [3], "text": "A 10ms trigger each time the note changes"}
+  ],
+  "notes": [
+    "pressing and dragging on the pad plays and records, and clicking a note in one of the four scale strips takes it out of that scale or puts it back",
+    "while the pointer is over the pad the keys z, x, c and v pick the clock input and a, s, d and f pick the scale"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "0 to 9.9999V · continuous · one channel only",
+      "7": "0 to 9.9999V · continuous · one channel only",
+      "8": "high above 5V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only",
+      "10": "stepped · one channel only",
+      "11": "stepped · one channel only",
+      "12": "0 to 9.99V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

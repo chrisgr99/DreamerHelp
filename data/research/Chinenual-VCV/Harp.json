@@ -1,0 +1,16 @@
+{
+  "plugin": "Chinenual-VCV",
+  "module": "Harp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "normal": "eleven semitones from middle C", "why": "Harp.cpp:102-116 takes the channel count with getChannels and each note with getPolyVoltage, falling back to middle C plus a semitone per degree"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "normal": "0V", "why": "Harp.cpp:92-99 reads the jack with getVoltage and rescales it across the low and high of the chosen CVRange"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "normal": "always strumming", "why": "Harp.cpp:86-90 reads the jack with getVoltage and compares it against 1V, treating an unpatched jack as strumming"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Harp.cpp:131 and 160 write the note to the current channel and call setChannels with 16"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Harp.cpp:128-136 write 10V to the current channel and 0V to the one it left, and call setChannels with 16"}
+    }
+  },
+  "comment": "Two things in the source do not match the README. The default scale, used when the scale jack is unpatched, repeats after eleven semitones rather than twelve (Harp.cpp:103 sets scaleSize to 11 with the comment \"default to chromatic\"), so the unpatched module is not chromatic. And the note-range parameter is configured with a minimum of 2, a maximum of 16 and a default of 48 (Harp.cpp:60), which looks like the arguments transposed; the menu offers 2 to 48 and writes the parameter directly rather than through its quantity, so the larger values do work, but a new module starts at 48. All four parameters have no widget on the panel and are set from the menu, so none is tagged."
+}

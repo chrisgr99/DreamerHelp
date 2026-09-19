@@ -1,0 +1,74 @@
+{
+  "plugin": "Venom",
+  "module": "PolyFade",
+  "description": "Crossfades between the channels of a polyphonic input, a phasor sweeping an envelope across the channels one after another",
+  "params": [
+    {"ids": [0], "text": "Curves the rising ramp of each channel envelope between -100% and 100%, 0% linear, negative bending toward exponential and positive toward logarithmic"},
+    {"ids": [1], "text": "Attenuates and inverts the rise CV before it is added to the RISE knob"},
+    {"ids": [2], "text": "Curves the falling ramp of each channel envelope between -100% and 100%, 0% linear, negative bending toward exponential and positive toward logarithmic"},
+    {"ids": [3], "text": "Attenuates and inverts the fall CV before it is added to the FALL knob"},
+    {"ids": [4], "text": "Sets how many channel slots each envelope spans; 1 makes the envelopes abut, below 1 leaves silence between channels, above 1 overlaps them, and the default is 2"},
+    {"ids": [5], "text": "Attenuates and inverts the width CV before it is added to the WIDTH knob"},
+    {"ids": [6], "text": "Sets what percentage of each channel envelope is held at full level; 100% gives a square envelope and 0% something between a triangle and a saw"},
+    {"ids": [7], "text": "Attenuates and inverts the hold CV before it is added to the HOLD knob"},
+    {"ids": [8], "text": "Splits the sloped part of the envelope, as the percentage given to the rise; 0% is an instant rise with a sloped fall, 100% the reverse, 50% symmetrical"},
+    {"ids": [9], "text": "Attenuates and inverts the skew CV before it is added to the SKEW knob"},
+    {"ids": [10], "text": "Sets the frequency of the internal phasor between 0.0079842Hz and 32.703Hz, at 2.044Hz by default; the ping pong shape runs at half the displayed figure"},
+    {"ids": [11], "text": "Cycles the internal phasor through forward, backward, ping pong and off, where off freezes it and by default resets it to phase 0"},
+    {"ids": [12], "text": "Sets how many polyphonic channels take part in the fade, between 0 and 16, where 0 uses every channel present at the IN input"},
+    {"ids": [13], "text": "Picks which input channel is phase 0, between 1 and 16"},
+    {"ids": [14], "text": "Sets the maximum level of the channel and sum outputs between 0% and 100%, at 100% by default"},
+    {"ids": [15], "text": "Attenuates and inverts the level CV before it is added to the LEVEL knob"},
+    {"ids": [16], "text": "Cycles the slew applied to the PHASOR input before it is summed with the internal phasor: off, 3ms per volt, 6ms per volt or 10ms per volt, which softens pops from sudden phasor jumps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "CV added to the RISE knob through its attenuator, scaled at 10% per volt, with the sum clamped between -100% and 100%"},
+    {"ids": [1], "text": "CV added to the FALL knob through its attenuator, scaled at 10% per volt, with the sum clamped between -100% and 100%"},
+    {"ids": [2], "text": "CV added to the WIDTH knob through its attenuator, scaled at 1 channel slot per 0.5V, with the sum clamped between 0.0625 and 16 slots"},
+    {"ids": [3], "text": "CV added to the HOLD knob through its attenuator, scaled at 10% per volt, with the sum clamped between 0% and 100%"},
+    {"ids": [4], "text": "CV added to the SKEW knob through its attenuator, scaled at 10% per volt, with the sum clamped between 0% and 100%"},
+    {"ids": [5], "text": "Drives the phasor rate at a volt per octave, down to 0.0015Hz and up to 12kHz; nothing anti-aliases the high rates"},
+    {"ids": [6], "text": "Sets the phasor direction outright, overriding the button: 0V forward, 1V backward, 2V ping pong, 3V off, rounded to the nearest"},
+    {"ids": [7], "text": "Sets the channel count outright, overriding the knob, at 0.5V per channel and rounded to the nearest half volt"},
+    {"ids": [8], "text": "Sets the start channel outright, overriding the knob, at 0.5V per channel with 0.5V meaning channel 1"},
+    {"ids": [9], "text": "Summed with the internal phasor to drive the fade; 0V is phase 0 and the phase rises with voltage until 10V wraps back to phase 0, so voltages outside that range wrap around"},
+    {"ids": [10], "text": "The polyphonic signal whose channels are crossfaded"},
+    {"ids": [11], "text": "A rising edge here resets the internal phasor to phase 0"},
+    {"ids": [12], "text": "CV added to the LEVEL knob through its attenuator, scaled at 10% per volt, with the sum clamped between 0% and 100%"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate for each channel whose envelope is above zero"},
+    {"ids": [1], "text": "The crossfaded signal for each channel, one per polyphonic channel"},
+    {"ids": [2], "text": "The monophonic sum of the crossfaded channel outputs"},
+    {"ids": [3], "text": "The phasor that actually drives the fade, the internal phasor and the phasor input mixed at unity, always between 0V and 10V"},
+    {"ids": [4], "text": "The envelope of each channel, one per polyphonic channel"}
+  ],
+  "menu": [
+    "Minimize output channels — on by default, packing the fading channels into the lowest output channels; turn it off to map input channels straight through to output channels",
+    "Reset on direction turning off — on by default, sending the internal phasor back to phase 0 when the direction is set to off; turn it off to freeze the phasor and resume later"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "0 to 5V · continuous · one channel only",
+      "4": "0 to 5V · continuous · one channel only",
+      "5": "1V per octave · continuous · one channel only",
+      "6": "0 to 3V · stepped · one channel only",
+      "7": "0 to 8V · stepped · one channel only",
+      "8": "stepped · one channel only",
+      "9": "0 to 10V · continuous · one channel only",
+      "10": "polyphonic",
+      "11": "high above 2V · stepped · one channel only",
+      "12": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · polyphonic",
+      "1": "polyphonic",
+      "2": "one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · polyphonic"
+    }
+  }
+}

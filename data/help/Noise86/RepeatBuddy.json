@@ -1,0 +1,35 @@
+{
+  "plugin": "Noise86",
+  "module": "RepeatBuddy",
+  "description": "Counter with a comparator and a clock divider, for adding step repeats to a sequencer",
+  "params": [
+    {"ids": [0], "text": "Scales the Count output, from silence at one end to the full count voltage at the other"},
+    {"ids": [1], "text": "Sets the division, 0 to 8 in whole numbers, and attenuates the voltage at the Division input while anything is patched there"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the count the comparator fires at, 1V for 0.8 through 10V for 8; with nothing patched here the threshold is 8"},
+    {"ids": [1], "text": "A rising edge adds one to the counter, which stops climbing at 8"},
+    {"ids": [2], "text": "A rising edge clears the counter to zero and restarts the division"},
+    {"ids": [3], "text": "Sets the division, 0V to 10V spanning 0 to 8 in whole numbers once the knob has attenuated it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the count is at or above the threshold; with nothing patched to Rst the counter clears itself there, so the gate lasts 1ms"},
+    {"ids": [1], "text": "The count as a voltage, 0V to 10V over counts of 0 to 7 and 11.43V at a count of 8, scaled by the counter attenuator"},
+    {"ids": [2], "text": "A 1ms 10V pulse whenever the count is a multiple of the division; at a division of 0 nothing is sent"}
+  ],
+  "notes": [
+    "the green lights show the count and the red lights the threshold, brightened at every multiple of the division",
+    "The counter climbs only on a rising edge at the Count input, so with nothing patched there the count, the comparator and the divider all stand at zero"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "0 to 10V",
+      "2": "stepped"
+    }
+  }
+}

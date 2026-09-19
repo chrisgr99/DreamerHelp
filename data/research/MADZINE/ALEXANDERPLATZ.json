@@ -1,0 +1,39 @@
+{
+  "plugin": "MADZINE",
+  "module": "ALEXANDERPLATZ",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/ALEXANDERPLATZ.cpp:296-302, getChannels() sets the output channel count and getPolyVoltage(c) reads each"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio", "poly": true, "range": "±10V", "normal": "the left jack, 20ms late", "why": "src/ALEXANDERPLATZ.cpp:385-399, patched, getPolyVoltage(c) is that track's right channel and its channel count feeds the output's; with only the left jack patched the right side is that left signal 20ms late; with neither patched it is 0V"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 2V", "why": "src/ALEXANDERPLATZ.cpp:399-406, clamp(getPolyVoltage(c)/10, -1, 1) added to the 0..2 knob, then clamped to 0..2"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv", "poly": true, "range": "0 to 10V", "negative": "ignored", "why": "src/ALEXANDERPLATZ.cpp:408-415, clamp(getPolyVoltage(c)/10, 0, 1), so negative voltages duck nothing"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/ALEXANDERPLATZ.cpp:354-359, a SchmittTrigger read on channel 0 only, at Rack default thresholds"},
+      "17": {"family": "trigger"},
+      "18": {"family": "trigger"},
+      "19": {"family": "trigger"},
+      "20": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/ALEXANDERPLATZ.cpp:361-367, a SchmittTrigger read on channel 0 only, at Rack default thresholds"},
+      "21": {"family": "trigger"},
+      "22": {"family": "trigger"},
+      "23": {"family": "trigger"},
+      "24": {"family": "audio", "poly": true, "range": "±10V", "why": "src/ALEXANDERPLATZ.cpp:434, getPolyVoltage(c) added into the mix before the equaliser"},
+      "25": {"family": "audio", "poly": true, "range": "±10V", "why": "src/ALEXANDERPLATZ.cpp:435, getPolyVoltage(c) added into the mix before the equaliser"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/ALEXANDERPLATZ.cpp:443, clamp(mixL, -10, 10) per channel"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "src/ALEXANDERPLATZ.cpp:444, clamp(mixR, -10, 10) per channel"}
+    }
+  },
+  "comment": "The equaliser is a cascade of 8 peaking biquads on the master mix, each -12dB to +12dB, applied after the chain input is summed in, so a chained signal is equalised too (src/ALEXANDERPLATZ.cpp:432-441). The mute and solo trigger jacks are read on channel 0 only, however many channels the cable carries. sumRange on the level jacks is written with a volt spelling because that is the only spelling the field takes; the figure is the gain the sum is clamped to, 0 to 2 times. The duck law is 1 - duckV/10 * duckKnob * 3, floored at zero. The solo search walks leftExpander and rightExpander, stops at the first module that is not a U8, an ALEXANDERPLATZ or a SHINJUKU, and reads their solo parameters by hardcoded index. A long press on a solo button clears every solo in that whole run. The panel prints INPUT, LEVEL, DUCK and the pair MUTE and SOLO over each track, the band centre under each fader, and nothing over the chain and mix jacks. The module is 16HP."
+}

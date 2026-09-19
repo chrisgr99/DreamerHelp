@@ -1,0 +1,59 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "VCMP1",
+  "description": "One value comparator in 4HP with offset knobs, an adjustable tolerance, all six comparison results, a crossing trigger and a clamp output",
+  "params": [
+    {"ids": [0], "text": "Adds its voltage to the A input, and with that jack empty sets A on its own, -10V to +10V"},
+    {"ids": [1], "text": "Adds its voltage to the B input, and with that jack empty sets B on its own, -10V to +10V"},
+    {"ids": [2], "text": "Sets how far apart two values may be while counting as equal, 0V to 10V, and a twenty-fourth of a volt unless you move it"},
+    {"ids": [3], "text": "Attenuates and inverts the tolerance CV between -100% and +100%, and comes up at 0% so that jack does nothing until you turn it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal passed by any of the six comparison outputs that comes out true; with the jack empty a true output carries the level set on the menu"},
+    {"ids": [1], "text": "The signal passed by any of the six comparison outputs that comes out false; with the jack empty a false output carries the level set on the menu"},
+    {"ids": [2, 3], "text": "One of the two voltages being compared, added to its offset knob"},
+    {"ids": [4], "text": "Adds its voltage to the tolerance knob after the trim, widening or narrowing what counts as equal"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the true signal while A and B are within the tolerance of each other"},
+    {"ids": [1], "text": "Carries the true signal while A and B are further apart than the tolerance"},
+    {"ids": [2], "text": "Carries the true signal while A is greater than B or within the tolerance of it"},
+    {"ids": [3], "text": "Carries the true signal while A is greater than B by more than the tolerance"},
+    {"ids": [4], "text": "Carries the true signal while A is less than B or within the tolerance of it"},
+    {"ids": [5], "text": "Carries the true signal while A is less than B by more than the tolerance"},
+    {"ids": [6], "text": "Fires a 1ms trigger when A crosses B and gets clear of the tolerance on the far side"},
+    {"ids": [7], "text": "Carries A held within the tolerance either side of B, so at a tolerance of 1V it never strays more than a volt from B"}
+  ],
+  "notes": [
+    "with both signal jacks empty the comparison runs on the two offset knobs alone, which is the way to compare one signal against a fixed voltage",
+    "the tolerance jack does nothing while its trim knob is centred, whatever is patched into it"
+  ],
+  "menu": [
+    "True output level — sets the voltage a true output carries when the True input is empty, 10V unless you change it",
+    "False output level — sets the voltage a false output carries when the False input is empty, 0V unless you change it",
+    "Set tolerance — sets the tolerance knob to a named value, from 0.00001V up to 5V, with the musical intervals labelled in notes",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic\n\nunpatched it reads the True output level from the menu.",
+      "1": "polyphonic\n\nunpatched it reads the False output level from the menu.",
+      "2": "polyphonic\n\nunpatched it reads 0V, leaving the A offset knob alone.",
+      "3": "polyphonic\n\nunpatched it reads 0V, leaving the B offset knob alone.",
+      "4": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "stepped · polyphonic",
+      "7": "polyphonic"
+    }
+  }
+}

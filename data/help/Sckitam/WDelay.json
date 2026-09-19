@@ -1,0 +1,42 @@
+{
+  "plugin": "Sckitam",
+  "module": "WDelay",
+  "description": "A delay line read with third-order Lagrange interpolation, built for waveguide and Karplus-Strong voices, flanging and chorus, with a second output tapped part way along the line",
+  "params": [
+    {"ids": [0], "text": "Shortens the delay by 0 to 16 sample periods, which compensates for the one sample every patch cable in the feedback loop adds"},
+    {"ids": [1], "text": "Sets the delay to one cycle of a pitch, -4 to 4 volts around C4 at 261.63Hz, and appears while the menu is set to Pitch"},
+    {"ids": [2], "text": "Sets the delay directly, 0.1ms to 1 second, and appears while the menu is set to Time"},
+    {"ids": [3], "text": "Taps the delay line for the Pickup output, 0 at the point the signal enters the line and 1 at the point it leaves"},
+    {"ids": [4], "text": "Attenuates and inverts the pickup position CV, which at the full setting moves the tap across the whole line for 10V"},
+    {"ids": [5], "text": "Scales the signal at the FBack input, 0 to 0.999, before it is added to the delay input"},
+    {"ids": [6], "text": "Switches the feedback between being added to the input and being subtracted from it, and lights the lamp for the sign in force"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the delay: read a volt per octave around C4 in Pitch mode, and in Time mode every volt lengthens the delay by a fifth of the knob setting"},
+    {"ids": [1], "text": "Moves the pickup tap along the delay line, scaled by the trimpot under the Pk Pos knob"},
+    {"ids": [2], "text": "The signal fed into the delay line"},
+    {"ids": [3], "text": "The signal returned into the delay line, scaled by the feedback trimpot and given the sign of the plus-minus button; nothing is routed back inside the module, so a cable is needed"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal tapped part way along the delay line, at the point set by Pk Pos"},
+    {"ids": [1], "text": "The delayed signal, interpolated between samples so the delay can be a fraction of one, and limited to -20V to 20V"}
+  ],
+  "notes": [
+    "Nothing is fed back inside the module: a Karplus-Strong voice needs the Out jack patched back to the FBack jack",
+    "The maker's example patch runs that feedback path through a filter and a DC blocker before it returns to FBack"
+  ],
+  "menu": [
+    "Delay specification... — chooses whether the Delay knob is read as a Pitch, one cycle long, or as a Time in milliseconds"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous",
+      "2": "continuous",
+      "3": "continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "±20V · continuous"
+    }
+  }
+}

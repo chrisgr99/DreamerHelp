@@ -1,0 +1,33 @@
+{
+  "plugin": "TyrannosaurusRu",
+  "module": "Droplets",
+  "description": "Sequencer modelling liquid running down a leaky pipe of eight cells, moving liquid from cell to cell on each clock tick and firing a gate wherever a cell empties",
+  "params": [
+    {"ids": [0], "text": "Sets how much liquid is added to the first cell on each tick, 0 to 1"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the FLOW input before it is added to the flow amount"},
+    {"ids": [2], "text": "Sets the volume a cell has to reach before it empties into the cell below and fires its gate, 0.001 to 10"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at the VISC input before it is added to the viscosity"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A voltage added to the flow amount, scaled by the slider for FLOW, with 10V covering the whole range at the slider's full setting"},
+    {"ids": [1], "text": "A voltage added to the viscosity, scaled by the slider for VISC, with 10V covering the whole range at the slider's full setting"},
+    {"ids": [2], "text": "A rising edge runs one cycle of the flow, reading high above 2V and low below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Eight channels, one per cell, carrying 10V on the ticks when that cell empties"},
+    {"ids": [1], "text": "Eight channels, one per cell, carrying the volume of liquid in that cell as 0-10V"}
+  ],
+  "notes": [
+    "the square lights give the amount of liquid in each cell, brighter for a fuller cell",
+    "nothing moves until a clock is patched to CLK; the module has no clock of its own",
+    "FLOW starts at zero, so no liquid enters the first cell and no gate fires until FLOW is raised"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "high above 2V · stepped"
+    },
+    "outputs": {
+      "1": "0 to 10V"
+    }
+  }
+}

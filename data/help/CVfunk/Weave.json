@@ -1,0 +1,59 @@
+{
+  "plugin": "CVfunk",
+  "module": "Weave",
+  "description": "A six-note chord quantizer whose notes can be shuffled between the six outputs: a root and a chord type give six pitches, and each trigger applies a permutation that moves them from jack to jack",
+  "params": [
+    {"ids": [0], "text": "Picks which permutation is applied on each trigger"},
+    {"ids": [1], "text": "Attenuverts the weave CV before it is added to the weave knob"},
+    {"ids": [2], "text": "Picks the chord built on the root, from an octave through the major and minor triads to the ninths and suspensions printed round the knob"},
+    {"ids": [3], "text": "Drops the chord an octave on each press, as far as one octave down"},
+    {"ids": [4], "text": "Lifts the chord an octave on each press, as far as one octave up"},
+    {"ids": [5], "text": "Applies the chosen permutation on each press, moving every note to a different output"},
+    {"ids": [6], "text": "Returns the notes to their starting outputs on each press"},
+    {"ids": [7], "text": "Shifts every output, -1V to 1V, which the menu can snap to semitones"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise applies the chosen permutation, moving every note to a different output"},
+    {"ids": [1], "text": "A rise returns the notes to their starting outputs"},
+    {"ids": [2], "text": "Picks the permutation, one volt per pattern, added to the weave knob and wrapped round the list"},
+    {"ids": [3], "text": "Sets the root of the chord as a volt per octave; a polyphonic cable here gives the six notes directly instead of building a chord"},
+    {"ids": [4], "text": "Picks the chord type, one twelfth of a volt per step through the list, wrapping round the sixteen chords"},
+    {"ids": [5], "text": "Shifts every output, added to the transpose knob; the menu can snap the total to semitones"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Fires a one-millisecond 10V trigger whenever the notes change, from a weave, a chord change, a root change or an octave button"},
+    {"ids": [1], "text": "Carries all six notes at once as six polyphonic channels, each note on the channel its permutation has moved it to"},
+    {"ids": [2, 3, 4, 5, 6, 7], "text": "One of the six chord notes as a volt per octave, clamped to -10 to 10V; which note arrives here depends on the permutation"},
+    {"ids": [8], "text": "The root of the chord as a volt per octave, put in the octave of the lowest note being played"}
+  ],
+  "notes": [
+    "the chord is built from a root and a chord type, and the root comes from the keyboard drawn on the panel, from the ROOT NOTE input, or from both",
+    "the keyboard on the panel is a display rather than a control, so clicking one of its keys cannot reach a help entry",
+    "patching a polyphonic cable into the root input replaces the chord builder: the cable's channels become the notes, and the chord knob is ignored"
+  ],
+  "menu": [
+    "Quantize Shift to semitones — snaps the transpose knob and its CV to whole semitones instead of passing them through as a continuous voltage",
+    "Allow input to track multiple octaves — lets the root input move the chord across octaves rather than folding it into one"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "1V per octave · continuous · polyphonic",
+      "4": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous",
+      "5": "1V per octave · continuous",
+      "6": "1V per octave · continuous",
+      "7": "1V per octave · continuous",
+      "8": "1V per octave · continuous · one channel only"
+    }
+  }
+}

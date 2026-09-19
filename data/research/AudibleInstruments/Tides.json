@@ -1,0 +1,24 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Tides",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "why": "Tides.cpp:115 divides this input by 5, adds the knob and clamps the total to -1..1, the span a fifth of ±5V covers"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "why": "Tides.cpp:116 divides this input by 5, adds the knob and clamps the total to -1..1, the span a fifth of ±5V covers"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "±5V", "why": "Tides.cpp:117 divides this input by 5, adds the knob and clamps the total to -1..1, the span a fifth of ±5V covers"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "Tides.cpp:139 tests this input against 0.7V with getVoltage() alone"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "Tides.cpp:137 tests this input against 0.7V with getVoltage() alone"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "Tides.cpp:107 multiplies this input by 12 into the pitch in semitones"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "normal": "0.1V", "why": "Tides.cpp:108 reads this input with getNormalVoltage(0.1), divides by 5 and multiplies by the FM knob before adding it to the pitch"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "normal": "8V", "why": "Tides.cpp:132 reads this input with getNormalVoltage(8.0), divides by 8 and clamps that alone to 0..1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.7V", "why": "Tides.cpp:141 tests this input against 0.7V with getVoltage() alone; Tides.cpp:125 also puts the generator into clocked mode whenever a cable is present"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "trigger"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"}
+    }
+  },
+  "comment": "Both gate outputs run inverted against the Mutable manual, which has HIGH TIDE going high at the end of the rise and LOW TIDE going high at the end of the fall, each staying high until the cycle restarts or the envelope is retriggered. The plugin holds each one high through its segment and drops it at the end, so the lines describe the plugin. Clock sync differs too: the manual engages the phase-locked mode by holding the range switch for a second, while the plugin locks to the CLOCK input whenever a cable is patched there. The Sheep firmware also disables clock sync: set_sync is called with the CLOCK input's connected state ANDed with the firmware being off."
+}

@@ -1,0 +1,51 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Fill",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "fill.cpp:1004 clockTrig.process crosses 1V — the edge is consumed every sample — and :1006 measures the interval used for swing and ratchet timing; steps fire on it, the module has no timebase of its own"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "fill.cpp declares the bar input; the time between its rises is what sets how many clocks make a bar"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "fill.cpp:991 resetTrig.process crosses 1V and calls onReset"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "fill.cpp:998 reseedTrig.process crosses 1V and :1000 gives reseedBase a fresh random::u32, rolling a new variation layer"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "fill.cpp declares the accumulate CV, summed with the accumulate knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "fill.cpp declares the discharge CV, summed with the discharge knob"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "fill.cpp names it ±5V, summed with the tier offset knob"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "fill.cpp declares the pattern set CV, summed with the set knob"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "fill.cpp names it 0-10V mapped onto none to eight extra triggers"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "why": "fill.cpp declares the next-queue-entry input, which takes effect at the next cycle"},
+      "10": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "fill.cpp names it one volt per phrase length, summed with the phrase knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "fill.cpp declares that channel's gate output; its length comes from the menu"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "trigger"},
+      "7": {"family": "trigger"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "fill.cpp declares that channel's velocity output"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "fill.cpp declares that channel's accent output"},
+      "17": {"family": "trigger"},
+      "18": {"family": "trigger"},
+      "19": {"family": "trigger"},
+      "20": {"family": "trigger"},
+      "21": {"family": "trigger"},
+      "22": {"family": "trigger"},
+      "23": {"family": "trigger"},
+      "24": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "fill.cpp declares the fill gate, held high while a fill plays"},
+      "25": {"family": "cv", "poly": false, "why": "fill.cpp declares the pattern set output at one volt per set"},
+      "26": {"family": "cv", "poly": false, "why": "fill.cpp declares the time signature numerator output at half a volt per count"},
+      "27": {"family": "cv", "poly": false, "why": "fill.cpp declares the time signature denominator output at one volt per index"},
+      "28": {"family": "cv", "poly": false, "why": "fill.cpp declares the tempo output at a hundredth of a volt per beat per minute"}
+    }
+  },
+  "comment": "A \"Sync fills to phrase\" parameter is declared with no widget (it has no position in the census) and is set from the menu's Fills item instead. Pattern sets come from three shipped banks plus any files in the plugin's own patterns folder under Rack's user directory, and drum-patterns.com text exports are read directly (fill.cpp:403). Favourites are kept plugin-wide in a file beside that folder rather than in the patch (fill.cpp:543), so a set starred in one project is starred in the next."
+}

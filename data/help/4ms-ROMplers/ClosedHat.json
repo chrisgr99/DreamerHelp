@@ -1,0 +1,38 @@
+{
+  "plugin": "4ms-ROMplers",
+  "module": "ClosedHat",
+  "description": "Plays one of sixteen recorded closed hi-hat samples, at a playback speed you set and under a decay envelope",
+  "params": [
+    {"ids": [0], "text": "Chooses which of the sixteen samples is played, numbered 1 to 16"},
+    {"ids": [1], "text": "Sets the playback speed, and with it the pitch: the recorded speed at centre, 0.01 times speed fully left and twice speed fully right"},
+    {"ids": [2], "text": "Sets an exponential decay over the sample, 5ms fully left and the whole length of the chosen sample fully right"},
+    {"ids": [3], "text": "Pressing it restarts the sample from its beginning; the lamp in it flashes whenever the module is triggered, from the button or from Trig"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the sample choice, 0.625V moving it by one sample; it is added to the Sample knob and the total held between the first sample and the sixteenth"},
+    {"ids": [1], "text": "Shifts the playback speed, 5V covering the whole of the Pitch knob's travel; the total of knob and voltage is held inside that travel"},
+    {"ids": [2], "text": "Shifts the decay time, 5V covering the whole of the Decay knob's travel; the total of knob and voltage is held inside that travel"},
+    {"ids": [3], "text": "A rising edge past 1V restarts the sample from its beginning"},
+    {"ids": [4], "text": "Scales the output level: 0V silences it, 5V gives full level, and anything above 5V counts as 5V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The chosen sample at the set speed under the decay envelope, a full-scale sample reaching ±10V"}
+  ],
+  "notes": [
+    "no sound comes out until the module is triggered, either by a rising edge at Trig or by a press of the button.",
+    "the sample number, and the sample length the Decay knob is scaled against, are read at the moment of the trigger; turning Sample part way through a note does not change what is playing.",
+    "with Vol unpatched the level is full, so patching a cable that rests at 0V silences the module."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "0 to 5V · continuous · one channel only\n\nunpatched it reads 5V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only"
+    }
+  }
+}

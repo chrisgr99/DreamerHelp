@@ -1,0 +1,44 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Galaxy",
+  "description": "Semi-random chord generator: each trigger moves the choice around a galaxy whose arms are chord qualities and whose stars are root notes",
+  "params": [
+    {"ids": [0], "text": "Sets the key the chords are drawn from, C to B"},
+    {"ids": [1], "text": "Sets the mode the chords are drawn from, Ionian through Locrian"},
+    {"ids": [2], "text": "Raises the chance that the chord comes from outside the chosen key or mode, 0 to 100%; the lamp flashes green for a chord from the key underlying the mode and red for one taken at random"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger picks the next chord and sends it to the pitch outputs"},
+    {"ids": [1], "text": "A voltage here sets the key, in place of the ROOT knob; 0V to 10V spread across the twelve keys, or read as a 1V/octave pitch if the menu says so"},
+    {"ids": [2], "text": "A voltage here sets the mode, in place of the MODE knob; 0V to 10V spread across the seven modes"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowest note of the current chord as a 1V/octave pitch, and the same jack carries all six notes as a polyphonic cable"},
+    {"ids": [1, 2, 3, 4, 5], "text": "One note of the current chord as a 1V/octave pitch; a chord of three or four notes fills the remaining outputs by repeating its own notes from the root up, in the octave the menu chooses"}
+  ],
+  "notes": [
+    "no chord is chosen until the first trigger arrives at the input in the middle of the galaxy, and the chord changes only on a trigger there.",
+    "the display names the chord now playing and its degree in the mode, with the key and the mode the chords are drawn from."
+  ],
+  "menu": [
+    "Chord Selection — how the next chord is found: Random moves as much as two arms and two scale steps, in Key keeps the root in the chosen key, in Mode draws root and quality from the mode",
+    "Repeat Notes — the octave of the notes repeated to fill six outputs from a three- or four-note chord: Lower, Repeat, Upper or Random",
+    "Allowed Chord Inversions — which inversions may be picked at random: Root only, Root and First, or Root, First and Second",
+    "Root Volt Scaling — how the ROOT input is read: V/Oct takes it as a 1V/octave pitch, Fourths and Fifths as the twelve keys spread across 0V to 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "stepped · one channel only\n\nunpatched it reads the ROOT knob's setting.",
+      "2": "0 to 10V · stepped · one channel only\n\nunpatched it reads the MODE knob's setting."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "1V per octave · continuous · one channel only"
+    }
+  }
+}

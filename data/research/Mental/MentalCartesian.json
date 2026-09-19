@@ -1,0 +1,30 @@
+{
+  "plugin": "Mental",
+  "module": "MentalCartesian",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:115 a dsp::SchmittTrigger at its default thresholds of 0 and 1; :207-212 each crossing moves the position one row up, wrapping from the top row to the bottom"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:108 a dsp::SchmittTrigger at its default thresholds of 0 and 1; :200-205 each crossing moves the position one row down, wrapping from the bottom row to the top"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:101 a dsp::SchmittTrigger at its default thresholds of 0 and 1; :193-198 each crossing moves the position one column left, wrapping from the first column to the last"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:94 a dsp::SchmittTrigger at its default thresholds of 0 and 1; :186-191 each crossing moves the position one column right, wrapping from the last column to the first"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 3V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:153-159, rounded, clamped to 0 and 3, then added to the column and taken modulo 4"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 3V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:161-167, rounded, clamped to 0 and 3, then added to the row and taken modulo 4"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:121 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing puts the position back to the first row and column and cancels any step taken that sample"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:132 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing puts the position back to the first column, leaves the row alone and cancels any step taken that sample"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalCartesian.cpp:142 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing puts the position back to the first row, leaves the column alone and cancels any step taken that sample"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:217 and 231, the knob's configured -2 to 2"},
+      "1": {"family": "pitch", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:219-222 and 232, the knob rounded to a twelfth of a volt"},
+      "2": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:225 and 227, a knob's configured -2 to 2"},
+      "3": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:225 and 227, a knob's configured -2 to 2"},
+      "4": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:225 and 227, a knob's configured -2 to 2"},
+      "5": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:225 and 227, a knob's configured -2 to 2"},
+      "6": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:226 and 228, a knob's configured -2 to 2"},
+      "7": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:226 and 228, a knob's configured -2 to 2"},
+      "8": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:226 and 228, a knob's configured -2 to 2"},
+      "9": {"family": "cv", "poly": false, "range": "±2V", "why": "src/MentalCartesian.cpp:226 and 228, a knob's configured -2 to 2"}
+    }
+  },
+  "comment": "The two CV inputs do not set the position, they add to it, and they do so on every sample rather than on an edge: src/MentalCartesian.cpp:157 and 165 compute the new position from the current one plus the rounded voltage and store it back, so a steady 1V steps the grid once per sample. That is what the lines for those two jacks say. Both are clamped to 0 and 3 before use, so a negative voltage does nothing. The sixteen buttons are read as levels rather than as edges (line 174), so each one jumps the position to its cell only while it is held; where two are held the higher numbered cell wins, because the loop runs in order. Index order is not panel order for the parameters: the buttons occupy 0 to 15 and the knobs 16 to 31, while the panel puts the knobs on the left and the buttons on the right (lines 269-272). The row outputs sit in a line under the grid, one under each column, and each carries the knob in that column on the current row; the column outputs run down the side, one beside each row, and each carries the knob in that row in the current column. The panel prints Cartesian Sequencer, Left, Right, X CV, X Reset, Up, Down, Y CV, Y reset, Reset, Out, Quant. Out, Column Out and Row Out."
+}

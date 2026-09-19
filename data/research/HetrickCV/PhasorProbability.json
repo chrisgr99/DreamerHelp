@@ -1,0 +1,16 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorProbability",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorProbability.cpp:124 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 1V", "step": "continuous", "why": "PhasorProbability.cpp:129 clamps the knob plus this CV to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "0 to 10V", "why": "PhasorProbability.cpp:116 setChannels(getMaxInputPolyphony()) and 163 a per-channel write of the phasor times HCV_PHZ_UPSCALE, or 0V when the throw sends it elsewhere; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorProbability.cpp:117 and 164 write HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"},
+      "2": {"poly": true, "range": "0 to 10V", "why": "PhasorProbability.cpp:118 and 166 write the phasor times HCV_PHZ_UPSCALE per channel, or 0V when the throw sends it elsewhere; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorProbability.cpp:119 and 167 write HCV_GATE_MAG or 0V per channel; HetrickUtilities.hpp:73 sets HCV_GATE_MAG to 10V"}
+    }
+  }
+}

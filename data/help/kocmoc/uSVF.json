@@ -1,0 +1,36 @@
+{
+  "plugin": "kocmoc",
+  "module": "uSVF",
+  "description": "A fast state variable filter with an explicit tanh-saturated integrator, switchable between lowpass, bandpass and highpass, running sixteen polyphonic channels",
+  "params": [
+    {"ids": [0], "text": "Sets the cutoff, with the dial's travel raised to the fourth power so most of the fine control falls at the low end"},
+    {"ids": [1], "text": "Sets the resonance by reducing the damping in the bandpass feedback; the damping only reaches zero near the very top of the dial"},
+    {"ids": [2], "text": "Drives the signal into the filter as the fourth power of the dial; from the halfway point upward the output is scaled back to hold the level steady"},
+    {"ids": [3], "text": "Chooses which response reaches OUT: LP for lowpass, BP for bandpass, HP for highpass"},
+    {"ids": [4], "text": "Scales what the FM input does to the cutoff, from fully inverted through nothing to fully positive; the dial's travel is cubed"},
+    {"ids": [5], "text": "Scales what the V/OCT input does to the cutoff, from fully inverted through nothing to fully positive; the dial's travel is cubed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds a fifth of its voltage to the cutoff, scaled by its attenuverter"},
+    {"ids": [1], "text": "Multiplies the cutoff by two raised to its voltage, an octave per volt with its attenuverter fully positive"},
+    {"ids": [2], "text": "The signal into the filter; the number of channels patched here is the number of channels the module runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered signal, one channel for each channel patched into IN"}
+  ],
+  "notes": [
+    "the internal cutoff rate is clamped at zero, so a negative voltage at FM large enough to drive it there closes the filter",
+    "bypassing the module passes IN straight through to OUT",
+    "this module carries no oversampling, decimator or integration settings; its core runs twice per sample at a fixed rate"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

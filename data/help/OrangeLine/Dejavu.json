@@ -1,0 +1,64 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Dejavu",
+  "description": "Polyphonic source of random triggers, gates and CV whose sequences repeat in up to four nested levels, so that passages heard before come back",
+  "params": [
+    {"ids": [0], "text": "Sets the clock division the module runs at, 1 to 64, and is passed over while the DIV input is patched"},
+    {"ids": [1], "text": "Sets the seed the random generators start from on reset"},
+    {"ids": [2, 3, 4, 5], "text": "Sets the number of steps in the sequence that row repeats, counted in clock ticks for the top row and in whole durations of the active row above it for the others"},
+    {"ids": [6, 7, 8, 9], "text": "Switches that repeat row on or off; the lamp is dim where the row is on but its length and duration are both 1"},
+    {"ids": [10, 11, 12, 13], "text": "Sets how long that row runs before it takes a fresh seed and starts a new sequence, usually a multiple of that row's length"},
+    {"ids": [14], "text": "Sets the probability that a trigger fires on each clock tick, 0% to 100%, the same for every channel while the probability input is unpatched"},
+    {"ids": [15], "text": "Unlit lets the CV output change on every clock tick, yellow only where a trigger or gate is produced, red only on a trigger or a newly opened gate"},
+    {"ids": [16], "text": "Unlit produces triggers, yellow a gate that reopens on every clock tick, red a gate that is held across consecutive gates"},
+    {"ids": [17], "text": "Sets the offset added to the generated CV, -10V to 10V"},
+    {"ids": [18], "text": "Attenuates the CV offset input before it is added to the OFS knob, -100% to 100%"},
+    {"ids": [19], "text": "Sets the scale of the generated CV, -100 to 100; positive gives unipolar values from the offset upward and negative bipolar values centred on the offset"},
+    {"ids": [20], "text": "Attenuates the CV scale input before it is added to the SCL knob, -100% to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger resets the module and reseeds it from the SEED setting"},
+    {"ids": [1], "text": "The clock the module runs on, divided by DIV"},
+    {"ids": [2], "text": "Sets the clock division in place of the DIV knob, 0.1V per division, so 6.4V gives the largest division of 64"},
+    {"ids": [3], "text": "Sets the seed in place of the SEED knob, scaled by a thousand"},
+    {"ids": [4], "text": "Polyphonic control of the four repeat rows, read as length 1, duration 1, length 2, duration 2 and so on at 0.01V per clock tick"},
+    {"ids": [5], "text": "A trigger sets all counters back to zero without applying the reset offsets"},
+    {"ids": [6], "text": "Polyphonic trigger probability per output channel, with the HEAT knob added to each channel"},
+    {"ids": [7], "text": "Polyphonic scaling of how much the HEAT knob adds to each channel's probability; a negative channel makes raising HEAT lower that channel's probability"},
+    {"ids": [8], "text": "Sets the CV offset for each output channel, through its own attenuator and added to the OFS knob"},
+    {"ids": [9], "text": "Sets the CV scale for each output channel, through its own attenuator and added to the SCL knob"},
+    {"ids": [10], "text": "Sets trigger or gate behaviour per channel: below 1V triggers, from 1V to 2V a gate reopening on every clock tick, and from 2V a gate held across consecutive gates"},
+    {"ids": [11], "text": "Sets sample and hold behaviour per channel: below 1V the CV changes on every clock tick, from 1V to 2V only where a trigger or gate is produced, and from 2V only on a trigger or newly opened gate"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Polyphonic effective length and duration of the repeat rows, read as duration 1, length 1, duration 2 and so on, scaled so that 10V stands for 100000 clock ticks"},
+    {"ids": [1], "text": "Polyphonic triggers from the repeat rows, the even channels at the end of a row's length and the odd channels at the end of its duration"},
+    {"ids": [2], "text": "The polyphonic random triggers or gates"},
+    {"ids": [3], "text": "The polyphonic random CV"}
+  ],
+  "notes": [
+    "nothing is generated until a clock is patched to CLK"
+  ],
+  "menu": [
+    "Poly Channels — the number of trigger and CV channels produced, 1 to 16",
+    "Loop — takes a fresh seed from SEED where no repeat row is active, so what is generated repeats instead of running on",
+    "Clockwise — runs the repeat display clockwise",
+    "Backward — runs the repeat display backward",
+    "Normal Operation — the length and duration knobs set the lengths and durations themselves",
+    "Edit Ranges — turns the length and duration knobs into the largest value each of them may reach",
+    "Edit Offsets — turns the duration knobs into the counter offsets applied on reset"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "5": "stepped",
+      "10": "1 to 2V",
+      "11": "1 to 2V"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

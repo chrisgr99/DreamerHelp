@@ -1,0 +1,83 @@
+{
+  "plugin": "MADZINE",
+  "module": "NIGOQ",
+  "description": "Complex oscillator: a modulation oscillator with a morphing wave, a final oscillator it can frequency-modulate, rectify and wave-fold, a low-pass filter, a decay envelope on both, and a scope",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the modulation oscillator, 0.001Hz at the bottom of its travel to 6000Hz at the top"},
+    {"ids": [1], "text": "Sets the pitch of the final oscillator, 20Hz at the bottom of its travel to 8000Hz at the top"},
+    {"ids": [2], "text": "Sets the corner of the low-pass filter after the folding, 10Hz at the bottom of its travel to 20000Hz at the top"},
+    {"ids": [3], "text": "Sets how far the final oscillator's wave is rectified, 0% to 100%"},
+    {"ids": [4], "text": "Sets how far the final oscillator's wave is folded back on itself, 0% to 100%"},
+    {"ids": [5], "text": "Morphs the modulation oscillator's wave, stepping through sine, triangle, sawtooth and pulse with blends between them"},
+    {"ids": [6], "text": "Scales the voltage at the FM CV jack before it is added to the FM knob, 0% to 100%"},
+    {"ids": [7], "text": "Scales the voltage at the TM CV jack before it is added to the TM knob, 0% to 100%"},
+    {"ids": [8], "text": "Scales the voltage at the RECT CV jack before it is added to the RECT knob, 0% to 100%"},
+    {"ids": [9], "text": "Scales how far the modulation FM jack moves the modulation oscillator, 0% to 100%"},
+    {"ids": [10], "text": "Scales how far the final FM jack moves the final oscillator, 0% to 100%"},
+    {"ids": [11], "text": "Sets how long both envelopes take to fall: 0 to 0.3 seconds over the lower half of its travel and 0.3 to 3 seconds over the upper half, with the very top holding both wide open for a drone"},
+    {"ids": [12], "text": "Sets how much plain sine at the final oscillator's own pitch is mixed back in under the shaped wave, 0% to 100%"},
+    {"ids": [13], "text": "Sets how deeply the modulation signal frequency-modulates the final oscillator; the phase increment can go negative, so it is a through-zero modulation"},
+    {"ids": [14], "text": "Sets how deeply the modulation signal moves the wave-folding, 0% to 100%"},
+    {"ids": [15], "text": "Sets how deeply the modulation signal moves the rectification, 0% to 100%"},
+    {"ids": [16], "text": "Chooses what the final oscillator does to the modulation oscillator's phase at each of its own cycles: Off, Soft or Hard"},
+    {"ids": [17], "text": "Sets how much time one screen of the scope covers, 5ms at the top of its travel to 50 seconds at the bottom; it carries no marking and is set by dragging up and down over the display"},
+    {"ids": [18], "text": "Switches the scope between waiting for a trigger and running free"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge fires both envelopes; with DECAY at the top of its travel both stay open and this jack does nothing"},
+    {"ids": [1], "text": "Added to the WAVE knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [2], "text": "Replaces the modulation oscillator outright with whatever is patched here, taken as ±5V"},
+    {"ids": [3], "text": "Replaces the final oscillator's own wave with whatever is patched here, taken as ±5V, before the rectifying and the folding"},
+    {"ids": [4], "text": "Shifts the filter corner, two octaves down at 0V, no change at 5V and two octaves up at 10V"},
+    {"ids": [5], "text": "Added to the RECTIFY knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [6], "text": "Added to the FM knob through the trimmer beside it, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [7], "text": "Added to the FOLD knob, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [8], "text": "Added to the TM knob through the trimmer beside it, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [9], "text": "Added to the RECT knob through the trimmer beside it, a tenth of its travel per volt; the total is held between the two ends of it"},
+    {"ids": [10], "text": "Multiplies the modulation oscillator's pitch through the trimmer beside it, 5V doubling it at full attenuation"},
+    {"ids": [11], "text": "Multiplies the modulation oscillator's pitch, one volt per octave"},
+    {"ids": [12], "text": "Multiplies the final oscillator's pitch through the trimmer beside it, and at full attenuation 5V takes it ten times over"},
+    {"ids": [13], "text": "Multiplies the final oscillator's pitch, one volt per octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The modulation oscillator, 0V to 10V, through its own envelope"},
+    {"ids": [1], "text": "The final oscillator's plain sine, before the rectifying, the folding and the filter"},
+    {"ids": [2], "text": "The final oscillator after the rectifying, the folding, the filter and the bass mix, through its envelope"}
+  ],
+  "notes": [
+    "randomising this module does not jump. Every knob slides to its new setting over the glide time set on the menu, and only within the span set by Random Amount.",
+    "patching the modulation EXT IN jack takes the modulation oscillator out of circuit entirely; the WAVE knob, the modulation pitch knob and its two pitch jacks then do nothing.",
+    "patching the final EXT IN jack likewise replaces the final oscillator's wave; its pitch knob and pitch jacks then do nothing, though the rectifying and folding apply as before."
+  ],
+  "menu": [
+    "2x Oversample — runs the whole voice at twice the sample rate and filters it back down",
+    "Attack Time — a slider setting how long both envelopes take to rise, 0.1ms to 100ms",
+    "Randomize Glide Time — a slider setting how long the knobs take to slide to their new values when the module is randomised",
+    "Random Amount — a slider setting how far from their current settings randomising is allowed to move the knobs",
+    "Final Frequency affected by Random — ticked, randomising moves the FINAL FREQ knob; unticked, it is left alone",
+    "Decay affected by Random — ticked, randomising moves the DEC knob; unticked, it is left alone"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "±5V · continuous · one channel only",
+      "11": "1V per octave · continuous · one channel only",
+      "12": "±5V · continuous · one channel only",
+      "13": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only"
+    }
+  }
+}

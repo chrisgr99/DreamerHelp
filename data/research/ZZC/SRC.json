@@ -1,0 +1,14 @@
+{
+  "plugin": "ZZC",
+  "module": "SRC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "±11V", "normal": "the knobs alone", "why": "SRC.cpp:161 clamp(coarse + fine + getVoltage(), -11.0f, 11.0f)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "swings", "normal": "the ON button alone", "why": "SRC.cpp:95-99 (bool)getVoltage() in Hold, SchmittTrigger otherwise"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±11V", "why": "SRC.cpp:164 setVoltage(on ? voltage : 0.0f), voltage clamped to ±11"}
+    }
+  },
+  "comment": "In Hold mode the ON input is cast straight to a bool (SRC.cpp:97), so any voltage that is not exactly zero counts as raised, negative ones included, and the result is exclusive-or'd with the button rather than replacing it. The maker's tooltip for the button is On/Off; the panel prints ON above the jack beside it, so the two carry the same word."
+}

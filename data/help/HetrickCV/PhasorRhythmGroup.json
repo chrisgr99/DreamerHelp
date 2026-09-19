@@ -1,0 +1,47 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorRhythmGroup",
+  "description": "Breaks one phasor into three nested rhythmic layers — steps, groups of steps and subgroups — each with a phasor output and a trigger output",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps one cycle of the input phasor is split into, 1 to 64, 16 when new"},
+    {"ids": [1], "text": "Attenuverts the steps CV, -1 to +1; at full depth 5V adds 64 steps"},
+    {"ids": [2], "text": "Sets how many steps make a group, 1 to 64, 7 when new; a group that does not fit the bar is cut short when the input phasor restarts"},
+    {"ids": [3], "text": "Attenuverts the group steps CV, -1 to +1; at full depth 5V adds 64 steps"},
+    {"ids": [4], "text": "Sets how many steps make a subgroup within the group, 1 to 64, 3 when new"},
+    {"ids": [5], "text": "Attenuverts the subgroup steps CV, -1 to +1; at full depth 5V adds 64 steps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor being divided; one 0-10V cycle is the whole bar"},
+    {"ids": [1], "text": "Adds to the step count, scaled by the steps attenuverter"},
+    {"ids": [2], "text": "Adds to the group step count, scaled by the group steps attenuverter"},
+    {"ids": [3], "text": "Adds to the subgroup step count, scaled by the subgroup steps attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 0-10V ramp across the current step, restarting on every step"},
+    {"ids": [1], "text": "A 1ms 10V trigger at the start of every step"},
+    {"ids": [2], "text": "A 0-10V ramp across the current group of steps"},
+    {"ids": [3], "text": "A 1ms 10V trigger at the start of every group"},
+    {"ids": [4], "text": "A 0-10V ramp across the current subgroup"},
+    {"ids": [5], "text": "A 1ms 10V trigger at the start of every subgroup"}
+  ],
+  "notes": [
+    "the larger of the group and subgroup settings is taken as the group and the smaller as the subgroup, and a change to either takes effect at the next step",
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic",
+      "4": "0 to 10V · polyphonic",
+      "5": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "Seqtrol",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Seqtrol.cpp process(): startTrigger.process(rescale(inputs[START_TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)) with SchmittTrigger's default 0 and 1 thresholds, one voltage and no channel loop"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Seqtrol.cpp process(): continueTrigger.process(rescale(inputs[CONTINUE_TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)) with SchmittTrigger's default 0 and 1 thresholds, one voltage and no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Seqtrol.cpp process(): stopTrigger.process(rescale(inputs[STOP_TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)) with SchmittTrigger's default 0 and 1 thresholds, one voltage and no channel loop"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Seqtrol.cpp process(): inputClockTrigger.process(rescale(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f)) with SchmittTrigger's default 0 and 1 thresholds, one voltage and no channel loop"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "src/Seqtrol.cpp process(): outputs[RESET_OUTPUT].setVoltage(inputs[CLOCK_INPUT].getVoltage()) or 0.0f, no setChannels, so it carries the clock's own height"},
+      "1": {"family": "trigger", "poly": false, "why": "src/Seqtrol.cpp process(): outputs[CLOCK_OUTPUT].setVoltage(clockCounter == 0 ? intermediateClock : 0.f), no setChannels, so it carries the clock's own height"}
+    }
+  },
+  "comment": "Both outputs pass the Clock input's own voltage rather than a fixed 10V, so no range is claimed for them. The Reset output is high only on the frame at which the clock input is first found high after a Start trigger, which is a one-frame pulse rather than a full clock pulse. counterMax[13] holds 1, 3, 6, 12, 24, 48, 96, 2, 4, 8, 16, 32 and 64, matching the thirteen divisor names in the order the menu prints them. The divisor and the counter are saved with the patch; the running state is not, so the module comes up stopped."
+}

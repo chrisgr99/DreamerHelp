@@ -1,0 +1,18 @@
+{
+  "plugin": "DHE-Modules",
+  "module": "Hostage",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: is_high(inputs[Defer]) compares getVoltage() with 1.0 (src/signals/basic.h:20); the plugin never calls getPolyVoltage or getChannels"},
+      "1": {"family": "cv", "poly": false, "polarity": "unipolar", "step": "continuous", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: inputs[DurationCv] goes through modulation_of(), which multiplies getVoltage() by 0.1 into a 0 to 1 knob rotation (src/signals/basic.h:24); the plugin never calls getPolyVoltage or getChannels"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: inputs[Envelope] is read with getVoltage() and used as the signal; the plugin never calls getPolyVoltage or getChannels"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: is_high(inputs[Trigger]) compares getVoltage() with 1.0 (src/signals/basic.h:20); the plugin never calls getPolyVoltage or getChannels"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: outputs[Active] is set from UnipolarVoltage::scale of a bool, so 0V or 10V; the plugin never calls getPolyVoltage or getChannels"},
+      "1": {"family": "cv"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "DHE-Modules 2.0.3 src/modules/envelope/hostage/signals.h: outputs[Eoc] is set from UnipolarVoltage::scale of a bool, so 0V or 10V; the plugin never calls getPolyVoltage or getChannels"}
+    }
+  },
+  "comment": "The previous note here said the module emits 0V before it first becomes active and that changing the mode abandons a stage in progress. Neither holds in the 2.0.3 source: the engine starts in Input mode, which copies IN to OUT, and identify_mode only reads the mode switch on a gate rise or a DEFER fall, so moving the switch mid-stage changes nothing until the next gate."
+}

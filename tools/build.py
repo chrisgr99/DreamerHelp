@@ -1,75 +1,26 @@
 #!/usr/bin/env python3
-"""Turns data/plugins/*.yaml into src/HelpText.cpp.
+"""Keeps what each jack expects, in data/help, in step with the research behind it.
 
-One YAML file per maker, written by hand from that maker's own manual; this flattens the lot
-into a table the plugin can carry. Never edit HelpText.cpp — edit the YAML and run this.
+    python3 tools/build.py            rewrite any help file whose "expects" has fallen behind
+    python3 tools/build.py --check    report them and change nothing (the pull-request check)
 
-    python3 tools/build.py
-
-NOTHING HALF-WRITTEN. The whole table is assembled in memory and the file is written in one go
-at the end, so a bad entry stops the build with an error instead of leaving a HelpText.cpp that
-is a third of a database and compiles anyway.
+TWO FILES PER MODULE. data/help/<Plugin>/<Module>.json is the help, in the format makers use,
+and ships with the plugin. data/research/<Plugin>/<Module>.json is what it was worked out from
+and does not ship: each jack's family, the facts about what it expects and the citation for each,
+the writer's comments. The one thing the help file takes from the research is the short phrase
+under each jack — range, shape, polyphony — which is derived here from the facts and the jack's
+own line, by the rules below, so that changing a rule does not mean rewriting a hundred files.
 """
+import json
 import os
 import re
 import sys
 
-import yaml
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-DATA = os.path.join(ROOT, 'data', 'plugins')
-OUT = os.path.join(ROOT, 'src', 'HelpText.cpp')
+HELP = os.path.join(ROOT, 'data', 'help')
+RESEARCH = os.path.join(ROOT, 'data', 'research')
 
-
-def cstr(s):
-    out = []
-    for ch in s:
-        if ch == '"':
-            out.append('\\"')
-        elif ch == '\\':
-            out.append('\\\\')
-        elif ch == '\n':
-            out.append('\\n')
-        else:
-            out.append(ch)
-    return '"' + ''.join(out) + '"'
-
-
-def tags_of(entry):
-    """A module's entry is a list of lines, and optionally a "tags" object beside it saying which
-    line covers which jack or knob. Accepts either:
-
-        'Model': ['line', 'line']
-        'Model': {'lines': [...], 'in': {'0': 2, '1': 3}, 'out': {...}, 'param': {...}}
-
-    A tag map is port index -> line index. Anything not mentioned is -1, meaning nothing here
-    describes that control."""
-    if isinstance(entry, dict):
-        lines = entry.get('lines', [])
-        maps = (entry.get('in', {}), entry.get('out', {}), entry.get('param', {}))
-    else:
-        lines = entry
-        maps = ({}, {}, {})
-    if isinstance(lines, str):
-        lines = [lines]
-    out = []
-    for m in maps:
-        if not m:
-            out.append([])
-            continue
-        highest = max(int(k) for k in m)
-        table = [-1] * (highest + 1)
-        for k, v in m.items():
-            if not (0 <= int(v) < len(lines)):
-                raise ValueError('tag points at line %s, which does not exist' % v)
-            table[int(k)] = int(v)
-        out.append(table)
-    return lines, out
-
-
-# What a family word means to Clarity's palette. Kept in step with FAM_* in src/Palette.hpp.
-FAMILIES = {'audio': 0, 'cv': 1, 'trigger': 2, 'pitch': 3}
 
 # WHAT A JACK EXPECTS, AS FACTS RATHER THAN A SENTENCE.
 #
@@ -212,36 +163,25 @@ def polarity_of(rng):
     return None
 
 
-def props_of(entry, kind='in'):
-    """One short phrase per port, or an empty list where there is nothing to say.
+def expects_of(doc, research, key):
+    """One short phrase per jack of one kind, by number, where there is anything to say.
 
-    Assembled here rather than in the plugin so that the rules live in one place and the cost is
-    paid once, at build time. Order is fixed — range, then shape, then polyphony — so that the
-    line can be read at a glance and heard in one piece, and so that a missing fact reads as a
-    gap rather than as a different fact."""
-    if not isinstance(entry, dict):
-        return []
-    families = (entry.get('family') or {}).get(kind) or {}
-    # What somebody established by hand, which always wins over the derivation.
-    known = ((entry.get('props') or {}).get(kind)) or {}
-    # EVERY PORT EITHER SIDE KNOWS ABOUT. A family is a colouring decision and plenty of ports
-    # never got one — 953 across the library, 141 of them in Bogaudio alone — but a port somebody
-    # established a fact about has that fact whether or not anybody chose it a colour. Walking the
-    # families alone dropped those on the floor.
-    ports = set(families) | set(known)
-    if not ports:
-        return []
-    lines = entry.get('lines') or []
-    tagged = entry.get(kind) or {}
-    highest = max(int(k) for k in ports)
-    out = [''] * (highest + 1)
-    for port in ports:
-        family = families.get(port)
+    Order is fixed — range, then shape, then polyphony — so that the line can be read at a glance
+    and heard in one piece, and so that a missing fact reads as a gap rather than as a different
+    fact."""
+    facts = ((research.get('facts') or {}).get(key)) or {}
+    lines = {}
+    for entry in doc.get(key) or []:
+        for i in entry.get('ids', []):
+            lines[str(i)] = entry.get('text', '')
+    out = {}
+    for port, fact in facts.items():
+        known = dict(fact)
+        family = known.pop('family', None)
         got = dict(DERIVED.get(family) or {})
         # The port's own line is the evidence for a range, not its colour.
-        at = tagged.get(port)
-        if at is not None and 0 <= int(at) < len(lines):
-            line = lines[int(at)]
+        line = lines.get(port)
+        if line is not None:
             if family == 'trigger' and STEPPED.search(line):
                 got['step'] = 'stepped'
             if family == 'pitch' and PER_OCTAVE.search(line):
@@ -250,7 +190,7 @@ def props_of(entry, kind='in'):
                 found = range_in_line(line, family)
                 if found:
                     got['range'] = found
-        got.update(known.get(port) or {})
+        got.update(known)
         poly = got.get('poly')
         # POLARITY ONLY WHERE THE RANGE DOES NOT ALREADY SAY IT. "0 to 10V · unipolar" says
         # one thing twice and spends a third of the line doing it; the word earns its place
@@ -286,147 +226,116 @@ def props_of(entry, kind='in'):
         text = ' · '.join(parts)
         if more:
             text += '\n\n' + '; '.join(more) + '.'
-        out[int(port)] = text
-    return out if any(out) else []
+        out[port] = text
+    return dict(sorted(out.items(), key=lambda kv: int(kv[0])))
 
 
-def families_of(entry):
-    """The family per input and per output, as palette numbers, -1 where we did not say.
+NOTE = 'Note \u2014 '
+MENU = 'Menu \u2014 '
 
-    These are read off the panels while the help was written, and they are what Clarity colours a
-    jack from — so they are emitted into the same table rather than living only in the data."""
-    if not isinstance(entry, dict):
-        return [], []
-    fam = entry.get('family') or {}
-    out = []
-    for kind in ('in', 'out'):
-        m = fam.get(kind) or {}
-        if not m:
-            out.append([])
+
+def refresh_expects(doc, research):
+    """Puts the derived phrases into a help file, in place. Returns whether anything changed."""
+    expects = {}
+    for key in ('inputs', 'outputs'):
+        got = expects_of(doc, research, key)
+        if got:
+            expects[key] = got
+    before = doc.get('expects')
+    if expects:
+        doc['expects'] = expects
+    else:
+        doc.pop('expects', None)
+    # "expects" is kept last, where a reader expects the least-read part of a file to be.
+    if 'expects' in doc:
+        doc['expects'] = doc.pop('expects')
+    return before != doc.get('expects')
+
+
+def dump(doc):
+    """A file as a person would lay it out: one field to a line, each entry of a list on a line
+    of its own, and a table of tables — facts and expects — one row to a line, so a control's
+    numbers and its text are read together. Plain JSON either way; the layout is only for the
+    reader, and for a diff that shows one changed entry as one changed line."""
+    one = lambda v: json.dumps(v, ensure_ascii=False)
+    out = ['{']
+    keys = list(doc)
+    for k, key in enumerate(keys):
+        value = doc[key]
+        comma = ',' if k + 1 < len(keys) else ''
+        if isinstance(value, list) and value:
+            out.append('  %s: [' % one(key))
+            for i, item in enumerate(value):
+                out.append('    %s%s' % (one(item), ',' if i + 1 < len(value) else ''))
+            out.append('  ]' + comma)
+        elif isinstance(value, dict) and value:
+            out.append('  %s: {' % one(key))
+            inner = list(value)
+            for i, sub in enumerate(inner):
+                last = ',' if i + 1 < len(inner) else ''
+                v = value[sub]
+                if isinstance(v, dict) and v and all(isinstance(x, dict) for x in v.values()):
+                    out.append('    %s: {' % one(sub))
+                    rows = list(v)
+                    for j, row in enumerate(rows):
+                        out.append('      %s: %s%s' % (one(row), one(v[row]),
+                                                       ',' if j + 1 < len(rows) else ''))
+                    out.append('    }' + last)
+                elif isinstance(v, dict) and v:
+                    out.append('    %s: {' % one(sub))
+                    rows = list(v)
+                    for j, row in enumerate(rows):
+                        out.append('      %s: %s%s' % (one(row), one(v[row]),
+                                                       ',' if j + 1 < len(rows) else ''))
+                    out.append('    }' + last)
+                else:
+                    out.append('    %s: %s%s' % (one(sub), one(v), last))
+            out.append('  }' + comma)
+        else:
+            out.append('  %s: %s%s' % (one(key), one(value), comma))
+    out.append('}')
+    return '\n'.join(out) + '\n'
+
+
+def modules():
+    """Every help file, as (plugin, module, help path, research path)."""
+    for plugin in sorted(os.listdir(HELP)):
+        folder = os.path.join(HELP, plugin)
+        if not os.path.isdir(folder):
             continue
-        highest = max(int(k) for k in m)
-        table = [-1] * (highest + 1)
-        for k, v in m.items():
-            if v in FAMILIES:
-                table[int(k)] = FAMILIES[v]
-        out.append(table)
-    return out
-
-
-def load(path):
-    """One plugin's data, with the file named in anything that goes wrong.
-
-    A YAML parse error names a line and not a file, and a wrong key names neither; a build over
-    376 files that stops with "expected a mapping" and no more than that is a build nobody can
-    fix."""
-    name = os.path.basename(path)
-    try:
-        with open(path) as f:
-            doc = yaml.safe_load(f)
-    except yaml.YAMLError as e:
-        raise SystemExit('%s: will not parse: %s' % (name, e))
-    if not isinstance(doc, dict):
-        raise SystemExit('%s: not a help entry (a %s at the top level)'
-                         % (name, type(doc).__name__))
-    if not doc.get('plugin'):
-        raise SystemExit('%s: no plugin slug' % name)
-    if not isinstance(doc.get('modules'), dict):
-        raise SystemExit('%s: no modules' % name)
-    return doc
+        for name in sorted(os.listdir(folder)):
+            if name.endswith('.json') and not name.startswith('.'):
+                model = name[:-5]
+                yield (plugin, model, os.path.join(folder, name),
+                       os.path.join(RESEARCH, plugin, name))
 
 
 def main():
-    if not os.path.isdir(DATA):
-        raise SystemExit('no data directory at %s' % DATA)
-    entries = []          # (plugin, model, [lines], [in, out, param], [infam, outfam], [props])
-    sources = []          # (plugin, url, count)
-    for name in sorted(os.listdir(DATA)):
-        if not name.endswith('.yaml'):
-            continue
-        path = os.path.join(DATA, name)
-        doc = load(path)
-        plugin = doc['plugin']
-        mods = doc['modules']
-        for model, entry in sorted(mods.items()):
-            try:
-                lines, tables = tags_of(entry)
-                entries.append((plugin, model, lines, tables, families_of(entry),
-                                props_of(entry, 'in'), props_of(entry, 'out')))
-            except (ValueError, TypeError, KeyError) as e:
-                raise SystemExit('%s/%s: %s' % (name, model, e))
-        sources.append((plugin, doc.get('source', ''), len(mods)))
-
-    if not entries:
-        raise SystemExit('%s holds no entries; refusing to write an empty table' % DATA)
-    entries.sort()
-
-    # ASSEMBLED WHOLE, THEN WRITTEN ONCE. Everything below builds a string; the file is opened
-    # only when there is nothing left that can fail.
-    out = []
-    out.append('/** GENERATED by tools/build.py — do not edit.\n\n')
-    out.append('What each module is, in point form, written from its maker\'s own manual.\n')
-    out.append('See Help.hpp for what this is for and where the wording rules come from.\n\n')
-    out.append('Sources:\n')
-    for plugin, url, count in sources:
-        out.append('  %-24s %4d modules  %s\n' % (plugin, count, url))
-    out.append('*/\n#include "Help.hpp"\n\n#include <cstddef>\n\n')
-
-    # ONE POOL OF PHRASES, AND A BYTE PER PORT. There are 13,711 typed input ports and only a
-    # handful of distinct things to say about them, so the phrases are pooled and each port
-    # holds an index into the pool. A string per port would have cost a third of a megabyte to
-    # say the same few sentences over and over.
-    pool = []
-    seen = {}
-    for e in entries:
-        for phrase in e[5] + e[6]:
-            if phrase and phrase not in seen:
-                seen[phrase] = len(pool)
-                pool.append(phrase)
-    out.append('/** What a jack expects, as short phrases shared by every port that wants one. */\n')
-    out.append('const char* const HELP_PROP_TEXT[] = {\n')
-    for phrase in pool:
-        out.append('\t%s,\n' % cstr(phrase))
-    out.append('};\nconst int HELP_PROP_TEXT_COUNT = %d;\n\n' % len(pool))
-
-    for i, (plugin, model, lines, tables, fams, props, oprops) in enumerate(entries):
-        out.append('static const char* const L%d[] = {\n' % i)
-        for line in lines:
-            out.append('\t%s,\n' % cstr(line))
-        out.append('};\n')
-        for kind, table in zip(('I', 'O', 'P'), tables):
-            if table:
-                out.append('static const short %s%d[] = {%s};\n'
-                           % (kind, i, ','.join(str(x) for x in table)))
-        for kind, table in zip(('FI', 'FO'), fams):
-            if table:
-                out.append('static const signed char %s%d[] = {%s};\n'
-                           % (kind, i, ','.join(str(x) for x in table)))
-        for mark, table in (('PR', props), ('PO', oprops)):
-            if table:
-                out.append('static const short %s%d[] = {%s};\n'
-                           % (mark, i, ','.join(str(seen[p]) if p else '-1' for p in table)))
-    out.append('\n/** Sorted by plugin then model, so it can be searched rather than walked. */\n')
-    out.append('const HelpEntry HELP[] = {\n')
-    for i, (plugin, model, lines, tables, fams, props, oprops) in enumerate(entries):
-        cells = []
-        for kind, table in zip(('I', 'O', 'P'), tables):
-            cells.append('%s%d, %d' % (kind, i, len(table)) if table else 'NULL, 0')
-        for kind, table in zip(('FI', 'FO'), fams):
-            cells.append('%s%d, %d' % (kind, i, len(table)) if table else 'NULL, 0')
-        cells.append('PR%d, %d' % (i, len(props)) if props else 'NULL, 0')
-        cells.append('PO%d, %d' % (i, len(oprops)) if oprops else 'NULL, 0')
-        out.append('\t{%s, %s, L%d, %d, %s},\n'
-                   % (cstr(plugin), cstr(model), i, len(lines), ', '.join(cells)))
-    out.append('};\n')
-    out.append('const int HELP_COUNT = %d;\n' % len(entries))
-
-    with open(OUT, 'w') as f:
-        f.write(''.join(out))
-
-    tagged = sum(1 for e in entries if any(e[3]))
-    typed = sum(sum(1 for x in t if x >= 0) for e in entries for t in e[4])
-    print('%d modules across %d makers, %d with controls tagged, %d ports typed -> %s'
-          % (len(entries), len(sources), tagged, typed, OUT))
+    check = '--check' in sys.argv[1:]
+    stale = []
+    count = 0
+    for plugin, model, path, rpath in modules():
+        count += 1
+        with open(path, encoding='utf-8') as f:
+            doc = json.load(f)
+        research = {}
+        if os.path.isfile(rpath):
+            with open(rpath, encoding='utf-8') as f:
+                research = json.load(f)
+        before = dump(doc)
+        refresh_expects(doc, research)
+        after = dump(doc)
+        if after != before:
+            stale.append('%s/%s' % (plugin, model))
+            if not check:
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(after)
+    if check:
+        for s_ in stale:
+            print('stale: data/help/%s.json' % s_)
+        print('%d modules, %d with expects out of step' % (count, len(stale)))
+        return 1 if stale else 0
+    print('%d modules, %d updated' % (count, len(stale)))
     return 0
 
 

@@ -1,0 +1,27 @@
+{
+  "plugin": "Hutara",
+  "module": "FmOperator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:214 adds this input's getVoltage() to the sine octave knob and feeds the sum to a power of two"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:230 adds this input's getVoltage() to the saw octave knob and feeds the sum to a power of two"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:197 adds this input's getVoltage() to the triangle octave knob and feeds the sum to a power of two"},
+      "3": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:249 adds this input's getVoltage() to the square octave knob and feeds the sum to a power of two"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:199, 216, 232 and 251 each multiply this input's getVoltage() by the FM amount and add it to that oscillator's octave exponent"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:178 multiplies this input's getVoltage() by the FM Amount knob, and src/Hutara.cpp:181 multiplies that by the knob again before adding it to the FM Input knob"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:240 and 241 add this input's getVoltage() to the Saw Psychedelic knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:185 scales this input's getVoltage() into the sine shaping, src/Hutara.cpp:240 into the saw shaping, and src/Hutara.cpp:169 and 201 into the triangle shaping inverted"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:201 and 202 add this input's getVoltage() to the Triangle Psychedelic knob"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:192 multiplies this input's getVoltage() by the Resample knob, and src/Hutara.cpp:279 multiplies the Resample output by that product"},
+      "10": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "src/Hutara.cpp:164 reads this input with getVoltage() and src/Hutara.cpp:197, 214, 230 and 249 add it to all four octave knobs"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Hutara.cpp:227 writes this output with setVoltage(), which is channel 1 alone"},
+      "1": {"family": "audio", "poly": false, "why": "src/Hutara.cpp:246 writes this output with setVoltage(), which is channel 1 alone"},
+      "2": {"family": "audio", "poly": false, "why": "src/Hutara.cpp:211 writes this output with setVoltage(), which is channel 1 alone"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Hutara.cpp:262 sets the square to -1 or 1 and src/Hutara.cpp:265 writes five times the volume knob times that"},
+      "4": {"family": "audio", "poly": false, "why": "src/Hutara.cpp:279 writes this output with setVoltage(), which is channel 1 alone"}
+    }
+  },
+  "comment": "Read from src/Hutara.cpp at commit 90c6a4e, the only state this repository has ever carried version 2.0.0 in. The repository also holds a stale copy of the same file at its root, with a WAVEFOLD parameter and a different jack layout; that copy does not match the installed module and was ignored. The saw output is unipolar because src/Hutara.cpp:243 computes two times the phase rather than two times the phase minus one, which the maker's README does not mention. The FM Amount knob multiplies its own jack twice, at src/Hutara.cpp:178 and again at 181, so the jack arrives scaled by the square of the knob; that reads as an oversight rather than a design. The variable psychedelicCVAll at src/Hutara.cpp:169 has the Psychedelic CV knob added to it at line 172 and is then never read, so that addition has no effect; only the inverted copy taken at line 171 reaches anything. The square wave is decided from the phase of the previous sample, at src/Hutara.cpp:254, one sample before the phase is advanced. The maker's README describes the Final Output as the combined output of all waveforms and does not say that it is multiplied by the Resample jack, so it does not mention that the output is silent with that jack unpatched."
+}

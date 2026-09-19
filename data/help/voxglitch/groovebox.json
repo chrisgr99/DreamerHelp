@@ -1,0 +1,88 @@
+{
+  "plugin": "voxglitch",
+  "module": "groovebox",
+  "description": "Eight-track sample-based drum machine: sixteen steps per track, a knob per step for any of sixteen parameters, and sixteen memory slots holding whole patterns",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Turns that step of the selected track on or off"},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Sets the value of the chosen parameter at that step of the selected track, which is what a parameter lock is"},
+    {"ids": [48], "text": "Makes the step knobs set the level of the selected track, step by step"},
+    {"ids": [49], "text": "Makes the step knobs set the stereo position of the selected track, step by step"},
+    {"ids": [50], "text": "Makes the step knobs set the playback speed of the selected track, step by step"},
+    {"ids": [51], "text": "Makes the step knobs set how many times the sample repeats within that step of the selected track"},
+    {"ids": [52], "text": "Makes the step knobs set where in the sample playback begins at that step of the selected track"},
+    {"ids": [53], "text": "Makes the step knobs set where in the sample playback ends at that step of the selected track"},
+    {"ids": [54], "text": "Makes the step knobs set the chance that the step plays at all, from never to every time"},
+    {"ids": [55], "text": "Makes the step knobs set whether the sample repeats between its start and end points at that step"},
+    {"ids": [56], "text": "Makes the step knobs set whether the sample plays backwards at that step"},
+    {"ids": [57], "text": "Makes the step knobs set the fade in at the start of the sample at that step"},
+    {"ids": [58], "text": "Makes the step knobs set the fade away at the end of the sample at that step, up to 4 seconds"},
+    {"ids": [59], "text": "Makes the step knobs set how much of the track's delay is heard at that step"},
+    {"ids": [60], "text": "Makes the step knobs set the delay time of the selected track at that step"},
+    {"ids": [61], "text": "Makes the step knobs set how much of the delay is fed back into itself at that step"},
+    {"ids": [62], "text": "Makes the step knobs set the filter frequency of the selected track at that step"},
+    {"ids": [63], "text": "Makes the step knobs set the filter resonance of the selected track at that step"},
+    {"ids": [72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87], "text": "Selects that memory slot, loading the sequences and parameter locks stored in it for all eight tracks"},
+    {"ids": [88], "text": "Marks the memory slot showing as the one to copy from"},
+    {"ids": [89], "text": "Writes the copied memory slot over the one showing"},
+    {"ids": [90], "text": "Sets the level of the stereo mix, from silence to eight times the summed tracks"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence one step every eight rising edges, with the pulses in between used for ratcheting"},
+    {"ids": [1], "text": "A rising edge returns every track to its first step"},
+    {"ids": [2], "text": "Picks the memory slot, 0-10V across the sixteen"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of all eight tracks mixed, after the master level"},
+    {"ids": [1], "text": "The right channel of all eight tracks mixed, after the master level"},
+    {"ids": [2, 4, 6, 8, 10, 12, 14, 16], "text": "The left channel of that track alone, before the master level"},
+    {"ids": [3, 5, 7, 9, 11, 13, 15, 17], "text": "The right channel of that track alone, before the master level"}
+  ],
+  "notes": [
+    "no track makes a sound until a sample is loaded into it, either from the right-click menu or by double-clicking that track's window in the display",
+    "clicking a track window in the display chooses which track the step buttons and step knobs edit",
+    "a track window carries its own right-click menu, headed Track Menu, with Load Sample, Clear Track Steps, Reset Track Parameters, Clear and Reset Both, and Unassign Sample",
+    "a step knob carries its own right-click menu, with Randomize Knobs, Reset Knobs, Increase all knobs by 1 notch and Decrese all knobs by 1 notch",
+    "a step button carries its own right-click menu, with Clear All Parameter Locks for this Step, Copy Step, Paste Step, Shift Steps Right, Shift Steps Left, Randomize Steps and Clear Steps",
+    "double-clicking a step knob returns it to its default value, and holding shift while double-clicking returns every step knob of that parameter to it",
+    "the module counts eight clock pulses per step, so a sequence advances at an eighth of the rate arriving at the clock input",
+    "the step knob menu also holds Set all knobs' values to this knob's value, and two items shifting all sixteen knob values one step left or right"
+  ],
+  "menu": [
+    "Load individual samples — the eight numbered items under this label each load a WAV file into that track, and each prints the filename it holds",
+    "Tracks — Track #1 through Track #8, each holding Sample Position Snap Division, Clear Track Data and Unassign Sample",
+    "All Tracks — holds Shift All Sequences, which moves every track's sequence one step left or right",
+    "LCD Color Theme — Cool White, Soft Yellow, Legacy Red, Ice Blue or Data Green, setting the colour the display is drawn in",
+    "Initialize — clears everything the module holds, after a confirmation item inside the submenu",
+    "Load first 8 WAV files from a folder — opens a folder browser and puts that folder's first eight WAV files into the eight tracks in name order",
+    "Export Kit — packs the eight loaded sample files into one archive, with a list naming the track each belongs to",
+    "Import Kit — unpacks an archive written by Export Kit into a folder you choose and loads its eight samples into the tracks",
+    "Interpolation — Off, or Linear (Better Quality), choosing how the samples between two stored samples are worked out; under the Audio Quality label"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "continuous",
+      "9": "continuous",
+      "10": "continuous",
+      "11": "continuous",
+      "12": "continuous",
+      "13": "continuous",
+      "14": "continuous",
+      "15": "continuous",
+      "16": "continuous",
+      "17": "continuous"
+    }
+  }
+}

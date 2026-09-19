@@ -1,0 +1,69 @@
+{
+  "plugin": "rcm",
+  "module": "rcm-pianoroll",
+  "description": "A monophonic step sequencer programmed on a piano roll grid, holding 64 patterns of up to 16 measures, with pitch, gate, retrigger and velocity outputs and inputs for recording into the grid",
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge advances the sequence by one division; pulses arriving while the module is paused are ignored, and there is no internal clock"},
+    {"ids": [1], "text": "Each trigger flips the sequence between running and paused, without reading whether the clock is actually running"},
+    {"ids": [2], "text": "A trigger sets the play position back to the start of the pattern, so that the next clock pulse plays the first note"},
+    {"ids": [3], "text": "Selects the pattern by pitch: 0V picks the first of the 64 and every semitone above that picks the next one"},
+    {"ids": [4], "text": "A trigger arms recording, which begins when the play position wraps round to the start of the pattern; a second trigger cancels the arming or stops the recording"},
+    {"ids": [5], "text": "The pitch written into the step being played while recording, quantised to the nearest semitone"},
+    {"ids": [6], "text": "A level above 1V while recording makes the step being played sound, and a level below 0.1V at the start of a step silences it"},
+    {"ids": [7], "text": "A level above 1V while recording marks the step being played to retrigger, and a level below 0.1V at the start of a step clears that mark"},
+    {"ids": [8], "text": "Sets the velocity written into the step being played while recording, 0-10V mapped onto the step's own 0 to 1 velocity"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the clock input unchanged, for chaining the clock on to another piano roll"},
+    {"ids": [1], "text": "Carries the run input unchanged, for chaining the run signal on to another piano roll"},
+    {"ids": [2], "text": "Carries the reset input unchanged, for chaining the reset on to another piano roll"},
+    {"ids": [3], "text": "The pattern now selected, as a pitch: 0V for the first and a twelfth of a volt for each one after, rather than the copy of the PTRN input the manual describes"},
+    {"ids": [4], "text": "Carries the record input unchanged, for chaining the record signal on to another piano roll"},
+    {"ids": [5], "text": "The pitch of the step now playing, 0V for C4 and a twelfth of a volt per semitone; while a gate above 1V is present at GATE the unquantised 1V/OCT input comes out here instead"},
+    {"ids": [6], "text": "10V while the step now playing sounds. With nothing patched to RTRG it drops to 0V for 1ms where a retrigger falls, and with nothing patched to RUN a gate lasts at most 2 seconds"},
+    {"ids": [7], "text": "A 1ms 10V pulse at the start of a step that follows a silent step, and at the start of any step marked to retrigger"},
+    {"ids": [8], "text": "The velocity of the step now playing, 0-10V"},
+    {"ids": [9], "text": "A 1ms 10V pulse when the last step of the pattern has been played"}
+  ],
+  "notes": [
+    "left-clicking a cell in the grid makes that note sound, right-clicking an active note marks it to retrigger, and shift-dragging a note up or down sets its velocity",
+    "clicking the strip above the grid moves the play position and sounds the note there, and dragging across it plays along",
+    "clicking the strip below the grid picks the measure; holding on a measure for a second loops that measure alone, and holding again releases it",
+    "the readouts beside the grid are clicked with the left button, not the right, and each opens its own list",
+    "the pattern readout steps down or up when clicked at its ends, and opens a list of the 64 patterns when clicked in its middle",
+    "the readouts under the pattern number open lists headed Measures, Beats Per Measure and Divisions Per Beat, 1 to 16 of each",
+    "the bottom readout beside the grid shows whether the sequence is running, paused or recording, and clicking it starts or pauses it",
+    "the pattern readout ignores clicks while a cable is patched to PTRN, because the pattern is then chosen by that input",
+    "a new Piano Roll has an empty grid and plays nothing until notes are put into it by left-clicking cells, or recorded through the record inputs",
+    "the module has no clock of its own; nothing advances until a clock is patched to CLOCK",
+    "shift-dragging up or down on the module name changes the colour of the panel, and holding ctrl as well makes the change finer"
+  ],
+  "menu": [
+    "Copy Pattern — copies the pattern now selected; a Paste Pattern item then appears in the same menu and writes the copy over whatever pattern is selected when you click it",
+    "Copy Measure — copies the measure now selected; a Paste Measure item then appears in the same menu and writes the copy over whatever measure is selected when you click it",
+    "Clear Notes — empties every note in the pattern now selected",
+    "Notes to Show — a heading over the choices 12, 18, 24, 36, 48 and 60, setting how many rows of the grid are drawn",
+    "Clock Delay (samples) — a heading over the choices 0, 1, 2, 3, 4, 5 and 10, holding the clock input back by that many samples so a pattern change can arrive first",
+    "Driver Mode — makes a run or reset signal pick the first step at once rather than waiting for a clock pulse, so a piano roll driving another selects the pattern first"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "4": "stepped",
+      "5": "continuous",
+      "6": "high above 1V · stepped",
+      "7": "high above 1V · stepped",
+      "8": "0 to 10V"
+    },
+    "outputs": {
+      "0": "stepped",
+      "5": "1V per octave · continuous",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "0 to 10V",
+      "9": "stepped"
+    }
+  }
+}

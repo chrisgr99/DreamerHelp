@@ -1,0 +1,20 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-wvco",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "WVCO.h:294 takes the channel count of this input for the output, and :413 adds it to the base pitch"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "why": "WVCO.h:416 reads this input with getPolyVoltage, one channel per bank of four, and adds it to the pitch through the FM depth"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "WVCO.h:567 reads this input with getPolyVoltageSimd as the linear FM modulator"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "WVCO.h:507-508 reads all sixteen channels with getVoltageSimd and gates the envelope where the voltage is above 1V"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 0.01V", "step": "stepped", "why": "WVCO.h:583 getPolyVoltageSimd reads this jack a bank of four channels at a time; WVCODsp.h:55-61 subtracts 0.01V and restarts that channel's cycle where the result crosses zero upwards, and the level itself is never used, which is why the family is trigger and not audio"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "WVCO.h:441-443 reads this input with getPolyVoltageSimd, scales it by a tenth and clamps the result to 0..1"},
+      "6": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "WVCO.h:577-578 reads this input with getPolyVoltageSimd, scales it by a tenth and clamps the result to 0..1"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "WVCO.h:527-528 reads this input with getPolyVoltageSimd, scales it by a tenth and clamps the result to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "WVCO.h:295 sets the channel count of this output from the V/OCT input"}
+    }
+  },
+  "comment": "Param 18, the second snap setting, and param 19, a patch version number, have no control on the panel. The two snap menu items in WVCOModule.cpp are inside an #if 0 block and are not in the shipped build, so the entry no longer mentions them. The manual says the Ratio knob goes 1, 2, 3; the composite configures it 1 to 16. The FM input is read one channel per bank of four (WVCO.h:416 uses getPolyVoltage at the base channel of each bank), so channels 1, 5, 9 and 13 of a polyphonic cable set the FM for the four voices in their bank."
+}

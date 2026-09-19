@@ -1,0 +1,43 @@
+{
+  "plugin": "phrasing-module",
+  "module": "phrasing",
+  "description": "Four slow envelopes that switch themselves on and off: a shared timer marks out the gaps, each lane rolls its own chance of firing at one, and each fades up and down over seconds to drive a VCA",
+  "params": [
+    {"ids": [0], "text": "Sets how long the gaps between events last, 90 seconds at the counter-clockwise end and 5 seconds at the clockwise end on a logarithmic scale; a cable in the Density CV input takes it out of use"},
+    {"ids": [1], "text": "Varies the length of each gap at random, by nothing at the counter-clockwise end and by up to 30% either way at the clockwise end"},
+    {"ids": [2], "text": "Varies how long each event runs at random, by nothing at the counter-clockwise end and by up to half either way at the clockwise end"},
+    {"ids": [3], "text": "On starts the enabled lane with the highest Weight whenever no lane is running, so the module never falls silent; its lamp is white while this is on and red while it is off"},
+    {"ids": [4, 5, 6, 7], "text": "Each press switches that lane on or off; a lane switched off holds its output at 0V whatever its Floor knob says, and its lamp turns red"},
+    {"ids": [8, 9, 10, 11], "text": "Sets the chance that this lane fires when a gap ends, from never at the counter-clockwise end to every time at the clockwise end"},
+    {"ids": [12, 13, 14, 15], "text": "Sets how long this lane stays on once it fires, 5 seconds at the counter-clockwise end and 90 seconds at the clockwise end on a logarithmic scale, and its fade times are taken from it too"},
+    {"ids": [16, 17, 18, 19], "text": "Sets the level this lane rests at between events, 0V at the counter-clockwise end and the full 5V at the clockwise end, with the envelope rising from there"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the gap length outright, 0V giving 90 seconds and 10V giving 5 seconds; while a cable is here the Density knob is left out of the reckoning"},
+    {"ids": [1, 2, 3, 4], "text": "A rising edge past 1V switches that lane on for a full duration with its jitter, even while it is already running; the lane's enable button has to be on for this to reach it"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "That lane's envelope, 0V to 5V, rising and falling on one-pole curves whose times come from its Duration knob and resting at the level its Floor knob sets"}
+  ],
+  "notes": [
+    "this module works on a scale of seconds to minutes: gaps of 5 to 90 seconds, events of 5 to 90 seconds and fades measured in seconds, so a patch takes a while to show what it does",
+    "a lane's attack is a fifth of its Duration setting held between 30ms and 2 seconds, and its release is two fifths of it held between 300ms and 25 seconds",
+    "a lane's lamp is red while that lane is switched off and white while it is on, its brightness following the envelope that lane is putting out",
+    "the four enable buttons are saved with the patch, and nothing else about the module's state is, so the gaps and the events start afresh each time it is loaded"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Density knob; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only"
+    }
+  }
+}

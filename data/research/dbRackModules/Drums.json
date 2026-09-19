@@ -1,0 +1,15 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Drums",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Drums.cpp:249 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "Drums.cpp:254 reads it with getVoltage() and no channel loop, scales it by a tenth and the Decay CV knob, adds the Dec knob and Drums.cpp:255 clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "the Gain knob alone", "why": "Drums.cpp:258-260 read it with getVoltage() and no channel loop and multiply the Gain knob by a tenth of it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Drums.cpp:262 writes one voltage and no channel count is ever set"}
+    }
+  },
+  "comment": "The module is monophonic. The six sets hold sixteen samples each, built into the plugin as raw data, Drums.cpp:3-98. The pitch knob is used as a power of two on the read speed, Drums.cpp:242 and DrumSampler.hpp:101, so it changes length along with pitch. The decay knob is squared before it is mapped onto 4.5ms to 4 seconds, Drums.cpp:255, which puts more of the travel at the short end. The output is the sample times the envelope times the gain times three, Drums.cpp:261."
+}

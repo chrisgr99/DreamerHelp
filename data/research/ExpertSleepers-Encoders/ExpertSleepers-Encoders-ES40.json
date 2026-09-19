@@ -1,0 +1,18 @@
+{
+  "plugin": "ExpertSleepers-Encoders",
+  "module": "ExpertSleepers-Encoders-ES40",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "range": "0 to 255V", "step": "stepped", "negative": "ignored", "why": "ES40.cpp:40-42 reads getVoltage() with no channel, truncates it to an int and clamps it to 0 and 255"},
+      "1": {"poly": false, "range": "0 to 255V", "step": "stepped", "negative": "ignored", "why": "ES40.cpp:40-42 reads getVoltage() with no channel, truncates it to an int and clamps it to 0 and 255"},
+      "2": {"poly": false, "range": "0 to 255V", "step": "stepped", "negative": "ignored", "why": "ES40.cpp:40-42 reads getVoltage() with no channel, truncates it to an int and clamps it to 0 and 255"},
+      "3": {"poly": false, "range": "0 to 255V", "step": "stepped", "negative": "ignored", "why": "ES40.cpp:40-42 reads getVoltage() with no channel, truncates it to an int and clamps it to 0 and 255"},
+      "4": {"poly": false, "range": "0 to 255V", "step": "stepped", "negative": "ignored", "why": "ES40.cpp:40-42 reads getVoltage() with no channel and clamps it to 0 and 255; line 45 keeps its top nibble and line 46 its bottom nibble"}
+    },
+    "outputs": {
+      "0": {"poly": false, "range": "±10V", "step": "continuous", "why": "ES40.cpp:65 divides the twenty-four-bit word by the full-scale divisor to give -1 to 1 and multiplies by 10"},
+      "1": {"poly": false, "range": "±10V", "step": "continuous", "why": "ES40.cpp:66 divides the twenty-four-bit word by the full-scale divisor to give -1 to 1 and multiplies by 10"}
+    }
+  },
+  "comment": "Source read at commit 95496e8, HEAD of the maker's repository; its plugin.json is byte-for-byte the installed 2.1.0 manifest. ES40.cpp:45-46 pack inputs 0 and 1 into the high and middle bytes of the left word and inputs 2 and 3 into the same bytes of the right, then split input 4: (b[4] << 0) & 0xf0 goes into the low byte of the left word and (b[4] << 4) & 0xf0 into the low byte of the right, so the fifth header is the only one that does not get a whole byte and the low four bits of each word are always zero. The Category menu is the same submenu as on the ES-5 Encoder, selecting 0x800000, 0x7fff80 or 0x7fffff; the maker's page does not mention it. The outputs are given no family: they carry encoded words destined for a DAC rather than audio, control voltage, pitch or a trigger. The panel prints the inputs 1 to 5 and leaves the outputs unlabelled; left and right come from the source."
+}

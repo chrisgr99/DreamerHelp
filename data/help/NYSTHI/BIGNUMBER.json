@@ -1,0 +1,41 @@
+{
+  "plugin": "NYSTHI",
+  "module": "BIGNUMBER",
+  "description": "A single digit pulse counter with a large display. Several of them chain together through their jacks to count in tens and hundreds, with the digit each one rolls over on set in its menu",
+  "params": [
+    {"ids": [0], "text": "Switches the counting on and off; pressing it also sends a pulse from the ACTIVE output"},
+    {"ids": [1], "text": "Resets the counter, in the manner chosen in the menu; pressing it also sends a pulse from the RESET output"},
+    {"ids": [2], "text": "Counts one step by hand, the step a pulse at PULSE IN counts"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A pulse or a gate here switches the counting on and off"},
+    {"ids": [1], "text": "A pulse or a gate here resets the counter, in the manner chosen in the menu"},
+    {"ids": [2], "text": "Each pulse here counts the counter one step on, or one step back while the menu has it decrementing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Sends a pulse whenever the counting is switched on or off, for passing the switch on to another BIGNUMBER"},
+    {"ids": [1], "text": "Sends a pulse whenever the counter is reset, for passing the reset on to another BIGNUMBER"},
+    {"ids": [3], "text": "Sends a pulse when the counter passes the overflow digit set in the menu, for driving the next BIGNUMBER along a chain; a reset neither fires it nor leaves it armed"}
+  ],
+  "notes": [
+    "the display reads NEXT PULSE RESET while a reset is held back to the next pulse, and RESET ARMED once a reset has arrived and has not yet been applied"
+  ],
+  "menu": [
+    "Reset to the next CLOCK IN — holds a reset back until the next pulse arrives at PULSE IN, which settles a reset and a pulse landing together",
+    "PULSE IN DECREMENT MODE — counts backwards on each pulse instead of forwards",
+    "COUNT BEATS — starts the count at 1 rather than 0, for counting beats, and moves 0 to the end of the count",
+    "Overflow on — sets the digit the counter rolls over on, 0 to 9"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped"
+    }
+  }
+}

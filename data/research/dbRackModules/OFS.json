@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OFS",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "why": "OFS.cpp:49 takes the channel count from this input and OFS.cpp:52 reads it four channels at a time"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "OFS.cpp:53 reads it four channels at a time with getPolyVoltageSimd, scales it by the Offset CV knob and adds the Ofs knob, with no clamp"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "OFS.cpp:54 reads it four channels at a time with getPolyVoltageSimd, scales it by the Scale CV knob and adds the Scl knob, with no clamp"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "OFS.cpp:56 reads it four channels at a time with getPolyVoltageSimd into a Schmitt trigger with its default 0V and 1V thresholds; OFS.cpp:48 switches the hold on when it is connected"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "OFS.cpp:68-71 read every channel of this input, OFS.cpp:75 sorts them and OFS.cpp:83 keeps those within 1V of the lowest"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "OFS.cpp:116 sets this output's channel count from the In jack, or to one at OFS.cpp:120 when In is empty"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "OFS.cpp:117 sets this output's channel count; OFS.cpp:113 writes 10V or 0V"}
+    }
+  },
+  "comment": "Three parameters, Panel Hue, Panel Saturation and Panel Lightness, have no widget on the panel and are reached only through the menu sliders, so they get no line of their own beyond the menu. The whole process block is skipped unless the Out jack is connected, OFS.cpp:46. With In empty the Trg jack is never written. The quantizer keeps the channels of Qnt that lie within one volt of the lowest and splits the octave equally between them, OFS.cpp:78-95, so the tuning of those pitches sets the steps but not their spacing."
+}

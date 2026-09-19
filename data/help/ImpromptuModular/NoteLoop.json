@@ -1,0 +1,48 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "NoteLoop",
+  "description": "Looper for note events rather than audio, carrying pitch, gate and a second CV for velocity or panning, up to 16 channels",
+  "params": [
+    {"ids": [0], "text": "Turns looping on: the tape is read back at the point set by LENGTH and written to its own input, and the CV, GATE and CV2 inputs are ignored. Tempo and length changes have no effect while it runs"},
+    {"ids": [1], "text": "Sets the length of the loop in tempo steps, 1 to 32"},
+    {"ids": [2], "text": "Erases the tape"},
+    {"ids": [3], "text": "Picks whether the TEMPO input takes clock pulses or a BPM-CV"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch in, sampled and held on the rising edge of the gate on the matching channel"},
+    {"ids": [1], "text": "Gates marking the notes to be recorded; each rising edge samples the CV and CV2 inputs"},
+    {"ids": [2], "text": "A second CV, for velocity or panning, sampled and held on the rising edge of the matching gate"},
+    {"ids": [3], "text": "Clock setting the speed of the tape, so the length knob counts its steps"},
+    {"ids": [4], "text": "A trigger here erases the tape"},
+    {"ids": [5], "text": "A trigger here toggles looping"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Pitch of the recorded or looped notes"},
+    {"ids": [1], "text": "Gate of the recorded or looped notes"},
+    {"ids": [2], "text": "CV2 of the recorded or looped notes"}
+  ],
+  "notes": [
+    "the tape is not saved with the patch, and looping is off whenever a patch is loaded",
+    "with nothing patched to TEMPO the tape runs at 60 BPM, so the LENGTH knob counts steps without a clock"
+  ],
+  "menu": [
+    "Tempo multiplier — runs the tape at a multiple or a fraction of the clock at the TEMPO input, listed as x 2, x 3/2 and so on",
+    "CV2 input normalization — a slider setting the voltage the CV2 input takes when nothing is patched to it",
+    "Mono legato mode — collapses the outputs to one channel carrying the most recently started note that has not ended, with the gate high while any note sounds"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

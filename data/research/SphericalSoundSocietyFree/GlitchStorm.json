@@ -1,0 +1,21 @@
+{
+  "plugin": "SphericalSoundSocietyFree",
+  "module": "GlitchStorm",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GlitchStorm.cpp:383 calls calculate_parameter_input, which at line 298 reads getVoltage() with no channel, scales it by 1.5 and by the attenuverter, and line 307 clamps the knob-plus-jack total to 0 and 15"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GlitchStorm.cpp:384 calls calculate_parameter_input, which at line 298 reads getVoltage() with no channel, scales it by 1.5 and by the attenuverter, and line 307 clamps the knob-plus-jack total to 0 and 15"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GlitchStorm.cpp:385 calls calculate_parameter_input, which at line 298 reads getVoltage() with no channel, scales it by 1.5 and by the attenuverter, and line 307 clamps the knob-plus-jack total to 0 and 15"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "GlitchStorm.cpp:349 reads getVoltage() with no channel, multiplies it by 2.1 and adds it to the Program knob; line 350 clamps the total to 0 and 20"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "GlitchStorm.cpp:331 reads getVoltage() with no channel, line 332 maps it from 3072 to 44100 without the knob, and line 333 clamps it to those bounds"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "GlitchStorm.cpp:315 compares getVoltage() with no channel against 1.0 and zeroes the counter while it is greater"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "-15 to 5V", "why": "GlitchStorm.cpp:390 computes compute() * 10 - 5, and compute returns -1 to 1 at lines 642 and 644; line 391 writes it with setVoltage and no setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "GlitchStorm.cpp:424 writes the mono signal times a gain derived from the byte at lines 416 to 422, with setVoltage and no setChannels"},
+      "2": {"family": "audio", "poly": false, "why": "GlitchStorm.cpp:425 writes the mono signal times a gain derived from the byte at lines 416 to 422, with setVoltage and no setChannels"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "GlitchStorm.cpp:428 writes 10V when the counter is a multiple of 1024 and 0V otherwise, with setVoltage and no setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit f086c41, whose plugin.json carries the installed 2.0.0; four commits carry that version and src/ is byte-identical across all four, and the installed plugin.json matches f086c41's tag list exactly. Inputs 5 (T input) and 6 (Sync clock) are configured in the module but no PortWidget is added for them, so no cable can reach them; T input would replace the counter with the patched voltage times 2048 and Sync clock is read nowhere at all. MONO is centred on -5V, not on zero: line 390 scales a -1 to +1 signal by 10 and then subtracts 5, giving -15V to +5V, and LEFT and RIGHT inherit the same offset scaled by their gains. Rate CV replaces the RATE knob rather than adding to it, which the README's parameter list does not say. The A, B and C knobs, their attenuverters and their CV jacks carry no lettering on the panel; the names used here are the maker's own parameter names. The equation ranges the maker once computed per program are commented out at lines 354 to 374, so all three knobs run 0 to 15 whichever program is selected. The module has no context menu of its own."
+}

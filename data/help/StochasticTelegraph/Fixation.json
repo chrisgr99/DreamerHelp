@@ -1,0 +1,54 @@
+{
+  "plugin": "StochasticTelegraph",
+  "module": "Fixation",
+  "description": "A playback head that replays a short stretch of a Memory or MemoryCV buffer over and over from a set position; it runs while touching a group of modules with a Memory or MemoryCV at the left-hand end",
+  "params": [
+    {"ids": [0], "text": "Attenuates and inverts the POSITION input before it is added to the POSITION knob, -100% to 100%"},
+    {"ids": [1], "text": "Sets the position playback starts from, 0V to 10V across the buffer, with the attenuated POSITION input added to it"},
+    {"ids": [2], "text": "Latches; the head plays while it is lit, and the light goes out once a style has finished its repeats"},
+    {"ids": [3], "text": "Sets the playback speed and direction, -10 to 10, added to the SPEED input; 1 plays at the speed it was recorded, 0.5 is an octave down at twice the length, and -1 plays backwards"},
+    {"ids": [4], "text": "Sets how much of the buffer is played from POSITION, 1ms to 10 seconds, with the attenuated LENGTH input added to it"},
+    {"ids": [5], "text": "Attenuates and inverts the LENGTH input before it is added to the LENGTH knob, -100% to 100%"},
+    {"ids": [6], "text": "Sets how many repeats one CLOCK trigger plays, 1 to 128, in the style that repeats"},
+    {"ids": [7], "text": "Picks how playback starts: CLOCK restarts it until the next clock, it restarts itself every LENGTH, CLOCK starts COUNT repeats of LENGTH, or CLOCK is read as a gate and playback lasts while it is high"},
+    {"ids": [8], "text": "Picks the note length played from POSITION, a whole note down to a triplet thirty-second, against the tempo of triggers at LENGTH; it replaces the LENGTH knob when the menu interprets LENGTH as tempo"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger fades out whatever is playing, moves the head to POSITION and starts it again, in the three styles that read it"},
+    {"ids": [1], "text": "Multiplied by its attenuverter and added to the POSITION knob to give the position playback starts from"},
+    {"ids": [2], "text": "A high gate plays and a low gate stops"},
+    {"ids": [3], "text": "Added to the SPEED knob to give the playback speed; with Use Speed as V/Oct set in the menu that sum is read as a pitch voltage"},
+    {"ids": [4], "text": "Multiplied by its attenuverter and added to the LENGTH knob to give the length played; when the menu interprets LENGTH as tempo it takes clock triggers, whose tempo sets the note length"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of what is in the buffer under the playback head"},
+    {"ids": [1], "text": "The right channel of what is in the buffer under the playback head"},
+    {"ids": [2], "text": "A short trigger each time the head starts playing from POSITION, which falls a little after the CLOCK trigger that asked for it because the previous sound is faded down first"},
+    {"ids": [3], "text": "Channel one is the position of the head as a phasor, 0V at the start of the buffer and 10V at the end; channel two is the position in seconds, which the menu can drop"}
+  ],
+  "notes": [
+    "it plays nothing until a Memory or MemoryCV is the left-most module of the touching group it is in; the small light near the top edge is lit while it is attached",
+    "the buffer is silent until something writes into it: an Embellish or a Brainwash in the same group, or a file loaded into the Memory",
+    "the LENGTH knob and the note length knob stand at the same place on the panel and only one of them is drawn, the Interpret LENGTH as tempo and note length menu item deciding which",
+    "Randomize on the module's own menu sets the SPEED knob to a diatonic interval of whole-number ratios rather than to any value at all"
+  ],
+  "menu": [
+    "Interpret LENGTH as tempo and note length — turns the LENGTH input into a clock whose tempo is measured and the LENGTH knob into a choice of note lengths, and takes the attenuverter away",
+    "Use Speed as V/Oct — reads the sum of the SPEED knob and input as a pitch voltage, so that a sum of 1 plays at the recorded speed",
+    "Default direction is reverse — starts the head playing from the top of the buffer downwards",
+    "Zero the outputs when not playing — drops L and R to 0V when the head stops; unset, they hold the value they stopped at",
+    "Have 2nd channel of seconds on CURRENT — adds or removes the second channel of that output, which carries the position in seconds",
+    "Behavior at ends — what the head does at the top or bottom of the buffer: Loop Around carries on from the other end, Bounce turns round and plays the other way, Stop halts it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "stepped"
+    }
+  }
+}

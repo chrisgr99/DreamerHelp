@@ -1,0 +1,43 @@
+{
+  "plugin": "PdArray",
+  "module": "Miniramp",
+  "description": "Small envelope generator that sends a linear ramp from 0V to 10V over a set time when it is triggered, with a gate, an end-of-cycle pulse and a finished flag beside it",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the ramp, from 1ms to 10 seconds with the switch at LOG and from 0 to 10 seconds with it at LIN, and the figure in seconds is printed on the display"},
+    {"ids": [1], "text": "Sets how much a volt at the CV input changes the ramp, clockwise from the centre lengthening it and counter-clockwise shortening it, by as much as 10 seconds per 10V at either end"},
+    {"ids": [2], "text": "Chooses how the duration knob is read: LIN spreads 0 to 10 seconds evenly across its travel, LOG spreads 1ms to 10 seconds across it so that the short times get most of the turn"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge starts the ramp from 0V, restarting it if one is already running; it reads high above 2V"},
+    {"ids": [1], "text": "Lengthens or shortens the ramp by the amount set by the CV AMT knob, with the total held between 0 and 10 seconds"},
+    {"ids": [2], "text": "A rising edge stops the ramp at once and drops it to its finished value; it reads high above 2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The ramp itself, climbing evenly from 0V to 10V over the set time and resting at 0V or 10V as the menu sets"},
+    {"ids": [1], "text": "Carries 10V from the start of the ramp until it finishes, and 0V at all other times"},
+    {"ids": [2], "text": "Carries a 1ms pulse of 10V at the moment the ramp finishes"},
+    {"ids": [3], "text": "Carries 10V whenever no ramp is running and 0V while one is, which is the GATE output turned upside down"}
+  ],
+  "notes": [
+    "the module makes nothing until a trigger arrives at TRG IN; the duration knob alone starts nothing",
+    "a polyphonic cable in TRG IN or CV makes every output polyphonic with that many ramps; a monophonic cable in TRG IN, CV or STOP acts on all of the channels at once"
+  ],
+  "menu": [
+    "Ramp value when finished: 0V, 10V — chooses what the RAMP output holds once the ramp has ended, which at 10V prevents a click when a sample is being played from an Array",
+    "Send EOC on STOP — sends the EOC pulse when a trigger at STOP cuts the ramp short, as well as when the ramp reaches its end",
+    "Update duration only on trigger — freezes the duration at the value it had when the last trigger arrived, instead of following the knob and CV while the ramp runs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "high above 2V · stepped · polyphonic\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

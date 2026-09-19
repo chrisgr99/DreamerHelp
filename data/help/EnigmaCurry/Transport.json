@@ -1,0 +1,55 @@
+{
+  "plugin": "EnigmaCurry",
+  "module": "Transport",
+  "description": "DAW-style transport: play and stop, arm recording and punch it in and out on the clock, with gates and triggers for a recorder and for a clock generator",
+  "params": [
+    {"ids": [0], "text": "Sets the recording length in counted clock cycles, 0 to 128; the upper display shows the figure, in red while the length is switched on"},
+    {"ids": [1], "text": "Switches the LENGTH counter on and off; the lamp is lit while the length is in use, and with it off recording runs for as long as it stays armed"},
+    {"ids": [2], "text": "Starts playback when pressed and stops it when pressed again, arming permitting; the lamp is lit for as long as the module is playing"},
+    {"ids": [3], "text": "Arms recording when pressed and disarms it when pressed again; the lamp blinks while an arming change is queued for the next quantised beat"},
+    {"ids": [4], "text": "Stops playback, disarms recording, clears both counters and fires a pulse from RST"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 1V starts playback and the next one stops it; if recording is armed, recording starts with it"},
+    {"ids": [1], "text": "A rising edge through 1V arms recording and the next one disarms it; while the module is playing the change is queued for the next beat the Quantize Arming setting allows"},
+    {"ids": [2], "text": "A rising edge through 1V advances the counter, and only while playing; the counter steps once per several edges, according to the Incoming Clock Divider setting, which starts at 4"},
+    {"ids": [3], "text": "A rising edge through 1V stops playback, disarms recording, clears both counters and fires a pulse from RST"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V for the whole time the module is playing and 0V while it is stopped"},
+    {"ids": [1], "text": "A 1ms pulse at 10V when playback starts, and another when it stops"},
+    {"ids": [2], "text": "A 1ms pulse at 10V on every reset, including the ones the On Start and On Stop settings send"},
+    {"ids": [3], "text": "10V for the whole time the module is playing with recording armed, and 0V at any other time"},
+    {"ids": [4], "text": "A 1ms pulse at 10V when recording starts, and another when it stops"},
+    {"ids": [5], "text": "A 1ms pulse at 10V at the start of each pass through the record length, whether recording or not; a sampler clocked from this stays in step with the clock the recording was made against"}
+  ],
+  "notes": [
+    "the counters, the record length and the LOOP output all depend on a clock patched into CLK. With that jack empty the module will play and record, but it counts nothing and never punches out.",
+    "the upper display shows the record length and the lower one shows the elapsed count: bars played while the module is running, or bars recorded, in red, while it is armed.",
+    "every jack on the module is monophonic; only the first channel of a polyphonic cable is read."
+  ],
+  "menu": [
+    "On Start: No action, Send Reset — chooses whether a reset pulse is fired when playback starts; it starts at No action",
+    "On Stop: No action, Send Reset — chooses whether a reset pulse is fired when playback stops; it starts at Send Reset",
+    "Incoming Clock Divider: 1, 2, 4 (MIDI-CV CLK/N), 8, 12, 16, 24 PPQN (MIDI-CV CLK), 48 PPQN — sets how many edges at CLK make one counted cycle; it starts at 4, for four beats in a bar",
+    "Quantize Arming: OFF, 1, 2, 4, 8, 16, 32, 64, 128 — sets how many counted cycles pass before a queued arming change takes effect while playing; OFF applies it at once",
+    "Stop after record length? — when ticked, playback stops once the record length has been counted out, rather than the length governing the recording alone",
+    "Play button is toggle? — when ticked, a second play trigger stops playback; unticked, repeated play triggers leave the module playing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

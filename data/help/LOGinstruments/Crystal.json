@@ -1,0 +1,41 @@
+{
+  "plugin": "LOGinstruments",
+  "module": "Crystal",
+  "description": "Up to 32 self-exciting delay-line voices detuned against one another, whose pitch and waveform are taken only at the moment a voice is restarted",
+  "params": [
+    {"ids": [1], "text": "Sets how many voices run, 1 to 32; the count moves by one voice per sample, so a large change takes a moment to arrive"},
+    {"ids": [3], "text": "Spreads the voices in pitch, each voice by its own fixed share of the setting, reaching 0.808 of a semitone either way at the clockwise end"},
+    {"ids": [4], "text": "Sets the output level from -30 to 6; the figure is read as ten to the power of a tenth of it, so the clockwise end is about four times and the counter-clockwise end a thousandth"},
+    {"ids": [7], "text": "Retunes and restarts every voice when pressed, one voice per sample, taking the pitch and waveform from the inputs at that moment"},
+    {"ids": [8], "text": "Stops any retuning or restarting at all, so neither the inputs nor the reset button changes what is already sounding"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Restarts every voice on a rising edge above 1V, retuning each one from the other two inputs as it goes"},
+    {"ids": [1], "text": "Chooses the waveform each voice takes at its next restart: the voltage is rounded to a whole number and wrapped over six shapes, saw, triangle, square, pulse, bipolar pulse and sine"},
+    {"ids": [2], "text": "Sets the pitch each voice takes at its next restart, 1V per octave with 0V giving C4 at 261.63Hz, held between 32 semitones below and 54 above"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Every voice summed, clamped to ±15V"},
+    {"ids": [1], "text": "The first voice together with every odd-numbered voice after it, clamped to ±15V"},
+    {"ids": [2], "text": "The first voice together with every even-numbered voice after it, clamped to ±15V"}
+  ],
+  "notes": [
+    "the pitch and waveform inputs are read only while a voice is being restarted, so patching them changes nothing until the Rst button is pressed or the first input is triggered",
+    "nothing is computed at all until one of the three output jacks is patched",
+    "a voice whose energy falls below half of its starting pulse is re-excited by the module itself, so the sound keeps going with nothing patched in",
+    "the module also restarts all its voices every 1024 samples while the third input is below 0V, and while the first input is above the second and the third is below 1V",
+    "the gem drawn in the middle of the panel shows the energy in each voice; it is drawn by the module rather than placed as a widget, so it cannot be clicked for help"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±15V · continuous · one channel only",
+      "1": "±15V · continuous · one channel only",
+      "2": "±15V · continuous · one channel only"
+    }
+  }
+}

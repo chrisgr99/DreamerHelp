@@ -1,0 +1,44 @@
+{
+  "plugin": "MADZINE",
+  "module": "Runshow",
+  "description": "Timer for a performance: it counts a clock into four bars of your own lengths and times the set in minutes, with a shaped envelope at the start of each bar and at each minute and five-minute mark",
+  "params": [
+    {"ids": [0], "text": "Puts the bar count, the note counts and the elapsed time back to zero, and fires both of the minute-based outputs at once"},
+    {"ids": [1], "text": "Starts and stops the timer on each press"},
+    {"ids": [2], "text": "Sets what share of each span the envelope fills, 1% to 99%: for a bar output that is a share of the bar, for the two minute-based outputs a share of five minutes and of one minute"},
+    {"ids": [3], "text": "Chooses the shape every output takes, stepping through a slow rise to a vertical drop, a triangle, a vertical jump to a slow fall, a half sine and a flat pulse"},
+    {"ids": [4], "text": "Sets how many clocks the first bar lasts, 1 to 16"},
+    {"ids": [5], "text": "Sets how many clocks the second bar lasts, 1 to 16"},
+    {"ids": [6], "text": "Sets how many clocks the third bar lasts, 1 to 16"},
+    {"ids": [7], "text": "Sets how many clocks the fourth bar lasts, 1 to 16"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V is counted as one sixteenth note; the four bar lengths are counted in these, and every fourth edge flashes the lamp"},
+    {"ids": [1], "text": "A rising edge above 1V puts the counters back to zero and fires both of the minute-based outputs"},
+    {"ids": [2], "text": "A rising edge above 1V starts the timer if it is stopped and stops it if it is running"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "An envelope fired at each reset and then every five minutes until thirty minutes have passed, lasting the share of five minutes set by the percentage knob"},
+    {"ids": [1], "text": "An envelope fired at each reset and then every minute until fifteen minutes have passed, lasting the share of one minute set by the percentage knob"},
+    {"ids": [2], "text": "An envelope fired when the cycle enters the first bar, lasting the share of that bar set by the percentage knob"},
+    {"ids": [3], "text": "An envelope fired when the cycle enters the second bar, lasting the share of that bar set by the percentage knob"},
+    {"ids": [4], "text": "An envelope fired when the cycle enters the third bar, lasting the share of that bar set by the percentage knob"},
+    {"ids": [5], "text": "An envelope fired when the cycle enters the fourth bar, lasting the share of that bar set by the percentage knob"}
+  ],
+  "notes": [
+    "nothing counts until the start button is pressed or a rising edge reaches the start jack. All six outputs rest at 0V until then.",
+    "the minutes are taken from the computer's own clock rather than from the clock jack, so they do not follow the tempo. Only the bars are counted in clocks.",
+    "the five-minute output stops firing after thirty minutes and the one-minute output after fifteen; only a reset brings them back."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

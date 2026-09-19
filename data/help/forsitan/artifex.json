@@ -1,0 +1,101 @@
+{
+  "plugin": "forsitan",
+  "module": "artifex",
+  "description": "Nine stereo effects sharing one feedback loop, with three big knobs that mean something different in each of them, a sixteen-step pattern generator and an oscillator",
+  "params": [
+    {"ids": [0], "text": "Chooses the effect: delay, flanger, freezer, panner, crusher, slicer, pitcher, replayer or shifter"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the fx mode jack before it is added to the knob"},
+    {"ids": [2], "text": "The knob's meaning changes with the mode: a delay time, a flanger's depth, the length of a freeze, a panning rate, a slicing rhythm, a pitch interval. The display reads it in the mode's own unit"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at both time jacks before they are added to the time knob"},
+    {"ids": [4], "text": "Sets how much goes round the loop again, 0% to 100%"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the feedback jack before it is added to the feedback knob"},
+    {"ids": [6], "text": "Sets the depth of whatever the mode does, 0% to 100%"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the amount jack before it is added to the amount knob"},
+    {"ids": [8], "text": "Filters what goes round the loop, open at the centre of its travel and closing one way or the other"},
+    {"ids": [9], "text": "Widens the effect from mono at the bottom of its travel to as far apart as the mode allows at the top"},
+    {"ids": [10], "text": "Fires whatever the mode takes a trigger for by hand"},
+    {"ids": [11], "text": "Sets the internal clock, 30 to 300 beats per minute"},
+    {"ids": [12], "text": "Chooses whether the oscillator follows the clock, where the rate knob picks a division and the phase is locked to the pattern, or runs free"},
+    {"ids": [13], "text": "Sets the oscillator's rate: a division of the clock when it is synced, 0.01Hz to 20Hz when it is free"},
+    {"ids": [14], "text": "Attenuates and inverts the voltage at the lfo rate jack before it is added to the rate knob"},
+    {"ids": [15], "text": "Writes into the gate pattern as it plays: up randomises the step now passing, down inverts it, the middle leaves it alone"},
+    {"ids": [16], "text": "Writes into the CV pattern as it plays: up randomises the level now passing, down inverts it around 5V, the middle leaves it alone"},
+    {"ids": [17], "text": "Chooses one of thirty-two patterns, twenty-two written by hand and ten euclidean distributions over sixteen steps"},
+    {"ids": [18], "text": "Sets the level going in, up to +12dB; the feedback loop reacts to how hard it is driven, and the two lamps go red at 5V, where the effect starts folding the signal"},
+    {"ids": [19], "text": "Sets the output level"},
+    {"ids": [20], "text": "Skews the oscillator's triangle, and since its pulse is high exactly while the triangle rises, the same skew is the pulse's duty cycle; the saw is left a plain ramp"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal to treat"},
+    {"ids": [1], "text": "The right side of the signal to treat; with nothing patched here the left jack feeds both sides"},
+    {"ids": [2], "text": "Sweeps the effect across the whole list of nine over ten volts and wraps round, so eleven volts is the first mode again; a change is held back to the next clock step unless the menu says otherwise"},
+    {"ids": [3], "text": "Moves the time parameter continuously, through the attenuverter it shares with the stepped jack"},
+    {"ids": [4], "text": "Moves the time parameter in steps: it is sampled and held on each step of the clock, through the attenuverter it shares with the free jack"},
+    {"ids": [5], "text": "Added to the feedback knob through the attenuverter beside it"},
+    {"ids": [6], "text": "Added to the amount knob through the attenuverter beside it"},
+    {"ids": [7], "text": "Added to the filter knob"},
+    {"ids": [8], "text": "Added to the stereo knob"},
+    {"ids": [9], "text": "Fires whatever the mode takes a trigger for"},
+    {"ids": [10], "text": "A clock that takes over from the tempo knob; the module returns to its own clock two seconds after this stops"},
+    {"ids": [11], "text": "Added to the lfo rate knob through the attenuverter beside it"},
+    {"ids": [12], "text": "A rising edge restarts the oscillator"},
+    {"ids": [13], "text": "A rising edge returns both the gate and CV sequences to their first step"},
+    {"ids": [14], "text": "Takes over the gate pattern switch beside it: above 3.2V randomises the step now passing and below 1.6V inverts it"},
+    {"ids": [15], "text": "Takes over the CV pattern switch beside it: above 3.2V randomises the level now passing and below 1.6V inverts it around 5V"},
+    {"ids": [16], "text": "Sweeps the rhythm across the whole list of thirty-two over ten volts and wraps round"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the treated signal"},
+    {"ids": [1], "text": "The right side of the treated signal"},
+    {"ids": [2], "text": "An envelope follower on the input, reading 10V at the same 5V point the input lamps turn red"},
+    {"ids": [3], "text": "The oscillator's triangle, skewed by the pwm trimmer"},
+    {"ids": [4], "text": "The oscillator's pulse, high exactly while the triangle rises"},
+    {"ids": [5], "text": "The oscillator's saw, a plain ramp; synced, it is a usable bar phasor"},
+    {"ids": [6], "text": "The pattern's gate for the step now passing"},
+    {"ids": [7], "text": "The pattern's CV for the step now passing"},
+    {"ids": [8], "text": "The running clock passed on, so this module can drive another one's pattern generator and oscillator"}
+  ],
+  "notes": [
+    "the two pattern switches are pencils rather than filters: a switch writes into the pattern one step at a time, so putting it back to the middle does not restore what was there.",
+    "pick the rhythm again with the rhythm knob to get the untouched pattern back.",
+    "the display above everything names the mode and its number on the left and reads the time parameter on the right, in the mode's own colour. Right-click it to jump straight to a mode.",
+    "this module and vates share a clock, a rhythm list, a pattern generator and an oscillator, because on the hardware they are one circuit board with two panels.",
+    "patch this module's clock output into the other's clock input and both pattern generators and oscillators run as one."
+  ],
+  "menu": [
+    "Buffer — how much memory the effects share: 1.15 s, which is the hardware's, 2.5 s or 5 s; it sets the longest delay, the longest freeze and the length of the replayer's tape",
+    "Mode changes wait for the clock — on by default; off, a change from the mode CV jack lands the instant the voltage crosses, wherever in the bar that falls",
+    "Input — stereo, or sum to mono",
+    "Pattern inputs read a Rack voltage window — 0V neutral, above +1V randomise, below -1V invert; off, the two pattern jacks use the hardware's 1.6V and 3.2V thresholds instead"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · stepped · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only",
+      "9": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "10": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "±5V · continuous · one channel only",
+      "12": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "14": "high above 1V · one channel only",
+      "15": "high above 1V · one channel only",
+      "16": "0 to 10V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "0 to 10V · one channel only",
+      "3": "one channel only",
+      "4": "stepped",
+      "6": "stepped · one channel only",
+      "8": "stepped · one channel only"
+    }
+  }
+}

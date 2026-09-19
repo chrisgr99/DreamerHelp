@@ -1,0 +1,40 @@
+{
+  "plugin": "LomasModules",
+  "module": "GateSequencer",
+  "description": "A gate sequencer holding four patterns of up to 64 steps each, edited 16 steps at a time on the button grid",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Shows that quarter of the pattern's 64 steps on the button grid. Half a second's hold clears those 16 steps if the quarter is already shown, or copies the shown 16 steps into it if it is not"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Switches that step of the shown quarter on or off in the playing pattern. Hold it for half a second and the pattern's last step is moved to that step"},
+    {"ids": [24, 25, 26, 27], "text": "Queues that pattern to start playing at the next quantization boundary. Hold it for half a second and, on the playing pattern, it is cleared; on another pattern, the playing pattern is copied into it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that advances the sequence by one step per rising edge, and whose own high time becomes the length of the gate at GATE"},
+    {"ids": [1], "text": "A pulse here returns the sequence to its first step, either at once or at the next clock pulse"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the current step is on and the clock is above 0.01V, and 0V otherwise"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched to CLOCK, because the gate is the clock's own high time gated by the step.",
+    "a new module starts with all four patterns empty and every pattern 16 steps long; click grid buttons to put steps in.",
+    "the gate at GATE is high only while the clock is high, so the gate length follows the clock's pulse width rather than a setting on the panel.",
+    "place a second Gate Sequencer immediately to the right of this one and it takes the step count, the clock and the pattern selection from this one, ignoring its own CLOCK and RESET jacks.",
+    "a chained Gate Sequencer keeps its own steps and its own pattern lengths, and any number can be chained in a row.",
+    "a grid lamp is blue where the step is on, green on the step playing now, dim red on the step set as the pattern's last, and dim blue on a step that is on but past the last step.",
+    "a lamp in the top row is blue on the quarter shown on the grid, green on the quarter holding the step playing now, and dim red on the quarter holding the pattern's last step.",
+    "a lamp in the bottom row is green on the pattern playing now and blue on the pattern queued to play next."
+  ],
+  "menu": [
+    "Reset mode: Next clock input., Instant — chooses whether a pulse at RESET returns to the first step immediately or at the next clock pulse",
+    "Global quantization: 4 Bars, 1 Bar, 1/16 — sets the number of clock pulses a queued pattern is held back before it starts playing: 64, 16 or 1"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

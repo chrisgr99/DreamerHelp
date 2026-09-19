@@ -1,0 +1,35 @@
+{
+  "plugin": "NullSet",
+  "module": "QuickMelody",
+  "description": "Makes a melody by sampling a free-running oscillator at each clock, so the notes step through a pattern that repeats; the clock cable's channel count sets how many voices play",
+  "params": [
+    {"ids": [0], "text": "Draws a new random oscillator frequency, between 440Hz and three octaves above it, which is a new melody; held down it keeps drawing another every sample"},
+    {"ids": [1], "text": "Sets the voltage the melody reaches at the far end of the oscillator cycle, -10V to +10V"},
+    {"ids": [2], "text": "Sets the voltage the melody starts from at the near end of the oscillator cycle, -10V to +10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Samples a new note on each rise past 2V; each channel of the cable reads the oscillator a fixed fraction of a cycle from the last"},
+    {"ids": [1], "text": "Draws a new random oscillator frequency on each rise past 2V, which is a new melody"},
+    {"ids": [2], "text": "Replaces the Max knob while a cable is patched, a volt of range per volt"},
+    {"ids": [3], "text": "Replaces the Min knob while a cable is patched, a volt of range per volt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The melody, one channel per clock channel, each note held until the next clock"}
+  ],
+  "notes": [
+    "nothing comes out until a clock is patched: the output takes its channel count from the clock cable, and with no cable there it has no channels at all",
+    "the two range knobs start with Max at -5V and Min at +5V, the opposite way round to their names, so a fresh module sweeps downward until one of them is moved",
+    "the melody is the oscillator's frequency and it is saved with the patch, so the same one comes back when the patch is loaded"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · polyphonic",
+      "1": "high above 2V · one channel only\n\na negative voltage does nothing here.",
+      "2": "±10V · continuous · one channel only",
+      "3": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

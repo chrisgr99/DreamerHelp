@@ -1,0 +1,48 @@
+{
+  "plugin": "Extratone",
+  "module": "Ichneumonid",
+  "description": "A four-way switch for signals that only ever changes over where two signals momentarily hold the same voltage, so the output never steps",
+  "params": [
+    {"ids": [0], "text": "Takes every crossing that comes up, ignoring CROSSING and both rows' knobs"},
+    {"ids": [1], "text": "Allows a changeover only where both signals are moving the same way, so a rising signal is swapped only for another rising signal"},
+    {"ids": [2], "text": "The chance that any one crossing of two signals is taken, none fully left and every crossing fully right"},
+    {"ids": [3, 4, 5, 6], "text": "Forces the output onto this row's signal at once, whatever the two voltages are doing"},
+    {"ids": [8, 9, 10, 11], "text": "Scales the chance of a changeover away from this row's signal, never fully left and the full CROSSING chance fully right"},
+    {"ids": [12, 13, 14, 15], "text": "Scales the chance of a changeover onto this row's signal, never fully left and the full CROSSING chance fully right"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Allows changeovers onto this row's signal while the voltage here is at or above 5V and blocks them below that; with nothing patched the row is allowed"},
+    {"ids": [4, 5, 6, 7], "text": "A rising edge above 1V forces the output onto this row's signal at once, whatever the two voltages are doing"},
+    {"ids": [8, 9, 10, 11], "text": "One of the four signals the output can be taken from; the crossing test only ever moves the output onto it while it has a cable in it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse each time the output changes over to a different signal"},
+    {"ids": [1], "text": "The selected signal, passed through unchanged"},
+    {"ids": [2, 3, 4, 5], "text": "10V while the output is being taken from this row's signal, and 0V otherwise"}
+  ],
+  "notes": [
+    "a changeover can only happen where two signals come within 0.01V of each other, so signals that never cross will never swap however high the chance is set.",
+    "a row with nothing patched to its SHAPES jack is never reached by the crossing test; its SELECT button forces the output onto that row anyway, where it reads 0V.",
+    "after a crossing is declined that row is barred until the two voltages move more than 0.011V apart, so one slow crossing is offered once rather than at every sample."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row is allowed; a negative voltage does nothing here.",
+      "1": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row is allowed; a negative voltage does nothing here.",
+      "2": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row is allowed; a negative voltage does nothing here.",
+      "3": "high above 5V · stepped · one channel only\n\nunpatched it reads high, the row is allowed; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "8": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "10": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "one channel only"
+    }
+  }
+}

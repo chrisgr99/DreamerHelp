@@ -1,0 +1,18 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-harmony2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "why": "composites/Harmony2.h:434-443 a channel per enabled row when channels > 1, voltage times 12 rounded to whole scale degrees"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "why": "composites/Harmony2.h:253-267 getVoltage(0), fraction times 12 rounded and wrapped into 0 to 11"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "why": "composites/Harmony2.h:285-297 getVoltage(0) times 12, taken modulo the number of scales on offer"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "why": "composites/Harmony2.h:427 getVoltage(0) only, then the scale quantizer"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "composites/Harmony2.h:338-360 needs 12 channels; under 4V not in scale, under 9V in scale, above that root"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "composites/Harmony2.h:326-333 channels set to the number of enabled rows"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "composites/Harmony2.h:377-401 twelve channels, 8V in scale and 10V for the root"}
+    }
+  },
+  "comment": "The Key input's scaling is not a straight 1V per octave read: composites/Harmony2.h:259-267 takes the fractional part of the voltage, so the octave is discarded and the root wraps within twelve semitones. The XP input has no range field because the transposition it adds is unbounded in the code; the resulting degree is wrapped into the scale by ScaleNote::transposeDegree. Params 12 to 23 report state back to the panel and params 32 and 33 carry the two menu settings; none of them has a widget. The maker's manual lists the mode CV mapping with 12/12V absent and 13/12V as Chromatic; the code takes the voltage modulo the number of scales, so 12/12V is the first scale again."
+}

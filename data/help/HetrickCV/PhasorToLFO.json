@@ -1,0 +1,45 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorToLFO",
+  "description": "Drives a triangle shaper, then a trapezoid shaper, then a sine shaper from an incoming phasor, to build cyclical modulation shapes; the outputs are not anti-aliased",
+  "params": [
+    {"ids": [0], "text": "Sets the angle of the triangle shaper, sweeping from a rising ramp through a symmetrical triangle to a falling ramp"},
+    {"ids": [1], "text": "Attenuverter, -1 to +1, scaling the Skew CV input before it is added to the Skew knob"},
+    {"ids": [2], "text": "Sets the size of the flat top on the trapezoid shaper, and also the pulse width of the Pulse output"},
+    {"ids": [3], "text": "Attenuverter, -1 to +1, scaling the Width CV input before it is added to the Width knob"},
+    {"ids": [4], "text": "Sets the steepness of the trapezoid's sloping sides; towards the extreme the sides go vertical and the shape becomes a pulse"},
+    {"ids": [5], "text": "Attenuverter, -1 to +1, scaling the Shape CV input before it is added to the Shape knob"},
+    {"ids": [6], "text": "Blends between the raw trapezoid output and a copy of that output put through a sine shaper"},
+    {"ids": [7], "text": "Attenuverter, -1 to +1, scaling the Curve CV input before it is added to the Curve knob"},
+    {"ids": [8], "text": "Picks whether all three outputs run 0-10V or -5V to +5V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor driving the shapers, 0-10V; voltages outside that range wrap back into it"},
+    {"ids": [1], "text": "Modulates the triangle shaper's angle, added to the Skew knob"},
+    {"ids": [2], "text": "Modulates the trapezoid's flat top, added to the Width knob"},
+    {"ids": [3], "text": "Modulates the steepness of the trapezoid's sides, added to the Shape knob"},
+    {"ids": [4], "text": "Modulates the sine blend, added to the Curve knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal after all three shapers in series"},
+    {"ids": [1], "text": "The signal after the triangle shaper alone, before the trapezoid and sine stages"},
+    {"ids": [2], "text": "A pulse wave whose width is set by the Width knob, taken from the phasor rather than from the shapers"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

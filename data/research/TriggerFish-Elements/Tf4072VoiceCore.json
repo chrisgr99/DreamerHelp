@@ -1,0 +1,22 @@
+{
+  "plugin": "TriggerFish-Elements",
+  "module": "Tf4072VoiceCore",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "normal": "0V", "why": "Tf4072VoiceCore.cpp:352 takes the channel count from every jack; line 446 reads this one per channel"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the filter output", "why": "Tf4072VoiceCore.cpp:383 sets vcaOverride from isConnected; line 457 feeds this jack to the amplifier instead of the filter"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "normal": "0V", "why": "Tf4072VoiceCore.cpp:437 adds the jack straight to the cutoff pitch in octaves"},
+      "3": {"family": "cv", "poly": true, "negative": "swings", "step": "continuous", "normal": "0V", "why": "Tf4072VoiceCore.cpp:425 scales the jack by the knob, then line 440 or 442 applies it as pitch or as 200Hz per volt"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "negative": "subtracts", "step": "continuous", "normal": "0V", "why": "Tf4072VoiceCore.cpp:444 divides the jack by 10 and adds it to the resonance knob"},
+      "5": {"family": "cv", "poly": true, "negative": "swings", "step": "continuous", "normal": "0V", "why": "Tf4072VoiceCore.cpp:428 scales the jack by the knob and line 430 routes it into the amplifier's control pair"},
+      "6": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "Tf4072VoiceCore.cpp:405 reads getPolyVoltage into ArpEnvelope::Step, whose ArpEnvelope.hpp:89 opens both envelopes at 1V and :90 releases them below 0.1V"},
+      "7": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "the gate input", "why": "Tf4072VoiceCore.cpp:406 reads getPolyVoltage(channel) into ArpEnvelope::Step, whose ArpEnvelope.hpp:92 tests it against TriggerHighVolts 1.0 and :99 against TriggerLowVolts 0.1, so only its rising edge is read; :385 sets autoGateTrigger when the jack is unpatched, which makes the gate retrigger the envelopes"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"}
+    }
+  }
+}

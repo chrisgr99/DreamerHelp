@@ -1,0 +1,32 @@
+{
+  "plugin": "forsitan",
+  "module": "caligo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/caligo.cpp:197, one getVoltage() with no channel loop"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "normal": "the left input", "why": "src/caligo.cpp:198, the maker names it normalled to left"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1.5V", "negative": "ignored", "why": "src/caligo.cpp:409, clockTrigger.process(getVoltage(), 0.2f, 1.5f) times the edges, and :332 snaps the delay time to a ratio only while a cable is in"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1.5V", "negative": "ignored", "why": "src/caligo.cpp:333, the voltage is compared against 1.5V every sample and ORed with the latched button, so the freeze holds for as long as the gate is high"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1.5V", "negative": "ignored", "why": "src/caligo.cpp:402, sctTrigger.process(getVoltage(), 0.2f, 1.5f) sets the reseed flag on the rising edge"},
+      "5": {"family": "audio", "poly": false, "range": "±10V", "normal": "the send, fed straight through", "why": "src/caligo.cpp:202, the maker names it normalled through"},
+      "6": {"family": "audio", "poly": false, "range": "±10V", "normal": "the left return", "why": "src/caligo.cpp:203, the maker names it normalled to left"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 339, knobCv() adds getVoltage() times 0.2 times the attenuverter to the time knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 359, knobCv() adds getVoltage() times 0.2 times the attenuverter to the size knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "9": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 363, knobCv() adds getVoltage() times 0.2 times the attenuverter to the diffusion knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "10": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 368, knobCv() adds getVoltage() times 0.2 times the attenuverter times a span of 1.2, the kMaxFeedback constant, to the feedback knob, which runs 0 to 1.2, so ±5V at a fully open attenuverter covers the whole travel"},
+      "11": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 372, knobCv() adds getVoltage() times 0.2 times the attenuverter to the damping knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "12": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 376, knobCv() adds getVoltage() times 0.2 times the attenuverter to the modulation depth knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "13": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 378, knobCv() adds getVoltage() times 0.2 times the attenuverter to the modulation rate knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "14": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 385, knobCv() adds getVoltage() times 0.2 times the attenuverter to the mix knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "15": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 387, knobCv() adds getVoltage() times 0.2 times the attenuverter to the spin knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"},
+      "16": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/caligo.cpp:308-313 and 389, knobCv() adds getVoltage() times 0.2 times the attenuverter to the drift knob, which runs 0..1, so ±5V at a fully open attenuverter covers the whole travel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/caligo.cpp:214, the loop tapped after the long delay, with no stated clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": false, "why": "src/caligo.cpp:216, one setVoltage per side after the mix, with no stated clamp"},
+      "3": {"family": "audio"}
+    }
+  },
+  "comment": "Every one of the ten knobs has its own attenuverter and CV jack directly below it, so the ten attenuverters share one line. The diffuser is three stages of four-deep nested allpass, twenty-four fractional delay lines in all, whose lengths are prime numbers indexed by size times a scale; the index glides with a 0.23 second one-pole so sweeping size slides rather than steps. The diffusion coefficient alternates sign across the three stages, which is where the reversed-sounding build-up at medium settings comes from. The channel rotator, hardcoded to a quarter turn in the original, is the spin knob here. The damping is sample-rate compensated, which the original's raw coefficient is not. configBypass passes each input to its own output. The panel prints caligo, time, size, diff, feedback, damp, mod, rate, mix, spin, drift, frz, sct, in L, in R, clk, frz, sct, snd L, snd R, rtn L, rtn R, l and r."
+}

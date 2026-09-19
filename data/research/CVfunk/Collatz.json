@@ -1,0 +1,19 @@
+{
+  "plugin": "CVfunk",
+  "module": "Collatz",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "Collatz.cpp:195 reads it with getVoltage, so only channel 1, into a Schmitt trigger offset by 0.01V"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Collatz.cpp:111 reads it with getVoltage, so only channel 1, and Collatz.cpp:113 scales it by 100 before adding it to the knob and taking the absolute value"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Collatz.cpp:119 reads it with getVoltage, so only channel 1, and Collatz.cpp:120 scales it by 10 before adding it to the knob and taking the absolute value"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "Collatz.cpp:169 reads it with getVoltage, so only channel 1, into a Schmitt trigger offset by 0.01V"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "why": "Collatz.cpp:188 reads it with getVoltage into a Schmitt trigger; Collatz.cpp:171 also tests it above 0V when a reset arrives"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Collatz.cpp:267 writes one channel with setVoltage, 10V or 0V from Collatz.cpp:231"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Collatz.cpp:269 writes one channel with setVoltage, 10V or 0V from Collatz.cpp:249"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Collatz.cpp:162 writes 10V while no chain runs and Collatz.cpp:145 writes 0V while one does"}
+    }
+  },
+  "comment": "The END output and the two displays are refreshed only once every thousand and one process calls (Collatz.cpp:130), so the END gate can lag the end of a chain by a few milliseconds. The accent count is the current number divided by the gate count, taken modulo the modulus, and is forced to zero when the gate count is zero to avoid dividing by it (Collatz.cpp:223)."
+}

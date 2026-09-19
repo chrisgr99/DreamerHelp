@@ -1,0 +1,58 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "DigitalChaoticSystem",
+  "description": "Two oscillators driving an eight-bit shift register: each clock combines the data state with the register's oldest bit by exclusive or and pushes it in at the front",
+  "params": [
+    {"ids": [0], "text": "Sets the clock oscillator's frequency, twenty octaves from about 0.03Hz to about 32768Hz"},
+    {"ids": [1], "text": "Sets the data oscillator's frequency, twenty octaves from about 0.03Hz to about 32768Hz"},
+    {"ids": [2], "text": "Scales the clock oscillator's unmarked modulation input, 0 to 1, before it is added to the clock frequency"},
+    {"ids": [3], "text": "Scales the data oscillator's marked modulation input, -1 to +1, before it is added to the data frequency"},
+    {"ids": [4], "text": "Scales the clock oscillator's marked modulation input, -1 to +1, before it is added to the clock frequency"},
+    {"ids": [5], "text": "Scales the data oscillator's unmarked modulation input, 0 to 1, before it is added to the data frequency"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the clock oscillator's frequency through its attenuator, a volt an octave"},
+    {"ids": [1], "text": "Modulates the data oscillator's frequency through its attenuverter, a volt an octave"},
+    {"ids": [2], "text": "Modulates the clock oscillator's frequency through its attenuverter, a volt an octave"},
+    {"ids": [3], "text": "Modulates the data oscillator's frequency through its attenuator, a volt an octave"},
+    {"ids": [4], "text": "Sets the clock oscillator's pitch with no attenuation, a volt an octave, added to everything else"},
+    {"ids": [5], "text": "The data state read on each clock pulse; above 1.8V counts as high, and with nothing patched it reads the data oscillator's square wave"},
+    {"ids": [6], "text": "Clocks the shift register on each rise past 1.8V; with nothing patched it is clocked by the clock oscillator's square wave"},
+    {"ids": [7], "text": "Sets the data oscillator's pitch with no attenuation, a volt an octave, added to everything else"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clock oscillator's triangle wave, -5V to +5V"},
+    {"ids": [1], "text": "The clock oscillator's square wave, -5V or +5V, which also clocks the shift register when its input is empty"},
+    {"ids": [2], "text": "The data oscillator's triangle wave, -5V to +5V"},
+    {"ids": [3], "text": "The data oscillator's square wave, -5V or +5V, which also feeds the register's data input when that input is empty"},
+    {"ids": [4], "text": "The last three bits of the register read as a binary number, 0V to 4.38V in eight steps"},
+    {"ids": [5], "text": "The exclusive or of the data state and the register's oldest bit, 0V or 5V, which usually runs at an eighth of the clock"},
+    {"ids": [6], "text": "The stepped output through a first-order lowpass at 20Hz, 0V to 4.38V"}
+  ],
+  "notes": [
+    "nothing has to be patched for the register to run: with the clock and data inputs empty it is driven by the two oscillators' own square waves",
+    "feeding a steady 0V into the data input makes the register cycle through a fixed eight-step pattern, because exclusive or with zero passes the bit through unchanged",
+    "patching an oscillator's own square or triangle output back into one of its modulation inputs changes the shape of the wave as well as its pitch"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "1V per octave · continuous · one channel only\n\na negative voltage does nothing here.",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "high above 1.8V · stepped · one channel only\n\nunpatched it reads the data oscillator's square.",
+      "6": "high above 1.8V · stepped · one channel only\n\nunpatched it reads the clock oscillator's square.",
+      "7": "1V per octave · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "0 to 5V · one channel only",
+      "5": "0 to 5V · stepped · one channel only",
+      "6": "0 to 5V · one channel only"
+    }
+  }
+}

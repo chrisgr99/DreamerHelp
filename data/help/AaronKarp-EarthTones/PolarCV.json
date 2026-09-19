@@ -1,0 +1,37 @@
+{
+  "plugin": "AaronKarp-EarthTones",
+  "module": "PolarCV",
+  "description": "Control voltages taken from a point travelling round one of four polar equations, drawn on the screen with the point marked in red",
+  "params": [
+    {"ids": [0], "text": "Each press moves to the next speed multiplier and the lamp colour shows which — magenta 0.5x, cyan 1x, yellow 2x — though the rate changes by the square of that figure, so 0.5x quarters it"},
+    {"ids": [1], "text": "Moves to the previous of the four equations, wrapping from the first round to the last; the equation in force is printed across the top of the screen"},
+    {"ids": [2], "text": "Moves to the next of the four equations, wrapping from the last round to the first; the equation in force is printed across the top of the screen"},
+    {"ids": [3], "text": "Sets how fast the point travels round the equation; it is ignored entirely while anything is patched to the jack beside it"},
+    {"ids": [4], "text": "Sets the first constant of the equation, 0 to 10 in steps of 0.5; the value in force is printed into the equation across the top of the screen"},
+    {"ids": [5], "text": "Sets the second constant of the equation, 0 to 10 in steps of 0.5; the value in force is printed into the equation across the top of the screen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes over from the speed knob: 0V leaves the point almost stationary, and higher voltages send it backwards round the equation, fastest at 10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The radius of the point in polar coordinates, ±10V"},
+    {"ids": [1], "text": "The horizontal position of the point, its radius times the sine of the angle, ±10V"},
+    {"ids": [2], "text": "The vertical position of the point, its radius times the cosine of the angle, ±10V"}
+  ],
+  "notes": [
+    "patching anything into the speed jack cuts the speed knob out altogether; the knob is read only while that jack is empty.",
+    "the point never comes to rest: a small fixed amount is added to the angle every sample whatever the speed setting.",
+    "the screen is a display and not a control; nothing drawn on it responds to a click or a drag.",
+    "there is no reset or sync input, so nothing in the patch can return the point to the start of the equation."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads the speed knob; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · one channel only",
+      "1": "±10V · one channel only",
+      "2": "±10V · one channel only"
+    }
+  }
+}

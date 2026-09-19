@@ -1,0 +1,44 @@
+{
+  "plugin": "forsitan",
+  "module": "sylla",
+  "description": "A sampler with no files: every sound is rendered from nothing by one of twenty-eight generators, on a background thread, and a fresh one is made at each press of the generate button",
+  "params": [
+    {"ids": [0], "text": "Chooses which generator renders the next sample, one detent per engine, with the last position rolling one at random from the pool set on the menu"},
+    {"ids": [1], "text": "Renders a new sample; the lamp is lit while the worker thread is busy and the old sample keeps playing until the new one lands, with requests during a render ignored"},
+    {"ids": [2], "text": "Starts the sample, and acts as a gate while it is held down if the trigger mode switch is set to gate"},
+    {"ids": [3], "text": "Sets the playback rate, a tenth of normal speed at the bottom of its travel to twice at the top"},
+    {"ids": [4], "text": "Sets how much of the buffer is played, measured from its start and never less than 30ms, with soft edges to the window"},
+    {"ids": [5], "text": "Sets the output level, 0% to 100%"},
+    {"ids": [6], "text": "Chooses what happens at the end of the window: One-shot stops there, Loop wraps back through a 25ms equal-power seam and skips the buffer's own fade-in on later laps so a drone holds its level"},
+    {"ids": [7], "text": "Chooses how the trigger jack is read: Trigger takes rising edges, Gate follows the level"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 1V renders a new sample"},
+    {"ids": [1], "text": "Shifts the playback rate around the speed knob, one volt per octave"},
+    {"ids": [2], "text": "Starts the sample on a rising edge through 1V, or holds it playing while above 1V if the trigger mode switch is set to gate"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sample"},
+    {"ids": [1], "text": "A trigger at the end of each pass through the play window"}
+  ],
+  "notes": [
+    "nothing is loaded until generate is pressed or a trigger reaches its jack. The play controls do nothing until there is a sample.",
+    "every engine, the random position included, derives its sound from the sample's own seed, so a reloaded patch comes back with the same sound.",
+    "generating never starts or stops playback: a stopped module stays quiet when a new sample lands."
+  ],
+  "menu": [
+    "Engine — the same list of generators as the knob's detents, for when the wanted one is known by name",
+    "Random pool — a tick per generator saying which the knob's random position may land on, with an Enable all at the top; two self-finishing engines are never rolled"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

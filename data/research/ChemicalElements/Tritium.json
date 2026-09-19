@@ -1,0 +1,13 @@
+{
+  "plugin": "ChemicalElements",
+  "module": "Tritium",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "10V", "why": "src/Tritium.cpp:34 reads it with getNormalVoltage(10.0), a single-channel read; line 35 multiplies the knob's rate by voltage/10 and clamps the result at 0 with std::max"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/Tritium.cpp:62 and 64 call setVoltage(10) and setVoltage(0) on channel 0 only, gated by a dsp::PulseGenerator whose default duration is 1e-3 seconds (Rack-SDK include/dsp/digital.hpp:189)"}
+    }
+  },
+  "comment": "The Stability CV input is declared, given a panel jack and named by the maker, but is read nowhere in process(): getStability() at src/Tritium.cpp:38 returns the parameter alone. It is therefore given a line saying so and no family, since a colour would say something can be patched there.\n\nThe rate is a product, not a sum: rate = 10^knob * volts/10, so the jack scales the knob rather than adding to it, and the knob alone is what is heard when the jack is unpatched (the normal is 10V, which makes the multiplier 1).\n\nThe interval between triggers is stability-weighted: (1-s)*period + s, where period is a fresh -log(uniform) draw, so stability blends the exponential draw toward a fixed interval of one over the rate."
+}

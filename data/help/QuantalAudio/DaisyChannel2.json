@@ -1,0 +1,44 @@
+{
+  "plugin": "QuantalAudio",
+  "module": "DaisyChannel2",
+  "description": "Stereo mixer channel strip for the Daisy Mix chain, adding its signal to the running mix carried across touching modules",
+  "params": [
+    {"ids": [0], "text": "Sets the level of this strip, silence at the bottom and 0dB at the top, though the tooltip reads half the attenuation applied, so its -6dB is really -12dB"},
+    {"ids": [1], "text": "Click to mute the strip, which lights red; hold the button for about a second to solo it instead, which lights green"},
+    {"ids": [2], "text": "Pans this strip between left and right at constant power, centred at noon"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left input, and the whole signal when the right input is unpatched, in which case it is copied to both sides before panning"},
+    {"ids": [1], "text": "The right input for this strip; leaving it unpatched sends the left input to both sides"},
+    {"ids": [2], "text": "Scales the level of this strip, 0-10V for silence to the fader setting, with voltage outside that range clamped"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of this strip after the fader, the level CV and the pan, silent while the strip is muted unless the menu sets the direct outs pre-mute"},
+    {"ids": [1], "text": "The right side of this strip after the fader, the level CV and the pan, silent while the strip is muted unless the menu sets the direct outs pre-mute"}
+  ],
+  "notes": [
+    "A strip takes the running mix from the daisy module touching its left edge and passes that mix plus its own signal to the one touching its right edge, ending at a D-MX2 master",
+    "The two lamps in the blue DAISY band light when a daisy module is linked on the left and on the right, and the red number shows this strip's place in the chain",
+    "When a strip anywhere in the chain is soloed, the master carries only the soloed strips",
+    "With the mouse over this module, pressing m toggles mute and pressing s toggles solo",
+    "Up to 16 strips can feed one master",
+    "The strip adds nothing to any mix on its own: it needs a D-MX2 master at the right-hand end of an unbroken run of touching daisy modules."
+  ],
+  "menu": [
+    "Aux Group 1 Send Amt — a slider setting how much of this strip, taken after the fader, is passed down the chain to an AUX module set to group 1, 0% to 100%, and 0% until it is moved",
+    "Aux Group 2 Send Amt — a slider setting how much of this strip, taken after the fader, is passed down the chain to an AUX module set to group 2, 0% to 100%, and 0% until it is moved",
+    "Direct outs pre-mute — keeps the OUT jacks sounding while the strip is muted, so the strip can be processed elsewhere without its dry signal in the mix",
+    "Smooth level CV — adds a 6ms slew to the level CV input, softening abrupt changes of level; it is ticked by default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "0 to 10V"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Convection",
+  "description": "Four independent curve generators sharing one time base, each with its own end-of-cycle trigger, and a running sum and trigger stream taken from whichever of them are not patched out",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Cycles the shape of that segment through up, down, up-down, down-up and a held constant; the lamp reads red, green, orange, blue and white in that order"},
+    {"ids": [4, 5, 6, 7], "text": "Sets how long that segment takes, as a multiplier on the module's time scale: a quarter at the far left, one at centre and sixteen times at the far right"},
+    {"ids": [8, 9, 10, 11], "text": "Sets how much of the segment is played before it stops, all of it at the far right and a shorter fragment as it is turned down; the fragment takes the whole time set for the segment"},
+    {"ids": [12, 13, 14, 15], "text": "Sets how many triggers are spread through that segment, 1 to 8"},
+    {"ids": [16, 17, 18, 19], "text": "Bends the shape of that segment away from straight lines, symmetrical at centre; for the held constant shape this knob sets the value that is held instead"},
+    {"ids": [20], "text": "Chooses how the triggers are spread through a segment: down, they are spaced evenly in time; up, they are spaced evenly up the segment's height, so a steep part fires them faster"},
+    {"ids": [21, 22, 23, 24], "text": "Scales the height of that segment, silent at the far left, unity at centre and double at the far right"},
+    {"ids": [25], "text": "Sets the time every segment is measured against, 64 milliseconds at the far left to about a second at the far right"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Starts that segment from the beginning; it fires on any rise in voltage"},
+    {"ids": [4], "text": "A trigger here resets the running output to zero and stops all four segments"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A 10V pulse the moment that segment finishes, whether it ran to its end or stopped short"},
+    {"ids": [4, 5, 6, 7], "text": "That segment's own curve, five volts at full height and scaled by its amp knob; patching this jack takes the segment out of the module's running and trig outputs"},
+    {"ids": [8], "text": "The running total of every segment not patched out at its own jack, held between -10V and 10V; it sums their movements rather than their values, so it drifts and stays where it is left"},
+    {"ids": [9], "text": "A 10V pulse whenever any segment that is not patched out at its own jack fires one of its triggers"}
+  ],
+  "notes": [
+    "Nothing moves until a trigger arrives at a segment's own trig jack; the segments do not free-run and the reset jack only stops them",
+    "The module declares a scaled sum output that has no jack on the panel, so the running output is the only summed voltage available"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "±10V · continuous · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

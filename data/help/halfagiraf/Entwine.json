@@ -1,0 +1,82 @@
+{
+  "plugin": "halfagiraf",
+  "module": "Entwine",
+  "description": "A sixteen voice generative synthesiser whose two streams, Pulsar and Quasar, each feed their own last pitch and note length into the next ones",
+  "params": [
+    {"ids": [0], "text": "Sets how many voices are sounding, up to eight per stream, or sixteen on Pulsar alone when no Quasar output is patched; at zero with a clock in the poly jack the module runs in sync mode"},
+    {"ids": [1], "text": "Transposes everything, two octaves down at the bottom of its travel and two octaves up at the top"},
+    {"ids": [2], "text": "Chooses one of sixteen built-in scales, or one of the scales from a loaded scale file, that the generated pitches are drawn from"},
+    {"ids": [3], "text": "Sets how long a voice takes to slide to its new pitch, as a fraction of that note's own length, so short notes glide proportionally faster"},
+    {"ids": [4], "text": "Sets how wide a pitch range the generator draws from, the root alone at the bottom of its travel and about six octaves at the top"},
+    {"ids": [5], "text": "Sets the note length, sweeping from audio-rate grains at the bottom of its travel to notes tens of seconds long at the top; in sync mode it chooses the clock division instead"},
+    {"ids": [6], "text": "Morphs through the eight frames of the selected wavetable preset"},
+    {"ids": [7], "text": "Moves the peak of each note's envelope, a sharp attack with a long decay at one end and a slow swell at the other"},
+    {"ids": [8], "text": "Starts a fresh trajectory for the Pulsar voices"},
+    {"ids": [9], "text": "Starts a fresh trajectory for the Quasar voices"},
+    {"ids": [10], "text": "Holds the generator on its current pitches instead of stepping them on, while note lengths and envelopes carry on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Transposes everything at 1V per octave, added to the root knob"},
+    {"ids": [1], "text": "Adds to the polyphony knob, about one voice for every 1.25V; with the knob at zero it is read as a clock instead and the module steps on its rising edges"},
+    {"ids": [2], "text": "Added to the glide knob, a tenth of its travel per volt, with the total held inside that travel"},
+    {"ids": [3], "text": "Added to the spread knob, a tenth of its travel per volt, with the total held inside that travel"},
+    {"ids": [4], "text": "Added to the wave knob, a tenth of its travel per volt, with the total held inside that travel"},
+    {"ids": [5], "text": "Added to the envelope knob, a tenth of its travel per volt, with the total held inside that travel"},
+    {"ids": [6], "text": "Added to the coupling knob, a tenth of its travel per volt, with the total held inside that travel"},
+    {"ids": [7], "text": "1V or more holds the generator on its current pitches, while note lengths and envelopes carry on"},
+    {"ids": [8], "text": "1V or more starts a fresh trajectory for the Pulsar voices"},
+    {"ids": [9], "text": "1V or more starts a fresh trajectory for the Quasar voices"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The Pulsar stream's audio, soft-clipped to roughly ±5V; with no Quasar output patched it carries both voice banks"},
+    {"ids": [1], "text": "The Quasar stream's audio, soft-clipped to roughly ±5V; it is silent while no Quasar output is patched"},
+    {"ids": [2], "text": "The pitch of the first Pulsar voice at 1V per octave, dropping to 0V while that voice is idle"},
+    {"ids": [3], "text": "10V while the first Pulsar voice is inside the gate length set in the menu, and 0V otherwise"},
+    {"ids": [4], "text": "The pitch of the first Quasar voice at 1V per octave, dropping to 0V while that voice is idle"},
+    {"ids": [5], "text": "10V while the first Quasar voice is inside the gate length set in the menu, and 0V otherwise"}
+  ],
+  "notes": [
+    "With no Quasar output patched, both eight voice banks are summed into Pulsar and the polyphony knob reaches sixteen; patching any Quasar jack splits the streams and caps the knob at eight",
+    "Turn the polyphony knob to zero and patch a clock to the poly jack, and the module steps on that clock instead of its own timing, with the coupling knob choosing the division",
+    "The menu loads a WAV file of 256-sample frames as a custom wavetable, and a scale.txt as custom scales; both paths are stored with the patch and the defaults can be restored from the same menu",
+    "The menu can send the notes out as MIDI, Pulsar on channel 1 and Quasar on channel 2, once a driver and device are chosen"
+  ],
+  "menu": [
+    "Load wavetable (.wav, 256-sample frames)... — reads a mono or multichannel WAV as custom wavetable frames",
+    "Restore default wavetable — drops a loaded wavetable and goes back to the 64 built-in frames",
+    "Load scales (scale.txt)... — reads a scale file in place of the sixteen built-in scales",
+    "Restore default scales — drops a loaded scale file and goes back to the built-in scales",
+    "Driver — chooses which MIDI system the note output is sent through",
+    "Device — chooses which MIDI port the note output is sent to",
+    "Monophonic (1 voice per channel) — sends one note at a time on each MIDI channel instead of the whole stream",
+    "Gate length — sets what fraction of each note the gate outputs and the MIDI notes stay on for, from 20% to 95%",
+    "Wavetable preset — chooses which block of eight frames the wave knob morphs through",
+    "Filter type: Off, Low-pass, Band-pass, High-pass — puts a state variable filter on every voice",
+    "Filter cutoff — sets the filter's corner, sweeping from 20Hz at the lowest setting to about 18kHz at the highest",
+    "Filter resonance — sets the filter's Q, from 0.5 at the lowest setting to 10 at the highest",
+    "Wavetable index — shifts the whole wavetable selection on by a fixed number of frames",
+    "Note length — scales every generated note length, a quarter of it at the shortest setting and four times at the longest"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "0 to 10V · stepped · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "high above 1V · one channel only",
+      "8": "high above 1V · one channel only",
+      "9": "high above 1V · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

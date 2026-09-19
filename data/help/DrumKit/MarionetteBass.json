@@ -1,0 +1,63 @@
+{
+  "plugin": "DrumKit",
+  "module": "MarionetteBass",
+  "description": "A hybrid bass drum: a recorded kick blended with a sine oscillator, a square-to-sine sub-oscillator under them, and two envelopes shaping pitch and level.",
+  "params": [
+    {"ids": [0], "text": "Sets the decay time of the pitch envelope, from 0.1 to 2.2 seconds; at exactly 1 second the whole pitch envelope is turned upside down."},
+    {"ids": [1], "text": "Sets the level the pitch envelope holds at, from 0.1 to 0.9 of its peak."},
+    {"ids": [2], "text": "Sets the release time of the pitch envelope, from 0.1 to 2.9 seconds."},
+    {"ids": [3], "text": "Nothing in the module reads this switch; the pitch envelope is turned upside down by the pitch DECAY knob reaching exactly 1 second instead."},
+    {"ids": [4], "text": "Sets the decay time of the amplitude envelope, from 0.1 to 2.2 seconds; at exactly 1 second the whole amplitude envelope is turned upside down."},
+    {"ids": [5], "text": "Sets the level the amplitude envelope holds at, from 0.1 to 0.9 of its peak."},
+    {"ids": [6], "text": "Sets the release time of the amplitude envelope, from 0.1 to 2.9 seconds."},
+    {"ids": [7], "text": "Nothing in the module reads this switch; the amplitude envelope is turned upside down by the amplitude DECAY knob reaching exactly 1 second instead."},
+    {"ids": [8], "text": "Crossfades between the sine oscillator and the recorded kick, 0 for all oscillator and 10 for all sample, despite the panel marking the knob 0 to 5."},
+    {"ids": [9], "text": "Multiplies the sample playback rate and both oscillator frequencies together, from 0.2x to 1.8x."},
+    {"ids": [10], "text": "Sets how much of the sub-oscillator is in the output; the knob reaches half of the full mix and the CV input is needed for more."},
+    {"ids": [11], "text": "Crossfades the sub-oscillator between a square wave at one end and a sine at the other."},
+    {"ids": [12], "text": "Chooses how far below the oscillator the sub-oscillator runs: the same frequency, an octave down, or two octaves down."},
+    {"ids": [13], "text": "Chooses which of the two recorded kicks plays; the choice also sets the oscillator frequency, which is twice the chosen sample's nominal 55Hz or 60Hz."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Restarts the sample from its first frame and retriggers both envelopes each time the voltage rises through 0.5V."},
+    {"ids": [1], "text": "Replaces the pitch envelope with the voltage here divided by 5 for as long as a cable is patched, and the pitch DECAY, SUSTAIN and RELEASE knobs then do nothing."},
+    {"ids": [2], "text": "Adds to the pitch envelope's decay time, 10V covering a 0 to 2.2 second span, with the total clamped to it."},
+    {"ids": [3], "text": "Adds to the pitch envelope's sustain level, 10V covering the 0.1 to 0.9 span, with the total clamped to it."},
+    {"ids": [4], "text": "Adds to the pitch envelope's release time, 10V covering the 0.1 to 2.9 second span, with the total clamped to it."},
+    {"ids": [5], "text": "Replaces the amplitude envelope with the voltage here divided by 5 for as long as a cable is patched, and the amplitude DECAY, SUSTAIN and RELEASE knobs then do nothing."},
+    {"ids": [7], "text": "Adds to the amplitude envelope's decay time, 10V covering a 0 to 2.2 second span, with the total clamped to it."},
+    {"ids": [8], "text": "Adds to the amplitude envelope's sustain level, 10V covering the 0.1 to 0.9 span, with the total clamped to it."},
+    {"ids": [9], "text": "Adds to the amplitude envelope's release time, 10V covering the 0.1 to 2.9 second span, with the total clamped to it."},
+    {"ids": [10], "text": "Adds to BLEND, 10V covering its 0 to 10 span, with the total clamped to it."},
+    {"ids": [11], "text": "Adds to TUNE, 10V covering the 0.2 to 1.8 span, with the total clamped to it."},
+    {"ids": [12], "text": "Adds to the sub-oscillator mix, 10V covering the full 0 to 10 span, with the total clamped to it."},
+    {"ids": [13], "text": "Adds to the sub-oscillator wave blend, 10V covering the full square to sine span, with the total clamped to it."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The drum's audio: the blended sample and oscillator with the sub-oscillator mixed in and the amplitude envelope applied, at 5V for a full-scale sample."}
+  ],
+  "notes": [
+    "both envelopes hold their sustain for a fixed 4400 samples before releasing, so the length of the gate changes nothing.",
+    "the panel and the manual each give the two envelopes a DIRECTION switch, and neither switch is read by the module."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 5V · continuous · one channel only\n\nunpatched it reads the module's own envelope.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "0 to 5V · continuous · one channel only\n\nunpatched it reads the module's own envelope.",
+      "7": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "8": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "9": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "10": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "11": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "12": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "13": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

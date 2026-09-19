@@ -1,0 +1,23 @@
+{
+  "plugin": "BGal256",
+  "module": "DressMeUp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "DressMeUp.cpp:72 runs resetTrigger, a dsp::SchmittTrigger, on this jack's raw voltage, so a rising edge past 1V sets stepIndex to 0"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "DressMeUp.cpp:132 runs prevTrigger, a dsp::SchmittTrigger, on this jack's raw voltage and decrements stepIndex on a rising edge past 1V; it sits in the else branch opened at DressMeUp.cpp:114, so nothing here is read while STEPCV_INPUT is patched"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:176-183 maps this voltage across the range the Step input range switch sets at lines 141-155, clamps it to 0..1 and multiplies by the step count"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:229-239 maps this voltage across the range the Value range switch sets at lines 157-170 and stores it as step A"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:229-239 maps this voltage across the range the Value range switch sets at lines 157-170 and stores it as step B"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:229-239 maps this voltage across the range the Value range switch sets at lines 157-170 and stores it as step C"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:229-239 maps this voltage across the range the Value range switch sets at lines 157-170 and stores it as step D"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "normal": "0V", "why": "DressMeUp.cpp:219-225 maps this voltage across the range the Value range switch sets at lines 157-170 and stores it as the current step"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "DressMeUp.cpp:127 runs clockTrigger, a dsp::SchmittTrigger, on this jack's raw voltage and increments stepIndex on a rising edge past 1V; it sits in the else branch opened at DressMeUp.cpp:114, so nothing here is read while STEPCV_INPUT is patched"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "DressMeUp.cpp:288 writes one voltage with setVoltage and no channel count is set"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "DressMeUp.cpp:274 triggers a PulseGenerator for 1e-3 seconds and lines 293-294 write 10V while it runs"},
+      "2": {"family": "cv", "poly": false, "why": "DressMeUp.cpp:280-286 adds the step values, multiplies by the Output Range knob and divides by 4"}
+    }
+  },
+  "comment": "Seven of the sixteen declared inputs have no jack on the panel and no name, so nothing describes them here. The Sum output is divided by four whatever the step count is (DressMeUp.cpp:286) and is scaled by the Output Range knob, where the manual calls it the raw sum of all four steps. The Step input range switch reads bottom to top as ±10V, ±5V and +10V, and its default is ±10V. The Smooth Step switch only has an effect while the STEP/CV jack is patched, because the fractional step position is zero otherwise (DressMeUp.cpp:249-262)."
+}

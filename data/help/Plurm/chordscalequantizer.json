@@ -1,0 +1,32 @@
+{
+  "plugin": "Plurm",
+  "module": "chordscalequantizer",
+  "description": "Picks the major scale that best matches a chord played into it and rounds a separate melody to that scale; the maker describes the module as unfinished",
+  "inputs": [
+    {"ids": [0], "text": "The notes of the chord that chooses the scale, one per channel, read while the matching channel of chord gate is above 2V; the major scale holding most of those notes is the one used"},
+    {"ids": [1], "text": "A channel above 2V puts the note on that channel of chord v/oct into the chord, and dropping below 2V takes it out again"},
+    {"ids": [2], "text": "The pitches to be rounded to the chosen scale, and the number of channels here sets the number of channels at quantized melody"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Each channel of melody v/oct rounded to the nearest note of the chosen scale, kept in the octave it arrived in"},
+    {"ids": [1], "text": "The first note of the chosen scale as a pitch inside one octave, 0V for C up to 0.917V for B"},
+    {"ids": [2], "text": "10V in any sample in which a note of the chord changed, and 0V in every other sample"},
+    {"ids": [3], "text": "The seven notes of the chosen scale as a polyphonic signal, one per channel, from 0V for C up to 0.917V for B"}
+  ],
+  "notes": [
+    "the scale is C major until a chord is played in, so a melody is rounded to the white notes before the chord inputs have been used",
+    "a note joins the chord while its channel of chord gate is above 2V, so the chord inputs do nothing without gates; the notes alone are not read"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "high above 2V · stepped",
+      "2": "continuous"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "continuous",
+      "3": "continuous"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "plugin": "Mental",
+  "module": "MentalClockDivider",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalClockDivider.cpp:82 a dsp::SchmittTrigger at its default thresholds of 0 and 1; each crossing advances all nine counters by one"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/MentalClockDivider.cpp:69 a dsp::SchmittTrigger at its default thresholds of 0 and 1, which zeroes every counter and output; the same trigger object processes the reset button immediately before the jack on that line, so its state is cleared each sample and a held gate resets continuously rather than only on the edge"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103, 10 while the pulse generator is running and 0 otherwise"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "7": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"},
+      "8": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/MentalClockDivider.cpp:103"}
+    }
+  },
+  "comment": "The reset button and the reset input share one dsp::SchmittTrigger, fed first with the button and then with the jack inside a single || expression (src/MentalClockDivider.cpp:69). Because the trigger is handed two different values in the same sample it goes low on one call and high on the next, which means a steady high voltage at the reset input fires a reset on every sample rather than once; that is why the lines say the reset holds rather than fires once. The divider order in the code (src/MentalClockDivider.cpp:40) matches the /2 /4 /8 /16 /32 /3 /5 /7 /12 printed down the panel. The panel prints ClkDiv, Clk In and Reset."
+}

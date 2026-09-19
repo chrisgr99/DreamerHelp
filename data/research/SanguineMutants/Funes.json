@@ -1,0 +1,23 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Funes",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "stepped", "negative": "subtracts", "why": "Funes.cpp:236 reads this input with getPolyVoltage(channel) and divides it by 5 into the engine modulation, which voice.cc:117 quantises onto the model index"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "±8V", "negative": "swings", "sumRange": "±8V", "why": "Funes.cpp:245 reads this input with getPolyVoltage(channel) and divides it by 8; voice.cc adds it to the knob through the attenuverter and constrains the total to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Funes.cpp:241 reads this input with getPolyVoltage(channel) and multiplies it by 6 into the frequency modulation in semitones, scaled by the attenuverter"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±8V", "negative": "swings", "sumRange": "±8V", "why": "Funes.cpp:247 reads this input with getPolyVoltage(channel) and divides it by 8; voice.cc adds it to the knob through the attenuverter and constrains the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "±5V", "why": "Funes.cpp:242 reads this input with getPolyVoltage(channel), divides it by 5 and multiplies by the attenuverter; voice.cc:158 adds it to the knob and constrains the total to 0..1"},
+      "5": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0.9V", "why": "Funes.cpp:250 reads this input with getPolyVoltage(channel) and divides it by 3; voice.cc:99 compares that against 0.3 and voice.cc:108 releases below 0.1"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 8V", "negative": "ignored", "why": "Funes.cpp:252 reads this input with getPolyVoltage(channel) and divides it by 8; voice.cc:152 compresses that and constrains it to 0..1"},
+      "7": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "Funes.cpp:239 multiplies this input by 12 into the note in semitones, and Funes.cpp:163 takes part of the module's channel count from its getChannels()"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "0 to 5V", "why": "Funes.cpp:213 reads this input with getVoltage() alone, outside the per-channel loop, divides it by 5, multiplies by the attenuverter, adds the knob and clamps the total to 0..1"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "0 to 5V", "why": "Funes.cpp:215 reads this input with getVoltage() alone, outside the per-channel loop, divides it by 5, multiplies by the attenuverter, adds the knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Funes.cpp:465 multiplies the voice's sample by 5 and Funes.cpp:469 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "Funes.cpp:466 multiplies the voice's auxiliary sample by 5 and Funes.cpp:470 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is Émilie Gillet's Plaits at firmware 1.2, vendored unchanged at eurorack/plaits; src/Funes.cpp is the Rack wrapper, running one Plaits voice per polyphonic channel. The trigger threshold is not the 0.7V the wrapper's own comment at Funes.cpp:249 gives: Funes.cpp:250 divides the jack voltage by 3 and voice.cc:99 compares the result against 0.3, so the input goes high at 0.9V, and voice.cc:108 releases it below 0.3V. The two low-pass gate jacks are read with getVoltage() at Funes.cpp:213 and Funes.cpp:215, outside the per-channel loop, so they are monophonic and apply to every voice; the maker marks this with silver jacks and says so in the manual. The model offset is sampled and held at each trigger: voice.cc:105 copies it on the rising edge, and voice.cc:113 reads it continuously only when nothing is patched to the trigger. The LEVEL input is compressed and constrained to 0..1 at voice.cc:152, and with nothing patched the accent is fixed at 0.8 and the trigger strikes the low-pass gate instead. The menu item the manual calls Open custom data editors in web browser... is spelled Open editors in web browser... in the source."
+}

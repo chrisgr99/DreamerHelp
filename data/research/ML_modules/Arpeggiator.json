@@ -1,0 +1,23 @@
+{
+  "plugin": "ML_modules",
+  "module": "Arpeggiator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Arpeggiator.cpp:532 reads it per channel with getNormalPolyVoltage into a SchmittTrigger at its default 1V threshold"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "Arpeggiator.cpp:465 takes getChannels() on it and Arpeggiator.cpp:536 reads it per channel with getNormalPolyVoltage as the note pitch"},
+      "2": {"poly": true, "step": "continuous", "why": "Arpeggiator.cpp:537 reads it per channel with getNormalPolyVoltage and carries that voltage with the note"},
+      "3": {"poly": true, "step": "continuous", "why": "Arpeggiator.cpp:538 reads it per channel with getNormalPolyVoltage and carries that voltage with the note"},
+      "5": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Arpeggiator.cpp:611 reads it per channel with getNormalPolyVoltage and Arpeggiator.cpp:621 puts it through a SchmittTrigger at its default 1V threshold"},
+      "6": {"family": "cv", "poly": true, "step": "stepped", "why": "Arpeggiator.cpp:613 reads it per channel with getNormalPolyVoltage and rounds it to a whole play mode"},
+      "7": {"family": "cv", "poly": true, "step": "stepped", "why": "Arpeggiator.cpp:612 reads it per channel with getNormalPolyVoltage and rounds it to a whole octave range"},
+      "8": {"family": "cv", "poly": true, "step": "stepped", "why": "Arpeggiator.cpp:607 reads it per channel with getNormalPolyVoltage, adds it to the note order and truncates the result to a whole number"},
+      "9": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Arpeggiator.cpp:619 reads it per channel with getNormalPolyVoltage into a SchmittTrigger at its default 1V threshold"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "Arpeggiator.cpp:479 reverses the hold setting while the voltage is above 0.5V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger"},
+      "1": {"family": "pitch"}
+    }
+  },
+  "comment": "Input 4 (CV 3) and outputs 4 and 5 are declared in the code but have no jack on the panel, so they are left untagged. The note-input polyphony is worked out as the smaller of the V/Oct channel count and the Gate OUTPUT channel count, which follows the Clock input, so a patch with fewer Clock channels than played notes reads fewer notes than are being played. The CV 3 input and the CV 3 output are configured on the panel but nothing in the installed v2.0.3 source reads or writes either of them."
+}

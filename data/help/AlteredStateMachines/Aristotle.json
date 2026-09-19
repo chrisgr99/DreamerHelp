@@ -1,0 +1,43 @@
+{
+  "plugin": "AlteredStateMachines",
+  "module": "Aristotle",
+  "description": "Two-channel counterpoint sequencer: each of four stages carries a slider for channel A and one for channel B, and a trigger flips which of the two that stage feeds",
+  "params": [
+    {"ids": [2, 3, 4, 5], "text": "Adds its setting to the A output while that stage is flipped to channel A, 0V fully down to 1.25V fully up, or 2V with the wider range chosen for channel A"},
+    {"ids": [6, 7, 8, 9], "text": "Adds its setting to the B output while that stage is flipped to channel B, 0V fully down to 1.25V fully up, or 2V with the wider range chosen for channel B"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Flips all four stages away from channel A on a rising edge above 2V, leaving the A output at 0V and the B output carrying all four of its sliders"},
+    {"ids": [1], "text": "Flips all four stages away from channel B on a rising edge above 2V, leaving the B output at 0V and the A output carrying all four of its sliders"},
+    {"ids": [2], "text": "Flips the first stage between channel A and channel B on each rising edge above 2V"},
+    {"ids": [3, 4, 5], "text": "Flips that stage between channel A and channel B on each rising edge above 2V; with no cable in it, the stage is flipped by every second trigger of the stage before it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sum of the A sliders of whichever stages are flipped to channel A, so 0V to 5V, or 0V to 8V with the wider range chosen for channel A"},
+    {"ids": [1], "text": "The sum of the B sliders of whichever stages are flipped to channel B, so 0V to 5V, or 0V to 8V with the wider range chosen for channel B"}
+  ],
+  "notes": [
+    "every stage comes up flipped to channel B, so the A output starts at 0V and the B output carries all four of its sliders",
+    "a stage feeds one channel or the other and never both, so the two outputs together always carry the same set of four stages divided between them",
+    "the lamp in a slider lights while that stage is feeding that channel, and the two lamps by the outputs brighten with the voltage each output is carrying",
+    "on a sample where either reset jack fires, the stage triggers are not read at all, so a trigger arriving at the same moment as a reset is lost"
+  ],
+  "menu": [
+    "2V range for channel A — makes each of channel A's four sliders span 0V to 2V in place of 0V to 1.25V, so the A output reaches 8V",
+    "2V range for channel B — makes each of channel B's four sliders span 0V to 2V in place of 0V to 1.25V, so the B output reaches 8V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only\n\nunpatched it reads half the rate of Trig 1.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads half the rate of Trig 2.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads half the rate of Trig 3."
+    },
+    "outputs": {
+      "0": "0 to 8V · continuous · one channel only",
+      "1": "0 to 8V · continuous · one channel only"
+    }
+  }
+}

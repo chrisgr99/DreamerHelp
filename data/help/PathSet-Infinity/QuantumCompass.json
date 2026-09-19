@@ -1,0 +1,69 @@
+{
+  "plugin": "PathSet-Infinity",
+  "module": "QuantumCompass",
+  "description": "Sequencer and quantizer that builds a sequence from the notes switched on at the keyboard, then adds accidentals, octave shifts, ratchets and mutes to it",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Clicking adds that note to the pool the sequence draws from; holding it takes the note back out"},
+    {"ids": [12], "text": "Switches the clock or position input between a clock, whose rising edges advance the sequence, and a voltage that picks the step directly"},
+    {"ids": [13], "text": "Returns the sequence to its first step"},
+    {"ids": [14], "text": "Sets how many steps the sequence plays, 1 to 64; changing it truncates the pattern rather than changing the notes in it"},
+    {"ids": [15], "text": "Attenuates and inverts the steps CV before it is added to the step count"},
+    {"ids": [16], "text": "Sets the chance that the sequence resets part way through; the display marks the first step in green and the steps that might reset it in red"},
+    {"ids": [17], "text": "Sets which steps of the sequence have a chance of resetting it"},
+    {"ids": [18], "text": "Allows a ratcheted step to play twice in one clock cycle"},
+    {"ids": [19], "text": "Allows a ratcheted step to play three times in one clock cycle"},
+    {"ids": [20], "text": "Allows a ratcheted step to play four times in one clock cycle"},
+    {"ids": [21], "text": "Attenuates and inverts the mutes CV before it is added to the mutes setting"},
+    {"ids": [22], "text": "Sets how many steps of the sequence are silenced"},
+    {"ids": [23], "text": "Adds flattened or sharpened steps to the sequence, flats one way and sharps the other, and both once it is turned far enough"},
+    {"ids": [24], "text": "Attenuates and inverts the accidentals CV before it is added to the accidentals setting"},
+    {"ids": [25], "text": "Adds steps shifted an octave up or an octave down, one direction each way and both once it is turned far enough"},
+    {"ids": [26], "text": "Attenuates and inverts the octave shift CV before it is added to the octave shift setting"},
+    {"ids": [27], "text": "Adds randomness to the accidentals, octave shifts, ratchets and mutes, leaving the notes, the step count and the auto reset alone"},
+    {"ids": [28], "text": "Attenuates and inverts the chaos CV before it is added to the chaos setting"},
+    {"ids": [29], "text": "Sets how many steps play more than one note in a clock cycle; the extra notes are taken from the next three notes of the sequence"},
+    {"ids": [30], "text": "Attenuates and inverts the ratchet CV before it is added to the ratchet setting"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence on each rising edge in clock mode; in sequence mode the voltage picks the step, 0V the first and 10V the last, wrapping outside that range"},
+    {"ids": [1], "text": "A rising edge returns the sequence to its first step"},
+    {"ids": [2], "text": "Raises or lowers the accidentals setting through its attenuverter"},
+    {"ids": [3], "text": "Raises or lowers the octave shift setting through its attenuverter"},
+    {"ids": [4], "text": "Raises or lowers the chaos setting through its attenuverter"},
+    {"ids": [5], "text": "Raises or lowers the step count through its attenuverter"},
+    {"ids": [6], "text": "Raises or lowers the ratchet setting through its attenuverter"},
+    {"ids": [7], "text": "Raises or lowers the mutes setting through its attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a gate for the whole clock cycle of a step that is flattened"},
+    {"ids": [1], "text": "Carries a gate for the whole clock cycle of a step that is sharpened"},
+    {"ids": [2], "text": "Carries a gate for the whole clock cycle of a step shifted an octave down"},
+    {"ids": [3], "text": "Carries a gate for the whole clock cycle of a step shifted an octave up"},
+    {"ids": [4], "text": "Carries the pitch of the step being played"},
+    {"ids": [5], "text": "Carries the gate of the step being played"}
+  ],
+  "notes": [
+    "no sequence exists until two or more notes are switched on at the keyboard; with one note or none the ring of lights stays dark and the outputs do not move",
+    "a clock is needed at the clock or position input with the position control switch set to clock; there is no clock inside the module",
+    "bypassing this module leaves every output at 0V"
+  ],
+  "menu": [
+    "Compass Display — what the ring of lights shows: (Last Interaction), Notes, Length, Auto Reset, Ratchet, Accidentals, Octave or Mutes",
+    "Set Scale — switches the keyboard to a named scale and gives a new random sequence each time: Major, Dorian, Lydian, Mixolydian, Minor, Locrian, four more, or None / Clear",
+    "Shift Notes — moves every note in the pool up or down by a chosen interval; the keyboard wraps, so a C shifted down becomes a B an octave higher",
+    "Accidentals Mode — what an accidental does: Non Diatonic moves a semitone, Diatonic moves up one note of the scale, Middle picks the pitch halfway between two notes of the scale"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "continuous",
+      "5": "stepped"
+    }
+  }
+}

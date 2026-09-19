@@ -1,0 +1,65 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Morph",
+  "description": "Polyphonic gate and CV looper with turing machine behaviour, replacing steps of its loop from source inputs or from an internal random generator; the maker marks it deprecated in favour of Morpheus",
+  "params": [
+    {"ids": [0], "text": "Sets the chance that the gate at the current step is left alone, 0% replacing the gate at every step and 100% replacing none"},
+    {"ids": [1], "text": "Added to both lock settings, -100% to 100%"},
+    {"ids": [2], "text": "Sets the chance that the CV at the current step is left alone, 0% replacing the CV at every step and 100% replacing none"},
+    {"ids": [3], "text": "Sets where a replacement comes from, 0% always the SRC inputs and 100% always the internal random generator"},
+    {"ids": [4], "text": "Shifts the loop one step to the left"},
+    {"ids": [5], "text": "Shifts the loop one step to the right"},
+    {"ids": [6], "text": "Clears the loop, taking every gate off and every CV to 0V"},
+    {"ids": [7], "text": "Sets the number of steps in the loop, 1 to 64"},
+    {"ids": [8], "text": "Sets the chance of a gate where a step is replaced from the random generator, 0% to 100%"},
+    {"ids": [9], "text": "Scales the random CV, -1 to 1, positive giving unipolar values and negative bipolar ones"},
+    {"ids": [10], "text": "Sets the offset added to the scaled random CV, -10V to 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that advances the playhead one step, monophonic where every other jack is polyphonic"},
+    {"ids": [1], "text": "The gate written into the loop where a step is replaced from the source"},
+    {"ids": [2], "text": "The CV written into the loop where a step is replaced from the source"},
+    {"ids": [3], "text": "A high channel writes the source gate and CV into that channel's loop whatever the lock settings are"},
+    {"ids": [4], "text": "Added to the gate lock for each channel, 0-10V covering the full range"},
+    {"ids": [5], "text": "Added to both locks for each channel, -10V to 10V"},
+    {"ids": [6], "text": "Added to the CV lock for each channel, 0-10V covering the full range"},
+    {"ids": [7], "text": "Sets the balance between source and random per channel, 0V always source and 10V always random"},
+    {"ids": [8], "text": "A high channel shifts that channel's loop one step to the left"},
+    {"ids": [9], "text": "A high channel shifts that channel's loop one step to the right"},
+    {"ids": [10], "text": "A high channel clears that channel's loop"},
+    {"ids": [11], "text": "Sets the loop length per channel, 0.1V per step, so 6.4V gives the longest loop of 64"},
+    {"ids": [12], "text": "Sets the chance of a random gate per channel, 0-10V"},
+    {"ids": [13], "text": "Sets the random CV scale per channel, -10V to 10V"},
+    {"ids": [14], "text": "Sets the random CV offset per channel, -10V to 10V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The gate at the playhead of each channel's loop"},
+    {"ids": [1], "text": "The CV at the playhead of each channel's loop"}
+  ],
+  "notes": [
+    "nothing advances until a clock is patched to CLK"
+  ],
+  "menu": [
+    "Gates from CV — takes the gate output from the step's CV value rather than from the stored gate",
+    "Channels — the number of polyphonic output channels, Auto to follow the number of channels coming in, or 1 to 16"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped",
+      "4": "0 to 10V",
+      "5": "±10V",
+      "6": "0 to 10V",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "12": "0 to 10V",
+      "13": "±10V",
+      "14": "±10V"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "plugin": "Kalliste",
+  "module": "KScene",
+  "facts": {
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "KScene.cpp:231 writes 10V while a 5ms timer set by fireEOCPulse at line 57 is running and 0V otherwise, with setVoltage and no setChannels"}
+    }
+  },
+  "comment": "Source read at commit d7e66fd, settled the same way as K-ARP. The sixteen scene slots and their lamps are plain Widgets added with addChild (KSceneSlotButton, KSceneSlotLed) and have no parameter behind them, so the census records only the two switches in paramPos and no slot can be clicked for help; they are covered by Note lines. The AUTO/MANUAL switch is written to by process rather than only read: KScene.cpp:155 forces it to MANUAL on every sample while the module is in STORE, and line 160 sets it back to AUTO on the first sample after the switch returns to PLAY, so a MANUAL choice made in PLAY does not survive a trip through STORE. occupiedCount() at line 254 stops at the first empty slot, so the slots are a run from the first rather than sixteen independent stores."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Congabongo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:39 takes a rising edge from that voltage being greater than 0.5"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:110 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:39 takes a rising edge from that voltage being greater than 0.5"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:39 takes a rising edge from that voltage being greater than 0.5"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:109 adds it to the DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Congabongo.hh:39 takes a rising edge from that voltage being greater than 0.5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Congabongo.hh:91 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Congabongo.hh:92 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "Both sines sound an octave above the code's frequency variable: src/modules/Congabongo.hh:120-121 set the phase increments to freq_hz * rSampleRate * 2 and freq_hz * 0.75 * rSampleRate * 2, and :73 and :78 take sin(2 * M_PIF * phase) with M_PIF equal to pi. freq_hz is 98 + control * 100 at Conga and 200 + control * 250 at Bongo (:115-118), so the high drum sounds 196Hz to 396Hz and 400Hz to 900Hz. The manual's 98-198Hz and 200-400Hz are the variable, and its 400Hz top does not match the code's 450Hz either. Decay is 40 + control * 80 at Conga and 15 + control * 25 at Bongo, so the tops are 120ms and 40ms, where the manual says 80ms and 25ms. The switch is a Toggle2pos whose second position, printed Bongo on the panel, is compared against Toggle2posHoriz::RIGHT at :114 - the two enums both give 1, so it works. The slap alpha is fixed at 10ms at :96, the slap is doubled in the mix at :86 and :89, and a slap sets the matching tone envelope to zero at :57 and :64, which is the muting the manual describes."
+}

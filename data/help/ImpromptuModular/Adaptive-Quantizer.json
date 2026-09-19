@@ -1,0 +1,67 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Adaptive-Quantizer",
+  "description": "Quantizer that builds its set of target pitches from a reference melody it has heard, weighting them by how often each pitch occurs rather than following a chosen scale",
+  "params": [
+    {"ids": [0], "text": "Sets how many target pitches incoming notes are quantized to, 1 to 12; at 1 only one pitch ever comes out, and at 12 the module quantizes chromatically"},
+    {"ids": [1], "text": "Biases the weighting towards high pitches turned clockwise and low pitches turned anticlockwise, five times the weight at one end against a fifth at the other; centred it applies no bias"},
+    {"ids": [2], "text": "Biases the weighting towards pitches held for long gates turned clockwise and short gates turned anticlockwise, five times the weight against a fifth; centred it applies no bias"},
+    {"ids": [3], "text": "Sets where the active region of the data table starts, counted in events back from the newest, so quantizing can follow earlier pitches; a red light comes on when that region is empty"},
+    {"ids": [4], "text": "Sets how many of the stored reference events are used to work out the weighting, 4 to 240; low values follow the reference closely, high values smooth it out"},
+    {"ids": [5], "text": "Erases every pitch event in the data table and turns FREEZE off"},
+    {"ids": [6], "text": "Stops new reference events being written into the data table; quantizing carries on from what is already stored, and those stored events are saved with the patch"},
+    {"ids": [7], "text": "Turns off the statistical weighting and quantizes chromatically, to twelve-tone equal temperament"},
+    {"ids": [8], "text": "Holds the output pitch until the next rising edge at the GATE input, so the pitch does not jump when the reference changes; it applies to the CHORD output as well"},
+    {"ids": [9], "text": "Sets how many notes the CHORD output carries, 1 to 5, taking the highest weighted pitches"},
+    {"ids": [10], "text": "Three settings: LAST weighs the most recent pitch interval at the CV input, MOST weighs the most frequent interval in the active region, and OFF weighs neither"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The monophonic pitch to be quantized"},
+    {"ids": [1], "text": "Gate for the pitch being quantized; it marks each note event and triggers the sample and hold"},
+    {"ids": [2], "text": "Pitch of the reference performance, recorded into the data table"},
+    {"ids": [3], "text": "Gate for the reference pitch; each rising edge stores one event with its pitch, octave, duration and interval"},
+    {"ids": [4], "text": "A trigger here clears the data table and turns FREEZE off"},
+    {"ids": [5], "text": "A trigger here toggles FREEZE"},
+    {"ids": [6], "text": "Added to the PITCHES knob, at 1.1 pitches per volt"},
+    {"ids": [7], "text": "Added to the PERSIST knob; 10V adds the full 240 events"},
+    {"ids": [8], "text": "A trigger here toggles THRU"},
+    {"ids": [9], "text": "Added to the OFFSET knob; 10V adds the full 240 events"},
+    {"ids": [10], "text": "Added to the OCTAVE knob; 5V covers its whole range"},
+    {"ids": [11], "text": "Added to the DURATION knob; 5V covers its whole range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch"},
+    {"ids": [1], "text": "A copy of the gate at the GATE input"},
+    {"ids": [2], "text": "Polyphonic pitch output carrying the highest weighted target pitches, as many of them as CHORD is set to"}
+  ],
+  "notes": [
+    "the warning light beside the module name comes on when the active region of the data table is empty, and when all twelve notes are in use",
+    "the module quantizes to pitches it has heard: patch a reference melody's pitch and gate into REF CV and REF GATE. While the active region of the data table is empty the pitch output is held."
+  ],
+  "menu": [
+    "Reset of data table — chooses what RESET does: None only releases FREEZE, Clear all (default) erases every stored event, and Clear with priming erases it then restores the four newest events",
+    "Skip repeats of same ref note — stores a run of identical reference pitches as a single event",
+    "Copy weights for ProbKey — puts the twelve note weights on the clipboard in the form that Prob-Key's Paste weights from Adaptive Quantizer reads"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "1V per octave · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "±5V · continuous · one channel only",
+      "11": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "stepped",
+      "2": "continuous"
+    }
+  }
+}

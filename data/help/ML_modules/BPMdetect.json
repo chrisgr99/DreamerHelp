@@ -1,0 +1,42 @@
+{
+  "plugin": "ML_modules",
+  "module": "BPMdetect",
+  "description": "Measures the tempo of a clock and gives back the rate voltages a Fundamental LFO, SEQ-3 and Delay expect, with three clock outputs of its own",
+  "params": [
+    {"ids": [0], "text": "Sets how much of each freshly measured beat length goes into the running tempo, 0 holding the tempo it already has and 1 replacing it outright"},
+    {"ids": [1], "text": "Sets how many pulses Clk2 Out gives per beat, a whole number from 1 to 8"},
+    {"ids": [2], "text": "Sets how many pulses Clk3 Out gives per beat, a whole number from 1 to 8"},
+    {"ids": [3], "text": "Scales the gap between the Clk2 Out pulses, 0 to 2 with 1 spacing them evenly, and the count restarts on every detected beat"},
+    {"ids": [4], "text": "Scales the gap between the Clk3 Out pulses, 0 to 2 with 1 spacing them evenly, and the count restarts on every detected beat"},
+    {"ids": [5], "text": "Multiplies the beat length by a whole number from 1 to 8 before the Delay CV voltage is worked out"},
+    {"ids": [6], "text": "Divides the beat length by a whole number from 1 to 8 before the Delay CV voltage is worked out"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A clock whose beat length is measured from one rising edge to the next; the detected tempo in beats per minute shows on the display"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A voltage tracking the detected tempo at one volt per doubling of the rate, for the FREQ input of a Fundamental LFO"},
+    {"ids": [1], "text": "A voltage three volts below the LFO one, for the CLOCK input of a Fundamental SEQ-3"},
+    {"ids": [2], "text": "A voltage setting a Fundamental Delay to the beat length after the multiplication and division, on a logarithmic scale from 0-10V"},
+    {"ids": [3], "text": "A 10ms pulse at 10V on every detected beat"},
+    {"ids": [4], "text": "A 10ms pulse at 10V, repeating within each beat at the count and spacing set for clock 2"},
+    {"ids": [5], "text": "A 10ms pulse at 10V, repeating within each beat at the count and spacing set for clock 3"}
+  ],
+  "notes": [
+    "nothing is measured until a clock is patched to Clk In: with that jack empty the clock outputs give no pulses and the rate outputs hold the voltage last worked out"
+  ],
+  "menu": [
+    "Swing Range — Fine narrows both Swing knobs to a quarter of their travel around even spacing, and Legacy gives them their full 0 to 2 range"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "2": "0 to 10V",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

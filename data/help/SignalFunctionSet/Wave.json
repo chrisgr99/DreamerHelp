@@ -1,0 +1,59 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Wave",
+  "description": "A wavetable voice whose table is built by hand: six controls sculpt one shape, and each snap stores that shape into a table of eight, which the oscillator then scans through",
+  "params": [
+    {"ids": [0], "text": "Sets how many peaks the sculpted shape has, 1 to 8"},
+    {"ids": [1], "text": "Tilts the sculpted shape toward one side, -100 to 100 per cent"},
+    {"ids": [2], "text": "Bends the sculpted shape's segments between logarithmic and exponential, -100 to 100 per cent"},
+    {"ids": [3], "text": "Leans the sculpted shape's peaks forward or back, -100 to 100 per cent"},
+    {"ids": [4], "text": "Sets how wide the peaks of the sculpted shape are"},
+    {"ids": [5], "text": "Folds the sculpted shape back on itself, adding harmonics"},
+    {"ids": [6], "text": "Adds a slow random movement of its own to every shape control, so the sculpted shape evolves with no CV patched"},
+    {"ids": [7], "text": "Sets how fast the playback scans through the stored shapes: positive from oldest to newest, negative the other way, and at the centre detent the position is locked"},
+    {"ids": [8], "text": "Sets how long a change of scan speed takes to arrive, from instant to five seconds"},
+    {"ids": [9], "text": "Stores the sculpted shape into the table on each press, writing over the oldest of the eight when the table is full"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch as a volt per octave"},
+    {"ids": [1], "text": "Adds to the frequency directly, about 100Hz per volt, rather than by octaves"},
+    {"ids": [2], "text": "A rise restarts the wave at the beginning of its cycle"},
+    {"ids": [3], "text": "Changes the scan speed, ±5V for the whole travel, added to the velocity knob"},
+    {"ids": [4], "text": "A rise stores the sculpted shape into the table"},
+    {"ids": [5], "text": "A rise jumps the scan position to the oldest stored shape"},
+    {"ids": [6], "text": "Changes the amount of internal random movement, added to the wander knob"},
+    {"ids": [7], "text": "Changes how many peaks the sculpted shape has, added to the peaks knob"},
+    {"ids": [8], "text": "Changes the tilt of the sculpted shape, added to the bias knob"},
+    {"ids": [9], "text": "Changes the segment curve of the sculpted shape, added to the transition knob"},
+    {"ids": [10], "text": "Changes the lean of the sculpted shape's peaks, added to the skew knob"},
+    {"ids": [11], "text": "Changes how wide the peaks are, added to the width knob"},
+    {"ids": [12], "text": "Changes the folding, added to the fold knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator, reading the stored shapes rather than the one being sculpted"}
+  ],
+  "notes": [
+    "the module is silent until a shape has been snapped: the six sculpting controls shape a wave that is only drawn on the display, and the output reads the stored table",
+    "the table holds eight shapes and is written oldest first, so the ninth snap writes over the first",
+    "every stored shape is pre-rendered as a band-limited set of tables, so playback does not alias however high the pitch is"
+  ],
+  "menu": [
+    "Snap now — stores the sculpted shape into the table, the same action as the panel button",
+    "Clear all snapshots — empties the table, which leaves the module silent again"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

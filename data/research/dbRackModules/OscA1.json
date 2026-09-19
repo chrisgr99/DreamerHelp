@@ -1,0 +1,25 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscA1",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "OscA1.cpp:362 takes the channel count from this input and OscA1.cpp:366 adds it to the Freq knob"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 3V", "why": "OscA1.cpp:383 reads it four channels at a time, scales it by the Decay CV knob, adds the Decay knob and clamps the total to 0.1..3"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±1V", "why": "OscA1.cpp:385 reads it four channels at a time, scales it by a tenth and the Odd/Even CV knob, adds the knob and clamps the total to -1..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±1.25V", "why": "OscA1.cpp:387 reads it four channels at a time, scales it by a tenth and the Stretch CV knob, adds the knob and clamps the total"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "the First Partial knob", "why": "OscA1.cpp:336 reads it with getVoltage() and no channel loop, multiplies by 12.8 and clamps it to 1..128 into the knob"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "OscA1.cpp:396 reads it four channels at a time, scales it by the Amp CV knob and adds it to the Amp knob"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "the Num Partials knob", "why": "OscA1.cpp:332 reads it with getVoltage() and no channel loop, multiplies by 25.6 and clamps it to 1..256 into the knob"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "OscA1.cpp:339 reads it with getVoltage() and no channel loop, scales it by a tenth and the Comb Amp CV knob, adds the knob and clamps the total"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 4V", "why": "OscA1.cpp:345 reads it with getVoltage() and no channel loop, scales it by half and the Comb Peek CV knob, adds the knob and clamps the total to 0.1..4"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "1 to 100V", "why": "OscA1.cpp:341 reads it with getVoltage() and no channel loop, scales it by ten and the Comb Freq CV knob, adds the knob and clamps the total to 1..100"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "OscA1.cpp:348 reads it with getVoltage() and no channel loop, scales it by a tenth and the Comb Warp CV knob, adds the knob and clamps the total to 0.2..1"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "OscA1.cpp:343 reads it with getVoltage() and no channel loop, scales it by the Comb Phs CV knob, adds the knob and clamps the total to one turn"},
+      "13": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "OscA1.cpp:372 and OscA1.cpp:374 read it four channels at a time and scale it by the FM Amt knob, into the frequency with Linear FM on and into the pitch with it off"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "OscA1.cpp:400 sets this output's channel count from the V/Oct jack; OscA1.cpp:396 writes five times the wave at the set level"}
+    }
+  },
+  "comment": "A second input is configured with no jack widget on the panel, so no cable and no click can reach it, and it gets no line. All five comb jacks and the two partial-count jacks are read monophonic although the oscillator is polyphonic, OscA1.cpp:330-350, so one voltage shapes the comb for every voice. The partials above the Cutoff setting are left out rather than filtered, which is what keeps the oscillator free of aliasing."
+}

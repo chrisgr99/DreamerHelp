@@ -1,0 +1,40 @@
+{
+  "plugin": "Sulamith",
+  "module": "BPMClk",
+  "description": "A clock with a master output and three more, each divided down from or multiplied up from the master tempo",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the clock; it comes up running"},
+    {"ids": [1], "text": "Sets the tempo, 15 to 300 BPM, starting at 120; the display shows whatever tempo is in use"},
+    {"ids": [2, 3, 4], "text": "Sets this output's speed against the master, from a forty-eighth of it to forty-eight times it in 23 steps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge sets every phase back to the start"},
+    {"ids": [1], "text": "Any change from 0V starts the clock if it is stopped and stops it if it is running"},
+    {"ids": [2], "text": "Sets the tempo from outside: as a voltage doubling the tempo per volt with 0V for 120 BPM, or as a stream of clock pulses at the rate chosen on the menu"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a 1ms pulse at 10V at the master tempo, and 0V while the clock is stopped"},
+    {"ids": [1, 2, 3], "text": "Carries a 1ms pulse at 10V at its own divided or multiplied tempo, and 0V while the clock is stopped"}
+  ],
+  "notes": [
+    "the three division settings are /48, /32, /24, /16, /12, /8, /6, /5, /4, /3, /2, x1, x2, x3, x4, x5, x6, x8, x12, x16, x24, x32 and x48, and each is shown beside its own output",
+    "in any of the pulse-counting modes an incoming pulse starts the clock by itself, and the clock stops again if no pulse arrives for a second",
+    "the maker's own note is that the external sync drifts at high speeds and needs a reset after a tempo change"
+  ],
+  "menu": [
+    "External Clock Mode — chooses how the external clock jack is read: as an Impromptu-style tempo voltage, or as 2, 4, 8, 12 or 24 pulses to the quarter note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

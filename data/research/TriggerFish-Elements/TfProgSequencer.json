@@ -1,0 +1,22 @@
+{
+  "plugin": "TriggerFish-Elements",
+  "module": "TfProgSequencer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "TfProgSequencer.cpp:913 reads getVoltage with no channel argument and :915 passes it to clockTrigger.process(v, 0.1f, 2.f), a dsp::SchmittTrigger declared at :184"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "0V", "why": "TfProgSequencer.cpp:891 processes getVoltage through a Schmitt trigger with thresholds of 0.1V and 2V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "normal": "high", "why": "TfProgSequencer.cpp:911 counts an unpatched jack as running and otherwise reads 1V or more as running; :926 stops the score advancing while it is below that"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "TfProgSequencer.cpp:1083 sets the channel count from the sounding voice count"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "tftransport.hpp:136 returns 10V while the voice's gate is high"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "tftransport.hpp:137 returns 10V while the trigger pulse runs"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "TfProgSequencer.cpp:803 multiplies the event velocity, clamped to 0 to 1, by 10"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "TfProgSequencer.cpp:804 multiplies the event accent by 10"},
+      "5": {"family": "cv", "poly": false, "why": "TfProgSequencer.cpp:1103 sets each CV output to one channel"},
+      "6": {"family": "cv", "poly": false, "why": "TfProgSequencer.cpp:1103 sets each CV output to one channel"},
+      "7": {"family": "cv", "poly": false, "why": "TfProgSequencer.cpp:1103 sets each CV output to one channel"}
+    }
+  },
+  "comment": "The editor and the status line are custom display widgets, not ParamWidgets, so nothing in them can be clicked for help; the keyboard shortcuts are recorded in Note lines instead. Pitch, Gate, Trigger, Velocity and Accent share up to sixteen polyphonic voices; CV1 to CV3 are monophonic."
+}

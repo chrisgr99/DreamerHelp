@@ -1,0 +1,33 @@
+{
+  "plugin": "bmbo",
+  "module": "BTFQuantizer",
+  "description": "A quantizer that snaps 1V/octave pitch to a tuning read from a Bmbo Tuning Format file, repeating that tuning at every octave and treating each polyphonic channel the same way",
+  "params": [
+    {"ids": [0], "text": "Shifts the tuning's root by as much as twelve semitones either way, carrying the whole scale with it; the knob is continuous, so the output follows it between the scale's own steps"},
+    {"ids": [1], "text": "Adds whole octaves to the output, four down to four up, without changing which step of the tuning is chosen"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be quantized; the number of channels patched here sets how many the output carries"},
+    {"ids": [1], "text": "Moves the tuning's root at one volt per octave, read separately for each polyphonic channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch at one volt per octave, with the root offset and the octave shift added back on"}
+  ],
+  "notes": [
+    "pitch passes straight through until a tuning is loaded; press LOAD BTF and pick a .btf file, or load one of the seventeen tunings the plugin ships as module presets",
+    "the display gives the loaded tuning's title, how many intervals it holds, its root frequency in hertz and whether it is Closed or Open, then the result of the last load",
+    "the lamp by the load button glows green while a tuning is loaded and red when a load has failed; a failed load leaves whatever tuning was already active in place",
+    "a tuning marked Open is read and shown as Open but quantized as though it repeated at the octave, because only the Closed behaviour is written",
+    "the loaded tuning's text is stored in the patch, so it returns when the patch is reopened even if the .btf file has been moved or deleted",
+    "every loaded tuning gets a unison whether or not the file lists 1/1, and intervals are folded into a single octave, so an interval written as 2/1 collapses onto the unison"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

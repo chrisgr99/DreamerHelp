@@ -1,0 +1,53 @@
+{
+  "plugin": "Animatek",
+  "module": "UnitDistanceSeq",
+  "description": "Generative sequencer that scatters a cloud of points from a seed, joins the ones a set distance apart, and walks that network on each clock to make pitch, gates, accents and two modulation voltages",
+  "params": [
+    {"ids": [0], "text": "Sets the number the cloud of points is generated from, 0 to 999; the same number rebuilds the same cloud"},
+    {"ids": [1], "text": "Sets how many points the cloud holds, 8 to 64"},
+    {"ids": [2], "text": "Sets the distance at which two points count as joined, 0.25 to 2"},
+    {"ids": [3], "text": "Widens or narrows the margin around that distance, 0.01 to 0.2, as the fine adjustment to the radius"},
+    {"ids": [4], "text": "Thins or fills the connections in the network, 0% to 100%"},
+    {"ids": [5], "text": "Picks how the walker moves: to the next neighbour, to a neighbour chosen by a repeatable pseudo-random rule, or to whichever neighbour has the most connections of its own"},
+    {"ids": [6], "text": "Sets how many octaves the pitch output spreads the points across, 1 to 4"},
+    {"ids": [7], "text": "Sets the gate length, 5% to 95% of the clock period"},
+    {"ids": [8], "text": "Sets how often a step produces a gate at all, 15% to 100%, with the walker moving on either way"},
+    {"ids": [9], "text": "Freezes the phrase into a repeating loop: to the right a 16-step loop and to the left a 32-step loop, further from the centre freezing more of the steps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the walker moves on; each rising edge takes it to another point, and with this jack empty nothing advances"},
+    {"ids": [1], "text": "A rising edge returns the walk to its starting state, so a phrase can repeat from the same place"},
+    {"ids": [2], "text": "Adds to the seed knob, a hundred seeds per volt, which rebuilds the whole cloud; slow or stepped voltages suit it, audio rate does not"},
+    {"ids": [3], "text": "Adds to the density knob, a tenth of its travel per volt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the current point, taken from its horizontal position and quantised to C minor"},
+    {"ids": [1], "text": "A 10V gate when the current point produces one, its length set by the gate length knob"},
+    {"ids": [2], "text": "An accent voltage from 0 to 10V, higher for a point with more connections of its own"},
+    {"ids": [3], "text": "A 0 to 10V reading of the current point's horizontal position, the same figure the pitch is made from"},
+    {"ids": [4], "text": "A 0 to 10V reading of the current point's vertical position, as a second modulation source"}
+  ],
+  "notes": [
+    "the display draws the network as it stands: points, the lines joining them, and the current point in fuchsia, drawn larger for a longer gate and brighter for a higher gate density.",
+    "the module is deterministic: the same seed and the same knob positions rebuild the same network and the same phrase."
+  ],
+  "menu": [
+    "Poly seed mode: Shared seed, Per-voice seed — whether the extra polyphonic voices offset one cloud or each build a cloud of their own",
+    "Poly voices — how many channels every output carries, 1, 2, 3, 4, 6 or 8"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · polyphonic",
+      "4": "0 to 10V"
+    }
+  }
+}

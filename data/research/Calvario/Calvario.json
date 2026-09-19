@@ -1,0 +1,17 @@
+{
+  "plugin": "Calvario",
+  "module": "Calvario",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Calvario.cpp:62 reads one channel with getVoltage; :69 clamps it to -5V and 5V and scales by 0.2 for the XOR path, while :66 keeps the unclamped voltage as the dry side of the crossfade at :90"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Calvario.cpp:63 reads one channel with getVoltage; :70 clamps it to -5V and 5V and scales by 0.2; it is used only at :74 and :78 on the way into the XOR"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Calvario.cpp:57 clamps the jack to -5V and 5V, scales it by 0.2 to give -1 to 1, and adds that to the 0 to 1 knob with no clamp on the sum, so the product at :73 can be negative"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/Calvario.cpp:58 clamps the jack to -5V and 5V, scales it by 0.2 to give -1 to 1, and adds that to the 0 to 1 knob with no clamp on the sum, so the product at :74 can be negative"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/Calvario.cpp:59 calls math::clamp on the jack with no bounds given, which takes Rack's defaults of 0 and 1 (include/math.hpp:106), then scales by 0.2; :89 adds that to the knob and clamps the sum to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "src/Calvario.cpp:93 clamps the result to -5V and 5V before :94 writes one channel with setVoltage"}
+    }
+  },
+  "comment": "Read at commit bf4acd2 of HydrangeaSystems/Calvario, the head of the repository. Three commits carry version 2.3.1 — a59a841, db7930d and bf4acd2 — and the only difference between them in src/ is renaming: _5_OVER_MAX_INT32 became 5.f * MIN_Q31 where MIN_Q31 is 1/INT_MAX, and abs(output / 5.f) became abs(output * .2f). Both pairs are arithmetically the same, so the behaviour is identical across all three and the version did not need settling further. The installed res/calvario.svg hashes the same as the blob at every one of them.\n\nThe mix CV jack is almost certainly a mistake in the code. Line 59 reads math::clamp(inputs[SIGNAL_MIX_MOD_OUT].getVoltage()) with no bounds, so it takes Rack's defaults of 0 and 1 rather than the -5 and 5 that lines 57 and 58 pass explicitly for the two gain CV jacks in the same block. The jack therefore responds only between 0V and 1V, and at its ceiling shifts the crossfade by 0.2 out of a range of 1. Nothing the maker publishes claims otherwise — there is no manual, manualUrl in plugin.json is empty, and the panel has no lettering — so this is not written as a contradiction, only as what the jack does.\n\nThere is no hardware manual and no README: commit db7930d deleted the README and the logo, and the repository at 2.3.1 holds nothing but source and a licence. Every fact here is from the source.\n\nThe BLINK_LIGHT lamp does have a LightWidget and is set every sample, but a light is not one of the three lists Help.cpp walks, so it takes a Note line rather than a tag."
+}

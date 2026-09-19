@@ -1,0 +1,30 @@
+{
+  "plugin": "Valley",
+  "module": "Plateau",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "normal": "the RIGHT jack", "why": "Plateau.cpp:269 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, and Plateau.cpp:274 takes the RIGHT jack instead when only that one is patched"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "normal": "the LEFT jack", "why": "Plateau.cpp:270 reads this input with getVoltageSum(), which sums every channel of a polyphonic cable, and Plateau.cpp:278 takes the LEFT jack instead when only that one is patched"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 1V", "negative": "subtracts", "why": "Plateau.cpp:283 multiplies this input by its attenuverter and adds the 0..1 knob, and Plateau.cpp:285 clamps the total to 0..1, so one volt at full attenuverter covers the whole control"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 1V", "negative": "subtracts", "why": "Plateau.cpp:287 multiplies this input by its attenuverter and adds the 0..1 knob, and Plateau.cpp:289 clamps the total to 0..1, so one volt at full attenuverter covers the whole control"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "why": "Plateau.cpp:198 raises 2 to this input times a sensitivity constant, halves the result and adds it to the knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:228 multiplies this input by its attenuverter and adds the knob, and Plateau.cpp:230 clamps the total to 0..10V"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:234 multiplies this input by its attenuverter and adds the knob, and Plateau.cpp:236 clamps the total to 0..10V"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "why": "Plateau.cpp:201 multiplies this input by a tenth of its attenuverter and adds the knob before the tuned or untuned size mapping at Plateau.cpp:206 or Plateau.cpp:211"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:215 multiplies this input by its attenuverter and adds the 0..10 knob, and Plateau.cpp:218 clamps the total to 0..10V"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "Plateau.cpp:221 rescales this input times its attenuverter from 0V..10V onto a decay of 0.1 to 0.999 before the knob is added"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:245 multiplies this input by its attenuverter and adds the knob, and Plateau.cpp:247 clamps the total to 0..10V"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:239 multiplies this input by its attenuverter and adds the knob, and Plateau.cpp:241 clamps the total to 0..10V"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:250 multiplies this input by a tenth of its attenuverter and Plateau.cpp:253 clamps the knob-plus-input total to 0..1, the span a tenth of 0 to 10V covers"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "Plateau.cpp:257 multiplies this input by a tenth of its attenuverter and Plateau.cpp:260 rescales the knob-plus-input total from the 0..1 span a tenth of 0 to 10V covers"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "Plateau.cpp:263 rescales this input times its attenuverter from 0V..10V onto a modulation depth of 0 to 16 before the knob is added"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "Plateau.cpp:140 tests this input against 0.5V with getVoltage() alone"},
+      "16": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "why": "Plateau.cpp:162 tests this input against 0.5V with getVoltage() alone"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "Param 16 (CLEAR_TOGGLE_PARAM) is declared with no widget. The four damping knobs are offset by 5 inside the code, so their tooltip readings in Hz do not match the filter frequencies actually set; the low cut knobs run backwards against their readings. The decay CV is rescaled such that even an unpatched decay input adds 0.1 to the decay knob. PRE DELAY takes no fixed range: Plateau.cpp:198 raises 2 to the voltage times a sensitivity constant that the right-click menu switches, so the same voltage moves the pre-delay by different amounts on the two settings."
+}

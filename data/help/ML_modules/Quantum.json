@@ -1,0 +1,41 @@
+{
+  "plugin": "ML_modules",
+  "module": "Quantum",
+  "description": "A scale quantizer with twelve semitone buttons setting which notes are allowed, plus a gate and a trigger reporting what it passes",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Adds that semitone to the allowed scale or takes it out, and lights while the semitone is allowed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be quantized, at a volt per octave, with every channel of the cable quantized"},
+    {"ids": [1], "text": "Moves the pattern of allowed notes to a new root, one semitone per twelfth of a volt, without shifting the output pitch"},
+    {"ids": [2], "text": "Names the semitone to be switched in or out of the scale, read at a volt per octave with the octave ignored"},
+    {"ids": [3], "text": "A rising edge switches the semitone named at the Note input in or out of the scale"},
+    {"ids": [4], "text": "A rising edge clears every note from the scale and sets the quantizer mode back to Closest, up"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch, at a volt per octave"},
+    {"ids": [1], "text": "A 1ms trigger each time the quantized output moves to a different note"},
+    {"ids": [2], "text": "Carries 10V while the input pitch falls on an allowed note, and 0V while the quantizer is reaching for one; it drops to 0V for 1ms each time the quantized note changes, which retriggers an envelope"}
+  ],
+  "notes": [
+    "a new Quantum allows no notes at all, so until one of the twelve key buttons is lit the Out jack holds the last note it gave, 0V on a fresh module, and Gate stays at 0V"
+  ],
+  "menu": [
+    "Quantizer Mode — what becomes of a pitch outside the scale: Last holds the note already playing, Up and Down search in one direction, and Closest, up and Closest, Down take the nearer one",
+    "Transpose — applies the Transpose voltage to the semitone arriving at the Note input before it is switched, and Don’t Transpose switches the semitone as played",
+    "Poly Gate Mode — keeps a semitone in the scale while any channel of the Toggle input holds it high, and Legacy Mode flips that semitone on every rising edge"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · polyphonic",
+      "1": "1V per octave · stepped · one channel only",
+      "2": "1V per octave · stepped · polyphonic",
+      "3": "high above 1V · stepped · polyphonic",
+      "4": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "stepped"
+    }
+  }
+}

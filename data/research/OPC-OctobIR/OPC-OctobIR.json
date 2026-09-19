@@ -1,0 +1,19 @@
+{
+  "plugin": "OPC-OctobIR",
+  "module": "OPC-OctobIR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "opc-vcv-ir.hpp:317 reads this with getVoltage() alone and scales by 0.2 to the core's ±1.0 convention, and opc-vcv-ir.hpp:288 tests it only for connection"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "opc-vcv-ir.hpp:319 reads this with getVoltage() alone and scales by 0.2 to the core's ±1.0 convention, and opc-vcv-ir.hpp:289 tests it only for connection"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "opc-vcv-ir.hpp:312 reads this with getVoltage() alone and scales by 0.2; opc-vcv-ir.hpp:310 reads it only when dynamic mode and the sidechain switch are both on"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the THRESHOLD knob", "why": "opc-vcv-ir.hpp:277 reads it with getVoltage() alone and opc-vcv-ir.hpp:278 maps it as clamp(cv * 6 - 60, -60, 0), replacing the knob value set at opc-vcv-ir.hpp:274"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "the BLEND knob", "why": "opc-vcv-ir.hpp:284 reads it with getVoltage() alone and opc-vcv-ir.hpp:285 maps it as clamp(cv * 0.2 - 1, -1, 1), replacing the knob value set at opc-vcv-ir.hpp:281"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "normal": "the DYNAMIC button", "why": "opc-vcv-ir.hpp:221 tests this input against 1.0V with getVoltage() alone, and opc-vcv-ir.hpp:222 uses the DYNAMIC switch when nothing is patched"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "opc-vcv-ir.hpp:323 writes one value with setVoltage(), scaling the core's ±1.0 sample by 5.0; opc-vcv-ir.hpp:348 writes 0V when neither audio input is patched"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "opc-vcv-ir.hpp:324 writes one value with setVoltage(), scaling the core's ±1.0 sample by 5.0; opc-vcv-ir.hpp:349 writes 0V when neither audio input is patched"}
+    }
+  },
+  "comment": "Source read at vcv-octobir commit 996088e (plugin.json version 2.2.0), whose opc submodule is pinned at October-Production-Co a0b8b68; the module is plugins/octobir/vcv-rack/src/opc-vcv-ir.hpp and the DSP is libs/octobir-core. The panel SVG is nearly empty because every control is drawn at runtime with NanoVG, so the panel names above were read from the VCV library screenshot. The load, CLR, previous, next and SWAP buttons are plain widgets rather than parameters, so no click on them can reach a help line; they are covered by Note lines instead. The file dialog filter at opc-vcv-ir.cpp:474 offers wav, aiff, aif and flac, but IRLoader::loadFromFile (IRLoader.cpp:131) opens the file with dr_wav only, and there is no AIFF or FLAC decoder anywhere in octobir-core, so only WAV files load. Sample rate conversion is done on load, and an IR longer than MaxIrLengthSeconds, 10, is refused (Types.hpp:12, IRLoader.cpp:143). A slot that is enabled but empty acts as a dry path in the crossfade (IRProcessor.cpp:388, 402), so with one IR loaded and both ENABLE buttons on the blend knob becomes a dry-to-wet control."
+}

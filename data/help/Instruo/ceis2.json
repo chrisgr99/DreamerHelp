@@ -1,0 +1,42 @@
+{
+  "plugin": "Instruo",
+  "module": "ceis2",
+  "description": "ADSR envelope generator with a retrigger input, a hold mode for slew limiting and a gate output for each stage",
+  "params": [
+    {"ids": [0], "text": "Sets the attack time, about 3ms at the bottom to about 10 seconds at the top"},
+    {"ids": [1], "text": "Sets the decay time, about 3ms at the bottom to about 12 seconds at the top"},
+    {"ids": [2], "text": "Sets the level the envelope rests at after the decay, 0-10V, and adds a positive offset to the slewed voltage in HOLD mode"},
+    {"ids": [3], "text": "Sets the release time, about 3ms at the bottom to about 12 seconds at the top"},
+    {"ids": [4], "text": "Fires an envelope by hand, and lights in step with the contour being generated"},
+    {"ids": [5], "text": "HOLD stalls the envelope at its sustain level and turns the module into a slew limiter; GATE runs every stage while the gate is high; TRIG completes the attack and then goes straight to the release"},
+    {"ids": [6], "text": "Morphs the contour from linear anticlockwise to a logarithmic attack with exponential decay and release clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 3], "text": "Shifts that stage's time, summed with its slider; negative voltage brings the shortest time down to about 0.8ms"},
+    {"ids": [2], "text": "Shifts the sustain level, -10V to 10V summed with the slider, and is the voltage that gets slewed in HOLD mode"},
+    {"ids": [4], "text": "A rising edge restarts the attack stage from the level the envelope has reached"},
+    {"ids": [5], "text": "A gate or trigger starts the envelope"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0-10V, or the slewed input at -10V to 10V in HOLD mode"},
+    {"ids": [1], "text": "A 10V trigger at the start of every envelope stage"},
+    {"ids": [2, 3, 4, 5], "text": "A 10V gate held for the length of that stage, and in HOLD mode for the length of the matching slew"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

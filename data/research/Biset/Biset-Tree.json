@@ -1,0 +1,22 @@
+{
+  "plugin": "Biset",
+  "module": "Biset-Tree",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "Tree.cpp:107 reads this jack with getVoltage, channel 0 only, into a dsp::TSchmittTrigger left at Rack's defaults of 1V high and 0V low. An edge discards the whole tree: the branch count goes back to one and that branch is re-initialised, so growth starts again from nothing."},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "Tree.cpp:112 reads this jack with getVoltage, channel 0 only, into a dsp::TSchmittTrigger left at Rack's defaults of 1V high and 0V low. An edge sets the sequence read position back to zero and leaves the tree itself standing."},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "Tree.cpp:115 reads this jack with getVoltage, channel 0 only, into a dsp::TSchmittTrigger left at Rack's defaults of 1V high and 0V low. An edge here is the only thing that advances the read position, and the five outputs are written at line 173 inside that same branch, so with nothing patched they never change; the same edge is also what gives the branch just read its chance to mutate."},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "Tree.cpp:118-120 reads this input with getVoltage, divides it by 10, multiplies it by the attenuator and by 64 and adds it to the knob; lines 121-124 clamp the total to 1..64"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "Tree.cpp:125-128 reads this input with getVoltage, divides it by 10, multiplies it by the attenuator and adds it to the knob; line 130 floors the result at 0"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "Tree.cpp:131-134 reads this input with getVoltage, divides it by 10, multiplies it by the attenuator and adds it to the knob; lines 135-138 clamp the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "Tree.cpp:168-173 adds the branch value scaled to -5..5V to the wind force and clamps the result to ±5V"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "Tree.cpp:168-173 adds the branch value scaled to -5..5V to the wind force and clamps the result to ±5V"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "why": "Tree.cpp:168-173 adds the branch value scaled to -5..5V to the wind force and clamps the result to ±5V"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "why": "Tree.cpp:168-173 adds the branch value scaled to -5..5V to the wind force and clamps the result to ±5V"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "why": "Tree.cpp:168-173 adds the branch value scaled to -5..5V to the wind force and clamps the result to ±5V"}
+    }
+  },
+  "comment": "The four growth knobs are not in panel order: reading the panel left to right they are angle variation (param 0), branching variation (param 1), branching (param 3) and sun force (param 2), so the last two are swapped against their index order. The mutation chance parameter has no widget on the panel and lives only on the right-click menu. The manual says the growth controls have a negligible effect on the sequences, and the code bears that out: they change the shape of the tree, and the sequence values come from random numbers assigned to each branch rather than from its geometry. The display drawing the tree is a single widget; nothing on it can be clicked for help."
+}

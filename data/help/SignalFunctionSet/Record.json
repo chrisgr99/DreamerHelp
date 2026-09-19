@@ -1,0 +1,64 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Record",
+  "description": "An auto-sampler: it plays a voice in the rack across a range of notes and velocities, records what comes back, and writes a folder of WAV files and an SFZ instrument to disk",
+  "params": [
+    {"ids": [0], "text": "Sets the lowest note of the sweep"},
+    {"ids": [1], "text": "Sets how many octaves the sweep covers, 1 to 8"},
+    {"ids": [2], "text": "Sets how many semitones apart the samples are: every semitone, every 2, every 3, every 4, every 6, or every octave"},
+    {"ids": [3], "text": "Sets how many velocity layers are captured per note, 1 to 4; at one there is no velocity switching in the result"},
+    {"ids": [4], "text": "Sets how long the gate is held for each capture, 0.1 to 10 seconds"},
+    {"ids": [5], "text": "Sets how long recording carries on after the gate releases, 0 to 10 seconds, which is what catches the release and any reverb tail"},
+    {"ids": [6], "text": "Starts the real capture on each press, after asking where to put the files; the readout shows the progress and then how many files were written"},
+    {"ids": [7], "text": "Runs the same sweep through the voice without recording or writing anything, which is how the sustain and tail settings are checked before a long capture"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left return from the voice being sampled"},
+    {"ids": [1], "text": "The right return from the voice being sampled"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch the voice is being played at, a volt per octave"},
+    {"ids": [1], "text": "The gate driving the voice, held for the sustain time, or a short pulse when the menu says so"},
+    {"ids": [2], "text": "The velocity the voice is being played at"},
+    {"ids": [3], "text": "A trigger when the sweep has finished and the files are written"}
+  ],
+  "notes": [
+    "the module drives a voice rather than making sound: patch V/OCT and GATE into the voice and its output back into L and R before recording anything",
+    "the grid on the display is playable while the module is idle, so a patch can be auditioned note by note without starting a sweep; the display cannot be reached by clicking for help"
+  ],
+  "menu": [
+    "Set destination folder… — chooses where the WAV files and the SFZ file are written",
+    "Instrument name… — names the instrument, which names the folder and the SFZ file",
+    "Gate output — a label over the two choices below it",
+    "Gate (held) — holds the gate output high for the sustain time of each capture",
+    "Trigger (pulse) — sends a short pulse instead of a held gate, for a voice driven by triggers",
+    "Wait for silence between notes — holds off the next capture until the return has gone quiet, rather than moving straight on",
+    "Min gap between notes — sets the shortest pause between captures in milliseconds",
+    "Normalize — scales each captured sample up to full level before writing it",
+    "Auto-trim silence — cuts the silence off the front and back of each captured sample",
+    "Loop this instrument — marks the written regions as looping, for sustained instruments",
+    "Round-robin takes — captures each note and velocity more than once so a sampler can alternate between the takes",
+    "Channels: Mono, Stereo — writes one-channel or two-channel files",
+    "Bit depth — sets the bit depth of the written files, including a 32-bit floating point option",
+    "Calibrate latency — measures the round trip through the patched voice and offsets the captures by it, so the samples are not written with a delay at the front",
+    "Clear latency — throws away the measured round trip and records with no offset; it appears once a latency has been measured",
+    "Grid view — a label over the grid items below it",
+    "Layout: Chromatic (4ths), In-Key (scale), Chromatic grid (C0) — sets how the notes are laid out across the pad grid",
+    "Root — sets the root the In-Key layout is drawn from",
+    "Scale (In-Key) — sets the scale the In-Key layout is drawn from",
+    "Octave up — moves the pad grid an octave higher",
+    "Octave down — moves the pad grid an octave lower"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

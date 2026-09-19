@@ -1,0 +1,17 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-visualizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "composites/Visualizer.h:129-147 loops over getChannels() and quantizes each channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 5V", "step": "stepped", "normal": "every pitch channel read", "why": "composites/Visualizer.h:134-138 unconnected means all gates true, otherwise getVoltage(channel) > 5"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "PESConverter.h:20-45 needs 12 channels; under 4V not in scale, under 9V in scale, above that root"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "PESConverter.h:59-62 twelve channels, 8V in scale and 10V for the root"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "composites/Visualizer.h:196 writes ROOT_OUTPUT.value, which is channel 0, and sets no channel count"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "composites/Visualizer.h:188-197 10V when a chord is recognised, 0V when it is not"}
+    }
+  },
+  "comment": "Params 0 to 3 report the recognised chord back to the panel display and param 6 carries the Sharps&Flats menu setting; none of them has a widget. The gate test at composites/Visualizer.h:137 compares the channel index with > rather than >=, so when the gate cable has fewer channels than the pitch cable the first channel past the end of the gate cable is read as 0V rather than being excluded outright; either way it is treated as a low gate. The module runs its chord recognition once every 32 samples unless the Root or Valid output is patched, in which case it runs every sample (composites/Visualizer.h:202-207)."
+}

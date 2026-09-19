@@ -1,0 +1,43 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Beat",
+  "description": "A one-voice drum sequencer: eight patterns of sixteen steps, each step with its own velocity, accent and chance of firing, edited on the display and clocked from outside",
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the pattern by one step, wrapping at the pattern's own length"},
+    {"ids": [1], "text": "Each rise counts one bar and, once the current pattern has had its repeats, moves to the next active pattern"},
+    {"ids": [2], "text": "A rise returns the module to its first active pattern and its first step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger on each step that fires, of the length set on the menu"},
+    {"ids": [1], "text": "The velocity of the last step that fired, 0-10V, held until the next one fires"},
+    {"ids": [2], "text": "A 10V trigger on each firing step that is marked accented, of the length set on the menu"}
+  ],
+  "notes": [
+    "the module has no knobs: patterns, step velocities, accents, probabilities, pattern length and repeat count are all edited on the display, which no click can reach for help",
+    "nothing plays until a clock is patched; the module has no tempo of its own and is meant to be driven from a Meter or any other clock",
+    "a bar pulse and a clock pulse arriving together count as one event: the clock is suppressed while the bar pulse is high, so a bar boundary does not fire two steps back to back"
+  ],
+  "menu": [
+    "Advance only on bar trigger — moves to the next pattern only on a real bar pulse, so with nothing patched at BAR the current pattern repeats for ever",
+    "Gate/trigger width — sets how long the gate and accent pulses last: a fixed 1, 2, 5 or 10ms",
+    "Copy current pattern — takes a copy of the pattern being edited",
+    "Copy all patterns — takes a copy of all eight patterns at once",
+    "Paste to current pattern — writes the copied pattern over the one being edited, leaving its active flag alone",
+    "Paste all patterns — writes the copied set over all eight patterns",
+    "Randomize current pattern steps — switches each of the sixteen steps on or off at even odds, leaving velocity, accent and probability alone",
+    "Clear current pattern — switches off every step of the pattern being edited and returns its velocities, accents and probabilities to their defaults",
+    "Clear all patterns — returns all eight patterns to empty and marks them all active"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

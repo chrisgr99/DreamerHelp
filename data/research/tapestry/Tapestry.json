@@ -1,0 +1,30 @@
+{
+  "plugin": "tapestry",
+  "module": "Tapestry",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Tapestry.cpp:178 reads it with getVoltage and divides by 5, so ±5V is full scale"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "the Audio L jack", "why": "Tapestry.cpp:181-189: read with getVoltage and divided by 5; with nothing patched the left input is copied to the right"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 8V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 8V", "why": "dsp/tapestry-dsp.h:394-398 divides it by kSosCvMax of 8, adds the Mix knob and clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±8V", "negative": "swings", "normal": "0V", "sumRange": "0 to 8V", "why": "dsp/tapestry-dsp.h:400-402 divides it by kGeneSizeCvMax of 8, multiplies by the attenuverter, adds the knob and clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±4V", "negative": "swings", "normal": "0V", "sumRange": "±4V", "why": "dsp/tapestry-core.h:364-365 divides it by kVariSpeedCvMax of 4, multiplies by the attenuverter, adds the knob and clamps the total to -1..+1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "dsp/tapestry-dsp.h:405-409 divides it by kMorphCvMax of 5, adds the Density knob and clamps the total to 0..1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±8V", "negative": "swings", "normal": "0V", "sumRange": "0 to 8V", "why": "dsp/tapestry-dsp.h:411-413 divides it by kSlideCvMax of 8, multiplies by the attenuverter, adds the knob and clamps the total to 0..1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 5V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "dsp/tapestry-dsp.h:416-420 divides it by kOrganizeCvMax of 5, adds the Select knob and clamps the total to 0..1"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "free-running, not clock-synced", "why": "Tapestry.cpp:476 clkTrigger.process crosses kGateTriggerThreshold, 2.5V at dsp/tapestry-core.h:58, and :479 onClockRising resyncs the grain engine; :484 with nothing patched onClockDisconnected lets it free-run"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "high", "why": "Tapestry.cpp:487-496 compares it with kGateTriggerThreshold of 2.5V and passes true when the jack is unpatched"},
+      "10": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "0V", "why": "Tapestry.cpp:501 recInputTrigger.process crosses 2.5V and :505 toggles recording, stopping it if it is running and otherwise clearing the reel and starting fresh"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "0V", "why": "Tapestry.cpp:522 spliceInputTrigger.process crosses 2.5V and :525 onSpliceTrigger adds a marker at the playhead"},
+      "12": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "0V", "why": "Tapestry.cpp:533 shiftInputTrigger.process crosses 2.5V and :536 onShiftTrigger moves playback to the next marker"},
+      "13": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "0V", "why": "Tapestry.cpp:543 clearSplicesInputTrigger.process crosses 2.5V and :546 deleteAllMarkers removes every marker and resets Select to 0"},
+      "14": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "negative": "ignored", "normal": "0V", "why": "Tapestry.cpp:556 spliceCountToggleInputTrigger.process crosses 2.5V and :560 spreads the current auto-marker count across the reel, then :561 cycles it through 4, 8 and 16"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Tapestry.cpp:243 writes the mix multiplied by 5"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Tapestry.cpp:244 writes the mix multiplied by 5"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 8V", "why": "dsp/tapestry-dsp.h:509 scales the envelope follower by kCvOutMax of 8; Tapestry.cpp:247 writes it"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Tapestry.cpp:250-255 triggers a PulseGenerator of kEosgPulseWidth 0.001s and writes 10V while it runs"}
+    }
+  },
+  "comment": "SPEED is asymmetric in a way the maker's own comment and QUICKSTART.md contradict: dsp/tapestry-core.h:383-398 raises 2 to the power of semitones/12 for both directions, so the reverse end of the knob plays backwards at about 4.5 times speed rather than the 26 semitones down that kVariSpeedDownSemitones and the manual describe. QUICKSTART.md also says centre is normal forward playback; the code has a dead zone of 0.02 either side of centre that stops playback outright (dsp/tapestry-core.h:368-377), and the knob's default is centre, so a freshly added module is silent. The panel menu still uses the maker's older wording, Splice and Reel, where the panel prints MRK."
+}

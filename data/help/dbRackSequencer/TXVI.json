@@ -1,0 +1,75 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "TXVI",
+  "description": "Sixteen step switch and sequencer: a clock or an address voltage picks one of sixteen stages, each with its own output, gate and level",
+  "params": [
+    {"ids": [2], "text": "Sets how many stages the sequence runs through before starting again, 1 to 16"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], "text": "Scales its stage, 0 to 100% of the input signal or of 10V when nothing is patched into IN"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on to the next stage"},
+    {"ids": [1], "text": "A high gate here runs the stages backwards while it lasts"},
+    {"ids": [2], "text": "A rising edge sends the sequence back to the first stage"},
+    {"ids": [3], "text": "Adds to the stage the clock has reached, 10/16V per step over 0-10V, wrapping around within the length"},
+    {"ids": [4], "text": "A high gate here holds the sequence where it is, ignoring the clock"},
+    {"ids": [5], "text": "The signal passed to the stage outputs; with nothing patched here every stage puts out 10V scaled by its own knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the input signal scaled by the active stage's knob, following the sequence from one stage to the next"},
+    {"ids": [1], "text": "A 0.05ms trigger whenever the sequence arrives at another stage"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], "text": "Carries the input signal scaled by its stage's knob while that stage is active, and 0V otherwise unless the menu is set to All"},
+    {"ids": [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33], "text": "Carries 10V while its stage is active and 0V otherwise"},
+    {"ids": [34], "text": "The stage the sequence has reached as a voltage, 10/16V per step"}
+  ],
+  "menu": [
+    "In mode — Track lets a stage follow the input while that stage is active; Sample takes the input once as the stage becomes active and holds it",
+    "Out mode — Solo puts 0V out of every stage that is not active; All leaves each stage holding the value it last took"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 10V · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic",
+      "10": "polyphonic",
+      "11": "polyphonic",
+      "12": "polyphonic",
+      "13": "polyphonic",
+      "14": "polyphonic",
+      "15": "polyphonic",
+      "16": "polyphonic",
+      "17": "polyphonic",
+      "18": "one channel only",
+      "19": "one channel only",
+      "20": "one channel only",
+      "21": "one channel only",
+      "22": "one channel only",
+      "23": "one channel only",
+      "24": "one channel only",
+      "25": "one channel only",
+      "26": "one channel only",
+      "27": "one channel only",
+      "28": "one channel only",
+      "29": "one channel only",
+      "30": "one channel only",
+      "31": "one channel only",
+      "32": "one channel only",
+      "33": "one channel only",
+      "34": "one channel only"
+    }
+  }
+}

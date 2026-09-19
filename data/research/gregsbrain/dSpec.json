@@ -1,0 +1,24 @@
+{
+  "plugin": "gregsbrain",
+  "module": "dSpec",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings"},
+      "2": {"family": "trigger", "poly": false, "negative": "ignored", "normal": "0V"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "Mod1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"},
+      "8": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings"},
+      "10": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "DSpecModule::process writes one value into outputs[0].voltages[0] and never calls setChannels, multiplying the internal sample by 5 first"},
+      "1": {"family": "audio", "poly": false, "why": "DSpecModule::process writes one value into outputs[1].voltages[0] and never calls setChannels, multiplying the internal sample by 5 first"}
+    }
+  },
+  "comment": "gregsbrain publish no source. Read from the installed 2.6.5 build alongside the maker's PDF, whose URL is in the module's entry in plugin.json rather than at the top of it. THE KNOBS ARE WRONG WHEN THE MODULE IS ADDED. Every configParam is called with a range of 0 to 1 and a default of 0, while DSpecModule::onReset sets the five offset knobs, Comb Depth and Transpose to 0.5 and the four attenuators to 0 — with Odd/Even Mix Offset going to 0.05 rather than 0.5. Rack calls onReset for Initialize but not when a module is created from the browser, so a freshly placed dSpec has every knob hard anticlockwise, which puts each offset at the bottom of its swing instead of the centre the manual describes and the maker's own screenshot shows. PollAnalogControls maps every offset knob as 2v-1, so the centre of an offset knob is zero. A CV is only added when its jack is connected, which is what makes the offset knob the sole control with nothing patched. Transpose is the exception among the CV rows: it has an offset knob but no attenuator, and its voltage goes in at a flat 0.1 per volt. Mod Depth and Comb Depth have knobs but no jacks. The Transpose jack is given a blue dress nut like VPO1 and VPO2 and the manual calls it the third volt-per-octave input, but the code reads it as a normalised control clamped to -1 and 1 rather than in octaves, so it is coloured as a control voltage here and the conflict is named on its line. The panel names differ from the maker's port names in several places: the panel prints Noise Mix where the port is called Noise Insertion, O/E Mix where it is Odd/Even Mix, Aux CV and Aux with a pulse symbol where they are Assignable Control and Assignable Gate, and Select beside the encoder. The two Mod inputs are read with getVoltageSum, so a polyphonic cable is mixed down; Mod1 is normalled into Mod2. The encoder is configured with a maximum of positive infinity and is read as a direction rather than a value, its motion registering once it moves more than 0.01."
+}

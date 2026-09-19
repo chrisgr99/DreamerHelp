@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "USVF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "why": "USVF.cpp:113 takes the channel count from this input and USVF.cpp:120 reads it four channels at a time"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "the Freq knob alone", "why": "USVF.cpp:116-117 read it four channels at a time, scale it by the Freq CV knob, add the Freq knob and raise 2 to that power"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0.5 to 20V", "why": "USVF.cpp:118 reads it four channels at a time, scales it by a tenth and the Q CV knob, adds the Q knob and clamps the total to 0.5..20"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "USVF.cpp:119 reads it four channels at a time, scales it by a tenth and the Drive CV knob, adds the Drv knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "USVF.cpp:129 sets this output's channel count from the In jack"},
+      "1": {"family": "audio", "poly": true, "why": "USVF.cpp:128 sets this output's channel count from the In jack"},
+      "2": {"family": "audio", "poly": true, "why": "USVF.cpp:127 sets this output's channel count from the In jack"}
+    }
+  },
+  "comment": "The Q sum is clamped to 0.5 to 20 and the drive to 0 to 1, USVF.cpp:118-119; both sums are numbers rather than voltages, which is why the sumRange fields read that way. The Freq knob runs 8 to 14.5 as a power of two, USVF.cpp:83, which is 256Hz to about 23170Hz. The LP output is also configured as a bypass of the input."
+}

@@ -1,0 +1,23 @@
+{
+  "plugin": "NOI",
+  "module": "Pruners",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:125-128 multiplies getVoltage() by the attenuverter, adds it to the head knob and clips the total to 1 and 4"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:135-138 multiplies getVoltage() by the attenuverter, adds it to the size knob and clips the total to 0.0001 and 3.9"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:120-123 multiplies getVoltage() by the attenuverter, adds it to the ratio knob and clips the total to -4 and 4"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:130-133 multiplies getVoltage() by the attenuverter, adds it to the speed knob and clips the total to -4 and 4"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:140-143 multiplies getVoltage() by the attenuverter, adds it to the feedback knob and clips the total to 0 and 1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Pruners.cpp:145-148 multiplies getVoltage() by the attenuverter, adds it to the position knob and clips the total to -1 and 1"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Pruners.cpp:160 reads getVoltage() with no channel; Philodendron.cpp:70-73 sums it with the feedback and clips the result to -10 and 10"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Pruners.cpp:170 writes the head sample with setVoltage and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "why": "Pruners.cpp:171 writes the head sample with setVoltage and never calls setChannels"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "Pruners.cpp:172 writes the head sample with setVoltage and never calls setChannels"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "why": "Pruners.cpp:173 writes the head sample with setVoltage and never calls setChannels"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "why": "Pruners.cpp:169 writes the averaged head sum with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "Source read at commit 2b2ad81. Pruners.cpp:151 subtracts 1 from the speed knob before passing it on, which is what makes 1 on the panel read as the writing rate rather than as a standstill; the maker marks the line 'dirty fix'. The head count is stored into an int at RingBuffer.hpp:82, so the continuous 1 to 4 knob takes effect in whole heads. A sixth output, DEBUG_OUTPUT, is declared with no configOutput and no PortWidget, so no cable can reach it. The head outputs carry sound whether or not the head count includes them; the count only selects what the mix sums."
+}

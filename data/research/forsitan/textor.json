@@ -1,0 +1,20 @@
+{
+  "plugin": "forsitan",
+  "module": "textor",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/textor.cpp:660, getVoltage() scaled by 0.2 into the capture buffer"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/textor.cpp:588, recTrig.process(getVoltage(), 0.1f, 1.f)"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "src/textor.cpp:594-604, the voltage is compared with the one held from the previous sample and a change of more than 0.5V calls reweave(), so only movement is read and the level itself sets nothing"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/textor.cpp:685-686, clockTrig.process(getVoltage(), 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/textor.cpp:822, one setVoltage per side, with no stated clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "trigger", "poly": false, "why": "src/textor.cpp:830, a gate per element"},
+      "3": {"family": "trigger"},
+      "4": {"family": "trigger"}
+    }
+  },
+  "comment": "The weave jack rolls a new loop on any change of its voltage rather than reading a level, which is why it has no range: a slow ramp there rerolls continuously. The maker records that the original hardware's algorithm is unpublished and that this engine was designed from its documented behaviour and from analysis of demo recordings. Each weave rolls its own tempo, its own strand divisions, its own pitches and its own delay, and about a third of the rolls come out with no delay at all. Pitch shifts land on whole semitones even in random mode. The panel prints textor, weave, mode, pitch, rec, warp, weft, fleck over the three levels and again over the three gate jacks, and in, rec, weave, clock, l and r."
+}

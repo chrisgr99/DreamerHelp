@@ -1,0 +1,17 @@
+{
+  "plugin": "Sculpt-O-Sound",
+  "module": "Vocode_O_Matic_XL",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "src/Vocode_O_Matic_XL.cpp process() reads inputs[CARR_INPUT].getVoltage() once per frame with no channel loop"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "src/Vocode_O_Matic_XL.cpp process() reads inputs[MOD_INPUT].getVoltage() once per frame with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Vocode_O_Matic_XL.cpp process() passes inputs[SHIFT_RIGHT_INPUT].getVoltage() to SynthDevKit::CV(0.1f), whose update() fires on the first sample at or above the threshold"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Vocode_O_Matic_XL.cpp process() passes inputs[SHIFT_LEFT_INPUT].getVoltage() to SynthDevKit::CV(0.1f), whose update() fires on the first sample at or above the threshold"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/Vocode_O_Matic_XL.cpp process() accumulates the band sum with setVoltage() and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "src/Vocode_O_Matic_XL.cpp process() accumulates the band sum with setVoltage() and never calls setChannels"}
+    }
+  },
+  "comment": "PAN_WIDTH_PARAM (index 1124) is declared in the enum and written by onReset but never passed to configParam and never given a widget, so it is not a control and is left untagged; DEBUG_PARAM (index 0) is the same. PAN_CENTER_PARAM has two widgets, Vocode_O_Matic_XL.cpp:659 and :663, one on each side of the slider bank; the census keeps one position, so only one of the two buttons can be clicked for help. The panel prints Mod Gain under the knob the code wires to CARRIER_GAIN_PARAM and Carr Gain under the one it wires to MODULATOR_GAIN_PARAM (Vocode_O_Matic_XL.cpp:544-545), the two labels swapped, while the Carrier and Modulator labels under the jacks are the right way round. pan_left() in Vocode_O_Matic_XL.hpp raises every pan slider toward MAX_PAN, and left_pan_factor in pan_and_level.cpp returns cos((v - MIN_PAN) * 0.5 * HALF_PI), which falls to zero there: the button the code calls PAN_LEFT, and which the README says pans to the left, moves the sound to the right output. pan_right() does the reverse. The band defaults settle it the same way, the even bands being configured at MIN_PAN + offset and described by the README as the left ones. The README also places the three pan macro buttons and the release macro buttons on the wrong sides: every macro button except the two pan-width ones sits in a single column at x 863, and the left-hand pair is pan width increase and decrease with a duplicate centre button, not the increase, centre and decrease the README describes."
+}

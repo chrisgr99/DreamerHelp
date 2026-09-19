@@ -1,0 +1,83 @@
+{
+  "plugin": "OhmerPrems",
+  "module": "FranKe",
+  "description": "An eight-track, sixteen-step, sixty-four-pattern step sequencer with pitch, gate and velocity jacks per track; a track holds quantised notes, free voltages, or a sixteen-bit Turing machine",
+  "params": [
+    {"ids": [0], "text": "Starts and pauses the sequencer"},
+    {"ids": [1], "text": "Starts a step-recording session, in which the buttons down the left edge become piano keys and each press writes a note and moves on one step; it does nothing on a Turing machine track"},
+    {"ids": [2], "text": "Sends every track back to the start of its sequence, with no trigger sent from the cycle outputs"},
+    {"ids": [3], "text": "Reverses the playing direction of the selected track only"},
+    {"ids": [4], "text": "Makes the selected track play to its last step and back again; a Turing machine track does not take it"},
+    {"ids": [5], "text": "Opens editing of the per-step velocity on the selected melodic track"},
+    {"ids": [6], "text": "Opens editing of the per-step gate length, as a percentage, on the selected melodic or voltage track"},
+    {"ids": [7], "text": "Opens editing of which steps of the selected melodic or voltage track are skipped; the logic keeps at least one unskipped step"},
+    {"ids": [8], "text": "Opens editing of the per-step subdivision on the selected melodic or voltage track"},
+    {"ids": [9], "text": "Opens editing of the per-step chance of being played, as a percentage, on the selected melodic or voltage track"},
+    {"ids": [10], "text": "Steps the selected track's role round from melodic to voltage to Turing machine and back"},
+    {"ids": [11], "text": "Opens editing of the first and last step of the selected track, which are then set with the STEP 1 and STEP 2 encoders"},
+    {"ids": [12], "text": "Opens and closes the module's SETUP page, and ends a step-recording session"},
+    {"ids": [13], "text": "Locks every Turing machine sequence at one press"},
+    {"ids": [14], "text": "Selects the pattern, unless a voltage is patched into the PATTRN. jack"},
+    {"ids": [15, 16, 17, 18, 19, 20, 21, 22], "text": "Selects that track and, turned, sets the value shown on that track's display; on the SETUP page the encoder on each row changes that row's setting"},
+    {"ids": [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], "text": "Sets the note, voltage or Turing machine value of that step on the selected track, and sets the first or last step while STEPS is open"},
+    {"ids": [39], "text": "Puts all eight tracks of the current pattern into the same mute state in one press"},
+    {"ids": [40], "text": "Takes every track of the current pattern out of solo"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Drives the sequencer from an outside clock, either as pulses at 32 or 24 PPQN or as a BPM-CV voltage, whichever the SETUP page names; a BPM-CV reading is scaled like 1V per octave, so 0V is 120 BPM"},
+    {"ids": [1], "text": "Starts and pauses the sequencer, as a toggling trigger or while a gate is held, whichever the SETUP page names"},
+    {"ids": [2], "text": "A trigger sends every track back to the start of its sequence"},
+    {"ids": [3], "text": "While a gate is held here, every track plays backwards; a track already set to play backwards plays forwards instead"},
+    {"ids": [4], "text": "While a gate is held here, melodic and voltage tracks play to the last step and back again; Turing machine tracks ignore it"},
+    {"ids": [5], "text": "The SETUP page chooses what this jack does, from the selected Turing machine track's randomise-and-lock, voltage scale, octave, gate length, delay and speed; in step recording it records velocity"},
+    {"ids": [6], "text": "What this jack does is chosen on the SETUP page, from a list covering previous pattern by trigger, track select, and mute, unmute, solo or unsolo a track by voltage of one volt per track"},
+    {"ids": [7], "text": "Selects the pattern by voltage over 0V to +10V, which stops the pattern knob from working; when CV2 is set to previous pattern this jack takes a trigger for the next pattern instead"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Carries that track's pitch as 1V per octave when the track is melodic or a Turing machine, and the sequenced voltage between -10V and +10V when the track is a voltage track"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Goes to +10V while that track's step is sounding and 0V between steps"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Carries the velocity of that track's note, 0V to +10V, on a melodic track, and a +10V 1ms trigger at the start of each pass through the sequence on a voltage or Turing machine track"}
+  ],
+  "notes": [
+    "the sequencer will not advance without a clock. Patch a clock into CLOCK, or it falls back to the last tempo it read, 120 BPM on a new module, and that internal tempo cannot be set by hand.",
+    "the eight track displays are touchscreens and the note grid is edited on them; no part of that can be clicked for help, because each display is one widget rather than a control per step",
+    "the gear button opens the SETUP page, which sets the clock type, the RUN jack behaviour, the CV1 and CV2 assignments and the flat-or-sharp preference; each track's encoder changes that row",
+    "while step recording is running, the REV. jack takes pitch, the PENDUL. jack takes gate and the CV1 jack takes velocity, so a MIDI-to-CV module can play the notes in.",
+    "without an OhmerPrems licence keyfile a new module reaches patterns 01 and 02 only, edits tracks 1 and 2 only, and sends a constant -10V from the pitch outputs of tracks 3 to 8.",
+    "clicking the Ohmer logo dims or brightens every display on models that have lit ones.",
+    "the module cannot be saved as a Rack preset or module selection file; use Sequencer, Pattern and Track in its own menu to write its state to separate files."
+  ],
+  "menu": [
+    "Sequencer: Open, Save as — reads or writes the whole sequencer, every pattern and track, as one file",
+    "Pattern: Open, Save as, Copy, Paste, Move, Swap, Initialize, Insert, Remove — the operations on one pattern of the sixty-four; Copy is greyed while the sequencer runs",
+    "Track: Open (use/set saved track role), Open (keep current track role), Save as, Copy, Paste, Move up, Move down, Initialize, Randomize — the operations on the selected track"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "stepped · one channel only",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous",
+      "5": "1V per octave · continuous",
+      "6": "1V per octave · continuous",
+      "7": "1V per octave · continuous",
+      "16": "0 to +10V",
+      "17": "0 to +10V",
+      "18": "0 to +10V",
+      "19": "0 to +10V",
+      "20": "0 to +10V",
+      "21": "0 to +10V · stepped",
+      "22": "0 to +10V · stepped",
+      "23": "0 to +10V · stepped"
+    }
+  }
+}

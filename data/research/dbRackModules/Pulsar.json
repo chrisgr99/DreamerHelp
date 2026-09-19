@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "Pulsar",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "Pulsar.cpp:144 takes the channel count from this input and Pulsar.cpp:156 adds it to the Freq and Fine knobs"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1.99V", "why": "Pulsar.cpp:148 reads it four channels at a time, scales it by a fifth and the D CV knob, adds the Duty knob and clamps the total to 0.01..1.99"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 3V", "why": "Pulsar.cpp:152 reads it four channels at a time, scales it by three tenths and the Waveform CV knob, adds the Waveform knob and clamps the total to 0..3"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "1 to 10V", "normal": "the Cluster knob", "why": "Pulsar.cpp:130 reads it with getVoltage() and no channel loop, clamps this jack to 1..10 and writes it into the Cluster knob"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 4V", "negative": "ignored", "normal": "the envelope knob", "why": "Pulsar.cpp:136 reads it with getVoltage() and no channel loop, clamps this jack to 0..4 and writes it into the envelope knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "1 to 10V", "normal": "the envelope shaping knob", "why": "Pulsar.cpp:141 reads it with getVoltage() and no channel loop, clamps this jack to 1..10 and writes it into the knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "Pulsar.cpp:169 sets this output's channel count from the V/Oct jack; Pulsar.cpp:167 writes five times the wave"}
+    }
+  },
+  "comment": "The Cluster knob is configured 1 to 8 while its jack is clamped to 1 to 10, Pulsar.cpp:108 and Pulsar.cpp:130, so the top of the jack's span is held at the knob's own limit. The duty sum is clamped to 1.99 although the knob stops at 0.99, Pulsar.cpp:148, so a cable can push the pulse past the length of one cycle. The three jacks that move knobs are read monophonic even though the module is polyphonic."
+}

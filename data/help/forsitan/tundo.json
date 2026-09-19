@@ -1,0 +1,64 @@
+{
+  "plugin": "forsitan",
+  "module": "tundo",
+  "description": "A synthesised drum built from six tonal oscillators and a noise oscillator stacked into a modal spectrum, folded and re-enveloped, after Noise Engineering's Basimilus Iteritas Alter",
+  "params": [
+    {"ids": [0], "text": "Sets the fundamental, three octaves below to five above C1 at 32.7Hz, before the range switch is added"},
+    {"ids": [1], "text": "Sets how much spectrum there is: one oscillator fully anticlockwise, a second fading in over the first quarter, and then the decays and the levels of the other four staggered in over the rest"},
+    {"ids": [2], "text": "Sets the intervals between the partials, from the harmonic series fully anticlockwise to the prime series fully clockwise, blended in the log domain; the fundamental itself never moves"},
+    {"ids": [3], "text": "Sets the wave every oscillator uses, sine, triangle, sawtooth and square in three equal thirds of the turn"},
+    {"ids": [4], "text": "Lowers the folder's reflection threshold over its first three quarters, and over the last quarter crossfades in a train of decaying pulses fired at every peak and trough of the tonal sum"},
+    {"ids": [5], "text": "One knob doing two things: from fully anticlockwise to noon it mixes in a burst of noise, loudest at the far end, and from noon to fully clockwise the attack stretches out to 2 seconds"},
+    {"ids": [6], "text": "Sets how long the hit takes to die, 5ms to 4 seconds, for all the oscillators together; the harm knob sets how much of that each partial gets"},
+    {"ids": [7, 8, 9, 10, 11, 12, 13], "text": "Attenuates and inverts the voltage at the jack beside it before it is added to the knob above"},
+    {"ids": [14], "text": "Chooses how the oscillators relate: skin is plain additive, liquid adds a pitch envelope to every oscillator, and metal has them modulate each other as two three-operator stacks"},
+    {"ids": [15], "text": "Offsets the whole voice by octaves: bass adds none, alto two and treble four"},
+    {"ids": [16], "text": "Strikes the voice by hand, and lights the lamp beside the trigger jack"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the pitch one volt per octave through the attenuverter beside it, which is the only one of the seven that starts fully open"},
+    {"ids": [1], "text": "Added to the harm knob through the attenuverter beside it"},
+    {"ids": [2], "text": "Added to the spread knob through the attenuverter beside it"},
+    {"ids": [3], "text": "Added to the morph knob through the attenuverter beside it"},
+    {"ids": [4], "text": "Added to the fold knob through the attenuverter beside it"},
+    {"ids": [5], "text": "Added to the attack knob through the attenuverter beside it"},
+    {"ids": [6], "text": "Added to the decay knob through the attenuverter beside it"},
+    {"ids": [7], "text": "While it is patched it overrides the mode switch, splitting nought to five volts three ways: skin below 1.67V, liquid below 3.33V and metal above"},
+    {"ids": [8], "text": "While it is patched it overrides the range switch, splitting nought to five volts three ways in the same fashion"},
+    {"ids": [9], "text": "A rising edge through 1.5V strikes the voice; there is no legato, so a retrigger restarts every envelope from zero"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The voice"},
+    {"ids": [1], "text": "The voice's own envelope, 0V to 10V: the whole of what drives the folder, attack and decay together, so it follows harm, attack and decay as well as the trigger"}
+  ],
+  "notes": [
+    "the partials do not share one envelope: harm staggers both their levels and their decay lengths, so the spectrum collapses towards the fundamental as the hit dies.",
+    "the spread knob is a timbre control and not a tuning one. The prime end has an ambiguous pitch the way a bell does, but nothing is transposed."
+  ],
+  "menu": [
+    "Sample rate — Fundamental-locked (hardware), which runs the engine at a power-of-two multiple of the fundamental so every alias lands on a harmonic of the note, or Clean (oversampled)",
+    "16-bit quantization — rounds the engine's output to sixteen bits, which the fundamental-locked mode does and the clean mode ignores",
+    "Spread law — Harmonic -> prime, which is what the spread knob does by default, or Extended (unison -> harmonic -> prime), which adds a detuned-unison stretch below the harmonic series",
+    "Free-run at full decay — makes the top of the decay knob hold the envelopes open instead of decaying, so the module becomes an oscillator",
+    "Liquid pitch depth — how far the liquid mode's pitch envelope sweeps: 1 octave, 2 octaves, 3 octaves or 4 octaves",
+    "Output level — 5 Vpp, 10 Vpp or 14 Vpp"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "0 to 5V · stepped · one channel only\n\nunpatched it reads the mode switch; a negative voltage does nothing here.",
+      "8": "0 to 5V · stepped · one channel only\n\nunpatched it reads the range switch; a negative voltage does nothing here.",
+      "9": "high above 1.5V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

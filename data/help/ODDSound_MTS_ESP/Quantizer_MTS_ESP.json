@@ -1,0 +1,32 @@
+{
+  "plugin": "ODDSound_MTS_ESP",
+  "module": "Quantizer_MTS_ESP",
+  "description": "Quantizes or retunes a 1V/octave pitch to the tuning table held by an MTS-ESP master running elsewhere on the computer",
+  "params": [
+    {"ids": [0], "text": "Chooses which way a pitch falling between two tuned pitches is rounded: down, to the nearer of the two, or up"},
+    {"ids": [1], "text": "Chooses how the tuning is applied: quant moves the input to the nearest tuned pitch, retune rounds the input to a twelve-tone note and plays that note's tuned pitch"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to be quantized, at 1V per octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The quantized pitch at 1V per octave; with no MTS-ESP master connected the input is passed through untouched"},
+    {"ids": [1], "text": "A 10V pulse 1ms long on a channel whenever that channel's output pitch changes"}
+  ],
+  "notes": [
+    "with no MTS-ESP master running anywhere on the computer this module quantizes nothing and passes its input straight through, and the trigger output is never written",
+    "a master has to be loaded elsewhere: in a VCV Host module in this patch, or in any application on the same computer, since MTS-ESP passes tunings between processes",
+    "the lamp is fully lit while a master is found and dim while none is",
+    "the output is worked out again at most every 5ms and holds its last value between those",
+    "notes the master has marked as filtered out are skipped in quant mode, so the output never lands on them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

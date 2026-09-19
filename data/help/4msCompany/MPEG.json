@@ -1,0 +1,52 @@
+{
+  "plugin": "4msCompany",
+  "module": "MPEG",
+  "description": "Clock-synced envelope generator: ping it a tempo, and it puts out an envelope at a division or multiple of that time",
+  "params": [
+    {"ids": [0], "text": "Sets the envelope's period against the pinged time, in nineteen steps from a thirty-second of it up to sixteen times it"},
+    {"ids": [1], "text": "Sweeps the envelope's shape from a ramp rising across the whole period, through a symmetrical peak in the middle, to a ramp falling across it, bending the slopes on the way"},
+    {"ids": [2], "text": "Sets the height of the ENV output, up to 10V peak to peak"},
+    {"ids": [3], "text": "Shifts the ENV output up or down"},
+    {"ids": [4], "text": "Tap it twice to set the time the envelope is built from"},
+    {"ids": [5], "text": "Sets the envelope cycling, so it starts again as soon as it finishes"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Two edges above 2V set the time the envelope is built from"},
+    {"ids": [1], "text": "A rising edge above 2V fires one envelope, and what an edge here means is chosen on the menu"},
+    {"ids": [2], "text": "Moves the SHAPE setting; 5V takes it to the bottom of the range and -5V to the top"},
+    {"ids": [3], "text": "Switches cycling on and off; whether an edge or a level does it is chosen on the menu"},
+    {"ids": [4], "text": "Moves the DIV/MULT setting; 5V takes it to the bottom of the range and -5V to the top"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope after SCALE and OFFSET, running between -10V and +10V"},
+    {"ids": [1], "text": "A 5V pulse or gate at the point in the cycle chosen on the menu"},
+    {"ids": [2], "text": "The envelope at a fixed 0V to 5V, with SCALE and OFFSET passing it by"}
+  ],
+  "notes": [
+    "The number of voices follows whichever of the ping, trigger and cycle jacks has the most channels, up to four."
+  ],
+  "menu": [
+    "Sync Mode: Sync, Async — chooses whether the envelope re-locks to the pinged clock every cycle or runs on from the last ping",
+    "Shift — moves the whole envelope up or down in voltage, on top of the OFFSET knob",
+    "Skew Limit: Off, On — holds the shape control back from the extreme skews that leave one side of the envelope too short to hear",
+    "Free-running Ping: On, Off — chooses whether the envelope keeps running between pings or stops after the last one",
+    "EOF Jack Type: Gate, Trigger — chooses whether that jack puts out a short pulse or a gate",
+    "EOF Jack Mode: EOR, EOF, Half-Rise, Tap Clock — chooses what the jack marks: the end of the rise, the end of the fall, the halfway point of the rise, or the tapped clock itself",
+    "Cycle Jack Mode: Trig, Gate+Sync, Gate — chooses how the cycle jack is read: a rising edge toggles cycling, both edges toggle it in step with the clock, or both edges toggle it",
+    "Trig Jack Mode: Async Trig, Async Gate, Quantized Trig — chooses how the trigger jack is read: fire at once, fire and hold while the gate is high, or hold off until the next beat"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · polyphonic",
+      "1": "high above 2V · stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "high above 2V · stepped · polyphonic",
+      "4": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "±10V · polyphonic",
+      "1": "0 to 5V · stepped · polyphonic",
+      "2": "0 to 5V · polyphonic"
+    }
+  }
+}

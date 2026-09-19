@@ -1,0 +1,35 @@
+{
+  "plugin": "PhoturiElectronics",
+  "module": "Mo-Th",
+  "description": "Four-step sequencer whose step moves on at random rather than on a trigger, with a level knob and an output for each step and a further output carrying a note voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets the voltage this step sends to its own output, 0 to 10V"},
+    {"ids": [4], "text": "Sets how far the note output is moved at random, from no movement at 0 to twelve semitones either way at full"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A fresh random number from 0 to 1 is compared with this voltage every sample and the step moves on when the number is larger, so 0V runs the sequence and 1V stops it; no trigger edge is read"},
+    {"ids": [1], "text": "A rising edge sets the sequence back to the first step; it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries the voltage set by the knob for that step while the sequence stands on it, and 0V at every other step"},
+    {"ids": [4], "text": "Carries the step's place in a fixed pattern turned into a note number, converted to a frequency in hertz and divided by twelve; it lands between about 0.3V and 1.5V and is not a volt per octave"}
+  ],
+  "notes": [
+    "the sequence runs by itself: with nothing patched into Trigger the step changes in nearly every sample, so the four step outputs carry a burst rather than a sequence",
+    "the note output is worked out afresh in every sample, so with the randomness knob above 0 it carries a new random value at the sample rate rather than one value per step",
+    "Reset is the only jack that reads an edge"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 1V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "one channel only"
+    }
+  }
+}

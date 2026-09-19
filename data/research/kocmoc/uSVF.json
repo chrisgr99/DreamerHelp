@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "uSVF",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "uSVF.cpp:130 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "uSVF.cpp:141 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "uSVF.cpp:88 getChannels() here sets the loop bound; uSVF.cpp:146 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "uSVF.cpp:179 setVoltage(..., ii) per channel, uSVF.cpp:183 setChannels(channels)"}
+    }
+  },
+  "comment": "No appendContextMenu at all, so the only right-click entries are Rack's own. Damping is uSVF.cpp:119, fb = 1 - 1.15 * reso, clamped to a maximum of 0.9 at :122. The linear FM input is twice as sensitive as SVF-1's: uSVF.cpp:130 multiplies by 2.0f before dividing by ten."
+}

@@ -1,0 +1,23 @@
+{
+  "plugin": "forsitan",
+  "module": "aether",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "normal": "a fixed +5V", "why": "src/aether.cpp:209 and src/aether_dsp.hpp:274-275, the voltage is scaled by the LEVEL knob, and with nothing patched a fixed 5V bias is scaled in its place"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the signal itself", "why": "src/aether_dsp.hpp:283-284 and 306, the carrier octave takes the voltage times the carrier CV knob at one octave per volt; unpatched the levelled signal is read in its place, and patching the carrier clock jack drops this term to zero"},
+      "2": {"family": "trigger", "poly": false, "negative": "swings", "why": "src/aether_dsp.hpp:317-320 and 412-417, crossing() takes the upward zero crossing of this voltage as the carrier tick, in place of the internal timer"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "the signal itself", "why": "src/aether_dsp.hpp:285-286 and 307, the demodulator octave takes the voltage times the demodulator CV knob at one octave per volt; unpatched the levelled signal is read in its place, and patching the demodulator clock jack drops this term to zero"},
+      "4": {"family": "trigger", "poly": false, "negative": "swings", "why": "src/aether_dsp.hpp:321-324 and 412-417, crossing() takes the upward zero crossing of this voltage as the demodulator tick, in place of the internal timer"},
+      "5": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/aether_dsp.hpp:292-294, the voltage times the tone trimpot is added to the tone setting at one octave per volt and clamped inside the knob’s 7.64 octave span"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "src/aether.cpp:164-169 and 244, mixAmount() multiplies the 0..1 knob by getVoltage() times 0.1 and clamps, so the knob attenuates the CV and a patched cable sitting at 0V leaves the signal output fully dry"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "src/aether.cpp:164-169 and 246, mixAmount() multiplies the 0..1 knob by getVoltage() times 0.1 and clamps, so the knob attenuates the CV and a patched cable sitting at 0V leaves the error output fully dry"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/aether.cpp:131, the recovered signal crossfaded with the dry one, with no stated clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "trigger", "poly": false, "why": "src/aether.cpp:133, a wide-range square whose rate follows the carrier clock"},
+      "3": {"family": "trigger"}
+    }
+  },
+  "comment": "The two clock jacks are given no range because any signal crossing zero will do as a clock; the two clock outputs are squares whose rate is set by the clocks and are explicitly not one volt per octave. Both CV jacks for the clocks are normalled to the signal itself, so their attenuators double as audio-rate modulation depths when nothing is patched. configBypass passes the signal input to the recovered output. The module is after Schlappi Engineering's Interstellar Radio of 2018, rebuilt from the published description of its parts, a synchronous voltage-to-frequency converter and a phase-locked loop, rather than from a schematic. The panel prints aether, in, level, type, tone, cv, carrier, error, demod, cv twice, clk twice, tx, rx, mix, out, error and mix."
+}

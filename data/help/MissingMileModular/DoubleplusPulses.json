@@ -1,0 +1,42 @@
+{
+  "plugin": "MissingMileModular",
+  "module": "DoubleplusPulses",
+  "description": "A gate router for the Music Thing Turing Machine: it rebuilds that sequencer's eight-bit register from a clock and one bit, and merges any chosen set of the eight onto two output buses",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sends this channel's bit to bus A at the left throw and to bus B at the right throw; in the centre the bit goes to neither bus"},
+    {"ids": [8, 9], "text": "Chooses what its bus puts out: AND at the top throw, high only while every channel routed to it is high; MUTE in the centre, holding the jack at 0V; OR at the bottom, high while any of them is high"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the same clock that drives the Turing Machine; each rising edge above 1V shifts the register on by one stage"},
+    {"ids": [1], "text": "Takes the Turing Machine's first-stage bit; a pulse above 1V here at any point in a clock period is shifted in as a one on the next clock"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate carrying the merge of every channel routed to bus A, in the mode its toggle is set to"},
+    {"ids": [1], "text": "A 10V gate carrying the merge of every channel routed to bus B, in the mode its toggle is set to"}
+  ],
+  "notes": [
+    "a new module puts out nothing at all: all eight routing toggles start in their centre position, routed to neither bus, and both bus toggles start at OR, which gives 0V with nothing routed",
+    "patch the same clock that drives the Turing Machine into CLK, and the Turing Machine's stage-1 bit into BIT; on Stellare Modular's Turing Machine that is the BIT1 output of its Pulses expander",
+    "the eight bits are rebuilt here from those two cables rather than taken over Rack's expander bus, so the module works anywhere in the rack and need not be placed beside the Turing Machine",
+    "channel 1 carries the bit shifted in on the most recent clock, and each higher-numbered channel carries that same bit one more clock later, up to seven clocks at channel 8",
+    "a pulse at BIT is held for the whole clock period before being shifted in, which is what makes the very short triggers of Stellare Modular's Pulses expander register at all",
+    "the module is clocked by the cable at CLK rather than by the Turing Machine itself, so its register can be one clock out of step with the sequencer's; only the alignment differs",
+    "the lamp on the centre line beside each channel number shows that channel's bit whatever its routing toggle is set to, so the whole register can be watched marching down the panel",
+    "the lamp above each output jack shows what that jack is putting out",
+    "a bus set to AND with no channel routed to it is held at 10V without pulsing, which is the behaviour of the hardware this copies; the menu can make an empty AND bus read low instead"
+  ],
+  "menu": [
+    "Gate outputs with clock — on, each output passes only while the voltage at CLK is high, so two high steps in a row come out as two separate gates; off, each output is held for the whole step",
+    "AND of empty bus is high — on, a bus in AND mode with no channel routed to it is held at 10V; off, that bus reads 0V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

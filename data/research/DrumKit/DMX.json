@@ -1,0 +1,19 @@
+{
+  "plugin": "DrumKit",
+  "module": "DMX",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/controller/SampleController.cpp:12-20 — paramValue adds (voltage/10)*(high-low) to the knob value and clamps the total; src/controller/DMX.cpp:19 calls it for this jack with a range of 0 to 15"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "src/controller/SampleController.cpp:12-20 — paramValue adds (voltage/10)*(high-low) to the knob value and clamps the total; src/controller/DMX.cpp:19 calls it for this jack with a range of 0 to 15"},
+      "16": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/controller/SampleController.cpp:35-41 reads this jack and fires on a rise through the 0.5V threshold set at src/controller/SampleController.cpp:5"},
+      "17": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/controller/SampleController.cpp:35-41 reads this jack and fires on a rise through the 0.5V threshold set at src/controller/SampleController.cpp:5"},
+      "32": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/SampleController.cpp:47 adds this jack's voltage to the TUNE knob and clamps the total to 0.2..1.8"},
+      "33": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/controller/SampleController.cpp:47 adds this jack's voltage to the TUNE knob and clamps the total to 0.2..1.8"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/controller/SampleController.cpp:44-49 writes the sample value to this jack"},
+      "1": {"family": "audio", "poly": false, "why": "src/controller/SampleController.cpp:44-49 writes the sample value to this jack"}
+    }
+  },
+  "comment": "Sample lookup is off by one in src/controller/SampleController.cpp:23-31: index 0 and index 1 both return samples[0], and samples[numSamples-1] is never returned, so the last of the 12 samples cannot be selected from the panel. The maker names no port or knob, so every name here comes from the rendered panel. Each module declares 48 inputs and 16 outputs for up to 16 voices; only 2 are built, and the rest have no widget. src/controller/DMX.cpp:19 passes a CV range of 0 to 15 while the knob only reaches 11, so the CV input can push the total past the last sample, where sampleId returns the first one."
+}

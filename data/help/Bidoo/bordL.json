@@ -1,0 +1,89 @@
+{
+  "plugin": "Bidoo",
+  "module": "bordL",
+  "description": "Eight-step sequencer with a pitch line and a second free voltage line, each step carrying its own randomness, gate probability, pulse count and gate mode, with sixteen patterns stored",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock in powers of two, from a quarter of a hertz at one end to 64Hz at the other"},
+    {"ids": [1], "text": "Starts and stops the sequencer; the gate output rests at 0V while it is stopped"},
+    {"ids": [2], "text": "Sends the sequencer back to the first step of the pattern"},
+    {"ids": [3], "text": "Sets how many steps the pattern runs, 1 to 16, and the jack for it adds a volt for each step; with eight step columns a setting above 8 plays the columns round a second time"},
+    {"ids": [4], "text": "Sets how long the pitch takes to glide to the next step, 10% to 100% of the step, on steps that have slide turned on"},
+    {"ids": [5], "text": "Sets how much of each pulse the gate stays open, 10% to 100%, and the jack for it adds 10% per volt"},
+    {"ids": [6], "text": "Sets the root note the pitches are quantized to, and the jack for it moves that root up through the twelve semitones over 0V to 10V"},
+    {"ids": [7], "text": "Sets the scale the pitches are quantized to, chromatic at one end and named scales after it, and the jack for it steps the scale on by one for each volt"},
+    {"ids": [8], "text": "Steps through the five play modes — forward, backward, ping-pong, random, and random neighbour"},
+    {"ids": [9], "text": "Switches between counting the pattern length in steps and counting it in pulses"},
+    {"ids": [10], "text": "Chooses which of the sixteen patterns is edited and played, 1 to 16"},
+    {"ids": [11], "text": "Scales every pitch towards the root note, 10% flattening the whole sequence onto one note and 100% leaving the pitches as set"},
+    {"ids": [19, 20, 21, 22, 23, 24, 25, 26], "text": "Sets how many pulses that step lasts, 1 to 8, so the step holds the clock for that many ticks"},
+    {"ids": [27, 28, 29, 30, 31, 32, 33, 34], "text": "Sets the gate mode of that step: no gate, a gate on the first pulse only, a gate on every pulse, a gate held open for the whole step, the step passing G1, or the step passing G2"},
+    {"ids": [35, 36, 37, 38, 39, 40, 41, 42], "text": "Sets the pitch of that step, -4V to +6V before quantizing"},
+    {"ids": [43, 44, 45, 46, 47, 48, 49, 50], "text": "Turns slide on for that step, so its pitch glides up from the pitch before it over the time set by SLIDE"},
+    {"ids": [51, 52, 53, 54, 55, 56, 57, 58], "text": "Turns skip on for that step, so the sequencer passes over it"},
+    {"ids": [59, 60, 61, 62, 63, 64, 65, 66], "text": "Sets the chance that step opens its gate at all, silent at the bottom of its travel and always sounding at the top"},
+    {"ids": [67, 68, 69, 70, 71, 72, 73, 74], "text": "Spreads the pitch of that step randomly on each pass, up to five volts either way at the top of its travel and fixed at the bottom"},
+    {"ids": [75, 76, 77, 78, 79, 80, 81, 82], "text": "Sets the voltage that step sends from the V output, 0V to 10V, which is a second line free of the quantizer"},
+    {"ids": [83, 84, 85, 86, 87, 88, 89, 90], "text": "Spreads that step's V voltage randomly on each pass, up to five volts either way at the top of its travel and fixed at the bottom"},
+    {"ids": [91], "text": "Moves every step's settings one column to the left, wrapping the first one round to the end"},
+    {"ids": [92], "text": "Moves every step's settings one column to the right, wrapping the last one round to the start"},
+    {"ids": [93], "text": "Raises the pitch of every step by a semitone"},
+    {"ids": [94], "text": "Lowers the pitch of every step by a semitone"},
+    {"ids": [95], "text": "Arms the copy on the first press, and pastes that pattern into the pattern now selected on the second press"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the internal clock rate, a volt doubling it"},
+    {"ids": [1], "text": "A trigger here advances the sequencer one pulse, and while anything is patched here the internal clock is ignored"},
+    {"ids": [2], "text": "A trigger here sends the sequencer back to the first step of the pattern"},
+    {"ids": [3], "text": "Sets how many steps the pattern runs, 1 to 16, and the jack for it adds a volt for each step; with eight step columns a setting above 8 plays the columns round a second time"},
+    {"ids": [4], "text": "Adds to the slide length, a volt for each 10%"},
+    {"ids": [5], "text": "Sets how much of each pulse the gate stays open, 10% to 100%, and the jack for it adds 10% per volt"},
+    {"ids": [6], "text": "Sets the root note the pitches are quantized to, and the jack for it moves that root up through the twelve semitones over 0V to 10V"},
+    {"ids": [7], "text": "Sets the scale the pitches are quantized to, chromatic at one end and named scales after it, and the jack for it steps the scale on by one for each volt"},
+    {"ids": [8, 9], "text": "The signal that steps set to that gate mode send from the gate output in place of a gate, which can be another gate or an audio signal"},
+    {"ids": [10], "text": "0V to 10V picks which of the sixteen patterns is played, and while anything is patched here the PATTERN knob only picks which pattern is edited"},
+    {"ids": [11], "text": "Added to the pitch of every step before quantizing, so a volt transposes the sequence an octave"},
+    {"ids": [12], "text": "0V to 10V raises the pitch sensitivity, and while anything is patched here it adds to the trimpot rather than replacing it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the current step's gate is open, or the G1 or G2 signal on steps set to those modes, and 0V through any step whose probability came up short"},
+    {"ids": [1], "text": "The pitch of the current step, quantized to the scale and root note, and gliding on steps that have slide turned on"},
+    {"ids": [2], "text": "The second voltage line, 0V to 10V, holding the current step's V value with its randomness added"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10], "text": "A 10V pulse when the sequencer reaches that step"}
+  ],
+  "menu": [
+    "Rand pitch — sets a new random pitch on all eight steps",
+    "Rand gates — sets a new random pulse count and gate mode on all eight steps",
+    "Rand slides & skips — turns slide and skip on and off at random across the eight steps, slide coming on for about one step in five and skip for about one in seven",
+    "Step outputs mode — makes each step output pulse on every pulse of its step rather than once when the step is reached"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "unipolar · continuous · one channel only",
+      "5": "unipolar · continuous · one channel only",
+      "6": "0 to 10V · one channel only",
+      "7": "one channel only",
+      "8": "one channel only",
+      "9": "one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "1V per octave · continuous · one channel only",
+      "12": "0 to 10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "continuous",
+      "2": "0 to 10V",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped"
+    }
+  }
+}

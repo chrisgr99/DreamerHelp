@@ -1,0 +1,49 @@
+{
+  "plugin": "NANOModules",
+  "module": "VCVRANDOM",
+  "description": "Random voltage generator with an internal clock, a probability control, and the same random value shaped four ways at four outputs; it is the hardware version of the VCV Random module",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock"},
+    {"ids": [1], "text": "Sets the chance of a new random value being generated on each clock tick"},
+    {"ids": [2], "text": "Blends the previous value with a new random one, which sets how far the output moves each time"},
+    {"ids": [3], "text": "Sets the shape of the transition to each new value at all four shaped outputs"},
+    {"ids": [4], "text": "Picks the range of the shaped outputs: unipolar 0-10V with the switch up, bipolar -5V to 5V with it down"},
+    {"ids": [5, 6, 7, 8], "text": "Attenuates and inverts the voltage at that parameter's control voltage input before it is added to the slider"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the clock tempo, through the RATE attenuverter"},
+    {"ids": [1], "text": "Modulates the chance of a new value, through the PROB attenuverter"},
+    {"ids": [2], "text": "Modulates the blend between the old and the new value, through the RND attenuverter"},
+    {"ids": [3], "text": "Modulates the transition shape, through the SHAPE attenuverter"},
+    {"ids": [4], "text": "A trigger here clocks the module in place of the RATE slider, and the PROB slider sets the chance of a new value on each of those triggers"},
+    {"ids": [5], "text": "The voltage here is sampled in place of a random one at each clock, and the RND slider has no effect"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A pulse each time a new random value is generated"},
+    {"ids": [1], "text": "Jumps to each new value in one step at 0 percent SHAPE, and divides the move into sixteen steps at 100 percent"},
+    {"ids": [2], "text": "Reaches each new value at once at 0 percent SHAPE, and takes the whole clock cycle to get there at 100 percent, holding steady in between"},
+    {"ids": [3], "text": "Moves to each new value along an exponential curve, at a pace set by the SHAPE slider, and becomes a straight line at 100 percent"},
+    {"ids": [4], "text": "Moves smoothly to each new value at a speed set by the SHAPE slider, then holds it until the cycle ends"}
+  ],
+  "menu": [
+    "Turn ON — under the heading Normalize OUT to CV INs, feeds the LIN output back into all four CV inputs, so each attenuverter sets how far the module modulates itself",
+    "Turn OFF — what the same item reads once normalization is on, and it takes the LIN output back off the four CV inputs"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "stepped · one channel only",
+      "5": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "one channel only",
+      "2": "one channel only",
+      "3": "one channel only",
+      "4": "one channel only"
+    }
+  }
+}

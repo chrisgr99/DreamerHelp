@@ -1,0 +1,15 @@
+{
+  "plugin": "LOGinstruments",
+  "module": "Speck",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Speck.cpp:146 and :158 read getVoltage() with no channel argument; the module never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Speck.cpp:149 and :159 read getVoltage() with no channel argument; the module never calls setChannels"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "normal": "the first input, unchanged", "why": "Speck.cpp:146 copies the first input to this jack with setVoltage and no channel argument"},
+      "1": {"family": "audio", "poly": false, "normal": "the second input, unchanged", "why": "Speck.cpp:149 copies the second input to this jack with setVoltage and no channel argument"}
+    }
+  },
+  "comment": "Read at commit 1fc62fa, the only commit carrying the installed 2.0.4. The peak readout at Speck.cpp:383 prints stats->peakx, which Stats::calculate fills with the index of the loudest bin rather than a frequency, while the label beside it reads Peak f. The analysis runs as soon as either input is patched; the ON button toggles a forceOff flag that is cleared whenever both inputs are pulled out. The two pass-through jacks copy the input voltage without touching it, one channel only, so a polyphonic cable comes out as a single channel. Nothing here is polyphonic and the plugin adds no context menu items."
+}

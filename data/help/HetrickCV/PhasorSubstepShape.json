@@ -1,0 +1,40 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorSubstepShape",
+  "description": "Divides a phasor into equal steps and applies a shaping algorithm inside each step, for step-by-step sequence warping or phase distortion",
+  "params": [
+    {"ids": [0], "text": "Sets how many equal steps the phasor cycle is cut into, 1 to 64, snapped to whole numbers"},
+    {"ids": [1], "text": "Attenuverter scaling the Steps CV input, with a full 5V sweeping the whole 1 to 64 range"},
+    {"ids": [2], "text": "Sets the depth of the shaping applied within each step, negative one way and positive the other, with no change at centre"},
+    {"ids": [3], "text": "Attenuverter, -1 to +1, scaling the Shape CV input before it is added to the Shape knob"},
+    {"ids": [4], "text": "Picks the shaping algorithm: Curve, S-Curve, Split, Swing, Shift, Triangle, Arc, Speed - Clip, Speed - Wrap and Speed - Fold; a lamp beside the list marks the one in use"},
+    {"ids": [5], "text": "Attenuverter scaling the Mode CV input, which steps through all ten algorithms across 5V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The phasor being shaped, 0-10V; voltages outside that range wrap back into it"},
+    {"ids": [1], "text": "Modulates the number of steps, added to the Steps knob"},
+    {"ids": [2], "text": "Modulates the shaping depth, added to the Shape knob"},
+    {"ids": [3], "text": "Modulates which shaping algorithm is used, added to the Mode knob"},
+    {"ids": [4], "text": "Shaping is applied only while this is at 1V or above; below that the phasor passes through untouched. With nothing patched here, shaping is always applied"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The whole phasor with every one of its steps shaped, 0-10V"},
+    {"ids": [1], "text": "The shaped ramp of the current step on its own, covering 0-10V within each step and restarting at every step boundary"}
+  ],
+  "notes": [
+    "a phasor drives this, not a clock: a ramp rising from 0V to 10V once per cycle, from Phasor Generator, Clock to Phasor or an LFO's saw output. Nothing moves here until one is patched in."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "stepped · polyphonic",
+      "4": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

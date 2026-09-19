@@ -1,0 +1,18 @@
+{
+  "plugin": "SickoCV",
+  "module": "Switcher",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Switcher.cpp:259 getVoltage() compared against 1V, as a level in Gate mode and as a rising edge in Toggle mode"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Switcher.cpp:335 getVoltage() taken as a rising edge at 1V"},
+      "2": {"poly": true, "step": "continuous", "why": "Switcher.cpp:315 getChannels() on this jack becomes the loop bound, with getVoltage(c) read inside it"},
+      "3": {"poly": true, "step": "continuous", "why": "Switcher.cpp:321 getChannels() on this jack becomes the loop bound, with getVoltage(c) read inside it"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Switcher.cpp:277 getVoltage() added to the knob as a time in seconds, the total clamped to 0-10 seconds at :356-358"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "Switcher.cpp:373 and the matching writes set the channel count from whichever input is feeding it"},
+      "1": {"poly": true, "why": "Switcher.cpp sets the channel count from whichever input is feeding it, with setVoltage(value, c) in the loop above"}
+    }
+  },
+  "comment": "The function is decided from a four-bit pattern of which jacks are connected, built at Switcher.cpp:222-230 and switched on at :332 through the rest of process(). The README adds that with a fade time set the module behaves like an envelope generator rather than a function generator: a flip during a fade restarts the fade from where it had reached. The IN and OUT jacks carry whatever is patched, so they get no family."
+}

@@ -1,0 +1,59 @@
+{
+  "plugin": "Venom",
+  "module": "DASE",
+  "description": "DASE: an attack-decay envelope whose attack share is modulated by the audio fed into it, so it works as a VCA and a wave shaper, with an internal oscillator adding repeated attacks or tremolo",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the whole envelope, 0.03125 to 32 seconds with 1 second at noon"},
+    {"ids": [1], "text": "Sets the share of the envelope given to the attack, the rest being the decay: 0% is a falling ramp, 50% a triangle and 100% a rising ramp"},
+    {"ids": [2], "text": "Attenuates the IN jack before it modulates the attack share, which sets the output volume; 0% to 100%, starting at 100%"},
+    {"ids": [3], "text": "Bends the attack and decay stages, concave down fully counter-clockwise, linear at noon and concave up fully clockwise"},
+    {"ids": [4], "text": "Attenuates and inverts the ENVELOPE LENGTH CV input, where each volt doubles or halves the length"},
+    {"ids": [5], "text": "Attenuates and inverts the ENVELOPE ATTACK CV input, scaled at 10% per volt with the attenuverter at 100%"},
+    {"ids": [6], "text": "Attenuates and inverts the INPUT LEVEL CV input, scaled at 10% per volt with the attenuverter at 100%"},
+    {"ids": [7], "text": "Attenuates and inverts the OUTPUT RESPONSE CV input, scaled at 0.1 per volt with the attenuverter at 100%"},
+    {"ids": [8], "text": "Cycles what a trigger does while an envelope is running: yellow starts the attack from the level reached, light blue restarts from 0V, and dark grey ignores triggers until the envelope has finished"},
+    {"ids": [9], "text": "Turned on, each polyphonic channel gets its own repeat oscillator that restarts when that channel is triggered; turned off one free-running oscillator drives every channel"},
+    {"ids": [10], "text": "Cycles the oversampling applied against aliasing: off, then x2, x4, x8, x16 and x32"},
+    {"ids": [11], "text": "Turned on, the output is DC coupled and unipolar; turned off it is AC coupled and bipolar"},
+    {"ids": [12], "text": "Sets the rate of the repeat oscillator, 7.5 to 1920 BPM with 120 BPM at noon"},
+    {"ids": [13], "text": "Sets the depth of the repeat modulation, -1 to 1 with no modulation at noon; the two directions invert the shape against each other"},
+    {"ids": [14], "text": "Sets the share of the repeat oscillator's cycle given to its attack: 0% is a falling ramp, 50% a triangle and 100% a rising ramp"},
+    {"ids": [15], "text": "Attenuates and inverts the REPEAT RATE CV input, which is a volt per octave with the attenuverter at 100%"},
+    {"ids": [16], "text": "Attenuates and inverts the REPEAT LEVEL CV input, scaled at 0.1 per volt with the attenuverter at 100%"},
+    {"ids": [17], "text": "Attenuates and inverts the REPEAT ATTACK CV input, scaled at 10% per volt with the attenuverter at 100%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Lengthens and shortens the envelope, added to the ENVELOPE LENGTH knob through the attenuverter beside it; the total is held between 0.03125 and 32 seconds"},
+    {"ids": [1], "text": "Moves the attack share, added to the ENVELOPE ATTACK knob through the attenuverter beside it; the total is held between 0% and 100%"},
+    {"ids": [2], "text": "Moves the input attenuation, added to the INPUT LEVEL knob through the attenuverter beside it"},
+    {"ids": [3], "text": "Bends the attack and decay curves, added to the OUTPUT RESPONSE knob through the attenuverter beside it; the total is held between -1 and 1"},
+    {"ids": [4], "text": "Changes the rate of the repeat oscillator, added to the REPEAT RATE knob through the attenuverter beside it; this jack reads channel one only"},
+    {"ids": [5], "text": "Changes the depth of the repeat modulation, added to the REPEAT LEVEL knob through the attenuverter beside it; the total is held between -1 and 1 and this jack reads channel one only"},
+    {"ids": [6], "text": "Moves the attack share of the repeat oscillator, added to the REPEAT ATTACK knob through the attenuverter beside it; the total is held between 0% and 100%, and this jack reads channel one only"},
+    {"ids": [7], "text": "A rising edge starts the envelope; it reads high above 2V and low below 0.2V"},
+    {"ids": [8], "text": "The audio put through the envelope, and the signal whose instantaneous voltage modulates the attack share, which is what shapes the output waveform"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The audio after the envelope, bipolar and AC coupled, or unipolar and DC coupled with the DC button on"}
+  ],
+  "notes": [
+    "nothing comes out until a trigger arrives at TRIG; the envelope runs once for each rising edge",
+    "the three repeat oscillator CV jacks are monophonic; every other jack takes polyphony, and the output carries as many channels as the widest input"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "bipolar · continuous · polyphonic",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "high above 2V · stepped · polyphonic",
+      "8": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · continuous · polyphonic"
+    }
+  }
+}

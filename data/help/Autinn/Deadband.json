@@ -1,0 +1,34 @@
+{
+  "plugin": "Autinn",
+  "module": "Deadband",
+  "description": "Silences a signal while it stays within a set voltage of zero and passes what rises beyond it",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage either side of zero that is silenced, from 0 to 5V; at 0 the signal passes through untouched"},
+    {"ids": [1], "text": "Scales what the CV jack adds to the width, reaching a volt of width per volt at its maximum"},
+    {"ids": [2], "text": "Subtracts that fraction of the width from whatever passes: at 1 the output leaves silence smoothly, at 0 it jumps straight to the width"},
+    {"ids": [3], "text": "Scales what the CV jack takes off the gap, reaching a fifth of the gap range per volt at its maximum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be silenced near zero"},
+    {"ids": [1], "text": "Adds to the width, scaled by its attenuator, with the total clamped between 0 and 5V"},
+    {"ids": [2], "text": "Moves the gap, scaled by its attenuator, with the total clamped between 0 and 1; a positive voltage reduces the gap"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input with the band around zero removed"}
+  ],
+  "notes": [
+    "the GAP knob runs backwards: fully anticlockwise is 1 and fully clockwise is 0, and it starts fully anticlockwise.",
+    "the signal is processed at twice the sample rate and filtered back down, which keeps the corners of the deadband from folding back as aliasing.",
+    "the maker left the input and the output jack unnamed, so hovering them shows no tooltip text."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "2": "bipolar · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "plugin": "TinyTricks",
+  "module": "WAVE",
+  "description": "A three-oscillator wavetable oscillator that ships with no wavetable: you record one into it from three signal inputs, and it is then stored in the patch.",
+  "params": [
+    {"ids": [0], "text": "Sets the main oscillator's pitch in volts, -3 to +3; 0V gives C4 at 261.63Hz."},
+    {"ids": [1], "text": "Shifts the main oscillator's pitch by up to half an octave either way."},
+    {"ids": [2], "text": "Sets where the main oscillator reads in the table, 0 giving the waveform captured at the top INPUT jack and 1 the one captured at the bottom jack, blending between them in between."},
+    {"ids": [3], "text": "Starts recording a new wavetable from the three INPUT jacks; the lamp is lit for as long as the recording lasts."},
+    {"ids": [4], "text": "Toggles every oscillator reading the table forwards and then backwards, so each cycle comes out symmetrical; the lamp is lit while that is on."},
+    {"ids": [5], "text": "Turns oscillator 2 on and off; the lamp is lit while it is on, and switching it on restarts that oscillator."},
+    {"ids": [6], "text": "MAIN restarts oscillator 2 at the beginning of every cycle of the main oscillator; OFF leaves it free-running."},
+    {"ids": [7], "text": "Raises oscillator 2 above the main pitch, unison at the left through to a full octave at the right."},
+    {"ids": [8], "text": "Offsets oscillator 2's reading position from the main POS, -1 to +1, and the total is held between 0 and 1."},
+    {"ids": [9], "text": "Turns oscillator 3 on and off; the lamp is lit while it is on, and switching it on restarts that oscillator."},
+    {"ids": [10], "text": "MAIN restarts oscillator 3 on every cycle of the main oscillator; OSC 2 restarts it on every cycle of oscillator 2, and does nothing while oscillator 2 is off; OFF leaves it free-running."},
+    {"ids": [11], "text": "Raises oscillator 3 above oscillator 2's pitch rather than above the main pitch, unison at the left through to a full octave at the right."},
+    {"ids": [12], "text": "Offsets oscillator 3's reading position from the main POS, -1 to +1, and the total is held between 0 and 1."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch at a volt per octave, added to FREQ; the number of channels patched here sets the module's polyphony."},
+    {"ids": [1], "text": "Shifts the pitch by a fifth of an octave per volt, added to FINE."},
+    {"ids": [2], "text": "Adds a tenth of its voltage to POS, and the total is held between 0 and 1."},
+    {"ids": [3], "text": "The signal recorded into the wavetable's top waveform; the maker's tooltip calls all three capture jacks Top capture."},
+    {"ids": [4], "text": "The signal recorded into the wavetable's middle waveform; the maker's tooltip calls all three capture jacks Top capture."},
+    {"ids": [5], "text": "The signal recorded into the wavetable's bottom waveform; the maker's tooltip calls all three capture jacks Top capture."},
+    {"ids": [6], "text": "While this is patched a rising edge here starts the recording and the next edge ends it, so the table holds exactly one cycle of whatever oscillator is driving it."},
+    {"ids": [7], "text": "Raises oscillator 2 by a fifth of an octave per volt, added to its own DETUNE knob."},
+    {"ids": [8], "text": "Adds a tenth of its voltage to oscillator 2's position offset."},
+    {"ids": [9], "text": "Raises oscillator 3 by a fifth of an octave per volt, added to its own DETUNE knob."},
+    {"ids": [10], "text": "Adds a tenth of its voltage to oscillator 3's position offset; the maker's tooltip names this jack as oscillator 2's."},
+    {"ids": [11], "text": "A rising edge starts a recording, with no need to press CAPTURE."},
+    {"ids": [12], "text": "A rising edge toggles the mirroring, with no need to press the button."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The enabled oscillators added together and divided by how many of them are on; the voltage that comes out is whatever was recorded into the table."}
+  ],
+  "notes": [
+    "A newly placed module has an empty wavetable and makes no sound. Patch a signal to at least one INPUT jack and press CAPTURE before expecting anything at the output.",
+    "With nothing patched to SYNC a recording runs for 2048 samples; with SYNC patched it runs from one rising edge to the next, and stops at 2048 samples if the second edge has not come by then.",
+    "The output is held at 0V for the whole of a recording.",
+    "The captured wavetable is written into the patch file, so it comes back with the patch and travels with it to anyone else."
+  ],
+  "menu": [
+    "Hide scope (increases performance) — turns off the wavetable drawing that fills the middle of the panel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V.",
+      "1": "continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±3.5V.",
+      "2": "continuous · polyphonic\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic\n\nthe knob and this input are summed and the total held to 0 to 1V.",
+      "11": "high above 1V · stepped · one channel only",
+      "12": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

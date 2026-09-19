@@ -1,0 +1,13 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "C1COMPCV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/C1COMPCV.cpp:81 getVoltage, /10 then added at C1COMP.cpp:1020"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "sumRange": "-20 to 10V", "why": "src/C1COMPCV.cpp:89 getVoltage, /10 then *30 dB at C1COMP.cpp:986"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/C1COMPCV.cpp:97 getVoltage, /10 then *0.89 at C1COMP.cpp:987"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/C1COMPCV.cpp:105 getVoltage, /10 then added at C1COMP.cpp:929"}
+    }
+  },
+  "comment": "The threshold sumRange is the dB scale the knob is marked in, not a voltage at the jack; the validator's spellings have no dB form. The release CV is scaled by 0.89 rather than 1.0 and the sum is then clamped to 0.89, which is the same clamp that makes C1-COMP's AUTO release unreachable. C1-COMP returns from process() while bypassed before updateCompressorParameters() runs (src/C1COMP.cpp:887-906), so the ratio, threshold and release jacks do nothing in that state."
+}

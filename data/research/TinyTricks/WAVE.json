@@ -1,0 +1,25 @@
+{
+  "plugin": "TinyTricks",
+  "module": "WAVE",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "sumRange": "±3.5V", "why": "wavetable-oscillator.cpp:329 nChan from getChannels(); :337 getPolyVoltage(c) added as octaves; :341 clamp(pitch, -3.5f, 3.5f)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "±3.5V", "why": "wavetable-oscillator.cpp:340 getPolyVoltage(c)/5.f added to the pitch; :341 clamp(pitch, -3.5f, 3.5f)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 1V", "why": "wavetable-oscillator.cpp:365-366 getPolyVoltage(c)/10.f added to the knob, then clamp(osc1Y, 0.f, 1.f)"},
+      "3": {"family": "audio", "poly": false, "normal": "0V", "why": "wavetable-oscillator.cpp:260 getNormalVoltage(0.0f) with no channel argument, read only while recording"},
+      "4": {"family": "audio", "poly": false, "normal": "0V", "why": "wavetable-oscillator.cpp:263 getNormalVoltage(0.0f) with no channel argument, read only while recording"},
+      "5": {"family": "audio", "poly": false, "normal": "0V", "why": "wavetable-oscillator.cpp:266 getNormalVoltage(0.0f) with no channel argument, read only while recording"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "wavetable-oscillator.cpp:248 getVoltage() into dsp::SchmittTrigger, whose default thresholds are 0V low and 1V high (Rack dsp/digital.hpp:107)"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "why": "wavetable-oscillator.cpp:347 getPolyVoltage(c)/5.f added to oscillator 2's detune in octaves, with no clamp"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 1V", "why": "wavetable-oscillator.cpp:374-375 getPolyVoltage(c)/10.f added, then clamp(osc2Y, 0.f, 1.f)"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "why": "wavetable-oscillator.cpp:353 getPolyVoltage(c)/5.f added to oscillator 3's detune in octaves, with no clamp"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 1V", "why": "wavetable-oscillator.cpp:383-385 getPolyVoltage(c)/10.f added, then clamp(osc3Y, 0.f, 1.f)"},
+      "11": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "wavetable-oscillator.cpp:228 getVoltage() into dsp::SchmittTrigger, whose default thresholds are 0V low and 1V high (Rack dsp/digital.hpp:107)"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "wavetable-oscillator.cpp:297 getVoltage() into dsp::SchmittTrigger, whose default thresholds are 0V low and 1V high (Rack dsp/digital.hpp:107)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "wavetable-oscillator.cpp:424 setVoltage(mix, c); setChannels at :330. The voltage is whatever was captured, so it has no fixed range"}
+    }
+  },
+  "comment": "Oscillator 3's detune is added to oscillator 2's already detuned pitch (wavetable-oscillator.cpp:351), not to the main pitch as docs/wave.md says; with oscillator 2 detuned, oscillator 3 moves with it. The maker's tooltips are wrong in two places: all three capture inputs are configured as 'Top capture' (:89-91) and oscillator 3's position CV input is configured as 'Osc 2 wavetable position CV' (:114). Input 6, the SYNC jack, has no configInput at all, so hovering it shows no name. The mirror button and the MIRROR trigger input share one dsp::SchmittTrigger (:296-297), so a voltage held above 1V at that jack stops the button working."
+}

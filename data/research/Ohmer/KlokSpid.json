@@ -1,0 +1,17 @@
+{
+  "plugin": "Ohmer",
+  "module": "KlokSpid",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/KlokSpid.cpp:1066 puts this input through a Schmitt trigger after rescaling 0.2V to 1.7V onto 0 to 1, and :1291 compares the same voltage against 1.7"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "stepped", "negative": "subtracts", "why": "src/KlokSpid.cpp:987-993 read this input with getVoltage and clamp it to -5 to 5, or to 0 to 10 when the unipolar SETUP choice is on, then round it to a whole ratio step"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/KlokSpid.cpp:1258 writes each output as the SETUP output level or zero on one channel; the level is 2V, 5V, 10V or 11.7V, set at :561-578"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/KlokSpid.cpp:1258 writes each output as the SETUP output level or zero on one channel; the level is 2V, 5V, 10V or 11.7V, set at :561-578"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/KlokSpid.cpp:1258 writes each output as the SETUP output level or zero on one channel; the level is 2V, 5V, 10V or 11.7V, set at :561-578"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/KlokSpid.cpp:1258 writes each output as the SETUP output level or zero on one channel; the level is 2V, 5V, 10V or 11.7V, set at :561-578"}
+    }
+  },
+  "comment": "The README declares this module deprecated and says it cannot be added from the module browser; the installed plugin.json carries no hidden flag for it and src/Ohmer.cpp:22 registers it normally, so it does appear in the browser. That is worth a person checking in the running Rack. Only two of the module's controls exist as parameters: the encoder at src/KlokSpid.cpp:332, configured with infinite limits, and the button at :333-334. Everything else is a SETUP page drawn on the display and driven by those two, which means no other setting can be reached by clicking, and the right-click menu holds only the Model submenu. The ratio list is the 31 values at :107, running from 64 down to 1/64. The CV mapping is at :987-993: the clamped voltage is multiplied by 12.6 and rounded, which is what steps it through the list. Output level choices are at :561-578 and the option to put an LFO waveform on the fourth jack at :1272-1285, available only while that jack is at ratio x1. Because SETUP is a screen rather than a set of controls, the settings it holds are written as Note lines and only the ones that could be read straight from the source are given."
+}

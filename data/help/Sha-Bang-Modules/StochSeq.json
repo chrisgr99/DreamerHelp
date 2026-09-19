@@ -1,0 +1,55 @@
+{
+  "plugin": "Sha-Bang-Modules",
+  "module": "StochSeq",
+  "description": "A 32-step sequencer whose sliders set the probability that each step fires, and whose slider heights also make a pitch",
+  "params": [
+    {"ids": [0], "text": "Returns the sequence to its first step"},
+    {"ids": [1], "text": "Picks one of nine preset slider patterns"},
+    {"ids": [2], "text": "Throws every slider to a new random probability"},
+    {"ids": [3], "text": "Replaces every slider's probability with one minus it"},
+    {"ids": [4], "text": "Halves the pattern and repeats it, each press halving what is left"},
+    {"ids": [5], "text": "Sets the number of steps played before the sequence returns to the start, 1 to 32"},
+    {"ids": [6], "text": "Scales the pitch taken from the slider heights, 0 to 100% of the full voltage range"},
+    {"ids": [7], "text": "Sets the root note that the pitch outputs are quantised to"},
+    {"ids": [8], "text": "Picks the scale the pitch outputs are quantised to, among them the Messiaen modes of limited transposition and the seventh chords"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A gate throws every slider to a new random probability"},
+    {"ids": [1], "text": "A gate replaces every slider's probability with one minus it"},
+    {"ids": [2], "text": "A gate halves the pattern and repeats it"},
+    {"ids": [3], "text": "A clock advances the sequence by one step"},
+    {"ids": [4], "text": "A trigger returns the sequence to its first step"},
+    {"ids": [5], "text": "Selects one of twelve memory banks from the fractional part of the voltage, so a pitch voltage picks a bank by its semitone"}
+  ],
+  "outputs": [
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], "text": "Fires 10V when the sequence reaches that step and its slider wins its probability roll"},
+    {"ids": [64], "text": "Fires 10V at a step whose slider wins its probability roll"},
+    {"ids": [65], "text": "Fires 10V at a step whose slider loses its probability roll"},
+    {"ids": [66], "text": "Carries the current step's slider height subtracted from full scale, quantised to the root note and scale"},
+    {"ids": [67], "text": "Carries a pitch from the height of the current step's slider, quantised to the root note and scale, whether or not that step fired"}
+  ],
+  "notes": [
+    "click or drag across the sliders to draw a pattern, and click a memory bank to recall or store one",
+    "the sequencer has no clock of its own: nothing advances until a clock arrives at the CLK input."
+  ],
+  "menu": [
+    "Gate mode — Gates, which last the step, or Triggers, which are 1ms long",
+    "V/OCT mode — Independent changes the pitch at every step, Sample and Hold changes it only when a gate fires",
+    "Volt Offset — takes the pitch from a -5V to +5V range, or from a 0-10V range",
+    "Slider Percentages — prints the probability on each slider",
+    "Keyboard Shortcuts — turns on ctrl with the left and right arrows to shift the sliders sideways, and ctrl with the up and down arrows to move them by 5%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped"
+    },
+    "outputs": {
+      "66": "continuous",
+      "67": "continuous"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "C1EQ",
+  "description": "Four band stereo equaliser for the C1 channel strip, with switchable cut, bell and shelf on the outer bands, four degrees of analogue colouring and a spectrum display",
+  "params": [
+    {"ids": [0], "text": "Sets the output level of the whole equaliser, -24dB to +24dB, smoothed so a fast change does not click"},
+    {"ids": [1], "text": "Sets the frequency of the LF band, 20Hz to 400Hz"},
+    {"ids": [2], "text": "Sets the gain of the LF band, -20dB to +20dB, and is held at 0dB and cannot be moved while that band is set to C"},
+    {"ids": [3], "text": "Sets the frequency of the LMF band, 200Hz to 2kHz"},
+    {"ids": [4], "text": "Sets the width of the LMF bell, 0.3 for the widest to 12 for the narrowest"},
+    {"ids": [5], "text": "Sets the gain of the LMF bell, -20dB to +20dB"},
+    {"ids": [6], "text": "Sets the frequency of the HMF band, 1kHz to 8kHz"},
+    {"ids": [7], "text": "Sets the width of the HMF bell, 0.3 for the widest to 12 for the narrowest"},
+    {"ids": [8], "text": "Sets the gain of the HMF bell, -20dB to +20dB"},
+    {"ids": [9], "text": "Sets the frequency of the HF band, 4kHz to 20kHz"},
+    {"ids": [10], "text": "Sets the gain of the HF band, -20dB to +20dB, and is held at 0dB and cannot be moved while that band is set to C"},
+    {"ids": [11], "text": "Steps the LF band through C, B and S: a high-pass with a Butterworth response, a bell at a fixed Q of 0.8, or a low shelf; the lit lamp beside it shows which"},
+    {"ids": [12], "text": "Steps the HF band through C, B and S: a low-pass with a Butterworth response, a bell at a fixed Q of 1, or a high shelf; the lit lamp beside it shows which"},
+    {"ids": [13], "text": "Runs the whole chain at a multiple of the sample rate with anti-aliasing filters either side, at the cost of processing time; the small amber lamp above it is lit while it is on"},
+    {"ids": [14], "text": "Passes the input straight to the output and takes the whole equaliser out of circuit; the lamp beside it is lit while that is on"},
+    {"ids": [15], "text": "Chooses how much analogue colouring is added ahead of the filters, in four steps from none to full circuit modelling; the lamp above it is unlit, green, blue or red to match"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left input, and the source for the right channel as well while the right input is unpatched"},
+    {"ids": [1], "text": "The right input; with nothing patched here the left input feeds this channel too"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel after the four bands and the master gain, clamped to ±10.5V"},
+    {"ids": [1], "text": "The right channel after the four bands and the master gain, clamped to ±10.5V"}
+  ],
+  "notes": [
+    "Both LF and HF come up set to C, which forces their FREQ knobs to the far end of their travel and holds their GAIN knobs at 0dB, so those two bands do nothing until the C B S button is pressed.",
+    "Pressing the C B S button into C resets that band's GAIN to 0dB and its FREQ to 20Hz on LF or 20kHz on HF, losing whatever was set there.",
+    "LF and HF have no Q knob; their width is fixed at 0.8 and 1 in bell mode and at 0.707 in cut mode.",
+    "The lamp to the left of the GAIN knob is green while the output is clear and reddens as it clips.",
+    "The small square at the top right of the display turns the spectrum drawing off, and the analysis thread stops 8 seconds later.",
+    "Each jack carries one channel, so a polyphonic cable is reduced to its first channel."
+  ],
+  "menu": [
+    "Enable VCA Compression — adds a gentle level-dependent gain change to the analogue stage ahead of the filters; it is off when the module is added",
+    "Enable Proportional Q — widens each bell as its gain is cut back, by 2% of the Q per dB; it is on when the module is added"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the left input."
+    },
+    "outputs": {
+      "0": "±10.5V · continuous · one channel only",
+      "1": "±10.5V · continuous · one channel only"
+    }
+  }
+}

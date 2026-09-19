@@ -1,0 +1,40 @@
+{
+  "plugin": "DrumKit",
+  "module": "Baronial",
+  "description": "An envelope generator for drums that runs a whole attack, decay, sustain and release cycle from one trigger, with every stage given its own length in seconds.",
+  "params": [
+    {"ids": [0], "text": "Sets how long the envelope takes to climb from 0V to its peak, from 0.001 to 4.999 seconds."},
+    {"ids": [1], "text": "Sets how long the envelope takes to fall from its peak to the sustain level, from 0.001 to 4.999 seconds."},
+    {"ids": [2], "text": "Sets how long the envelope holds at the sustain level before it releases, from 0.001 to 4.999 seconds."},
+    {"ids": [3], "text": "Sets the level the envelope holds at, as a fraction of the 5V peak; the value is clamped to 0.99, so the upper part of the knob gives one level and the panel's 0 to 5 marking is wrong."},
+    {"ids": [4], "text": "Sets how long the envelope takes to fall from the sustain level to 0V, from 0.001 to 4.999 seconds."},
+    {"ids": [5, 6, 7], "text": "Chooses a straight line or a quarter-sine curve for that stage; the panel prints EXP for the curve, which is a sine rather than an exponential."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Starts the envelope from 0V each time the voltage rises through 0.5V."},
+    {"ids": [1], "text": "Adds to the attack time, 10V covering the whole 0.001 to 4.999 second span, with the total clamped to it."},
+    {"ids": [2], "text": "Adds to the decay time, 10V covering the whole 0.001 to 4.999 second span, with the total clamped to it."},
+    {"ids": [3], "text": "Adds to the sustain time, 10V covering the whole 0.001 to 4.999 second span, with the total clamped to it."},
+    {"ids": [4], "text": "Adds to the sustain level, 10V covering the 0.01 to 0.99 span, with the total clamped to it."},
+    {"ids": [5], "text": "Adds to the release time, 10V covering the whole 0.001 to 4.999 second span, with the total clamped to it."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0V to 5V."}
+  ],
+  "notes": [
+    "the envelope runs its whole shape from a trigger rather than from the length of a gate: the sustain stage has a time of its own, and the release follows it however long the gate stays high."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "0 to 5V · one channel only"
+    }
+  }
+}

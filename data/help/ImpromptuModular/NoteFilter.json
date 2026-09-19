@@ -1,0 +1,33 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "NoteFilter",
+  "description": "Drops a note from a polyphonic note stream when another channel is already sounding the same pitch, and can delay the gate input by a few samples",
+  "params": [
+    {"ids": [0], "text": "Delays the gate input by 0 to 5 samples, for when the CV from an upstream module arrives later than its gate"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch in, sampled on each rising gate on the matching channel"},
+    {"ids": [1], "text": "Gates marking the notes; the number of channels here sets the polyphony of all three outputs"},
+    {"ids": [2], "text": "A second CV, for velocity or panning, sampled on each rising gate on the matching channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Pitch of the notes that were kept"},
+    {"ids": [1], "text": "Gate of each note that was kept; a note whose pitch matches one already sounding on another channel produces no gate"},
+    {"ids": [2], "text": "CV2 of the notes that were kept"}
+  ],
+  "notes": [
+    "the inputs are sampled and held on the gates, so modulation that moves between gates does not pass through"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

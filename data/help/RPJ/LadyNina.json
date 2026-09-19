@@ -1,0 +1,46 @@
+{
+  "plugin": "RPJ",
+  "module": "LadyNina",
+  "description": "A second order state variable filter modelled on the analogue circuit, giving low pass, high pass, band pass and band stop versions of one input.",
+  "params": [
+    {"ids": [0], "text": "Sets the corner frequency of the filter, 20Hz to 20480Hz, starting at 261.63Hz."},
+    {"ids": [1], "text": "Attenuates the cutoff CV input, and inverts it when turned below zero."},
+    {"ids": [2], "text": "Sets the quality factor Q, 0.707 to 20; with Enable Self Oscilation switched on in the menu the damping is taken out and the filter rings at its cutoff frequency whatever this is set to."},
+    {"ids": [3], "text": "Attenuates the resonance CV input, and inverts it when turned below zero."},
+    {"ids": [6], "text": "Nothing in the module reads this control; the boost CV is applied at a fixed 20dB per volt."},
+    {"ids": [7], "text": "Sets the gain the filter applies to its output, -20dB to 20dB, flat at the centre."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be filtered; sixteen channels are filtered separately."},
+    {"ids": [1], "text": "Shifts the corner frequency by one octave per volt, scaled by its attenuverter."},
+    {"ids": [2], "text": "Raises the quality factor Q; 10V adds the whole range of 20 with its attenuverter at maximum."},
+    {"ids": [3], "text": "Adds to the boost and cut directly, 20dB per volt, stopping at 20dB."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The low pass version of the input, clamped between -5V and 5V."},
+    {"ids": [1], "text": "The high pass version of the input, clamped between -5V and 5V."},
+    {"ids": [2], "text": "The band pass version of the input, clamped between -5V and 5V."},
+    {"ids": [3], "text": "The band stop version of the input, clamped between -5V and 5V."}
+  ],
+  "notes": [
+    "the cutoff and resonance CV inputs are each multiplied by the attenuverter beside them, and those start at zero, so a patched cable changes nothing until one is turned up."
+  ],
+  "menu": [
+    "Enable Gain Compensation — drops the input by half the resonant peak in dB, so that raising Q does not raise the level.",
+    "Enable NLP — soft clips the band pass node inside the filter, adding saturation as the level rises.",
+    "Enable Self Oscilation — takes the damping out of the filter so that it rings at its cutoff frequency.",
+    "Match gain at Nyquist for LPF — adds a correction to the low pass output that matches the gain of the analogue filter near Nyquist; the other three outputs are unchanged."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "1V per octave · continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous"
+    }
+  }
+}

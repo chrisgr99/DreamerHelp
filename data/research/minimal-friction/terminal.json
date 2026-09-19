@@ -1,0 +1,31 @@
+{
+  "plugin": "minimal-friction",
+  "module": "terminal",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() reads inputs[INPUT_L_INPUT].getVoltage() with no channel loop"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() reads inputs[INPUT_R_INPUT].getVoltage() with no channel loop"},
+      "2": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_L_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "3": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_R_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "4": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_L_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "5": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_R_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "6": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_L_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "7": {"family": "audio", "poly": false, "normal": "0V", "why": "src/terminal.cpp process() writes inputs[ARRIVAL1_R_INPUT + i*2].getVoltage() into the ring buffer, one value per frame"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp GAIN macro: clamp(params[GAIN1_PARAM + i].getValue() + inputs[GAIN1_MOD_INPUT + i].getVoltage() / 10.f, 0.f, 1.f)"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp GAIN macro: clamp(params[GAIN1_PARAM + i].getValue() + inputs[GAIN1_MOD_INPUT + i].getVoltage() / 10.f, 0.f, 1.f)"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp GAIN macro: clamp(params[GAIN1_PARAM + i].getValue() + inputs[GAIN1_MOD_INPUT + i].getVoltage() / 10.f, 0.f, 1.f)"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp DELAY_TIME macro: clamp(params[DELAY1_PARAM + i].getValue() + inputs[DELAY1_MOD_INPUT + i].getVoltage() * 3.f/10.f, 0.f, ...)"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp DELAY_TIME macro: clamp(params[DELAY1_PARAM + i].getValue() + inputs[DELAY1_MOD_INPUT + i].getVoltage() * 3.f/10.f, 0.f, ...)"},
+      "13": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/terminal.cpp DELAY_TIME macro: clamp(params[DELAY1_PARAM + i].getValue() + inputs[DELAY1_MOD_INPUT + i].getVoltage() * 3.f/10.f, 0.f, ...)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"},
+      "1": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"},
+      "2": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"},
+      "3": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"},
+      "4": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"},
+      "5": {"family": "audio", "poly": false, "why": "src/terminal.cpp process() calls setVoltage once per departure jack and never sets a channel count"}
+    }
+  },
+  "comment": "The upper bound of the delay clamp in process() is written as DELAY_MEMORY_SIZE*args.sampleRate — three times the sample rate rather than three seconds — so the delay total is effectively unclamped at the top. The ring buffer is only 3 seconds long, and a delay total past 3 seconds indexes it modulo its length, giving a delay of the wrong length rather than the maximum. The maker's README does not mention this. The README also notes that pressing or holding a KILL button produces a short click, which the source's own comments attribute to the signal being crushed to zero in one frame."
+}

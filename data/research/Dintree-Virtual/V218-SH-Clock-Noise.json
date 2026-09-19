@@ -1,0 +1,23 @@
+{
+  "plugin": "Dintree-Virtual",
+  "module": "V218-SH-Clock-Noise",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "V218-SH_Clock_Noise.cpp:133 reads this input with getVoltage and compares it against 1.0f"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "V218-SH_Clock_Noise.cpp:152 reads this input with getVoltage and truncates it to an int for edge detection"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "V218-SH_Clock_Noise.cpp:120 reads this input with getVoltage and truncates it to an int for edge detection"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "V218-SH_Clock_Noise.cpp:167-169 reads this input with getVoltage, scales it by 0.1 times CLOCK_FREQ_MAX 30.0f and clamps the sum to CLOCK_FREQ_MIN 0.3f and CLOCK_FREQ_MAX"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "V218-SH_Clock_Noise.cpp:141 reads this input with getVoltage"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "V218-SH_Clock_Noise.cpp:186-191 writes 10.0f or 0.0f with setVoltage, the pulse CLOCK_TRIG_PULSELEN 0.005f long"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "V218-SH_Clock_Noise.cpp:197-198 writes (random::uniform() - 0.5f) * 20.0f with setVoltage"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "V218-SH_Clock_Noise.cpp:170 writes the phase accumulator times 10.0f with setVoltage"},
+      "3": {"family": "audio", "poly": false, "why": "V218-SH_Clock_Noise.cpp:204 writes the pink noise sum times 3.0f with setVoltage"},
+      "4": {"family": "cv", "poly": false, "why": "V218-SH_Clock_Noise.cpp:143 writes SH IN times the S&H LEVEL knob with setVoltage"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "V218-SH_Clock_Noise.cpp:177-178 writes (int)(phase * 2.0f) * 10.0f with setVoltage"},
+      "6": {"family": "cv", "poly": false, "why": "V218-SH_Clock_Noise.cpp:206-210 writes the twice-filtered peak detector output, offset by 1.0f and scaled by 8.0f, with setVoltage"}
+    }
+  },
+  "comment": "TRIG IN and SYNC IN are edge-detected on (int)getVoltage(), not on a Schmitt trigger, so the threshold is one whole volt in either direction and a negative swing past -1V is an edge as much as a positive one past +1V. The negative field is left off those two ports because none of ignored, subtracts or swings describes it. SH OUT is written only inside the if(samp) branch, so it holds its last value indefinitely when nothing is patched to GATE IN or TRIG IN. The README's 0.3Hz to 30Hz clock range, the 5ms trigger length and the 20V peak-to-peak white noise are all literals in the code. The README calls the pink filter a -3dB per octave approximation; that figure is not a constant anywhere in the source, so it is not quoted in the lines."
+}

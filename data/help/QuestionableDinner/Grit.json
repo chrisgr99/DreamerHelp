@@ -1,0 +1,36 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Grit",
+  "description": "A distortion that measures the level of the incoming audio, normalises it, adds noise, clips it and then restores the level it started with",
+  "params": [
+    {"ids": [0], "text": "Sets how much noise is mixed in, none at the far left"},
+    {"ids": [1], "text": "Sets how quickly the level-following envelope falls away, slow at the far left and fast at the far right; a faster fall follows the detail and gives a brighter, more broken result"},
+    {"ids": [2], "text": "Sets how hard the normalised audio is driven into the clipper, seven tenths of unity at the far left to sixteen times at the far right; the same gain is divided back out afterwards"},
+    {"ids": [3], "text": "Sets the shape of the clipper's corner, from a soft rounded bend at the far left to an almost square corner at the far right"},
+    {"ids": [5], "text": "Chooses where the noise goes: in the lower position it is subtracted from the level-following envelope, and in the upper position it is added to the normalised audio itself"},
+    {"ids": [6], "text": "In its upper position, the part of the sound below 150Hz is taken out before the distortion and put back at the main output, so the bass passes through clean"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio to be distorted"},
+    {"ids": [1], "text": "Takes over from the internal noise as the source of the grit; a polyphonic cable here is what makes the three outputs polyphonic"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The distorted audio with the level restored, and with the bass added back when the bass split switch is up"},
+    {"ids": [1], "text": "The level-following envelope, as a positive voltage tracking the peak of the input"},
+    {"ids": [2], "text": "The difference between the distorted audio and the audio that went in, which is the distortion on its own with the original sound removed"}
+  ],
+  "notes": [
+    "The module is mono until something is patched into the rasp input: the audio input is averaged down to one channel, and the channel count of all three outputs is taken from the rasp jack"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "±5V · continuous · polyphonic\n\nunpatched it reads the module's own white noise."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    }
+  }
+}

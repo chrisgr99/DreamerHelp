@@ -1,0 +1,37 @@
+{
+  "plugin": "CountModula",
+  "module": "ShiftRegister16",
+  "description": "Sixteen-place shift register for gates or control voltage, moving every stored value on one place with each shift pulse and taking a new value in",
+  "params": [
+    {"ids": [0], "text": "Turns recirculation on, so the value leaving the far end of the register is fed back to the other end instead of being lost"},
+    {"ids": [1], "text": "Picks what happens to the recirculated value: LOCK passes it round untouched, MIN/AND, MAX/OR and AVG/XOR combine it with the value at IN, and INVERT flips it"},
+    {"ids": [2], "text": "Chooses whether stored values move towards output 16, with new values entering at output 1, or back towards output 1, with new values entering at output 16"},
+    {"ids": [3], "text": "Sets how likely the chosen loop operation is on any shift pulse, 0% to 100%; with a cable in the chance CV input it attenuates that voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The value taken into the register on each shift pulse; with nothing patched an internal random generator supplies it instead"},
+    {"ids": [1], "text": "A rising edge shifts every stored value on by one place and takes a new value from IN"},
+    {"ids": [2], "text": "A high gate turns recirculation on and a low gate turns it off, taking the LOOP ENABLE switch out of circuit"},
+    {"ids": [3], "text": "A high gate shifts values back towards output 1 and a low gate shifts them towards output 16, taking the REVERSE switch out of circuit"},
+    {"ids": [4], "text": "Picks the loop operation by voltage and takes the LOOP MODE switch out of circuit: under 1V LOCK, 1V to 2V MIN/AND, 2V to 3V MAX/OR, 3V to 4V AVG/XOR, 4V and over INVERT"},
+    {"ids": [5], "text": "0-10V setting how likely the chosen loop operation is on any shift pulse, scaled by the CHANCE knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Carries the value stored in that place of the register"},
+    {"ids": [16], "text": "Carries the internal random value drawn at the last shift pulse, whether or not a cable is patched into IN"}
+  ],
+  "menu": [
+    "Digital mode — squares the input to a gate and makes every output 0V or 10V; with it off the register carries control voltage unchanged, and switching between the two clears the register",
+    "Internal random range — sets the values the internal generator draws to 0V to 10V, -10V to 10V, 0V to 5V or -5V to 5V; the entry is there only while Digital mode is off"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "0 to 4.99V · continuous · one channel only",
+      "5": "continuous · one channel only"
+    }
+  }
+}

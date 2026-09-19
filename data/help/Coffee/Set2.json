@@ -1,0 +1,57 @@
+{
+  "plugin": "Coffee",
+  "module": "Set2",
+  "description": "One large knob whose position is the output, with four stored settings it slides to over a set time",
+  "params": [
+    {"ids": [0], "text": "Sets the output voltage, 0 to 1 before the scale and offset knobs are applied"},
+    {"ids": [1, 2, 3, 4], "text": "Stores the knob's present position into that preset, and a second press clears it again"},
+    {"ids": [5, 6, 7, 8], "text": "Starts a slide from wherever the knob is to that stored preset, over that preset's time"},
+    {"ids": [9, 10, 11, 12], "text": "Sets that preset's slide time, 0 to 1 multiplied by the scale switch above it"},
+    {"ids": [13, 14, 15, 16], "text": "Bends that preset's slide away from a straight line, -1 to 1; at 0 the slide is linear, positive settings start slowly and negative settings start quickly"},
+    {"ids": [17, 18, 19, 20], "text": "Multiplies that preset's slide time by 1, 10 or 100"},
+    {"ids": [21], "text": "Multiplies the knob position before the offset is added, -10 to 10"},
+    {"ids": [22], "text": "Adds -10V to 10V to the output after the scale has been applied"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Scales the knob position; with a cable here the knob reads as a share of this voltage rather than of one volt"},
+    {"ids": [1, 2, 3, 4], "text": "A rising edge here starts a slide to that preset"},
+    {"ids": [5, 6, 7, 8], "text": "Sets that preset's slide time in seconds, multiplied by the scale switch, and overrides that preset's time knob while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the knob position, multiplied by the scale knob with the offset added"},
+    {"ids": [1], "text": "Carries the difference between the output and the value the knob would give at its top, which makes a mirror of the output"},
+    {"ids": [2, 3, 4, 5], "text": "Sends a 1ms pulse when a slide to that preset finishes"}
+  ],
+  "notes": [
+    "a Go button or jack does nothing until that preset has been stored: press its small set button first, and the small orange lamp beside it lights for a preset that holds something",
+    "moving the big knob during a slide stops the slide where it is"
+  ],
+  "menu": [
+    "Global End of Cycle — sends every preset's finished pulse from the first end of cycle jack",
+    "Separate End of Cycles — sends each preset's finished pulse from its own jack, and is the setting the module comes up in",
+    "Ignore retriggers — a second Go on the preset already running is ignored",
+    "Retrigger stops cycle — a second Go on the preset already running stops the slide where it is",
+    "Retrigger restarts cycle — a second Go on the preset already running starts the slide again from the knob's present position"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

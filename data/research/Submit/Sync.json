@@ -1,0 +1,19 @@
+{
+  "plugin": "Submit",
+  "module": "Sync",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sync.cpp:148 uses isConnected to switch the whole module to external timing; Sync.cpp:163 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sync.cpp:143 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sync.cpp:131 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Sync.cpp:132 puts getVoltage through a Schmitt trigger at its default 0.1V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Sync.cpp:119 triggers a 1ms pulse; Sync.cpp:217 sets 10V while it runs"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Sync.cpp:123 triggers a 1ms pulse on every other beat; Sync.cpp:218 sets 10V while it runs"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Sync.cpp:120 and 192 trigger 1ms pulses; Sync.cpp:219 sets 10V while it runs"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "Sync.cpp:146 triggers a 10ms pulse; Sync.cpp:220 sets 10V while it runs"}
+    }
+  },
+  "comment": "The manual lists only External clock and Reset among the inputs. The module also has Start and Stop inputs, which the panel labels RUN and STOP (Sync.cpp:73-74, 131-140). If both fire on the same sample, Stop wins (Sync.cpp:133-140).\n\nThe module comes up running (Sync.cpp:54), which the manual does not say.\n\nWhile EXT is patched the tempo knob does nothing: the outputs are driven straight from the incoming edges (Sync.cpp:160-202). The displayed BPM is measured from the interval, smoothed by a fifth of the difference each edge, accepted only between 20 and 400 BPM, and dropped again if no edge arrives for eight periods (Sync.cpp:166-175, 200-203).\n\nIn external mode the double-speed output fires its extra pulse half an external period after each edge, so it lags the tempo by one beat after a change (Sync.cpp:186-198)."
+}

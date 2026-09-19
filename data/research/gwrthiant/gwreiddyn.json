@@ -1,0 +1,14 @@
+{
+  "plugin": "gwrthiant",
+  "module": "gwreiddyn",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "gwreiddyn.cpp:49-50 reads getVoltage() with no channel and takes fmod(10 + v, 1) * 12, so the octave is discarded and voltages down to -10V still wrap correctly"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "1 to 10.167V", "step": "stepped", "why": "gwreiddyn.cpp:51-64 is a twelve-entry table from 1.0 to 10.167, written by setVoltage(v, 0) at line 80"},
+      "1": {"family": "cv", "poly": false, "range": "0.84 to 10.01V", "step": "stepped", "why": "gwreiddyn.cpp:65-78 is a twelve-entry table from 0.84 to 10.01, written by setVoltage(v, 0) at line 81"}
+    }
+  },
+  "comment": "Source read at commit c13145d. The panel prints thirteen and twelve, which are the two output tables rather than a count of steps: both tables hold twelve entries, one per pitch class. Neither output calls setChannels, so both stay monophonic even when a polyphonic cable is patched into root."
+}

@@ -1,0 +1,17 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-Mix2",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "mixer.cpp:21 clamp(getPolyVoltage(c)/10,0,1)"},
+      "1": {"family": "cv", "poly": true, "range": "high above 0.5V", "step": "stepped", "why": "mixer.cpp:26 clamp(getPolyVoltage(c),0,10) added to the mute button and tested against 0.5"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "Mix2.cpp:34 channels() reads getChannels() here; :64 getVoltage(c) into the left amplifier"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "why": "Mix2.cpp:73 getVoltage(c) into the right amplifier, channel by channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Mix2.cpp:68-69 setChannels(_channels) then a per-channel write"},
+      "1": {"family": "audio", "poly": true, "why": "Mix2.cpp:80-81 setChannels(_channels) then a per-channel write"}
+    }
+  },
+  "comment": "MIX2's widget overrides contextMenu without calling LinearCVMixerWidget::contextMenu, so the 'Linear level CV response' item its base class provides never reaches the menu; the flag is still saved and loaded from the patch. With the 'Poly channel' menu set to a channel, Mix2.cpp:30 drops the module to one channel and takes left and right from two channels of the L cable, so the jacks are no longer polyphonic in that mode."
+}

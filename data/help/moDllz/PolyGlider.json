@@ -1,0 +1,59 @@
+{
+  "plugin": "moDllz",
+  "module": "PolyGlider",
+  "description": "A polyphonic slew limiter that glides each channel from its old value to its new one, with separate rise and fall behaviour",
+  "params": [
+    {"ids": [0], "text": "Sets how long a rising glide takes, up to 1 second, or up to 10 seconds with the rise factor switch on"},
+    {"ids": [1], "text": "Sets how long a falling glide takes, up to 1 second, or up to 10 seconds with the fall factor switch on"},
+    {"ids": [2], "text": "Attenuates and inverts the rise time CV, -1 to +1, before it is added to the rise time knob"},
+    {"ids": [3], "text": "Attenuates and inverts the fall time CV, -1 to +1, before it is added to the fall time knob"},
+    {"ids": [4], "text": "Multiplies the rise time by ten"},
+    {"ids": [5], "text": "Multiplies the fall time by ten"},
+    {"ids": [6], "text": "Chooses whether a rising glide always takes the same time whatever the distance, or runs at a constant rate so a bigger jump takes longer"},
+    {"ids": [7], "text": "Chooses whether a falling glide always takes the same time whatever the distance, or runs at a constant rate so a bigger jump takes longer"},
+    {"ids": [8], "text": "Bends the glide curve, a logarithmic sweep at one end of its travel, a straight line at the centre and an exponential one at the other end"},
+    {"ids": [9], "text": "Chooses where a glide starts from: the channel's own output, the output of the poly channel below it, or the voltage at the follow jack, despite the tooltip naming the last two ch16 and ch1"},
+    {"ids": [10], "text": "Sets the size of change that glides: turned towards Over only changes larger than it glide, turned towards Under only changes smaller than it do, and at the centre every change glides"},
+    {"ids": [11], "text": "Sets a window of up to 10 seconds that new input values are measured against, working with the mode switch beside it"},
+    {"ids": [12], "text": "Chooses whether the window is the period after a change during which further changes are ignored, or the only period in which a change is taken"},
+    {"ids": [13], "text": "Passes the input straight through to the output during the part of the window in which changes are ignored, instead of holding the last value"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the rise time knob through the attenuverter beside it, read one value per poly channel"},
+    {"ids": [1], "text": "Added to the fall time knob through the attenuverter beside it, read one value per poly channel"},
+    {"ids": [2], "text": "Added to the slope shape, one value per poly channel, with the total held between 0.0375 and 32; the maker left this jack unnamed, so Rack shows no tooltip for it"},
+    {"ids": [3], "text": "Scales the threshold knob: 0V takes the threshold to zero and 10V gives the knob's full setting, with anything outside that range clamped"},
+    {"ids": [4], "text": "Scales the timeframe knob: 0V takes the window to zero and 10V gives the knob's full setting, with anything outside that range clamped"},
+    {"ids": [5], "text": "A level above 5V on a poly channel snaps that channel's output straight to its input with no glide, so only a note played without a new gate glides"},
+    {"ids": [6], "text": "The voltage a glide starts from when the glide-from switch is set to it, read one value per poly channel"},
+    {"ids": [7], "text": "The signal to be glided; the number of poly channels on this cable sets how many channels the module runs"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while that channel is gliding upwards"},
+    {"ids": [1], "text": "10V while that channel is gliding downwards"},
+    {"ids": [2], "text": "The progress of that channel's glide, -5V at the start of a rising glide and +5V at the start of a falling one, reaching 0V as it arrives"},
+    {"ids": [3], "text": "The glided signal, one poly channel for each channel of the input"}
+  ],
+  "notes": [
+    "Nothing is processed until a cable is patched into the signal input; the number of poly channels on that cable is the number everything else uses",
+    "A glide is started by a change in the input value, not by a clock or a gate, and the threshold sets which size of change is glided and which is passed through"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "±10V · continuous · polyphonic",
+      "2": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads the threshold knob's own setting; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the timeframe knob's own setting; a negative voltage does nothing here.",
+      "5": "high above 5V · stepped · polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

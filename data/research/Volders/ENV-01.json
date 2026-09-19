@@ -1,0 +1,13 @@
+{
+  "plugin": "Volders",
+  "module": "ENV-01",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "normal": "0V", "why": "ENV-01.cpp:83 channels = inputs[GATE_INPUT].getChannels() and line 91-95 getPolyVoltage(c) into a per-channel SchmittTrigger at Rack's default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "ENV-01.cpp:136 setVoltage(env[c] * 10.f, c) and line 139 setChannels(channels)"}
+    }
+  },
+  "comment": "Read from the source at tag 2.1.2 (commit d57e97e), which is the installed build. The module adds nothing to Rack's right-click menu, so there are no menu lines. The 1ms and 10 second endpoints are ENV_MIN_TIME and ENV_MAX_TIME at lines 6-7, fed through knobToSeconds. They are the one-pole time constant rather than the time the stage takes to finish: the attack aims at 1.2 and stops at 1.0 (lines 12, 106-111), so a full rise takes rather longer than the figure on the knob. No derived figure is quoted in the lines. The decay approaches the sustain level and never formally arrives, so there is no separate sustain stage in the code."
+}

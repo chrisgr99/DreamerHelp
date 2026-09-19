@@ -1,0 +1,37 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "Test_Osc",
+  "description": "Generates sine tones, sine sweeps and noise for testing and alignment, with the output level printed in decibels",
+  "params": [
+    {"ids": [0], "text": "Turns the output level up and down in 0.1dB steps, from 0dB, which is 10V peak, down to -96dB"},
+    {"ids": [1], "text": "Moves the sine frequency, by whatever interval STEP is set to"},
+    {"ids": [2], "text": "Sets how long one sweep takes, 0.1 seconds to 60 seconds, in steps of 0.1 seconds below 10 seconds and 1 second above"},
+    {"ids": [3], "text": "Chooses what comes out while SWEEP is at OFF: SINE a sine at the set frequency, WH white noise, PK pink noise"},
+    {"ids": [4], "text": "OFF leaves the tone to TONE; LOG sweeps a sine from 20Hz to 20000Hz at a constant number of octaves per second, LIN sweeps it over the same span at a constant number of hertz per second"},
+    {"ids": [5], "text": "Sets how far one detent of FREQ moves the sine: 3RD one third of an octave, OCT one octave, LOG one semitone"},
+    {"ids": [6], "text": "Starts a sweep, and while ON is at MOM produces the tone for as long as it is held down"},
+    {"ids": [7], "text": "ON leaves the output running all the time; MOM gives output only while TRIG is held or the TRIG jack is high, and makes each sweep a single pass rather than a loop"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge above 1V starts a sweep, and while the voltage stays above 1V and ON is at MOM the tone is produced"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The tone or sweep at the level LEVEL sets, and 0V whenever nothing is being produced"}
+  ],
+  "notes": [
+    "changing TONE, SWEEP, STEP or ON resets the sine frequency to 1000Hz, or to 1046.5Hz when STEP is at LOG, and stops any sweep in progress",
+    "at 3RD and OCT the frequency comes from the standard third-octave series; 3RD covers 20Hz to 20000Hz a step at a time and OCT covers 31.5Hz to 16000Hz three steps at a time",
+    "at LOG the frequency is free between 20.6Hz and 19912Hz",
+    "scroll over the display to move the REF reading up and down in 0.1dB steps; that changes only what the display prints, not the output",
+    "pink noise is approximated with three one-pole filters on white noise, so check the spectrum before using it for precise measurement",
+    "there is no menu of this module's own beyond Rack's; every setting is on the panel or the display"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Rimshot",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Rimshot.hh:41 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Rimshot.hh:42 adds it to the RING knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Rimshot.hh:49 takes a rising edge from that voltage being greater than 0.5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Rimshot.hh:65 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "src/modules/Rimshot.hh:39 declares a BiquadHPF and :45 sets it, so the resonator is a highpass; the manual calls it a bandpass. Cutoff 200Hz to 2000Hz is at :44 and resonance 1 to 10 at :43, both matching the manual. The impulse length, impulseMs, is 0.084 at :80 and its level is 5V at :51; the filter output is tripled at :63 before the -5V to 5V clamp. The manual's remark about the trigger modulating the cutoff is not in this code: nothing changes the filter on a hit."
+}

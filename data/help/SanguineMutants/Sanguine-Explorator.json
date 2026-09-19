@@ -1,0 +1,68 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Explorator",
+  "description": "Six independent polyphonic utility sections in one panel: a buffered multiple, an inverter with two rectifiers, a precision adder, a minimum and maximum pair, a mixer, and a sample and hold",
+  "params": [
+    {"ids": [0], "text": "Applies a third of the gain to the 3:1 mix, matching the hardware, so that its output is the average of the three inputs rather than their sum"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal the three 1:3 outputs copy; the channel count of this cable sets the polyphony of that section"},
+    {"ids": [1, 2], "text": "One of the two signals the 2:2 section adds; the larger channel count of the two sets the polyphony of that section"},
+    {"ids": [3, 4, 5], "text": "One of the three signals the 3:1 section mixes; the largest channel count of the three sets the polyphony of that section"},
+    {"ids": [6], "text": "The signal the three SIGN outputs shape; the channel count of this cable sets the polyphony of that section"},
+    {"ids": [7], "text": "The first signal the LOGIC section compares; the larger channel count of the two inputs sets the polyphony of that section"},
+    {"ids": [8], "text": "The second signal the LOGIC section compares; the larger channel count of the two inputs sets the polyphony of that section"},
+    {"ids": [9], "text": "The signal the sample and hold reads; with nothing patched it reads the module's own noise generator instead, which turns the section into a random voltage source"},
+    {"ids": [10], "text": "A rising edge past 1V takes a reading on each channel; the channel count of this cable sets the polyphony of the sample and hold section"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "A copy of the 1:3 input at the same voltage"},
+    {"ids": [3, 4], "text": "The two 2:2 inputs added together; with one of them patched alone this is a copy of it, which makes the section a one-into-two multiple"},
+    {"ids": [5], "text": "The three 3:1 inputs added together, or their average when the HW button is on"},
+    {"ids": [6], "text": "The SIGN input with its sign flipped, so that 5V in gives -5V out"},
+    {"ids": [7], "text": "The SIGN input with everything below 0V held at 0V, which adds harmonics to an audio signal"},
+    {"ids": [8], "text": "The SIGN input with everything below 0V flipped above it, which doubles the apparent frequency of a symmetrical wave"},
+    {"ids": [9], "text": "Whichever of the two LOGIC inputs is lower at each instant, which acts as an analogue AND; with one input patched alone it carries that signal's negative half"},
+    {"ids": [10], "text": "Whichever of the two LOGIC inputs is higher at each instant, which acts as an analogue OR; with one input patched alone it carries that signal's positive half"},
+    {"ids": [11], "text": "The noise generator, one independent channel for each channel the sample and hold trigger carries"},
+    {"ids": [12], "text": "The voltage read on each channel at the last trigger, held until the next trigger arrives on that channel"}
+  ],
+  "notes": [
+    "the six sections are independent: each takes its polyphony from its own inputs, and none of them feeds another.",
+    "the lamp in each section reports the voltage that section is working on, with one pair of colours for a monophonic cable and another for a polyphonic one.",
+    "held voltages are not saved: they are lost when Rack closes."
+  ],
+  "menu": [
+    "Noise mode: White noise (High CPU), Prism noise (Low CPU) — picks which noise generator feeds the NOISE output and the unpatched sample and hold input"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic\n\nunpatched it reads the module's noise generator.",
+      "10": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "polyphonic",
+      "7": "polyphonic",
+      "8": "polyphonic",
+      "9": "polyphonic",
+      "10": "polyphonic",
+      "11": "continuous · polyphonic",
+      "12": "polyphonic"
+    }
+  }
+}

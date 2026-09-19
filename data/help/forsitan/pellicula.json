@@ -1,0 +1,92 @@
+{
+  "plugin": "forsitan",
+  "module": "pellicula",
+  "description": "Eight one-shot drum sample voices as a grid: every row is one setting, every column one voice, and each row has eight mono jacks plus a polyphonic jack that drives all eight at once",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Chooses which sample of the kit that voice plays, 1 to 64; it is read at the trigger, so a change during a hit takes effect on the next one"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets that voice's playback rate, two octaves either way; it is read every sample, so turning it bends a sound already sounding"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23], "text": "Sets how fast that voice fades, from about 5 milliseconds at the bottom of its travel to 5 seconds; at the very top there is no fade at all and the whole sample plays out"},
+    {"ids": [24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets that voice's level, which is also its weight in the mix; it is read every sample rather than at the trigger"},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39], "text": "Fires that voice from the panel"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "A rising edge fires that voice from the start; while anything is patched here the polyphonic trigger jack's channel for this voice is ignored"},
+    {"ids": [8], "text": "Fires the voices by channel: channel one is voice one and so on, for any voice whose own trigger jack is empty"},
+    {"ids": [9, 10, 11, 12, 13, 14, 15, 16], "text": "Chooses the sample for that voice, one volt per octave quantised to semitones, so each semitone steps one sample on from the knob; zero volts is the knob's own choice"},
+    {"ids": [17], "text": "Chooses the sample for every voice at once, by channel; a voice with its own sample jack patched ignores its channel here"},
+    {"ids": [18, 19, 20, 21, 22, 23, 24, 25], "text": "Moves that voice's playback rate, one volt per octave, added to the knob"},
+    {"ids": [26], "text": "Moves every voice's playback rate by channel, one volt per octave"},
+    {"ids": [27, 28, 29, 30, 31, 32, 33, 34], "text": "Added to that voice's decay knob; ten volts covers its whole travel, and it is read at the trigger"},
+    {"ids": [35], "text": "Added to every voice's decay knob by channel"},
+    {"ids": [36, 37, 38, 39, 40, 41, 42, 43], "text": "Added to that voice's level knob; ten volts covers its whole travel, and it is read every sample"},
+    {"ids": [44], "text": "Added to every voice's level knob by channel"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "That voice on its own"},
+    {"ids": [8], "text": "All eight voices on one eight-channel cable, one voice per channel"},
+    {"ids": [9], "text": "The eight voices summed, held to ±10V; take the individual or polyphonic outputs if that is not enough headroom"}
+  ],
+  "notes": [
+    "this module ships with no samples. Point it at a folder of kits first, or every voice is silent.",
+    "a mono jack overrides the polyphonic jack in its row for that voice alone, and with neither patched the voice follows its knob.",
+    "sample choice and decay are read when the voice is triggered, while pitch and level are read every sample and change a sound already sounding.",
+    "a sample index past the end of the kit is silent rather than wrapping, so a short kit leaves the upper part of the sample knob empty."
+  ],
+  "menu": [
+    "Kits folder — a plugin-wide setting, shared by every pellicula and by vates, naming the folder your kits are kept in; each immediate subfolder of it is one kit",
+    "Set kits folder… — opens a folder chooser for that setting",
+    "Clear kits folder — forgets the folder, so no kit can be chosen until one is set again",
+    "Kit — which of that folder's kits this module plays; a kit is up to 64 wav files ordered by filename, and the choice is saved with the patch by name",
+    "Shift all samples +8 (next bank) — steps every voice's sample choice on by eight, wrapping at 64, so a 64-sample kit can be heard eight sounds at a time",
+    "Shift all samples -8 (previous bank) — steps every voice's sample choice back by eight",
+    "12-bit playback grit — on by default, requantising playback to twelve bits for the original hardware's character; off is full resolution",
+    "Choke groups — puts each voice in one of eight groups or none; voices in one group cut each other off, which is how an open and a closed hi-hat share a slot"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "high above 1V · stepped · polyphonic\n\na negative voltage does nothing here.",
+      "9": "1V per octave · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "1V per octave · continuous",
+      "11": "1V per octave · continuous",
+      "12": "1V per octave · continuous",
+      "13": "1V per octave · continuous",
+      "14": "1V per octave · continuous",
+      "15": "1V per octave · continuous",
+      "16": "1V per octave · continuous",
+      "17": "1V per octave · stepped · polyphonic\n\na negative voltage subtracts from the knob.",
+      "18": "1V per octave · continuous · one channel only",
+      "19": "1V per octave · continuous",
+      "20": "1V per octave · continuous",
+      "21": "1V per octave · continuous",
+      "22": "1V per octave · continuous",
+      "23": "1V per octave · continuous",
+      "24": "1V per octave · continuous",
+      "25": "1V per octave · continuous",
+      "26": "1V per octave · continuous · polyphonic",
+      "27": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "35": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "36": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "44": "0 to 10V · continuous · polyphonic\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "±5V · continuous · polyphonic",
+      "9": "±10V · continuous · one channel only\n\nthe knob and this input are summed and the total held to ±10V."
+    }
+  }
+}

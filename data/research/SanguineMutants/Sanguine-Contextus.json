@@ -1,0 +1,18 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Contextus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "contextus.cpp:246 tests this input against 1V with getVoltage(channel), and contextus.cpp:205 takes part of the module's channel count from its getChannels()"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "contextus.cpp:312 adds this input to the coarse and fine knobs and contextus.cpp:321 turns the sum into a pitch at twelve semitones per volt"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "contextus.cpp:285 multiplies this input by the FM knob and contextus.cpp:314 adds the result to the pitch in volts"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "contextus.cpp:301 divides this input by 5 and multiplies it by the MOD knob before adding the TIMBRE knob; contextus.cpp:307 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "contextus.cpp:302 divides this input by 5 and adds the COLOR knob with no attenuverter; contextus.cpp:308 clamps the total to 0..1"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "range": "±10V", "negative": "subtracts", "why": "contextus.cpp:290 divides this input by 10, multiplies by the number of models, rounds it and adds the knob's model, clamping the total at contextus.cpp:294"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "contextus.cpp:417 multiplies the oscillator's sample by 5 and contextus.cpp:421 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is the Renaissance alternative firmware for Braids, vendored at alt_firmware/renaissance; src/contextus.cpp is the Rack wrapper, running one macro oscillator per polyphonic channel. It carries 57 models against Nodi's 47: it adds two Software Automated Mouth speech models, five diatonic chord models and five six-oscillator stack models, replaces the four-voice wavetable model with a chord version of it, and drops the QPSK model and the Morse code easter egg along with the MORS button. There is a twenty-fifth parameter, PARAM_META at index 19, kept only so that older patches still load; it has no widget on the panel, is read nowhere in the module, and cannot be clicked. Every per-channel read uses getVoltage(channel) rather than getPolyVoltage(channel), so a monophonic cable patched to META, TIMBRE, COLOR or FM drives the first channel alone while the rest keep their knob values. The hardware firmware's option to reverse the model encoder is not offered here. The trigger threshold is 1V."
+}

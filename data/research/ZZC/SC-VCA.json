@@ -1,0 +1,18 @@
+{
+  "plugin": "ZZC",
+  "module": "SC-VCA",
+  "facts": {
+    "inputs": {
+      "1": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "silence", "why": "SC-VCA.cpp:69-73 getChannels() bounds a float_4::load loop"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "normal": "silence", "why": "SC-VCA.cpp:209-215 hands this jack to processChannel, which at :74-77 loads every one of its polyphonic channels, :83-112 multiplies them by the GAIN knob and CV, :156 soft-clips them to the CLIP ceiling, and :169-171 writes the same channel count to SIG 2 OUT"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the PRE knob alone", "why": "SC-VCA.cpp:84-110 isPolyphonic() branch, clamp(cv, 0, 1)"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the CLIP knob alone", "why": "SC-VCA.cpp:114-124 clamp(getVoltages(c) / 10.f, 0, 1) * clipParam"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the SOFTNESS knob alone", "why": "SC-VCA.cpp:135-145 clamp(getVoltages(c) / 10.f, 0, 1) * softnessParam"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SC-VCA.cpp:169 out.setChannels(in.getChannels())"},
+      "1": {"family": "audio", "poly": true, "why": "SC-VCA.cpp:169, the same call for SIG2"}
+    }
+  },
+  "comment": "Input 0 is declared in the source but no jack is ever added for it and nothing reads it (SC-VCA.cpp:39, and no CV_INPUT anywhere in process), so it gets no line and no tag. The PRE and CLIP knobs are concentric and share one census position, which means a click may resolve to either; both are described so that whichever answers is right about something on the panel. The CLIP input can only pull the ceiling down from the knob setting, never above it."
+}

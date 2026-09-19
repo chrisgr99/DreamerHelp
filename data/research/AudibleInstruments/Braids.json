@@ -1,0 +1,17 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Braids",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Braids.cpp:72 tests this input against 1V with getVoltage() alone"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "Braids.cpp:101 adds this input to the coarse and fine knobs and Braids.cpp:104 turns the sum into a pitch at twelve semitones per volt"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "why": "Braids.cpp:81 multiplies this input by the FM knob; Braids.cpp:103 adds the result to the pitch, or Braids.cpp:84 shifts the model instead when meta modulation is on"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "Braids.cpp:94 divides this input by 5, multiplies by the MOD knob and adds the TIMBRE knob, and Braids.cpp:96 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "Braids.cpp:95 divides this input by 5 and adds the COLOR knob, and Braids.cpp:97 clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "audio"}
+    }
+  },
+  "comment": "The trigger input calls Strike() on the oscillator, which re-excites the physical and percussive models and resets the phase of the others. The hardware's internal AD envelope is not implemented here: the port zeroes the settings block and exposes only meta_modulation, vco_drift and signature, so no envelope is applied to level, timbre or colour. The model count is 47, not the 48 often quoted: the shape parameter is scaled to MACRO_OSC_SHAPE_LAST_ACCESSIBLE_FROM_META, which is index 46 of the 47-entry table in Braids.cpp. FM does two different jobs. With meta modulation off it is added to the pitch in volts; with it on, Braids.cpp:84 uses a tenth of the same voltage to scan the model list instead, so the same cable changes the sound rather than the tuning."
+}

@@ -1,0 +1,14 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OscS",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "OscS.cpp:189 takes the channel count from this input and OscS.cpp:193 adds it to the Freq and Fine knobs"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "OscS.cpp:183 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "OscS.cpp:197 sets this output's channel count from the V/Oct jack; OscS.cpp:195 writes five times the wave"}
+    }
+  },
+  "comment": "The partials knob is a power of two, OscS.cpp:143 and OscS.cpp:195, so its ten steps give 1 to 512 partials. The maker recommends the background thread only in a patch that is already using a good deal of processor, because below a buffer size of 256 it takes a whole core for every four voices. The Dist and Seed knobs take effect at the next reset rather than at once."
+}

@@ -1,0 +1,18 @@
+{
+  "plugin": "MADZINE",
+  "module": "ADGenerator",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/ADGenerator.cpp:473-476 and 681, the voltage goes to a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds and a rising edge starts track 1's attack, ignored while that envelope is still running; with track 1's BPF on it is band-passed and followed as a level instead"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/ADGenerator.cpp:675-683, track 2 reads this jack only while AUTO ROUTE is off; AUTO ROUTE starts on, and track 2 then takes the track 1 jack and this one is read nowhere. When it is read, a rising edge through 1V on a dsp::SchmittTrigger at Rack's defaults starts track 2's attack"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/ADGenerator.cpp:675-683, track 3 reads this jack only while AUTO ROUTE is off; AUTO ROUTE starts on, and track 3 then takes the track 1 jack and this one is read nowhere. When it is read, a rising edge through 1V on a dsp::SchmittTrigger at Rack's defaults starts track 3's attack"}
+    },
+    "outputs": {
+      "0": {"family": "cv"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/ADGenerator.cpp:704-705, sumOutput clamped to 0..10"}
+    }
+  },
+  "comment": "The input jacks are triggers in the default mode and audio when that track's Follower latch is on, where the voltage is rectified and divided by ten (src/ADGenerator.cpp:401-402); negative is given as ignored for the trigger case only. The per-track outputs carry no range because the follower multiplies by GAIN, up to 100x, with no clamp (src/ADGenerator.cpp:697-701). The maker's tooltip for the Follower latch reads 'BPF Enable'; the panel prints Follower, and the latch does both — it puts the band-pass filter in circuit and swaps the envelope for a follower. The attack and decay tooltips are configured with a display offset of 0.01 seconds and no exponent, which does not match the pow(10, (x-0.5)*6) the code uses; the figures in the lines come from the code. The panel prints ATK ALL, DEC ALL, ROUTE, IN, ATK, DEC, CURV, Follower, FREQ, GAIN, 1, 2, 3 and MIYA, drawn in code at src/ADGenerator.cpp:726-791."
+}

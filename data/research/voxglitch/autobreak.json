@@ -1,0 +1,19 @@
+{
+  "plugin": "voxglitch",
+  "module": "autobreak",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Autobreak.hpp:150 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Autobreak.hpp:173 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "Autobreak.hpp:217 divides this input by 10, multiplies by 16 and subtracts 1 into an int, then clamps that to -1..15"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "why": "Autobreak.hpp:120 divides this input by 10 and scales it by the sample count and the attenuverter before adding the knob; Autobreak.hpp:129 stores the total in an unsigned int and Autobreak.hpp:130 clamps it afterwards"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "Autobreak.hpp:162 reads RATCHET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "range": "high above 5V", "why": "Autobreak.hpp:204 tests this input against 5V with getVoltage() alone"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "WAV is listed as subtracts, but the floor is an accident rather than a design. Autobreak.hpp:129 stores the knob-plus-CV total in an unsigned int and only clamps it at Autobreak.hpp:130, after the conversion. Converting a negative float to an unsigned int is undefined behaviour in C++; on the arm64 build it saturates at 0, which is why a negative CV pulls the selection down to the first sample and stops there rather than wrapping."
+}

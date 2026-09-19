@@ -1,0 +1,48 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "Conductor",
+  "description": "Performance controller that switches a sequencer's pattern on the beat: an expander queues the next pattern and this module changes to it on the next Advance trigger, putting out the pattern CV",
+  "params": [
+    {"ids": [0], "text": "Sets how many patterns the sequencer being driven has, 2 to 128; the pattern CV is worked out from it, so a wrong setting selects the wrong pattern"},
+    {"ids": [1], "text": "Sets the voltage the sequencer expects for its highest pattern, 0V to 10V; the pattern CV is spread across that span"},
+    {"ids": [2], "text": "Sets how many of those patterns may be switched to, which is what the expanders offer"},
+    {"ids": [3], "text": "Sets the pattern the module jumps to on a reset, when the toggle beside it is on"},
+    {"ids": [4], "text": "Turns the reset-pattern jump on and off"},
+    {"ids": [5], "text": "Sends a reset by hand: it fires the reset output, and jumps to the reset pattern if that is switched on"},
+    {"ids": [6], "text": "Advances by hand: whatever the expanders have queued is switched to at once"},
+    {"ids": [7], "text": "Chooses a pattern to switch to by hand, which the button beside it then applies"},
+    {"ids": [8], "text": "Switches to the pattern the knob beside it has chosen, without waiting for an Advance trigger"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The sequencer's clock on its way through; it is held back by a couple of samples so the reset reaches the sequencer first"},
+    {"ids": [1], "text": "A rise past 2V switches to whatever pattern is queued"},
+    {"ids": [2], "text": "A rise past 2V resets the module, which sends a trigger to the reset output and, if that option is on, jumps to the reset pattern"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clock from the CLOCK input, delayed by the number of samples the menu sets, and with the first clock after a reset optionally dropped"},
+    {"ids": [1], "text": "A 10V pulse when the module is reset and again whenever the pattern changes; patch it to the sequencer so it starts its new pattern in the right place"},
+    {"ids": [2], "text": "The voltage the sequencer needs to select the current pattern, worked out from the pattern count and the CV range"}
+  ],
+  "notes": [
+    "the module does nothing on its own: it needs one of its expanders placed touching it on the right, and a trigger source patched to the Advance input",
+    "with a phasor-driven sequencer, send the phasor straight to it rather than through the clock jacks; the reset output can be used to restart the phasor",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Pattern output offset — a slider adding a share of one pattern step to the pattern CV, which lines the module up with sequencers that read the voltage differently",
+    "Clock delay — a slider setting how many samples the clock is held back by, 0 to 50, at 2 to begin with",
+    "Ignore first clock within 1ms after reset — drops the first clock arriving immediately after a reset, which many sequencers need to stay in step"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only"
+    }
+  }
+}

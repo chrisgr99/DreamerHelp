@@ -1,0 +1,60 @@
+{
+  "plugin": "FehlerFabrik-Suite",
+  "module": "Arpanet",
+  "description": "Sixteen-step sequencer after the ARP 1601, with two voltage outputs, three gate busses, two quantisers and its own clock",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sends that step's gate to one of the three gate busses: bus 1 with the switch up, bus 2 in the middle, bus 3 down"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Sets the voltage that step sends to the sequencer output, 0-12V"},
+    {"ids": [32], "text": "Chooses how the start inputs work: Trig toggles running on each rising edge, Gate runs the sequencer only while a signal is high"},
+    {"ids": [33], "text": "Advances the sequence by one step"},
+    {"ids": [34], "text": "Chooses what a step assigned to gate bus 3 does: Skip Step passes over it, Reset sends the sequence back to step 1, and the middle position does neither"},
+    {"ids": [35], "text": "Runs and stops the sequencer"},
+    {"ids": [36], "text": "Sets the clock rate, 15 BPM at the bottom of its travel and 3840 BPM at the top"},
+    {"ids": [37], "text": "Sets how much the clock FM input changes the clock rate; at the top of its travel every volt there doubles the rate"},
+    {"ids": [38], "text": "Sets how much of each clock cycle the clock output stays high, from a twentieth of it to all of it"},
+    {"ids": [39], "text": "Sends the sequence back to step 1"},
+    {"ids": [40], "text": "Chooses between one sixteen-step sequence and two eight-step sequences running side by side, steps 1 to 8 on output A and steps 9 to 16 on output B"},
+    {"ids": [41], "text": "Chooses whether the sequence steps in order or jumps to a step picked at random on every clock pulse"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Its voltage is added to both quantised outputs after quantising, which shifts both by the same amount"},
+    {"ids": [1], "text": "A rising edge advances the sequence by one step"},
+    {"ids": [2], "text": "Starts the sequencer; in Gate mode it runs only while this input is high"},
+    {"ids": [3], "text": "The voltage quantiser A works on; with nothing patched here it takes sequencer output A"},
+    {"ids": [4], "text": "The voltage quantiser B works on; with nothing patched here it takes sequencer output B"},
+    {"ids": [5], "text": "A rising edge sends the sequence back to step 1"},
+    {"ids": [6], "text": "Stops the sequencer"},
+    {"ids": [7], "text": "A rising edge toggles the sequencer between running and stopped in Trig mode, and runs it while high in Gate mode"},
+    {"ids": [8], "text": "Changes the clock rate through the FM slider; with nothing patched here it takes gate bus 1, so a step on that bus speeds the clock up"},
+    {"ids": [9], "text": "Scales the clock pulse width, 10V leaving the slider setting as it is and lower voltages narrowing the pulse towards nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries a 10V gate while the sequence is on a step assigned to gate bus 1"},
+    {"ids": [1], "text": "Carries a 10V gate while the sequence is on a step assigned to gate bus 2"},
+    {"ids": [2], "text": "Carries a 10V gate while the sequence is on a step assigned to gate bus 3"},
+    {"ids": [3], "text": "Carries 10V while the sequence is on step 1"},
+    {"ids": [4], "text": "Carries 10V when the current step is assigned to gate bus 1 and the clock is high"},
+    {"ids": [5], "text": "Quantiser A's output: the voltage fed to it is rounded down to the nearest half volt and each half volt becomes a semitone, so 12V in comes out at 2V, plus whatever the CV input adds"},
+    {"ids": [6], "text": "Quantiser B's output: the voltage fed to it is rounded down to the nearest half volt and each half volt becomes a semitone, so 12V in comes out at 2V, plus whatever the CV input adds"},
+    {"ids": [7], "text": "The internal clock at 10V, held at 0V while the sequencer is stopped"},
+    {"ids": [8], "text": "The slider voltage of the current step; in eight-step mode it carries steps 1 to 8"},
+    {"ids": [9], "text": "The slider voltage of the current step; in eight-step mode it carries steps 9 to 16"}
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "2": "stepped",
+      "5": "stepped",
+      "7": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "4": "stepped",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "stepped"
+    }
+  }
+}

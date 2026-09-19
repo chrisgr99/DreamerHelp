@@ -1,0 +1,19 @@
+{
+  "plugin": "Cella",
+  "module": "TwinPeaks",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "TwinPeaks.cpp:134 reads this input with getPolyVoltage per channel and multiplies it by the attenuverter"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "TwinPeaks.cpp:147 reads this input with getPolyVoltage per channel; ripples.hpp:153 adds it straight to the cutoff in volts per octave"},
+      "2": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "TwinPeaks.cpp:138 reads this input with getPolyVoltage per channel; ripples.hpp:153 adds it straight to the cutoff in volts per octave"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "TwinPeaks.cpp:148 reads this input with getPolyVoltage per channel; TwinPeaks.cpp:139 also reads it in place of the FM B jack when that one is unconnected"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "FM A", "why": "TwinPeaks.cpp:139 reads this input with getPolyVoltage per channel and falls back to the FM A jack when it is unconnected"},
+      "5": {"family": "audio", "poly": true, "step": "continuous", "range": "±5V", "why": "TwinPeaks.cpp:103 takes the module's channel count from this input and TwinPeaks.cpp:136 reads each channel"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "0 to 1V", "normal": "0V", "why": "TwinPeaks.cpp:130 reads this input with getVoltage(), which is channel 1 alone, multiplies it by 0.1 and the attenuverter, adds the knob and clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±12V", "why": "TwinPeaks.cpp:164 sets this output to the input's channel count and TwinPeaks.cpp:161 clamps each channel to -12V and 12V"}
+    }
+  },
+  "comment": "Read from src/TwinPeaks.cpp and src/filter/ripples.hpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1. The manual describes FM A and FM B as controlling the total amount of modulation, which is right: ripples.hpp:154 multiplies the whole sum of FM jack, TRACK and XFM-B by that knob before it reaches the cutoff. ripples.hpp:156 then takes the minimum of that sum and zero, so upward modulation past the knob's own 20kHz maximum does nothing; the manual does not mention the cap. The LP-TWP jack is the one input on the module that is read outside the polyphony loop (TwinPeaks.cpp:130), so it is monophonic while everything else follows the audio input's channel count. ripples.hpp:163 adds a microvolt of noise to the input, which is what starts self-oscillation."
+}

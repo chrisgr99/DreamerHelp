@@ -1,0 +1,16 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Xenizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Xenizer.cpp:128 reads getVoltage() with no channel argument and multiplies it by 1200 to get cents"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 7V", "step": "stepped", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 7V", "why": "Xenizer.cpp:111 adds getVoltage() to the switch value and clamps the integer to 0 and NUM_SCALES - 1, which is 7"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 11V", "step": "stepped", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 11V", "why": "Xenizer.cpp:113 adds getVoltage() to the switch value and clamps the integer to 0 and Scale::N - 1, which is 11"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Xenizer.cpp:114 adds getVoltage() to the -5 to 5 knob with no clamp, and line 154 adds that sum to the quantized pitch in volts"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Xenizer.cpp:154 writes one value with setVoltage, dividing cents by 1200, and setChannels is never called"}
+    }
+  },
+  "comment": "Read from the maker's source at commit b9d77ec, the only commit carrying version 2.1.0. The panel prints SCALE, MODE and BASE once per row, over both the knob and the CV jack beside it; the parameter the panel marks BASE is configured as Base pitch. The scale names and their cent values are the SCALES table at Xenizer.cpp:16-66, read from .scl files; the periods are 3465.227865, 2789.930318, 4224.291077, 4329.865218, 4352.045060, 4404.286203, 1495.0 and 3769.436891 cents, which is where the 1495 to 4404 in the note comes from. The two selector knobs are configSwitch with printed choice names, the scales by name and the modes as 1 to 12. Quantizing searches the twelve rotated degrees and the period itself, so a pitch near the top of a period snaps up to the next period's root. Every configured parameter and port is read in process(); nothing is configured twice and no jack is left unread."
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "BGal256",
+  "module": "BufferSludger",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "BufferSludger.cpp:192 runs clockTrigger, a dsp::SchmittTrigger, on this jack's raw voltage, so a rising edge past 1V advances the buffer one step"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "BufferSludger.cpp:173 runs resetTrigger, a dsp::SchmittTrigger, on this jack's raw voltage, so a rising edge past 1V returns the step counter to the start"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "0V", "why": "BufferSludger.cpp:202-204 compares this jack with its value on the previous sample and treats a change of more than 0.5V as a beat"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "BufferSludger.cpp:167 runs clearBufferTrigger, a dsp::SchmittTrigger, on this jack's raw voltage, so a rising edge past 1V empties the buffer"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "BufferSludger.cpp:279 writes this voltage into the buffer unchanged"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "0V", "why": "BufferSludger.cpp:218-220 wraps this voltage into 0 to 10V with a modulo, then divides by 10 to give a position in the buffer"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 1V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 1V", "why": "BufferSludger.cpp:339-342 adds this voltage straight to the Dry/Wet knob, which runs 0 to 1, and clamps the total"},
+      "7": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "BufferSludger.cpp:279 writes this voltage into the buffer unchanged; line 163 puts the module into stereo when it is patched"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "BufferSludger.cpp:357 and 366 write a single voltage with setVoltage and no channel count is set"},
+      "1": {"family": "audio", "poly": false, "why": "BufferSludger.cpp:359 and 368 write a single voltage with setVoltage and no channel count is set"}
+    }
+  },
+  "comment": "The manual gives the Dry/Wet jack as 0-10V, but BufferSludger.cpp:341 adds the voltage straight to a parameter that runs 0 to 1 and clamps the sum, so 1V already reaches full wet. The output filter is applied with the left channel's filter object for both outputs (BufferSludger.cpp:357-360 both call outFilter[0]), so the right output is run through the left channel's filter state; with Disable Output Filter set neither output is filtered and the two are independent."
+}

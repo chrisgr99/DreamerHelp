@@ -1,0 +1,82 @@
+{
+  "plugin": "HoyerHoppes",
+  "module": "scanning_clock_multiplier_v2",
+  "description": "A clock generator whose rate is multiplied by any of sixteen ratios you switch on, with a scan control picking one of them and further outputs for the lowest, highest and middlemost",
+  "params": [
+    {"ids": [0], "text": "Pushes the start of the cycle back by this fraction of the ratio scan has chosen, 0 to 1, and is ignored while a cable is patched to the phase input"},
+    {"ids": [1], "text": "Sets the clock rate from 1 to 700 bpm, and is ignored while a cable is patched to the rate input"},
+    {"ids": [2], "text": "Holds the phase at zero for as long as it is held down, and sends 10V from the reset output meanwhile"},
+    {"ids": [3], "text": "Raises the phase to this power before any ratio is applied, 0.11 to 10: below 1 the cycle bunches towards its end, above 1 towards its start. A cable at the skew input replaces it"},
+    {"ids": [4], "text": "Divides 0 to 1 into as many regions as there are active ratios and picks the ratio whose region the setting falls in; the scan input's voltage is added to this knob before that choice is made"},
+    {"ids": [5], "text": "Reads the rate input as a 0-10V phasor rather than as clock pulses while it is lit, which locks to whatever drives it with no delay; unlit, that input needs two pulses before a rate is known"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], "text": "Adds this button's ratio to the list of active ratios while it is on; the scan, refl. scan, lowest, highest and middle outputs choose from that list and from nothing else"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the skew exponent in place of the knob while patched, 0-10V giving 0.11 to 10.11"},
+    {"ids": [1], "text": "Takes the clock this module runs from: rising edges above 1V with the phase button unlit, or a 0-10V phasor with it lit"},
+    {"ids": [2], "text": "Holds the phase at zero for as long as this reads above 0V"},
+    {"ids": [3], "text": "Adds to the scan knob, 0-10V covering the whole of that knob's travel, and the total is clamped to that travel"},
+    {"ids": [4], "text": "Sets the phase offset in place of the knob while patched, 0-10V covering the whole of that knob's travel"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], "text": "Turns its ratio on while this rises above 0.9V and off when it falls below 0.1V, and does nothing while that ratio's button is on, despite the tooltip calling it an inversion of the button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V trigger at the start of each cycle of the clock, before any ratio is applied, and silent while reset is held"},
+    {"ids": [1], "text": "Carries 10V for as long as the reset button is held or the reset input reads above 0V, and 0V the rest of the time"},
+    {"ids": [2], "text": "A 0-10V rising ramp, one per cycle of the clock, before any ratio or skew is applied"},
+    {"ids": [3], "text": "A 10V trigger each time the skewed phase multiplied by the ratio scan has chosen comes round to its start"},
+    {"ids": [4], "text": "A 0-10V rising ramp at the clock rate multiplied by the ratio scan has chosen, after skew"},
+    {"ids": [5], "text": "A 0-10V rising ramp at the clock rate multiplied by the ratio at the mirror image of the scan setting, after skew"},
+    {"ids": [6], "text": "A 10V trigger each time the phase multiplied by the highest active ratio comes round to its start"},
+    {"ids": [7], "text": "A 0-10V rising ramp at the clock rate multiplied by the highest active ratio, after skew"},
+    {"ids": [8], "text": "A 10V trigger each time the phase multiplied by the ratio at the mirror image of the scan setting comes round; scan at 0 gives the ratio scan at 1 would pick"},
+    {"ids": [9], "text": "A 10V trigger each time the phase multiplied by the lowest active ratio comes round to its start"},
+    {"ids": [10], "text": "A 0-10V rising ramp at the clock rate multiplied by the lowest active ratio, after skew"},
+    {"ids": [11], "text": "A 10V trigger each time the phase multiplied by the middlemost active ratio comes round; with an even number of active ratios the higher of the two middle ones is taken"},
+    {"ids": [12], "text": "A 0-10V rising ramp at the clock rate multiplied by the middlemost active ratio, after skew"}
+  ],
+  "notes": [
+    "every ratio multiplies the clock rate rather than dividing it, and they run from 1:1 up to 32:1, so a slow master clock gives the widest usable spread",
+    "with no ratio button on at all, the module behaves as though a single 1:1 ratio were active and all six pairs of outputs run at the clock rate",
+    "the ratio buttons and the phase offset are stored with the patch, but the rate, skew and scan knobs are ordinary parameters and come back where you left them"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads the skew knob.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 0V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads the phase knob.",
+      "5": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "8": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "9": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "10": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "12": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "14": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "15": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "16": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "17": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "18": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "19": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "20": "high above 0.9V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · one channel only"
+    }
+  }
+}

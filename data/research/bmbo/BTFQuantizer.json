@@ -1,0 +1,14 @@
+{
+  "plugin": "bmbo",
+  "module": "BTFQuantizer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "BmboBTFQuantizer.cpp:119 reads getChannels() to bound the per-channel loop and line 135 reads getPolyVoltage(c) inside it"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "BmboBTFQuantizer.cpp:132 reads getPolyVoltage(c) for each channel while the jack is connected and substitutes 0 when it is not"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "BmboBTFQuantizer.cpp:120 calls setChannels with the pitch input's channel count and line 140 writes setVoltage(out, c) once per channel"}
+    }
+  },
+  "comment": "Read from the maker's source at commit ba1b628, the last commit carrying the installed 2.0.0; main has moved on to 2.1.0 with a second module. Six commits carry a plugin.json byte-identical to the installed one, and src/ is identical across five of them (the sixth has no src at all), so the code is settled whichever is picked; the installed build confirms it, carrying LOAD BTF, BMBO BTF QUANTIZER, No tuning loaded and Dark mode from that tree. The LOAD BTF button and the tuning display are plain widgets rather than ParamWidgets, so neither can be clicked for help and neither gets a line or a tag; both are covered by Note lines instead. The module's only menu item is Dark mode, which is cosmetic and changes no behaviour, so it is left out under the theme-menu rule. The module declares configBypass from the pitch input to the output, so bypassing it passes pitch through. The quantizer folds every interval into one octave and sorts and de-duplicates them, which means an Open tuning's intervals above the octave are collapsed rather than used; the maker's README says as much."
+}

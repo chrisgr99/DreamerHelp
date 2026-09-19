@@ -1,0 +1,24 @@
+{
+  "plugin": "moDllz",
+  "module": "MIDIpolyMPE",
+  "facts": {
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/MIDIpolyMPE.cpp:1281 setChannels(outCh), 1295 and 1361 setVoltage per voice"},
+      "1": {"poly": true, "why": "src/MIDIpolyMPE.cpp:1282 setChannels(outCh); 1298 in MPE, 1364 outpitch + drift in poly"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1283 setChannels(outCh), 1365 naft scaled by 10/127 at 567-569"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1284 setChannels(outCh), 1297 vels scaled by 10/127 at 567-569"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1285 setChannels(outCh), 1366 rvels scaled by 10/127"},
+      "5": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1286 setChannels(outCh), 1296 outgates is 10.f or 0.f"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "why": "src/MIDIpolyMPE.cpp:1289 one setVoltage, scaled by 5/8192 and 5/8191 at 573-579"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "13": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"},
+      "14": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/MIDIpolyMPE.cpp:1331 one setVoltage from a value scaled by 10/127"}
+    }
+  },
+  "comment": "The three output rows are not in index order: the top row reads pitch, gate and velocity, which are indices 0, 5 and 3, and the row below reads the second pitch, aftertouch and release velocity, indices 1, 2 and 4. The second pitch jack has no family because what it carries depends on the mode: 1V per octave in the polyphonic modes and a controller CV in the MPE ones. configParam is called twice for the data knob (src/MIDIpolyMPE.cpp:190-191) with different ranges; the second call wins, so the knob runs 0 to 1. The names Rack shows on the second pitch, aftertouch, release velocity and the eight controller jacks are rewritten at run time (src/MIDIpolyMPE.cpp:342-349), so the census names are whatever was assigned when it was taken. The module runs its MIDI and output code once every half a millisecond rather than every sample (src/MIDIpolyMPE.cpp:1275)."
+}

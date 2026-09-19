@@ -1,0 +1,41 @@
+{
+  "plugin": "Autinn",
+  "module": "Trace",
+  "description": "A vector oscillator: it runs a point round the outline of a shape and gives its position as a pair of voltages, tracing a circle until an SVG is pasted in",
+  "params": [
+    {"ids": [0], "text": "Sets how many times a second the outline is traced, from about 16Hz to 1046Hz"},
+    {"ids": [1], "text": "Scales the shape, from nothing at 0 to 1.2 times its stored size"},
+    {"ids": [2], "text": "Turns the shape, reaching half a turn one way at one end of its travel and half a turn the other way at the other end"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the trace rate at 1V per octave"},
+    {"ids": [1], "text": "Adds to the scale, a tenth per volt, with the total clamped between 0 and 10"},
+    {"ids": [2], "text": "Turns the shape further, 5V giving half a turn"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The horizontal position of the tracing point, one channel per shape in the SVG"},
+    {"ids": [1], "text": "The vertical position of the tracing point, one channel per shape in the SVG"}
+  ],
+  "notes": [
+    "with no SVG pasted, one channel traces a circle of ±5V.",
+    "the pasted shape is saved with the patch and comes back when the patch is loaded.",
+    "the shapes are scaled together, so their positions relative to each other are kept: the wider of the two dimensions spans ±5V before the SCALE controls and the other spans proportionally less.",
+    "the outline is sampled by arc length rather than by drawing order, so the point travels at an even speed all the way round however the curves are drawn.",
+    "each of the three knobs draws a gold arc from its own position round to where its CV input has moved it."
+  ],
+  "menu": [
+    "Paste SVG from clipboard — reads an SVG from the system clipboard and traces its outlines, up to sixteen of them, one per output channel",
+    "Clear SVG — throws the pasted shape away and returns to the circle"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

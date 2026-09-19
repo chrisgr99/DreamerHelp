@@ -1,0 +1,62 @@
+{
+  "plugin": "SickoCV",
+  "module": "TrigSeqPlus",
+  "description": "A sixteen-step trigger sequencer with thirty-two stored programs, clocked or addressed by voltage",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Turns that step on or off"},
+    {"ids": [16], "text": "Sets how many steps the sequence runs through, 1 to 16"},
+    {"ids": [17], "text": "Chooses whether the jack below it advances the sequence on each trigger or addresses a step directly by voltage"},
+    {"ids": [18], "text": "Sets which step a reset jumps to, 1 to 16; in TURING mode it attenuates the output voltage instead"},
+    {"ids": [19], "text": "Starts and stops the sequencer"},
+    {"ids": [20], "text": "Selects one of the thirty-two programs, 0 to 31; the choice only takes effect when SET is pressed, unless AUTO is on"},
+    {"ids": [21], "text": "Reloads the selected program, discarding any edits made since it was stored"},
+    {"ids": [22], "text": "Double-click to store the current sequence and its settings into the selected program"},
+    {"ids": [23], "text": "Applies the pending program change, and applies any step edits made to a pending program"},
+    {"ids": [24], "text": "Applies a program change the moment it is made, instead of waiting for the SET button"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence on each trigger, or addresses a step with 0-10V spread across the set length, depending on the switch above it"},
+    {"ids": [1], "text": "Held above 1V, each clock steps backwards instead of forwards; it is read in clock mode only"},
+    {"ids": [2], "text": "Runs the sequencer for as long as it is held high, or toggles it on a trigger with Run Input set to Trig"},
+    {"ids": [3], "text": "A trigger here jumps to the step the RST knob sets; it is read in clock mode only"},
+    {"ids": [4], "text": "Lengthens the sequence, 0-10V covering all sixteen steps, added to the STEPS knob"},
+    {"ids": [5], "text": "Selects the program by voltage, or steps to the next stored one on each trigger with Prog Input type set to Trig"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms pulse on the steps that are on, or a held gate or a clock-width pulse under Output type; in TURING mode it carries a voltage worked out from the on steps instead"}
+  ],
+  "notes": [
+    "a program is only saved by double-clicking STOR; editing the steps and moving on loses the changes.",
+    "in TURING mode the sequence is read as a register of bits and turned into a voltage, the way randLoops does it, so the output stops being a trigger."
+  ],
+  "menu": [
+    "Randomize Steps — turns all sixteen steps on or off at random",
+    "Output type: Trig, Gate, Clock Width — chooses whether an on step sends a 1ms pulse, a gate lasting the whole step, or a pulse the length of the incoming clock's high part",
+    "Reverse Input Voltage: Positive, Negative — chooses whether REV runs the sequence backwards above 1V or below -1V",
+    "Run Input: Gate, Trig — chooses whether the RUN jack runs the sequencer while held high or toggles it on each trigger",
+    "Reset on Run — resets the step when the sequencer goes from stopped to running",
+    "Don't advance — makes the first clock after a reset hold on the reset step rather than moving off it",
+    "Prog Input type: CV, Trig — chooses whether the PROG jack reads a voltage or steps to the next stored program on each trigger",
+    "Scan Last Prog — reads every program again and reports the highest one that holds anything",
+    "Copy Sequence — puts the current sequence on a clipboard shared with other trigSeq and randLoops modules",
+    "Paste Sequence — takes a sequence off that clipboard; it is shown as a plain label when the clipboard is empty",
+    "TURING MODE — reads the sixteen steps as register bits and puts out a voltage built from them, which turns on the Bit Resolution and Voltage progression items",
+    "Bit Resolution: 8 bit, 16 bit — sets how many of the steps the TURING voltage is built from",
+    "Voltage progression: 2x (std.), 1.3x, Fibonacci — sets how much each further bit is worth in the TURING voltage",
+    "DISK operations — a submenu with Load trigSeq PRESET and Save trigSeq PRESET, which read and write all thirty-two programs and the module's settings as one file",
+    "Initialize on Start — returns to the first step when Rack loads a patch, instead of resuming where the sequence stopped"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "0 to 10V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only"
+    }
+  }
+}

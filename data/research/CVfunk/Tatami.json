@@ -1,0 +1,20 @@
+{
+  "plugin": "CVfunk",
+  "module": "Tatami",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "the R audio jack", "why": "Tatami.cpp:287 takes getChannels() on this input and Tatami.cpp:371 reads each channel; Tatami.cpp:381 copies the right input here when this jack is empty, and Tatami.cpp:390 clamps to -10 to 10V"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Tatami.cpp:296 checks getChannels() on this input and Tatami.cpp:324 reads each channel; Tatami.cpp:326 wraps the knob-plus-input total into 0 to 3"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "the L audio jack", "why": "Tatami.cpp:288 takes getChannels() on this input and Tatami.cpp:372 reads each channel; Tatami.cpp:377 copies the left input here when this jack is empty, and Tatami.cpp:391 clamps to -10 to 10V"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Tatami.cpp:297 checks getChannels() on this input and Tatami.cpp:338 reads each channel, scaling by a tenth; Tatami.cpp:339 clamps the total to 0 to 1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±5V", "why": "Tatami.cpp:298 checks getChannels() on this input and Tatami.cpp:345 reads each channel; Tatami.cpp:346 clamps the knob-plus-input total to -5 to 5V"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the right density jack", "why": "Tatami.cpp:299 checks getChannels() on this input and Tatami.cpp:354 reads each channel; Tatami.cpp:359 copies the right density value here when this jack is empty"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "the left density jack", "why": "Tatami.cpp:300 checks getChannels() on this input and Tatami.cpp:355 reads each channel; Tatami.cpp:357 copies the left density value here when this jack is empty"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Tatami.cpp:292 sets its channel count from the two audio inputs; Tatami.cpp:451 clamps the folded signal to -10 to 10V"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "Tatami.cpp:293 sets its channel count from the two audio inputs; Tatami.cpp:452 clamps the folded signal to -10 to 10V"}
+    }
+  },
+  "comment": "The density knobs read 1 to 20 on the panel but the knob-plus-CV total is clamped to 30 (Tatami.cpp:366), so a density CV can push the fold count half again past the knob's own end. The fold itself is antiderivative-antialiased and morphs between a logistic curve, a sine, a sine of a power of the signal, and back to the logistic (Tatami.cpp:526)."
+}

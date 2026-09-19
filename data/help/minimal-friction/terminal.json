@@ -1,0 +1,53 @@
+{
+  "plugin": "minimal-friction",
+  "module": "terminal",
+  "description": "Three stereo send-and-return loops, each adding a delayed copy of what comes back to the signal at IN",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Sets how much of that channel's delayed ARRIVALS signal is added to its DEPARTURES output, silence at the left and full at the right"},
+    {"ids": [3, 4, 5], "text": "Sets how far back in that channel's memory the ARRIVALS signal is read from, 0 to 3 seconds"},
+    {"ids": [6, 7, 8], "text": "Clears that channel's delay memory and drops its DEPARTURES output to 0V; the button is momentary and acts on the frame it is pressed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left half of the source signal, added undelayed to the left DEPARTURES output of all three channels"},
+    {"ids": [1], "text": "The right half of the source signal, added undelayed to the right DEPARTURES output of all three channels"},
+    {"ids": [2, 4, 6], "text": "The left return for that channel, written into its delay memory and read back after the DELAY time"},
+    {"ids": [3, 5, 7], "text": "The right return for that channel, written into its delay memory and read back after the DELAY time"},
+    {"ids": [8, 9, 10], "text": "Added to that channel's GAIN knob at 10% per volt, with the total clamped between silence and full"},
+    {"ids": [11, 12, 13], "text": "Added to that channel's DELAY knob at 0.3 seconds per volt; the total is clamped at 0 but not at 3 seconds, so a large CV reads a wrong place in the memory rather than stopping at the longest delay"}
+  ],
+  "outputs": [
+    {"ids": [0, 2, 4], "text": "The left IN signal plus that channel's delayed left ARRIVALS signal scaled by GAIN"},
+    {"ids": [1, 3, 5], "text": "The right IN signal plus that channel's delayed right ARRIVALS signal scaled by GAIN"}
+  ],
+  "notes": [
+    "a channel does nothing on its own: patch its DEPARTURES pair out to an effect chain and that chain back into its ARRIVALS pair, or the departure output carries the IN signal alone.",
+    "there is no clipper anywhere in the module, so a loop with gain added in the chain can build without limit.",
+    "the delay memory is 3 seconds long, sized from the sample rate when the module is added; change the engine sample rate afterwards and the delay times are wrong until the module is replaced."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "7": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "11": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "13": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only"
+    }
+  }
+}

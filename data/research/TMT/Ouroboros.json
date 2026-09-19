@@ -1,0 +1,16 @@
+{
+  "plugin": "TMT",
+  "module": "Ouroboros",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "normal": "0V on a single step", "why": "ouroboros.cpp:77 getChannels() sets the sequence length; :114 getVoltage(step)"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "ouroboros.cpp:97 clockTrigger.process(rescale(v, 0.1, 2, 0, 1)), so the Schmitt trigger's 1.0 threshold falls at 2V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "ouroboros.cpp:84 resetTrigger.process(rescale(v, 0.1, 2, 0, 1)); :85 compares the clock against 0.1V"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "10V", "why": "ouroboros.cpp:80 unpatched reads 10V; :94 max(1, round(rescale(v, 0, 10, 1, channels)))"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "ouroboros.cpp:114 setVoltage with no channel argument"}
+    }
+  },
+  "comment": "The reset rule in the code (ouroboros.cpp:84-91) matches the readme and contradicts the module's own tooltip: a reset edge while the clock is high resets immediately, and one while the clock is low is held until the next clock edge. The Length input is not clamped, so a voltage above 10V asks for more steps than the input has channels; the extra steps read 0V from the unset channels of the port."
+}

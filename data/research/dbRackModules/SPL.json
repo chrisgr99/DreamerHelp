@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SPL",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "SPL.cpp:254 takes the channel count from this input and adds it to the Freq knob"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "normal": "a flat wave", "why": "SPL.cpp:303 reads the channel count of this input, holding it to two at least, and reads each channel as one point"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "normal": "0V", "why": "SPL.cpp:256 reads it per channel with getPolyVoltage(c) into a Schmitt trigger"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "SPL.cpp:289 takes the channel count from this input when it is connected and SPL.cpp:290-294 read each channel as the phase"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SPL.cpp:280 sets this output's channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "SPL.cpp:282 sets this output's channel count; SPL.cpp:270 writes five times the line value"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "SPL.cpp:284 sets this output's channel count; SPL.cpp:276 writes five times the step value"}
+    }
+  },
+  "comment": "The spline output is written at four times the point values rather than five, SPL.cpp:262, so it is quieter than the other two and can pass above 5V where the spline overshoots. With the Phs jack patched the module becomes a reader of the points at an outside phase, SPL.cpp:288-298, and the reset and pitch controls take no part."
+}

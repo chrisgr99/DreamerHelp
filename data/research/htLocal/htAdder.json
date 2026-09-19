@@ -1,0 +1,23 @@
+{
+  "plugin": "htLocal",
+  "module": "htAdder",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "normal": "0V", "why": "src/htAdder.cpp:173 and :175 read .value, channel 0 only; :180 supplies nothing for the CV when the jack is empty"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "normal": "1V", "why": "src/htAdder.cpp:190 reads .value, channel 0 only; :194 adds 1.0f times the switch when the jack is empty"},
+      "2": {"family": "pitch", "poly": false, "step": "continuous", "normal": "1V", "why": "src/htAdder.cpp:190 reads .value, channel 0 only; :194 adds 1.0f times the switch when the jack is empty"},
+      "3": {"family": "pitch", "poly": false, "step": "continuous", "normal": "1V", "why": "src/htAdder.cpp:190 reads .value, channel 0 only; :194 adds 1.0f times the switch when the jack is empty"},
+      "4": {"family": "pitch", "poly": false, "step": "continuous", "normal": "1V", "why": "src/htAdder.cpp:190 reads .value, channel 0 only; :194 adds 1.0f times the switch when the jack is empty"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "the switch keeps the position you set", "why": "src/htAdder.cpp:152 isConnected() gates it; :154-159 compare .value against 0 and write the switch"},
+      "6": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "the switch keeps the position you set", "why": "src/htAdder.cpp:152 isConnected() gates it; :154-159 compare .value against 0 and write the switch"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "the switch keeps the position you set", "why": "src/htAdder.cpp:152 isConnected() gates it; :154-159 compare .value against 0 and write the switch"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "the switch keeps the position you set", "why": "src/htAdder.cpp:152 isConnected() gates it; :154-159 compare .value against 0 and write the switch"},
+      "9": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "the switch keeps the position you set", "why": "src/htAdder.cpp:152 isConnected() gates it; :154-159 compare .value against 0 and write the switch"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "why": "src/htAdder.cpp:200-201 write .value, one channel, with no setChannels in the module"},
+      "1": {"family": "pitch", "poly": false, "why": "src/htAdder.cpp:200-201 write .value, one channel, with no setChannels in the module"}
+    }
+  },
+  "comment": "The MODE CV jacks do not add to the switches, they assign to them: params[PARAM_ADDER_MODE + ch].value is set to -1, 0 or 1 at src/htAdder.cpp:154-159. The switch therefore moves on the panel and keeps the position the CV last wrote once the cable is removed. The middle position needs an exact 0.0f, which a continuous CV will rarely hit. The first row is not like the other four: at :173 its CV is assigned to the total rather than added, and it is assigned whether or not the switch is at 0, so setting that switch to 0 does not remove the row. All ten jacks are read through Port::value, which is channel 0 of a polyphonic cable."
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "CVfunk",
+  "module": "Glass",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "Glass.cpp:485 takes getChannels() on this input for the note count and Glass.cpp:513 reads each channel with getPolyVoltage before folding it into the bowl range"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "negative": "ignored", "normal": "the V/OCT jack", "why": "Glass.cpp:486 takes getChannels() on this input and Glass.cpp:534 reads each channel, treating anything above 0.05V as high; Glass.cpp:541 holds every bowl when this jack is empty"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "10V", "why": "Glass.cpp:487 takes getChannels() on this input and Glass.cpp:527 reads each channel, dividing by 10 and clamping to 0 to 1; Glass.cpp:525 uses full pressure when it is empty"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "negative": "ignored", "why": "Glass.cpp:488 takes getChannels() on this input and Glass.cpp:551 reads each channel, treating anything above 0.05V as a damp on that note's bowl"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:403 clamps the total to 0 to 6"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:408 clamps the total to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:512 clamps the total to 0 to 1"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:369 clamps the total to 0 to 1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:466 clamps the total to 0 to 1"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Glass.cpp:233 reads channel one with getPolyVoltage and scales it by a tenth through the attenuverter; Glass.cpp:443 scales the total and clamps it to half an octave either way"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:429 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter; Glass.cpp:431 clamps the total to 0 to 1"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.5V", "negative": "ignored", "normal": "0V", "why": "Glass.cpp:362 reads it with getVoltage, so only channel 1, and treats anything above 0.5V as a global damp"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "why": "Glass.cpp:440 reads it with getVoltage, so only channel 1, and scales it by a hundredth times the external gain into every bowl"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Glass.cpp:437 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter; Glass.cpp:439 clamps the total to 0 to 1"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±2V", "why": "Glass.cpp:469 reads it with getVoltage, so only channel 1, adds it to the root knob and clamps the total to -2 to 2 octaves"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±12V", "why": "Glass.cpp:694 writes one channel with setVoltage, clamped to -12 to 12V"},
+      "1": {"family": "audio", "poly": false, "range": "±12V", "why": "Glass.cpp:695 writes one channel with setVoltage, clamped to -12 to 12V"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Glass.cpp:702 writes one channel with setVoltage, the follower scaled by 13 and clamped to 0 to 10V"}
+    }
+  },
+  "comment": "The knob labelled DECAY on the panel is configured as \"Sustain\" in the code (Glass.cpp:269) and controls how long a bowl rings after its gate drops. The pitch input is folded into a three-octave window and snapped to the nearest of thirty-seven fixed bowl pitches (Glass.cpp:221), so it does not track a keyboard continuously; ROOT and FM move the whole set. The module skips almost all of its work while no bowl holds energy (Glass.cpp:557)."
+}

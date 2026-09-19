@@ -1,0 +1,23 @@
+{
+  "plugin": "dbRackModules",
+  "module": "GeneticTerrain",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "GeneticTerrain.cpp:224 takes the channel count from this input when no phase is patched and GeneticTerrain.cpp:230 reads it four channels at a time"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "normal": "open", "why": "GeneticTerrain.cpp:227-229 read it four channels at a time and sound the voice only while it is high, and only while the Gate button is on"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:232 reads it four channels at a time, scales it by the knob beside it and adds the X knob, with no clamp"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:233 reads it four channels at a time, scales it by the knob beside it and adds the Y knob, with no clamp"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:234 reads it four channels at a time, scales it by the knob beside it and adds the RX knob, with no clamp"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:235 reads it four channels at a time, scales it by the knob beside it and adds the RY knob, with no clamp"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:236 reads it four channels at a time, scales it by the knob beside it and adds the ROT knob, with no clamp"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10.99V", "negative": "ignored", "normal": "the Curve knob", "why": "GeneticTerrain.cpp:191 reads it with getNormalVoltage(the knob) and no channel loop, clamps this jack to 0..10.99 and writes the whole number into the Curve knob"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "GeneticTerrain.cpp:231 reads it four channels at a time, scales it by the knob beside it and adds the CP knob, with no clamp"},
+      "9": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "why": "GeneticTerrain.cpp:224 takes the channel count from this input when it is connected and GeneticTerrain.cpp:238 walks the curve by it"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "GeneticTerrain.cpp:262 sets this output's channel count; GeneticTerrain.cpp:243 writes five times the terrain height"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "GeneticTerrain.cpp:264 sets this output's channel count; GeneticTerrain.cpp:255 writes five times the terrain height walked the other way"}
+    }
+  },
+  "comment": "The maker's README says the Gate input is only for the display and has no influence on the sound; that holds only while the small Gate button is off, GeneticTerrain.cpp:228-229, and with it on an unpatched or low gate silences that voice. The curve jack is clamped to 10.99 although there are eleven curves, GeneticTerrain.cpp:191, so its top volt reaches the last of them. A parameter for a SIMD setting is configured with no widget, so no click reaches it. The four terrain knobs run from -1, which is NONE, to 26, GeneticTerrain.cpp:98-101, and the 27 formulas are named at GeneticTerrain.cpp:92."
+}

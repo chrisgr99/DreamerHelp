@@ -1,0 +1,42 @@
+{
+  "plugin": "dbRackModules",
+  "module": "MPad2",
+  "description": "A small PadSynth voice with no faders of its own: the partials are set by cable, which is what the Faders module is for",
+  "params": [
+    {"ids": [0], "text": "Sets how wide each partial is spread in the spectrum, 0.5 to 60; wider partials give the chorused, breathing quality of a pad"},
+    {"ids": [1], "text": "Sets how much that width grows towards the higher partials, 0.5 to 4"},
+    {"ids": [2], "text": "Sets the seed the phases of the partials are drawn from, 0 to 1, which changes the sound a little without changing the harmonics"},
+    {"ids": [3], "text": "Sets the fundamental frequency the wavetable is built at, 16Hz to 2048Hz as a power of two; raising it helps when only high notes are played"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch the wavetable is read at, 1V per octave, one channel per voice"},
+    {"ids": [1], "text": "Sets the bandwidth by cable, 0-10V across the whole of the knob's span, and moves the knob while it is patched"},
+    {"ids": [2], "text": "Sets that growth by cable, 0-10V across the whole of the knob's span, and moves the knob while it is patched"},
+    {"ids": [3], "text": "Sets the strengths of the first sixteen partials, one channel per partial, 0-10V for each; the panel lettering 1-16 is right and the maker's tooltip, Partials 2-17, is off by one"},
+    {"ids": [4], "text": "Sets the strengths of the seventeenth to the thirty-second partials, one channel per partial, 0-10V for each"},
+    {"ids": [5], "text": "Sets the strengths of the thirty-third to the forty-eighth partials, one channel per partial, 0-10V for each"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the wave"},
+    {"ids": [1], "text": "The right side of the wave, which is the same table read half a cycle away, so the two sides differ"}
+  ],
+  "notes": [
+    "no partial is set when the module is placed, so it makes no sound until something is patched into the partial jacks; with the first of the three empty the other two are passed over as well",
+    "every change to the partials builds the wavetable again in a background thread, which the patch carries on playing through",
+    "place Faders to the left of PAD2 and press f over it to fetch that module's partials, then patch the Faders outputs here to carry the sound across"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads the BW knob; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads the Scl knob; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads silence; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · polyphonic\n\nunpatched it reads silence; a negative voltage does nothing here.",
+      "5": "0 to 10V · continuous · polyphonic\n\nunpatched it reads silence; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

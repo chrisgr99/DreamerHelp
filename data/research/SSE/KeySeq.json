@@ -1,0 +1,25 @@
+{
+  "plugin": "SSE",
+  "module": "KeySeq",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "KeySeq.cpp:1009 and 1065 read this jack with getVoltage() alone and KeySeq.cpp:691 splits it into octave and note"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "KeySeq.cpp:959 passes getVoltage() to a dsp::TSchmittTrigger declared at KeySeq.cpp:383; Rack's dsp::TSchmittTrigger takes high at 1V and low at 0V by default"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "KeySeq.cpp:1007 passes getVoltage() to a dsp::TSchmittTrigger declared at KeySeq.cpp:384; Rack's dsp::TSchmittTrigger takes high at 1V and low at 0V by default"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "KeySeq.cpp:854 passes getVoltage() to a dsp::TSchmittTrigger declared at KeySeq.cpp:382; Rack's dsp::TSchmittTrigger takes high at 1V and low at 0V by default"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "10V", "why": "KeySeq.cpp:1066 to 1069 read this jack with getVoltage() when it is connected and record 10V when it is not"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0V", "why": "KeySeq.cpp:947 compares getVoltage() against 0.0f directly, with no Schmitt trigger and no edge detection, so the reset holds while the voltage is above 0V"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "why": "KeySeq.cpp:973 reads this jack with getVoltage() alone and KeySeq.cpp:974 to 984 turn any change of more than 0.005V into a sequence number, either from the note within the octave or, with the menu option set, from 0V to 10V across the twelve"},
+      "7": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "KeySeq.cpp:1152 reads this jack with getVoltage() alone and KeySeq.cpp:691 splits it into octave and note; KeySeq.cpp:1149 reads it only while both it and the second gate are connected"},
+      "8": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "KeySeq.cpp:1150 passes getVoltage() to a dsp::TSchmittTrigger declared at KeySeq.cpp:385; Rack's dsp::TSchmittTrigger takes high at 1V and low at 0V by default"},
+      "9": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "KeySeq.cpp:995 reads this jack with getVoltage() alone and KeySeq.cpp:996 acts on any change of more than 0.005V, taking the voltage as the base note"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "KeySeq.cpp:888 writes one value with setVoltage(), the step's stored CV plus the transpose voltage, and KeySeq.cpp:898 writes 0V on a rest"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "KeySeq.cpp:917 writes 10V while the gate counter runs and KeySeq.cpp:921 writes 0V otherwise, one value with setVoltage()"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "KeySeq.cpp:889 writes the step's stored velocity with setVoltage() and KeySeq.cpp:899 writes 0V on a rest"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "KeySeq.cpp:938 writes 10V while the end-of-sequence counter runs, set to 200 at KeySeq.cpp:858, and KeySeq.cpp:942 writes 0V otherwise"}
+    }
+  },
+  "comment": "Source read at SSE-One commit ff3505b, the head of main; its only change over c2d3c7f, the commit that raised plugin.json to 2.0.2, is a line of changes.md, so the code is the same. Two params have no widget and no click can reach them, so both are untagged: param 0, the double-click time for smart tie, is inside an #ifdef SMART_TIE that the Makefile never defines, and param 8 is an unused enum member the maker never configured or placed. Input 9, the Tran jack, is the one input the maker never named, so its tooltip is blank in the rack. The manual has Prev and Next the wrong way round: it says Prev moves the input position forward and Next moves it backward, while KeySeq.cpp:1208 and 1216 call prev() and next() respectively, which is the other way about. The whole of process() runs only on every eighth sample (KeySeq.cpp:845 with FRAME_DIVIDER 8 in plugin.hpp), so the gate length knob and the 200-block end-of-sequence pulse are counted in blocks of eight samples. One bug worth knowing: with the Play Input CV 0..10V option set, KeySeq.cpp:978 rounds the voltage to round(v / 10 * 12), which gives 12 at 10V, and KeySeq.cpp:985 admits any value up to and including 12; the sequence array holds twelve entries numbered 0 to 11, so a full 10V on the Play input reads past the end of it. The Reserved button, param 6, does nothing when pressed on its own (KeySeq.cpp:1295 clears it with a comment saying it is reserved for future expansion), but it is the ninth entry of the button-to-sequence table at KeySeq.cpp:1185, so while Sel or Copy is waiting it selects sequence 8."
+}

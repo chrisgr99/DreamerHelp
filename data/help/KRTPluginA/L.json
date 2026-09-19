@@ -1,0 +1,31 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "L",
+  "description": "A delay that measures the time between triggers and plays back one trigger later, with a control to take a number of samples off that delay",
+  "params": [
+    {"ids": [0], "text": "Takes two to this power of samples off the delay, 0 to 16, so 1 sample at fully counter-clockwise and 65536 fully clockwise"},
+    {"ids": [1], "text": "Adds up to one more to the power the Pre knob sets, so the shortening moves smoothly between that knob's steps"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal written into the delay"},
+    {"ids": [1], "text": "Sets the delay to the time since the last rising edge here, reading high above 2V and low again below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V through the stretch of the cycle that the two knobs take off the delay, ending as the next trigger is due, and 0V the rest of the time"},
+    {"ids": [1], "text": "The input played back one trigger later, less the samples the two knobs take off"}
+  ],
+  "notes": [
+    "the delay length is only measured when a trigger arrives at TRIG; before the second trigger the module uses its starting length of 4096 samples",
+    "the buffer holds about 256 seconds at 44.1kHz shared out between the polyphonic channels, so sixteen channels leave about sixteen seconds each"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

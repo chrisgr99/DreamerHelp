@@ -1,0 +1,44 @@
+{
+  "plugin": "dbRackModules",
+  "module": "CSOSC",
+  "description": "A cosine oscillator whose phase is bent towards a pulse or a saw, with that bent phase brought out for driving other oscillators",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, -14 to 4 as a power of two around middle C, which is about 0.016Hz to 4186Hz"},
+    {"ids": [1], "text": "Sets where the middle of the cycle falls, 0 to 1; away from the centre the wave leans towards a saw"},
+    {"ids": [2], "text": "Sets how much of each half of the cycle is flattened at its ends, 0 to 1, which squares the wave off towards a pulse"},
+    {"ids": [3], "text": "Attenuates the voltage at the Skew jack before it is added to the Skew knob, 0 to 100 per cent"},
+    {"ids": [4], "text": "Attenuates the voltage at the Clip jack before it is added to the Clip knob, 0 to 100 per cent"},
+    {"ids": [5], "text": "Scales the voltage at the FM jack, 0 to 300 per cent"},
+    {"ids": [6], "text": "While on, the FM jack is added to the frequency in hertz rather than to the pitch in octaves, which gives through-zero frequency modulation"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch by cable, 1V per octave added to the knob, one channel per voice"},
+    {"ids": [1], "text": "Drives the wave from an outside phase over -5V to 5V; while a cable is patched here the pitch knob and the V/Oct jack are passed over"},
+    {"ids": [2], "text": "Modulates the skew, a tenth per volt scaled by the knob below it"},
+    {"ids": [3], "text": "Modulates the clipping, a tenth per volt scaled by the knob below it"},
+    {"ids": [4], "text": "Modulates the frequency through the FM knob; with Lin off it is added to the pitch in octaves, and with Lin on it is added to the frequency itself, which lets it pass through zero"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The bent phase as a rising ramp over -5V to 5V, for driving a phase driven oscillator"},
+    {"ids": [1], "text": "The cosine of the bent phase, -5V to 5V"}
+  ],
+  "notes": [
+    "used as an FM operator, the modulation is carried in the bent phase as well, so an oscillator driven from the Phs output is modulated through it"
+  ],
+  "menu": [
+    "Oversample — runs the oscillator sixteen times over per sample and filters the result, which cuts the aliasing of the harder settings; it is passed over while a cable is in the Phs input"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic"
+    }
+  }
+}

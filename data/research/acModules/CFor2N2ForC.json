@@ -1,0 +1,15 @@
+{
+  "plugin": "acModules",
+  "module": "CFor2N2ForC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/CFor2N2ForC.cpp process(): clamp(getVoltage(), -5.f, 10.f), a negative voltage is shifted up by 10V and only the fractional part is used"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "src/CFor2N2ForC.cpp process(): inTrigger.process(getVoltage(), 0.01f, 2.f)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "-5 to 10V", "why": "src/CFor2N2ForC.cpp process(): setVoltage(inCV), the knob value, knobs configured -5 to 10"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "why": "src/CFor2N2ForC.cpp process(): setVoltage(10.f, i) for i in 0..11 and setChannels(12)"}
+    }
+  },
+  "comment": "The CV output is monophonic and the trigger output always carries exactly twelve channels whether or not anything is patched in. A negative input voltage is shifted up by 10V before the note is worked out, so the twelve zones line up the same way across the whole -5V to +10V span. The module does nothing at all with the CV jack empty, which the README does not say. Every input is read with getVoltage(), so a polyphonic cable is read on its first channel only."
+}

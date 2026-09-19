@@ -18,20 +18,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install pyyaml
-
-      # DOES IT PARSE, AND DOES IT MEAN WHAT IT SAYS. The round-trip is the guard against YAML's
-      # type coercion: a line reading `Off` loads as the boolean false, looks perfectly correct
-      # in review, and renders as a card saying "false". Dumping and reloading catches it.
+      # DOES IT PARSE, AND DOES IT MEAN WHAT IT SAYS: the schema of every help file and research
+      # file, a citation for every fact, and the style rules on every line.
       - name: validate the database
         run: python3 tools/validate.py
 
-      # IS THE GENERATED TABLE CURRENT. src/HelpText.cpp is committed so that a build needs
-      # nothing but the SDK, which means it can fall behind the data it came from. Regenerating
-      # and diffing is how a stale table becomes a failed check rather than yesterday's text
-      # quietly shipping.
-      - name: the generated table matches the database
-        run: |
-          python3 tools/build.py
-          git diff --exit-code src/HelpText.cpp \
-            || (echo "::error::src/HelpText.cpp is stale — run 'make helptext' and commit it" && exit 1)
+      # IS WHAT EACH JACK EXPECTS CURRENT. It is derived from data/research into data/help, and a
+      # fact changed without re-deriving would ship yesterday's phrase quietly.
+      - name: every help file's expects matches its research
+        run: python3 tools/build.py --check

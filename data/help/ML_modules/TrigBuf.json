@@ -1,0 +1,37 @@
+{
+  "plugin": "ML_modules",
+  "module": "TrigBuf",
+  "description": "Two trigger buffers, each holding an arming until the next gate arrives and letting that one gate through",
+  "params": [
+    {"ids": [0, 1], "text": "Arms that channel by hand, so the next gate at its input is passed on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge arms the first channel; if its gate is already high the arming takes effect once that gate has fallen"},
+    {"ids": [1], "text": "A rising edge arms the second channel; with nothing patched it takes the first channel's Arm signal"},
+    {"ids": [2], "text": "The gates offered to the first channel's output, of which one is passed each time the channel is armed"},
+    {"ids": [3], "text": "The gates offered to the second channel's output; with nothing patched it takes the first channel's In signal"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "Carries 10V for one gate from its input once the channel has been armed, and 0V until it is armed again"}
+  ],
+  "notes": [
+    "both channels work polyphonically, arming and passing each channel of the cable separately",
+    "a channel passes nothing until it is armed: with Arm on Load unticked both outputs stay at 0V when the patch is loaded, until the Arm button is pressed or a trigger reaches the Arm input"
+  ],
+  "menu": [
+    "Arm on Load — both channels come up armed every time the module is loaded or reset, instead of waiting to be armed",
+    "Save Default — writes the present Arm on Load setting into ML_Modules.json in the Rack user folder, so new Trigger Buffer modules start with it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

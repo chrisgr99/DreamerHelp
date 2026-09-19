@@ -1,0 +1,42 @@
+{
+  "plugin": "SanguineMonsters",
+  "module": "Sanguine-Fortuna",
+  "description": "Two polyphonic coin tossers, each sending its input signal to one of two outputs on every trigger, with a crossfade so the swap does not click",
+  "params": [
+    {"ids": [0, 1], "text": "Sets the odds of the toss for that section: at the top every trigger sends the signal to A, at the bottom every trigger sends it to B in direct mode or swaps the outputs in toggle mode"},
+    {"ids": [2, 3], "text": "Chooses how the toss is read, the panel printing M: Direct sends the signal to A on heads and to B on tails; Toggle leaves it where it is on heads and swaps it over on tails. It comes up in Direct"},
+    {"ids": [4, 5], "text": "Sets how long the signal takes to fade from one output to the other after a swap, 0 to 10 seconds; at 0 the crossfader is off and the swap is instant"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "The signal that section routes to one of its two outputs; the second section's is normalled to the first section's"},
+    {"ids": [2, 3], "text": "Shifts the odds for that section; the voltage is divided by 5 and added to the probability slider, and it is read one voltage per channel"},
+    {"ids": [4, 5], "text": "A trigger above 2V tosses the coin for that section and chooses an output; the second section's is normalled to the first section's"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "One of the two destinations for that section's signal; it carries the input while it is selected and silence while it is not, with the crossfade between"}
+  ],
+  "notes": [
+    "Polyphony for a section comes from its signal and trigger inputs, whichever carries more channels; a monophonic probability CV modulates channel 1 only.",
+    "The second section's trigger input is normalled to the first section's, so one trigger can drive both halves; the manual mentions only the signal normalling.",
+    "A signal is always at one output or the other: a new module, or a freshly loaded patch, sends it to A."
+  ],
+  "menu": [
+    "LEDs channel — picks which polyphonic channel the lights on both sections show; only channels the cables carry are listed, and it defaults to channel 1"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads the section 1 signal input.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "high above 2V · stepped · polyphonic",
+      "5": "high above 2V · stepped · polyphonic\n\nunpatched it reads the section 1 trigger input."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

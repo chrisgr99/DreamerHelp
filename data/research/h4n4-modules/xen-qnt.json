@@ -1,0 +1,14 @@
+{
+  "plugin": "h4n4-modules",
+  "module": "xen-qnt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "negative": "swings", "why": "XenQnt.cpp:179 calls getChannels and line 182 reads getVoltage(i) for each channel; line 188 switches on the step each voltage maps to through getCvPitch"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "negative": "swings", "why": "XenQnt.cpp:245 calls getChannels and line 251 reads getVoltage(i) for each channel; updateTuning at line 505 builds steps from -4V to 6V, so a voltage outside that is taken to the nearest end"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "XenQnt.cpp:252 writes one voltage per channel and line 257 calls setChannels with the pitch input's channel count"}
+    }
+  },
+  "comment": "Source read at commit 17ed896, the merge that is the tip of the installed 2.3.0; the only other 2.3.0 commit, 039099c, has a byte-identical src/ tree, and the next commit bumps to 2.3.1. All four installed res/ SVGs hash to the blobs at that commit. The maker named the CV input CV and the output 1 V/oct but called configInput on the pitch input with an empty string, so that jack shows a blank tooltip; the panel prints cv beside the CV jack and nothing beside the other two. THE FIRST BUTTON IS THE LAST LINE OF THE SCALA FILE. scaleToLightIdx at line 268 maps scale index i to button (i + 1) modulo the scale size, because a Scala file's last value is the period rather than a step within it; for twelve-note equal temperament that puts 1200 cents on the first button and 100 cents on the second. THE CV JACK TAKES THE BUTTONS OVER WHILE IT IS PATCHED. Line 174 saves the current selection into backupScale on the sample the cable goes in, line 185 clears every step and lines 186-189 switch on only the ones the cable names, and line 197 restores the saved selection when the cable comes out. The buttons can still be clicked but the next CV scan, once a millisecond, overwrites them. The list of recent Scala files is written to H4N4.json in Rack's user directory and is shared by every instance of the module, which is what commit 5364f01 was about; at 2.3.0 the list is loaded once in the constructor. All 36 buttons have ParamWidgets at distinct positions, so all 36 can be clicked for help."
+}

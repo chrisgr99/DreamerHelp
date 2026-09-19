@@ -1,0 +1,66 @@
+{
+  "plugin": "Geodesics",
+  "module": "Twin-Paradox",
+  "description": "A clock generator with two outputs that can run at different rates through a group of beats and always come back together at its end",
+  "params": [
+    {"ids": [0], "text": "Sets the reference group at 1 to 8 beats, the span over which the twins go apart and meet again"},
+    {"ids": [1], "text": "Sets how many beats, 1 to 8, the travelling twin fits into the span of the reference group"},
+    {"ids": [2], "text": "Turns the tempo up or down between 30 and 300 BPM; the tempo comes from the sync input instead while a cable is patched there"},
+    {"ids": [3], "text": "Returns the clocks to the start of a reference group"},
+    {"ids": [4], "text": "Starts and stops the clocks; with a clock patched to the sync input in a pulses per quarter note reading it can only stop them"},
+    {"ids": [5], "text": "Sets the chance of a travel beginning at each new reference group, never fully anticlockwise and every group fully clockwise"},
+    {"ids": [6], "text": "Sets which twin takes the travelling timeline, twin 1 every time fully anticlockwise, twin 2 every time fully clockwise, and a random pick between them"},
+    {"ids": [7], "text": "Requests a travel, which begins at the start of the next reference group"},
+    {"ids": [8], "text": "Steps the reference tempo through plain, divided by 2, divided by 4, multiplied by 2 and multiplied by 4, a green lamp for a division and a violet one for a multiplication"},
+    {"ids": [9], "text": "Taps in the tempo, averaged over the last four taps; presses are ignored while a cable is in the sync input"},
+    {"ids": [10], "text": "Steps how the sync input is read, through a voltage carrying the tempo, 24 pulses per quarter note and 48; two quick pulses at that input also switch it to 24"},
+    {"ids": [11], "text": "Steps what the sync output carries, through a clock at the reference tempo, one at 24 times it, one at 48 times it, and a voltage carrying the tempo"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here returns the clocks to the start of a reference group"},
+    {"ids": [1], "text": "A trigger here starts and stops the clocks, or holds them running for as long as it is high with the menu option set"},
+    {"ids": [2], "text": "Sets the tempo from outside, as a clock at 24 or 48 pulses per quarter note, or as a voltage where 0V is 120 BPM and every volt doubles it"},
+    {"ids": [3], "text": "A trigger here requests a travel, which begins at the start of the next reference group"},
+    {"ids": [4], "text": "Every volt here adds a tenth to the chance of a travel beginning at a new group, on top of the auto-travel knob"},
+    {"ids": [5], "text": "Every volt here adds a tenth to the chance of twin 2 being the traveller, on top of the traveler knob"},
+    {"ids": [6], "text": "Lengthens the reference group, the whole 1 to 8 beat span across 0V to 10V, added to the reference time knob"},
+    {"ids": [7], "text": "Lengthens the traveller's group, the whole 1 to 8 beat span across 0V to 10V, added to the traveler time knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The twin 1 clock, which runs the reference tempo except while twin 1 is the traveller"},
+    {"ids": [1], "text": "The twin 2 clock, which runs the reference tempo except while twin 2 is the traveller"},
+    {"ids": [2], "text": "A 1ms 10V pulse whenever the module is reset, and on starting or stopping with the matching menu option set"},
+    {"ids": [3], "text": "A 1ms 10V pulse when the clocks start and another when they stop"},
+    {"ids": [4], "text": "A 1ms 10V pulse each time a reference group completes and the twins meet, or only at the end of a travel with the menu option set"},
+    {"ids": [5], "text": "A clock at the reference tempo or at 24 or 48 times it, or a voltage where 0V is 120 BPM and every volt doubles it"}
+  ],
+  "notes": [
+    "the clocks come up running as soon as the module is added, and the run button stops and starts them",
+    "the two group sizes are a ratio: while the reference group counts out its beats, the travelling twin fits its own count into the same span",
+    "a reference of 1 against a traveler of 2 doubles the travelling clock, and a reference of 2 against a traveler of 1 halves it",
+    "a reference of 4 against a traveler of 5 gives quintuplets, and a reference of 5 against a traveler of 7 gives nested tuplets",
+    "the run and reset outputs are the intended way to start and reset the rest of a patch along with these clocks"
+  ],
+  "menu": [
+    "On Start — what starting the clocks also does, either, both or neither of Do internal reset and Send reset pulse",
+    "On Stop — what stopping the clocks also does, either, both or neither of Do internal reset and Send reset pulse",
+    "Outputs high on reset when not running — holds the clock outputs at 10V while the module is reset and stopped, in place of 0V",
+    "Run CV input is gate (instead of trigger) — makes the run input follow the level of a gate rather than toggling on each rising edge",
+    "Meet only at end of travel — limits the meet output to the groups that end a travel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped"
+    }
+  }
+}

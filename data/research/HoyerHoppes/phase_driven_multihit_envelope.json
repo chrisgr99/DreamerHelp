@@ -1,0 +1,25 @@
+{
+  "plugin": "HoyerHoppes",
+  "module": "phase_driven_multihit_envelope",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "src/phase_driven_multihit_envelope.cpp:126 with the phase button lit the voltage divided by 10, plus the menu's bipolar offset, is clamped to 0 to 1 and used as the phase; :127 unlit, a SchmittTrigger at 1V counts the frames between edges to give the rate"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "src/phase_driven_multihit_envelope.cpp:215 the voltage is multiplied by the smoothed envelope and sent to the vca output; it is read nowhere else"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/phase_driven_multihit_envelope.cpp:177 the voltage divided by 10 is added to the attack slider with no clamp, and the sum is the fraction of one hit the attack segment takes"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/phase_driven_multihit_envelope.cpp:185 the voltage divided by 10 is added to the sustain slider with no clamp, and the sum is the fraction of one hit at which the envelope leaves full level"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/phase_driven_multihit_envelope.cpp:187 the voltage divided by 10 is added to the decay slider with no clamp, and the sum is the fraction of one hit at which the envelope reaches zero"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "normal": "the hits knob", "why": "src/phase_driven_multihit_envelope.cpp:154 while a cable is in, the voltage divided by 10 times 16, truncated to a whole number and clamped to 1 to 16, replaces the hits knob; the menu's other hit counts read the same jack at :158, :162 and :166 with their own multipliers"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the skew knob", "why": "src/phase_driven_multihit_envelope.cpp:139 while a cable is in, the voltage divided by 10 replaces the skew knob, clamped to 0.001 to 1, and sets where in the cycle the phase turns round"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the spread knob", "why": "src/phase_driven_multihit_envelope.cpp:142 while a cable is in, the voltage divided by 10 replaces the spread knob, clamped to 0.001 to 2, so 0-10V reaches only the lower half of that knob's travel; the result is the exponent the skewed phase is raised to"},
+      "9": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "10V", "why": "src/phase_driven_multihit_envelope.cpp:207 while a cable is in, the voltage divided by 10 is multiplied by the phase->env knob, and :208 multiplies the envelope by 1 minus that figure times the spread phase"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/phase_driven_multihit_envelope.cpp:217"},
+      "1": {"family": "audio", "poly": false, "why": "src/phase_driven_multihit_envelope.cpp:215"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/phase_driven_multihit_envelope.cpp:216"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/phase_driven_multihit_envelope.cpp:218"}
+    }
+  },
+  "source": "https://github.com/jakulley/HoyerHoppes/blob/main/README.md",
+  "comment": "Written from the maker's source at commit 7f2d7f2 (the plugin.json carrying 2.0.1); head carries the same source. Input 5 is declared in the enum as SPACE_INPUT and is the one input the worksheet lists as having no panel jack: there is no configInput for it and no addInput, so it cannot be clicked and it gets no line. Inputs 7 and 8, the skew and spread jacks, are configured with empty names and so have no tooltip. All four outputs are configured with empty names as well, so every output tooltip on this module is blank. The spread knob is configured 0 to 2.1 but process() clamps the value to 2.0, so the top five percent of that knob's travel does nothing; the same clamp on the two exp trimpots matches their configured range and costs nothing. The menu's 'evens' option labels the hits knob 2, 4, 6, 8, 10, 12, 16 while the code computes 2 times the knob position, which gives 14 at the top; the label is wrong. Neither hitPattern nor the bipolar phase offset is written by dataToJson, so a patch reload restores the hits knob's 1-16 labelling and the unipolar rate reading whatever was chosen. In phase mode the leftover clock rate from a previous spell in clock mode is added to the phase every sample, so switching from clock to phase leaves the phase drifting until a reset of the patch."
+}

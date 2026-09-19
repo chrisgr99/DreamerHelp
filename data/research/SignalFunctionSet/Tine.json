@@ -1,0 +1,15 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Tine",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "tine.cpp:143 reads it with getVoltage, so only channel 1, and adds it to the frequency knob"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "tine.cpp:178 reads it with getVoltage, so only channel 1, into a Schmitt trigger set to 0.1V and 1V"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 5V", "why": "tine.cpp:152 reads it with getVoltage, so only channel 1, divides by 5 and clamps the knob-plus-input total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "tine.cpp writes one channel with setVoltage from the resonator output"}
+    }
+  },
+  "comment": "The damping knob is mapped exponentially onto the resonator's quality factor, from about 2 at the bottom of the travel to 50000 at the top (tine.cpp:156), which is why almost all the useful ring lengths sit in the last quarter of the knob. The strike is a half-sine arch a fixed number of samples long (tine.cpp:227), not the trigger voltage itself, so the jack's level does not change how hard the resonator is struck."
+}

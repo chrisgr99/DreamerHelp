@@ -1,0 +1,38 @@
+{
+  "plugin": "dbRackModules",
+  "module": "EVA",
+  "description": "An ADSR envelope with a VCA built in, so the envelope both comes out on its own jack and multiplies whatever is patched into In",
+  "params": [
+    {"ids": [0], "text": "Sets how long the envelope takes to rise, 1ms to 10 seconds"},
+    {"ids": [1], "text": "Sets how long the envelope takes to fall from its peak to the sustain level, 1ms to 10 seconds"},
+    {"ids": [2], "text": "Sets the level the envelope holds while the gate is high, 0 to 100 per cent of the peak"},
+    {"ids": [3], "text": "Sets how long the envelope takes to fall to zero once the gate goes low, 1ms to 10 seconds"},
+    {"ids": [4], "text": "Scales the whole envelope, 0 to 2; at 1 the Env jack reaches 10V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal the envelope multiplies, one per channel; the channel count here is what the Out jack carries"},
+    {"ids": [1], "text": "Holds the envelope open while it is at or above 1V, one gate per channel; the channel count here is what the Env jack carries"},
+    {"ids": [2], "text": "A trigger here starts the attack again without the gate having gone low"},
+    {"ids": [3], "text": "Scales the envelope by voltage, multiplying the Gain knob by a tenth of the voltage here, one channel per output channel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal from In multiplied by the envelope"},
+    {"ids": [1], "text": "The envelope on its own, reaching 10V at a gain of 1"}
+  ],
+  "notes": [
+    "the Env jack takes its channel count from Gate, so with nothing patched into Gate it carries no channels at all",
+    "the envelope rises towards 1.2 times its peak and the attack ends when it reaches the peak, which is what gives the rise its curve"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the Gain knob alone."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

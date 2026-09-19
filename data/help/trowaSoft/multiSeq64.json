@@ -1,0 +1,94 @@
+{
+  "plugin": "trowaSoft",
+  "module": "multiSeq64",
+  "description": "A sixteen channel step sequencer of sixty-four steps per channel, where each channel can put out triggers, gates or voltages, with an Open Sound Control interface",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock, from a quarter of the note value per minute up to sixty-four times it, and the reading above shows the result"},
+    {"ids": [1], "text": "Starts and stops playback, and the lamp on it shows whether the sequence is running"},
+    {"ids": [2], "text": "Sends playback back to the first step, and while playback is stopped arms step one for the next start"},
+    {"ids": [3], "text": "Sets how many steps the sequence plays before it returns to the first, 1 to 64"},
+    {"ids": [4], "text": "Picks which of the 64 patterns is played, which is the number under PATT on the left of the display"},
+    {"ids": [5], "text": "Picks which of the 64 patterns the pads and knobs are editing, which is the number under PATT on the right of the display"},
+    {"ids": [6], "text": "Picks which of the sixteen channels the pads and knobs are editing, 1 to 16, shown under CHNL and coloured to match that channel's output jack"},
+    {"ids": [7], "text": "Picks the output mode of the channel being edited, from TRIG, RTRG and GATE for pulses and gates through VOLT, NOTE and PATT for voltages"},
+    {"ids": [9], "text": "Copies the whole pattern being edited, all sixteen channels, to the clipboard"},
+    {"ids": [10], "text": "Copies the channel being edited, in the pattern being edited, to the clipboard"},
+    {"ids": [11], "text": "Pastes whatever was last copied into the pattern or channel being edited"},
+    {"ids": [12], "text": "Steps the clock division through 1/4, 1/8, 1/8T and 1/16, which changes what the tempo knob counts and is shown after BPM on the display"},
+    {"ids": [13], "text": "Turns the OSC connection on and saves the addresses and ports typed into the configuration screen"},
+    {"ids": [14], "text": "Switched on, the OSC connection is opened again whenever the patch is loaded"},
+    {"ids": [15], "text": "Shows and hides the OSC configuration screen, where the send and receive addresses and ports are typed"},
+    {"ids": [16], "text": "Shows and hides the song mode screen, where the list of patterns the song plays is set"},
+    {"ids": [17], "text": "Switched on, playback follows the list of patterns on the song mode screen instead of staying on one pattern"},
+    {"ids": [18], "text": "Sets how many entries of the song mode list are played before it returns to the first"},
+    {"ids": [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82], "text": "Sets what that step of the channel being edited puts out; in the trigger modes it toggles the step on and off, and in the voltage modes it sets a value"},
+    {"ids": [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146], "text": "Sets which pattern that place in the song mode list plays, 1 to 64"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge here sets the tempo of the internal clock, -10V for the slowest setting and 10V for the fastest"},
+    {"ids": [1], "text": "A rising edge here advances the sequence one step and takes over from the internal clock while a cable is present"},
+    {"ids": [2], "text": "A rising edge here sends playback back to the first step"},
+    {"ids": [3], "text": "Sets how many steps the sequence plays, -10V for one step and 10V for 64"},
+    {"ids": [4], "text": "Picks which pattern is played, -10V for pattern 1 and 10V for pattern 64"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Carries that channel's output, and the ring of light around the jack shows when that channel is firing"}
+  ],
+  "notes": [
+    "the pads and knobs edit one channel of one pattern at a time, chosen by the CHNL knob and the PATT knob under EDIT; the PATT knob under PLAYBACK is the one that plays",
+    "each of the sixteen channels keeps its own output mode, so the MODE knob changes the mode of the channel being edited rather than of the whole module",
+    "dragging across the pads with the mouse held down toggles every pad the pointer passes over, which is the quickest way to draw or clear a run of steps",
+    "hovering a step and pressing the copy key copies that step, and the paste key pastes a step, row or column back; the same actions are on the step's own right-click menu",
+    "with nothing patched to the clock jack the module runs from its own clock at the tempo set by the tempo knob; patching a clock there takes that over",
+    "the six modes are shared out per channel, so one module can put gates on some outputs and pitches on others at the same time"
+  ],
+  "menu": [
+    "Initialize (Reset Channel Mode) — a heading over three items that clear steps and put the output mode back to its default",
+    "Current Edit Channel — clears the channel being edited in the pattern being edited",
+    "Current Edit Pattern — clears all sixteen channels of the pattern being edited",
+    "All Patterns — clears every channel of all 64 patterns",
+    "Initialize (Keep Channel Mode) — a heading over the same three items, which clear the steps but leave each channel's output mode alone",
+    "Random Options — a heading over the two randomisers below it",
+    "> All Steps Random — gives every step of the channel being edited a fresh random value",
+    "> Structured Random — randomises the channel being edited in a pattern rather than step by step",
+    "Set Value — on a step's own right-click menu, picks that step's value from a list instead of by dragging",
+    "Copy Step — on a step's own right-click menu, copies that step to the clipboard",
+    "Copy Row — on a step's own right-click menu, copies the whole row that step is in",
+    "Copy Column — on a step's own right-click menu, copies the whole column that step is in",
+    "Paste Step — on a step's own right-click menu, pastes a copied step here",
+    "Paste Row — on a step's own right-click menu, pastes a copied row starting here",
+    "Paste Column — on a step's own right-click menu, pastes a copied column starting here",
+    "Clear Clipboard — on a step's own right-click menu, throws away whatever was copied",
+    "Song Mode — clears the list of patterns the song plays, and appears only while song mode is available",
+    "Shift Values — a heading over the two items below it",
+    "> +1 V/Octave/Patt — raises every step by one volt, one octave or one pattern, over a submenu of Current Edit Channel, Current Edit Pattern or All Patterns",
+    "> -1 V/Octave/Patt — lowers every step by one volt, one octave or one pattern, over the same three choices"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "±10V · stepped · one channel only",
+      "4": "±10V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "continuous · one channel only",
+      "11": "continuous · one channel only",
+      "12": "continuous · one channel only",
+      "13": "continuous · one channel only",
+      "14": "continuous · one channel only",
+      "15": "continuous · one channel only"
+    }
+  }
+}

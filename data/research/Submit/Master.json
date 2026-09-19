@@ -1,0 +1,15 @@
+{
+  "plugin": "Submit",
+  "module": "Master",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Master.cpp:175 reads getVoltage, scales it by 0.2 and clamps it to -4 to 4"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input", "why": "Master.cpp:176 uses isConnected to fall back to the left input"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±20V", "why": "Master.cpp:320 sets one channel; Master.cpp:302 clamps to 4 and multiplies by 5"},
+      "1": {"family": "audio", "poly": false, "range": "±20V", "why": "Master.cpp:321 sets one channel; Master.cpp:303 clamps to 4 and multiplies by 5"}
+    }
+  },
+  "comment": "The manual names the five controls and says nothing about what any of them does numerically. From the code: Transient is ±6dB driven by the difference between a 0.5ms and a 15ms envelope (Master.cpp:186-199); Glue moves the threshold from -2dB to -12dB and the ratio from 1 to 4 with a 3dB soft knee, blends parallel by the same amount, adds up to 1.5dB of makeup and up to 12% tanh saturation (Master.cpp:203-244); Width splits the side signal at 140Hz and expands only the upper part above unity (Master.cpp:142, 245-266); Limit sets a ceiling of 1.20 down to 0.75 in the normalised domain, which is 6V down to 3.75V, with instant attack and a 120ms release (Master.cpp:275-297).\n\nAudio is clamped to ±4 in the internal domain on the way in and again on the way out (Master.cpp:114-119, 302-303), so the outputs can reach ±20V. The clip lamp lights above ±5V and holds for a quarter of a second (Master.cpp:312-317)."
+}

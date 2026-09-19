@@ -1,0 +1,73 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Sigma",
+  "description": "An additive voice after the Crumar GDS: nothing is filtered away, the output is a sum of up to sixty-four sine partials, and every control says how something varies from the first partial to the last",
+  "params": [
+    {"ids": [0], "text": "Tilts the levels across the partials, which is the slope of the spectrum"},
+    {"ids": [1], "text": "Balances the odd-numbered partials against the even-numbered ones"},
+    {"ids": [2], "text": "Stretches the partials away from whole-number multiples the way a real string's do, so the upper ones run sharp"},
+    {"ids": [3], "text": "Spreads the partials across the stereo pair: clockwise fans them outward in order and anticlockwise scatters them"},
+    {"ids": [4], "text": "Sets where between the quiet and loud spectra the tone is drawn from, which velocity is added to"},
+    {"ids": [5], "text": "Spreads the envelope rates across the partials, so the high ones die sooner than the low ones"},
+    {"ids": [6], "text": "Spreads the envelope start times across the partials, so the tone blooms upward, or the highs speak first and the fundamental builds underneath"},
+    {"ids": [7], "text": "Sets how long each partial takes to reach full level, read in milliseconds"},
+    {"ids": [8], "text": "Sets how long each partial takes to fall to the sustain level, read in milliseconds"},
+    {"ids": [9], "text": "Sets the level each partial holds at while the gate is high"},
+    {"ids": [10], "text": "Sets how long each partial takes to fall away after the gate drops, read in milliseconds"},
+    {"ids": [11, 12, 13], "text": "Sets that low-frequency oscillator's rate"},
+    {"ids": [17, 18, 19], "text": "Spreads that oscillator's effect across the partials, from the low ones to the high ones"},
+    {"ids": [20], "text": "Sets the frequency above which partials are dropped from the sum; it removes partials rather than filtering the output"},
+    {"ids": [21], "text": "Emphasises the partials near the cutoff rather than resonating a filter"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch as a volt per octave; the number of channels here is what sets the polyphony, up to sixteen voices"},
+    {"ids": [1], "text": "A rise starts a note on that channel and a fall releases it"},
+    {"ids": [2], "text": "Sets how hard each note is struck, which crossfades the tone between the quiet and loud spectra rather than only making it quieter"},
+    {"ids": [3], "text": "Scales the output level"},
+    {"ids": [4], "text": "Changes the spectral slope, added to the tilt knob"},
+    {"ids": [5], "text": "Changes the odd and even balance, added to that knob"},
+    {"ids": [6], "text": "Changes the inharmonicity, added to the stretch knob"},
+    {"ids": [7], "text": "Changes the stereo spread, added to the width knob"},
+    {"ids": [8], "text": "Changes where between the two spectra the tone is drawn from, added to the morph knob"},
+    {"ids": [9], "text": "Changes the spread of envelope rates, added to that knob"},
+    {"ids": [10], "text": "Changes the spread of envelope start times, added to that knob"},
+    {"ids": [11], "text": "Moves the cutoff a volt per octave, added to the cutoff knob"},
+    {"ids": [12, 13, 14], "text": "A rise restarts that oscillator's phase"},
+    {"ids": [15], "text": "Changes the emphasis near the cutoff, added to the resonance knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the summed partials"},
+    {"ids": [1], "text": "The right side of the summed partials"}
+  ],
+  "notes": [
+    "the module holds two complete spectra, one for a quiet note and one for a loud one, and velocity crossfades between them, so a quiet note is a different timbre",
+    "the per-partial levels, detunes, envelope depths and rates, and the modulation matrix, are all edited on the display, which cannot be reached by clicking for help",
+    "the three oscillators' depths, delays and randomness, and the velocity response settings, have no knob on the panel and are reached from the menu"
+  ],
+  "menu": [
+    "Preset — a submenu of twenty-one settings, each one chosen to exercise a different part of the engine rather than to be a sound",
+    "Partials: 16, 32, 64 — sets how many sine partials are summed, which trades detail against how much work the module does",
+    "Voice allocation: First available, Rolling — chooses whether a new note takes the first free voice or the next one in turn",
+    "PITCH tab snaps to: Free, Cents, Semitones, Octaves — sets what a drag on the per-partial detune display produces; the value is stored in cents either way",
+    "Touch response — a submenu setting how far velocity moves the level, where that range falls, and how far it moves the timbre",
+    "LFO delay and random — a submenu setting each oscillator's delay and randomness; randomness also frees each voice's phase, so the voices drift apart rather than locking together",
+    "Reset spectrum — returns the per-partial levels, detunes and envelopes to their starting values",
+    "Reset modulation — empties the modulation matrix"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "3": "continuous · one channel only",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "11": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "stepped · one channel only",
+      "15": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

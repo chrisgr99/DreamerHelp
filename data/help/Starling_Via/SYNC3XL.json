@@ -1,0 +1,82 @@
+{
+  "plugin": "Starling_Via",
+  "module": "SYNC3XL",
+  "description": "Three clock-locked oscillators with a state-variable filter on each, their three outputs available separately and as a mix",
+  "params": [
+    {"ids": [0], "text": "Picks oscillator I's ratio to the incoming clock from the current scale"},
+    {"ids": [1], "text": "Picks oscillator II's ratio to the incoming clock from the current scale"},
+    {"ids": [2], "text": "Picks oscillator III's ratio to the incoming clock from the current scale"},
+    {"ids": [3], "text": "Switched to Subaudio the three filter frequencies are divided by 1000, putting their corners below the audio band; switched to Audio they run at the frequency the knobs and CV set"},
+    {"ids": [4], "text": "Attenuverts the I ratio CV input, -1 to +1"},
+    {"ids": [5], "text": "Attenuverts the II ratio CV input, -1 to +1"},
+    {"ids": [6], "text": "Attenuverts the III ratio CV input, -1 to +1"},
+    {"ids": [7], "text": "Steps through oscillator I's waveform: Saw, Square or Triangle"},
+    {"ids": [8], "text": "Steps forward through the eight scales of the loaded scale file, wrapping round at the end"},
+    {"ids": [9], "text": "Steps through oscillator II's waveform: Saw, Square or Triangle"},
+    {"ids": [10], "text": "Switches between Independent Ratios, where each CV input picks its own oscillator's ratio, and II + III and Phase Modulation, where one input moves both and the other becomes a phase modulation input"},
+    {"ids": [11], "text": "Steps backward through the eight scales of the loaded scale file, wrapping round at the start"},
+    {"ids": [12], "text": "Steps through oscillator III's waveform: Saw, Square or Triangle"},
+    {"ids": [14, 17, 20], "text": "Sets the resonance of that oscillator's filter, -5V to +5V worth; turning it up also quietens the signal going into the filter, which keeps the resonant peak in bounds"},
+    {"ids": [15, 18, 21], "text": "Sets the corner frequency of that oscillator's filter, -5V to +5V worth, one octave per volt"},
+    {"ids": [16, 19, 22], "text": "Morphs that oscillator's filter between low pass at fully counter-clockwise, band pass at the centre and high pass at fully clockwise"},
+    {"ids": [23], "text": "Attenuates the shared resonance CV input before it is added to all three resonance knobs"},
+    {"ids": [24], "text": "Attenuates the shared frequency CV input before it is added to all three frequency knobs"},
+    {"ids": [25], "text": "Attenuates the shared filter-type CV input before it is added to all three filter-type knobs"},
+    {"ids": [26], "text": "Pressing this sets the tempo the three oscillators lock to, in place of a pulse at the Sync input"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 6], "text": "Modulates that oscillator's filter corner, one octave per volt, added to its frequency knob and to the shared frequency CV"},
+    {"ids": [2], "text": "Picks oscillator I's ratio, through the I CV scale attenuverter"},
+    {"ids": [3], "text": "Picks oscillator II's ratio, or both II and III together when the CV mapping button is on its second setting, through the II CV scale attenuverter"},
+    {"ids": [4], "text": "Picks oscillator III's ratio, or phase-modulates the pair when the CV mapping button is on its second setting, through the III CV scale attenuverter"},
+    {"ids": [5], "text": "The clock all three oscillators lock to; each rising edge is measured to work out the tempo"},
+    {"ids": [7], "text": "Adds to all three resonance knobs at once, through the resonance CV scale trimmer"},
+    {"ids": [8], "text": "Adds to all three filter corner knobs at once, one octave per volt, through the frequency CV scale trimmer, despite the maker's tooltip naming it a resonance CV"},
+    {"ids": [9], "text": "Adds to all three filter-type knobs at once, through the filter-type CV scale trimmer, despite the maker's tooltip naming it a resonance CV"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 5V trigger when oscillator I's ratio changes"},
+    {"ids": [1], "text": "Oscillator I through its own filter"},
+    {"ids": [2], "text": "A 5V trigger when oscillator II's ratio changes"},
+    {"ids": [3], "text": "Oscillator II through its own filter"},
+    {"ids": [4], "text": "A 5V trigger when oscillator III's ratio changes"},
+    {"ids": [5], "text": "Oscillator III through its own filter"},
+    {"ids": [6], "text": "A 5V trigger when any of the three ratios changes"},
+    {"ids": [7], "text": "The three filtered oscillators added together and divided by three"}
+  ],
+  "notes": [
+    "nothing is heard until a clock reaches the Sync input or the TAP button is tapped; the three oscillators take their frequency from the measured tempo.",
+    "a SYNC3XL Levels expander placed immediately to the right multiplies all four audio outputs by its own knobs, and those knobs start at zero, so a freshly placed expander silences this module.",
+    "each of the six mode buttons steps to the next mode when clicked. Hovering one names the mode and its number; right-click and you can type either to jump straight to it.",
+    "the panel artwork is a wireframe outline with almost no lettering on it, so the tooltips are the only naming the controls have."
+  ],
+  "menu": [
+    "Optimized — runs the oscillators through the plugin's faster path, which is the setting to leave it on; found under the CPU Mode heading",
+    "Direct Port — runs the hardware firmware straight through, which costs more CPU; found under the CPU Mode heading",
+    "Select Scale Set File — loads a scale file from disk in place of the one the module ships with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "high above 1.2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "1V per octave · continuous · one channel only",
+      "7": "±10V · continuous · one channel only",
+      "8": "1V per octave · continuous · one channel only",
+      "9": "±5V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 5V · stepped · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "0 to 5V · stepped · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "0 to 5V · stepped · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "0 to 5V · stepped · one channel only",
+      "7": "±5V · continuous · one channel only"
+    }
+  }
+}

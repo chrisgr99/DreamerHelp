@@ -1,0 +1,15 @@
+{
+  "plugin": "MicMusic",
+  "module": "Cuter",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Distortion.cpp:15 reads inputs[Inputs::HIGH].getVoltage() with no channel argument, multiplies it by the HIGH CV knob and line 16 adds the result to the HIGH knob with no clamp on the total"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Distortion.cpp:17 reads inputs[Inputs::LOW].getVoltage() with no channel argument, multiplies it by the LOW CV knob and line 18 adds the result to the LOW knob with no clamp on the total"},
+      "2": {"family": "audio", "poly": false, "negative": "swings", "why": "Distortion.cpp:14 reads inputs[Inputs::SIGNAL].getVoltage() with no channel argument, and line 21 clamps it between the two levels, which may both be negative"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Distortion.cpp:21 writes one value with setVoltage and never calls setChannels"}
+    }
+  },
+  "comment": "Source read at commit fcd92f3, settled the same way as SeVeN. rack::math::clamp takes the minimum against the upper bound first and the maximum against the lower bound second, so when the LOW knob is set above the HIGH knob the result is the LOW value and the input has no effect at all. The CV sums at Distortion.cpp:16 and 18 are not clamped, so a level can be pushed outside the -10V to 10V the knobs offer. No configParam names and no configInput or configOutput calls, so Rack shows an empty tooltip on every control and jack. The panel prints LOW, HIGH, LOW CV, HIGH CV, IN and OUT; the attenuating knob under each CV jack carries no label of its own."
+}

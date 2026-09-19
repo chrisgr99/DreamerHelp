@@ -1,0 +1,75 @@
+{
+  "plugin": "SmarTAZZStudio-Free",
+  "module": "Ticker",
+  "description": "A clock with a master tempo and four clocks divided or multiplied from it, each with its own gate length, phase offset and swing",
+  "params": [
+    {"ids": [0], "text": "Sets the master tempo, 10 to 400 BPM, starting at 120; the display shows whatever tempo is in use"},
+    {"ids": [1], "text": "Stops the clock, sets every phase back to the start and sends a pulse from the Reset output"},
+    {"ids": [2], "text": "Starts the clock if it is stopped and stops it if it is running; the clock comes up stopped"},
+    {"ids": [3], "text": "Sets how much of each master cycle the master gate stays high, 10% to 90%, starting at 50%"},
+    {"ids": [4, 5, 6, 7], "text": "Sets this clock's speed against the master, over 73 steps from a ninety-sixth of the master tempo to ninety-six times it; the display shows the division or multiplication in use"},
+    {"ids": [8, 9, 10, 11], "text": "Shifts this clock's gate earlier or later within its cycle, -0.25 to 0.25 of a cycle"},
+    {"ids": [12, 13, 14, 15], "text": "Sets how much of this clock's cycle its gate stays high, 10% to 90%, starting at 50%"},
+    {"ids": [16, 17, 18, 19], "text": "Sets how far each of this clock's gates is displaced at random from where it would otherwise fall, 0% to 9.999% of a cycle either way; at 0 the gates are even"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the master tempo directly over 0 to 10V for 10 to 400 BPM, overriding the BPM knob while patched"},
+    {"ids": [1], "text": "A voltage above 2V stops the clock, sets every phase back to the start and sends a pulse from the Reset output; it has to fall below 0.1V before another will be taken"},
+    {"ids": [2], "text": "A voltage above 2V starts the clock if it is stopped and stops it if it is running; it has to fall below 0.1V before another will be taken"},
+    {"ids": [3], "text": "Sets the master gate length directly over 0 to 10V for 10% to 90%, overriding the Length knob while patched"},
+    {"ids": [4, 5, 6, 7], "text": "Sets this clock's phase offset at a tenth of a cycle per volt, held to a quarter cycle either way; whether all four clocks read their jacks or their knobs turns on clock 1's phase jack alone"},
+    {"ids": [8, 9, 10, 11], "text": "Sets this clock's gate length directly over 0 to 10V for 10% to 90%, overriding this clock's Length knob while patched"},
+    {"ids": [12, 13, 14, 15], "text": "Sets this clock's swing amount directly over 0 to 10V for 0% to 9.999%, overriding this clock's Swing knob while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the master gate, 10V for the fraction of each cycle set by the master Length control"},
+    {"ids": [1], "text": "Carries a 1ms pulse at 10V at the start of every master cycle"},
+    {"ids": [2], "text": "Carries a 1ms pulse at 10V whenever the module is reset, from the button or from the reset jack"},
+    {"ids": [3], "text": "Carries a 1ms pulse at 10V whenever the clock is started or stopped, from the button or from the run jack"},
+    {"ids": [4, 5, 6, 7], "text": "Carries this clock's gate, 10V for the fraction of each of its cycles set by its own Length control"},
+    {"ids": [8, 9, 10, 11], "text": "Carries a 1ms pulse at 10V at the start of each of this clock's cycles"}
+  ],
+  "notes": [
+    "the clock comes up stopped whenever a patch is loaded; press Run or send a pulse to the run jack to start it",
+    "changing the master tempo or any clock's division resets every phase to the start, so the clocks stay lined up",
+    "the maker's manual gives the gate length range as 5% to 95% for the CV inputs; the code uses 10% to 90% throughout, for the knobs and the jacks alike",
+    "the maker's manual calls the phase control half a cycle either way and its jack unipolar; the code holds the shift to a quarter cycle and reads the jack bipolar",
+    "the maker's manual gives the swing jack's range as -5% to 5%; the code maps 0 to 10V onto 0% to 9.999%",
+    "the BPM jack's reading is not held to any range, unlike every other CV input here, so a voltage outside 0 to 10V gives a tempo outside 10 to 400 BPM",
+    "a clock's swing is a fresh random displacement taken after each gate, so the same swing setting never gives the same pattern twice"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads the BPM knob.",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads the master Length knob; a negative voltage does nothing here.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads this clock's Phase knob.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads this clock's Phase knob.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads this clock's Phase knob.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads this clock's Phase knob.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Length knob; a negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Length knob; a negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Length knob; a negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Length knob; a negative voltage does nothing here.",
+      "12": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Swing knob.",
+      "13": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Swing knob.",
+      "14": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Swing knob.",
+      "15": "0 to 10V · continuous · one channel only\n\nunpatched it reads this clock's Swing knob."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

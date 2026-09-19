@@ -1,0 +1,44 @@
+{
+  "plugin": "forsitan",
+  "module": "quadrare",
+  "description": "Cuts the signal into blocks, runs a Walsh-Hadamard transform on each one, hands the lowest sixteen coefficients out on sliders and jacks, and transforms whatever comes back into audio again",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the gain of that coefficient, -1 to +1, starting at +1; touch nothing and the round trip is exact to float precision"},
+    {"ids": [16], "text": "Sets the output gain, 0 to 2, unity at noon"},
+    {"ids": [17], "text": "Sets how many samples go into one block, 16 to 512, which is how far the sixteen coefficients reach up the signal"},
+    {"ids": [18], "text": "Keeps only the largest coefficients by magnitude, from all of them at one end of its travel down to one at the other"},
+    {"ids": [19], "text": "Coarsens every coefficient to a grid, from off at one end of its travel to two levels at the other"},
+    {"ids": [20], "text": "Crossfades between the dry signal, delayed to match, and the reconstruction"},
+    {"ids": [21], "text": "Chooses what happens to the coefficients above the sixteen on the panel: pass lets them through untouched, mute throws them away"},
+    {"ids": [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], "text": "Steps that coefficient's slider round three landmarks: the first press always lands on zero, the next on -1 and the next back on +1; nothing else moves"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to transform"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "text": "That coefficient on the way back in; it is a true insert return, so the slider gain has already been applied and this value is not multiplied by it again"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The reconstruction, crossfaded with the dry signal"},
+    {"ids": [1], "text": "The delayed dry signal minus the reconstruction, which rests at zero while nothing is changed"},
+    {"ids": [2], "text": "All sixteen coefficients as their own contributions to the audio, on one sixteen-channel cable"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], "text": "That coefficient, one mono jack per column, at every block size"}
+  ],
+  "notes": [
+    "this is not a spectral analyser. A Walsh coefficient describes the sign structure of a short block rather than a frequency band, so expect blockiness and grit.",
+    "with the menu on Replace and nothing in the audio jack, the sixteen coefficient inputs are a waveform in voltages, rebuilt as stacked square waves once per block."
+  ],
+  "menu": [
+    "Coeff in mode — what happens to the coefficients you have not patched, once at least one is patched: Overlay (absent channels stay internal) or Replace (absent channels become zero)"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous · polyphonic",
+      "3": "one channel only"
+    }
+  }
+}

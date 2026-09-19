@@ -1,0 +1,49 @@
+{
+  "plugin": "Core",
+  "module": "MIDIToCVInterface",
+  "description": "Turns the notes, wheels and clock of a MIDI device into control voltages",
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the note being played, a volt per octave with middle C at 0V; the pitch bend wheel is added to it"},
+    {"ids": [1], "text": "10V while a note is held and 0V once it is released"},
+    {"ids": [2], "text": "The velocity of the note played, 0V to 10V across MIDI velocity 0 to 127"},
+    {"ids": [3], "text": "Channel pressure from the MIDI device, 0V to 10V across MIDI values 0 to 127"},
+    {"ids": [4], "text": "The position of the pitch bend wheel, -5V to +5V, resting at 0V"},
+    {"ids": [5], "text": "The position of the mod wheel, 0V to 10V across MIDI values 0 to 127"},
+    {"ids": [6], "text": "A 1ms 10V pulse each time a note is pressed, so an envelope can be restarted during a held phrase"},
+    {"ids": [7], "text": "A 1ms 10V pulse on every MIDI clock tick, which is 24 ticks to the quarter note"},
+    {"ids": [8], "text": "A 1ms 10V pulse on one MIDI clock tick in every 24, giving a pulse per quarter note; the menu offers divisions from a whole note to every tick"},
+    {"ids": [9], "text": "A 1ms 10V pulse when the MIDI device sends a start message"},
+    {"ids": [10], "text": "A 1ms 10V pulse when the MIDI device sends a stop message"},
+    {"ids": [11], "text": "A 1ms 10V pulse when the MIDI device sends a continue message"}
+  ],
+  "notes": [
+    "nothing comes out until a MIDI device is chosen; a new one comes up with no device, and its channel line reads All channels",
+    "the driver, device and channel are picked by left-clicking the three lines of the display, each of which opens a menu of its own; none of them is on the panel's right-click menu"
+  ],
+  "menu": [
+    "Polyphony channels — how many notes sound at once, Monophonic or 2 to 16, which is also how many channels the note outputs carry",
+    "Monophonic priority — which held note is played while Polyphony channels is Monophonic: Last, First, Lowest or Highest",
+    "Polyphony allocation — which channel a new note is given: Rotate, Reuse, Reset or MPE",
+    "Retrigger on legato release — sends an RTRG pulse when the note being played is released and another held note takes over, while Polyphony channels is Monophonic",
+    "Use release velocity — makes VEL carry the velocity of the note off message once a note is let go",
+    "Pitch bend range — how far the wheel bends V/OCT: Off, 1 to 11 semitones, or 1, 2, 3 or 4 octaves",
+    "Smooth pitch/mod wheel — slews the PW and MW outputs towards each new value instead of stepping to it",
+    "CLK/N divider — what one pulse at CLK/N stands for: Whole, Half, Quarter, 8th, 16th, 32nd, 12 PPQN or 24 PPQN",
+    "Reset MIDI (Panic) — drops every held note and returns the outputs to rest"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "2": "0 to 10V",
+      "3": "0 to 10V",
+      "4": "±5V",
+      "5": "0 to 10V",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "stepped",
+      "11": "stepped"
+    }
+  }
+}

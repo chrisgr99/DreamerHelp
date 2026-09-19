@@ -1,0 +1,66 @@
+{
+  "plugin": "dBiz",
+  "module": "Bene",
+  "description": "A 4-by-4 grid sequencer: two clocks walk a cursor over the grid, and the knob it lands on is quantised to the root note and scale on the display",
+  "params": [
+    {"ids": [0], "text": "Sets the root note the scale is built on, the twelve semitones from C to B"},
+    {"ids": [1], "text": "Chooses the scale the grid is quantised to: seventeen scales and a last position that leaves the knob voltages unquantised"},
+    {"ids": [2], "text": "Keeps the cursor on its own row when the X clock wraps round the end"},
+    {"ids": [3], "text": "Keeps the cursor in its own column when the Y clock wraps round the end"},
+    {"ids": [4], "text": "Reverses both clocks, so the X clock steps across to the left and the Y clock steps up"},
+    {"ids": [5], "text": "Pressing this switches its lamp, but nothing in the module reads it: both clocks take their direction from the X direction button"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], "text": "Sets the pitch of that cell, -2V to 2V before quantising"},
+    {"ids": [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], "text": "Switches that cell's gate on or off, one press on and the next off"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "0-10V sweeps the root note through the twelve semitones, added to the KEY knob"},
+    {"ids": [1], "text": "0-10V sweeps the scale through the list, added to the SCALE knob"},
+    {"ids": [2], "text": "A rising edge steps the cursor one cell down, and at the bottom of the column it wraps and moves to the next column unless the Y lock is on"},
+    {"ids": [3], "text": "A rising edge steps the cursor one cell across, and at the end of the row it wraps and moves to the next row unless the X lock is on"},
+    {"ids": [4], "text": "A rising edge reverses both clocks, so the X clock steps across to the left and the Y clock steps up"},
+    {"ids": [5], "text": "A rising edge switches the X lock on or off"},
+    {"ids": [6], "text": "A rising edge switches the Y direction lamp, but nothing in the module reads it: both clocks take their direction from the X direction button"},
+    {"ids": [7], "text": "A rising edge switches the Y lock on or off"},
+    {"ids": [8], "text": "A rising edge puts the cursor back in the first column"},
+    {"ids": [9], "text": "A rising edge puts the cursor back in the top row"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the cursor is on a cell whose gate is on"},
+    {"ids": [1], "text": "The quantised pitch of the cell the cursor is on, held at its last value until the cursor reaches another cell whose gate is on"},
+    {"ids": [2], "text": "A 1ms trigger as the cursor leaves a cell whose gate is on"},
+    {"ids": [3, 4, 5, 6], "text": "The quantised pitch of the knob in that column, on whichever row the cursor is on"},
+    {"ids": [7, 8, 9, 10], "text": "The quantised pitch of the knob in that row, on whichever column the cursor is on"}
+  ],
+  "notes": [
+    "a BenePads placed immediately to the right moves the cursor to the pad being held and opens the gate output while it is held",
+    "every cell of the grid starts with its gate switched off, so the quantised output, the gate output and the trigger output do nothing until you press cells to switch gates on",
+    "the cursor moves only while a clock is patched to one of the two clock inputs; with neither patched it stays on the cell it is on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "stepped · one channel only",
+      "5": "stepped · one channel only",
+      "6": "stepped · one channel only",
+      "7": "stepped · one channel only",
+      "8": "high above 1V · stepped · one channel only",
+      "9": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "continuous",
+      "2": "stepped",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "continuous",
+      "8": "continuous",
+      "9": "continuous",
+      "10": "continuous"
+    }
+  }
+}

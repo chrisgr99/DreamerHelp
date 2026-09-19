@@ -1,0 +1,45 @@
+{
+  "plugin": "ODDSound_MTS_ESP",
+  "module": "CV_MIDI_MTS_ESP",
+  "description": "Turns CV and gates into MIDI for an external device, with each note number worked out from the tuning held by an MTS-ESP master",
+  "inputs": [
+    {"ids": [0], "text": "The pitch at 1V per octave; the note number comes from the MTS-ESP tuning when a master is connected, and its channel count sets how many notes are sent"},
+    {"ids": [1], "text": "A note sounds on that channel while this is at 1V or above, and ends when it falls"},
+    {"ids": [2], "text": "Sets the velocity of the note on that channel, 0 to 10V across the MIDI range of 0 to 127; with nothing patched it counts as 100"},
+    {"ids": [3], "text": "Sets the key pressure sent for the note on that channel, 0 to 10V across the MIDI range of 0 to 127"},
+    {"ids": [4], "text": "Sets the pitch wheel, ±5V across its full fourteen-bit range"},
+    {"ids": [5], "text": "Sets the mod wheel, 0 to 10V across the MIDI range of 0 to 127"},
+    {"ids": [6], "text": "A MIDI clock pulse is sent while this is at 1V or above"},
+    {"ids": [7], "text": "Sets the channel volume controller, 0 to 10V across the MIDI range of 0 to 127; with nothing patched it counts as 10V"},
+    {"ids": [8], "text": "Sets the pan controller, ±5V across the MIDI range of 0 to 127"},
+    {"ids": [9], "text": "A MIDI start message is sent while this is at 1V or above"},
+    {"ids": [10], "text": "A MIDI stop message is sent while this is at 1V or above"},
+    {"ids": [11], "text": "A MIDI continue message is sent while this is at 1V or above"}
+  ],
+  "notes": [
+    "nothing is sent until a driver, a device and a channel have been chosen on the module's own display",
+    "with no MTS-ESP master running on the computer the note numbers are worked out as plain twelve-tone tuning; the lamp is fully lit only while a master is found",
+    "a master has to be loaded elsewhere: in a VCV Host module in this patch, or in any application on the same computer, since MTS-ESP passes tunings between processes",
+    "the two wheel jacks and the volume and pan jacks are read 200 times a second rather than every sample",
+    "the driver, device and channel choosers are drawn inside one display widget and cannot be clicked for a help entry of their own"
+  ],
+  "menu": [
+    "Reset MIDI (Panic) — sends a note off for everything held and resets the MIDI output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 7.87V, which is velocity 100; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "9": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "10": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "11": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    }
+  }
+}

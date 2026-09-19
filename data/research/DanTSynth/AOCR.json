@@ -1,0 +1,15 @@
+{
+  "plugin": "DanTSynth",
+  "module": "AOCR",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "negative": "swings", "why": "src/modules/aocr.cpp:183 loops to inputs[SGNL_INPUT].getChannels() reading getNormalPolyVoltageSimd; nothing clamps it before the chosen stages run"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/modules/aocr.cpp:253 reads getNormalVoltage(0.0f), a channel-0 read, multiplies it by the trimpot and adds it to the attenuverter knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/modules/aocr.cpp:259 reads getNormalVoltage(0.0f), a channel-0 read, multiplies it by the trimpot and adds it to the offset knob"}
+    },
+    "outputs": {
+      "0": {"poly": true, "step": "continuous", "why": "src/modules/aocr.cpp:200 writes each block of four channels with setVoltageSimd and line 203 calls setChannels with the input's channel count"}
+    }
+  },
+  "comment": "Read from the repository at commit bbda641, the merge that carries version 2.0.2 in plugin.json (the version is set at 31ba4fb, tagged v2.0.2 in the commit subject).\n\nThe panel is drawn in code rather than from an SVG, so rsvg-convert gives nothing; the picture used was docs/img/aocr.png in the maker's own repository, checked against the label strings drawn at src/modules/aocr.cpp:690-720.\n\nThe two CV inputs are monophonic even though the signal path is polyphonic: readAttenuverter and readOffset (src/modules/aocr.cpp:253 and 259) use getNormalVoltage, which reads channel 0, and the resulting figure is applied to every channel. The maker's documentation does not mention this.\n\nOnly 12 of the 24 possible orderings are offered, because clip and rectify commute: the comment at src/dsp/att-off-clip-rect.hpp:8-11 says so and the enum lists each order with its equivalent.\n\nNeither the attenuverter nor the offset knob carries a printed name on the panel, so their lines lead with what they do.\n\nThe signal input and output are given no family. They take audio or CV with equal sense, and the maker's own documentation describes both uses."
+}

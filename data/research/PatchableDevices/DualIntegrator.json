@@ -1,0 +1,26 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "DualIntegrator",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "range": "±12V", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:110-118 reads getVoltage() with no channel and clamps it to -12V and 12V before slewing it"},
+      "1": {"poly": false, "range": "±12V", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:110-118 reads getVoltage() with no channel and clamps it to -12V and 12V before slewing it"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "DualIntegrator.cpp:108-115 reads getVoltage() with no channel and compares it against triggerThresholdLevel, which is 1.8 in voltage_helpers.cpp"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "DualIntegrator.cpp:108-115 reads getVoltage() with no channel and compares it against triggerThresholdLevel, which is 1.8 in voltage_helpers.cpp"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "DualIntegrator.cpp:92 reads getVoltage() with no channel into a Schmitt trigger set to 1.8V both ways"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "DualIntegrator.cpp:92 reads getVoltage() with no channel into a Schmitt trigger set to 1.8V both ways"},
+      "6": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:94-97 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the rate as an exponent of two"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:94-97 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the rate as an exponent of two"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:96 reads getVoltage() with no channel and adds it straight into the rate exponent"},
+      "9": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DualIntegrator.cpp:96 reads getVoltage() with no channel and adds it straight into the rate exponent"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "DualIntegrator.cpp:124 writes the slewed value with setVoltage and never calls setChannels"},
+      "1": {"poly": false, "why": "DualIntegrator.cpp:124 writes the slewed value with setVoltage and never calls setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "±5V", "why": "DualIntegrator.cpp:125 writes -5V or 5V from a Schmitt trigger whose thresholds are -5V and 5V"},
+      "3": {"family": "trigger", "poly": false, "range": "±5V", "why": "DualIntegrator.cpp:125 writes -5V or 5V from a Schmitt trigger whose thresholds are -5V and 5V"},
+      "4": {"family": "trigger", "poly": false, "range": "±5V", "why": "DualIntegrator.cpp:121 writes 5V while the left cell's value is above the right cell's and -5V otherwise"}
+    }
+  },
+  "comment": "Source read at commit f6cf8d6, the commit whose plugin.json carries the installed 2.0.1. The IN inputs and OUT outputs get no family: the maker's own manual has them carrying audio, control voltage, gates or a constant, depending on the patch. The rate parameter is configured as 2 to the power of the value in Hertz, -5 to 13.5 (DualIntegrator.cpp:74), and the result is multiplied by 20 in process() to match a 20V peak-to-peak swing, so the figures at the knob are the cycling frequency rather than volts per second. The mode switch is configured with the choices Track and Hold at 0 and Sample and Hold at 1, and the maker's panel standard puts a switch ON when it is upright."
+}

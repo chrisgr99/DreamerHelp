@@ -1,0 +1,21 @@
+{
+  "plugin": "TinyTricks",
+  "module": "SNOSC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "sumRange": "±3.5V", "why": "simplex-oscillator.cpp:108 nChan from getChannels(); :125 getVoltage(c) added as octaves; :129 clamp(pitch, -3.5f, 3.5f)"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "±3.5V", "why": "simplex-oscillator.cpp:128 getPolyVoltage(c)/5.f added to the pitch; :129 clamp(pitch, -3.5f, 3.5f)"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "simplex-oscillator.cpp:171-175 getPolyVoltage(c) into dsp::SchmittTrigger, default thresholds 0V and 1V; a reading of 11V or more also resets the display"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "why": "simplex-oscillator.cpp:152-153 getPolyVoltage(c)/4.f added to the knob, then clamped to 0 to 5"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "why": "simplex-oscillator.cpp:159-160 getPolyVoltage(c)/4.f added to the knob, then clamped to 0 to 5"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "why": "simplex-oscillator.cpp:138-139 getPolyVoltage(c)/4.f added to the knob, then clamped to 0.5 to 5.5"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "why": "simplex-oscillator.cpp:145-146 getPolyVoltage(c)*0.8f added to the knob, then clamped to 1 to 8"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "simplex-oscillator.cpp:114 getVoltage() into dsp::SchmittTrigger, whose default thresholds are 0V low and 1V high (Rack dsp/digital.hpp:107)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "simplex.cpp:109-110 rescaled against the running minimum and maximum and clamped, then * 5.f; setChannels at simplex-oscillator.cpp:109"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 11V", "step": "stepped", "why": "simplex-oscillator.cpp:198-211 setVoltage(11.f), setVoltage(10.f) or setVoltage(0.f, c)"}
+    }
+  },
+  "comment": "The mirror button and the MIRROR trigger input are fed into one shared dsp::SchmittTrigger (simplex-oscillator.cpp:113-114), so a voltage held above 1V at that jack keeps the detector high and the button stops working until the jack falls again. The end-of-cycle output carries 11V rather than 10V as a private signal: simplex-oscillator.cpp:175 resets the on-panel display only when the sync voltage reaches 11V."
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "dbRackModules",
+  "module": "OFS",
+  "description": "Offsets and scales a polyphonic signal, with a sample and hold, a quantizer and a jack that fires when the output changes",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage added to the signal, -10V to 10V"},
+    {"ids": [1], "text": "Attenuverts the voltage at the Ofs jack before it is added to the Ofs knob, -100 to 100 per cent"},
+    {"ids": [2], "text": "Sets what the signal is multiplied by, -10 to 10"},
+    {"ids": [3], "text": "Attenuverts the voltage at the Scl jack before it is added to the Scl knob, -100 to 100 per cent"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be offset and scaled, one per channel"},
+    {"ids": [1], "text": "Modulates the added voltage, scaled by the Offset CV knob"},
+    {"ids": [2], "text": "Modulates the multiplier, scaled by the Scale CV knob"},
+    {"ids": [3], "text": "While a cable is patched here, the signal, the offset and the scale are all held at each trigger and change only on the next one, which makes the module a sample and hold"},
+    {"ids": [4], "text": "A set of pitches to quantize the output to, one per channel; they are sorted, those within one volt of the lowest are kept, and the octave is then cut into that many equal steps"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal multiplied by Scl and shifted by Ofs; with nothing patched into In it carries the offset alone on one channel"},
+    {"ids": [1], "text": "Carries 10V on a channel whose output voltage differs from the sample before it, and 0V while the output holds"}
+  ],
+  "notes": [
+    "nothing is computed at all until a cable is patched into Out"
+  ],
+  "menu": [
+    "Offset Then Scale — adds the offset before the multiplication in place of after it",
+    "Limit to 10V — clamps the output to -10V and 10V",
+    "Hue, Sat, V — three sliders setting the colour of the panel",
+    "Copy Color — copies the panel colour, to be pasted into another OFS",
+    "Paste Color — sets the panel colour to the one last copied"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "polyphonic",
+      "1": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "2": "continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "high above 1V · stepped · polyphonic",
+      "4": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

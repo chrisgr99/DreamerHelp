@@ -1,0 +1,42 @@
+{
+  "plugin": "DreamerMPX",
+  "module": "toMPX",
+  "description": "Bundles seven ordinary control signals into one MPX note stream, reading them all on the gate's rising edge and holding them for the life of the note",
+  "params": [
+    {"ids": [0], "text": "Sets the level of a note when nothing is patched to the level input, 0 to 100%"},
+    {"ids": [1], "text": "Sets the length of a note when nothing is patched to the duration input, 0.01 to 30 seconds, exponential so the short end has most of the travel"},
+    {"ids": [2], "text": "Sets the placing of a note across the stereo field when nothing is patched to the pan input, hard left to hard right"},
+    {"ids": [3], "text": "Declares how many semitones count as full bend deflection, 0 to 12, and travels with every note so the receiving end needs no matching setting; fractions are allowed"},
+    {"ids": [4], "text": "Chooses whether a note ends at its own duration whatever the gate does, or at whichever of the gate's fall and the duration comes first"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge starts a note and the whole note is read at that instant; it reads high above 2V and low below 0.1V, and it is polyphonic, one note per channel"},
+    {"ids": [1], "text": "Sets the pitch of a note at its start, and afterwards any movement here is sent as bend measured from where the note began"},
+    {"ids": [2], "text": "Sets the level of a note, 0 to 10V mapping to none to full, read once at the note's start; the knob is used instead when nothing is patched"},
+    {"ids": [3], "text": "Sets the length of a note in seconds, one volt to the second, read once at the note's start; the knob is used instead when nothing is patched"},
+    {"ids": [4], "text": "Sets the placing of a note across the stereo field, -5V to 5V for hard left to hard right, read once at the note's start; the knob is used instead when nothing is patched"},
+    {"ids": [5], "text": "Sends pressure for a note that is already sounding, 0 to 10V, and with nothing patched here no pressure is sent at all rather than a stream of zeros"},
+    {"ids": [6], "text": "Sends timbre for a note that is already sounding, 0 to 10V, and with nothing patched here no timbre is sent at all rather than a stream of zeros"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the note stream to an MPX input; it is not a voltage, so a scope or a mixer reads nothing from it"}
+  ],
+  "notes": [
+    "a bare gate makes a complete note, because every value not patched is taken from its knob",
+    "the pitch read at the note's start is held for the life of the note, so a source that keeps moving afterwards bends the note instead of dragging it",
+    "mpx OUT carries a note stream, not a voltage; patch it to the mpx IN of another DreamerMPX module, and use fromMPX where ordinary voltages are wanted again",
+    "a cable between two MPX jacks turns pink once it has taken; a cable from an MPX jack to anything else keeps its ordinary colour and carries nothing",
+    "no note is sent until a rising edge arrives at the gate input",
+    "an MPX cable carries a note stream rather than a voltage and goes to an MPX input; fromMPX turns a stream back into gates and pitch for the wider rack"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "continuous",
+      "2": "0 to 10V",
+      "4": "±5V",
+      "5": "0 to 10V",
+      "6": "0 to 10V"
+    }
+  }
+}

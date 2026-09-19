@@ -1,0 +1,42 @@
+{
+  "plugin": "MADZINE",
+  "module": "ADGenerator",
+  "description": "Three attack-decay envelope generators, each of which can be switched to work as an envelope follower on a filtered band of whatever reaches its input",
+  "params": [
+    {"ids": [0], "text": "Adds to or takes from the attack time of all three envelopes, up to half a second either way"},
+    {"ids": [1], "text": "Adds to or takes from the decay time of all three envelopes, up to half a second either way"},
+    {"ids": [2], "text": "While it is on the first input jack feeds all three envelopes and the other two input jacks are not read; it comes up on"},
+    {"ids": [3, 9, 15], "text": "Sets how long that envelope takes to rise, 1ms at the bottom of its travel to 1000 seconds at the top, ten times longer for each sixth of the travel"},
+    {"ids": [4, 10, 16], "text": "Sets how long that envelope takes to fall back, 1ms at the bottom of its travel to 1000 seconds at the top, ten times longer for each sixth of the travel"},
+    {"ids": [5, 11, 17], "text": "Bends both the rise and the fall of that envelope; below the middle they start fast and flatten out, above it they start slow and steepen"},
+    {"ids": [6, 12, 18], "text": "Switches that track from an envelope fired by a trigger to a follower that tracks the level of whatever reaches its input, with the band-pass filter and gain beside it in circuit"},
+    {"ids": [7, 13, 19], "text": "Sets the centre of the band-pass filter that feeds that track's follower, 20Hz to 8000Hz; it is in circuit only while that track is following"},
+    {"ids": [8, 14, 20], "text": "Multiplies that track's follower output, 0.1x to 100x; it applies only while that track is following"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Starts track 1's envelope on a rising edge through 1V, or feeds track 1's follower when that track is switched to follow"},
+    {"ids": [1], "text": "Starts track 2's envelope on a rising edge through 1V, or feeds track 2's follower; it is read only while ROUTE is off"},
+    {"ids": [2], "text": "Starts track 3's envelope on a rising edge through 1V, or feeds track 3's follower; it is read only while ROUTE is off"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "That track's envelope, 0V to 10V; while the track is following it is that figure multiplied by GAIN, and nothing clips it"},
+    {"ids": [3], "text": "A third of each of the three envelopes added together and clipped at 10V"}
+  ],
+  "notes": [
+    "ROUTE comes up on, and while it is on only the leftmost input jack is read: the other two do nothing until you turn it off.",
+    "a track switched to follow ignores triggers and tracks the level of its input instead, so a trigger patched into a following track gives a short blip rather than the set envelope."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V",
+      "1": "0 to 10V",
+      "2": "0 to 10V",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}

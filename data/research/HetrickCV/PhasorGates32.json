@@ -1,0 +1,18 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorGates32",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorGates32.cpp:180 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorGates32.cpp:167 clamps the knob plus this CV and hands it to setNumberSteps, which takes an int (DSP/Phasors/HCVPhasorAnalyzers.h:91)"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorGates32.cpp:171 clamps the knob plus this CV to plus or minus 5V"},
+      "3": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorGates32.cpp:176 tests each channel against 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorGates32.cpp:160 and 197 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of HCV_PHZ_GATESCALE or 0V; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorGates32.cpp:201 writes HCV_PHZ_GATESCALE or 0V per channel as a trigger; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "2": {"poly": true, "range": "0 to 10V", "why": "PhasorGates32.cpp:202 writes the step's fractional position times HCV_PHZ_UPSCALE per channel, or 0V on a step that is off; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorGates32.cpp:198 writes HCV_PHZ_GATESCALE or 0V per channel, high on the steps that are off; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"}
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "plugin": "Quostate",
+  "module": "LSystem",
+  "description": "Sequencer built from up to seven typed rules of scale-degree and duration pairs, where the last degree of a rule picks the rule that follows it, with every degree quantised to a scale set on the menu",
+  "params": [
+    {"ids": [0], "text": "Starts and stops the sequence, and the lamp in it is lit while the sequence runs"},
+    {"ids": [1], "text": "Restarts the sequence of every channel at the first rule"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One pulse per beat drives everything; every duration written in a rule is counted in these pulses, and with nothing patched here the sequence never advances"},
+    {"ids": [1], "text": "A trigger restarts every channel at the first rule; with a cable in EVAL in Rule select mode it jumps straight to the first step of the rule that voltage picks"},
+    {"ids": [2], "text": "A trigger flips the sequence between running and stopped, exactly as the RUN button does"},
+    {"ids": [3], "text": "Steers which rule plays next, in whichever way the Eval input mode menu item is set to: a 0 to 10V rule number, a gate above 2V holding the current rule, or a trigger releasing the next transition"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the step playing on that channel, one volt per octave, quantised to the scale and root note set on the menu"},
+    {"ids": [1], "text": "10V while the step playing on that channel sounds, dropping briefly at each new step so that envelopes retrigger, and staying at 0V through a silence step"},
+    {"ids": [2], "text": "A 10V trigger when the rule playing on that channel finishes, with all of that rule's repetitions counting as one block"},
+    {"ids": [3], "text": "0V to 10V saying which rule that channel is playing, in steps of ten sixths of a volt, with 0V for the first rule and 10V for the seventh"}
+  ],
+  "notes": [
+    "The module does nothing until a rule is typed into one of the seven text fields and a clock is patched.",
+    "A rule is written as an initiator degree and duration, then an arrow, then the steps of the sequence, each a degree and a duration separated by a comma.",
+    "The seven rule fields and the two random-pool fields below them are typed into directly, and confirmed with Enter or by clicking away.",
+    "A rule field's bar is yellow while it has focus, red when what is typed will not parse, and green while the first channel plays that rule.",
+    "Two clock pulses are needed before sub-beat timing is available; until then only the first step of each beat fires.",
+    "If the clock stops or a pulse arrives late, the pitch and gate hold where they are rather than running on.",
+    "Editing a rule that is currently playing takes effect only once that rule and all its repetitions have finished, so rules can be rewritten without stopping playback."
+  ],
+  "menu": [
+    "Polyphony channels — sets how many independent voices run, from one to six; all four outputs carry that many channels, and each voice makes its own random choices",
+    "Reset when starting playback — restarts the sequence every time playback is started from the RUN button or the run input",
+    "If a note has no rule...: Loop back to first rule, Jump to a random rule — sets what happens when the last degree of a rule matches no other rule's initiator",
+    "Eval input mode: Rule select (0-10V CV), Loop / Hold rule (Gate), Advance on trigger (Trigger) — sets how the EVAL jack steers the sequence",
+    "Autoreset after steps (each step = 1 beat): Off, 8 beats, 16 beats, 32 beats, 64 beats — restarts the sequence automatically after that many clock pulses",
+    "Scale — sets the scale the rule degrees are quantised to, natural major by default",
+    "Root note — sets the tonic of that scale, C by default",
+    "Random degree range (r) — sets the limits the random character picks between when the degree pool is empty, and the limits the plus and minus operators wrap at",
+    "Randomize rules style: Melodic, Acid / Techno, Ambient / Evolving, Complex L-System — sets the profile used when Randomize Rules writes the rules",
+    "Randomize Rules — writes a fresh set of rules and both random pools in the chosen style; leave the seed field above it empty for a random seed, or type one in to repeat a particular result"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "0 to 10V · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "RareBreeds_Orbits",
+  "module": "RareBreeds_Orbits_Eugene",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/EugeneModule.cpp:155 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/EugeneModule.cpp:139 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/EugeneModule.cpp:82 to 87 read this input with getVoltage(), divide by 5, scale by the CV knob and 31, add the knob and round the total to a whole number of beats"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/EugeneModule.cpp:93 to 98 read this input with getVoltage(), divide by 5, scale by the CV knob, add the knob and round the total to a whole number of hits"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "src/EugeneModule.cpp:104 to 108 read this input with getVoltage(), divide by 5, scale by the CV knob and 31, add the knob and round and wrap the total to the current length"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/EugeneModule.cpp:113 to 116 read this input with getVoltage() into a dsp::SchmittTrigger only while it is connected, with default thresholds of 0V and 1V"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/EugeneModule.cpp:126 to 129 read this input with getVoltage() into a dsp::SchmittTrigger only while it is connected, with default thresholds of 0V and 1V"},
+      "7": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "src/EugeneModule.cpp:149 passes this input's getVoltage() to a dsp::SchmittTrigger, whose default thresholds are 0V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/EugeneModule.cpp:201 writes 10 or 0 to this output with setVoltage(), which is channel 1 alone"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "src/EugeneModule.cpp:202 writes 10 or 0 to this output with setVoltage(), and src/OrbitsModule.cpp:65 sets the pulse length to 1e-3 seconds"}
+    }
+  },
+  "comment": "Read from src/EugeneModule.cpp, src/OrbitsModule.cpp, src/EugeneWidget.cpp and manual/docs/index.md at commit 71660d9, the commit that raised the version to 2.0.4; the three later commits on the branch change a workflow file, the changelog and two SVG files. Parameter 8, RANDOM_KNOB_PARAM, is declared in src/EugeneModule.hpp but never given a widget in src/EugeneWidget.cpp, so it has no position, cannot be clicked, and gets no line; Polygene does place the equivalent button. The three CV jacks are stepped in effect rather than continuous: clampRounded at src/EugeneModule.cpp:5 adds a half and truncates, so the knob-plus-jack total lands on a whole number of beats or hits. The reverse and invert CV jacks use a Schmitt trigger with Rack's default thresholds, 0V and 1V, and while either is connected the matching panel switch is not read at all. The plugin-wide Theme menu item is cosmetic and carries no line, in line with the house rule. The display and its beat markers are drawn by a custom widget with no clickable parts."
+}

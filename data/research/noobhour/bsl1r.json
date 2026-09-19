@@ -1,0 +1,16 @@
+{
+  "plugin": "noobhour",
+  "module": "bsl1r",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "step": "continuous", "sumRange": "±10V", "negative": "swings", "normal": "0V", "why": "src/Baseliner.cpp process(): channels[i] = inputs[SIGNAL1_INPUT + i].getChannels() and the loop reads getVoltage(c), then clamp(input*param + absVal, -10.f, 10.f)"},
+      "4": {"poly": true, "step": "continuous", "sumRange": "±10V", "negative": "swings", "normal": "0V", "why": "src/Baseliner.cpp process(): channels[i] = inputs[BASE1_INPUT + i].getChannels() and the loop reads getVoltage(c), then clamp(input*param + absVal, -10.f, 10.f)"},
+      "8": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Baseliner.cpp process(): the daisy-chain loop takes inputs[GATE1_INPUT + j].getVoltage() from the first connected jack at or to the left of the column, and feeds rescale(gate, 0.1f, 2.f, 0.f, 1.f) to a SchmittTrigger"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Baseliner.cpp process(): p_input = clamp(inputs[P1_INPUT + i].getVoltage()/10.f, -10.f, 10.f), then p = clamp(p_input + knob, 0.f, 1.f), one channel"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "src/Baseliner.cpp process() daisy-chain loop calls outputs[OUT1_OUTPUT + i].setChannels(currentChannels), taken from the selected input's channel count"}
+    }
+  },
+  "comment": "Read from the maker's source at commit fd172d0, the installed 2.0.0. The module is the same templated class as Baseliner with one column instead of four, so it declares 24 parameters, 16 inputs and 4 outputs of which only parameters 0, 4, 8, 12, 16 and 20, inputs 0, 4, 8 and 12 and output 0 are drawn on the panel; the rest have no widget and no click can reach them, so they are left untagged. The HIGH and LOW inputs and the output are left without a family, because the module passes whatever is patched into them. There is no configInput or configOutput call anywhere in the file."
+}

@@ -1,0 +1,48 @@
+{
+  "plugin": "GoodSheperd",
+  "module": "Stable16",
+  "description": "Eight 16-step gate rows on one clock, each row with its own start point, end point, mute and pattern-shifting buttons",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, its value from -2 to 6 read as two to that power in hertz"},
+    {"ids": [1], "text": "Starts and stops all eight rows; they come up running"},
+    {"ids": [2], "text": "Sends every row back to its own Start step"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130], "text": "Turns this step on or off for its row; a row's Gate output goes to 10V while the clock is high on a step that is on"},
+    {"ids": [131, 132, 133, 134, 135, 136, 137, 138], "text": "Sets the step this row returns to after passing its End step; the knob counts from 0 while the panel numbers the columns from 1, so it reads one less than the column"},
+    {"ids": [139, 140, 141, 142, 143, 144, 145, 146], "text": "Sets the last step this row plays before returning to its Start step; the knob counts from 0 while the panel numbers the columns from 1, so it reads one less than the column"},
+    {"ids": [147, 148, 149, 150, 151, 152, 153, 154], "text": "Holds this row's Gate output at 0V while it is switched on; the row keeps stepping and its pattern is unchanged"},
+    {"ids": [155, 156, 157, 158, 159, 160, 161, 162], "text": "Shifts this row's pattern one step to the left each time it is pressed, the step falling off the left end coming back in at the right"},
+    {"ids": [163, 164, 165, 166, 167, 168, 169, 170], "text": "Shifts this row's pattern one step to the right each time it is pressed, the step falling off the right end coming back in at the left"},
+    {"ids": [171], "text": "Chooses what the nudge buttons move: the upper position, marked i, shifts only the steps between that row's Start and End, and the lower, marked a, shifts all 16"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Clock knob before the rate is worked out, so one volt doubles the rate"},
+    {"ids": [1], "text": "Takes over the clock; each rising edge above 1V advances every row one step, and the Clock knob and CV input are ignored while a cable is here"},
+    {"ids": [2], "text": "Added to the Reset button, and a total above 1V sends every row back to its own Start step"}
+  ],
+  "outputs": [
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "10V while the clock is high and this row's current step is on, and 0V otherwise; a muted row stays at 0V"}
+  ],
+  "notes": [
+    "the module comes up running on its own clock; patch a clock to Trig to take it over.",
+    "a row whose End knob is set below its Start knob plays its Start step and nothing else.",
+    "the lamp behind each row's mute switch is lit while that row's Gate output is high, and the lamp in each step button shows whether the step is on, brightest on the step the row is playing.",
+    "randomising the module fills every row's step pattern at random and leaves the knobs, the mutes and the nudge mode switch untouched."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

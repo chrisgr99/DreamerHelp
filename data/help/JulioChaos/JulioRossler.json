@@ -1,0 +1,47 @@
+{
+  "plugin": "JulioChaos",
+  "module": "JulioRossler",
+  "description": "A chaotic oscillator that steps the Rössler attractor forward one sample at a time and puts its three coordinates out as three voltages, deterministic but never repeating",
+  "params": [
+    {"ids": [0], "text": "Sets how far the system is stepped forward on each sample, which works like a pitch control; fully counter-clockwise the system stops moving and the outputs go quiet"},
+    {"ids": [1], "text": "Sets the constant A of the equations, from 0.05 to 0.33, and its effect on the sound is not predictable"},
+    {"ids": [2], "text": "Sets the constant B of the equations, from 0.9 fully counter-clockwise down to 0.15 fully clockwise, and its effect on the sound is not predictable"},
+    {"ids": [3], "text": "Sets the constant C of the equations, from 5.5 to 16.5, and its effect on the sound is not predictable"},
+    {"ids": [4], "text": "Attenuates and inverts the voltage at the RATE input before it is added to the RATE knob, and at dead centre that input is ignored"},
+    {"ids": [5], "text": "Attenuates and inverts the voltage at the A input before it is added to the A knob, and at dead centre that input is ignored"},
+    {"ids": [6], "text": "Attenuates and inverts the voltage at the B input before it is added to the B knob, and at dead centre that input is ignored"},
+    {"ids": [7], "text": "Attenuates and inverts the voltage at the C input before it is added to the C knob, and at dead centre that input is ignored"},
+    {"ids": [8], "text": "Switches between two speed ranges: unlit the system is stepped seven times a sample and RATE reaches 600 steps a second, lit it is stepped once and RATE reaches 80"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the step size away from the RATE knob, through the attenuverter above it; the total is held between stopped and the top of whichever range the HF/LF button is in"},
+    {"ids": [1], "text": "Shifts the A constant away from its knob, through the attenuverter above it; the total is held between 0.05 and 0.33"},
+    {"ids": [2], "text": "Shifts the B constant away from its knob, through the attenuverter above it; the total is held between 0.15 and 0.9"},
+    {"ids": [3], "text": "Shifts the C constant away from its knob, through the attenuverter above it; the total is held between 5.5 and 16.5"},
+    {"ids": [4], "text": "Puts the system back to its starting point on each rising edge past 2V, falling ready again below 0.1V; because the system is deterministic that makes it a sync input"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first coordinate of the system, direct voltage removed, reaching a few volts either way"},
+    {"ids": [1], "text": "The second coordinate of the system, direct voltage removed, reaching a few volts either way and covering a different part of the spectrum from the first"},
+    {"ids": [2], "text": "The third coordinate of the system, direct voltage removed and scaled down further because it swings much wider than the other two"}
+  ],
+  "notes": [
+    "with RATE fully counter-clockwise nothing moves and all three outputs stay at 0V; turn RATE up for any sound at all",
+    "each of the four CV inputs is read through the attenuverter above it, and every attenuverter starts at dead centre, so a cable alone changes nothing until that small knob is turned",
+    "if the system runs away and any coordinate passes its limit, the module puts itself back to its starting point without being asked, which is heard as a click"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "bipolar · continuous · one channel only",
+      "3": "bipolar · continuous · one channel only",
+      "4": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only"
+    }
+  }
+}

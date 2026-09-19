@@ -1,0 +1,25 @@
+{
+  "plugin": "Extratone",
+  "module": "Splitterburst",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Splitterburst.cpp process(): round(clamp(params[MULTI_PARAM]+inputs[MULTI_CV].getVoltage()*1.6*params[MULTI_ATT],1.f,16.f))"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Splitterburst.cpp process(): round(clamp(params[STEPS_PARAM]+inputs[STEPS_CV].getVoltage()*6.4*params[STEPS_ATT],1.f,64.f))"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): gateon=(inputs[GATE_INPUT].getVoltage()>=1.f) — a level test, not an edge"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): togTrigger.process(inputs[TOG_INPUT].getVoltage()), default SchmittTrigger thresholds 0V and 1V"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): offTrigger.process(inputs[OFF_INPUT].getVoltage())"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): trigTrigger.process(inputs[TRIG_INPUT].getVoltage())"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): stepTrigger.process(inputs[STEP_INPUT].getVoltage())"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Splitterburst.cpp process(): clockTrigger.process(inputs[CLOCK_INPUT].getVoltage())"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "src/Splitterburst.cpp process(): outputs[STEP_OUTPUT].setVoltage(step*10/steps), single channel"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"},
+      "3": {"family": "trigger", "poly": false, "why": "src/Splitterburst.cpp process(): outputs[SOLO_OUTPUT].setVoltage(soloPulse.process(...)?10.f:0.f), single channel"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"}
+    }
+  },
+  "comment": "The GATE input is a level test at 1V rather than an edge, so it holds the burst on but never advances the step counter: step counting is gated on trigon, which only ON and TOGGLE set. The clock measurement is kept in whole samples (timer/goal are incremented once per process call), so the multiplied rate follows the sample rate exactly and a change of sample rate is absorbed. The x4 switch has no configParam of its own; Rack's Module::config gives it the default 0 to 1 range and a default of 0, so it comes up off and its tooltip has no name."
+}

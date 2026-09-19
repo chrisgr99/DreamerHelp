@@ -1,0 +1,67 @@
+{
+  "plugin": "nullpath",
+  "module": "switch18",
+  "description": "Routes one signal out to whichever of nine outputs the current step has landed on, the step advancing on each clock and each step carrying a weight the mode puts to a different use",
+  "params": [
+    {"ids": [0], "text": "Chooses which of four things a step weight means: a chance of being picked, a chance of being skipped past, a number of repeats, or a share of a repeating fixed pattern"},
+    {"ids": [1], "text": "Sets all nine step weights to fresh random values between 0 and 1"},
+    {"ids": [2], "text": "Picks one of the four modes at random"},
+    {"ids": [3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Sets the weight of that step, 0 to 1, with the mode deciding what the weight is used for; a step whose output jack is empty is given a weight of zero and is never picked"},
+    {"ids": [12], "text": "Turns every step weight into one minus itself, but only while it disagrees with the Invert Trigger input; with nothing patched there the switch inverts the weights on its own"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal sent to whichever output the current step has landed on; the other eight carry 0V or their held value"},
+    {"ids": [1], "text": "A rising edge past 1V advances to the next step, chosen by the weights and the mode"},
+    {"ids": [2], "text": "A rising edge past 1V sends the step back to the first one"},
+    {"ids": [3], "text": "A rising edge past 1V sets all nine step weights to fresh random values"},
+    {"ids": [4], "text": "A rising edge past 1V picks one of the four modes at random"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13], "text": "Replaces that step's weight with its own voltage over ten, multiplied by the knob beside it and held between 0 and 1, so the knob becomes an attenuator while a cable is here"},
+    {"ids": [14], "text": "A gate that inverts every step weight while it disagrees with the invert switch; with the switch off, a high voltage here inverts them"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8], "text": "Carries the input signal while this step is the one the module has landed on, and 0V otherwise, or the last value it was given if the menu is set to hold it"}
+  ],
+  "notes": [
+    "a step is only ever picked if its own output jack has a cable in it; an unpatched output is treated as a weight of zero.",
+    "with every weight at zero the module stops advancing and stays on the step it was on.",
+    "the lamp beside each output lights while that step is the one selected, or shows the crossfade level while fading is switched on.",
+    "the number of channels on every output follows the channel count of the signal input.",
+    "Select Chance weights a random draw and Skip Chance steps on then rolls against the new step's weight.",
+    "Repeat Weight counts down from a step's weight before moving on, and Fixed Pattern adds each weight to a running total for its step and picks whichever total is highest."
+  ],
+  "menu": [
+    "Hold last value — makes an output hold the last voltage it carried instead of dropping to 0V when the step moves on",
+    "Fade while switching — crossfades between the old step and the new one instead of switching at once",
+    "Fade Time — sets how long that crossfade takes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "8": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "11": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "13": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "14": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic"
+    }
+  }
+}

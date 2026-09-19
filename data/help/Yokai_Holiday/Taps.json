@@ -1,0 +1,48 @@
+{
+  "plugin": "Yokai_Holiday",
+  "module": "Taps",
+  "description": "A delay that records into a loop and reads it back at two points, one running forwards through the recording and one running backwards, with the reverse tap feeding back into the loop",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the recording loop, 0.5 to 10 seconds; with a cable in CLOCK the whole number part instead picks a multiple of the clock interval, a sixth of it at 0, once at 5 and six times at 10"},
+    {"ids": [1], "text": "Sets how much of the reverse tap is written back into the loop along with the input, from none at 0 to all of it at 1"},
+    {"ids": [2], "text": "Sets how far back in the loop the reverse tap reads, from the write point at 0 to a whole loop behind it at 1"},
+    {"ids": [3], "text": "Sets how far back in the loop the forward tap reads, from the write point at 0 to a whole loop behind it at 1"},
+    {"ids": [4], "text": "Scales the LENGTH input, inverting it below the centre; at full travel one volt adds one second to the loop"},
+    {"ids": [5], "text": "Scales the FEEDBACK input, inverting it below the centre; at full travel 10V covers the knob's whole range"},
+    {"ids": [6], "text": "Scales the reverse tap's DISTANCE input, inverting it below the centre; at full travel 10V covers the knob's whole range"},
+    {"ids": [7], "text": "Scales the forward tap's DISTANCE input, inverting it below the centre; at full travel 10V covers the knob's whole range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal recorded into the loop; a polyphonic cable is summed to one channel before it is written"},
+    {"ids": [1], "text": "Times the interval between rising edges, reading high at 1.7V, and makes the loop that long; the LENGTH knob then multiplies or divides the interval"},
+    {"ids": [2], "text": "Modulates the loop length through the LENGTH trimpot, the total held between 0.5 and 10 seconds"},
+    {"ids": [3], "text": "Modulates the feedback amount through the FEEDBACK trimpot, the total held between 0 and 1"},
+    {"ids": [4], "text": "Modulates how far back the reverse tap reads, through the trimpot for that tap, the total held between 0 and 1"},
+    {"ids": [5], "text": "Modulates how far back the forward tap reads, through the trimpot for that tap, the total held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The reverse tap, reading backwards through the loop, and the only signal that FEEDBACK writes back in"},
+    {"ids": [1], "text": "The forward tap, reading forwards through the loop at the distance set for it, which is an ordinary delay"}
+  ],
+  "notes": [
+    "the module is silent for the first half second after a patch is loaded, while the buffers are cleared",
+    "recording runs the whole time and there is nothing to arm, so sound reaches both outputs as soon as INPUT is patched",
+    "the reverse tap crosses the write point once per loop, and a 0.2 second crossfade covers the join; one of the lights flashes each time that happens",
+    "an unsteady clock drags the read and write points across older material, which clicks; once the delay time is right, unpatch CLOCK and leave LENGTH alone to hold it",
+    "turning the reverse tap's DISTANCE while sound is playing adds high-frequency noise, which the maker lists as a known bug"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1.7V · stepped · one channel only\n\nunpatched it reads the LENGTH knob sets the loop instead; a negative voltage does nothing here.",
+      "2": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "plugin": "ALMFree",
+  "module": "MFD",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "the left side of the A input"},
+      "3": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "the left side of the B input"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": false, "step": "continuous"},
+      "3": {"family": "audio"}
+    }
+  },
+  "comment": "The crossfade really is equal power, and the curve can be named exactly: MFD::process loads the double pi/2 and calls cos twice, multiplying the A side by cos(x * pi/2) and the B side by cos((1 - x) * pi/2), where x is the fader position clamped to 0 and 1. ALM's page for the hardware says \"Approx equal power crossfading\", which agrees.\n\nBoth stereo inputs are mono-normalled: the right jack of each pair falls back to its own left jack, and the panel marks each left jack (m). This is the behaviour MEGA-TANG's return jacks print the same mark for and do not have.\n\nThe cue bus ignores the fader. The raw input voltages of whichever channels are cued are added, with no crossfade and no clamp.\n\nThe cue buttons are ALM BlueButtons with the momentary flag cleared in the constructor, so they hold their state rather than acting only while pressed. CueButton::onDragStart and onDragEnd set and clear a separate byte that drives a second lamp and is not read by the audio path. The lines avoid claiming either behaviour.\n\nThe X Fade CV is added to the knob and the total clamped, so negative voltage pulls the fader towards A and is not simply discarded, but it cannot pull it past A.\n\nNothing on this module is clamped to a voltage: only the fader position is."
+}

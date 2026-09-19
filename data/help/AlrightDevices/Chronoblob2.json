@@ -1,0 +1,52 @@
+{
+  "plugin": "AlrightDevices",
+  "module": "Chronoblob2",
+  "description": "Digital delay with four routing modes, a clock sync, an infinite loop and a choice of tape or fade time modulation",
+  "params": [
+    {"ids": [0], "text": "Sets how much of the delay output goes back into the delay input, reaching 125% at the clockwise end of the pink arc, with a short span at the join of the two arcs where it snaps to exactly 100%"},
+    {"ids": [1], "text": "Sweeps the delay time from 5ms to 2.73 seconds, or, once a clock is patched into SYNC, picks one of the multiplications and divisions of that clock marked around it"},
+    {"ids": [2], "text": "Mixes the dry signal against the delayed signal on an equal-power curve, dry alone at fully counter-clockwise and delay alone at fully clockwise"},
+    {"ids": [3], "text": "Attenuates and inverts the feedback CV input; at the centre that voltage has no effect, and turned counter-clockwise a positive voltage cuts the feedback"},
+    {"ids": [4], "text": "Attenuates and inverts the left delay time CV input; with that jack empty it holds 5V, so this knob then offsets the left delay time from the time knob"},
+    {"ids": [5], "text": "Attenuates and inverts the right delay time CV input, which sets the right delay time apart from the left one; in single delay mode it changes nothing"},
+    {"ids": [6], "text": "Attenuates and inverts the dry/wet CV input; turned counter-clockwise a positive voltage makes the mix drier, and turned clockwise it makes the mix wetter"},
+    {"ids": [7], "text": "Switches the infinite loop on, which shuts the audio inputs off and feeds each delay from its own output, or from the other delay's output in ping-pong mode; the button lights while the loop runs"},
+    {"ids": [8], "text": "Picks how a change of delay time is made: tape mode resamples the delay line and bends the pitch with it, and fade mode crossfades into the new time"},
+    {"ids": [9], "text": "Steps through the four delay modes, dual, ping-pong, single with send and return, and cascade with send and return, each shown by one of the lamps beside it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the feedback amount, scaled by the feedback attenuverter"},
+    {"ids": [1], "text": "Modulates the left delay time, scaled by the left time attenuverter; with nothing patched here the jack is held at 5V"},
+    {"ids": [2], "text": "A high gate switches the infinite loop on; with a clock at SYNC the loop starts on the next clock edge, and the button shows a dim light until then"},
+    {"ids": [3], "text": "Modulates the right delay time, scaled by the right time attenuverter; with nothing patched here it takes whatever is at the left delay time CV input"},
+    {"ids": [4], "text": "Modulates the dry and wet balance, scaled by the dry/wet attenuverter"},
+    {"ids": [5], "text": "The audio input to the left delay in dual and ping-pong modes, and the single audio input in single and cascade modes"},
+    {"ids": [6], "text": "The audio input to the right delay in dual and ping-pong modes, taking the left input when it is empty; in single and cascade modes it is the return of the feedback loop, normalled to the send"},
+    {"ids": [7], "text": "A clock here puts the module into sync mode, where the time knob picks a multiplication or division of that clock; sync mode holds until the cable is pulled out, even if the clock stops"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left delay in dual and ping-pong modes, carrying an even mix of both delays while the right output is empty; in single and cascade modes it is the delay output"},
+    {"ids": [1], "text": "The right delay in dual and ping-pong modes; in single and cascade modes it is the send, taken from inside the feedback loop"}
+  ],
+  "notes": [
+    "each delay has a status lamp that blinks white at its delay rate and glows red while its input is overloaded",
+    "in cascade mode the left status lamp belongs to the outer delay and the right one to the inner delay",
+    "in dual and ping-pong modes the left status lamp belongs to the left delay and the right one to the right delay, and in single mode the two lamps show the same thing"
+  ],
+  "menu": [
+    "Loop button behavior — Toggling starts the loop on one press and ends it on the next; Momentary holds the loop only while the button is held",
+    "Sync prescaler — multiplies or divides the clock at SYNC before the time knob divides or multiplies it again: None, or 1.5, 2, 3, 4, 5 or 6 times, or divided by any of those"
+  ],
+  "expects": {
+    "inputs": {
+      "2": "stepped",
+      "5": "continuous",
+      "6": "continuous",
+      "7": "stepped"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

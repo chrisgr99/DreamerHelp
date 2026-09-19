@@ -1,0 +1,14 @@
+{
+  "plugin": "LOGinstruments",
+  "module": "Velvet",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Velvet.cpp:43 reads getVoltage() with no channel argument and line 45 adds the knob to it and clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Velvet.cpp:73-79 write one value with setVoltage and the module never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "why": "Velvet.cpp:85 writes one value with setVoltage and the module never calls setChannels"}
+    }
+  },
+  "comment": "Read at commit 1fc62fa, the head of the repository and the only commit carrying the installed 2.0.4; its plugin.json is byte for byte the installed one. The density input reaches full scale at 1V rather than at 10V: Velvet.cpp:45 adds the raw voltage to a knob that runs 0 to 1 and clamps the total there. In the density-weighted mode the pulse height is (1.5 minus the density) cubed times 10, so it is 33.75V at the bottom of the density range and 1.25V at the top, and the pulse height is worked out from the density before the density is cubed. The same uniform random number decides whether a pulse fires and what the white noise output reads, so the two outputs are not independent. Nothing in this plugin is polyphonic and it adds no context menu items."
+}

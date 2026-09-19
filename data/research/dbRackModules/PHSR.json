@@ -1,0 +1,17 @@
+{
+  "plugin": "dbRackModules",
+  "module": "PHSR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "PHSR.cpp:62 takes the channel count from this input and PHSR.cpp:49 reads it four channels at a time, adding it to the Freq knob"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "normal": "0V", "why": "PHSR.cpp:68-69 read it four channels at a time into a Schmitt trigger with thresholds of 0.1V and 2V"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "PHSR.cpp:53 and PHSR.cpp:55 read it four channels at a time and scale it by the FM knob, into the frequency with Lin on and into the pitch with Lin off"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "PHSR.cpp:85 sets this output's channel count from the V/Oct jack"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "PHSR.cpp:111 sets this output's channel count from the V/Oct jack"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "PHSR.cpp:98 sets this output's channel count from the V/Oct jack"}
+    }
+  },
+  "comment": "The frequency is held to half the sample rate, PHSR.cpp:58. An output with no cable in it is not computed at all, PHSR.cpp:63, PHSR.cpp:88 and PHSR.cpp:101. With the Square menu item on, the Phsr output carries 0V to 10V rather than -5V to 5V, PHSR.cpp:71. The DC blockers for the Sin and Tri outputs are indexed by channel rather than by group of four, PHSR.cpp:96 and PHSR.cpp:109, so with more than four channels those outputs use blockers that belong to other channels."
+}

@@ -1,0 +1,37 @@
+{
+  "plugin": "Fundamental",
+  "module": "Process",
+  "description": "Six ways of processing a voltage over time: two stages of sample and hold, track and hold both ways round, and two slew limiters",
+  "params": [
+    {"ids": [0], "text": "Sets the slew rate in milliseconds per volt, from 1ms to 10 seconds for each volt of change"},
+    {"ids": [1], "text": "Acts as the gate for as long as it is held down"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the slew rate, each volt doubling it"},
+    {"ids": [1], "text": "The voltage being processed"},
+    {"ids": [2], "text": "The gate that drives the sampling, tracking and slew limiting"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Takes the input voltage on each trigger and holds it until the next one"},
+    {"ids": [1], "text": "The voltage held before the last trigger, one place back in a two-step shift register"},
+    {"ids": [2], "text": "Passes the input while the gate is low and holds the last voltage while the gate is high"},
+    {"ids": [3], "text": "Passes the input while the gate is high and holds the last voltage while the gate is low"},
+    {"ids": [4], "text": "The input held to the slew rate, so it cannot change faster than that; while the gate is high it jumps to the input and follows it"},
+    {"ids": [5], "text": "The input held to the slew rate only while the gate is high, and passed through the rest of the time; the limiting starts 1ms after the gate rises"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "polyphonic",
+      "2": "high above 2V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "polyphonic",
+      "5": "polyphonic"
+    }
+  }
+}

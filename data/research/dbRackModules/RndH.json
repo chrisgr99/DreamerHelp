@@ -1,0 +1,18 @@
+{
+  "plugin": "dbRackModules",
+  "module": "RndH",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "RndH.cpp:126 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "RndH.cpp:113 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "normal": "0V", "why": "RndH.cpp:116 reads it with getVoltage() and no channel loop; RndH.cpp:118 divides it by 10 to make the seed"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "half the Sth knob", "why": "RndH.cpp:93 reads it per channel with getNormalPolyVoltage(strength*.5f,k), doubles it and clamps the result to 1..20"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "RndH.cpp:103 sets this output's channel count from the Chn knob"},
+      "1": {"family": "cv", "poly": true, "why": "RndH.cpp:105 sets this output's channel count from the Chn knob"},
+      "2": {"family": "cv", "poly": true, "why": "RndH.cpp:107 sets this output's channel count from the Chn knob"}
+    }
+  },
+  "comment": "The maker's README says the three outputs run 0V to 10V unipolar and -5V to 5V bipolar, and that holds for Min and Tri. The Weibull output does not: RndH.cpp:68 raises a value below 1 to the power of the strength and RndH.cpp:73 multiplies by 10, so with a high strength the output sits near 0V rather than filling the range. An output that is not patched is never written and never given a channel count (RndH.cpp:94-107)."
+}

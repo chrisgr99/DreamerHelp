@@ -1,0 +1,17 @@
+{
+  "plugin": "CVfunk",
+  "module": "Hub",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "±10V", "negative": "swings", "why": "Hub.cpp:115 takes getChannels() on this input and Hub.cpp:150 reads each channel; Hub.cpp:152 clamps the gain-and-offset result times the range to -10 to 10V"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "10V", "why": "Hub.cpp:115 takes getChannels() on this input and Hub.cpp:125 reads each channel; Hub.cpp:125 uses 10V when the jack is empty, and Hub.cpp:126 scales the range knob by a hundredth of it"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "Hub.cpp:169 takes getChannels() on this input and reads each channel in the same way as the first half"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "10V", "why": "Hub.cpp:169 takes getChannels() on this input and Hub.cpp:175 reads each channel, using 10V when the jack is empty"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "Hub.cpp:117 sets its channel count from that half's two inputs; Hub.cpp:152 clamps the result to -10 to 10V"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "why": "Hub.cpp:170 sets its channel count from that half's two inputs; Hub.cpp:152 clamps the result to -10 to 10V"}
+    }
+  },
+  "comment": "The knob that the input takes over is written from channel one only (Hub.cpp:135), while every channel of a polyphonic input is processed and sent out, so the animated knob shows the first voice and the others pass through unseen. With no cable in a half's input, that half's output is the knob times the range without the -10 to 10V clamp (Hub.cpp:158)."
+}

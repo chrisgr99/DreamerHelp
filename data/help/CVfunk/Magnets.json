@@ -1,0 +1,44 @@
+{
+  "plugin": "CVfunk",
+  "module": "Magnets",
+  "description": "A 25 by 25 grid of magnetic spins flipping under a simulated temperature: the grid is split into twenty-five zones and each zone's average alignment comes out as a voltage",
+  "params": [
+    {"ids": [0], "text": "Sets how much random flipping the spins do against the pull of their neighbours, none at one end of the travel to constant churn at the other"},
+    {"ids": [1], "text": "Biases the spins toward one alignment or the other, -1 to 1, and is the mixture a reset starts from"},
+    {"ids": [2], "text": "Sets how strongly a spin is pulled to match its neighbours, none at one end of the travel to the full amount at the other"},
+    {"ids": [3], "text": "Sets the time between spin updates, 0.15ms to 2ms, so turning it clockwise slows the lattice down despite the panel printing RATE"},
+    {"ids": [4], "text": "Attenuverts the temperature CV before it is added to the temperature knob"},
+    {"ids": [5], "text": "Attenuverts the polarity CV before it is added to the polarity knob"},
+    {"ids": [6], "text": "Attenuverts the interaction CV before it is added to the interaction knob"},
+    {"ids": [7], "text": "Scatters every spin afresh on each press, with the mixture of alignments set by the polarity control"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Writes into the central five-by-five block of the grid, pulling it one way at -5V and the other at 5V, from where it spreads outward; it is added to the polarity as well"},
+    {"ids": [1], "text": "A rise scatters every spin afresh, with the mixture of alignments set by the polarity control"},
+    {"ids": [2], "text": "Changes the temperature, scaled by a tenth and added to the temperature knob through its attenuverter, the total clamped to the knob's travel"},
+    {"ids": [3], "text": "Changes the polarity, scaled by a tenth and added to the polarity knob through its attenuverter, the total clamped to -1 to 1"},
+    {"ids": [4], "text": "Changes the interaction strength, scaled by a tenth and added to the interaction knob through its attenuverter, the total clamped to the knob's travel"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "text": "The average alignment of that zone of the grid, smoothed by four stages of low-pass filtering, from -10V to 10V or half that on the menu setting"}
+  ],
+  "notes": [
+    "the grid keeps moving on its own: the temperature drives random flips whether or not anything is patched, and the outputs wander with it",
+    "the central zone of the twenty-five has no jack; that block of the grid is the one the tape head writes into"
+  ],
+  "menu": [
+    "Voltage Range ±5V — halves every zone output, so the grid swings between -5V and 5V rather than -10V and 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "stepped · one channel only",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±10V · one channel only"
+    }
+  }
+}

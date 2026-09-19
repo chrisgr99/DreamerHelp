@@ -1,0 +1,74 @@
+{
+  "plugin": "forsitan",
+  "module": "perge",
+  "description": "A stereo sampler: a note loud enough to cross a threshold is captured, repeats of it are spawned on a tempo grid, and those repeats run through four effects",
+  "params": [
+    {"ids": [0], "text": "Crossfades between the signal coming in and the repeats, dry at the bottom of its travel and nothing but repeats at the top"},
+    {"ids": [1], "text": "Sets how far apart the repeats fall, 100ms to 2 seconds"},
+    {"ids": [2], "text": "Inactive at the centre; clockwise each repeat rolls its own dice for a shift up, first an octave and then a fifth above that, and anticlockwise the same shifts go downward"},
+    {"ids": [3], "text": "Sets how long the stream of repeats lasts; past about nine tenths of its travel it freezes instead, holding the captured audio and stopping any new capture"},
+    {"ids": [4], "text": "Inactive at the centre; anticlockwise the tempo grid lurches into sudden accelerations, clockwise the two previous captures come back as extra layers on every second and every third tick"},
+    {"ids": [5], "text": "Inactive at the centre; anticlockwise a wobbling, saturating narrow band, clockwise sample-rate reduction that gets harsher"},
+    {"ids": [6], "text": "Inactive at the centre; anticlockwise a deep dark reverb, clockwise an allpass diffusion that melts the attacks together"},
+    {"ids": [7], "text": "Inactive at the centre; anticlockwise a low-pass, clockwise a high-pass"},
+    {"ids": [8], "text": "Sets how much the loudness of what was played carries into the repeats: at the bottom of its travel every repeat comes out the same, at the top a soft phrase nearly disappears"},
+    {"ids": [9], "text": "Sets the level a note has to cross to be captured, 25mV to 5V, starting at playing level so that a bed or a tail does not fire it"},
+    {"ids": [10], "text": "Sets the attack of each repeat's envelope, 1ms to 800ms"},
+    {"ids": [11], "text": "Sets the release of each repeat's envelope, 5ms to 1500ms"},
+    {"ids": [12], "text": "Sets how deep and how fast the lofi knob's wobble runs"},
+    {"ids": [13], "text": "Sets the tail length of the reverb or the smear"},
+    {"ids": [14], "text": "Sets how wide the repeats are spread, each one landing at its own random position between the two sides"},
+    {"ids": [15], "text": "Sends the dry signal through the four effects as well; at the bottom of its travel only the repeats are treated"},
+    {"ids": [16], "text": "Holds the captured audio indefinitely and stops any new capture, which is what the top of the sustain knob does too; it latches, so one press holds it"},
+    {"ids": [17], "text": "While it is held down, the pitch, lofi and reverb knobs jump to one new random position each, anywhere in their range, and snap back on release"},
+    {"ids": [18], "text": "Chooses how a repeat plays: standard, reversed, or the swelling tail of it alone"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left side of the signal to capture"},
+    {"ids": [1], "text": "The right side of the signal; with nothing patched here the left jack feeds both sides"},
+    {"ids": [2], "text": "Added to the pitch knob; five volts covers half its travel"},
+    {"ids": [3], "text": "Added to the sustain knob; ten volts covers its whole travel"},
+    {"ids": [4], "text": "Added to the glitch knob; five volts covers half its travel"},
+    {"ids": [5], "text": "Added to the filter knob; five volts covers half its travel"},
+    {"ids": [6], "text": "A clock the repeat grid follows instead of the tempo knob, measured between rising edges; it is released about ten seconds after the clock stops"},
+    {"ids": [7], "text": "While it is high the captured audio is held, as the freeze button does"},
+    {"ids": [8], "text": "While it is high the pitch, lofi and reverb knobs are thrown to random positions, as the tilt button does"},
+    {"ids": [9], "text": "Added to the tempo knob; ten volts covers its whole travel"},
+    {"ids": [10], "text": "A rising edge forces a capture whatever the level is, the capture runs while the gate is high, and the falling edge commits it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the result; with nothing patched into the right jack this one carries both sides summed"},
+    {"ids": [1], "text": "The right side of the result"}
+  ],
+  "notes": [
+    "set the threshold before anything else. The lamp by the capture jack lights while a capture runs: adjust until it lights on your notes and goes dark between them.",
+    "a capture starts when the level crosses the threshold and runs until it falls back to about seven tenths of it, or two seconds, whichever comes first.",
+    "the captured sound becomes the newest of three slots. The slots and anything frozen never expire, but the buffer is not saved with the patch and is emptied by a change of sample rate.",
+    "everything dynamic in this module keys off that threshold, so it is worth treating as part of the gain staging rather than as a knob to set later."
+  ],
+  "menu": [
+    "Clock multiplier — scales an external clock by 1/4, 1/2, x1, x2 or x4; it does nothing to the tempo knob",
+    "Cap grain to tempo interval — on by default, so a repeat is never longer than one tempo period; off, each repeat replays the whole captured note and the repeats overlap into a wash",
+    "Resync grid to capture — Note end, the default, puts the first repeat one tempo interval after the note ends; Note start locks the grid to the attack; Off lets the grid free-run",
+    "Clear buffer — empties the three sample slots and whatever is frozen"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "±5V · continuous · one channel only",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "8": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only\n\nunpatched it reads sums both sides when the right jack is empty.",
+      "1": "±10V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "plugin": "forsitan",
+  "module": "rete",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/rete.cpp:154-157, the node gain takes getVoltage()*0.2 on top of its knob"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"poly": false, "range": "±10V", "why": "src/rete.cpp:160, getVoltage() scaled by 0.1 and by the in lvl knob"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/rete.cpp:139, rndTrigger.process(getVoltage(), 0.1f, 1.f)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/rete.cpp:198, the mixed left side times a compensation factor, with no stated clamp"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "src/rete.cpp:192-194, setVoltage(5 * node, i) for eight channels, then setChannels(8)"}
+    }
+  },
+  "comment": "The in jack gets no family: it takes audio or CV equally and the maker's own suggestions are an impulse train or a drum loop. The signal path is a loop run once per sample: leaky integrators, a fixed random eight by eight mixing matrix, first-order DC-blocking highpasses, and hard clippers feeding back to the integrators. The scale knob is ten raised to three times its value, which is one to a thousand (src/rete.cpp:150). The topology is credited to Nathan Ho's feedback integrator networks, itself after Giorgio Sancristoforo's Bentò. The panel prints rete, G1 to G8 over the eight gain knobs with a CV jack under each, leak, scale, in lvl, rnd, in, trig, L, R and poly."
+}

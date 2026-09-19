@@ -1,0 +1,21 @@
+{
+  "plugin": "3HR",
+  "module": "Repeat3hr",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Repeat3hr.cpp:237 reads getVoltage() with no channel, scales it by 0.98 and adds it to the knob at line 246 before a clamp to 0.001 and 4.099"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Repeat3hr.cpp:236 reads getVoltage() with no channel and scales it by 0.0198 into the same time sum at line 246"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Repeat3hr.cpp:234 reads getVoltage() with no channel, scales it by 0.8 and line 251 subtracts it from the knob"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Repeat3hr.cpp:235 reads getVoltage() with no channel and scales it by 0.12 into the feedback sum at line 247"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Repeat3hr.cpp:238 reads getVoltage() with no channel and scales it by 0.1 into the input-level sum at line 248"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Repeat3hr.cpp:239 reads getVoltage() with no channel and scales it by 0.1 into the dry sum at line 249, clamped to 0 and 1"},
+      "6": {"poly": false, "why": "Repeat3hr.cpp:240 computes WetInput from this port but line 250 writes WetCV * WetCV into the wet level, so WetInput is never used"},
+      "7": {"family": "audio", "poly": true, "why": "Repeat3hr.cpp:242 reads getVoltageSum(), which adds every polyphonic channel into one"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Repeat3hr.cpp:160 writes one value with setVoltage and never calls setChannels"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Repeat3hr.cpp:159 writes 10V for a 1ms pulse from a PulseGenerator and 0V otherwise"}
+    }
+  },
+  "comment": "Source read at commit 5458029, the commit whose plugin.json carries the installed 2.2.0. TWO PLACES WHERE THE CODE DOES NOT DO WHAT THE PANEL PROMISES. First, Repeat3hr.cpp:250 reads 'WetKnob + (WetCV * WetCV)' where every other parameter reads knob plus CV-amount times CV-input, so the WET control input's voltage is discarded and the WET CV knob instead adds its own square to the wet level, and only while something is plugged into that jack. Second, Bitcrush() at line 207 quantises with BitcrushKnob rather than bitcrushAmount, so the CRUSH control input changes only the downsampling in Downsample() at line 212, not the bit depth. The WET control input therefore gets a line saying it is not read, rather than being left untagged where the maker's tooltip would claim otherwise."
+}

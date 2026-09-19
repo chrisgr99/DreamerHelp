@@ -1,0 +1,30 @@
+{
+  "plugin": "MSM",
+  "module": "DualDelay",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "Delay.cpp:227 runs clockTriggerA.process on this jack at the default 0V and 1V thresholds and times the interval between rising edges to set the delay; :226 reads it only while a cable is in"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "Delay.cpp:220 divides this jack by ten into a 0 to 1 delay time"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "why": "Delay.cpp:254 divides this jack by ten into a 0 to 1 delay time"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Delay.cpp:319 clamps the knob plus this jack over ten symmetrically between -1 and 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "Delay.cpp:430 clamps the knob plus this jack over ten symmetrically between -1 and 1"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:391 clamps the knob plus this jack over ten at zero"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:401 clamps the knob plus this jack over ten at zero"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:503 clamps the knob plus this jack over ten at zero"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:513 clamps the knob plus this jack over ten at zero"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:416 clamps the knob plus this jack over ten at zero"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Delay.cpp:528 clamps the knob plus this jack over ten at zero"},
+      "11": {"family": "audio", "poly": false, "step": "continuous", "why": "Delay.cpp:318 reads this jack as a signal and multiplies it by the level knob"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "why": "Delay.cpp:429 reads this jack as a signal and multiplies it by the level knob"},
+      "15": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 10V", "why": "Delay.cpp:368 divides this jack by ten, clamps it to 0 to 1 and feeds a trigger whose threshold is 1"},
+      "16": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 10V", "why": "Delay.cpp:480 divides this jack by ten, clamps it to 0 to 1 and feeds a trigger whose threshold is 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:418 passes the output through saturate(), which Resources.hpp:23 fixes at ten"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:530 passes the output through saturate(), which Resources.hpp:23 fixes at ten"},
+      "2": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:413 passes the output through saturate(), which Resources.hpp:23 fixes at ten"},
+      "3": {"family": "audio", "poly": false, "range": "±10V", "why": "Delay.cpp:525 passes the output through saturate(), which Resources.hpp:23 fixes at ten"}
+    }
+  },
+  "comment": "Inputs 13 and 14 are declared in the code as level CV jacks but are not placed on the panel and are never read, so they carry no line. The LEVEL knobs therefore have no CV input. The two CLEAR inputs need a full 10V. Delay.cpp:368 and 480 divide the jack by ten and clamp the result to 0 to 1 before handing it to a trigger whose threshold is 1, so anything under 10V never reaches it with the button at rest. The two TIME inputs behave differently in the two clock modes: free running, the jack is clamped to 0 to 1 on its own, so a negative voltage does nothing; clocked, the knob and jack are summed first and a negative voltage pulls the knob down."
+}

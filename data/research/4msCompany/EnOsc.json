@@ -1,0 +1,23 @@
+{
+  "plugin": "4msCompany",
+  "module": "EnOsc",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "EnOscCore.cc:290 stores this jack per channel and EnOscCore.cc:424-434 map it from a ±8V span into the pitch conditioner; EnOscCore.cc:76 takes the voice count from it"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "EnOscCore.cc:293 stores this jack per channel and EnOscCore.cc:424-435 map it from a ±8V span into the pitch conditioner; EnOscCore.cc:76 takes the voice count from it"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:296 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:299 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:285 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.5V", "why": "EnOscCore.cc:311 compares this jack against the 1.5V gate threshold set at EnOscCore.cc:277, and control.hh:385 adds a note on its rising edge while learn mode is on"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:282 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:302 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "why": "EnOscCore.cc:305 with EnOscCore.cc:270-275 divides this jack by 5V, halves it and subtracts it from a half, so 0V is the centre and the voltage is read upside down"},
+      "9": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.5V", "why": "EnOscCore.cc:308 compares this jack against the 1.5V gate threshold set at EnOscCore.cc:277, and control.hh:379-383 flip the freeze on both edges"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±9V", "why": "EnOscCore.cc:89 with EnOscCore.cc:416-418 scales the sample, which runs between -1 and 1, by 9; EnOscCore.cc:82 sets the channel count from the voice count"},
+      "1": {"family": "audio", "poly": true, "range": "±9V", "why": "EnOscCore.cc:90 with EnOscCore.cc:416-418 scales the sample, which runs between -1 and 1, by 9; EnOscCore.cc:83 sets the channel count from the voice count"}
+    }
+  },
+  "comment": "Every CV jack except the two pitch jacks is inverted: EnOscCore.cc:270-275 turn the voltage into a control value by halving it and subtracting it from a half, so a rising voltage lowers the setting. The two 1V/octave jacks are handled apart from the rest, over a ±8V span (EnOscCore.cc:424-429), and are the only polyphonic inputs. The output level is deliberately not the hardware's: the comment at EnOscCore.cc:415 says the hardware is about 4.5V peak to peak for one oscillator and this build doubles it to sit with other Rack oscillators. The cross-modulation directions are named in the source at polyptic_oscillator.hh:102-116, where mode ONE is Up, TWO is All and THREE is Down."
+}

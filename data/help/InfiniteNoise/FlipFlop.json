@@ -1,0 +1,55 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "FlipFlop",
+  "description": "One flip-flop in 2HP that works as a toggle or a data type by switch, with set and reset inputs that override both",
+  "params": [
+    {"ids": [0], "text": "Chooses what the T/D input means: T toggles the output on a clock while T/D is high, D copies T/D to the output on a clock"},
+    {"ids": [1], "text": "Sets the output high by hand"},
+    {"ids": [2], "text": "Sets the output low by hand"},
+    {"ids": [3], "text": "Chooses how the enable input is read: as a gate that disables the module while it is high, or as a trigger that flips between enabled and disabled"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "In T mode a high here lets the next clock flip the output; in D mode its level is what the next clock copies to the output"},
+    {"ids": [1], "text": "A rising edge acts on the T/D input; with this jack empty it reads T/D itself, so in T mode one signal alone flips the output"},
+    {"ids": [2], "text": "A high here sets the output high and holds it, overriding the clock and T/D"},
+    {"ids": [3], "text": "A high here sets the output low and holds it, overriding the clock and T/D"},
+    {"ids": [4], "text": "Stops the module reacting to any of its other inputs while it says disabled, read as a gate or a trigger according to the button beside it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the flip-flop is set and 0V while it is clear"},
+    {"ids": [1], "text": "Carries 10V while the flip-flop is clear and 0V while it is set"},
+    {"ids": [2], "text": "Fires a 1ms pulse each time the main output changes, in either direction"}
+  ],
+  "notes": [
+    "the module is monophonic throughout; a polyphonic signal on any input is read on channel 1 only",
+    "at least one output must be patched for the module to run at all",
+    "holding Set and Reset high together is an undefined state: a red light beside the Q label comes on and the outputs are frozen until one of them drops, unless the menu says otherwise",
+    "in T mode with a clock in the T/D input alone, the main output is that clock halved and the inverted output is the same divided clock shifted by half a step"
+  ],
+  "menu": [
+    "Enable/disable high-gate: Will disable (default), Will enable — chooses which way round a gate on the enable input reads",
+    "Undefined output (SR-mode): Unchanged (default), Q=Low / !Q=Low, Q=High / !Q=Low, Q=Low / !Q=High, Q=High / !Q=High — sets what the two outputs carry while Set and Reset are both high",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V, read as low; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the T/D input; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V, read as low; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V, read as low; a negative voltage does nothing here.",
+      "4": "high above 1V · stepped · one channel only\n\nunpatched it reads enabled; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

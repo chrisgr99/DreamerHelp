@@ -1,0 +1,63 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Mother",
+  "description": "Probabilistic quantizer holding twelve scales, each with a weight per note, choosing a neighbouring note by weight rather than always the nearest one",
+  "params": [
+    {"ids": [0], "text": "Shifts the root note of the mother scale, -11 to 11 semitones"},
+    {"ids": [1], "text": "Picks which of the twelve stored mother scales is in use"},
+    {"ids": [2], "text": "Rotates the scale by that many positions, -11 to 11, so the notes and weights start at another degree of it; 0 uses the mother scale itself"},
+    {"ids": [3], "text": "Sets how far either side of the incoming note the choice may reach, 0 to 6 semitones; at 0 the module quantizes to the nearest note of the scale with no choice"},
+    {"ids": [4], "text": "Shapes how the chance of a note falls away with distance from the incoming note: turned down only the closest notes come up, turned up notes out at the edge of SPAN come up nearly as often"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "text": "Sets the probability weight of that note, 0% to 100%; 50% takes the weight from the same position of the mother scale, and 100% takes that note outright with no further choice"},
+    {"ids": [17], "text": "Nothing changes when this button is clicked: the first note of a mother scale is always in the scale"},
+    {"ids": [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28], "text": "Switches that note in or out of the scale; the buttons are locked while CHILD is not 0"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch to quantize"},
+    {"ids": [1], "text": "While a cable is here the module quantizes only when a trigger arrives, rather than on every change of the input pitch"},
+    {"ids": [2], "text": "Adds semitones to the root of the mother scale, quantized, so a C adds nothing and a D raises the root two semitones"},
+    {"ids": [3], "text": "Adds semitones to the scale number, quantized, so a C selects the scale the knob points at and a D the one two on from it"},
+    {"ids": [4], "text": "Adds semitones to the rotation, quantized, so a C leaves the rotation at the knob setting"},
+    {"ids": [5], "text": "A seed for the internal random generator, which is reset to this value every process cycle, so a fresh seed per trigger is wanted for fresh choices"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The chosen note as a pitch"},
+    {"ids": [1], "text": "A gate each time the output pitch changes"},
+    {"ids": [2], "text": "The weight of the note that was chosen; the POW Output Config menu switches it to put out the notes of the scale instead"}
+  ],
+  "notes": [
+    "the note buttons can be edited only while CHLD is 0; at any other setting of CHLD they are locked",
+    "the internal random generator is set back to the RND seed on every process cycle, so a fresh voltage at RND is needed for each trigger if the choices are to differ",
+    "where the notes switched on make one of the named scales, that name is shown in the header"
+  ],
+  "menu": [
+    "Scales — a submenu of forty-two named scales, from Major and Dorian through to Wholetone; choosing one sets the note buttons to that scale",
+    "Copy Scale — takes a copy of the whole selected mother scale, its notes and all its weights",
+    "Paste Scale — writes the copied mother scale into the scale now selected, in this module or another one",
+    "Copy Child — takes a copy of the weights of the child scale now selected",
+    "Paste Child — writes the copied child weights into the child scale now selected",
+    "Disable Visualization — stops the note display being drawn",
+    "Disable DNA — stops a child weight of 50% from taking the weight at the same position of the mother scale",
+    "Disable Grab — stops a weight of 100% from taking that note outright",
+    "Root Based Display — names the notes by their distance from the root of the scale",
+    "C Based Display — names the notes from C",
+    "Child CV Mode — reads the CHLD voltage as Root Based or as In Scale",
+    "Mode — what POW carries: Power, Scale Gates, Scale Pitches or PES",
+    "Scale Base — whether the scale POW puts out starts on the Root or on the Child",
+    "Scale Step — builds the POW scale from every note of it, every second note and so on up to every seventh, so 3 gives a stack of thirds",
+    "Pack Scale — keeps the pitches POW puts out inside one octave instead of climbing an octave where the scale wraps round",
+    "Preserve Octaves — builds the POW pitches on the octave of the child rather than on the octave of the root",
+    "Auto Channels — a floor of 1 to 16 on the number of output channels while TRG is patched; the count otherwise follows the larger of the CV and TRG channel counts"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous",
+      "1": "stepped",
+      "2": "continuous"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "stepped"
+    }
+  }
+}

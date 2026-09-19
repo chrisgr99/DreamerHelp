@@ -1,0 +1,16 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Pump",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TL_Pump.cpp:131 inputTrig.process(getVoltage()), Rack's default 0V/1V Schmitt thresholds"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/TL_Pump.cpp:165 getVoltage() multiplied by the gain"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the left input", "why": "src/TL_Pump.cpp:166 isConnected() ? getVoltage() : inL"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/TL_Pump.cpp:175 setVoltage(inL*(1-dw) + wetL*dw)"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/TL_Pump.cpp:176"}
+    }
+  },
+  "comment": "No module in this plugin implements dataToJson, so the SHAPE selection, which lives only in a runtime int, is lost when a patch is saved and reloaded and comes back as shape 1. The manual describes the four shapes qualitatively; the times and the -30dB floor here are read from the shapes[4] table at TL_Pump.cpp:55-61 and from minGain at :41. The manual lists the stereo inputs as L and R without mentioning that R falls back to L when unpatched. Every jack is read with getVoltage(), so nothing is polyphonic."
+}

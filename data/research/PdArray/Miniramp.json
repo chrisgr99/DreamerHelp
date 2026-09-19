@@ -1,0 +1,19 @@
+{
+  "plugin": "PdArray",
+  "module": "Miniramp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "why": "Miniramp.cpp:223-224 reads it with getPolyVoltage(c) inside a loop bounded by the channel count taken at line 210, rescaling 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Miniramp.cpp:220-221 reads it with getPolyVoltage(c) and adds it, scaled by the CV AMT knob, to the knob duration, the total clamped to 0 and 10 seconds"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "why": "Miniramp.cpp:228-233 reads it with getPolyVoltage(c), rescaling 0.1V and 2V onto 0 and 1 before a default dsp::SchmittTrigger"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "Miniramp.cpp:255-267 writes the ramp per channel and line 279 sets the channel count from the trigger and CV inputs"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Miniramp.cpp:268 writes 10.0f or 0.0f per channel and line 280 sets the channel count"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Miniramp.cpp:269 writes 10.0f or 0.0f per channel from a generator triggered with 1e-3f at line 251, and line 281 sets the channel count"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Miniramp.cpp:270 writes 0.0f while the gate is high and 10.0f otherwise, per channel, and line 282 sets the channel count"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "Duration law: linear mode returns the knob value in seconds, 0 to 10; logarithmic mode raises ten to a power spread from -3 to 1 across the knob, giving 1ms to 10 seconds (Miniramp.cpp:7-8 and 168-183). CV depth is in seconds per 10V and follows the same two laws (lines 187-202). The channel count at line 210 is written as inputs[CV_AMT_PARAM], which indexes the input list with a parameter id; the id happens to be 1 and input 1 is the CV jack, so the count is right by coincidence. The STOP input's channel count is not counted, matching the maker's statement that polyphony comes from TRG IN and CV. The four port lights are written from channel 0 only, which the maker marks as unfinished in a comment."
+}

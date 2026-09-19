@@ -1,0 +1,27 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Slice",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "slice.cpp:566 reads it with getVoltage and :569 writes it into the circular buffer unless FREEZE is high; :567 normals it to the right channel while R is unpatched"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left audio jack", "why": "slice.cpp:355 names this input normalled from the left one"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "why": "slice.cpp:356 declares the clock, which sets the slice length in place of the length knob"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "why": "slice.cpp:526 barTrig.process crosses 1V and :527 measures barLen from the time between rises, which is what makes REACH count bars instead of slices (:416)"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "why": "slice.cpp:532 resetTrig.process crosses 1V and :533 zeroes sliceIdx and slicePos and cancels the crossfade"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "why": "slice.cpp:359 declares the freeze gate, which stops the write head while it is high"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "slice.cpp:547 reseedTrig.process crosses 1V and :548 rehashes the seed, rolling fresh choices"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slice.cpp:361 names it the depth CV, ±5V, summed with the depth knob"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "slice.cpp:362 names it the slice length CV, ±5V, summed with the length knob"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "slice.cpp:680 adds a fifth of this jack's voltage to the DEPTH knob and clamps the total to 0 to 1 as the wet-dry mix, with no rounding"},
+      "10": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "slice.cpp:364 names it the ratio CV at one volt per step, summed with the ratio switch"},
+      "11": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "slice.cpp:365 names it the reach CV at a tenth of a volt per step or bar, summed with the reach knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "slice.cpp:366 declares the left output, the reworked stream after the depth crossfade"},
+      "1": {"family": "audio", "poly": false, "why": "slice.cpp:367 declares the right output, the reworked stream after the depth crossfade"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "slice.cpp:368 declares a trigger on every slice boundary"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "slice.cpp:369 declares a gate held high while a slice is being altered"}
+    }
+  },
+  "comment": "A Channels parameter, offering Independent or Paired, is declared at slice.cpp:339 but never given a panel switch, so it cannot be reached; the two sides run paired. A run of untouched slices gets no fade at all, because it is already continuous and fading it would only cut a hole in it. The window control sweeps from a declick taper to a full grain envelope, and the shape switch only matters near the top of that travel."
+}

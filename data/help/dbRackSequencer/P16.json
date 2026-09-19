@@ -1,0 +1,33 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "P16",
+  "description": "Address generator playing one of 100 stored sixteen-step orders, with an offset, a direction and an address space of 2 to 32 steps",
+  "params": [
+    {"ids": [0], "text": "Picks which of the 100 sixteen-step orders is played"},
+    {"ids": [1], "text": "Adds to every step number before it is put out, 0 to 15 steps"},
+    {"ids": [2], "text": "Runs the order forwards or backwards"},
+    {"ids": [3], "text": "Sets how many steps the address space holds, 2 to 32; use 16 to address TD4"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves on to the next step of the order"},
+    {"ids": [1], "text": "A rising edge returns to the first step of the order and blocks the clock for 1ms"},
+    {"ids": [2], "text": "Selects the order, 0.1V per order over 0-10V, and overrides the pattern selector while patched"},
+    {"ids": [3], "text": "Sets the offset, 1.6 steps per volt over 0-10V, overrides the Ofs knob while patched, and restarts the order whenever it changes the offset"},
+    {"ids": [4], "text": "Runs the order backwards at 5V and above and forwards below that, and overrides the switch while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The current step as a voltage, with the whole address space spread over 0-10V"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "0 to 9.99V · continuous · one channel only",
+      "3": "0 to 9.99V · continuous · one channel only",
+      "4": "high above 5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

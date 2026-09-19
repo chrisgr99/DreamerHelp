@@ -1,0 +1,29 @@
+{
+  "plugin": "SickoCV",
+  "module": "Enver",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Enver.cpp:290 getChannels() on this jack sets the envelope's channel count, which :682-688 passes to every envelope output; the level is compared against 1V"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Enver.cpp:497 and :581 read getVoltage(c) per envelope channel and take a rising edge at 1V"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Enver.cpp:275 getVoltage() * trimpot * 0.1 added to the knob, the sum clamped to 0-1 at :276-279"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Enver.cpp:463 getVoltage() * trimpot added to the attack time in seconds, floored at the 1ms minimum at :465-466"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Enver.cpp:512 region adds getVoltage() * trimpot to the decay time in seconds, floored at the 1ms minimum"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Enver.cpp:281 getVoltage() * trimpot * 0.1 added to the knob as a level"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "Enver.cpp:607 region adds getVoltage() * trimpot to the release time in seconds, floored at the 1ms minimum"},
+      "7": {"family": "audio", "poly": true, "step": "continuous", "why": "Enver.cpp:709 getChannels() on this jack becomes the amplifier's loop bound and :711 reads getVoltage(c)"},
+      "8": {"family": "audio", "poly": true, "step": "continuous", "why": "Enver.cpp:723 getChannels() on this jack becomes the amplifier's loop bound and :725 reads getVoltage(c)"},
+      "9": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "Enver.cpp:701 getVoltage(0)/10 multiplies the knob on a monophonic envelope, :738 getVoltage(c)/10 is added to it on a polyphonic one, and the result is clamped to 0-1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:682 setChannels(chanTrig); the port carries a 1ms pulse"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:683 setChannels(chanTrig); the port carries a 1ms pulse"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:684 setChannels(chanTrig); the port carries a 1ms pulse"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:685 setChannels(chanTrig); the port carries a 1ms pulse"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:642 setVoltage(env * 10, c) and :687 setChannels(chanTrig)"},
+      "5": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "Enver.cpp:644 setVoltage((1 - env * invStr) * 10, c) and :688 setChannels(chanTrig)"},
+      "6": {"family": "audio", "poly": true, "range": "±10V", "why": "Enver.cpp:712-717 clamps to ±10V, :719 setChannels(chanVca) or :759 setChannels(chanTrig)"},
+      "7": {"family": "audio", "poly": true, "range": "±10V", "why": "Enver.cpp:726-731 clamps to ±10V, :732 setChannels(chanVca) or :760 setChannels(chanTrig)"}
+    }
+  },
+  "comment": "The attack, decay and release CVs are added as seconds directly, so one volt at a full attenuverter adds one second. The shape and sustain sumRanges are positions rather than voltages: knob plus CV is clamped to 0-1. The amplifier section is only calculated when one of its outputs has a cable in it (Enver.cpp:692). The LVL jack behaves differently on the two paths: Enver.cpp:701 multiplies the knob by the voltage over ten for a monophonic envelope, while :738 adds the voltage over ten to the knob when the envelope is polyphonic. The README's tip about using the LVL jack for velocity, with the knob at zero, only holds on the polyphonic path."
+}

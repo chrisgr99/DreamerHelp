@@ -1,0 +1,25 @@
+{
+  "plugin": "Mental",
+  "module": "MentalMuxes",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:65, a bare getVoltage passed through unchanged"},
+      "1": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:66 read as a bare voltage; :69-71 copied to the A output while the A select is above 0"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalMuxes.cpp:67 and 69, compared against 0"},
+      "3": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:81 read as a bare voltage; :85-93 copied to the B output while the B select is at or below 0"},
+      "4": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:82 read as a bare voltage; :85-87 copied to the B output while the B select is above 0"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 0V", "negative": "ignored", "normal": "0V", "why": "src/MentalMuxes.cpp:83 read as a level; :85 anything above 0 chooses the second B input, anything else the first"},
+      "6": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:98 read as a bare voltage; :106-108 copied to the C output while the C select rounds to 0"},
+      "7": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:99 read as a bare voltage; :115-117 copied to the C output while the C select rounds to 1"},
+      "8": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:100 read as a bare voltage; :123-125 copied to the C output while the C select rounds to 2"},
+      "9": {"poly": false, "negative": "swings", "normal": "0V", "why": "src/MentalMuxes.cpp:101 read as a bare voltage; :131-133 copied to the C output while the C select rounds to 3"},
+      "10": {"family": "cv", "poly": false, "range": "0 to 3V", "step": "stepped", "normal": "0V", "why": "src/MentalMuxes.cpp:102-105, abs then round then clamped to 3"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "src/MentalMuxes.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "1": {"poly": false, "why": "src/MentalMuxes.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"},
+      "2": {"poly": false, "why": "src/MentalMuxes.cpp, setVoltage with no channel index; the plugin uses no polyphony API at all"}
+    }
+  },
+  "comment": "The four-way select takes the absolute value of the voltage before rounding, so -2V picks the same input as 2V; that is neither ignored, subtracted nor swung, so the negative field is left off it and the behaviour is in the line instead. No family on the signal jacks or the outputs, which carry whatever is patched. The panel prints In, Select and Out. The four-way section's lights are driven from the selected signal divided by three, so they read as level meters rather than as plain indicators; the maker also writes LEVEL_LED_C2 twice at src/MentalMuxes.cpp:126-127 where LEVEL_LED_C1 was plainly meant, which leaves the first light lit at its last value while the third input is selected."
+}

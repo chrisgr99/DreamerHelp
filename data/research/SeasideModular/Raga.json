@@ -1,0 +1,25 @@
+{
+  "plugin": "SeasideModular",
+  "module": "Raga",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Raga.cpp:694-699 strums on rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) through a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Raga.cpp:560 clamps the jack to between -1V and 2V and line 433 turns it into a frequency at twelve semitones per volt; read at voltages[0] with no channel loop"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Raga.cpp:657-662 plucks the chikaris on rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) through a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:633 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:634 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "5": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:635 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "6": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:636 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "7": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:637 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "8": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Raga.cpp:638 clamps the jack to ±10V, divides by ten and adds it to that fader; read at voltages[0] with no channel loop", "sumRange": "0 to 10V"},
+      "9": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "negative": "swings", "normal": "0V", "why": "Raga.cpp:611 clamps the jack to between -1V and 2V and line 473 rounds twelve times it to a whole number of semitones; read at voltages[0] with no channel loop"},
+      "10": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "negative": "swings", "normal": "0V", "why": "Raga.cpp:612 clamps the jack to between -1V and 2V and line 474 rounds twelve times it to a whole number of semitones; read at voltages[0] with no channel loop"},
+      "11": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "negative": "swings", "normal": "0V", "why": "Raga.cpp:613 clamps the jack to between -1V and 2V and line 475 rounds twelve times it to a whole number of semitones; read at voltages[0] with no channel loop"},
+      "12": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "Raga.cpp:666-671 strums the tarafs on rescale(voltage, 0.1f, 2.0f, 0.f, 1.f) through a SchmittTrigger, at voltages[0] with no channel loop, so a rising edge is detected once the jack passes 2V and is armed again below 0.1V"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Raga.cpp:806 setVoltage with no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "The taraf strum jack is configured as \"Taraf string tuning\" at Raga.cpp:240 but is read at line 666 as a trigger that strums the tarafs; the panel prints TARAF STRUM over it and the code agrees with the panel. The three tuning knobs are configured 1 to 11 (lines 254-260) against note tables holding twelve entries, so the last name in each table, B on the main knob and Ni on the second and third, cannot be selected. The module declares a right-hand audio output in its OutputId enum but adds no jack for it, so the instrument is mono and the second output can never be reached. GLIDETYPE_PARAM is configured at line 252 and read at line 649 but has no widget, so its linear-or-logarithmic choice is fixed at the default and cannot be changed from the panel. The fader sums at lines 633-638 clamp the knob and the CV separately but not the total, so a level above one is reachable."
+}

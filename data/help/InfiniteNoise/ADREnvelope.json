@@ -1,0 +1,64 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "ADREnvelope",
+  "description": "An envelope that rises to one level, holds there, then falls to another, in 4HP, with the time and the curve of each ramp set separately",
+  "params": [
+    {"ids": [0], "text": "Chooses how the Phase input is read: as a gate whose rising edge attacks and whose falling edge releases, or as a trigger where they alternate"},
+    {"ids": [1], "text": "Starts an attack by hand"},
+    {"ids": [2], "text": "Starts the delay and release by hand"},
+    {"ids": [3], "text": "Makes each attack trigger start a fresh attack from the release level, instead of carrying on from wherever the envelope is"},
+    {"ids": [4], "text": "Makes each release trigger restart the delay, instead of being ignored while the delay or release is already running"},
+    {"ids": [5], "text": "Sets how long the envelope holds its level between the attack and the release, 0 to 10 seconds"},
+    {"ids": [6], "text": "Sets how quickly the envelope covers the whole distance between the two levels on the way up, 0 to 10 seconds"},
+    {"ids": [7], "text": "Sets how quickly the envelope covers the whole distance between the two levels on the way down, 0 to 10 seconds"},
+    {"ids": [8], "text": "Bends the rise, concave one way and convex the other, with a straight line in the centre"},
+    {"ids": [9], "text": "Bends the fall, concave one way and convex the other, with a straight line in the centre"},
+    {"ids": [10], "text": "Sets the voltage the attack climbs to and holds at, -10V to +10V, and 10V unless you move it"},
+    {"ids": [11], "text": "Sets the voltage the release falls to and holds at, -10V to +10V, and 0V unless you move it"},
+    {"ids": [12], "text": "Links the release time knob to the attack time knob, so the release knob greys out and follows it"},
+    {"ids": [13], "text": "Links the release shape knob to the attack shape knob, green for the same value and red for the mirror image of it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Drives both stages from one signal: in gate mode the rising edge attacks and the falling edge releases, in trigger mode they take turns"},
+    {"ids": [1], "text": "A rising edge starts an attack; a light beside it is green while the rise runs and red while the envelope is held at the attack level"},
+    {"ids": [2], "text": "A rising edge starts the delay and then the release; a light beside it is yellow during the delay, green during the fall and red once the release level is reached"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Fires a 2ms pulse as an attack starts, at the gate-high level from the menu rather than the trigger-high level"},
+    {"ids": [1], "text": "Fires a 2ms pulse when the rise reaches the attack level, and not if the attack is cut short"},
+    {"ids": [2], "text": "Fires a 2ms pulse as the release starts, which is after the delay has run"},
+    {"ids": [3], "text": "Fires a 2ms pulse when the fall reaches the release level, and not if the release is cut short"},
+    {"ids": [4], "text": "Carries the envelope itself, between the two level knobs"}
+  ],
+  "notes": [
+    "the time knobs set a rate, not a duration: they say how long the full distance between the two levels takes, so a ramp starting part way there finishes sooner",
+    "an interrupted stage starts the next one from wherever the envelope is, unless the matching retrigger setting is on",
+    "patching the end-of-attack output back into the release trigger makes one attack trigger run a whole cycle, and adding end-of-release back into the attack trigger makes it run on by itself",
+    "this module is monophonic, and comes up sitting at the release level waiting for an attack"
+  ],
+  "menu": [
+    "Attack rate chaos, Delay rate chaos, Release rate chaos — picks a new random length for that stage each time it begins, up to a tenth or ten times the dialled time at 100%",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Gate-high detect-level — sets the voltage at which an incoming gate counts as high, 1V or more unless you change it",
+    "Gate-high output-level — sets the voltage a gate output carries while high, 10V unless you change it",
+    "Gate-low output-level — sets the voltage a gate output carries while low, 0V unless you change it",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it",
+    "Trigger-high output-level — sets the voltage a trigger pulse carries during its 1ms high phase, 10V unless you change it",
+    "Trigger-low output-level — sets the voltage a trigger output carries between pulses, 0V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the rising edge of the Phase input; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads the falling edge of the Phase input; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "stepped · one channel only",
+      "4": "one channel only"
+    }
+  }
+}

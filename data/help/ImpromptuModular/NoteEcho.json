@@ -1,0 +1,52 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "NoteEcho",
+  "description": "Four-tap delay for note events rather than audio, carrying pitch, gate and a second CV for velocity or panning; each tap comes back as extra channels of the polyphonic outputs",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets the delay of that tap in tempo steps, up to 32; at 0 the tap is switched off"},
+    {"ids": [4, 5, 6, 7], "text": "Transposes the pitch of that tap by a number of semitones, -48 to 48"},
+    {"ids": [8, 9, 10, 11], "text": "Offsets or scales the CV2 output of that tap: an offset of minus 10V to 10V, or a scaling of minus 1 to 1, according to the CV2 mode switch"},
+    {"ids": [12, 13, 14, 15], "text": "Sets the probability that the gate of that tap fires"},
+    {"ids": [16], "text": "Sets the polyphony of the CV, GATE and CV2 inputs, 1 to 4. At 4, one tap must be switched off or WET ONLY turned on, to keep the total inside 16 channels"},
+    {"ids": [17], "text": "Picks whether the CV2 knobs offset the CV2 output or scale it"},
+    {"ids": [18], "text": "In the chord setting one probability draw covers every channel of a tap, so its notes play all or none; in the separate setting each channel is drawn on its own"},
+    {"ids": [19], "text": "The voltage the CV2 input takes when nothing is patched to it, -10V to 10V"},
+    {"ids": [20], "text": "Leaves the undelayed tap out of the outputs, so only the delay taps are heard"},
+    {"ids": [21], "text": "Picks whether the TEMPO input takes clock pulses or a BPM-CV"},
+    {"ids": [22, 23, 24, 25], "text": "Adds a random semitone offset to the pitch of that tap; turned right the offset is bipolar and turned left it is unipolar, as far as two octaves either way"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Pitch in, sampled and held on the rising edge of the gate on the matching channel"},
+    {"ids": [1], "text": "Gates marking the notes to be delayed; each rising edge samples the CV and CV2 inputs"},
+    {"ids": [2], "text": "A second CV, for velocity or panning, sampled and held on the rising edge of the matching gate"},
+    {"ids": [3], "text": "Clock setting the speed of the delay tape, so the delay knobs count its steps"},
+    {"ids": [4], "text": "A trigger here erases the delay tape"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Pitch of every tap, one polyphonic channel per tap for each input channel"},
+    {"ids": [1], "text": "Gate of every tap, on the channels matching the CV output"},
+    {"ids": [2], "text": "CV2 of every tap, on the channels matching the CV output"}
+  ],
+  "notes": [
+    "with nothing patched to TEMPO the tape runs at 60 BPM, so the delay knobs count steps and the taps sound without a clock",
+    "the delay tape is not saved with the patch, so a reloaded patch starts with it empty"
+  ],
+  "menu": [
+    "Tempo multiplier — runs the delay tape at a multiple or a fraction of the clock at the TEMPO input, listed as x 2, x 3/2 and so on",
+    "Low CPU mode — refreshes the outputs less often; it does not change how the inputs are processed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "plugin": "voxglitch",
+  "module": "arpseq",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "why": "ArpSeq.hpp:980 takes getChannels() on this input and ArpSeq.hpp:988 reads each channel as the note voltage the arpeggiator holds and puts out"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "why": "ArpSeq.hpp:946 takes getChannels() on this input and ArpSeq.hpp:961 tests each channel against 0V to decide which notes are held"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "ArpSeq.hpp:1232 reads CLOCK_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "ArpSeq.hpp:405 reads RESET_INPUT with getVoltage() alone into a Schmitt trigger whose high threshold is constants::gate_high_trigger, 2V (vgLib-2.0/constants.cpp:5)"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "why": "RateModel.hpp:17 divides this input by the attenuverter range, multiplies by the attenuverter and RateModel.hpp:22 truncates the total to a rate index clamped to -8..+7"},
+      "5": {"family": "cv", "poly": false, "step": "stepped", "why": "ShapeModel.hpp:20 divides this input by the attenuverter range, multiplies by the attenuverter and ShapeModel.hpp:22 truncates the total to a playback mode clamped to 0..9"}
+    },
+    "outputs": {
+      "0": {"family": "pitch"},
+      "1": {"family": "trigger"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"}
+    }
+  },
+  "comment": "Reset Cycles and Smart Randomize are on the cycle selector knob's own menu, not the panel menu, and the drawn value rows carry a menu of their own. RATE and SHAPE divide their voltage by an attenuverter range that is a menu choice of 5 or 10 (ArpSeq.hpp:1046-1053), so the span a full attenuverter covers is ±5V or ±10V depending on that setting. No range is written for either jack because it is not fixed."
+}

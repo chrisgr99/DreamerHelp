@@ -1,0 +1,23 @@
+{
+  "plugin": "MSM",
+  "module": "Rogue",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 0.01V", "why": "VCO.cpp:150-151 subtract 0.01 from this jack's voltage and reset the oscillator phase when the result rises above zero with the previous sample at or below it, so the sync point is 0.01V"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "VCO.cpp:881 multiplies this jack by twelve into a semitone pitch"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "why": "VCO.cpp:884 adds this jack, scaled by its attenuator, to the same semitone pitch the volt per octave jack feeds", "polarity": "bipolar"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "ignored", "why": "VCO.cpp:890 clamps this jack, scaled by its attenuator, to 0 to 2 before raising the exponential base to it"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "VCO.cpp:899 adds this jack over ten to the width knob, and setPulseWidth at VCO.cpp:130 clamps the sum to 0.01 to 0.99"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"}
+    }
+  },
+  "comment": "The linear FM input is exponential. VCO.cpp:884 adds it, scaled by its attenuator, to the same semitone pitch figure the volt per octave jack feeds."
+}

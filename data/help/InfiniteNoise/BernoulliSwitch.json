@@ -1,0 +1,51 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "BernoulliSwitch",
+  "description": "A coin toss on every clock, in 2HP, choosing between two inputs for one output and between two outputs for one input",
+  "params": [
+    {"ids": [0], "text": "Switches what the probability knob means: by default it is the chance that B is chosen, and pressed it becomes the chance that the choice flips"},
+    {"ids": [1], "text": "Sets the probability, 0% fully counter-clockwise to 100% fully clockwise, at 50% in the centre"},
+    {"ids": [2], "text": "Attenuates and inverts the probability CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [3], "text": "Sets the rate of the internal clock, from 0.0039Hz fully counter-clockwise to 1024Hz fully clockwise, and is ignored while a clock is patched"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the probability, 10V covering the knob's full travel at full trim"},
+    {"ids": [1], "text": "A rising edge tosses the coin; with the jack empty the internal clock does it at the knob's rate"},
+    {"ids": [2, 3], "text": "One of the two signals for the upper section; an empty jack carries the voltage set for it on the menu, 10V for A and 0V for B"},
+    {"ids": [4], "text": "The signal routed to one of the two lower outputs; with the jack empty it reads the clock, which splits the clock between them"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries whichever of the two upper inputs the toss chose"},
+    {"ids": [1, 2], "text": "Carries the lower input while the toss chose this port, and otherwise a fixed voltage from the menu or the last value it carried"}
+  ],
+  "notes": [
+    "leaving the lower input empty turns the module into a Bernoulli gate: each clock pulse goes to the A output or the B output",
+    "leaving both upper inputs empty makes the upper output a random high or low gate, from the 10V and 0V the menu normals it to"
+  ],
+  "menu": [
+    "Sections: shared or independent A/B — chooses whether the two sections share one toss or toss separately",
+    "A-normalized input, B-normalized input — sets the voltage an upper input carries when its jack is empty",
+    "Non selected A/B-output (fixed level) — sets the voltage the unselected lower output carries",
+    "Non selected A/B-output (mode): Fixed level, Last A/B-value — chooses whether the unselected lower output holds that fixed voltage or the last voltage it passed, tracked per channel",
+    "Clock rate chaos — picks a new random speed for each cycle of the internal clock, and does nothing while a clock is patched",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Auto select process quality — picks the process quality from the dialled-in rate and from which ports are patched, and greys out the manual choice while it is on",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads the internal clock; a negative voltage does nothing here.",
+      "2": "polyphonic\n\nunpatched it reads 10V unless changed on the menu.",
+      "3": "polyphonic\n\nunpatched it reads 0V unless changed on the menu.",
+      "4": "polyphonic\n\nunpatched it reads the clock input."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

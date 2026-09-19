@@ -1,0 +1,53 @@
+{
+  "plugin": "CountModula",
+  "module": "BinarySequencerPlus",
+  "description": "Sequencer built on a counter, mixing eight of the counter's divisions together in whatever proportions the knobs set to make a repeating control voltage",
+  "params": [
+    {"ids": [0], "text": "Picks which way the counter runs, up or down; a cable in the COUNT input takes this switch out of circuit"},
+    {"ids": [1], "text": "Sets the largest voltage the mix can reach, 1V to 10V in 1V steps, divided equally across the eight division knobs"},
+    {"ids": [2], "text": "Picks how the counter's eight divisions are worked out: B1 a binary ripple counter, B2 a binary counter, D the decimals 2 to 9, P the primes, F the Fibonacci numbers, E the evens and O the odds"},
+    {"ids": [3], "text": "Slews the output voltage so it glides between steps rather than jumping"},
+    {"ids": [4], "text": "Shapes the glide, linear at one end and logarithmic at the other"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12], "text": "How much that division adds to the output voltage, -10 to 10, so it can pull the voltage down as well as push it up; it counts only while that division is active"},
+    {"ids": [13], "text": "Picks what the CLOCK and TRIG outputs follow: in the CLOCK position the clock input itself, in the DIV position only the clock pulses on which some division is active. A cable in GATE overrides it"},
+    {"ids": [14], "text": "Reverses the order of the eight divisions across the panel, so the longest division moves to the left; a cable in the FLIP input takes this switch out of circuit"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the counter; there is no clock inside, so nothing moves until one is patched here"},
+    {"ids": [1], "text": "A rising edge restarts the counter at the first count of the chosen mode"},
+    {"ids": [2], "text": "A high gate lets the sequencer run and a low gate pauses it, taking up again at the next clock; with nothing patched the sequencer runs"},
+    {"ids": [3], "text": "A voltage sampled at each rising clock edge, used in place of the SCALE switch as the total the division knobs share, each knob at full reaching an eighth of it; it is held within 10V either way"},
+    {"ids": [4], "text": "A high gate counts up and a low gate counts down, in place of the COUNT switch"},
+    {"ids": [5], "text": "A high gate gives the DIV gate mode and a low gate the CLOCK gate mode, in place of the GATE switch"},
+    {"ids": [6], "text": "A high gate reverses the order of the eight divisions, in place of the FLIP switch"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the clock while the sequencer runs: the clock input itself under the CLOCK gate mode, or only those pulses on which a division is active under the DIV mode"},
+    {"ids": [1], "text": "A 1ms trigger on each clock pulse the gate mode lets through"},
+    {"ids": [2], "text": "The eight division knobs summed for the divisions that are active, scaled by the SCALE switch or the S&H voltage, sampled at the clock edge and passed through LAG and SHAPE"},
+    {"ids": [3], "text": "The CV output with its sign flipped"}
+  ],
+  "notes": [
+    "the eight lamps above the division knobs light for the divisions that are active on the current count",
+    "this module is monophonic: only the first channel of a polyphonic cable is read, and every output carries a single channel"
+  ],
+  "menu": [
+    "Initialize Division Mix Only — puts the eight division knobs back to their default positions and leaves the rest of the module as it is",
+    "Randomize Division Mix Only — sets the eight division knobs to random positions and leaves the rest of the module as it is"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "high above 2V · stepped · one channel only",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 10V, so the sequencer runs.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads the SCALE switch.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads the COUNT switch.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads the GATE switch.",
+      "6": "high above 2V · stepped · one channel only\n\nunpatched it reads the FLIP switch."
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "plugin": "squinktronix-plug1",
+  "module": "sqh-harmony2",
+  "description": "Diatonic chord generator: six transposers each shift the input pitch by a number of scale degrees and octaves, and the enabled ones come out together as one polyphonic chord",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "Transposes that row by this many scale degrees above the input, 0 to +11; a third is +2 and a fifth is +4"},
+    {"ids": [6, 7, 8, 9, 10, 11], "text": "Shifts that row by whole octaves, -2 to +2, on top of its scale-degree setting"},
+    {"ids": [24, 25, 26, 27, 28, 29], "text": "Turns that row on and off, lighting while it is on; each enabled row adds one channel to the V/Oct output"},
+    {"ids": [30], "text": "Sets the root of the scale that the quantizing and the transposing are done in"},
+    {"ids": [31], "text": "Sets the scale that the quantizing and the transposing are done in, the seven diatonic modes and a further six scales"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the transposition of every enabled row, a twelfth of a volt per scale degree; a polyphonic cable feeds each enabled row its own channel, in panel order from the top"},
+    {"ids": [1], "text": "Sets the scale root from a voltage, a twelfth of a volt per semitone, wrapping within the octave"},
+    {"ids": [2], "text": "Sets the scale from a voltage, a twelfth of a volt per scale, wrapping through the list; Mode CV only diatonic cuts that list to the seven modes"},
+    {"ids": [3], "text": "The pitch every enabled row transposes, read from channel 0 at 1V per octave and quantized to the scale"},
+    {"ids": [4], "text": "Sets the scale root and mode from a twelve-channel Poly External Scale cable: under 4V a note outside the scale, under 9V a note in it, above that the root"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The chord at 1V per octave, one channel per enabled row, in panel order from the top"},
+    {"ids": [1], "text": "The current scale as a twelve-channel Poly External Scale cable: 0V for a note outside it, 8V for a note in it and 10V for the root"}
+  ],
+  "notes": [
+    "nothing comes out until one of the six rows is enabled with its button; with none enabled the V/Oct output carries no channels",
+    "the scale can be set from the panel pickers, from the Key and Mode inputs or from the PES input, and whichever changed most recently is the one in force",
+    "with a cable in XP, the number printed beside an enabled row is the total transposition that row is applying, in scale degrees",
+    "the red lamp beside the PES input lights when that cable has fewer than twelve channels or carries a scale the module does not recognise"
+  ],
+  "menu": [
+    "Mode CV only diatonic — cuts the Mode input's list to the seven diatonic modes; the panel's own mode picker offers every scale either way",
+    "Sharps&Flats: Default+sharps, Default+flats, Sharps, Flats — chooses how a note that could be written either way is named"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · stepped · polyphonic",
+      "1": "1V per octave · stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "1V per octave · continuous · one channel only",
+      "4": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

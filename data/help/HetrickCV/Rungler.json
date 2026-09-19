@@ -1,0 +1,45 @@
+{
+  "plugin": "HetrickCV",
+  "module": "Rungler",
+  "description": "Eight-bit shift register after Rob Hordijk's Benjolin and Blippoo Box, with a stepped voltage built from the last three bits",
+  "params": [
+    {"ids": [0], "text": "Sets the voltage the Data input is compared against, -5V to +5V; a data voltage above it writes a one into the first bit"},
+    {"ids": [1], "text": "Attenuverts the CV that shifts the comparison voltage, -1 to +1, and zero at startup, so that input does nothing until this is turned up"},
+    {"ids": [2], "text": "Scales the stepped output, -5V to +5V, inverting it below zero"},
+    {"ids": [3], "text": "Attenuverts the CV that shifts the output scaling, -1 to +1, and zero at startup, so that input does nothing until this is turned up"},
+    {"ids": [4], "text": "Write feeds the Data input into the register; Loop ignores Data and fills the first bit from the last bit alone, so the pattern repeats unchanged"},
+    {"ids": [5], "text": "Direct fills the first bit from the Data comparison alone; XOR fills it from that comparison exclusive-ORed with the last bit, which is far less predictable"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances the register by one bit"},
+    {"ids": [1], "text": "Compared against the comparison voltage; above it a one enters the register, below it a zero"},
+    {"ids": [2], "text": "Shifts the comparison voltage, through its own attenuverter"},
+    {"ids": [3], "text": "Shifts the output scaling, through its own attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "5V while that bit of the register holds a one, 0V while it holds a zero"},
+    {"ids": [8], "text": "The stepped voltage built from the last three bits of the register, eight levels between 0V and the level set by the Scale knob"}
+  ],
+  "notes": [
+    "the register starts with every bit at zero and stays there while Data is unpatched and Compare is at 0V; a clock on its own changes nothing until Data rises above the Compare voltage."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 5V · polyphonic",
+      "1": "0 to 5V · polyphonic",
+      "2": "0 to 5V · polyphonic",
+      "3": "0 to 5V · polyphonic",
+      "4": "0 to 5V · polyphonic",
+      "5": "0 to 5V · polyphonic",
+      "6": "0 to 5V · polyphonic",
+      "7": "0 to 5V · polyphonic",
+      "8": "±5V · polyphonic"
+    }
+  }
+}

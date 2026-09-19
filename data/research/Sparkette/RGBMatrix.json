@@ -1,0 +1,20 @@
+{
+  "plugin": "Sparkette",
+  "module": "RGBMatrix",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the red offset knob", "why": "src/RGBMatrix.cpp line 122 with applyScaleOffset in src/Utility.cpp line 6; getVoltage(i) inside the per-channel loop at line 120"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the green offset knob", "why": "src/RGBMatrix.cpp:123 applyScaleOffset (src/Utility.cpp:6) makes the green value the Green Offset knob plus the Green CV Scale knob times this channel's voltage over ten, which :126-136 writes to the pixel being scanned"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "the blue offset knob", "why": "src/RGBMatrix.cpp:124 applyScaleOffset (src/Utility.cpp:6) makes the blue value the Blue Offset knob plus the Blue CV Scale knob times this channel's voltage over ten, which :126-136 writes to the pixel being scanned"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "a frame starts by itself", "why": "src/RGBMatrix.cpp lines 86 and 96-97, isConnected chooses autotrigger and getVoltage() >= 1.0f with a trigger_last edge test"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/RGBMatrix.cpp lines 164-168, off + 10*t with off of -5 when the X switch is bipolar"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/RGBMatrix.cpp lines 107-110, 10V or 0V from the sample counter"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "stepped", "why": "src/RGBMatrix.cpp lines 170-173, off + 10*t with off of -5 when the Y switch is bipolar"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/RGBMatrix.cpp line 111, 10V while 2*curX/width is 0"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "step": "stepped", "why": "src/RGBMatrix.cpp line 91, 10V at the last pixel of the last row"}
+    }
+  },
+  "comment": "src/RGBMatrix.cpp at commit b90cd69; all three sizes are the same template, this one instantiated at 32 by 32. The maker's one-line description in plugin.json calls these an array of lights with built-in oscillators; there are no oscillators in the code. What the X and Y outputs carry is the position of the scan, and its rate comes from the samples-per-pixel knob and the patch's sample rate, so the frame rate is the sample rate divided by the sample count times 1024 pixels. The grid of lamps is one widget holding 3072 light widgets and no parameters, so no pixel can be clicked for help. In polyphonic mode sixteen pixels are painted per step and the X and Y outputs carry sixteen channels; the grid width must be a multiple of sixteen, which all three sizes are. Double-buffered is on by default and polyphonic mode and fade lights are off."
+}

@@ -1,0 +1,26 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Crystal",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "why": "crystal.cpp:1016 scales it by 0.2 and sums it with the internal exciter into emitter A of the mesh"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the size CV, ±5V, summed with the size knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the damping CV, ±5V, summed with the damping knob"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "crystal.cpp:859 adds getVoltage() (the pv helper at :841) to the material knob, rounds the total and clamps it to the material count — one volt per material, which no range spelling fits"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the tail CV, ±5V, summed with the tail knob"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "crystal.cpp:979 pingTrig.process crosses 1V and :987 restrikes the exciter, reading V/OCT at that instant"},
+      "7": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "crystal.cpp:987 sets the strike frequency to 261.63 * 2^V, clamped to 8 to 12000Hz, and reads the jack only at the moment of a ping"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the feedback CV, ±5V, summed with the feedback knob"},
+      "9": {"poly": false, "step": "continuous", "why": "crystal.cpp:1017 scales it by 0.2 and sums it with the internal exciter into emitter B of the mesh"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the dry and wet CV, ±5V, summed with the mix knob"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "crystal.cpp names it the echoes CV, ±5V, summed with the echoes knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "crystal.cpp declares one of the four listener outputs; each carries its own arrival times and levels"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"}
+    }
+  },
+  "comment": "Eight parameters and eight inputs are declared with no widget: the camera yaw and pitch, both emitters' azimuth, elevation and heading, the navigation speed, and the four emitter velocity CV jacks. The camera pair are set by dragging the display and the emitter positions likewise; the velocity inputs the manual describes have no jack on this panel at all, so the modulation it suggests cannot be patched. No family is given to the first audio input: whatever is patched, audio or CV, is carried into the chamber. The tail length is sized from the crystal's own volume and surface area by Sabine's equation, so a larger habit really does ring longer."
+}

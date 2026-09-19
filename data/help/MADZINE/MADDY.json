@@ -1,0 +1,57 @@
+{
+  "plugin": "MADZINE",
+  "module": "MADDY",
+  "description": "A swung clock of its own driving three Euclidean tracks that put out envelopes rather than triggers, with a five-knob voltage sequencer clocked from any of them",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, doubling per unit of travel from 0.125Hz at the bottom to 128Hz at the top; two clock pulses come out of every cycle"},
+    {"ids": [1], "text": "Moves the second of each pair of clock pulses, evenly spaced at the bottom of its travel and a quarter cycle from the first at the top"},
+    {"ids": [2], "text": "Sets how many steps all three patterns run for; the knob reads up to 48 but anything above 32 is treated as 32"},
+    {"ids": [3], "text": "Sets how long every track's envelope takes to fall, 10ms at the bottom of its travel to 1 second at the top, and bends the curve with it"},
+    {"ids": [4, 6, 8], "text": "Sets what share of the pattern's steps that track fires on, 0% to 100%"},
+    {"ids": [5, 7, 9], "text": "Divides or multiplies the clock for that track, from a quarter speed through the clock's own rate to four times it"},
+    {"ids": [10, 11, 12, 13, 14], "text": "One of the five voltages the sequencer steps between, -10V to +10V"},
+    {"ids": [15], "text": "Steps through the three orders the sequencer can take: Sequential walks the knobs in turn, Custom follows the pattern typed into the menu, and Jump takes them 1, 3, 5, 2, 4"},
+    {"ids": [16], "text": "Sets how many of the five knobs the pattern is built from, two at the bottom of its travel, then three, then four, then five"},
+    {"ids": [17], "text": "Replaces a share of the steps with a knob chosen at random, 0% to 100% of half the pattern length"},
+    {"ids": [18], "text": "Steps through the seven things that can clock the voltage sequencer: the internal clock, any one of the three tracks, or any one of the three chain outputs; the lamp shows a different colour for each"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 2V returns all three tracks and the voltage sequencer to the start, without clearing the rotations set on the menu"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms trigger at 10V on every pulse of the internal clock, swung pulses included"},
+    {"ids": [1, 2, 3], "text": "That track's envelope, 0V to 10V, fired on each step of its pattern that carries a hit"},
+    {"ids": [4], "text": "The envelope of track 1 for one full pass of its pattern, then track 2 for one full pass, and repeats"},
+    {"ids": [5], "text": "The envelope of track 2 for one full pass of its pattern, then track 3 for one full pass, and repeats"},
+    {"ids": [6], "text": "One full pass each of track 1, track 2, track 1 again and track 3, then repeats"},
+    {"ids": [7], "text": "The voltage of the knob the sequencer's current step points at"},
+    {"ids": [8], "text": "A 10ms trigger at 10V whenever a step lands on a voltage different from the one before it"}
+  ],
+  "notes": [
+    "this module makes its own clock and needs nothing patched to run. The clock jack is an output, not an input, and there is no way to drive it from outside.",
+    "the three track jacks carry envelopes shaped by the DECAY knob, not triggers, even though the maker's tooltips call them T1, T2 and T3 Trigger.",
+    "the LENGTH knob is configured to 48 but process() clamps the figure to 32, so the top third of its travel does nothing."
+  ],
+  "menu": [
+    "Attack Time — a slider setting how long every track's envelope takes to rise, shared across all three, with the current figure printed above it",
+    "Track 1 Shift — rotates track 1's pattern by 0 to 4 steps",
+    "Track 2 Shift — rotates track 2's pattern by 0 to 4 steps",
+    "Track 3 Shift — rotates track 3's pattern by 0 to 4 steps",
+    "Enter pattern (1-5): — a text field taking a run of the digits 1 to 5, which becomes the order the knobs are played in while the mode is Custom",
+    "Reset to Default — puts the custom pattern back to the 32-step order the module starts with"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "0 to 10V",
+      "3": "0 to 10V",
+      "4": "0 to 10V · one channel only",
+      "7": "±10V · one channel only",
+      "8": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

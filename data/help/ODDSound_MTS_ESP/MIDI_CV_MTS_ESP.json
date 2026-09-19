@@ -1,0 +1,54 @@
+{
+  "plugin": "ODDSound_MTS_ESP",
+  "module": "MIDI_CV_MTS_ESP",
+  "description": "Turns MIDI from an external device into CV and gates, with the pitch output bent to the tuning held by an MTS-ESP master",
+  "outputs": [
+    {"ids": [0], "text": "The note pitch at 1V per octave, with the MTS-ESP retuning for that note and the pitch wheel bend added in"},
+    {"ids": [1], "text": "10V while a note is held on that channel and 0V otherwise"},
+    {"ids": [2], "text": "The velocity of the note on that channel, 0 to 10V across the MIDI range of 0 to 127"},
+    {"ids": [3], "text": "The key pressure for the note on that channel, 0 to 10V across the MIDI range of 0 to 127"},
+    {"ids": [4], "text": "The pitch wheel, ±5V across its full travel"},
+    {"ids": [5], "text": "The mod wheel, 0 to 10V across the MIDI range of 0 to 127"},
+    {"ids": [6], "text": "A 10V pulse on a channel whenever the note there is retriggered"},
+    {"ids": [7], "text": "10V while a MIDI clock pulse is high, at 24 pulses to the quarter note"},
+    {"ids": [8], "text": "10V while a divided clock pulse is high, at the division set on the panel menu"},
+    {"ids": [9], "text": "A 10V pulse when a MIDI start message arrives"},
+    {"ids": [10], "text": "A 10V pulse when a MIDI stop message arrives"},
+    {"ids": [11], "text": "A 10V pulse when a MIDI continue message arrives"}
+  ],
+  "notes": [
+    "no MIDI is read until a driver, a device and a channel have been chosen on the module's own display",
+    "with no MTS-ESP master running on the computer the pitch output is plain twelve-tone tuning; the lamp is fully lit only while a master is found",
+    "a master has to be loaded elsewhere: in a VCV Host module in this patch, or in any application on the same computer, since MTS-ESP passes tunings between processes",
+    "a note the master has marked as filtered out is thrown away when it arrives, so it never reaches the outputs at all",
+    "the driver, device and channel choosers are drawn inside one display widget and cannot be clicked for a help entry of their own"
+  ],
+  "menu": [
+    "Polyphony channels: Monophonic, 2 to 16 — sets how many channels the note outputs carry",
+    "Monophonic priority: Last, First, Lowest, Highest — chooses which of the held notes sounds while the module is monophonic",
+    "Polyphony allocation: Rotate, Reuse, Reset, MPE — chooses how arriving notes are spread over the channels",
+    "Retrigger on legato release — retriggers the remaining held note when an overlapping note is let go",
+    "Use release velocity — reports the velocity of the note off rather than of the note on",
+    "Pitch bend range: Off, 1 to 11 semitones, 1 to 4 octaves — sets how far the pitch wheel bends the pitch output",
+    "Smooth pitch/mod wheel — ramps the two wheel outputs between values instead of stepping them",
+    "CLK/N divider: Whole, Half, Quarter, 8th, 16th, 32nd, 12 PPQN, 24 PPQN — sets the division of the divided clock output",
+    "MTS-ESP retuning note-nn only — takes the retuning once as the note starts instead of following the master while the note is held",
+    "Reset MIDI (Panic) — clears every held note and resets the MIDI input"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "0 to 10V · polyphonic",
+      "3": "0 to 10V · polyphonic",
+      "4": "±5V · polyphonic",
+      "5": "0 to 10V · polyphonic",
+      "6": "0 to 10V · stepped · polyphonic",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

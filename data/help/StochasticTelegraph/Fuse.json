@@ -1,0 +1,41 @@
+{
+  "plugin": "StochasticTelegraph",
+  "module": "Fuse",
+  "description": "Counts triggers, and blocks, opens or scales the signal travelling from IN to OUT once that count reaches LIMIT",
+  "params": [
+    {"ids": [0], "text": "Sets the number of TRIGGER events that blow the fuse, 1 to 1000"},
+    {"ids": [1], "text": "Picks what OUT does as the count climbs to LIMIT: BLOW CLOSED passes IN then drops to 0V, BLOW OPEN holds 0V then passes IN, NARROW attenuates IN to nothing, WIDEN grows IN from nothing"},
+    {"ids": [2], "text": "Pressing it sets the count of triggers back to zero"},
+    {"ids": [3], "text": "Pressing it adds one to the count of triggers"},
+    {"ids": [4], "text": "Sets the shortest time the gain applied to IN takes to travel the whole way from 0 to 1, 0 to 5 seconds; at zero the gain changes instantly, which can click on audio"},
+    {"ids": [5], "text": "Pressing it subtracts one from the count of triggers, and does nothing once the fuse has blown"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger sets the count of triggers back to zero"},
+    {"ids": [1], "text": "A trigger adds one to the count of triggers"},
+    {"ids": [2], "text": "The signal Fuse scales on its way to OUT; with no cable patched, a fixed voltage for it can be picked in the menu"},
+    {"ids": [3], "text": "A trigger subtracts one from the count of triggers, and does nothing once the fuse has blown"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A single trigger at the moment the count reaches LIMIT"},
+    {"ids": [1], "text": "IN multiplied by the gain that STYLE, LIMIT and the current count of triggers give"}
+  ],
+  "notes": [
+    "OUT stays at 0V whatever the count until a cable is patched to IN or a constant is picked for it in the menu",
+    "hovering over the coloured fuse bar shows the count of TRIGGER events so far and how far that has reached towards LIMIT",
+    "bypassed, OUT carries IN, and 0V when nothing is patched to IN even where the menu sets a constant"
+  ],
+  "menu": [
+    "Unplugged value of IN — the heading over six constants, -10V, -5V, -1V, 1V, 5V and 10V, one of which stands in for IN when nothing is patched to it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

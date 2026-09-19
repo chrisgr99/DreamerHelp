@@ -1,0 +1,36 @@
+{
+  "plugin": "alefsbits",
+  "module": "steps",
+  "description": "Eight step sequencer with a knob per step, a gate output per step, a randomize trigger and an end-of-cycle trigger",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps play before the sequence returns to the first, 1 to 8"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "Sets the voltage this step sends to the cv output, over the range picked on the menu"},
+    {"ids": [9], "text": "Sets all eight step knobs to new random values"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge advances to the next step"},
+    {"ids": [1], "text": "A rising edge returns the sequence to step 1, taking effect on the next clock pulse while the clock input is patched"},
+    {"ids": [2], "text": "A rising edge sets all eight step knobs to new random values"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms 10V trigger each time the sequence returns to its first step"},
+    {"ids": [1], "text": "The voltage of the knob for the current step, over the range picked on the menu, and 0V while the clock input is unpatched"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Carries 10V while the sequence is on this step and 0V otherwise, and holds whatever it last carried while this step is above the number set by the steps knob"}
+  ],
+  "notes": [
+    "the cv and eoc outputs hold 0V until a clock is patched; the eight step gate outputs follow the current step whether or not a clock is patched."
+  ],
+  "menu": [
+    "range — sets the voltage span of the step knobs and the cv output: twelve presets from +/-10V to 0V-1V, or custom for a minimum and maximum of your own"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "stepped"
+    }
+  }
+}

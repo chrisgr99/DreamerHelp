@@ -1,0 +1,51 @@
+{
+  "plugin": "Coalescent",
+  "module": "Lineages",
+  "description": "A sequencer built on an ancestral tree: a cursor travels through a random genealogy, and the mutations each sample has inherited at that moment become a polyphonic chord.",
+  "params": [
+    {"ids": [0], "text": "Sets the internal traversal speed, -6 to +5 octaves around a tenth of a complete tree per second; the centre takes about 10 seconds to cross one tree."},
+    {"ids": [1], "text": "Sets how many samples the next tree is generated with, 2 to 16, which is also the number of channels TRAITS puts out."},
+    {"ids": [2], "text": "Sets the expected total number of mutations on the next tree, 0 to 64."},
+    {"ids": [3], "text": "Sets how much voltage each inherited mutation adds to a sample's trait, 0 to 12 semitones; it changes the current tree at once rather than waiting for a new one."},
+    {"ids": [4], "text": "Chooses Ancestry, travelling back from the present toward the common ancestor, or Descent, travelling forward from the ancestor; switching it reverses the movement from where the cursor already is."},
+    {"ids": [5], "text": "Sets whether the cursor jumps back to the start after reaching the end of its direction, or stops there until a new tree, a replay or a change of direction moves it."},
+    {"ids": [6], "text": "Generates a new tree from the current SAMPLES and MUTATE settings, with new topology, branch timings, mutation placements and signs."},
+    {"ids": [7], "text": "Replays the current tree from the start of the chosen direction, without changing the topology or the mutations, so the replay is exact."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the RATE knob at 1V per octave; the two together are clamped to -12 through +5 octaves, giving at most 3.2 complete trees a second."},
+    {"ids": [1], "text": "Sets the cursor's position through the tree absolutely, 0V at the sampled present and 10V at the common ancestor; while a cable is here the rate and loop controls no longer move it."},
+    {"ids": [2], "text": "A rising edge past 1V generates a new tree, the same operation as the NEW button."},
+    {"ids": [3], "text": "A rising edge past 1V replays the current tree, the same operation as the RESET button."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "One channel per sample carrying the signed sum of the mutations that sample has inherited at the cursor's position, at a twelfth of the STEP setting in volts per mutation."},
+    {"ids": [1], "text": "A 10V pulse 1ms long when the cursor crosses one or more coalescent nodes, the root included."},
+    {"ids": [2], "text": "A 10V pulse 1ms long when the cursor crosses one or more mutation positions."},
+    {"ids": [3], "text": "A 10V pulse 1ms long on arrival at the common ancestor, or on starting a descent there."},
+    {"ids": [4], "text": "The number of distinct ancestral lineages at the cursor's position, mapped to 10V at the sampled present and 0V at the common ancestor."},
+    {"ids": [5], "text": "The mean pairwise number of inherited mutations between samples, at 2V per mutation and clamped at 10V; the STEP setting does not change it."}
+  ],
+  "notes": [
+    "SAMPLES and MUTATE describe the next tree, not the one playing. Moving either off the values the current tree was made with lights the yellow lamp beside NEW; pressing NEW clears it.",
+    "With nothing patched to TIME the cursor is driven by RATE. Patching a cable there takes the cursor over at the input voltage, and unpatching hands it back to the internal transport.",
+    "Rack's Initialize is not the panel RESET: it restores every parameter to its default and then generates a fresh tree, where RESET replays the tree already loaded.",
+    "At the common ancestor every TRAITS channel and the diversity output are exactly zero, because no mutation has happened yet."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "0 to 10V · one channel only"
+    }
+  }
+}

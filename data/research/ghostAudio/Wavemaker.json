@@ -1,0 +1,21 @@
+{
+  "plugin": "ghostAudio",
+  "module": "Wavemaker",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Wavemaker.cpp:98 reads getVoltage() with no channel and adds it to the knob as an octave exponent at line 99, with no clamp on either side"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "Wavemaker.cpp:198-202 divides getVoltage() with no channel by 10, scales it by the modulation knob and by a half, adds it to the PW knob and clamps the sum to 0.01 and 0.99"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Wavemaker.cpp:105-106 reads getVoltage() with no channel, multiplies it by the FM knob and by 261.63 over 5, and adds the result to the frequency with no clamp"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "Wavemaker.cpp:123 passes getVoltage() with no channel to a dsp::SchmittTrigger with thresholds of 0.1 and 1"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "full level, the modulation switched off", "why": "Wavemaker.cpp:140-146 tests isConnected and then divides getVoltage() with no channel by 10 and mixes it against 1 by the AM knob, with no clamp, so a negative voltage inverts the waveform"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "Wavemaker.cpp:178 writes one triangle value scaled by 5 with setVoltage"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "Wavemaker.cpp:188 writes one sawtooth value scaled by 5 with setVoltage"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "Wavemaker.cpp:215 writes one square value scaled by 5 with setVoltage"},
+      "4": {"family": "audio", "poly": false, "range": "±5V", "why": "Wavemaker.cpp:222 writes random::uniform() mapped to -1 and 1 and scaled by 5, outside the block that applies the amplitude modulation"}
+    }
+  },
+  "comment": "Read at commit dc4aa7f, the repository head; cf19c15 first carried the installed 2.1.0 and the two commits after it change only plugin.json, so the source is the same either way. The maker's user manual says the amplitude modulation is applied equally to all generated waveforms, and the code applies it to the sine, triangle, sawtooth and square only, leaving the noise output at full level; the lines say so. The manual calls the duty cycle control the PWM knob and the panel prints PW. The panel prints no name at all on the pulse width modulation knob or its jack, only a line joining them to PW. The PW knob's own range runs from 0.1% to 99.9%, but the square wave clamps the total to 1% and 99%, so the last of the knob's travel at each end makes no difference. The module has no context menu of its own. Nothing here is polyphonic: every jack is read with getVoltage() and no channel, and nothing calls setChannels or getPolyVoltage."
+}

@@ -1,0 +1,55 @@
+{
+  "plugin": "pachde-CHEM",
+  "module": "chem-core",
+  "description": "The link between Rack and a Haken Eagan Matrix instrument: it holds the MIDI connection, scans the presets, and carries the surface out as control voltage; other CHEM modules work through one",
+  "params": [
+    {"ids": [0, 1], "text": "Passes only notes and expression from that controller to the instrument, dropping the control messages that would otherwise change the preset"},
+    {"ids": [2, 3], "text": "Blocks everything from that controller, which mutes it without unplugging it"},
+    {"ids": [4], "text": "Counts up one per second to a maximum of 60 minutes and then wraps to zero; nothing in the module or in the instrument reads it"},
+    {"ids": [5, 6], "text": "Reflects music on MIDI channels 2 and up from that controller down to channels 15 and below, so a second Eagan Matrix surface can be played at the same time without note collisions"},
+    {"ids": [7], "text": "Sets the master level on the instrument, which is attenuation on Haken instruments and post level on an Osmose"},
+    {"ids": [8], "text": "Slews the Y output, with no slew fully anticlockwise and the slowest movement fully clockwise"},
+    {"ids": [9], "text": "Slews the Z output, with no slew fully anticlockwise and the slowest movement fully clockwise"},
+    {"ids": [10], "text": "Lengthens the slew range of the two trim pots beside the Y and Z outputs by a factor of ten"},
+    {"ids": [11], "text": "Sends a short test phrase of MIDI notes to the instrument, so you can hear whether the connection carries sound"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "A high gate blocks that controller's MIDI from reaching the instrument and lights the button beside it; the gate reads high at 0.8V and above"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the instrument is able to accept MIDI and make sound, and 0V while it is busy loading a preset, scanning presets or remaking Mahling data"},
+    {"ids": [1], "text": "Carries 10V on a channel while a note is held on that channel of the playing surface, and 0V when the note ends"},
+    {"ids": [2], "text": "The pitch of the note held on that channel, as a volt per octave with the surface's pitch bend folded in; 0V is MIDI note 60"},
+    {"ids": [3], "text": "The front-to-back position on that channel, 0-10V, taken from whichever continuous controller the instrument has assigned to Y"},
+    {"ids": [4], "text": "The pressure on that channel, 0-10V, taken from whichever continuous controller the instrument has assigned to Z"}
+  ],
+  "notes": [
+    "a module added to a patch finds the first Eagan Matrix instrument connected to the computer and connects to it; if there is more than one, click the HAKEN button to choose",
+    "MIDI usually stays silent unless the patch also holds one of the VCV Audio modules with a driver chosen, so add an Audio module before this one",
+    "the Preset and Play modules show nothing until the presets have been scanned into a database, which is started from the Presets submenu of the Core actions menu on this panel",
+    "the C1 and c2 buttons choose MIDI controllers whose data is passed on to the instrument; the MIDI Reset button above HAKEN restarts the connection, and control-clicking it clears every one",
+    "to control a second Eagan Matrix instrument, add a second one of these to the patch"
+  ],
+  "menu": [
+    "Presets — on the Core actions menu reached from the hamburger button, not the right-click menu; scans the instrument to build the preset databases Preset and Play read",
+    "Log MIDI — on the Core actions menu; writes every MIDI message sent and received into a log file in the pachde-CHEM folder under your Rack user folder",
+    "Disconnect MIDI — on the Core actions menu; drops the MIDI connection to the instrument until it is turned off again",
+    "Zero XYZ on Note off — on the Core actions menu; drops the X, Y and Z voltage for a channel to zero when the note ends, in place of holding the last value",
+    "MPE channels (2-15) only — on the Core actions menu; makes the W, X, Y and Z outputs 14 channels taken from MIDI channels 2 to 15, in place of 16 channels taken from every MIDI channel",
+    "Silence WYXZ — on the Core actions menu; clears the stored note, bend, front-to-back and pressure for every channel, so the four surface outputs fall to 0V",
+    "Haken Requests — on the Core actions menu; sends single requests from the Haken MIDI protocol to the instrument, for working out what has gone wrong"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.8V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 0.8V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · polyphonic",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic"
+    }
+  }
+}

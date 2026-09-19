@@ -1,0 +1,69 @@
+{
+  "plugin": "Venom",
+  "module": "VCOUnit",
+  "description": "Polyphonic oscillator with one selectable waveform, carrying shape, phase, offset and level controls each with its own CV input and attenuverter",
+  "params": [
+    {"ids": [0], "text": "Picks the overall mode: audio, low frequency, 0Hz carrier for linear FM, or a triggered, retriggered or gated one shot that fires from the HARD SYNC input"},
+    {"ids": [1], "text": "Sets the oversampling applied to the audio output, off or x2 through x32; audio and 0Hz carrier modes start at x4 and the LFO modes start off"},
+    {"ids": [2], "text": "Switches on a high pass filter that removes DC offset from the output, off by default"},
+    {"ids": [3], "text": "Sets the base frequency, 16.352Hz to 4186Hz in audio mode with C4 at the centre and 0.125Hz to 32Hz in low frequency mode; in 0Hz carrier mode it is a bias of -0.08Hz to 0.08Hz"},
+    {"ids": [4], "text": "Selects the waveform: sine, triangle, square or saw"},
+    {"ids": [5], "text": "Shifts the frequency by as much as four octaves either way; in 0Hz carrier mode it sets the range of the linear FM depth instead"},
+    {"ids": [6], "text": "Momentarily forces the output monophonic so the channel count is recomputed, which restores the right polyphony in a patch with feedback"},
+    {"ids": [7], "text": "Sets the depth of exponential frequency modulation, -100% to 100%, and has no effect in 0Hz carrier mode"},
+    {"ids": [8], "text": "Sets the depth of through-zero linear frequency modulation, -100% to 100%"},
+    {"ids": [9], "text": "Picks the type of shaping the shape knob applies, from log/exp, J-curve, S-curve, rectify, normalized rectify, morphing and pulse width; the choices follow the waveform set by WAVE"},
+    {"ids": [10], "text": "Sets how much shaping is applied to the waveform, -100% to 100%, with the type of shaping set by the SHAPE mode button"},
+    {"ids": [11, 13, 15, 17], "text": "Attenuates or inverts the CV for that control, and the result is summed with the knob value"},
+    {"ids": [12], "text": "Shifts the phase of the waveform as much as 180 degrees either way; driven at audio rates it gives phase modulation"},
+    {"ids": [14], "text": "Adds as much as 5V either way to the output, applied before the level"},
+    {"ids": [16], "text": "Sets the output level, -100% to 100%, at 100% by default"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "CV for exponential frequency modulation, ignored in 0Hz carrier mode; the port menu can turn its oversampling off"},
+    {"ids": [1], "text": "CV for linear frequency modulation, AC coupled and through-zero by default, with port menu options for DC coupling and for switching through-zero off"},
+    {"ids": [2], "text": "Attenuates the exponential FM depth, 10V for full depth and -10V for full depth inverted"},
+    {"ids": [3], "text": "Attenuates the linear FM depth, 10V for full depth and -10V for full depth inverted"},
+    {"ids": [4], "text": "Pitch at a volt per octave, added to the frequency knob; in 0Hz carrier mode it moves the bias at 0.02Hz per volt"},
+    {"ids": [5], "text": "A rising edge resets the oscillator phase to 0, and starts a cycle in the one shot modes; the trigger goes high above 2V and low below 0.2V"},
+    {"ids": [6], "text": "A rising edge reverses the direction of the waveform; the trigger goes high above 2V and low below 0.2V"},
+    {"ids": [7], "text": "CV for the shaping amount, summed with the shape knob after its attenuverter; 10V peak to peak covers the whole range"},
+    {"ids": [8], "text": "CV for the phase shift, summed with the phase knob after its attenuverter"},
+    {"ids": [9], "text": "CV for the offset, summed with the offset knob after its attenuverter"},
+    {"ids": [10], "text": "CV into the level through a VCA; port menu options make 5V equal 100% and make the VCA bipolar for ring modulation"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The selected waveform, after its shaping, phase, offset and level"}
+  ],
+  "menu": [
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%",
+    "Disable DPW anti-alias — switches the alias suppression off in all audio modes, which gives smoother results for phase distortion work in 0Hz carrier mode",
+    "Limit level to 100% — on by default; switch it off and the level knob plus its CV is no longer clipped at 100%",
+    "LFO frequency as BPM — reads and displays the frequency knob in beats per minute rather than hertz while the module is in low frequency mode",
+    "Sync trigger threshold — High 2V, Low 0.2V by default, or High 0V, Low -2V, setting where the sync and reverse inputs count a rising edge",
+    "Audio mode default oversample — Off, x2, x4, x8, x16 or x32, the setting the OVER control takes on when the mode is changed to audio or 0Hz carrier; x4 by default",
+    "Disable oversampling, in a CV input's own port menu — leaves that one input unoversampled, which saves CPU on slow modulation",
+    "DC coupled, in the linear FM CV input's own port menu — stops that input being AC coupled, so a steady offset shifts the frequency",
+    "Disable through-zero, in the linear FM CV input's own port menu — stops the linear FM carrying the oscillator through zero into reverse",
+    "VCA unity = 5V, in the level CV input's own port menu — makes 5V rather than 10V stand for 100% at that VCA",
+    "Bipolar VCA (ring mod), in the level CV input's own port menu — passes negative control voltage and inverts the wave, which gives ring modulation"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "stepped · polyphonic",
+      "6": "stepped · polyphonic",
+      "7": "±5V · continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "±5V · continuous · polyphonic",
+      "10": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

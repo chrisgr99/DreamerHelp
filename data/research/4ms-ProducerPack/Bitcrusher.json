@@ -1,0 +1,21 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "Bitcrusher",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:188 clamp(getVoltage(), -5, 5) / 10 added to the 0-1 knob, then clamped"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:205 clamp(getVoltage(), -5, 5) / 5 * 15, three bits per volt"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:158 getNormalizedParam clamps to ±5V and divides by 10"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:158 getNormalizedParam, used for the cutoff at :226"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:158 getNormalizedParam, used for the resonance at :227"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Bitcrusher.cpp:158 getNormalizedParam, used for the volume at :240"},
+      "6": {"family": "audio", "poly": false, "step": "continuous", "why": "Bitcrusher.cpp:178 getVoltage(), channel 0 only"},
+      "7": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left input", "why": "Bitcrusher.cpp:180 isConnected() ? getVoltage() : leftIn"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Bitcrusher.cpp:243 clamp(crossfade(...) * volume, -5, 5)"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "The cutoff knob's tooltip is configured as an exponential 20 * 750^value while the filter itself uses 20Hz + value * 14980Hz (Bitcrusher.cpp:127 and :228), so the two agree only at the ends of the travel: at the halfway point the tooltip says about 548Hz where the filter is at about 7510Hz. The manual gives the cutoff range as 20Hz to 8000Hz; the code's top is 15000Hz. The panel prints Sample Rate where the parameter is named Clock Frequency."
+}

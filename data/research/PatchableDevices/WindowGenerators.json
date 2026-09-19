@@ -1,0 +1,29 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "WindowGenerators",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "WindowGenerators.cpp:133 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the T1 time parameter, which is 0.5 times 0.5 to the power of the value in seconds"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "WindowGenerators.cpp:133 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the T2 time parameter"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "WindowGenerators.cpp:133 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the T3 time parameter"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "WindowGenerators.cpp:137-139 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the sustain level parameter, which is configured 0V to 10V"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "WindowGenerators.cpp:133 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the T4 time parameter"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "WindowGenerators.cpp:127 reads getVoltage() with no channel, adds the manual gate button and compares the result against triggerThresholdLevel, 1.8V"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1.8V", "negative": "ignored", "why": "WindowGenerators.cpp:126 reads getVoltage() with no channel and compares it against triggerThresholdLevel, 1.8V, on a rising edge"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "why": "WindowGenerators.cpp:139 reads getVoltage() with no channel and adds it to all four stage-time parameters with no attenuation"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V while the ADASR envelope is in that stage and 0V otherwise, one channel"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V while the ADASR envelope is in that stage and 0V otherwise, one channel"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V while the ADASR envelope is in that stage and 0V otherwise, one channel"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V while the ADASR envelope is in its sustain phase and 0V otherwise, one channel"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V while the ADASR envelope is in that stage and 0V otherwise, one channel"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "WindowGenerators.cpp:49 sets the envelope peak to 10V and the shape is written with setVoltage, one channel"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "WindowGenerators.cpp:49 sets the envelope peak to 10V and the shape is written with setVoltage, one channel"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "WindowGenerators.cpp:49 sets the envelope peak to 10V and the shape is written with setVoltage, one channel"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "WindowGenerators.cpp:49 sets the envelope peak to 10V and the shape is written with setVoltage, one channel"},
+      "9": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "WindowGenerators.cpp writes 5V when the ADASR envelope ends and 0V otherwise, one channel"}
+    }
+  },
+  "comment": "Source read at commit f6cf8d6, the commit whose plugin.json carries the installed 2.0.1. The four time parameters are configured as 0.5 times 0.5 to the power of the value in seconds, -6 to 8 (WindowGenerators.cpp:75), so the knob runs from 32 seconds at the bottom to about 1.95ms at the top and a rising control voltage shortens the stage, which is what makes the time inputs track a volt an octave when the module is cycling. The SHAPE knob feeds each envelope back into its own time parameters, so it changes the timing as well as the curve. The whole plugin is monophonic."
+}

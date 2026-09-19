@@ -1,0 +1,20 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Distortiones",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V, or 2V for the oscillator pitch", "why": "distortiones.cpp:185 reads this input with getNormalVoltage(5, channel), distortiones.cpp:192 divides it by 5, multiplies by the knob and clamps to 0..1; distortiones.cpp:210 reads it again with getNormalVoltage(2, channel) into the oscillator note"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V", "why": "distortiones.cpp:186 reads this input with getNormalVoltage(5, channel) and distortiones.cpp:193 divides it by 5, multiplies by the knob and clamps the result to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "distortiones.cpp:187 reads this input with getVoltage(channel) and distortiones.cpp:203 divides it by 5, adds the knob and clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "distortiones.cpp:188 reads this input with getVoltage(channel) and distortiones.cpp:207 divides it by 5, adds the knob and clamps the total to 0..1"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "distortiones.cpp:217 divides this input by 8 into a 16-bit sample and clamps it, and distortiones.cpp:118 takes part of the module's channel count from its getChannels()"},
+      "5": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "distortiones.cpp:219 divides this input by 8 into a 16-bit sample and clamps it, and distortiones.cpp:118 takes part of the module's channel count from its getChannels()"},
+      "6": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 8V", "negative": "ignored", "why": "distortiones.cpp:157 reads this input four channels at a time and distortiones.cpp:164 clamps it to 0..8 and truncates it to a mode index; distortiones.cpp:160 instead multiplies it by 12 and rounds when the note reading is on"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "distortiones.cpp:222 scales the modulator's 16-bit sample by 5 and distortiones.cpp:228 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "distortiones.cpp:224 scales the modulator's 16-bit sample by 5 and distortiones.cpp:229 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is the Parasite alternative firmware for Warps, vendored at alt_firmware/parasites; src/distortiones.cpp is the Rack wrapper, running one modulator per polyphonic channel. It adds eight modes to the original cross-modulation set, which survives here as Meta mode, and replaces the F.S button with MD, a mode selector that takes over the big knob. The level jacks carry two normals each in effect: distortiones.cpp:185 reads the first with getNormalVoltage(5) for the gain and distortiones.cpp:210 reads the same jack again with getNormalVoltage(2) for the internal oscillator's pitch. The algorithm control voltage is applied only while the mode selector is off, at distortiones.cpp:199. Per-channel reads use getVoltage(channel) rather than getPolyVoltage(channel), so a monophonic cable patched to a control voltage jack drives the first channel alone; the MODE jack is the exception and is read four channels at a time."
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "wintoid",
+  "module": "VortexMM",
+  "description": "Multi-mode filter running one of twelve responses at a time, polyphonic to 16 voices, with a saturating drive stage ahead of the filter",
+  "params": [
+    {"ids": [1], "text": "Sets the filter corner, 20Hz at the left and 20kHz at the right"},
+    {"ids": [2], "text": "Sets the resonance at the corner, sweeping the filter damping from 0.707 at the left to 0.01 at the right"},
+    {"ids": [3], "text": "Sets the gain into a soft-clipping stage ahead of the filter, unity at the left and ten times at the right"},
+    {"ids": [4], "text": "Scales the Cutoff CV input before it shifts the corner, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [5], "text": "Scales the Reso CV input before it changes the damping, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"},
+    {"ids": [6], "text": "Scales the Drive CV input before it is added to the drive, and inverts it below centre; it comes up at zero, so the jack does nothing until this is turned"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be filtered; its channel count sets how many voices the module runs, and it is divided by 5 on the way in and multiplied by 5 again at the output"},
+    {"ids": [1], "text": "Multiplies the corner by two raised to its own voltage, after the attenuverter beside it, and the result is held between 20Hz and 20kHz"},
+    {"ids": [2], "text": "Raises the resonance after the attenuverter beside it, each volt at a full attenuverter taking 0.2 off the damping, and the damping is held between 0.01 and 0.707"},
+    {"ids": [3], "text": "Adds a tenth of its voltage to the drive after the attenuverter beside it, and the total is held between 0 and 1"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The filtered signal, carrying one channel per voice of the input"}
+  ],
+  "notes": [
+    "the response is picked on the mode display rather than by a knob: a left click steps to the next of the twelve and a right click opens a menu of them.",
+    "the mode display is drawn rather than being a parameter, so clicking it never reaches a help line.",
+    "the twelve responses are LP 6dB, LP 12dB, LP 24dB, HP 6dB, HP 12dB, HP 24dB, BP, BP+, Notch, Notch+, AP and AP+.",
+    "the four responses marked with a plus run two identical two-pole sections in series, doubling the slope of the plain one, and Reso has no effect on the two 6dB responses, which are one-pole.",
+    "changing the response clears the filter state on every voice, so a note sounding at the time restarts rather than crossfades.",
+    "a mono cable, or one with fewer channels than the input, is copied to every voice on each of the three CV jacks.",
+    "this module is kept so that patches already using it keep loading, and it is hidden from the module browser. VortexV2 is the current one."
+  ],
+  "menu": [
+    "Filter Mode — on the mode display rather than the panel: lists the twelve responses and sets the one in use"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob.",
+      "3": "±10V · continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic"
+    }
+  }
+}

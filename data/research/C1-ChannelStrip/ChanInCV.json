@@ -1,0 +1,13 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "ChanInCV",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "why": "src/ChanInCV.cpp:100 getVoltage, scaled /10 then *66 dB at ChanIn.cpp:1180"},
+      "1": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/ChanInCV.cpp:109 getVoltage, added to a log2 frequency at ChanIn.cpp:1198"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/ChanInCV.cpp:118 getVoltage, added to a log2 frequency at ChanIn.cpp:1207"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/ChanInCV.cpp:127 getVoltage, compared > 1.0f at ChanIn.cpp:1183"}
+    }
+  },
+  "comment": "The filter CVs are tested with `!= 0.0f` rather than by whether the jack is patched, and when non-zero they replace the knob: the frequency becomes the geometric centre of the range multiplied by two to the power of the volts. Those centres are not stored as such; they are the log2 constants LPF_CENTER_LOG and HPF_CENTER_LOG in src/ChanIn.cpp:931-932, which are log2(4472.14) and log2(100). The expander writes its HPF jack into msg->hpfFreqCV and CHAN-IN reads that field into its low-pass CV (src/ChanIn.cpp:1181-1182, commented `Swapped`); the two swaps cancel, so the jack printed HPF really does move the knob printed HPF. The PHASE jack has no attenuverter. The expander is inert unless CHAN-IN is the module immediately to its left."
+}

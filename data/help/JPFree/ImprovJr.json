@@ -1,0 +1,55 @@
+{
+  "plugin": "JPFree",
+  "module": "ImprovJr",
+  "description": "An eight-block sequencer that rewrites what it plays as you add and remove notes on its keyboard, with four note pools to switch between",
+  "params": [
+    {"ids": [0], "text": "Sets how many note blocks are played before the sequence returns to the first"},
+    {"ids": [3], "text": "Empties the current note pool and the sequence written from it"},
+    {"ids": [4, 5, 6, 7], "text": "Makes its note pool the active one; pressing it again while it is already active writes a fresh random sequence from that pool"},
+    {"ids": [8, 18, 28, 38, 48, 58, 68, 78], "text": "One beat of the sequence, holding up to four notes in one of nine subdivisions; left click to step forward, shift and left click to step back, right click to choose from a list"},
+    {"ids": [10, 11, 12, 13, 20, 21, 22, 23, 30, 31, 32, 33, 40, 41, 42, 43, 50, 51, 52, 53, 60, 61, 62, 63, 70, 71, 72, 73, 80, 81, 82, 83], "text": "Sets the pitch of one note in the block: click for a keyboard carrying Rest, Tie and an Auto Advance button, or drag up and down to set the voltage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Advances the sequence one note block"},
+    {"ids": [1], "text": "Returns the sequence to its first note block when the voltage rises past 2V"},
+    {"ids": [2], "text": "Chooses the active note pool by voltage: 1V to a shade below 2V picks the first pool, and so on up to a shade below 5V for the fourth"},
+    {"ids": [3], "text": "Empties the current note pool and its sequence when the voltage rises past 2V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "High while a note is playing, for the length set on the menu"},
+    {"ids": [1], "text": "The pitch of the note now playing"},
+    {"ids": [2], "text": "A gate at the end of each cycle"}
+  ],
+  "notes": [
+    "nothing happens until a clock is patched; the module has no clock of its own",
+    "the sequence is written from the note pool, so it stays empty until notes are added on the keyboard strip",
+    "the keyboard strip is one drawing, not a row of controls: click a key to add or remove that note, drag up or down on it to set how often it appears, and no key can be clicked for help",
+    "this build has four note pools and reads 1V to a shade below 5V to select them; the maker's manual says eight pools"
+  ],
+  "menu": [
+    "Fill Remaining Sequence — fills every note block outside the current length at random, using the blocks that are inside it",
+    "Randomize All Note Pools — writes a fresh random pool into all four slots",
+    "Gate Length — sets how much of each note the gate output stays high for",
+    "Swing — delays every second note block",
+    "Clock Mode: Gate, Phase — reads the clock input either as a square wave, high above 2V and low below 0.1V, or as a ramp that advances a block when it falls from above 9V to below 1V",
+    "Randomize — randomises the pitches or the rhythm of the whole sequence",
+    "Shift & Shuffle — shifts and shuffles the sequence from the menu, the way the Shift & Shuffle expander does from its jacks",
+    "Set Rhythm — sets every note block to one subdivision",
+    "Note Pool — sets the pool of notes the randomisers draw from, from a scale, from a keyboard, or by shifting the current pool in semitones",
+    "Copy/Paste — copies and pastes the sequence or the note pool in a portable format that other JP sequencers read",
+    "Expanders — places an expander module beside this one"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "one channel only",
+      "2": "unipolar · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "stepped · one channel only"
+    }
+  }
+}

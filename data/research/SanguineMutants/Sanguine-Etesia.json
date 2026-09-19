@@ -1,0 +1,27 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Etesia",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "etesia.cpp:298 tests this input against 1V with getVoltage() and ORs the result with the freeze button"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:227 reads this input with getVoltage(), etesia.cpp:286 divides it by 5 and adds the slider, and etesia.cpp:293 clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:228 reads this input with getVoltage(), etesia.cpp:286 divides it by 5 and adds the slider, and etesia.cpp:293 clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:229 reads this input with getVoltage(), etesia.cpp:286 divides it by 5 and adds the slider, and etesia.cpp:293 clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:230 reads this input with getVoltage(), etesia.cpp:286 divides it by 5 and adds the slider, and etesia.cpp:293 clamps the total to 0..1"},
+      "5": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "why": "etesia.cpp:299 adds this input to the pitch knob, multiplies by 12 and clamps the result to ±48 semitones"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "etesia.cpp:221 tests this input against 1V with getVoltage() alone"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:263 reads this input with getVoltage(), etesia.cpp:268 divides it by 5, etesia.cpp:270 adds the knob and etesia.cpp:275 clamps the total to 0..1"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:264 reads this input with getVoltage(), etesia.cpp:268 divides it by 5, etesia.cpp:271 adds the knob and etesia.cpp:275 clamps the total to 0..1"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:265 reads this input with getVoltage(), etesia.cpp:268 divides it by 5, etesia.cpp:272 adds the knob and etesia.cpp:275 clamps the total to 0..1"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "etesia.cpp:266 reads this input with getVoltage(), etesia.cpp:268 divides it by 5, etesia.cpp:273 adds the knob and etesia.cpp:275 clamps the total to 0..1"},
+      "11": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "etesia.cpp:214 reads this input with getVoltageSum(), which folds every channel into one, and divides it by 5 through the input gain knob"},
+      "12": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "the left input", "why": "etesia.cpp:215 reads this input with getVoltageSum() when it is connected and substitutes the left channel's sample when it is not"},
+      "13": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "why": "etesia.cpp:300 tests this input against 1V with getVoltage() and ORs the result with the reverse button"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "etesia.cpp:343 multiplies the processor's sample by 5"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "etesia.cpp:347 multiplies the processor's sample by 5"}
+    }
+  },
+  "comment": "The DSP is the Parasite alternative firmware for Clouds, vendored at alt_firmware/parasites, in the Monsoon layout; src/etesia.cpp is the Rack wrapper, resampling to the hardware's 32kHz. It adds two modes to Nebulae — the Oliverb reverb and the Resonestor resonator — along with more grain envelopes, smaller grains, and a REVERSE button and gate that play the buffer backwards. Every jack is read with getVoltage() or getVoltageSum(), so nothing here is polyphonic. The right audio input is normalled to the left at etesia.cpp:215. The freeze gate, the reverse gate and the trigger all read high at 1V, which the manual gives only for reverse. Both gates are OR-ed with their buttons, so either one turns the setting on. The hardware's ability to save and load the audio buffer is not implemented, and the maker says so in a footnote."
+}

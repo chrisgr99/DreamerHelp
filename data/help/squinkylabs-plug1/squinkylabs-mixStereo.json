@@ -1,0 +1,54 @@
+{
+  "plugin": "squinkylabs-plug1",
+  "module": "squinkylabs-mixStereo",
+  "description": "Expander adding two stereo channels to the Form mixer, placed to its left, carrying the main stereo bus, both aux buses and the solo bus without patch cables",
+  "params": [
+    {"ids": [0, 1], "text": "Sets that channel's level on an audio taper: logarithmic over the top three quarters, -18dB at a quarter turn, and straight down to silence below that"},
+    {"ids": [2, 3], "text": "Sets the balance of that stereo channel, full left giving the left side full gain and silencing the right, and centre attenuating both by 6dB"},
+    {"ids": [4, 5], "text": "Silences that channel, with a smoothing filter that stops the cut from clicking; a solo on any channel of the chain overrides it"},
+    {"ids": [6, 7], "text": "Plays that channel alone and clears the solo on every other channel of the chain; control-click, or command-click on a Mac, adds the channel to the solo instead of replacing it"},
+    {"ids": [9, 10], "text": "Sets how much of that channel is mixed into aux bus 1, taken after the level, balance and mute controls unless the menu switches send 1 to pre-fader"},
+    {"ids": [11, 12], "text": "Sets how much of that channel is mixed into aux bus 2, taken after the level, balance and mute controls unless the menu switches send 2 to pre-fader"}
+  ],
+  "inputs": [
+    {"ids": [0, 2], "text": "The left input of that stereo channel; patched on its own it feeds both sides, and the balance control then pans it between the two direct outputs"},
+    {"ids": [1, 3], "text": "The right input of that stereo channel; left unpatched, the left input feeds both sides"},
+    {"ids": [4, 5], "text": "Scales that channel's level, 0V silencing it and 10V leaving the level knob alone, smoothed so that fast changes do not click"},
+    {"ids": [6, 7], "text": "Shifts that channel's balance, 5V moving it fully right and -5V fully left, added to the balance knob and smoothed so that fast changes do not click"},
+    {"ids": [8, 9], "text": "Mutes that channel while the voltage is above 1.6V and un-mutes it below 0.8V, or toggles the mute on each rising edge when the menu is set that way"}
+  ],
+  "outputs": [
+    {"ids": [0, 2], "text": "The left side of that channel after its level knob and mute, carrying none of the other channels"},
+    {"ids": [1, 3], "text": "The right side of that channel after its level knob and mute, carrying none of the other channels"}
+  ],
+  "notes": [
+    "with no Form mixer in the row the two channels work on their own, each acting as a stereo VCA with balance, mute and solo",
+    "this module has to touch the Form mixer, or another ExTwo or ExFor that reaches it in an unbroken row; a gap breaks the chain and this module is cut off",
+    "the three items on the right-click menu apply only to the channels of the module you right-clicked; every expander in the row carries its own copy of them"
+  ],
+  "menu": [
+    "Send 1 Pre-Fader — takes the aux 1 sends from before the level and balance controls, so the fader no longer changes them while mute and solo do",
+    "Send 2 Pre-Fader — takes the aux 2 sends from before the level and balance controls, so the fader no longer changes them while mute and solo do",
+    "Mute CV toggles on/off — makes each rising edge at a mute CV jack flip the mute, in place of muting while the gate is high"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "0 to 10V · continuous · one channel only",
+      "5": "0 to 10V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "high above 1.6V · stepped · one channel only",
+      "9": "high above 1.6V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous"
+    }
+  }
+}

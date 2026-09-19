@@ -1,0 +1,22 @@
+{
+  "plugin": "MADZINE",
+  "module": "TWNC",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/TWNC.cpp:682-688, read only while patched; a rising edge through 1V on a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds times the interval since the last edge and steps both tracks"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/TWNC.cpp:693-701, a dsp::SchmittTrigger at Rack's default 0V and 1V thresholds, in parallel with the RESET button; a rising edge calls onReset and the rest of that sample's processing is skipped"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TWNC.cpp:781-789, freqParam += getVoltage() before pow(2, x), with no clamp on the total"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC.cpp:752-759, decayParam += getVoltage()/10, then clamp(0.01, 2)"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TWNC.cpp:838-845, freqParam += getVoltage() before pow(2, x)"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "src/TWNC.cpp:816-823, decayParam += getVoltage()/10, then clamp(0.01, 2), then halved"}
+    },
+    "outputs": {
+      "0": {"family": "audio"},
+      "1": {"family": "audio"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNC.cpp:803, mainVCAOutput * 10"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNC.cpp:804, envelopeOutput * 10"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/TWNC.cpp:854, vcaEnvelopeOutput * 10"}
+    }
+  },
+  "comment": "The drum's frequency jack has no clamp on the total, so a large voltage takes the oscillator past the audible range in either direction; the hats jack is the same. The hats divider maps to half, one, one and a half, two and three times the clock (src/TWNC.cpp:177-189 and the updateDivMult switch). The drum's NOISE knob does two jobs at once: it crossfades pink against blue and it scales the result, since the noise reaching the oscillator is the mix times the same knob value (src/TWNC.cpp:775). The hats NOISE knob picks pink below half travel and blue above it and scales it the same way (src/TWNC.cpp:828-836). The panel prints CLK, LENGTH, RST, Drum, FILL, FREQ, FM, NOISE, ACCENT, DELAY, DECAY, SHAPE, OUT, HATs, SHIFT, FILL, D/M, NOISE, FREQ, DECAY, SHAPE, OUT, then D.F, D.D, H.F and H.D over the CV jacks and VCA ENV, DRUM FM ENV and HATS VCA ENV over the envelope outputs. Lettering is drawn in code at src/TWNC.cpp:885-985."
+}

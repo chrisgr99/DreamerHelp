@@ -1,0 +1,15 @@
+{
+  "plugin": "HetrickCV",
+  "module": "ClockedNoise",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "ClockedNoise.cpp:153 passes it to a Rack SchmittTrigger, which fires above 1V"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "ClockedNoise.cpp:145 scales this CV by 0.2 onto a 0 to 1 rate knob"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "ClockedNoise.cpp:142 passes it to normalizeParameter, which maps the CV by v*0.1+0.5 clamped to 0 to 1 (HetrickUtilities.hpp:105)"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "why": "ClockedNoise.cpp:155 rounds the knob plus this CV to a whole mode number"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "ClockedNoise.cpp:137 and 175 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the noise times 5V"}
+    }
+  }
+}

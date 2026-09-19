@@ -1,0 +1,36 @@
+{
+  "plugin": "SickoCV",
+  "module": "Calcs",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Calcs.cpp:127 getVoltage() with no isConnected test, so an unpatched jack reads 0V; no getPolyVoltage or getChannels in the file"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Calcs.cpp:128 getVoltage() with no isConnected test, so an unpatched jack reads 0V; no getPolyVoltage or getChannels in the file"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Calcs.cpp:129 getVoltage() with no isConnected test, so an unpatched jack reads 0V; no getPolyVoltage or getChannels in the file"}
+    },
+    "outputs": {
+      "0": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "1": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "2": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "3": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "4": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "5": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "6": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "7": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "8": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "9": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "10": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "11": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "12": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "13": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "14": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "15": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "16": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "17": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "18": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "19": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "20": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"},
+      "21": {"poly": false, "why": "Calcs.cpp:130-186 writes each result with setVoltage() through checkRange(); there is no setChannels anywhere in the file"}
+    }
+  },
+  "comment": "Three faults in the division outputs, all at Calcs.cpp:143-145, :162, :174 and :177. b/a is guarded by 'if (cValue != 0.f)' instead of aValue, so it is silenced by c rather than by a and can divide by zero when a is 0V while c is not. c/a, c/b and a/c have a guard but no else branch, so when the divisor reaches 0V the output keeps whatever it last carried; only a/b and b/c fall to 0V. Param index 0 ('Input range') is declared but never given a widget and is never read by process(); the output range is set from the panel menu, whose four choices are printed 'Unlimited', '0-10v', '± 10v' and '± 5v' at :265. The README describes a panel U/B switch clamping to 0/10V or ±5V; the installed module has no such switch and the setting lives in the menu."
+}

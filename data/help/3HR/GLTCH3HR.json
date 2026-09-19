@@ -1,0 +1,39 @@
+{
+  "plugin": "3HR",
+  "module": "GLTCH3HR",
+  "description": "A threshold-triggered looper: a control signal above the threshold makes it record half a second of the input and then play a chosen slice of it over and over until the control signal falls again",
+  "params": [
+    {"ids": [0], "text": "Scales the end control input before it is added to the END knob"},
+    {"ids": [1], "text": "Scales the start control input before it is added to the START knob"},
+    {"ids": [2], "text": "Sets where in the recorded half second the loop ends, from a hundredth of the way in to the far end"},
+    {"ids": [3], "text": "Sets where in the recorded half second the loop starts, from the beginning to the far end"},
+    {"ids": [4], "text": "Sets the voltage the control signal has to pass before recording starts, 0 to 10V"},
+    {"ids": [5], "text": "Sets how long the crossfade at the loop point lasts, from one sample to about three thousand, which softens the click of the jump"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal to be recorded and looped; it is not passed through, so the module works as a send rather than an insert"},
+    {"ids": [1], "text": "Added to the END knob through the END CV knob, a tenth of the recording per volt at full amount"},
+    {"ids": [2], "text": "Added to the START knob through the START CV knob, a tenth of the recording per volt at full amount"},
+    {"ids": [3], "text": "The signal watched against the threshold: rising past it starts the recording, and falling back below it ends the loop"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The looped slice of the recording, one channel, clamped to -10V and +10V"}
+  ],
+  "notes": [
+    "the module does nothing until the threshold jack is fed something that goes above the THRESHOLD knob; with that jack empty it reads 0V and never fires",
+    "no audio passes through: the output carries the loop alone, so patch it as a send rather than in line",
+    "once the loop is running the START and END controls can be moved freely, and setting the end before the start plays the slice backwards",
+    "the module is monophonic and records at whatever the engine's sample rate is, always half a second's worth"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±10V · one channel only"
+    }
+  }
+}

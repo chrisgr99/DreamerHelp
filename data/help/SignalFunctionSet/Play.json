@@ -1,0 +1,51 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Play",
+  "description": "A polyphonic multisample player: it reads an SFZ or DecentSampler instrument from disk and plays it back with up to sixteen voices, with velocity layers, round-robins and loops",
+  "params": [
+    {"ids": [0], "text": "Picks which of the loaded instruments is played"},
+    {"ids": [1], "text": "Sets the output level, silence to twice"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch, a volt per octave; the number of channels here is what sets the polyphony, up to sixteen voices"},
+    {"ids": [1], "text": "A rise starts a note on that channel and a fall releases it"},
+    {"ids": [2], "text": "Sets how hard each note is struck, 0-10V read as 1 to 127, which sets the voice's level and picks the velocity layer"},
+    {"ids": [3], "text": "Picks the instrument, added to the instrument knob"},
+    {"ids": [4], "text": "Scales the output level, added to the level knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the sounding voices"},
+    {"ids": [1], "text": "The right side of the sounding voices"}
+  ],
+  "notes": [
+    "the module makes no sound until an instrument is loaded from the menu; more than one can be held at once and switched between by knob or CV",
+    "a one-channel cable in the velocity jack is broadcast to every voice, so one velocity cable covers a whole chord rather than leaving the voices after the first silent",
+    "notes are pitched by resampling from each region's own centre note, with a short attack and release on every voice so the note edges do not click"
+  ],
+  "menu": [
+    "Load instrument (.sfz / .dspreset / .dsbundle / .dslibrary)… — reads an instrument file and adds it to the list, which is saved with the patch",
+    "Load DecentSampler bundle (folder)… — reads a DecentSampler instrument from an unpacked folder",
+    "Remove current instrument — drops the selected instrument from the list",
+    "One-shot (play through, ignore gate-off) — lets each sample run to its natural end whatever the gate does, which suits drums and other play-through material",
+    "Amp envelope: Off (fast release), Use envelopes (SFZ), Default ADSR (smooth) — chooses whether the voice takes its shape from the instrument file, from a built-in envelope, or has almost none",
+    "Grid view — a label over the grid items below it",
+    "Layout: Chromatic (4ths), In-Key (scale), Chromatic grid (C0) — sets how the notes are laid out across the pad grid",
+    "Root — sets the root the In-Key layout is drawn from",
+    "Scale (In-Key) — sets the scale the In-Key layout is drawn from",
+    "Octave up — moves the pad grid an octave higher",
+    "Octave down — moves the pad grid an octave lower"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "3": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

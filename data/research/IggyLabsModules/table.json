@@ -1,0 +1,15 @@
+{
+  "plugin": "IggyLabsModules",
+  "module": "table",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "sumRange": "±3.5V", "why": "table.cpp:98 adds getPolyVoltage(c)/5 to the pitch when the jack is connected, and line 100 clamps the knobs-plus-inputs total to -3.5 and 3.5"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "table.cpp:105 adds getPolyVoltage(c)/10 to the pos knob when connected, and line 106 clamps that total to 0 and 1"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "sumRange": "±3.5V", "why": "table.cpp:94 adds getPolyVoltage(c) to the pitch when connected; line 85 takes the voice count from getChannels() on this jack alone, and line 100 clamps the total to -3.5 and 3.5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "table.cpp:86 calls setChannels with the channel count of the V/oct input, and line 113 writes the wavetable sample times 5 for each channel"}
+    }
+  },
+  "comment": "Read from source at commit fb63bc3, the state of the tree that the installed 2.0.0 matches; the only later source commit, 53c691a, changes select and not this module. The maker's tooltip on the V/oct knob reads Coarse, which is what the panel calls it in the repository's own doc/table.md; the panel prints V/oct and that is the name used above. wavetable.cpp:110 writes each incoming sample to cycleBuffers[i / cycleLength][cycleLength - i % cycleLength], so every cycle is stored back to front and the sample at offset 0 lands one past the slice that is read back at line 128; the maker comments on the reversal at line 107 and treats it as a fix rather than a fault. The output is bandlimited per octave by the EarLevel WaveTableOsc code in src/dsp/osc/earlevel."
+}

@@ -1,0 +1,43 @@
+{
+  "plugin": "Sulamith",
+  "module": "SH",
+  "description": "Three sample and hold sections that each sample a signal on a clock, or make a fresh random voltage per channel when nothing is patched to sample",
+  "params": [
+    {"ids": [0, 5], "text": "Sets one end of the range the random voltages cover, a whole number from -10V to 10V; whichever of the two knobs is lower becomes the bottom"},
+    {"ids": [1, 6], "text": "Sets the other end of the range the random voltages cover, a whole number from -10V to 10V; whichever of the two knobs is higher becomes the top"},
+    {"ids": [2, 7], "text": "Sets how many polyphonic channels this section puts out, 1 to 16; at 0 it follows the cable patched to the section instead"},
+    {"ids": [3, 8], "text": "Sets the chance that a channel takes a new random voltage on each clock pulse, 0 to 1; a channel that loses the roll keeps the voltage it had"},
+    {"ids": [4, 9], "text": "Rounds this section's output to the nearest semitone"},
+    {"ids": [10, 11, 12], "text": "Samples once, as a rising edge at this section's clock jack does"}
+  ],
+  "inputs": [
+    {"ids": [0, 2, 4], "text": "The signal to be sampled; leave it unpatched and this section makes random voltages instead"},
+    {"ids": [1, 3, 5], "text": "A rising edge samples the signal, or makes a fresh random voltage when nothing is patched to sample"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "Carries the held voltages, one per channel, until the next clock pulse"}
+  ],
+  "notes": [
+    "the bottom section has no settings of its own; its range, channel count, probability and quantise all come from the middle section's controls",
+    "a section with nothing patched to its signal jack is a random voltage source, and one with a signal patched is a sample and hold",
+    "a clock cable's polyphony is summed to one voltage before it is read, so every channel of a section is sampled at the same moment",
+    "the probability applies only when a section is making random voltages; with a signal patched every clock pulse samples it, despite the README saying otherwise",
+    "the quantise switch rounds a sampled signal as well as a generated voltage, despite the README saying it applies only to generated CV",
+    "a section writes nothing to its output until a clock is patched or its button is pressed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "±10V · continuous · polyphonic",
+      "3": "high above 1V · stepped · polyphonic",
+      "4": "±10V · continuous · polyphonic",
+      "5": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±10V · stepped · polyphonic",
+      "1": "±10V · stepped · polyphonic",
+      "2": "±10V · stepped · polyphonic"
+    }
+  }
+}

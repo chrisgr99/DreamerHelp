@@ -1,0 +1,46 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "MIDI_Clock",
+  "description": "A MIDI clock running at 24 pulses per quarter note, generating its own tempo or following an analogue or MIDI clock, with analogue and vMIDI outputs",
+  "params": [
+    {"ids": [0], "text": "Sends the clock back to the start of the count, pulses RESET OUT, and sends a song position of zero out of MIDI OUT"},
+    {"ids": [1], "text": "Starts the clock if it is stopped and stops it if it is running, sending the matching MIDI start, continue or stop message"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Runs and stops the clock; how the voltage here is read is set by Run In Mode on the menu, and the lamp beside the jack tracks the voltage"},
+    {"ids": [1], "text": "A rising edge above 1V stops the clock, whatever the RUN IN jack is doing"},
+    {"ids": [2], "text": "Takes an analogue clock at 24 pulses per quarter note, counting a tick on each rising edge above 1V; for 2 seconds after each edge it overrides the clock arriving at MIDI IN"},
+    {"ids": [3], "text": "A rising edge above 1V resets the clock count and pulses RESET OUT, and for 2 seconds afterwards it overrides the clock arriving at MIDI IN"},
+    {"ids": [4], "text": "Takes a vMIDI stream and follows its timing ticks, start, continue and stop; a recent edge on CLOCK IN or RESET IN takes precedence over it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries timing ticks at 24 per quarter note the whole time, running or stopped, with start, continue, stop and song position sent as they happen"},
+    {"ids": [1], "text": "A 4ms pulse to 10V on every tick that survives the output divider, and only while the clock is running"},
+    {"ids": [2], "text": "A 4ms pulse to 10V whenever the clock count is reset, from the button, the RESET IN jack or a MIDI start"}
+  ],
+  "notes": [
+    "the tempo, the run state, the clock source, the output divider and the autostart setting are all on the black display, and none of them can be clicked for help",
+    "scroll over the large number on the display to change the tempo a beat per minute at a time, 30 to 300; hold shift while scrolling to move it by 0.1, and click the number to tap a tempo",
+    "click the word INT or EXT on the display to switch between the module's own tempo and following an incoming clock; EXT is drawn cyan while it is locked and red while it is not",
+    "click the word RUN or STOP on the display to start and stop the clock",
+    "scroll over the d:1/ reading on the display to divide the CLOCK OUT jack, from 1/1, which is every tick, down to 1/24, which is one pulse per quarter note",
+    "click the word MAN or AUTO on the display to switch autostart; with AUTO showing, the clock starts on its own a fraction of a second after a patch is loaded"
+  ],
+  "menu": [
+    "Run In Mode: Momentary, Run, Toggle — sets how the RUN IN jack is read; Momentary runs while it is high, Run starts on a high but never stops, Toggle flips the run state on each rising edge"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "4": "one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

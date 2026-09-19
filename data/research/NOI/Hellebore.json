@@ -1,0 +1,20 @@
+{
+  "plugin": "NOI",
+  "module": "Hellebore",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0V", "step": "stepped", "negative": "ignored", "normal": "the freeze latch", "why": "Hellebore.cpp:84-86 replaces the latch with getVoltage() > 0 whenever the jack is connected"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Hellebore.cpp:94-95 multiplies getVoltage() by the attenuverter and adds it to the variation knob with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Hellebore.cpp:97-98 multiplies getVoltage() by the attenuverter, adds it to the time knob and clamps the total to 0.1 and 20"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Hellebore.cpp:88-92 multiplies getVoltage() by the attenuverter and by 10, slews it through a 20Hz low-pass, adds it to the size curve and clamps the total to 0.010 and 1"},
+      "4": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Hellebore.cpp:103 reads getVoltage() with no channel and with no fallback to the other channel"},
+      "5": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Hellebore.cpp:104 reads getVoltage() with no channel and with no fallback to the other channel"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 5V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Hellebore.cpp:100-101 divides getVoltage() by 5, adds it to the dry-wet knob with no attenuverter and clamps the total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±6V", "step": "continuous", "why": "Hellebore.cpp:109-114 clips the sample to -6 and 6 before setVoltage, and setChannels is never called"},
+      "1": {"family": "audio", "poly": false, "range": "±6V", "step": "continuous", "why": "Hellebore.cpp:109-115 clips the sample to -6 and 6 before setVoltage, and setChannels is never called"}
+    }
+  },
+  "comment": "Source read at commit 2b2ad81. The size control's tooltip and its behaviour disagree: Hellebore.cpp:58 configures the display as 0.3 * 4^v - 0.3 while line 90 computes 0.3 * 3^v - 0.3, so the tooltip reads up to 0.9 seconds where the delay lines reach 0.6. A third output, TEST_OUTPUT, is declared and configured but has no PortWidget, so no cable can reach it. The time CV attenuverter is configured with a display multiplier of -100 and an offset of 100, so its tooltip reads 100% when the trimpot is centred and doing nothing."
+}

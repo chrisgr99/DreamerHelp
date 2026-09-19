@@ -1,0 +1,53 @@
+{
+  "plugin": "ChordChemist",
+  "module": "ChordChemist",
+  "description": "Sixteen-step chord sequencer: each step names a degree of a scale, and on every clock the module builds a four-note chord on it, one voice per jack plus a polyphonic one",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the sequence runs before it returns to the first, 1 to 16"},
+    {"ids": [1], "text": "Sets the root the scale is built on, in semitones, with the display reading it out as a note name and octave"},
+    {"ids": [2], "text": "Picks the scale out of the 43 built in, with the display naming the one chosen"},
+    {"ids": [3], "text": "Sets the smallest gap the module leaves between one voice and the next, 0 to 12 semitones, which is what opens the chord out"},
+    {"ids": [4], "text": "Pressing it draws a fresh degree for all sixteen steps and a fresh chord quality for each of them"},
+    {"ids": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], "text": "Sets which degree of the scale this step builds its chord on, 0 for the tonic up to 6"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V moves the sequence on one step"},
+    {"ids": [1], "text": "A rising edge past 1V sends the sequence back to the first step"},
+    {"ids": [2], "text": "Sets the root outright, one volt per octave with 0V giving C4; while a cable is here the root knob is moved to match it and cannot be turned"},
+    {"ids": [3], "text": "Picks the scale outright, 0-10V spread evenly across all 43; while a cable is here the scale knob is moved to match it and cannot be turned"},
+    {"ids": [4], "text": "Sets the voice spacing outright, 0-10V giving 0 to 12 semitones; while a cable is here the spread knob is moved to match it and cannot be turned"},
+    {"ids": [5], "text": "Sets the sequence length outright, one volt for each step; while a cable is here the steps knob is moved to match it and cannot be turned"},
+    {"ids": [6], "text": "A rising edge past 1V draws a fresh degree and chord quality for all sixteen steps"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The lowest note of the chord, one volt per octave"},
+    {"ids": [1, 2, 3], "text": "One of the three notes above the root, one volt per octave, given in rising order rather than as the third, fifth and extension the panel lettering promises"},
+    {"ids": [4], "text": "All four voices on one polyphonic cable, one volt per octave, and always four channels"}
+  ],
+  "notes": [
+    "each step also carries a chord quality that only the randomiser sets: a doubled root, a seventh, a sixth, a ninth or an eleventh.",
+    "nothing moves until a clock reaches the trigger jack; before the first edge all four outputs read 0V.",
+    "the module saves nothing of its own in a patch, so every step's chord quality returns to the doubled root when that patch is loaded again."
+  ],
+  "menu": [
+    "Select Scale — opens a list of all 43 scales with a tick beside the one in use, and picking one moves the scale knob to it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "1 to 16V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "6": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous",
+      "4": "1V per octave · continuous"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "plugin": "questionablemodules",
+  "module": "treequencer",
+  "description": "A sequencer that walks a binary tree of nodes, one node per clock, taking a branch at random wherever a node has two children",
+  "params": [
+    {"ids": [1], "text": "Chooses Step, where each clock takes a branch at random as it arrives, or Sequence, where a whole path is chosen in advance and the clock walks along it"},
+    {"ids": [2], "text": "Turns the sequence round at the end of a path so it walks back towards the root, in place of jumping straight to it"},
+    {"ids": [3], "text": "Shifts the chance at every node in the tree, -1 to +1; turned up the second branch becomes more likely, turned down the first branch does"},
+    {"ids": [4], "text": "Stops the gate and the clock stepping the sequence, so the active node keeps sending"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "In Step trigger type this steps the sequence in the same way the clock does; in Sequence trigger type it picks a fresh path through the whole tree and starts it at the root"},
+    {"ids": [1], "text": "Moves to the next node on each rising edge, reading high above 2V and low below 0.1V"},
+    {"ids": [2], "text": "Returns to the root node on a rising edge, and the clock is ignored for 1ms afterwards"},
+    {"ids": [3], "text": "Adds to the CHANCE MOD knob, 1V covering half of its travel"},
+    {"ids": [4], "text": "Flips the HOLD button on each rising edge"},
+    {"ids": [5], "text": "Flips the TRIG TYPE button on each rising edge"},
+    {"ids": [6], "text": "Flips the BOUNCE button on each rising edge"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "A 1ms pulse at 10V while the active node carries this jack's number"},
+    {"ids": [8], "text": "The active node's number as a pitch, one twelfth of a volt per number, so node 1 gives 0V and node 13 gives 1V"},
+    {"ids": [9], "text": "A 1ms pulse at 10V each time a path through the tree finishes"}
+  ],
+  "notes": [
+    "left-click a node square on the screen for a menu that sets its output number and its chance, previews it, adds a child, removes it, or generates a tree below it",
+    "drag the screen to move around the tree and scroll on it to zoom; the three buttons under the screen follow the active node, undo an edit and redo it, and none can be clicked for help",
+    "a node whose number falls outside 1 to 8 fires none of the eight jacks, though its pitch reaches VOCT OUT",
+    "a new Treequencer holds a root node and two children, so it sequences from the moment a clock is patched"
+  ],
+  "menu": [
+    "Reset Screen Position — returns the tree view to the zoom and position it starts at",
+    "Toggle Follow Nodes — keeps the view centred on the node the sequence is on",
+    "Default Scale — sets the scale a note is drawn from when Add Child makes a new node",
+    "Note Representation: Squares, Letters, Numbers — draws a node's number as a block of dots, as a note name with its octave, or as a number; Letters also relabels the eight output jacks",
+    "Screen Color Mode: Light, Vibrant, Muted, Greyscale — sets the palette the node squares are drawn in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "±1V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "5": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V.",
+      "6": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "continuous · one channel only",
+      "9": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

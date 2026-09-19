@@ -1,0 +1,40 @@
+{
+  "plugin": "MUS-X",
+  "module": "ADSR",
+  "description": "Attack-decay-sustain-release envelope with exponential stages, built-in velocity scaling, a CV for the sustain level, and a per-voice random spread that makes each channel behave slightly differently",
+  "params": [
+    {"ids": [0], "text": "Sets the rise time, 0.5ms at fully counter-clockwise to 20 seconds at fully clockwise"},
+    {"ids": [1], "text": "Sets the fall time from the peak down to the sustain level, 0.5ms to 20 seconds"},
+    {"ids": [2], "text": "Sets the level the envelope holds at while the gate is high, 0 to 1"},
+    {"ids": [3], "text": "Sets the fall time from wherever the envelope has reached down to zero, 0.5ms to 20 seconds"},
+    {"ids": [4], "text": "Sets how much the velocity input scales the envelope's peak, 0 to 1; at 0 the velocity jack does nothing"},
+    {"ids": [5], "text": "Scales the attack, decay, sustain and release of each channel by a random amount, 0 to 1, in the way the voices of an old analogue polysynth differ from each other"},
+    {"ids": [6], "text": "Attenuates and inverts the Sus jack, -1 to 1, before that voltage is added to the sustain level"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The note velocity, 0V to 10V, which scales the envelope's peak by as much as the Vel knob allows"},
+    {"ids": [1], "text": "Divided by 10, scaled by the Sus mod knob and added to the sustain level"},
+    {"ids": [2], "text": "The gate: the envelope attacks while this is at 1V or above and releases below that; its channel count sets the polyphony of the whole module"},
+    {"ids": [3], "text": "A rise past 1V restarts the attack without the gate having to fall first"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "10V while the envelope is in its decay or sustain stage, and 0V during the attack and the release; useful for firing a second envelope to shape the sustain"},
+    {"ids": [1], "text": "The envelope, 0V to 10V"}
+  ],
+  "notes": [
+    "the random spread is generated once per module and saved with the patch, so a patch sounds the same each time it is opened",
+    "the polyphony of both outputs follows the gate input alone; the other three jacks are read at whatever channel count that sets"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "high above 1V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic"
+    }
+  }
+}

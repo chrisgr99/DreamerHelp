@@ -1,0 +1,16 @@
+{
+  "plugin": "Zoxnoxious",
+  "module": "PoleDancer",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "PoleDancer.cpp:214 reads it with getPolyVoltageSimd, multiplies by the trimpot and adds it to the cutoff in octaves at line 216"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "PoleDancer.cpp:209 reads it with getPolyVoltageSimd, divides by 10, multiplies by the trimpot, adds the knob and clamps the total to 0..1"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "PoleDancer.cpp:204 reads it with getVoltageSimd and divides by 5; line 202 takes the channel count from it"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "±10V", "negative": "swings", "normal": "a four-pole lowpass", "why": "PoleDancer.cpp:139-156 reads up to five channels as the mix weights, and sets a four-pole lowpass when the jack is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "PoleDancer.cpp:225 writes five times the clipped mix and line 229 sets the channel count from the audio input"}
+    }
+  },
+  "comment": "The filter core is Fundamental's VCF, with the four state variables mixed by the five weights instead of a fixed tap (PoleDancer.cpp:72-82). The mix is divided by POLEMIX_VOLTAGE_SCALE, 10/32, so a channel at 0.3125V is unity for that pole and anything higher drives the clipper. The cutoff dial reads out as hertz and counts one octave to a turn."
+}

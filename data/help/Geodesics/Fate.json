@@ -1,0 +1,37 @@
+{
+  "plugin": "Geodesics",
+  "module": "Fate",
+  "description": "An event modifier that on each trigger may swap two signals between its outputs and add a random offset to each",
+  "params": [
+    {"ids": [0], "text": "Sets the chance that a trigger alters fate, never fully anticlockwise and every trigger fully clockwise"},
+    {"ids": [1], "text": "Scales the random offsets added when fate is altered, none at the centre and plus or minus 5V at either end; anticlockwise the first output takes only positive offsets and the second only negative"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every volt here adds a tenth to the chance that a trigger alters fate, on top of the free will knob"},
+    {"ids": [1], "text": "A rising edge here draws a new fate, deciding whether the two signals swap outputs and what random offsets are added"},
+    {"ids": [2, 3], "text": "A signal passed to its own output, or to the other output when the draw alters fate; with the other event input empty this signal feeds both outputs"},
+    {"ids": [4], "text": "Widens the random offsets added when fate is altered by a tenth of their span per volt, added to the choice depth knob"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "The signal from its own input, or from the other input when the draw alters fate, with that draw's random offset added"},
+    {"ids": [2], "text": "10V while the last draw altered fate, lasting as long as the incoming trigger, or until the next draw with the menu option set"}
+  ],
+  "notes": [
+    "nothing is drawn until a trigger arrives at the clock input",
+    "with nothing patched to the event inputs the outputs carry the random offsets alone, which makes the module a pair of probabilistic random sources",
+    "the number of output channels is the largest channel count among the two event inputs and the clock input",
+    "with the choice depth knob at its centre no random voltage is added, which leaves a probabilistic switch between the two event inputs",
+    "clock this module from the same source as the sequencer feeding it, so that a draw lands on the same step as the note"
+  ],
+  "menu": [
+    "Hold trigger out during step — holds the trigger output high until the next draw, rather than only for the length of the incoming trigger"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped"
+    },
+    "outputs": {
+      "2": "stepped"
+    }
+  }
+}

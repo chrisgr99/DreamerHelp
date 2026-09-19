@@ -1,0 +1,61 @@
+{
+  "plugin": "VectorModular",
+  "module": "baseTrigs",
+  "description": "A clock generator with fourteen rhythmic divisions, its tempo set by a knob, by tapping, or by measuring an incoming clock",
+  "params": [
+    {"ids": [0], "text": "Scales the tempo modulation jack, from no effect at the bottom of its travel to the jack's full voltage at the top; it comes up at the bottom, where that jack does nothing"},
+    {"ids": [1], "text": "Sets the tempo in beats per minute, 0 to 300, coming up at 115; at 0 every output is held at 0V and nothing else in the module runs"},
+    {"ids": [2], "text": "Each press restarts every division from the beginning and drops all fourteen outputs to 0V"},
+    {"ids": [3], "text": "Sets the tempo from the time between two presses, reading that gap as one quarter note; a gap longer than 60 seconds or shorter than 10ms is discarded instead"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the tempo away from the setting: positive voltage multiplies it by one plus the attenuated voltage, negative voltage divides it by one plus the size of that voltage"},
+    {"ids": [1], "text": "Restarts every division from the beginning on a rising edge past 1.5V, and drops all fourteen outputs to 0V"},
+    {"ids": [2], "text": "Sets the tempo by timing two rising edges and reading the gap between them as one quarter note; it counts as high at 1.5V and is ready again below 0.1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 1ms trigger at 10V on every sixteenth note"},
+    {"ids": [1], "text": "A 1ms trigger at 10V three times in every quarter note"},
+    {"ids": [2], "text": "Goes to 10V for one whole sixteenth note starting on each eighth-note beat, then back to 0V for the next sixteenth: a gate, not a short trigger"},
+    {"ids": [3], "text": "Goes to 10V for the second sixteenth note of each eighth note and 0V for the first: a gate, not a short trigger"},
+    {"ids": [4], "text": "A 1ms trigger at 10V three times in every half note"},
+    {"ids": [5], "text": "Goes to 10V for one whole sixteenth note on each quarter-note beat and 0V for the other three sixteenths: a gate, not a short trigger"},
+    {"ids": [6], "text": "Goes to 10V for one whole sixteenth note halfway between quarter-note beats: a gate, not a short trigger"},
+    {"ids": [7], "text": "Goes to 10V for one whole sixteenth note at the start of each half note: a gate, not a short trigger"},
+    {"ids": [8], "text": "Goes to 10V for one whole sixteenth note halfway through each half note: a gate, not a short trigger"},
+    {"ids": [9], "text": "Goes to 10V for one whole sixteenth note once in every twelve sixteenths, which is every three quarter-note beats"},
+    {"ids": [10], "text": "Goes to 10V for one whole sixteenth note once in every sixteen sixteenths, which is every four quarter-note beats"},
+    {"ids": [11], "text": "Goes to 10V for one whole sixteenth note once in every twenty sixteenths, which is every five quarter-note beats"},
+    {"ids": [12], "text": "Goes to 10V for one whole sixteenth note once in every twenty-four sixteenths, which is every six quarter-note beats"},
+    {"ids": [13], "text": "Goes to 10V for one whole sixteenth note once in every twenty-eight sixteenths, which is every seven quarter-note beats"}
+  ],
+  "notes": [
+    "eleven of the fourteen outputs give a gate one sixteenth note long rather than a short trigger, because the pulse behind each is retriggered every sample while its step is current.",
+    "the clock input does not drive the divisions. It measures the gap between two rising edges and turns it into a tempo; everything else is generated from that number internally.",
+    "only the 1/16, 1/8t and 1/4t outputs give the 1ms trigger. The other eleven are held high for a whole sixteenth note, which at the default 115 BPM is about 130ms.",
+    "nothing locks the divisions to an incoming clock, so they drift against it until something resets them. Send a reset where they need to line up.",
+    "pull the clock cable out and the tempo falls back to whatever the knob or the last tap set. That fallback number is written into the patch file.",
+    "the lamp near the 1/4 output stays lit for 50ms after each quarter-note beat and goes dark on a reset.",
+    "the panel prints baseTrig while the module is called baseTrigs in the browser and in the plugin manifest.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "high above 1.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "10": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

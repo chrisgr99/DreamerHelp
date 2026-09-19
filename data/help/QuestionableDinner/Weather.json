@@ -1,0 +1,34 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Weather",
+  "description": "A noise oscillator: a phasor whose cycle length is randomised afresh every cycle, with four different shapes taken off it at once",
+  "params": [
+    {"ids": [0], "text": "Sets the base frequency, six octaves either side of the pitch chosen by the range switch"},
+    {"ids": [1], "text": "Chooses what the frequency knob is measured against, about 261.63Hz in the upper position and 10Hz in the lower"},
+    {"ids": [2], "text": "Sets how far each cycle is allowed to stray from the base frequency, none at the far left; at none the cloud output is silent and the other three run as a plain oscillator"},
+    {"ids": [3], "text": "Sets how long each pulse lasts as a fraction of the cycle, and with it the tone of the bubble shape"},
+    {"ids": [4], "text": "Sets how many copies of the whole oscillator are run and layered, 1 to 16"},
+    {"ids": [5], "text": "Spreads the copies apart in frequency, all at the same pitch at the far left and each one further above the last as it is turned up"},
+    {"ids": [6], "text": "Chooses whether the copies are summed into one channel or sent out as separate polyphonic channels"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Nothing in the module reads this jack. No code in the process routine touches any input at all, so the pitch is set by the frequency knob and the range switch alone"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A decaying envelope that is pushed up by one at the start of every cycle, so fast cycles pile it up into a continuous rush and slow ones give separate taps"},
+    {"ids": [1], "text": "A smoothed random walk following the randomised cycle lengths, highpassed so it stays around zero; silent when the randomness knob is fully left"},
+    {"ids": [2], "text": "A 10V pulse at the start of every cycle, lasting as long as the length knob sets"},
+    {"ids": [3], "text": "A short windowed chirp once per cycle, swept by the length knob"}
+  ],
+  "notes": [
+    "With the outputs switch set to mono all four jacks carry the average of the layered copies; set to poly, each copy gets its own channel on all four jacks"
+  ],
+  "expects": {
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "continuous · polyphonic"
+    }
+  }
+}

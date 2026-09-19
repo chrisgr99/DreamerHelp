@@ -1,0 +1,43 @@
+{
+  "plugin": "FrozenWasteland",
+  "module": "TheGardener",
+  "description": "Master clock and seed manager for Seeds of Change: it counts clocks and sends reseed and new seed triggers at the divisions set here.",
+  "params": [
+    {"ids": [0], "text": "Sets how many clocks pass between reseed triggers, from 1 to 999."},
+    {"ids": [1, 3], "text": "Scales the CV for the division it belongs to, from -100% to +100%; a volt moves that division by 100 steps at full."},
+    {"ids": [2], "text": "Sets how many clocks pass between new seed triggers, from 1 to 999."},
+    {"ids": [4], "text": "Delays the clock output and the reseed trigger by up to 10 samples, so a seed fetched by the new seed trigger reaches the seed output in time."},
+    {"ids": [5], "text": "Steps between the two division reset modes: in one the reseed count runs on its own, in the other a new seed trigger restarts the reseed count as well."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock that both divisions count."},
+    {"ids": [1], "text": "A trigger here zeroes both counts, and the next clock fires a reseed and a new seed."},
+    {"ids": [2], "text": "The seed value that gets held and passed on, sampled when a new seed falls due; polyphonic cables are carried through."},
+    {"ids": [3, 4], "text": "Moves the division it belongs to, scaled by the attenuverter for that division."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The clock input passed on, delayed by the number of samples set by DELAY COMP."},
+    {"ids": [1], "text": "The seed value held at the last new seed trigger, on as many channels as the seed input carries."},
+    {"ids": [2], "text": "A 1ms 10V pulse each time the reseed division is reached."},
+    {"ids": [3], "text": "A 1ms 10V pulse each time the new seed division is reached; patch it at whatever supplies seed values."}
+  ],
+  "notes": [
+    "nothing counts until a clock is patched into the clock input.",
+    "for a repeating Seeds of Change, patch the clock output to its clock input, the reseed output to its reseed input, and the seed output to its seed input."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "polyphonic",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped · one channel only",
+      "1": "polyphonic",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

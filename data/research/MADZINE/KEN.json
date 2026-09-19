@@ -1,0 +1,21 @@
+{
+  "plugin": "MADZINE",
+  "module": "KEN",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/KEN.cpp:297, a single getVoltage() inside an isConnected() test, no channel loop"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/KEN.cpp:326, a single setVoltage of the summed left ear, no clamp"},
+      "1": {"family": "audio", "poly": false, "why": "src/KEN.cpp:327, a single setVoltage of the summed right ear, no clamp"}
+    }
+  },
+  "comment": "The eight directions and distances are a fixed table at src/KEN.cpp:38-47: azimuth 45 and 135 degrees either side, elevation 30 degrees above and below, distance 0.5 for the front four and 2.0 for the back four. Each corner gets an inter-aural delay from a head 0.18m across at 343m/s, a low-pass whose corner falls with distance, a peak or low-pass standing for elevation, and a high-passed reverb blended in proportion to distance. All of that is computed once in the constructor against a hardcoded 44100Hz (src/KEN.cpp:124, 142, 178, 194) and there is no onSampleRateChange, so at any other engine sample rate the delays and filter corners are off by the ratio. The two outputs are not clamped, so eight loud inputs can push them past 10V. The panel prints LEVEL, the digits 1 to 8 beside the input jacks, and L and R over the outputs. Lettering is drawn in code at src/KEN.cpp:394-416."
+}

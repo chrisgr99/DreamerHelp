@@ -1,0 +1,15 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "Boost",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "why": "Boost.cpp:64 getVoltage(), channel 0 only"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "normal": "the left input", "why": "Boost.cpp:57 reads rightConnected from this jack; while it is empty Boost.cpp:69-74 send the left input through the same gain and clipper to the right output, and while it is patched Boost.cpp:82-88 use this jack instead"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "Boost.cpp:66 clamp(boosted, -5, 5) before the volume knob scales it down"},
+      "1": {"family": "audio"}
+    }
+  },
+  "comment": "In the 1x position the gain is the knob value alone (Boost.cpp:44), so the knob attenuates rather than boosts there; in the other two positions it is 1 + knob * (multiplier - 1). The clipping lamp is driven only from the right channel's value (Boost.cpp:92), which the manual does not say."
+}

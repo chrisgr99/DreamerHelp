@@ -1,0 +1,77 @@
+{
+  "plugin": "Venom",
+  "module": "SVF",
+  "description": "State variable filter with low pass, high pass, band pass, notch and a morph output all running at once, in stereo",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency where the filter begins to attenuate, C4 by default in the audio range; under Right Absolute spread it governs the left channel alone"},
+    {"ids": [1], "text": "Sets how steeply the response falls away past the cutoff, in eight steps from 12dB per octave to 96dB per octave"},
+    {"ids": [2], "text": "Switches the cutoff range between audio, 16.352Hz to 16744Hz with C4 as the default, and low frequency, 0.125Hz to 128Hz with 2Hz as the default"},
+    {"ids": [3], "text": "Inverts and attenuates the cutoff CV input, -100% to 100%; at 100% that CV tracks a volt per octave"},
+    {"ids": [4], "text": "Sets how much the cutoff frequency is emphasised, 0 to 1; the filter will not self oscillate without band pass feedback"},
+    {"ids": [5], "text": "Inverts and attenuates the resonance CV input, -100% to 100%"},
+    {"ids": [6], "text": "Amplifies or attenuates the input before the filter, 0 to 10; high settings drive the tanh saturation at the outputs"},
+    {"ids": [7], "text": "Inverts and attenuates the gain CV input, -100% to 100%; that CV adds 1 to the gain per volt"},
+    {"ids": [8], "text": "Sets the difference between the left and right cutoff frequencies, -2 to 2 octaves, which at high resonance produces formant sounds"},
+    {"ids": [9], "text": "Chooses how the spread is applied: half either way, the whole amount added to the right, or the right cutoff set outright by the SPREAD knob"},
+    {"ids": [10], "text": "With the right output unpatched, chooses whether the right result is averaged into the left output or subtracted from it"},
+    {"ids": [11], "text": "Inverts and attenuates the cutoff spread CV input, -100% to 100%; at 100% that CV is a volt per octave"},
+    {"ids": [12], "text": "Feeds part of the band pass result back into the filter input, sharpening the resonance, and with enough of it the filter self oscillates at the cutoff"},
+    {"ids": [13], "text": "Inverts and attenuates the feedback CV input, -100% to 100%"},
+    {"ids": [14], "text": "Crossfades between the filter modes chosen by the morph mode button, centred between them by default"},
+    {"ids": [15], "text": "Chooses which modes the morph output crossfades between, among low, band, high pass and notch pairings and the raw input against each of those"},
+    {"ids": [16], "text": "Inverts and attenuates the morph CV input, -100% to 100%"},
+    {"ids": [17], "text": "Sets whether the gain VCA is unipolar, clamped between 0V and 10V, or bipolar, clamped between -10V and 10V so the filter can ring modulate"},
+    {"ids": [18], "text": "Switches the input between DC coupled, which preserves any offset, and AC coupled, which removes it and evens out saturation asymmetry"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Shifts the cutoff at a volt per octave, with no attenuverter in its path"},
+    {"ids": [1], "text": "Modulates the cutoff, summed with the CUTOFF knob and scaled by its attenuverter"},
+    {"ids": [2], "text": "Modulates the resonance, summed with the RES knob and scaled by its attenuverter"},
+    {"ids": [3], "text": "Modulates the gain, summed with the GAIN knob and scaled by its attenuverter"},
+    {"ids": [4], "text": "Modulates the cutoff spread, summed with the SPREAD knob and scaled by its attenuverter, and it can drive the spread past the knob limits"},
+    {"ids": [5], "text": "Modulates the band pass feedback, summed with the FDBK knob and scaled by its attenuverter"},
+    {"ids": [6], "text": "Modulates the morph crossfade, summed with the MORPH knob and scaled by its attenuverter"},
+    {"ids": [7], "text": "The left channel into the filter, which feeds the right channel too when the right input is empty"},
+    {"ids": [8], "text": "The right channel into the filter; with nothing patched here the left input feeds both channels"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The morph crossfade for the left channel; with the right morph output empty the right result is merged in here as well"},
+    {"ids": [1], "text": "The morph crossfade for the right channel; leaving this unpatched merges the right result into the left morph output"},
+    {"ids": [2], "text": "Frequencies above the cutoff attenuated, left channel; with the right low pass empty the right result is merged in here as well"},
+    {"ids": [3], "text": "Frequencies above the cutoff attenuated, right channel; leaving this unpatched merges the right result into the left low pass output"},
+    {"ids": [4], "text": "Frequencies below the cutoff attenuated, left channel; with the right high pass empty the right result is merged in here as well"},
+    {"ids": [5], "text": "Frequencies below the cutoff attenuated, right channel; leaving this unpatched merges the right result into the left high pass output"},
+    {"ids": [6], "text": "Frequencies above and below the cutoff attenuated, left channel; with the right band pass empty the right result is merged in here as well"},
+    {"ids": [7], "text": "Frequencies above and below the cutoff attenuated, right channel; leaving this unpatched merges the right result into the left band pass output"},
+    {"ids": [8], "text": "Frequencies at and near the cutoff attenuated, left channel; with the right notch empty the right result is merged in here as well"},
+    {"ids": [9], "text": "Frequencies at and near the cutoff attenuated, right channel; leaving this unpatched merges the right result into the left notch output"}
+  ],
+  "menu": [
+    "Disable audio output DC block — switches off the high pass filter that strips the DC offset the filter algorithm introduces in the audio range"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "0 to 10V · continuous · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "1V per octave · continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "0 to 10V · continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic"
+    }
+  }
+}

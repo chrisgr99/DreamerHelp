@@ -1,0 +1,49 @@
+{
+  "plugin": "ChaoticInstruments",
+  "module": "WaveguideDelay",
+  "description": "A feedback delay whose time is a grid step of a clock, with damping in the loop and a pitch input that turns it into a Karplus-Strong string",
+  "params": [
+    {"ids": [0], "text": "Picks the delay length as a fraction of the beat, in thirteen steps from eight beats at the counter-clockwise end down to a five-hundred-and-twelfth of one at the clockwise end"},
+    {"ids": [1], "text": "Attenuates and inverts the voltage at the TIME input before it is added to the TIME knob"},
+    {"ids": [2], "text": "Sets how much of the delay output goes back into it, from 0.95 inverted at the counter-clockwise end through no feedback at the centre to 0.95 at the clockwise end"},
+    {"ids": [3], "text": "Attenuates and inverts the voltage at the FEEDBACK input before it is added to the FEEDBACK knob"},
+    {"ids": [4], "text": "Sets the base delay time, from 20ms to 2 seconds, that the TIME fraction multiplies while no clock is patched; with a clock patched nothing in the module reads it, despite the panel printing GLITCH"},
+    {"ids": [5], "text": "Damps the repeats, setting how much of the top end the feedback path keeps each time round"},
+    {"ids": [6], "text": "Crossfades the dry input against the delayed signal on an equal-power curve"},
+    {"ids": [8], "text": "Attenuates and inverts the voltage at the GLITCH input before it is added to the GLITCH knob"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio input into the delay line"},
+    {"ids": [1], "text": "A clock here sets the beat the delay fraction is measured against, taken from rising edges above 1V; when it stops for more than two beats the module falls back to the GLITCH knob for its base time"},
+    {"ids": [2], "text": "Moves the delay fraction, scaled by its attenuverter, with 5V covering the whole of the TIME knob's travel"},
+    {"ids": [3], "text": "Moves the feedback amount, scaled by its attenuverter, with 5V covering the whole of the FEEDBACK knob's travel"},
+    {"ids": [4], "text": "A rising edge above 1V starts the delay line again from empty, crossfading into it over the crossfade time set on the menu"},
+    {"ids": [5], "text": "Sets the delay length from a pitch instead, one volt per octave from C4 at 261.63Hz, which plays the delay as a plucked string; below the crossover frequency on the menu it is ignored"},
+    {"ids": [6], "text": "Moves the base delay time, scaled by its attenuverter, with 5V covering the whole of the GLITCH knob's travel; with a clock patched it changes nothing"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The delayed signal mixed with the dry input, five times the internal signal level and clipped at 10V"}
+  ],
+  "notes": [
+    "with nothing patched to CLK the delay time comes from the knob printed GLITCH, which is the only thing that knob does; a clock at CLK takes that job over and leaves the knob inert"
+  ],
+  "menu": [
+    "Delay units: Straight, Triplet, Dotted — reads the beat as straight, triplet or dotted note lengths, which scales every step the TIME knob can take",
+    "Crossfade time — sets how long the delay takes to fade from its old length into a new one",
+    "KS / clock crossover — sets the frequency above which a pitch at the 1V/OCT input takes the delay length over; below it that input does nothing"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "bipolar · stepped · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "unipolar · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "5": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

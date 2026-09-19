@@ -1,0 +1,32 @@
+{
+  "plugin": "CVfunk",
+  "module": "Aulos",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:982 takes getChannels() on this input for the voice count and Aulos.cpp:1231 reads each voice with getPolyVoltage, adding the pipe tuning knob"},
+      "1": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "the PIPE jack", "why": "Aulos.cpp:980 takes getChannels() on this input and Aulos.cpp:1239 reads each voice; Aulos.cpp:1241 falls back to the pipe pitch when this jack is empty"},
+      "2": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 1V", "why": "Aulos.cpp:978 takes getChannels() on this input for the voice count and Aulos.cpp:1171 reads each voice with getPolyVoltage, taking anything above 1V as high"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Aulos.cpp:1116 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter, clamping the total to 0 to 1"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:1109 reads it with getVoltage, so only channel 1, and scales it through the vibrato depth knob at about a sixtieth of an octave per volt"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "±1V", "why": "Aulos.cpp:1136 reads it with getVoltage, so only channel 1, and clamps the knob-plus-input total to -1 to 1"},
+      "11": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "12": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Aulos.cpp:347 reads each voice with getPolyVoltage and scales it by a tenth through the attenuverter"},
+      "13": {"family": "audio", "poly": false, "step": "continuous", "why": "Aulos.cpp:1128 reads it with getVoltage, so only channel 1, and scales it by a tenth times the external gain"},
+      "14": {"family": "trigger", "poly": false, "step": "stepped", "why": "Aulos.cpp:969 reads it with getVoltage, so only channel 1, into a Schmitt trigger that toggles the drone"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Aulos.cpp:1130 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter, clamping the total to 0 to 1"},
+      "16": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 10V", "why": "Aulos.cpp:1127 reads it with getVoltage, so only channel 1, and scales it by a tenth through the attenuverter, clamping the total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Aulos.cpp:1388 sets its channel count from the gate and pitch inputs; Aulos.cpp:1377 clamps the voice to -10 to 10V"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "why": "Aulos.cpp:1389 sets its channel count from the gate and pitch inputs; Aulos.cpp:1377 clamps the voice to -10 to 10V"},
+      "2": {"family": "cv", "poly": true, "why": "Aulos.cpp:1391 sets its channel count from the gate and pitch inputs; Aulos.cpp:1381 writes the breath envelope per voice"},
+      "3": {"family": "cv", "poly": true, "why": "Aulos.cpp:1393 sets its channel count from the gate and pitch inputs; Aulos.cpp:1383 writes the excitation follower per voice"}
+    }
+  },
+  "comment": "The two audio outputs are the two pipes, not a stereo pair: the panel prints MAIN and SEC. while the maker's port names read \"Audio L\" and \"Audio R\" (Aulos.cpp:417). A voice that is asleep writes 0V to all four outputs and skips its whole model (Aulos.cpp:1185), so the module costs almost nothing while silent."
+}

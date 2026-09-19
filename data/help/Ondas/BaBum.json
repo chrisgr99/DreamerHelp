@@ -1,0 +1,53 @@
+{
+  "plugin": "Ondas",
+  "module": "BaBum",
+  "description": "A five-part drum synthesiser — kick, snare, closed hi-hat, open hi-hat and an FX sound — each with its own trigger, output and level",
+  "params": [
+    {"ids": [0], "text": "Raises the pitch of the kick's downward sweep, 0 to 1"},
+    {"ids": [1], "text": "Raises the pitch of the snare's tone, 0 to 1"},
+    {"ids": [2], "text": "Sets the cutoff of the highpass filter on the noise both hi-hats are made from, 1Hz to 20000Hz"},
+    {"ids": [3], "text": "Raises the pitch of the FX sound's sweep, 0 to 1; that sweep falls away faster than the kick's or the snare's"},
+    {"ids": [4, 5, 7], "text": "Sets how long its own part sounds, 0.001 to 5 on the knob, giving a hit between a seventh of a second and half a second long"},
+    {"ids": [6], "text": "Sets how long both the closed and the open hi-hat sound, 0.001 to 5 on the knob, giving a hit between a seventh of a second and half a second long"},
+    {"ids": [8, 9], "text": "Drives its own part's sine oscillator into clipping, 1 to 10; at 1 the tone is a clean sine and higher settings square it off"},
+    {"ids": [11], "text": "Drives the FX oscillator into clipping; the knob reads 1 to 49 but the module clamps the drive at 10, so nothing above 10 changes the sound"},
+    {"ids": [12, 13, 14, 15, 16], "text": "Fires its own part once; held down, it re-fires four times a second"},
+    {"ids": [17, 18, 19, 20, 21], "text": "Sets its own part's level, 0 to 1, both at that part's own output and in the mix output"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the kick tune knob, 10V covering its whole range, and at the same time it moves the hi-hat highpass cutoff by 1000Hz per volt"},
+    {"ids": [1], "text": "Added to the snare tune knob, 10V covering its whole range"},
+    {"ids": [2], "text": "Nothing in the module reads this jack; the hi-hat highpass cutoff is moved by the kick tune input instead, despite the panel putting this jack in the hi-hat column"},
+    {"ids": [3], "text": "Added to the FX tune knob, 10V covering its whole range"},
+    {"ids": [4, 5, 6, 7, 8], "text": "A rising edge fires its own part once"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4], "text": "Carries its own part on its own, at the level set by that part's mix knob"},
+    {"ids": [5], "text": "Carries all five parts averaged together and lifted by half again; it falls silent when every mix knob is at 0"}
+  ],
+  "notes": [
+    "a Bap placed immediately to the right adds CV control of the four length settings and of the kick, snare and FX drive",
+    "the hi-hat has no drive control; the closed and open hi-hats are the one filtered noise source under two different decay shapes, the closed one much the shorter",
+    "every part is cut off hard at the end of its length setting rather than fading out, so a short length clips the tail"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here; the knob and this input are summed and the total held to 0 to 1V.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here; the knob and this input are summed and the total held to 0 to 1V.",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "continuous"
+    }
+  }
+}

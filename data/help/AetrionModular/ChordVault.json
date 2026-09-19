@@ -1,0 +1,55 @@
+{
+  "plugin": "AetrionModular",
+  "module": "ChordVault",
+  "description": "Polyphonic chord sequencer: it records the gates and pitches of a held chord into one of 16 steps and plays those chords back in one of eight orders",
+  "params": [
+    {"ids": [0], "text": "Chooses which step is recorded into or played, 1 to 16; with the clock stopped, turning it auditions each step, and it follows the sequencer while the clock runs"},
+    {"ids": [1], "text": "Switches between recording and playing; while recording, every note held during a gate is written into the current step and the step advances when the gate falls"},
+    {"ids": [2], "text": "Sets how many steps the sequence runs for, 1 to 16, counting steps whether or not anything has been recorded into them"},
+    {"ids": [3], "text": "Returns the sequencer to the first step of the sequence, which is not step 1 in every mode"},
+    {"ids": [4], "text": "Steps through the four plain modes of forward, backward, random without repeats, and step chosen by CV; holding it for a second switches to the four hidden modes of skip, ping-pong, shuffle and glide"},
+    {"ids": [5], "text": "Turns on offset mode, in which the STEP knob sets the first step of the sequence instead of the current one and stops following the sequencer"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Chooses the step in the CV and glide modes, 0-5V across the sequence length; in skip mode it sets the chance of skipping a step over 0-10V, and 20% when nothing is patched"},
+    {"ids": [1], "text": "A trigger or a gate here returns the sequencer to the first step of the sequence"},
+    {"ids": [2], "text": "Advances the sequencer one step, or retriggers the current step in the modes that pick steps by CV; it is read only in play state"},
+    {"ids": [3], "text": "Polyphonic gates saying which notes to record; the channel count has to match the module's poly channel setting or some notes go unrecorded"},
+    {"ids": [4], "text": "Polyphonic pitches, recorded into the current step for as long as the gate input is high"},
+    {"ids": [5], "text": "Sets the sequence length while a cable is patched, 0-5V giving 1 to 16 steps, in place of the LENGTH knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Polyphonic gates for the step being played, high for as long as the clock input is high"},
+    {"ids": [1], "text": "Polyphonic pitches for the step being played, ordered low to high; where a chord uses fewer channels than the module has, the spare channels hold the notes of the chord before it"}
+  ],
+  "notes": [
+    "the steps of a new module are empty and it plays nothing: switch it to record, hold a chord at the gate and pitch inputs to write it into the current step, and switch back to play",
+    "playback needs a clock patched to the clock input; a step is taken on a rising edge there and the gate output is high for as long as that clock is high",
+    "thirteen factory chord sets are shipped as presets, reached from Rack's own preset menu, among them C Maj Triads, C Maj Jazz Standard and Eb Maj Moody Jazz",
+    "when the module is bypassed both outputs stay at 0V",
+    "the module follows the VCV timing standard, which locks the clock out for 1ms after a reset"
+  ],
+  "menu": [
+    "Play Mode — switches between Record and Play, the same two states as the button on the panel",
+    "Step Knob Offset Mode — Off leaves the STEP knob choosing the current step, On makes it set the step the sequence starts from",
+    "SEQ Mode — picks the sequencing mode by name, from Forward, Backward, Random, CV Control, Skip, Ping Pong, Shuffle and Glide",
+    "Polyphony channels — sets how many notes a step can store, five by default",
+    "Dynamic Poly Channels — Yes makes the gate output carry as many channels as the step has notes, which can click on some voices; No holds the channel count fixed",
+    "Skip Partial Clock — Yes holds any change of step or gate until the next whole clock, which is what to turn on when the module will not stay in step with another sequencer",
+    "Step CV Range — sets what the STEP CV input reads, from 0 to 5V, White Keys where C is step 1 and D is step 2, and 0 to 10V",
+    "CV Record Order — sets how the channels of one chord are stored: Sorted low to high, Condensed with silent channels dropped, or Pristine as they arrived",
+    "Transpose SEQ — shifts every note of every step by a chosen number of semitones, from -12 to +12 with the interval named beside each; the original pitches are not kept"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 5V",
+      "1": "stepped",
+      "3": "stepped",
+      "4": "continuous"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "continuous"
+    }
+  }
+}

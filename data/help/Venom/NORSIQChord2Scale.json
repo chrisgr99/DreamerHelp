@@ -1,0 +1,33 @@
+{
+  "plugin": "Venom",
+  "module": "NORSIQChord2Scale",
+  "description": "Turns a polyphonic chord into the control voltages that set up a scale on the Non-Octave-Repeating Scale Intervallic Quantizer",
+  "params": [
+    {"ids": [0], "text": "When on, a note an octave multiple above the root is added as the last note of the scale; when off, the highest note of the chord ends the scale"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger patched here holds the outputs until the next trigger arrives; it goes high above 2V and low below 0.1V"},
+    {"ids": [1], "text": "The polyphonic pitches that define the scale: the lowest note becomes the root, the channel count becomes the scale length, and the gaps between the sorted notes become the intervals"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The trigger from the TRIG input passed on, in step with the scale changes made here"},
+    {"ids": [1], "text": "The lowest note of the chord as a pitch, to patch into the quantizer's SCALE ROOT input"},
+    {"ids": [2], "text": "The scale length as a voltage, to patch into the quantizer's SCALE LENGTH input"},
+    {"ids": [3], "text": "One channel per interval between the sorted chord notes, to patch into the quantizer's POLY INTERVALS input"}
+  ],
+  "notes": [
+    "the quantizer needs EQUAL DIVS off, its interval knobs and SCALE LENGTH fully counter-clockwise and SCALE ROOT at noon; its NORSIQ Chord to Scale configuration factory preset sets all that up"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "1V per octave · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "continuous · one channel only",
+      "2": "one channel only",
+      "3": "polyphonic"
+    }
+  }
+}

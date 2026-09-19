@@ -1,0 +1,76 @@
+{
+  "plugin": "Animatek",
+  "module": "UZZ",
+  "description": "16-step sequencer with seven programmable rows per step, per-step probability and ratchets, ten traversal orders and a clock divider and multiplier",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets the semitone for that step, 0 to 11, or 0 to 23 when the two-octave pitch range is chosen on the menu"},
+    {"ids": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], "text": "Shifts that step by whole octaves, -2 to +2"},
+    {"ids": [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], "text": "Cycles that step through the eight step modes: Play, Mute, Skip, Accum Up, Accum Down, Pulse, Gated and Hold"},
+    {"ids": [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], "text": "Sets the gate length of that step as a fraction of one sequence period, 1% to 95%, with no effect while the module is in TRIG mode"},
+    {"ids": [64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79], "text": "Sets the voltage that step puts out on the first modulation output, 0 to 10 over whatever range the menu gives that output"},
+    {"ids": [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95], "text": "Sets the voltage that step puts out on the second modulation output, 0 to 10 over whatever range the menu gives that output"},
+    {"ids": [96], "text": "Sets how many steps the active window holds, 1 to 16"},
+    {"ids": [97], "text": "Sets which physical step the active window starts at; the window wraps past step 16 back to step 1"},
+    {"ids": [98], "text": "Picks the traversal order: Pendulum, Backward, Forward, Random, Drunk, Ping-Pong, Odd/Even, Jump, Converge or Diverge"},
+    {"ids": [99], "text": "Switches the gate output between gates whose length follows each step's duration and fixed 10ms triggers"},
+    {"ids": [100], "text": "Divides or multiplies the incoming clock, from divide by 48 to multiply by 48, before swing is applied"},
+    {"ids": [101], "text": "Delays every other sequence tick, 0% to 60%, after the ratio has been applied"},
+    {"ids": [102], "text": "Slews the pitch output between steps, 0 to 2 seconds; gates, modulation and step selection are not delayed"},
+    {"ids": [103], "text": "Sets how many semitones an Accum Up or Accum Down step adds to or takes from its own stored offset, 0 to 24"},
+    {"ids": [104, 105, 106, 107, 108, 109, 137], "text": "Randomises all sixteen values of that row at once; double-click to set the row back to its default instead"},
+    {"ids": [110, 112, 114, 116, 118, 138], "text": "Lowers every value of that row inside the active window by one step of that row's own grid, stopping at the row's limit"},
+    {"ids": [111, 113, 115, 117, 119, 139], "text": "Raises every value of that row inside the active window by one step of that row's own grid, stopping at the row's limit"},
+    {"ids": [120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135], "text": "Left of centre this is the chance that step plays, 100% down to 0%; right of centre it is a ratchet count of 2 to 8, read only by the Pulse, Gated and Hold modes"},
+    {"ids": [136], "text": "Scales the chance of every step playing, 0% to 100%, multiplied with each step's own probability"},
+    {"ids": [140], "text": "Sets the range the per-step accumulator wraps through, 1 to 12 semitones either side of zero; at OFF it wraps through the full -12 to +12 semitones"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The clock the sequencer runs on; a rising edge above 1V advances one sequence tick, subject to the ratio and swing"},
+    {"ids": [1], "text": "A rising edge above 1V returns to the first step of the active window, clears every step's accumulator and interrupts a held or ratcheted gate"},
+    {"ids": [2, 3, 4, 5, 6, 7, 9], "text": "A rising edge above 1V randomises all sixteen values of that row, whether or not they are inside the active window"},
+    {"ids": [8], "text": "Transposes the pitch output at a volt per octave, quantised to semitones and limited to four octaves either way"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the selected step: its semitone and octave, plus transpose, plus that step's accumulated offset, with the glide applied"},
+    {"ids": [1], "text": "A 10V gate or trigger for the selected step, its length set by that step's duration knob and the gate mode switch"},
+    {"ids": [2], "text": "One 10V gate per position of the active window, on a polyphonic cable whose first channel is the window's first position rather than physical step 1"},
+    {"ids": [3], "text": "A 10V, 10ms pulse when the traversal completes a cycle; Random never produces one, and Pendulum produces one at each turn"},
+    {"ids": [4], "text": "The first modulation lane's voltage for the selected step"},
+    {"ids": [5], "text": "The second modulation lane's voltage for the selected step"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched; there is no internal tempo, and with the clock jack empty the gate, poly and end-of-cycle outputs stop while pitch and modulation hold.",
+    "Skip steps are bypassed without taking any time in Forward, Backward, Pendulum, Random and Drunk; in the other five orders they keep their place in the order and are played silently.",
+    "a ratio other than one to one needs the clock period measured first, so allow an edge or two after patching or changing the clock source.",
+    "the fractional multipliers of one and a half and two and a half re-anchor on every incoming edge and come out close to one to one and two to one; use the whole-number ones instead.",
+    "a failed probability test blocks the accumulation as well as the gate, and pitch and modulation update to the selected step either way."
+  ],
+  "menu": [
+    "EOC on reset — off by default, makes the reset input produce an end-of-cycle pulse as well",
+    "Direction mode — picks the traversal order, the same setting as the knob on the panel",
+    "Jump stride — how many positions the Jump order moves each advance, from two to seven",
+    "Pitch range: 1 octave (0..11), 2 octaves (0..23) — sets what the pitch knobs cover, rescaling the values already entered",
+    "Range Mod 1 — sets the voltage range of the first modulation output, from ±10V down to 0V..1V",
+    "Range Mod 2 — sets the voltage range of the second modulation output, from ±10V down to 0V..1V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped",
+      "4": "high above 1V · stepped",
+      "5": "high above 1V · stepped",
+      "6": "high above 1V · stepped",
+      "7": "high above 1V · stepped",
+      "8": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "9": "high above 1V · stepped"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "stepped",
+      "2": "0 to 10V · stepped · polyphonic",
+      "3": "stepped"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "plugin": "HardSeqs",
+  "module": "HardSeqs",
+  "description": "A 16-step trigger sequencer with a separate output for every step, where the gate, the repeat pattern, the probability and three modulation values are set one step at a time",
+  "params": [
+    {"ids": [0], "text": "Sets how many times through the sequence before the sequencer stops itself, from 1 to 4; at 0 it runs until something stops it"},
+    {"ids": [2], "text": "Sets how many steps are played before the sequence returns to its start, from 0 to 16"},
+    {"ids": [4], "text": "Turns the chosen step's trigger on or off; with it off the step produces nothing at its own output, at the GATE output or at the three MOD outputs"},
+    {"ids": [5, 6, 7, 8, 9], "text": "Turns the chosen step on for one position in its repeat cycle, so it plays on that pass through the sequence and is skipped on the others"},
+    {"ids": [10], "text": "Sets the chance that the chosen step fires when its turn comes, from 0% to 100%, drawn afresh each time"},
+    {"ids": [11], "text": "Sets the value the chosen step sends to the MOD1 output, from -100 to 100, which reaches the jack as -10V to 10V; this knob moves continuously"},
+    {"ids": [12], "text": "Sets the value the chosen step sends to the MOD2 output, from -100 to 100, which reaches the jack as -10V to 10V; this knob steps in whole numbers"},
+    {"ids": [13], "text": "Sets the value the chosen step sends to the MOD3 output, from -100 to 100, which reaches the jack as -10V to 10V; this knob steps in whole numbers"},
+    {"ids": [14], "text": "Sets how many passes through the sequence the chosen step's repeat cycle runs over, from 0 to 5, which is how many of the five EACH switches are read"},
+    {"ids": [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], "text": "Chooses which step the GATE, EACH, ELEN, PROB and MOD controls along the bottom edit; choosing a step changes nothing about what the sequence plays"},
+    {"ids": [31], "text": "Cycles the instrument name picture; nothing in the sequencer reads it, and the value saved with the patch is one behind the picture on screen, so a reloaded patch shows the one before"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Switches the sequencer between running and stopped on each rise past 0.5V; while REPEAT is set to anything but 0 and the sequence is already running, the rise is ignored"},
+    {"ids": [1], "text": "Moves the first step of the sequence, 0V giving step 1 and 5V giving step 16; the steps before the new start are left out of the loop"},
+    {"ids": [2], "text": "Advances the sequence by one step on each rise past 0.5V"},
+    {"ids": [3], "text": "Returns the sequence to its first step on a rise past 0.5V, and puts every step's repeat count back to the beginning of its cycle"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Goes to 10V for one single sample when that step fires, and rests at 0V the whole of the rest of the time"},
+    {"ids": [16], "text": "Goes to 10V when a step fires and drops back to 0V as soon as the clock input falls below 0.5V, so it lasts as long as the high part of the clock"},
+    {"ids": [17], "text": "The MOD1 value of the last step that fired, a tenth of that step's knob setting in volts, held until the next step; a step that does not fire leaves 0V here"},
+    {"ids": [18], "text": "The MOD2 value of the last step that fired, a tenth of that step's knob setting in volts, held until the next step; a step that does not fire leaves 0V here"},
+    {"ids": [19], "text": "The MOD3 value of the last step that fired, a tenth of that step's knob setting in volts, held until the next step; a step that does not fire leaves 0V here"}
+  ],
+  "notes": [
+    "There is no run button. The sequencer starts and stops on triggers into RUN, and until one arrives it puts out nothing whatever the clock does; the RUN lamp shows the state.",
+    "Click one of the sixteen step buttons to choose which step the GATE switch, the EACH switches, ELEN, PROB and the three MOD knobs along the bottom apply to.",
+    "Those bottom controls always edit the chosen step and show its stored settings; on a freshly added module they read as off until a step button has been clicked once."
+  ],
+  "menu": [
+    "Disable all gates — turns the gate off on all sixteen steps at once",
+    "Generate random gate sequence (temp = 10) — sets each of the sixteen gates afresh, each with a one in ten chance of coming out on",
+    "Generate random gate sequence (temp = 25) — sets each of the sixteen gates afresh, each with a one in four chance of coming out on",
+    "Generate random gate sequence (temp = 50) — sets each of the sixteen gates afresh, each with an even chance of coming out on",
+    "Generate random gate sequence (temp = 75) — sets each of the sixteen gates afresh, each with a three in four chance of coming out on",
+    "Generate random gate sequence (temp = 90) — sets each of the sixteen gates afresh, each with a nine in ten chance of coming out on"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 0.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "0 to 5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 0.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 0.5V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "0 to 10V · stepped · one channel only",
+      "15": "0 to 10V · stepped · one channel only",
+      "16": "0 to 10V · stepped · one channel only",
+      "17": "±10V · continuous · one channel only",
+      "18": "±10V · stepped · one channel only",
+      "19": "±10V · stepped · one channel only"
+    }
+  }
+}

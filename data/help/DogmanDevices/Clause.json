@@ -1,0 +1,53 @@
+{
+  "plugin": "DogmanDevices",
+  "module": "Clause",
+  "description": "A twelve-step sequencer with a voltage knob and a step output for every step, an internal clock, an adjustable length and an output scaler",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Sets the voltage that step sends to the CV output, from -10V to 10V before the range knob scales it"},
+    {"ids": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "text": "Turns that step's contribution to the trigger output on and off, the lamp beside it showing the state"},
+    {"ids": [24], "text": "Sends the sequence back to step one"},
+    {"ids": [25], "text": "Starts and stops the sequence, the lamp beside it lit while it runs"},
+    {"ids": [26], "text": "Sets the tempo of the internal clock, from 15 to 960 beats a minute, and is ignored while a cable is in the clock jack"},
+    {"ids": [27], "text": "Sets how many steps are played before the sequence returns to the first, from 1 to 12"},
+    {"ids": [28], "text": "Scales the CV output, from silence at the bottom to the full ±10V of the step knobs at the top"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge sends the sequence back to step one; it reads high above 2V"},
+    {"ids": [1], "text": "A rising edge starts or stops the sequence; it reads high above 2V"},
+    {"ids": [2], "text": "A rising edge advances the sequence by one step and takes the tempo away from the internal clock; it reads high above 2V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "text": "Carries 10V while that step is the one playing, and 0V otherwise"},
+    {"ids": [12], "text": "A 1ms trigger at 10V each time the sequence moves to a new step"},
+    {"ids": [13], "text": "A 1ms trigger at 10V each time the sequence moves to a step whose button is on"},
+    {"ids": [14], "text": "The voltage knob of the step playing, scaled by the range knob"}
+  ],
+  "notes": [
+    "it comes up running with every step switched on, so it plays as soon as a clock or the internal tempo carries it",
+    "a clock arriving during the 1ms reset pulse is ignored, so a reset and a clock on the same edge do not advance twice"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "0 to 10V · stepped · one channel only",
+      "5": "0 to 10V · stepped · one channel only",
+      "6": "0 to 10V · stepped · one channel only",
+      "7": "0 to 10V · stepped · one channel only",
+      "8": "0 to 10V · stepped · one channel only",
+      "9": "0 to 10V · stepped · one channel only",
+      "10": "0 to 10V · stepped · one channel only",
+      "11": "0 to 10V · stepped · one channel only",
+      "12": "0 to 10V · stepped · one channel only",
+      "13": "0 to 10V · stepped · one channel only",
+      "14": "±10V · continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Arp32",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "Arp32p.cpp:519 read with getVoltage() alone, with no channel loop, fed at line 547 into a rack::dsp::SchmittTrigger at its 0V/1V default", "poly": false},
+      "1": {"family": "pitch", "step": "continuous", "range": "1V per octave", "why": "Arp32p.cpp:621 read with getVoltage() alone, with no channel loop and takes it as a 1V/octave pitch", "poly": false},
+      "2": {"family": "cv", "step": "stepped", "range": "0 to 5V", "why": "Arp32p.cpp:525 read with getVoltage() alone, with no channel loop, casts it to an unsigned int and clamps that between 0 and 5, one pattern per whole volt", "poly": false},
+      "3": {"family": "cv", "step": "stepped", "range": "1 to 16V", "why": "Arp32p.cpp:531 read with getVoltage() alone, with no channel loop, casts it to an unsigned int and clamps that between 1 and 16, one step of length per whole volt", "poly": false},
+      "4": {"family": "cv", "step": "stepped", "range": "±24V", "why": "Arp32p.cpp:537 read with getVoltage() alone, with no channel loop, casts it to an int and clamps that between -24 and 24, one semitone per whole volt", "poly": false},
+      "5": {"family": "cv", "step": "stepped", "why": "Arp32p.cpp:544 read with getVoltage() alone, with no channel loop and takes its sign against a 0.001V dead band, so the jack holds, releases or does nothing", "poly": false},
+      "6": {"family": "trigger", "step": "stepped", "range": "high above 1V", "why": "Arp32p.cpp:521 read with getVoltage() alone, with no channel loop, fed at line 548 into a rack::dsp::SchmittTrigger at its 0V/1V default", "poly": false}
+    },
+    "outputs": {
+      "0": {"family": "pitch"},
+      "1": {"family": "trigger"},
+      "2": {"family": "trigger"}
+    }
+  },
+  "comment": "The pattern, arpeggio and length inputs are cast to an unsigned integer before they are clamped (Arp32p.cpp:525 and 531), so a negative voltage does not read as zero: it wraps to a very large number and the clamp then pins it to the last setting in the list. Send only positive voltages to those jacks."
+}

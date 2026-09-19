@@ -1,0 +1,50 @@
+{
+  "plugin": "unless_modules",
+  "module": "avoider",
+  "description": "Moves an incoming note off the intervals you have ruled out against a chord, and publishes the notes that are left as a scale",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5], "text": "Lights while this interval is one of the ruled-out ones; the module writes this button every cycle from the harmony and count knobs, so turning it by hand has no lasting effect"},
+    {"ids": [6], "text": "Steps through the sets of intervals that can be ruled out at the number set by the count knob"},
+    {"ids": [7], "text": "Sets how many intervals are ruled out at once, 1 to 5"},
+    {"ids": [8], "text": "Switches whether the notes of the chord itself are allowed through: with it on they are always allowed, and with it off they are ruled out along with the intervals"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The note to correct, as a 1V/octave pitch; with nothing patched a random note is taken instead"},
+    {"ids": [1], "text": "A rising edge works out a new note and opens the gate output; with nothing patched a new note is worked out every cycle"},
+    {"ids": [2], "text": "The chord the intervals are measured against, as a polyphonic 1V/octave pitch"},
+    {"ids": [3], "text": "Which channels of the chord count, one channel per chord note and wrapped round when there are fewer; a channel below 0.1V is left out of the chord"},
+    {"ids": [4], "text": "Adds to the harmony knob, a tenth of its travel per volt"},
+    {"ids": [5], "text": "Adds to the count knob, one interval per volt"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The corrected note, as a 1V/octave pitch in the octave the note arrived in"},
+    {"ids": [1], "text": "10V while the gate input is high, or steadily while nothing is patched there"},
+    {"ids": [2], "text": "10V when the note that arrived had to be moved, 0V when it was let through as it stood"},
+    {"ids": [3], "text": "The twelve semitones as twelve channels, each 10V where that semitone is allowed and 0V where it is ruled out"},
+    {"ids": [4], "text": "The allowed semitones as 1V/octave pitches, one channel each, so the channel count is the size of the scale"}
+  ],
+  "notes": [
+    "with no chord patched nothing is ruled out and the note arrives at the output unchanged.",
+    "the six interval buttons are indicators: they are written from the harmony and count knobs on every pass, so they show what is ruled out rather than setting it."
+  ],
+  "menu": [
+    "update cycle — sets how many samples pass between one recalculation and the next, 1 to 1024"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads a random note.",
+      "1": "high above 0.1V · stepped · one channel only\n\nunpatched it reads a new note every processed sample.",
+      "2": "1V per octave · continuous · polyphonic",
+      "3": "high above 0.1V · stepped · polyphonic\n\nunpatched it reads every chord channel counts.",
+      "4": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "stepped · one channel only",
+      "2": "one channel only",
+      "3": "0 to 10V · polyphonic",
+      "4": "1V per octave · continuous · polyphonic"
+    }
+  }
+}

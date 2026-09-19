@@ -1,0 +1,29 @@
+{
+  "plugin": "Starling_Via",
+  "module": "SYNC3XL",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "why": "src/sync3xl.cpp:557 adds this input to the I frequency knob and the shared frequency CV, and src/sync3xl.cpp filterVoltageToCoeff turns the sum into a corner with approxExp2_taylor5, clamped to ±10V"},
+      "1": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "why": "src/sync3xl.cpp:563 adds this input to the II frequency knob and the shared frequency CV, then through filterVoltageToCoeff"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/sync3xl.cpp:225-228 reads this input with getVoltage, scales it by the I CV scale knob and by 2048/5, offsets by 2048 and clamps to 0-4095"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/via-module.hpp:150 reads the CV2 input with getVoltage, clamps it to ±5V and scales it by the CV2 amount knob"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/via-module.hpp:151 reads the CV3 input with getVoltage, clamps it to ±5V and scales it by the CV3 amount knob"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1.2V", "negative": "ignored", "why": "src/sync3xl.cpp:258 adds the tap tempo button to this input, rescales 0.2 to 1.2 onto 0 to 1 and puts the result through a Schmitt trigger"},
+      "6": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "why": "src/sync3xl.cpp:569 adds this input to the III frequency knob and the shared frequency CV, then through filterVoltageToCoeff"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±10V", "why": "src/sync3xl.cpp:549 reads this input with getVoltage, scales it by the resonance CV scale trimmer and adds it to each resonance knob; resVoltageToCoeff clamps the sum to ±10V"},
+      "8": {"family": "pitch", "poly": false, "step": "continuous", "negative": "swings", "range": "1V per octave", "why": "src/sync3xl.cpp:550 reads this input with getVoltage, scales it by the frequency CV scale trimmer and adds it to all three filter corners"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "range": "±5V", "why": "src/sync3xl.cpp:551 reads this input with getVoltage, scales it by the filter-type CV scale trimmer and adds it to each filter-type knob; processFilterOuts divides the sum by 5 and clamps it to ±1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/sync3xl.cpp:608 writes this output with setVoltage, as a logic state times 5"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "src/sync3xl.cpp:600 writes this output with setVoltage, from a DAC sample mapped to ±5V at src/sync3xl.cpp:535-543 and then filtered"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/sync3xl.cpp:609 writes this output with setVoltage, as a logic state times 5"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "src/sync3xl.cpp:601 writes this output with setVoltage, from a DAC sample mapped to ±5V and then filtered"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/sync3xl.cpp:610 writes this output with setVoltage, as a logic state times 5"},
+      "5": {"family": "audio", "poly": false, "range": "±5V", "why": "src/sync3xl.cpp:602 writes this output with setVoltage, from a DAC sample mapped to ±5V and then filtered"},
+      "6": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "src/sync3xl.cpp:611 writes this output with setVoltage, as the OR of the three logic states times 5"},
+      "7": {"family": "audio", "poly": false, "range": "±5V", "why": "src/sync3xl.cpp:603 writes this output with setVoltage, as the three filtered outputs added and divided by three"}
+    }
+  },
+  "comment": "The maker names inputs 8 and 9 'I/II/III resonance CV' in configInput (src/sync3xl.cpp:61-62), which duplicates the name given to input 7. The code adds input 8 to the three filter corners and input 9 to the three filter-type knobs (src/sync3xl.cpp:550-551, 555-571), so the lines describe those and name the conflict. Parameter index 13, TRIG_BUTTON_PARAM, is declared in the enum but never given a widget, so no click can reach it and it gets no line and no tag; the tap tempo button is a separate parameter at index 26. The three resonance knobs share one line, as do the three frequency knobs and the three filter-type knobs, because the three channels are identical. The Subaudio setting divides every filter corner by 1000 (src/sync3xl.cpp filterVoltageToCoeff)."
+}

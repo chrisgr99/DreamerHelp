@@ -1,0 +1,20 @@
+{
+  "plugin": "Submit",
+  "module": "React",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "React.cpp:850-851 watches getVoltage cross 2V upwards"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "React.cpp:858-859 watches getVoltage cross 2V upwards"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "why": "React.cpp:947 divides getVoltage by 10 and clamps it to 0 to 1; React.cpp:1003-1027 uses it as the chance of taking the next pattern's step"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "React.cpp:930-931 compares getVoltage against 2V"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "React.cpp:935-936 watches getVoltage cross 2V upwards"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "React.cpp:1043 sets 10V for the 3ms set at React.cpp:796"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "React.cpp:1045 sets 10V for the 3ms set at React.cpp:796"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "React.cpp:1047 sets 10V for the 3ms set at React.cpp:796"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "React.cpp:1049 sets 10V for the 3ms set at React.cpp:796"}
+    }
+  },
+  "comment": "The manual says 'Pattern morphs between twelve patterns' and lists Morph among the inputs without saying what it leaves out. Morph acts only on the snare, hihat and percussion parts, and only while those parts are at kit; the kick is never morphed (React.cpp:1003-1027). The decision is taken per step with a random draw against the voltage, so the same setting gives a different result each bar.\n\nA part locked away from kit stops taking new pattern numbers: its morph index is only written while the knob is at 0 (React.cpp:955-957), so it keeps whatever pattern was current when it was last at kit.\n\nVariation's CV input writes to the panel parameter itself (React.cpp:938-941), so the button moves under a patched cable and any automation on that parameter is overwritten.\n\nAll five inputs use a 2V threshold rather than Rack's usual 1V (React.cpp:851, 859, 931, 936).\n\nThe module's own panel menu also carries three status lines, Snare, Hihat and Perc, each reading KIT or Lock with a genre name. They are labels showing the knob positions, not items that can be clicked.\n\nThe manual's statement that new instances use 1 PPQN and existing patches keep 4 PPQN matches the code."
+}

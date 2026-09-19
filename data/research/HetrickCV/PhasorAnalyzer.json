@@ -1,0 +1,16 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorAnalyzer",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorAnalyzer.cpp:75 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±5V", "why": "PhasorAnalyzer.cpp:71 and 88-92 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of 5V, -5V or 0V for the phasor's direction"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorAnalyzer.cpp:93 writes HCV_PHZ_GATESCALE or 0V per channel; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorAnalyzer.cpp:94 writes HCV_PHZ_GATESCALE or 0V per channel as a trigger; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "PhasorAnalyzer.cpp:95 writes HCV_PHZ_GATESCALE or 0V per channel as a trigger; HCVPhasorCommon.h:7 sets HCV_PHZ_GATESCALE to 10V"},
+      "4": {"family": "cv", "poly": true, "why": "PhasorAnalyzer.cpp:96 writes a per-channel value after setupPolyphonyForAllOutputs at PhasorAnalyzer.cpp:71"}
+    }
+  }
+}

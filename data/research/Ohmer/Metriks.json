@@ -1,0 +1,15 @@
+{
+  "plugin": "Ohmer",
+  "module": "Metriks",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "why": "src/Metriks.cpp:1021 reads this input with getVoltage, which is channel 1 only"},
+      "1": {"poly": false, "why": "no code anywhere in src/Metriks.cpp reads INPUT_PLAYPAUSE; it is declared at :24, configured at :219 and never used again"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Metriks.cpp:920 resetPort.process on rescale(getVoltage, 0.2, 1, 0, 1) fires above 1V and rearms below 0.2V; :924 then copies the live reading into the min, max and median registers"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "normal": "0V", "why": "src/Metriks.cpp:742 copies the input's getVoltage to this output on one channel, and :743 holds it at 0V while the input is unpatched"}
+    }
+  },
+  "comment": "The PLAY/PAUSE button and the PLAY/PAUSE jack are both dead as shipped. They are declared at src/Metriks.cpp:18 and :24 and configured at :216 and :219, and nothing else in the file reads either; the maker's own manual says they are reserved for a Peak Counter mode that is not written. Both get a line saying so, because an untagged control falls back to the maker's tooltip, which would promise a function. The RESET button and jack are read at :920 and only do anything in the voltmeter's Minimum, Maximum and Median settings (:922-930); in CV Pitch they do nothing. The OUT jack is a straight copy of IN on one channel (:742). The input is read with plain getVoltage, so a polyphonic cable is measured on its first channel only. The encoder is configured with infinite limits at :214 and is read as a delta at :746. The 10-second option timeout is at :1013. The Model submenu is on every module in this plugin and is left out per the house rule; it is listed once in the plugin-level notes."
+}

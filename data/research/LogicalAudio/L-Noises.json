@@ -1,0 +1,15 @@
+{
+  "plugin": "LogicalAudio",
+  "module": "L-Noises",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 5V", "why": "src/L-Noises.cpp:117 tests the voltage against 5.0f and line 109 reads it with getVoltage() and no channel index"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 5V", "why": "src/L-Noises.cpp:118 tests the voltage against 5.0f and line 110 reads it with getVoltage() and no channel index"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/L-Noises.cpp:144 and 146 call setVoltage with no channel index and setChannels is never called"},
+      "1": {"family": "audio", "poly": false, "why": "src/L-Noises.cpp:151 and 153 call setVoltage with no channel index and setChannels is never called"}
+    }
+  },
+  "comment": "configSwitch at src/L-Noises.cpp:47 gives NOISER_PARAM the name \"Noise L mode\" and line 48 gives NOISEL_PARAM the name \"Noise R mode\". The widget places NOISER_PARAM at x 45.5mm, the right-hand column, and NOISEL_PARAM at x 15.687mm, the left; process() reads NOISEL_PARAM into n_type_l which drives OUTL_OUTPUT, the left output. The two tooltips are therefore swapped relative to the controls, and each line says so. The panel prints A and B over the two input jacks and Out 1 and Out 2 under the two output jacks, with no L or R lettering anywhere. Both channels take the same white sample (src/L-Noises.cpp:125) and generateNoise keeps one set of pink filter states and one brown accumulator as module members (lines 35 to 36), so two channels set to the same colour are identical and two set to brown integrate the same accumulator twice per sample. VOLL_PARAM and VOLR_PARAM are configured 0 to 100 with a default of 1 (lines 54 and 55) and divided by 100 in use."
+}

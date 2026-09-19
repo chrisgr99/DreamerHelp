@@ -1,0 +1,12 @@
+{
+  "plugin": "OuroborosModules",
+  "module": "ConductorExternal",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "step": "continuous", "range": "0 to 10V", "why": "ConductorExternal.cpp:255 reads this input with getVoltage(), divides by 10 and clamps to 0 and 1 in Index mode; ConductorExternal.cpp:268 reads it as a trigger at 0.1V and 2V in Scroll mode; ConductorExternal.cpp:286 reads it as a pitch in Note Map mode, so it is given no family"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "ConductorExternal.cpp:272 reads this input with getVoltage() into a Schmitt trigger set to 0.1V and 2V by Constants.hpp:147 and 148"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2V", "why": "ConductorExternal.cpp:259 reads this input with getVoltage() into a Schmitt trigger set to 0.1V and 2V"}
+    }
+  },
+  "comment": "Read from src/ConductorExternal at commit 37a37b0, the commit whose plugin.json carries the installed 2.2.3, alongside the plugin's wiki page for Conductor - External. The wiki calls the menu item Clear mapping; the item prints Clear mappings (Widget.cpp). The CV 1 jack is given no family because what it wants depends on the mode knob: a level in Index, a trigger in Scroll and a pitch in Note Map. The Note Map quantisation is 24 steps per octave (ConductorExternal.cpp:286), which is quarter-tones rather than semitones. The module's own name in the browser is External MIDI controller expander for Conductor, though nothing about it is specific to MIDI."
+}

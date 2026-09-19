@@ -1,0 +1,44 @@
+{
+  "plugin": "SickoCV",
+  "module": "Switcher",
+  "description": "One switch that works out for itself whether it is a two-to-one switch, a one-to-two router, a signal swapper, a mute, a flip flop or a toggled gate, from which jacks have cables in them",
+  "params": [
+    {"ids": [0], "text": "Chooses whether the T/G jack is read as a gate that holds the switch over, or as triggers that flip it each time"},
+    {"ids": [1], "text": "Sets how long the crossfade between the two states takes, 1ms to 10 seconds; fully anticlockwise the change is instant"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Flips the switch: held above 1V in Gate mode, or one trigger to flip and the next to flip back in Toggle mode"},
+    {"ids": [1], "text": "A trigger here returns the switch to its resting state"},
+    {"ids": [2], "text": "One of the two signals, or the one signal being routed; which of those it is depends on how many of the other jacks have cables in them"},
+    {"ids": [3], "text": "The second signal to switch between, or the second source being swapped"},
+    {"ids": [4], "text": "Lengthens the crossfade by one second per volt, added to the FADE knob, with the total held between 0 and 10 seconds"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The switched, routed or swapped signal; with both inputs empty it carries a gate faded by the FADE knob"},
+    {"ids": [1], "text": "The second destination, or the inverse of OUT 1 when the module is acting as a flip flop"}
+  ],
+  "notes": [
+    "the module reads its function off the cables: two inputs and one output make a switch, one input and two outputs make a router.",
+    "two inputs and two outputs make a swapper, one input and one output a mute, two outputs alone a flip flop, and one output alone a toggled gate.",
+    "as a switch the resting source is IN 1 if OUT 1 is patched, IN 2 if OUT 2 is; as a router the resting destination is OUT 1 if IN 1 is patched, OUT 2 if IN 2 is.",
+    "as a swapper it rests straight through; as a mute, matching numbers rest muted and crossed numbers rest open.",
+    "as a flip flop it rests on OUT 1; as a toggled gate, OUT 1 rests low and OUT 2 rests high."
+  ],
+  "menu": [
+    "Route & Hold (Toggle) — in Toggle mode with the module acting as a router, holds the last voltage at the output that is no longer being fed instead of dropping it to 0V",
+    "Initialize on Start — comes up in its resting state when Rack loads a patch, instead of resuming whatever state it was saved in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

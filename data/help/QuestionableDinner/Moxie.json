@@ -1,0 +1,46 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "Moxie",
+  "description": "An oscillator driven by a voltage rather than by a clock: the positive and negative halves of the power input are accumulated separately, and each half fires when its accumulator fills",
+  "params": [
+    {"ids": [0], "text": "Adds a steady voltage to the power input, -10V to 10V, so the module runs with nothing patched"},
+    {"ids": [1], "text": "The general shape control: the envelope decay on the base model, the pulse width on the square, how tightly the sine bends on the sine warp, the burst speed on the sine pulse, nothing on the clock"},
+    {"ids": [2], "text": "Sets the base frequency. Its reading changes with the mode switch: hertz in continuous mode, and a multiplier on the incoming slope in slope mode"},
+    {"ids": [3], "text": "Crossfades the two halves through the main output, the negative half alone at the far left, both equally at centre and the positive half alone at the far right"},
+    {"ids": [4], "text": "Sets how much of the FM jack reaches the frequency, inverted anticlockwise of centre and none at centre"},
+    {"ids": [5], "text": "Chooses whether the accumulators are filled by the voltage at the power input or by the changes in it; a steady voltage makes no sound in the second position"},
+    {"ids": [6], "text": "Chooses whether the two halves fire freely, or each one is held off until the other has fired, which halves the rate and locks the two halves into alternation"},
+    {"ids": [7], "text": "Pressing it steps to the next of the five models; the lamp shows which one, dark for the base model, blue for square, green for sine warp, yellow for sine pulse and red for clock"},
+    {"ids": [8], "text": "Sets how hard the power input is clipped on its way in, from a hard corner at the far left to a soft one at the far right; the tuning is correct at both extremes and drifts in between"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The power that drives the oscillator; in continuous mode a steady voltage here gives a steady tone and in slope mode only changes in it do anything"},
+    {"ids": [1], "text": "Shifts the frequency exponentially, scaled by the knob beside it"},
+    {"ids": [2], "text": "Shifts the frequency at one volt per octave"},
+    {"ids": [3], "text": "A rise here empties both accumulators, which restarts the waveform"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The positive half's accumulator on its own, clipped at 24V; on the clock model this jack sends a 10V gate instead, open for as long as the morph knob allows"},
+    {"ids": [1], "text": "The negative half's accumulator on its own, clipped at 24V; on the clock model this jack sends a 10V gate instead, open for as long as the morph knob allows"},
+    {"ids": [2], "text": "The two halves crossfaded by the morph knob, with the direct current taken out and soft clipping applied unless the menu turns those off; on the clock model it is a plain trigger"}
+  ],
+  "menu": [
+    "Soft clip to ±10v — when this is off the main output is sent unclipped and can run well past 10V",
+    "Remove DC offset — when this is off the steady offset is left in the main output, which shifts it off centre",
+    "Old Oscillator Models — replaces the square, sine warp and sine pulse models with the three that this module had before version 2.1.7",
+    "Model: Base, Square, Sine Warp, Sine Pulse, Clock — picks the model without stepping round with the panel button"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±10V.",
+      "1": "bipolar · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "3": "unipolar · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "±24V · continuous · polyphonic",
+      "1": "±24V · continuous · polyphonic",
+      "2": "continuous · polyphonic"
+    }
+  }
+}

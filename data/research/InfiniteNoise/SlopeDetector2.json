@@ -1,0 +1,19 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "SlopeDetector2",
+  "facts": {
+    "inputs": {
+      "0": {"poly": false, "normal": "0V", "why": "SlopeDetector2.cpp:354 reads getVoltage() with no channel index"},
+      "1": {"poly": false, "normal": "the A-CV input", "why": "SlopeDetector2.cpp:353 tests this jack with isConnected and line 354 reads it with getVoltage, channel 0 only, into a variable that line 351 sets to 0 once per sample and that the loop carries from section A to section B. With this jack empty the variable still holds the A-CV voltage, so section B smooths and measures the same signal that A does; line 307 is what keeps section B running in that case, by counting a cable in A-CV as an input for B as well."}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"},
+      "1": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"},
+      "2": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"},
+      "3": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"},
+      "4": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"},
+      "5": {"family": "trigger", "poly": false, "why": "the module keeps one phase per section and writes each output with setVoltage and no channel index"}
+    }
+  },
+  "comment": "The threshold knob runs 0 to 1 and is mapped onto the voltage in two halves (SlopeDetector2.cpp:295 to 301): a concave curve from 0V up to 0.0005V over the lower half, then a convex curve from 0.0005V up to 0.01V over the upper half, so the default centre position is 0.0005V. The threshold is then multiplied by the number of cycles per process step, so lowering process quality widens it in proportion. The maker's manual gives the range as about 0.00001V to 0.01V with a default around 0.0001V, which does not match the code in 2.0.3. With Steady hold time Off a patched section never enters the steady phase and reports only rise and fall; an unpatched section stays steady."
+}

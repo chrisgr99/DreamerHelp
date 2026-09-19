@@ -1,0 +1,52 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Band",
+  "description": "Four bandpass filters locked to whole-number harmonics of one fundamental, so each band lands exactly on a partial of the sound going in",
+  "params": [
+    {"ids": [0], "text": "Sets the fundamental by hand, four octaves either side of 261.63Hz, and does nothing while the menu has the fundamental followed from the audio"},
+    {"ids": [1], "text": "Sets the bandwidth of every band as a fraction of the fundamental, 0.02 to 2 times it, so every harmonic is isolated as cleanly as every other"},
+    {"ids": [2, 3, 4, 5], "text": "Picks which whole-number harmonic that band tunes to, 1 to 32, where 1 is the fundamental itself"},
+    {"ids": [6, 7, 8, 9], "text": "Sets that band's level, silence to full"},
+    {"ids": [10, 11, 12, 13], "text": "Switches that band in or out, with a short fade so it does not click"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the fundamental as a volt per octave, added to the tune knob; it does nothing while the menu has the fundamental followed from the audio"},
+    {"ids": [1], "text": "Changes the bandwidth, added to the width knob at a fifth per volt"},
+    {"ids": [2], "text": "Slides every band between harmonics at once, one harmonic per volt, which sweeps the whole bank up and down the series"},
+    {"ids": [3], "text": "The signal the bands filter, and the signal the fundamental is detected from while the menu has that switched on"},
+    {"ids": [4, 5, 6, 7], "text": "Slides that band between harmonics, one harmonic per volt, added to its harmonic knob"},
+    {"ids": [8, 9, 10, 11], "text": "Changes that band's level, added to its level knob at a tenth per volt, so 10V opens it fully"},
+    {"ids": [12, 13, 14, 15], "text": "Any voltage at or above 1V switches that band on, and while a cable is here that jack replaces the band's own button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The four bands summed, each at its own level, clamped to -12 to 12V"},
+    {"ids": [1], "text": "The four bands on four polyphonic channels, one band per channel, for treating each harmonic separately"}
+  ],
+  "notes": [
+    "the bandwidth is a fraction of the fundamental rather than of each band's own frequency, so the sharpness rises with the harmonic number and every partial is isolated equally well"
+  ],
+  "menu": [
+    "Follow input pitch (auto-lock harmonics) — finds the fundamental from the audio going in and locks the harmonic grid to it, which takes the TUNE knob and the V/OCT jack out of the picture",
+    "Filter slope — a label over the two choices below it",
+    "4-pole (steep, default) — gives each band a steeper skirt, which isolates a partial more cleanly",
+    "2-pole (gentler) — gives each band a gentler skirt, which lets more of the neighbours through"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "continuous · one channel only",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "8": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "12": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped"
+    },
+    "outputs": {
+      "0": "±12V · continuous · one channel only",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

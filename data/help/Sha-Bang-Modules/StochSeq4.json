@@ -1,0 +1,80 @@
+{
+  "plugin": "Sha-Bang-Modules",
+  "module": "StochSeq4",
+  "description": "Four independent 32-step sequencers whose sliders set the probability that each step fires, and whose slider heights also make a pitch",
+  "params": [
+    {"ids": [0], "text": "Sets the root note that all four sequences' pitch outputs are quantised to"},
+    {"ids": [1], "text": "Picks the scale the pitch outputs are quantised to, among them the Messiaen modes of limited transposition and the seventh chords"},
+    {"ids": [2], "text": "Returns all four sequences to their first step"},
+    {"ids": [4, 5, 6, 7], "text": "Picks one of nine preset slider patterns for that sequence"},
+    {"ids": [8, 9, 10, 11], "text": "Throws every slider of that sequence to a new random probability"},
+    {"ids": [12, 13, 14, 15], "text": "Replaces every slider probability in that sequence with one minus it"},
+    {"ids": [16, 17, 18, 19], "text": "Halves that sequence's pattern and repeats it, each press halving what is left"},
+    {"ids": [20, 21, 22, 23], "text": "Sets the number of steps that sequence plays before returning to the start, 1 to 32"},
+    {"ids": [24, 25, 26, 27], "text": "Scales the pitch taken from that sequence's slider heights, 0 to 100% of the full voltage range"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A clock advances all four sequences by one step"},
+    {"ids": [4, 5, 6, 7], "text": "A clock advances that sequence by one step"},
+    {"ids": [8], "text": "A trigger returns all four sequences to their first step"},
+    {"ids": [12, 13, 14, 15], "text": "A gate throws every slider of that sequence to a new random probability"},
+    {"ids": [16, 17, 18, 19], "text": "A gate replaces every slider probability in that sequence with one minus it"},
+    {"ids": [20, 21, 22, 23], "text": "A gate halves that sequence's pattern and repeats it"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Fires 10V while at least one of the four sequences has its gate on"},
+    {"ids": [1], "text": "Fires 10V while exactly one of the four sequences has its gate on"},
+    {"ids": [5, 6, 7, 8], "text": "Fires 10V at a step of that sequence whose slider wins its probability roll"},
+    {"ids": [9, 10, 11, 12], "text": "Fires 10V at a step of that sequence whose slider loses its probability roll"},
+    {"ids": [13, 14, 15, 16], "text": "Carries a pitch from the height of that sequence's current slider, quantised to the root note and scale"},
+    {"ids": [17, 18, 19, 20], "text": "Carries that sequence's current slider height subtracted from full scale, quantised to the root note and scale"}
+  ],
+  "notes": [
+    "click or drag across a row of sliders to draw its pattern",
+    "with keyboard shortcuts enabled, Ctrl with the left and right arrows shifts the focused sliders sideways and Ctrl with the up and down arrows moves them by 5%",
+    "the sequencer has no clock of its own: nothing advances until a clock arrives at MCLK or at one of the four individual clock inputs.",
+    "the module ships two presets, Drums and Amen break, each filling the four rows of sliders with a drum pattern."
+  ],
+  "menu": [
+    "MCLK override — a cable in MCLK disables all four individual clock inputs",
+    "Gate mode — Gates, which last the step, or Triggers, which are 1ms long",
+    "V/OCT mode — Independent changes the pitch at every step, Sample and Hold changes it only when a gate fires",
+    "Volt Offset — takes the pitch from a -5V to +5V range, or from a 0-10V range",
+    "Slider Percentages — prints the probability on each slider",
+    "Keyboard Shortcuts — turns on ctrl-enter to focus one pattern, ctrl-C and ctrl-V to copy and paste it, and ctrl with the arrows to shift and move its sliders"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "12": "stepped",
+      "13": "stepped",
+      "14": "stepped",
+      "15": "stepped",
+      "16": "stepped",
+      "17": "stepped",
+      "18": "stepped",
+      "19": "stepped",
+      "20": "stepped",
+      "21": "stepped",
+      "22": "stepped",
+      "23": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "13": "continuous",
+      "14": "continuous",
+      "15": "continuous",
+      "16": "continuous",
+      "17": "continuous",
+      "18": "continuous",
+      "19": "continuous",
+      "20": "continuous"
+    }
+  }
+}

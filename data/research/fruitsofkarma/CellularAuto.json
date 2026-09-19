@@ -1,0 +1,25 @@
+{
+  "plugin": "fruitsofkarma",
+  "module": "CellularAuto",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/CellularAuto.cpp:331-333 getChannels and a BooleanTrigger per channel"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CellularAuto.cpp:319-322 added to the button, SchmittTrigger"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CellularAuto.cpp:258-261 added to the button, SchmittTrigger"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CellularAuto.cpp:275-278 added to the button, SchmittTrigger"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:154-156 getVoltage times 6.4, added to the knob"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:158-160 getVoltage times 25.6, added to the knob"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:162-164 getVoltage times 6.4, added to the knob"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:166-168 getVoltage times 25.6, added to the knob"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/CellularAuto.cpp:247-250 added to the button, SchmittTrigger"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:239-241 getVoltage times 25.6, added to the knob"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/CellularAuto.cpp:80-82 getVoltage times 100, added to the knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "src/CellularAuto.cpp:304 setChannels from the clock"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "src/CellularAuto.cpp:302 setChannels from the clock"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 5V", "why": "src/CellularAuto.cpp:303 setChannels from the clock"}
+    }
+  },
+  "comment": "None of the twelve inputs or the three outputs is named in configInput or configOutput, so Rack's tooltips are blank on all of them. Input 4 (ROTATE_INPUT) and parameter 10 (ROTATE_PARAM) are declared in the enums and given no widget, and ROTATE_PARAM has no configParam either, so neither can be reached or clicked; the jacks around them are not renumbered. The panel prints LEFT and TOP where configParam names the parameters X and Y. EOS tests Positions[c] == 0 (src/CellularAuto.cpp:354), but every channel above the first restarts at c * cells rather than 0, so EOS fires only on channel 0 however many channels the clock carries. RULE is clamped below at 0 and not above, and the rule byte is applied with a bitwise and against 1 << index, so anything above 255 acts as its remainder. Each ITER pass runs a full 256 rows carrying on from the last, so the grid kept is the last 256 generations. The four button inputs are summed with their buttons before a SchmittTrigger, so a steady voltage above 1V holds the trigger high and blocks further presses of the button beside it."
+}

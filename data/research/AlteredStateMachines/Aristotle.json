@@ -1,0 +1,19 @@
+{
+  "plugin": "AlteredStateMachines",
+  "module": "Aristotle",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "src/tools/InsAndOuts.hpp:47 getVoltage() with no channel, :77 rescale(v, 0.1, 2, 0, 1) into a SchmittTrigger"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "src/tools/InsAndOuts.hpp:47 getVoltage() with no channel, :77 rescale(v, 0.1, 2, 0, 1) into a SchmittTrigger"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "why": "src/Aristotle.cpp:41 builds a SimpleTrigger over this jack for the first stage; src/tools/InsAndOuts.hpp:77-79 rescales the voltage from 0.1V and 2V into 0 and 1 and feeds a dsp::SchmittTrigger at its default thresholds, so a rising edge past 2V fires the stage"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "half the rate of Trig 1", "why": "src/Aristotle.cpp:40 NormalledTrigger falls back to the previous stage's CountTo(2), InsAndOuts.hpp:115"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "half the rate of Trig 2", "why": "src/Aristotle.cpp:40 NormalledTrigger falls back to the previous stage's CountTo(2), InsAndOuts.hpp:115"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "normal": "half the rate of Trig 3", "why": "src/Aristotle.cpp:40 NormalledTrigger falls back to the previous stage's CountTo(2), InsAndOuts.hpp:115"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "0 to 8V", "why": "src/Aristotle.hpp:78 setVoltage with no channel; four stages of up to 2V each in the wider range"},
+      "1": {"family": "pitch", "poly": false, "range": "0 to 8V", "why": "src/Aristotle.hpp:78 setVoltage with no channel; four stages of up to 2V each in the wider range"}
+    }
+  },
+  "comment": "Params 0 and 1 hold the two voltage-range menu settings and have no widget, so no click reaches them. The stage counters are divide-by-two: a stage passes a high level on to the next stage's normalled trigger every second trigger it receives (src/tools/InsAndOuts.hpp:106-124), which makes the four stages a binary ripple counter when no trigger cables are patched past the first. The output range figure of 0 to 8V is the wider setting; the default range gives 0 to 5V."
+}

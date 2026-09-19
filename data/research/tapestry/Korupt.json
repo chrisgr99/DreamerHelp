@@ -1,0 +1,23 @@
+{
+  "plugin": "tapestry",
+  "module": "Korupt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Korupt.cpp:131 takes the channel count from this jack and line 137 reads it with getPolyVoltage; line 138 divides by 5 and clamps to ±1.5"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:114 passes this jack to normalizedParam at lines 101-107, which reads it with getPolyVoltage, adds a tenth of it to the Square voice level knob and clamps the total to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:115 passes this jack to normalizedParam at lines 101-107, which reads it with getPolyVoltage, adds a tenth of it to the Subharmonic voice level knob and clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:116 passes this jack to normalizedParam at lines 101-107, which reads it with getPolyVoltage, adds a tenth of it to the Oscillator voice level knob and clamps the total to 0..1"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:120 passes this jack to normalizedParam at lines 101-107, which reads it with getPolyVoltage, adds a tenth of it to the Frequency modulator rate knob and clamps the total to 0..1"},
+      "5": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:121 passes this jack to steppedParam at lines 109-115, which reads it with getPolyVoltage, adds seven tenths of it to the Subharmonic interval knob and rounds the total into 0..7"},
+      "6": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 10V", "why": "Korupt.cpp:122 passes this jack to steppedParam at lines 109-115, which reads it with getPolyVoltage, adds seven tenths of it to the Master oscillator interval knob and rounds the total into 0..7"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "Korupt.cpp:151 writes the mix multiplied by 5 and clamped to ±10V; korupt-dsp.h:439 has already held it inside ±1.35"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "Korupt.cpp:152 writes the square voice multiplied by 5"},
+      "2": {"family": "audio", "poly": true, "range": "±5V", "why": "Korupt.cpp:153 writes the subharmonic voice multiplied by 5"},
+      "3": {"family": "audio", "poly": true, "range": "±5V", "why": "Korupt.cpp:154 writes the oscillator voice multiplied by 5"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 10V", "why": "Korupt.cpp:155 writes the lock confidence, clamped to 0..1 at korupt-dsp.h:293, multiplied by 10"}
+    }
+  },
+  "comment": "The panel letters the main audio jacks CV IN and CV OUT, while the maker's own tooltips call both of them Audio and Korupt.cpp:151 writes an audio mix there; the lines follow the code and name the conflict. The lock output is a continuous confidence figure rather than a gate (korupt-dsp.h:404-415), so it is coloured cv. The oscillator's own range is 18Hz to the lesser of 9800Hz and 36% of the sample rate (korupt-dsp.h:353-358), which caps how high the chosen interval can actually reach."
+}

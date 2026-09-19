@@ -1,0 +1,21 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Prob-Key",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "stepped", "why": "ProbKey.cpp:611 reads channel one of this input only (getVoltage with no channel), multiplies it by twelve and rounds the sum with the INDEX knob to a whole index"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "why": "ProbKey.cpp:659 reads channel one of this input only (getVoltage with no channel), multiplies it by 1.6 and rounds the sum with the LENGTH knob to a whole number of steps"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "why": "ProbKey.cpp:655-656 reads channel one of this input only (getVoltage with no channel), scales it by a tenth onto the LOCK knob and clamps the sum to 0..1"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "why": "ProbKey.cpp:630-632 reads the matching channel of this input, scales it by 0.3 onto the OFFSET knob and clamps the sum to -3..3"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "ProbKey.cpp:639-641 reads the matching channel of this input, scales it by a tenth onto the SQUASH knob and clamps the sum to 0..1"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "ProbKey.cpp:1007-1008 takes getChannels() on this input for the outputs, and :1101 reads each channel into a Trigger, which goes high at 1V and low at 0.1V (ImpromptuModular.hpp:145-171)"},
+      "6": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "ProbKey.cpp:1127 reads the matching channel of this input and takes more than 1V as hold"},
+      "7": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "ProbKey.cpp:621-623 reads the matching channel of this input, scales it by a tenth onto the DENSITY knob and clamps the sum to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "1V per octave", "why": "ProbKey.cpp:1007 sets the channel count of this output from the gate input"},
+      "1": {"family": "pitch", "poly": true, "why": "ProbKey.cpp:1008 sets the channel count of this output from the gate input, and :1146 passes that channel's incoming gate through"}
+    }
+  },
+  "comment": "The index input is an index rather than a pitch: ProbKey.cpp:611 multiplies it by twelve, so each twelfth of a volt steps one index."
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "Cella",
+  "module": "Euler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±10V", "why": "Euler.cpp:73 reads this input with getVoltage(), which is channel 1 alone"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "why": "Euler.cpp:95 writes channel 1 alone; Euler.cpp:89 scales an angle of at most 90 degrees onto 10V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Euler.cpp:96 writes channel 1 alone, and the absolute value of a figure Euler.cpp:89 caps at 10V"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Euler.cpp:97 writes channel 1 alone, and the positive part of a figure Euler.cpp:89 caps at 10V"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Euler.cpp:98 writes channel 1 alone, and the negated negative part of a figure Euler.cpp:89 caps at 10V"}
+    }
+  },
+  "comment": "Read from src/Euler.cpp at commit fb01326, the commit whose plugin.json carries the installed 2.11.1. The FREQ knob runs from -8 to 4 and is shown as two to that power in hertz (Euler.cpp:52), so the range is about 0.004Hz to 16Hz with 2Hz at the default. The measurement interval is two divided by that frequency in samples, clamped to between 1 and 1024 (Euler.cpp:85), which the manual does not mention; at the slow end the module measures rarely and the output steps. The 31.5 in the angle formula at Euler.cpp:88 is the scaling that makes a one hertz sine measured at a FREQ of one hertz come out as its cosine, as the manual describes. The module has no context menu of its own."
+}

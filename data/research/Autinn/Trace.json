@@ -1,0 +1,16 @@
+{
+  "plugin": "Autinn",
+  "module": "Trace",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Trace.cpp:264 reads channel c of this input with getPolyVoltage when it carries that many, and Trace.cpp:265 adds it to the knob unclamped"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "why": "Trace.cpp:277 reads channel c of this input with getPolyVoltage when it carries that many; Trace.cpp:278 multiplies by 0.1 and Trace.cpp:279 clamps the knob-plus-input sum to 0 to 10"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "Trace.cpp:270 reads channel c of this input with getPolyVoltage when it carries that many; Trace.cpp:271 multiplies by 0.2 and adds it to the knob unclamped, so 5V is half a turn either way"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "why": "Trace.cpp:257 sets this output's channel count to the number of shapes in the SVG"},
+      "1": {"family": "cv", "poly": true, "why": "Trace.cpp:258 sets this output's channel count to the number of shapes in the SVG"}
+    }
+  },
+  "comment": "The SVG is parsed by nanosvg and each shape's paths are resampled into a 2048-point table by arc length (Trace.cpp:185 to :196). Normalisation divides by the larger of the two bounding-box dimensions and multiplies by 10, and the y axis is negated so that an SVG's downward y becomes an upward voltage (Trace.cpp:210 to :223). A paste is accepted only if the clipboard text contains <svg or <path (Trace.cpp:323). The module has no early return when nothing is patched, so it traces whether or not the outputs are read. The panel prints LISSAJOUS where the slug is Trace."
+}

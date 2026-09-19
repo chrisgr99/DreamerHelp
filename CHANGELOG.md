@@ -2,6 +2,27 @@
 
 Newest first.
 
+## 2.1.0 — 19 September 2026
+
+Still marked pre-release.
+
+### Added
+- Help is read from JSON files, one per module, instead of being compiled into the plugin. For every item, a maker's own file in their plugin's `help` folder comes first, then a user's file in the Rack user folder, then this plugin's database. Each note says when its text came from a maker's or a user's file.
+- `tools/helpscan.py`, which writes a plugin's help files from `//?` comments placed after each control's configure call in its source.
+- Export help files for: in the right-click menu, a starting file for every module of a plugin in the rack, listing every control with the current text beside it.
+- Reload help files, in the right-click menu, for somebody editing a file.
+- Send this help to Dreamer Help, on a module's note when a user's file is in use: the file goes on the clipboard and a GitHub issue opens ready for it.
+- Ask for help with: the gesture can be changed from option-click in the right-click menu.
+- Lights answer too, with the maker's own name and description for them where there is no help text.
+
+### Fixed
+- Controls on a panel inside a module's panel were never found. Venom's Envelope Factory puts each stage on one; reported by its maker.
+- On Windows, a new reading started over the one still speaking. It now stops the old one first.
+
+### Changed
+- The plugin is about a thirtieth of its former size, since the text is no longer compiled into it.
+- The database is JSON, two files per module: the help itself in `data/help`, in the same format makers use, which ships; and the research behind it in `data/research` — each jack's family, the facts about what it expects and a citation for each — which does not. The YAML is gone, and nothing needs PyYAML any more.
+
 ## 2.0.1
 
 Still marked pre-release.

@@ -1,0 +1,45 @@
+{
+  "plugin": "FehlerFabrik-Suite",
+  "module": "Fax",
+  "description": "CV recording sequencer: it samples a voltage as it moves from step to step while recording, then plays the stored voltages back in order; up to 32 steps and 16 polyphonic channels",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps the sequence runs for, 1 to 32"},
+    {"ids": [1], "text": "Sets the internal clock rate, 15 BPM at the bottom of its travel and 3840 BPM at the top"},
+    {"ids": [2], "text": "Advances the sequence by one step, sampling a voltage as it goes if recording is on"},
+    {"ids": [3], "text": "Sends the sequence back to its first step"},
+    {"ids": [4], "text": "Sets the voltage that is recorded when nothing is patched to the input, -5V to 5V"},
+    {"ids": [5], "text": "Runs and stops the sequencer, as a toggle or while held down depending on its Trig/Gate switch"},
+    {"ids": [6], "text": "Turns recording on and off, as a toggle or while held down depending on its Trig/Gate switch"},
+    {"ids": [7], "text": "Chooses how the start button and start input work: Trig toggles running on each rising edge, Gate runs the sequencer only while the signal is high"},
+    {"ids": [8], "text": "Chooses how the record button and record input work: Trig toggles recording on each rising edge, Gate records only while the signal is high"},
+    {"ids": [9], "text": "Chooses where a sampled voltage is stored: Pre puts it in the step the sequencer is leaving, Post in the step it is arriving at"},
+    {"ids": [10], "text": "Stops recording by itself as the sequence rolls over from its last step back to the first"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds one step to the sequence length per volt"},
+    {"ids": [1], "text": "Every volt doubles the internal clock rate"},
+    {"ids": [2], "text": "The voltage sampled into each step while recording, and its channel count sets the polyphony; with nothing patched here the module records the position of its own voltage knob"},
+    {"ids": [3], "text": "A rising edge advances the sequence by one step"},
+    {"ids": [4], "text": "A rising edge sends the sequence back to its first step"},
+    {"ids": [5], "text": "Runs and stops the sequencer, toggling on a rising edge or running while high depending on the Trig/Gate switch"},
+    {"ids": [6], "text": "Turns recording on and off, toggling on a rising edge or recording while high depending on the Trig/Gate switch"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The stored voltage of the current step, or the incoming voltage while recording"}
+  ],
+  "notes": [
+    "The module comes up stopped and not recording: Start runs the sequencer and Rec stores the incoming voltage into the steps as it moves.",
+    "Every step holds 0V until it has been recorded into, so the output is flat on a module that has never recorded."
+  ],
+  "menu": [
+    "Polyphony Channels — a submenu offering Auto and 1 to 16, fixing the number of channels recorded and played back; Auto follows the channel count of the input"
+  ],
+  "expects": {
+    "inputs": {
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped"
+    }
+  }
+}

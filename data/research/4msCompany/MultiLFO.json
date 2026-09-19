@@ -1,0 +1,18 @@
+{
+  "plugin": "4msCompany",
+  "module": "MultiLFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 2.5V", "why": "MultiLFOCore.cc:78 divides every input by 5V and MultiLFOCore.cc:92 passes this one to a Schmitt trigger with the default 0.1 low and 0.5 high from schmittTrigger.h:43-44; MultiLFOCore.cc:12 derives from CoreProcessor rather than CoreProcessorPoly"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "subtracts", "why": "MultiLFOCore.cc:78 divides this jack by 5V and MultiLFOCore.cc:113 adds it to the PW knob with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "MultiLFOCore.cc:78 divides this jack by 5V and MultiLFOCore.cc:39 passes it to setPitchMultiple at math.hh:252, which raises 2 to five times it, giving one doubling of the rate per volt in both directions"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±8V", "why": "MultiLFOCore.cc:110 scales the phase by MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"},
+      "1": {"family": "cv", "poly": false, "range": "±8V", "why": "MultiLFOCore.cc:113 puts out plus or minus MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"},
+      "2": {"family": "cv", "poly": false, "range": "±8V", "why": "MultiLFOCore.cc:107 scales the phase by MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"},
+      "3": {"family": "cv", "poly": false, "range": "±8V", "why": "MultiLFOCore.cc:104 scales the sine table by MaxOutputVolts, which CoreProcessor.hh:103 sets at 8V"}
+    }
+  },
+  "comment": "The PHASE CV jack is stored at MultiLFOCore.cc:86 and read nowhere: the output phase at MultiLFOCore.cc:32 uses the knob offset only, so the jack does nothing. The maker's manual gives the rate as 0.0003Hz-0.67Hz slow and 0.01Hz-20Hz fast; MultiLFOCore.cc:38 takes the knob through a table that returns 1 to 32, and MultiLFOCore.cc:41 divides by 30 in slow mode, which is 1Hz to 32Hz and 0.033Hz to 1.07Hz. The manual also lists the reset as a control rather than a jack."
+}

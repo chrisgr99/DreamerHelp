@@ -1,0 +1,17 @@
+{
+  "plugin": "HetrickCV",
+  "module": "PhasorSubstepShape",
+  "facts": {
+    "inputs": {
+      "0": {"poly": true, "range": "0 to 10V", "step": "continuous", "why": "PhasorSubstepShape.cpp:110 passes it to scaleAndWrapPhasor, which multiplies by HCV_PHZ_DOWNSCALE 0.1 and wraps (DSP/Phasors/HCVPhasorCommon.h:12)"},
+      "1": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorSubstepShape.cpp:105 floors the knob plus this CV to a whole step count"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "PhasorSubstepShape.cpp:99 clamps the knob plus this CV to plus or minus 5V"},
+      "3": {"family": "cv", "poly": true, "step": "stepped", "why": "PhasorSubstepShape.cpp:101 multiplies this voltage by modeDepth, the Mode CV Depth attenuverter times 9/5 (:94), adds it to the mode knob, and :102 truncates the sum to an int clamped to 0 to 9"},
+      "4": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "PhasorSubstepShape.cpp:115 tests each channel against 1V"}
+    },
+    "outputs": {
+      "0": {"poly": true, "why": "PhasorSubstepShape.cpp:85 and 126 HetrickUtilities.hpp:165-172 setupPolyphonyForAllOutputs() sets every output to the widest input's channel count, then a per-channel write of the shaped phasor times HCV_PHZ_UPSCALE, or the raw input voltage when the module is inactive"},
+      "1": {"poly": true, "range": "0 to 10V", "why": "PhasorSubstepShape.cpp:127 writes the substep phasor times HCV_PHZ_UPSCALE per channel; HCVPhasorCommon.h:6 sets HCV_PHZ_UPSCALE to 10V"}
+    }
+  }
+}

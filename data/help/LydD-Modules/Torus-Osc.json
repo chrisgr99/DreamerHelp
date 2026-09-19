@@ -1,0 +1,57 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Torus-Osc",
+  "description": "Two-operator oscillator built from toroidal orbit equations, a little circle winding around a big one, with the X, Y and Z of the traced path as three outputs and a distortion stage on each",
+  "params": [
+    {"ids": [0], "text": "Sets the frequency of the big circle, -60 to 60 semitones around 130.813Hz"},
+    {"ids": [1], "text": "Sets the frequency of the little circle, -60 to 60 semitones around 130.813Hz"},
+    {"ids": [2], "text": "Chooses the orbit equation, Electron, Folded or Toroidal from the bottom position upwards"},
+    {"ids": [3], "text": "Divides the little circle's frequency by 1024, ten octaves down, which turns it into a slow modulator"},
+    {"ids": [4], "text": "Divides the big circle's frequency by 1024, ten octaves down, which turns it into a slow modulator"},
+    {"ids": [5], "text": "Sets how many times the path goes round the big circle in one cycle, 1 to 6, though the value is clamped at 5, so the top of the travel does nothing"},
+    {"ids": [6], "text": "Sets how many times the path goes round the little circle in one cycle, 1 to 6, though the value is clamped at 5, so the top of the travel does nothing"},
+    {"ids": [7], "text": "Multiplies the PM input, -1 to 1; with no cable in the PM jack the knob is used on its own, which shifts both circles slightly in frequency"},
+    {"ids": [8], "text": "Sets how much smaller the little circle is than the big one, which is fixed at 45 units; a negative setting makes the little circle the larger of the two"},
+    {"ids": [9], "text": "Sets how hard the three outputs are driven, 0 to 11; with a cable in the Drive jack this knob scales that voltage instead"},
+    {"ids": [10], "text": "Chooses the distortion applied to all three outputs: a warm saturation, eight stages of wavefolding, or hard clipping, from the bottom position upwards"},
+    {"ids": [11], "text": "Adds the big circle's pitch to the little circle's, so the little circle tracks the big one and the Little Pitch controls become an interval"},
+    {"ids": [12], "text": "Spreads four copies of the whole orbit apart in pitch, up to about a third of a semitone either way, and all four are added together at the outputs"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Big Pitch knob at one volt per octave"},
+    {"ids": [1], "text": "Added to the Little Pitch knob at one volt per octave"},
+    {"ids": [2], "text": "Added to the Big Windings knob, one winding per volt; the absolute value of the total is taken and clamped to 5"},
+    {"ids": [3], "text": "Added to the Little Windings knob, one winding per volt; the absolute value of the total is taken and clamped to 5"},
+    {"ids": [4], "text": "Phase modulation for both circles, multiplied by the PM knob and added to both phases every sample"},
+    {"ids": [5], "text": "Scaled to -10 to 45 and added to the Radius knob, the total clamped to that span; a positive voltage shrinks the little circle, which is why the hover text calls it inverted"},
+    {"ids": [6], "text": "The absolute value of the voltage, times a fifth of the Drive knob, replaces the knob's own setting"},
+    {"ids": [7], "text": "A rise above 0V restarts both circles at the start of their cycles"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The horizontal axis of the chosen orbit equation, after the distortion stage"},
+    {"ids": [1], "text": "The vertical axis of the chosen orbit equation, after the distortion stage"},
+    {"ids": [2], "text": "The depth axis of the chosen orbit equation, after the distortion stage"}
+  ],
+  "notes": [
+    "four copies of the orbit run at once and are added together at the outputs; with Detune at the centre all four are identical",
+    "the screen draws the path the orbit traces, which is what the three outputs are the coordinates of",
+    "every output is monophonic, whatever is patched in"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 5V.",
+      "3": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 5V.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads the Drive knob.",
+      "7": "high above 0V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only"
+    }
+  }
+}

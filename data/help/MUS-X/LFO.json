@@ -1,0 +1,37 @@
+{
+  "plugin": "MUS-X",
+  "module": "LFO",
+  "description": "Polyphonic low-frequency oscillator with eight shapes, a CV for the rate and the level, and a phase reset",
+  "params": [
+    {"ids": [0], "text": "Chooses the waveform: Sine, Triangle, Square, Pulse, Ramp, Saw, Sample & hold or Warped"},
+    {"ids": [1], "text": "Sets the rate, -10 to 10 octaves, the hover text reading the result in hertz"},
+    {"ids": [2], "text": "Sets the output level, 0V to 5V either side of zero in bipolar mode"},
+    {"ids": [3], "text": "Restarts the waveform at the beginning of its cycle"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Freq knob at one octave per volt"},
+    {"ids": [1], "text": "Added to the Amp knob one volt for one volt, the total clamped to 10V"},
+    {"ids": [2], "text": "A rise of more than half a volt from the last sample restarts the waveform at the beginning of its cycle"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The waveform, centred on 0V in bipolar mode or running from 0V upwards in unipolar mode"}
+  ],
+  "notes": [
+    "the channel count of the output is the largest of the three input jacks, so with nothing patched it is a single channel",
+    "the reset jack looks for a step of more than half a volt rather than a fixed threshold, so a slowly rising voltage will not restart the cycle"
+  ],
+  "menu": [
+    "Reduce internal sample rate: 1x to 1024x — runs the oscillator at a fraction of the sample rate, which costs much less processor time and is harmless on slow shapes",
+    "Bipolar — switches between a waveform centred on 0V and one running from 0V up to twice the Amp setting"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "±10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "stepped · polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±10V · polyphonic"
+    }
+  }
+}

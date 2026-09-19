@@ -1,0 +1,13 @@
+{
+  "plugin": "MML",
+  "module": "PowQnt",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "ignored", "why": "src/PowQnt.cpp line 35 reads inputs[INPUT].getVoltage(), with no getChannels or getPolyVoltage anywhere in the file; MMLFQFunction at line 58 returns 0 for any voltage below 0, and line 62 splits the voltage into floorf(vIn) and floorf(12 * fraction)"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/PowQnt.cpp line 41 calls outputs[OUTPUT].setVoltage, and line 46 writes -1 when the input jack is not connected; the returned value adds floorf(vIn) to a fraction of an octave, so whole volts pass through as octaves"}
+    }
+  },
+  "comment": "Open source, read at commit b3a4be0, whose plugin.json is byte-identical to the installed 2.1.0 build and whose res/POW_QNT.svg matches the installed panel. The output is floor(v) - 1 + log2((2^p + ((4^p - 2^p) / 12) * floor(12 * fraction))^(1/p)), with p the knob, configured from 0.01 to 4 with a default of 2. At p = 2 the expression collapses to the Square Root Quantizer's; as p falls towards 0 the twelve steps approach equal spacing, that is equal temperament. The unpatched output of -1V is the maker's own choice and differs from the other two modules in the plugin, which write 0V; nothing in the README mentions it. The knob has no panel lettering, so its line starts with what it does. The README also proposes POW QNT 2, SIN QNT, ATN QNT, LIN QNT and EQT QNT for a later release; none of them is in the installed 2.1.0 plugin.json."
+}

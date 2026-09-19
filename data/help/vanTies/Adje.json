@@ -1,0 +1,65 @@
+{
+  "plugin": "vanTies",
+  "module": "Adje",
+  "description": "The spectrum of Ad without the oscillator: it puts out one polyphonic pitch and two polyphonic amplitudes, one channel per partial, for driving your own oscillators and VCAs",
+  "params": [
+    {"ids": [0], "text": "Sets which octave the fundamental falls in, -5 to 2, always snapped to a whole octave"},
+    {"ids": [1], "text": "Sets the spacing of the partials in units of the fundamental: at 1 the spectrum is harmonic, below 1 it is squeezed, above 1 stretched, and at 0 every partial lands on one frequency"},
+    {"ids": [2], "text": "Sets how many partials are generated, 1 to 15"},
+    {"ids": [3], "text": "Left of centre it tilts the weight of the spectrum towards the low partials; right of centre the weights go flat and the lowest partial climbs instead"},
+    {"ids": [4], "text": "Sieves partials out: turned up from the middle it removes the proper multiples of 2, then 3, then 5, leaving the primes; turned down it removes the primes from the top, leaving the octaves"},
+    {"ids": [5], "text": "Sets how long the amplitude CV takes to travel from one partial to the next, up to 4 seconds; fully clockwise it freezes the buffer"},
+    {"ids": [6], "text": "An attenuverter, -1 to +1, on the stretch CV"},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, on the number of partials CV"},
+    {"ids": [8], "text": "An attenuverter, -1 to +1, on the tilt CV"},
+    {"ids": [9], "text": "An attenuverter, -1 to +1, on the sieve CV"},
+    {"ids": [10], "text": "Restarts the spectrum and draws fresh delays for the random buffer order"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Transposes the whole spectrum at a volt per octave, added to the octave knob; only the first channel is read"},
+    {"ids": [1], "text": "Adds to the stretch knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [2], "text": "Adds to the number of partials knob through its attenuverter, a volt covering a fifth of the knob's travel at full attenuation; pushed below zero it also flips the sign of the stretch"},
+    {"ids": [3], "text": "Adds to the tilt knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [4], "text": "Adds to the sieve knob through its attenuverter, a volt covering a tenth of the knob's travel at full attenuation"},
+    {"ids": [5], "text": "The CV recorded into the four-second buffer that sets the partial amplitudes; patching this switches the amplitude section on"},
+    {"ids": [6], "text": "Adds to the amp delay knob, a volt covering a tenth of its travel"},
+    {"ids": [7], "text": "Steps the buffer on each reading above 2.5V, which turns the amp delay knob into a clock divider rather than a time"},
+    {"ids": [8], "text": "A reading above 2.5V restarts the spectrum"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of each partial, a volt per octave, one channel per partial"},
+    {"ids": [1], "text": "The amplitude of each partial for the left channel, one channel per partial"},
+    {"ids": [2], "text": "The amplitude of each partial for the right channel, one channel per partial"}
+  ],
+  "notes": [
+    "this module makes no sound; patch the pitch output to an oscillator and an amplitude output to a VCA, both of them polyphonic, and the oscillator through the VCA",
+    "every input here is read on its first channel only, however many the cable carries",
+    "the module resets and stops while all three of its outputs are unpatched",
+    "Bufke is its expander and goes immediately to the right"
+  ],
+  "menu": [
+    "Quantize stretch: Continuous, Consonants, Harmonics — snaps the stretch after the knob and its CV are added; Consonants snaps to pure intervals, Harmonics to whole numbers",
+    "Stereo mode: Mono, Soft-panned, Hard-panned — spreads the partials across the two amplitude outputs",
+    "CV buffer order: Low→high, High→low, Random — sets the order the amplitude CV travels through the partials",
+    "Empty buffer on reset — clears the amplitude buffer on a reset instead of leaving what is already in it",
+    "Channels — sets how many polyphony channels the three outputs carry, 1 to 16"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads nothing recorded.",
+      "6": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "7": "high above 2.5V · stepped · one channel only\n\nunpatched it reads unclocked, the delay read as a time; a negative voltage does nothing here.",
+      "8": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "plugin": "ImpromptuModular",
+  "module": "Tact",
+  "description": "A two-channel touch controller: dragging a pad sets a level, and the output slides to that level at a rate you choose",
+  "params": [
+    {"ids": [0, 1], "text": "Drag to set that channel's level, 0V at the bottom and 10V at the top, which the output then slides to at the rate set by RATE"},
+    {"ids": [2, 3], "text": "An attenuverter setting the range of that channel's CV output: at full right the pad gives 0-10V, at full left 0 to -10V"},
+    {"ids": [4, 5], "text": "Transition time of that channel's CV, from 0 for an instant jump to 4 seconds per volt; turning it during a transition changes the rate of the transition under way"},
+    {"ids": [6], "text": "Ties the two channels to one value, sent to both CV outputs; only the left channel's knobs and buttons have any effect, though either pad can change the value"},
+    {"ids": [7, 8], "text": "Sets whether a recall on that channel jumps straight to the stored CV or slides to it at the rate set by RATE"},
+    {"ids": [9, 10], "text": "Memorizes that channel's current CV, to be brought back by a trigger at its RECALL input"},
+    {"ids": [11], "text": "In the top position a slide is exponential, in the bottom position linear"}
+  ],
+  "inputs": [
+    {"ids": [0, 1], "text": "A rising edge above 1V sends that channel to 10V, sliding at the rate set by RATE"},
+    {"ids": [2, 3], "text": "A rising edge above 1V sends that channel to 0V, sliding at the rate set by RATE"},
+    {"ids": [4, 5], "text": "A rising edge above 1V sets that channel's level back to the CV held by its STORE button"}
+  ],
+  "outputs": [
+    {"ids": [0, 1], "text": "That channel's control voltage, after its ATTV knob"},
+    {"ids": [2, 3], "text": "A 1ms trigger each time a slide on that channel finishes, wherever it finishes"}
+  ],
+  "notes": [
+    "0V is in the CV memory at power-up and the slide switches start off, so a recall acts as a reset until something else is stored",
+    "with Auto-return on for a pad, that channel's arrow CV inputs become level sensitive, so a transition runs only while the input is held high"
+  ],
+  "menu": [
+    "Rate knob x3 (max 12 s/V) — stretches the rate knob to 12 seconds per volt, so a full 0 to 10V transition takes 2 minutes instead of 40 seconds",
+    "Level sensitive arrow CV inputs — makes a transition run only while the input is held above 1V, stopping at the level reached when it falls back",
+    "Auto-return (left pad) and Auto-return (right pad) — send that pad back to a chosen percentage of its range when the mouse button is released; Off (default) leaves it where it was put"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

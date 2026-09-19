@@ -1,0 +1,26 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Intone",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "intone.cpp:263 reads it with getVoltage, so only channel 1; :286 it is the oscillator pitch as FREQ_C4 * 2^V in the default mode and :290 the formant transpose ratio 2^V in the other two"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "why": "intone.cpp:226 declares this as the excitation; patching it takes the internal oscillator out of the picture"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "intone.cpp:228 declares this as that formant's frequency CV, summed with its offset knob"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "intone.cpp:231 declares this as that formant's bandwidth CV, summed with its bandwidth knob"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "intone.cpp:268 adds getVoltage()/10 to the vowel knob and :269 clamps the total to 0 to 1, so 0 to 10V covers the whole sweep and a negative subtracts from the knob"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "intone.cpp:234 declares this as the skirt width CV, summed with the skirt knob"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "intone.cpp:236 declares the audio output; it carries the sum of the five formant cells"}
+    }
+  },
+  "comment": "The mode switch only matters while the excitation jack is patched: with nothing there the module runs its own oscillator at the V/OCT pitch and is a voice in its own right. In audio mode the input is filtered by a parallel bandpass bank at the five formant frequencies rather than exciting the bursts, so a drum or an oscillator takes on the vowel colour."
+}

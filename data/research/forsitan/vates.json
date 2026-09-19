@@ -1,0 +1,35 @@
+{
+  "plugin": "forsitan",
+  "module": "vates",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "src/vates.cpp:284 and doc/vates.md, ten volts at a fully open attenuverter is one whole bank, and past that it wraps"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "src/vates.cpp:285 and doc/vates.md, modulation running past the last sample wraps to the first"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/vates.cpp:286, a trigger read as a rising edge"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/vates.cpp:650-655, voiceRateNow() adds the voltage times the pitch attenuverter to the pitch in octaves and raises 2 to that power, so it is one volt per octave with the attenuverter fully clockwise"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "stepped", "negative": "swings", "why": "src/vates.cpp:288, quantised to the menu's root and scale and latched at the trigger"},
+      "5": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/vates.cpp:289, added to the length knob through its attenuverter"},
+      "6": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/vates.cpp:290, added to the filter knob, which has no attenuverter"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/vates.cpp:291, added to the fx knob, which has no attenuverter"},
+      "8": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/vates.cpp:292, added to the LFO rate knob through its attenuverter"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/vates.cpp:293, a reset read as a rising edge"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/vates.cpp:294, a clock read as rising edges"},
+      "11": {"family": "cv", "poly": false, "range": "high above 1V", "negative": "swings", "why": "src/vates.cpp:515-522 and 767, patternMode() ignores the switch whenever the jack is patched and reads the voltage as three states: above 1V randomises the gate pattern, below -1V inverts it, in between it is left alone; the menu item for the hardware window moves those edges to 3.2V and 1.6V"},
+      "12": {"family": "cv", "poly": false, "range": "high above 1V", "negative": "swings", "why": "src/vates.cpp:515-522 and 768, patternMode() ignores the switch whenever the jack is patched and reads the voltage as three states: above 1V randomises the CV pattern, below -1V inverts it, in between it is left alone; the menu item for the hardware window moves those edges to 3.2V and 1.6V"},
+      "13": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "src/vates.cpp:297, a reset read as a rising edge"},
+      "14": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "swings", "why": "src/vates.cpp:298 and doc/vates.md, ten volts covers the thirty-two rhythms and the count wraps"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "why": "src/vates.cpp:300, the envelope of the sample playing"},
+      "1": {"family": "cv"},
+      "2": {"family": "trigger"},
+      "3": {"family": "cv", "poly": false, "why": "src/vates.cpp:303, the maker's own port name records it as the position in the cycle and in the bar when synced"},
+      "4": {"family": "trigger"},
+      "5": {"family": "trigger"},
+      "6": {"family": "cv"},
+      "7": {"family": "audio", "poly": false, "why": "src/vates.cpp:307, one setVoltage per side after the level knob"},
+      "8": {"family": "audio"}
+    }
+  },
+  "comment": "The bank is stepped by two buttons rather than swept by a knob, as on the hardware, where only the samples sit under a knob; both displays can be right-clicked for the whole list. The sample knob spans its bank end to end, so its top is the last sample rather than the first again; the wrapping belongs to modulation. On the hardware, play and cue are the sign of one attenuverter, which means play mode can never be modulated downward; splitting the mode onto its own switch lets the attenuverter run the full range in either mode. The length knob does the envelope and the direction together, and at either end the envelope is held open, so on the longer generated banks a sequence becomes a drone rather than a run of hits. The kits folder is shared with pellicula. The module is built after Bastl Instruments' Citadel, and its bottom half is the same circuit as artifex's. The panel prints vates, bank, sample, play/cue, trig, pitch, mod, free, note, length, filter, fx, tempo, clk, sync, rate, mod, reset, pwm, env, tri, saw, pulse, rhythm, gate ptrn, cv ptrn, reset, gate, cv, clk, level, L and R."
+}

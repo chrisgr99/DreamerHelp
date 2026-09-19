@@ -1,0 +1,33 @@
+{
+  "plugin": "AlgoritmArte",
+  "module": "HoldMeTight",
+  "description": "Three independent sample and hold sections sharing one twelve-note quantizer",
+  "params": [
+    {"ids": [0, 1, 2], "text": "Lit, the voltage sampled by that section is snapped to a note of the scale at 1V per octave"},
+    {"ids": [3], "text": "Chooses how a sample becomes a note: Prop spreads the active notes evenly across each volt, Nearest takes the closest active note, Clamp takes one only within half a semitone and else holds"},
+    {"ids": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Adds that note to the scale used by all three sections, or takes it out; the last remaining note cannot be switched off"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "A rising edge samples the voltage at the IN jack of that section; with nothing patched here that section never samples"},
+    {"ids": [3, 4, 5], "text": "The voltage that section samples when its HOLD input receives a rising edge; with nothing patched a fresh random voltage between 0V and 1V is sampled instead"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2], "text": "The voltage that section has held since its last sample, limited to -5V to 5V"},
+    {"ids": [3, 4, 5], "text": "Rests at 10V and drops to 0V for 1ms whenever a sample changes the held voltage, staying at 10V when the new sample repeats the old one"}
+  ],
+  "notes": [
+    "A section samples only while a cable is in its HOLD input; with that jack empty its output holds whatever it last had and never changes"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "±5V",
+      "1": "±5V",
+      "2": "±5V"
+    }
+  }
+}

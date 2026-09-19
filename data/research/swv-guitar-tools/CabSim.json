@@ -1,0 +1,17 @@
+{
+  "plugin": "swv-guitar-tools",
+  "module": "CabSim",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "step": "continuous", "why": "src/CabSim.cpp:78 getVoltage() with no channel loop, divided by 5"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the BLEND knob", "why": "src/CabSim.cpp:81-85 rescale(cv, -5, 5, 0, 1) replacing the param when isConnected"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the LP knob", "why": "src/CabSim.cpp:89-94 rescale(cv, -5, 5, 0, 1), then 1000 times 20 to that power"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the HP knob", "why": "src/CabSim.cpp:97-102 rescale(cv, -5, 5, 0, 1), then 20 times 100 to that power"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "the OUTPUT knob", "why": "src/CabSim.cpp:104-108 rescale(cv, -5, 5, 0, 2) replacing the param when isConnected"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "src/CabSim.cpp:129 setVoltage with no channel argument and no setChannels anywhere"}
+    }
+  },
+  "comment": "The convolution runs in 256-sample blocks, so the blend is applied once per block rather than per sample (src/dsp/CabSimDSP.h:189-192); the two filters run per sample. The filter corners are recomputed only when they move by more than 1Hz (src/CabSim.cpp:111-116), so very small CV movements do not retune them. Rack's own bypass is configured to pass the input jack to the output jack."
+}

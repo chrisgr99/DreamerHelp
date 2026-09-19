@@ -1,0 +1,85 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Dadras-Momeni-Chaos",
+  "description": "Three copies of a four-dimensional chaotic attractor by Dadras and Momeni, meant as slow modulation: a central voice called Spawn and two offset ones, Mom and Dad, each with X, Y, Z and W outputs",
+  "params": [
+    {"ids": [0], "text": "Sets how fast the attractor is stepped, 261.63 steps a second at the centre, doubling for each unit of travel clockwise and halving for each unit counter-clockwise"},
+    {"ids": [1], "text": "Pushes Mom and Dad apart from Spawn by a fixed step each time the attractor advances, -1 to 1; the smallest setting grows into a large difference over time"},
+    {"ids": [2], "text": "Skews the timestep the derivative is divided by, -3 to 3, slowing Mom and quickening Dad, and the other way round on the far side of the centre"},
+    {"ids": [3], "text": "Splits the stepping rate of Mom and Dad either side of the rate Haste sets, -2 to 2, each unit of it halving one and doubling the other"},
+    {"ids": [4], "text": "Snaps Mom and Dad onto whatever coordinates Spawn has reached; a cable in the Sync jack replaces this button"},
+    {"ids": [5], "text": "Puts all three voices back to their starting coordinates and clears the drawn trails; a cable in the Reset jack replaces this button"},
+    {"ids": [6], "text": "Chooses which three of the four dimensions the screen draws: X, Y and Z at the bottom position, Z, Y and X in the middle, W, X and Y at the top, the third of each being the axis drawn as depth"},
+    {"ids": [7], "text": "Swaps the equation used for the W dimension, which makes the W outputs scratch about instead of curving; the hover text reads Scratch while it is on"},
+    {"ids": [8], "text": "Pulls Spawn toward Dad, adding up to one hundredth of the gap between them at every step"},
+    {"ids": [9], "text": "Pulls Spawn toward Mom, adding up to one hundredth of the gap between them at every step"},
+    {"ids": [10], "text": "Sets the first constant of the attractor, the whole travel mapping it from 5 to 9"},
+    {"ids": [11], "text": "Sets the second constant of the attractor, the whole travel mapping it from 22 to 45"},
+    {"ids": [12], "text": "Sets the third constant of the attractor, the whole travel mapping it from 6 to 12"},
+    {"ids": [13], "text": "Sets the fourth constant of the attractor, the whole travel mapping it from 1 to 4; the hover text calls this knob Throw where the panel prints Hold"},
+    {"ids": [14], "text": "Stops the attractor and hands the four Constants knobs over to setting the coordinates all three voices start from; the outputs hold their last value until it is pressed again"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Added to the Haste knob, doubling the stepping rate of all three voices for every volt"},
+    {"ids": [1], "text": "Added to the Separation knob for the X and Y dimensions but subtracted from it for the Z dimension, so on Z the jack and the knob push opposite ways"},
+    {"ids": [2], "text": "Added to the Phase knob, one unit per volt, and the total is clamped to -3.14 and 3.14"},
+    {"ids": [3], "text": "Added to the Difference knob, one unit per volt, before Mom and Dad are pushed either side of the Haste rate"},
+    {"ids": [4], "text": "The absolute value of the voltage is added to the D knob, 5V giving the full amount, so a negative voltage pulls as hard as the same positive one does"},
+    {"ids": [5], "text": "The absolute value of the voltage is added to the M knob, 5V giving the full amount, so a negative voltage pulls as hard as the same positive one does"},
+    {"ids": [6], "text": "A rise past 1V snaps Mom and Dad onto whatever coordinates Spawn has reached"},
+    {"ids": [7], "text": "A rise past 1V puts all three voices back to their starting coordinates and clears the drawn trails"},
+    {"ids": [8], "text": "Added to the Force knob, one unit per volt, and the total is clamped to the knob's own range"},
+    {"ids": [9], "text": "Added to the Split knob, one unit per volt, and the total is clamped to the knob's own range"},
+    {"ids": [10], "text": "Added to the Dwell knob, one unit per volt, and the total is clamped to the knob's own range"},
+    {"ids": [11], "text": "Added to the Hold knob, one unit per volt, and the total is clamped to the knob's own range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The X coordinate of Mom, the copy pushed one way by Separation, -8V to 8V"},
+    {"ids": [1], "text": "The Y coordinate of Mom, the copy pushed one way by Separation, -8V to 8V"},
+    {"ids": [2], "text": "The Z coordinate of Mom, the copy pushed one way by Separation, -8V to 8V"},
+    {"ids": [3], "text": "The W coordinate of Mom, the fourth dimension added to the published equations, -8V to 8V"},
+    {"ids": [4], "text": "The X coordinate of Spawn, the copy the M and D knobs pull about, -8V to 8V"},
+    {"ids": [5], "text": "The Y coordinate of Spawn, the copy the M and D knobs pull about, -8V to 8V"},
+    {"ids": [6], "text": "The Z coordinate of Spawn, the copy the M and D knobs pull about, -8V to 8V"},
+    {"ids": [7], "text": "The W coordinate of Spawn, the fourth dimension added to the published equations, -8V to 8V"},
+    {"ids": [8], "text": "The X coordinate of Dad, the copy Separation pushes the opposite way from Mom, -8V to 8V"},
+    {"ids": [9], "text": "The Y coordinate of Dad, the copy Separation pushes the opposite way from Mom, -8V to 8V"},
+    {"ids": [10], "text": "The Z coordinate of Dad, the copy Separation pushes the opposite way from Mom, -8V to 8V"},
+    {"ids": [11], "text": "The W coordinate of Dad, the fourth dimension added to the published equations, -8V to 8V"}
+  ],
+  "notes": [
+    "the screen draws a trail for each of the three voices, and the viewport turns slowly on its own, so a line climbing the screen does not mean a climbing output",
+    "any coordinate that passes 120 throws that voice back to its starting point, which is what keeps a runaway setting from stopping the module dead",
+    "every output is monophonic and clamped to -8V to 8V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "high above 1V · stepped · one channel only",
+      "8": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "9": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "10": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "11": "±5V · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "±8V · one channel only",
+      "1": "±8V · one channel only",
+      "2": "±8V · one channel only",
+      "3": "±8V · one channel only",
+      "4": "±8V · one channel only",
+      "5": "±8V · one channel only",
+      "6": "±8V · one channel only",
+      "7": "±8V · one channel only",
+      "8": "±8V · one channel only",
+      "9": "±8V · one channel only",
+      "10": "±8V · one channel only",
+      "11": "±8V · one channel only"
+    }
+  }
+}

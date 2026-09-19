@@ -1,0 +1,53 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "PhaseDrivenLFO",
+  "description": "Four waveform outputs whose position in the cycle is set by a voltage you patch in, rather than by an oscillator of its own",
+  "params": [
+    {"ids": [0], "text": "Chooses the span the phase input is read over: -5V to 5V in the B position, 0V to 10V in the U position"},
+    {"ids": [1], "text": "Chooses what happens to a phase voltage outside that span: Clamp holds it at the end of the cycle, Wrap carries it round to the start again"},
+    {"ids": [2], "text": "Chooses whether the outputs run from 0V upwards in the U position or centred on 0V in the B position"},
+    {"ids": [3], "text": "Sets how wide the output span is, from 0V for a flat output to 10V at the far right"},
+    {"ids": [4], "text": "Attenuates and inverts the Range input between -100% and +100%, and comes up at 0%"},
+    {"ids": [5], "text": "Sets the pulse width, from 1% counter-clockwise to 99% clockwise, at half width in the centre"},
+    {"ids": [6], "text": "Attenuates and inverts the PWM input between -100% and +100%, and comes up at 0%"},
+    {"ids": [7], "text": "Shapes the waveforms, sharpening their peaks counter-clockwise and rounding them clockwise; the square instead morphs into a triangle counter-clockwise and into a saw clockwise"},
+    {"ids": [8], "text": "Attenuates and inverts the MOD input between -100% and +100%, and comes up at 0%"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets where in the cycle each output is, over the 10V span picked by the switch beside it; a polyphonic signal here gives every output the same number of channels"},
+    {"ids": [1], "text": "Adds its voltage to the span set by the Range knob, a volt of input widening the span by a volt once the trim knob is up"},
+    {"ids": [2], "text": "Moves the pulse width, 5V covering half the knob's travel once the trim knob is up"},
+    {"ids": [3], "text": "Moves the shaping, 10V covering the knob's full travel once the trim knob is up"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The square, high over the part of the phase span set by the pulse width"},
+    {"ids": [1], "text": "The triangle, at the top of its range a quarter of the way through the phase span"},
+    {"ids": [2], "text": "The falling saw, at the top of its range where the phase input is at the bottom of its span"},
+    {"ids": [3], "text": "The sine, one full cycle over the phase span"}
+  ],
+  "notes": [
+    "nothing comes out until a voltage is patched into the phase input; with the jack empty every output holds at one fixed point of the cycle",
+    "this is the one LFO here with no rate of its own, so there is no frequency knob, no sync and no rate chaos; the outputs go as fast as the phase voltage moves, audio rate included"
+  ],
+  "menu": [
+    "Pulse-width mode: All waveforms, Square only — chooses whether the pulse-width control warps the phase of every waveform or only sets the width of the square",
+    "Pulse-width range: 1% to 99%, 5% to 95%, 10% to 90%, 15% to 85%, 20% to 80%, 25% to 75% — narrows what the pulse-width knob covers end to end",
+    "Invert (all) waveforms — flips all four waveforms within the range, and lights a small red mark above the output jacks",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic"
+    }
+  }
+}

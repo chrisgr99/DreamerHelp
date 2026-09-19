@@ -1,0 +1,48 @@
+{
+  "plugin": "Fundamental",
+  "module": "Random",
+  "description": "Random voltage generator with an internal clock and four ways of travelling between values",
+  "params": [
+    {"ids": [0], "text": "Sets the rate of the internal clock, from 0.002Hz to 2000Hz; its light blinks on each tick"},
+    {"ids": [1], "text": "Sets how the outputs travel from the old value to the new one, from an instant jump at 0% to taking the whole clock cycle at 100%"},
+    {"ids": [2], "text": "Switches the outputs between -5V to 5V and 0-10V"},
+    {"ids": [4], "text": "Sets the chance that a tick produces a new value; its light blinks whenever one is produced"},
+    {"ids": [5], "text": "Sets how far a new value may move from the one before it: at 100% the new value is drawn freely, and at 0% it repeats the previous value"},
+    {"ids": [6], "text": "Scales the RATE input from -100% to 100%; at 100% each volt doubles the clock rate"},
+    {"ids": [7], "text": "Scales the SHAPE input from -100% to 100%, so the modulation can be made shallow or reversed"},
+    {"ids": [8], "text": "Scales the PROB input from -100% to 100%, so the modulation can be made shallow or reversed"},
+    {"ids": [9], "text": "Scales the RND input from -100% to 100%, so the modulation can be made shallow or reversed"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Moves the clock rate by an amount set by the RATE attenuverter"},
+    {"ids": [1], "text": "Moves the shape by an amount set by the SHAPE attenuverter"},
+    {"ids": [2], "text": "A trigger here replaces the internal clock, and the RATE slider is ignored; the PROB slider thins the incoming triggers"},
+    {"ids": [3], "text": "A voltage here is sampled on each trigger in place of a random value, and the RND slider has no effect"},
+    {"ids": [4], "text": "Moves the probability by an amount set by the PROB attenuverter"},
+    {"ids": [5], "text": "Moves the spread by an amount set by the RND attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Travels to the new value in equally spaced steps: one step at 0% shape, sixteen across the clock cycle at 100%"},
+    {"ids": [1], "text": "Travels to the new value along a straight line, arriving early and holding at low shape settings and taking the whole cycle at 100%"},
+    {"ids": [2], "text": "Travels to the new value along a sine curve, then holds until the cycle finishes"},
+    {"ids": [3], "text": "Travels to the new value exponentially, the time constant set by the shape, becoming a straight line at 100%"},
+    {"ids": [4], "text": "A pulse each time a new value is generated"}
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "polyphonic",
+      "4": "continuous · one channel only",
+      "5": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

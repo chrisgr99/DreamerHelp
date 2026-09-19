@@ -1,0 +1,23 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-LFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "LFO.cpp:91 clamp(getPolyVoltage(c)/10,0,1)"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "LFO.cpp:82 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "why": "LFO.cpp:110 clamp(getPolyVoltage(c)/5,-1,1) for offset, or :98 clamp(getPolyVoltage(c)/10,0,1) when the menu points it at smoothing"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "LFO.cpp:117 clamp(getPolyVoltage(c)/10,0,1)"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "LFO.cpp:54 channels() reads getChannels() here; lfo_base.cpp:46 setFrequency() adds getVoltage(c) as volts per octave"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 0.01V", "step": "stepped", "why": "LFO.cpp:124 getPolyVoltage(c) into PositiveZeroCrossing, threshold 0.01f in dsp/signal.hpp:76"}
+    },
+    "outputs": {
+      "0": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "1": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "2": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "3": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "4": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "5": {"poly": true, "range": "±12V", "why": "LFO.cpp:149 and 157 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"}
+    }
+  },
+  "comment": "The OFFSET CV jack reads as an offset over -5 to 5V, or as a smoothing amount over 0-10V when the menu sends it to smoothing instead (LFO.cpp:98 and :110), so it has no single voltage range."
+}

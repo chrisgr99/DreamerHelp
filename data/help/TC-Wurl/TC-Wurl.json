@@ -1,0 +1,76 @@
+{
+  "plugin": "TC-Wurl",
+  "module": "TC-Wurl",
+  "description": "A physically modelled Wurlitzer 200A electric piano: sixteen voices of reed and electrostatic pickup through a preamp, power amp and speaker, then tremolo, auto-pan, chorus and a low-pass filter",
+  "params": [
+    {"ids": [0], "text": "Sets the master level on a squared taper; whether the panel envelope also shapes the amplitude is picked on this knob's own right-click menu"},
+    {"ids": [1], "text": "Scales the drive into the pickup's nonlinearity: below the midpoint it tames the per-key calibrated amount toward nothing, at the midpoint it is that amount, and fully up it is 1.5 times it"},
+    {"ids": [3], "text": "Sets the attack time of the panel envelope, 0.5ms at the left to 5 seconds at the right"},
+    {"ids": [4], "text": "Sets the decay time of the panel envelope, 5ms at the left to 5 seconds at the right"},
+    {"ids": [5], "text": "Sets the level the panel envelope holds while a note is held down, 0 to 100%"},
+    {"ids": [6], "text": "Sets the release time of the panel envelope, 5ms at the left to 5 seconds at the right"},
+    {"ids": [7], "text": "Trims the level into the preamp saturation stage, -12dB to +12dB, with the level compensated afterwards so the change is heard mostly as timbre"},
+    {"ids": [8], "text": "Sets the chorus LFO rate, 0.05Hz to 8Hz"},
+    {"ids": [9], "text": "Sets how far the chorus LFO sweeps its delay time, 0 to 100%"},
+    {"ids": [10], "text": "Sets the chorus delay time the LFO sweeps around, 1ms to 20ms"},
+    {"ids": [11], "text": "Mixes the chorus against the dry signal on an equal-power curve; at 0% the chorus is bypassed and costs no processing"},
+    {"ids": [12], "text": "Sets how deep the tremolo modulates the amplitude, 0 to 100%; at 0% the tremolo is off"},
+    {"ids": [13], "text": "Sets the tremolo rate: with CLOCK empty a free-running period from 0.05 seconds to 5 seconds, and with a clock patched one of fifteen ratios of it from /16 to x16"},
+    {"ids": [14], "text": "Sets how far the auto-pan swings the signal between the two outputs, 0 to 100%; at 0% both outputs carry the same level"},
+    {"ids": [15], "text": "Sets the auto-pan rate: with CLOCK empty a free-running period from 0.05 seconds to 5 seconds, and with a clock patched one of fifteen ratios of it from /16 to x16"},
+    {"ids": [16], "text": "Sets the cutoff of the low-pass filter the whole output runs through, 20Hz to 20000Hz"},
+    {"ids": [17], "text": "Sets the filter's Q, 0.5 at the left to 10 at the right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The pitch of each voice, read once as the gate for that channel rises and rounded to the nearest semitone; after the strike only BEND moves that note"},
+    {"ids": [1], "text": "A rising gate here strikes a note on that channel and a falling gate damps it; the number of channels patched here sets how many of the sixteen voices run"},
+    {"ids": [2], "text": "Sets how hard each note is struck, 0V for the softest strike and 10V for the hardest; with nothing patched every note strikes at full"},
+    {"ids": [3], "text": "A modulation voltage for the bark amount and for the reed drive, read per channel; each of those reads it only while its own menu is set to Mod input"},
+    {"ids": [4], "text": "A gate above 2V holds the notes that are playing, freezing the reed decay in Reed mode and holding the envelope's segment in Envelope mode; the notes damp when it falls"},
+    {"ids": [5], "text": "Bends every sounding note, with ±5V covering the full bend either way; how many semitones that is comes from this jack's own right-click menu"},
+    {"ids": [6], "text": "A clock here sets the period that T-RATE and P-RATE divide and multiply, measured from one rising edge to the next"},
+    {"ids": [7], "text": "Moves the filter cutoff, ±10V covering the whole sweep, and is read only while the FILT knob's modulation source is set to CV"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel, carrying the summed engine after the tremolo, auto-pan, chorus, low-pass filter and limiter, hard clamped to ±10V"},
+    {"ids": [1], "text": "The right channel, carrying the summed engine after the tremolo, auto-pan, chorus, low-pass filter and limiter, hard clamped to ±10V"}
+  ],
+  "notes": [
+    "no sound is made until a gate arrives at GATE; a pitch at V/OCT on its own starts nothing",
+    "the sixteen voices are summed inside the engine before any of the effects, so L and R carry one mixed signal rather than a polyphonic cable",
+    "MOD does nothing until the BARK knob's or the reed drive's modulation source is set to Mod input and its depth is moved off zero",
+    "the CV jack does nothing until the FILT knob's modulation source is set to CV and its Mod depth is moved off zero",
+    "the display draws the shape set by the A, D, S and R trimpots, with a dot tracking the first polyphonic channel's position along it",
+    "the reed drive, the velocity curve, the filter's keytrack and the two modulation depths are not on the panel; they are sliders on the module's menu and on the BARK and FILT knobs' menus"
+  ],
+  "menu": [
+    "Amp envelope source: Reed, Envelope — on the VOLUME knob's menu: Reed leaves each note's own reed decay to shape the tail, Envelope multiplies the whole output by the panel envelope",
+    "Modulation source: Envelope, Mod input — on the BARK knob's menu: picks whether the panel envelope or the voltage at MOD moves the bark amount",
+    "Modulation depth — a slider on the BARK knob's menu, -100% to +100%, setting how far the chosen source moves the bark amount",
+    "Modulation source: Envelope, CV — on the FILT knob's menu: picks whether the panel envelope or the voltage at the CV jack moves the cutoff",
+    "Mod depth — a slider on the FILT knob's menu, -100% to +100%, setting how far the chosen source moves the cutoff",
+    "Keytrack — a slider on the FILT knob's menu, 0 to 100%; at 100% the cutoff follows the average pitch of the held notes at one octave per volt",
+    "Bend range: ±2 semitones, ±5 semitones, ±7 semitones, ±12 semitones — on the BEND jack's menu: sets how far ±5V at that jack bends",
+    "Velocity curve: Parabolic, Exponential — Parabolic raises the incoming velocity to a power of 1 to 4, Exponential to a power of 1 down to 0.25, and the slider under them sets how far",
+    "(connect VEL input to enable) — printed where the velocity slider would be when VEL has no cable, and the two curve choices are greyed out while it shows",
+    "Reed drive (gnarl): Envelope, Mod input — picks whether the panel envelope or the voltage at MOD raises the reed level going into the pickup",
+    "Reed drive — a slider setting the reed level into the pickup, one times at the left and four times at the right",
+    "Mod depth — a slider on the module's menu, 0 to 100%, setting how much the chosen source adds to the reed drive"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 2V · stepped · polyphonic\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads the hardest strike; a negative voltage does nothing here.",
+      "3": "±5V · continuous · polyphonic",
+      "4": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "±5V · continuous · one channel only\n\nunpatched it reads no bend.",
+      "6": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "7": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only",
+      "1": "±10V · continuous · one channel only"
+    }
+  }
+}

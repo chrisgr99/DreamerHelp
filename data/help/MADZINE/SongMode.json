@@ -1,0 +1,44 @@
+{
+  "plugin": "MADZINE",
+  "module": "SongMode",
+  "description": "Eight-way switch that plays its inputs in an order you type in, giving each one a length in clocks, with a crossfade at the changeover and a trigger when each turn begins",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Sets how many clocks this row plays for before the order moves on, 1 to 64"},
+    {"ids": [8, 9, 10, 11, 12, 13, 14, 15], "text": "Starts counting clocks on the first press and writes that count into this row's length knob on the second; the lamp on it is lit while it is counting"},
+    {"ids": [16], "text": "Sets how many clocks before the changeover the crossfade starts, 0 to 16; at 0 the crossfade starts at the changeover itself"},
+    {"ids": [17], "text": "Sets how long the crossfade takes, 0ms to 1000ms; at 0 the switch is instant"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V counts one clock towards the length of the input now playing, and towards any length being learned"},
+    {"ids": [1], "text": "A rising edge above 1V returns to the start of the typed order and cancels any learning in progress"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "The signal that is passed to the output while this row's turn comes round"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Whatever the row now playing is being fed, crossfaded with the row before it while a fade is running"},
+    {"ids": [1, 2, 3, 4, 5, 6, 7, 8], "text": "A one-millisecond trigger at 10V at the moment this row's turn begins"}
+  ],
+  "notes": [
+    "type the order into the black strip below the clock jacks: digits 1 to 8 in any arrangement, spaces and commas allowed, and a hyphen for a range, so 1-4 stands for 1, 2, 3, 4.",
+    "an empty strip plays all eight rows in turn.",
+    "nothing moves on until a clock reaches CLK. The output carries whatever the first row in the order is being fed until then.",
+    "the crossfade only happens where the next row is a different one; a row named twice over carries straight on."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped"
+    }
+  }
+}

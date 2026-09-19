@@ -1,0 +1,48 @@
+{
+  "plugin": "DigitalAtavism",
+  "module": "Hit",
+  "description": "An 8-bit hit voice: one oscillator crossfading between a pulse wave, a falling sawtooth and pitched noise, with a pitch bend and a pair of filters",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch, from 54 semitones below C4 at 261.63Hz to 54 semitones above it"},
+    {"ids": [1], "text": "Bends the pitch across the note, upwards as it is turned up and downwards as it is turned down; the amount follows the cube of the setting, so small settings do very little"},
+    {"ids": [2], "text": "Crossfades the oscillator from a pulse wave at its minimum, through a falling sawtooth and then pitched noise, and back to the pulse wave at its maximum"},
+    {"ids": [3], "text": "Sets the width of the pulse wave, from 1% to 99%"},
+    {"ids": [4], "text": "Sets how long the envelope holds at full level before the release begins, from 1ms to 250ms"},
+    {"ids": [5], "text": "Sets how long the envelope takes to fall in a straight line from full level to nothing, from 0ms to 250ms"},
+    {"ids": [6], "text": "Sets the corner of the high-pass filter at the output; at 0% the filter is out of the signal path altogether"},
+    {"ids": [7], "text": "Opens the low-pass filter at the output; at 0% the filter is almost shut and very little gets through, and at 100% it is at its widest"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the pitch set by FREQ at one volt per octave, read at the moment the trigger arrives"},
+    {"ids": [1], "text": "Adds to the bend set by SLIDE, a tenth of its travel per volt, read at the moment the trigger arrives"},
+    {"ids": [2], "text": "Adds to the crossfade set by BLND, three tenths of its travel per volt"},
+    {"ids": [3], "text": "Adds to the width set by PW, a tenth of its travel per volt"},
+    {"ids": [4], "text": "Doubles the time set by HOLD per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [5], "text": "Doubles the time set by REL per volt and halves it per volt below zero, read at the moment the trigger arrives"},
+    {"ids": [6], "text": "Starts a note when it rises past 2V, and has to fall back below 0.1V before another note can start"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope as a voltage from 0V to 10V, quantised to 127 steps"},
+    {"ids": [1], "text": "The voice, quantised to 127 steps and clipped at 5V either way"}
+  ],
+  "notes": [
+    "LPF comes up at 0%, which closes the low-pass filter almost completely and leaves next to nothing at the output. Turn it up before expecting to hear anything.",
+    "With nothing patched into TRIG the envelope is held wide open and the oscillator drones. It only shapes the sound once a trigger cable is in.",
+    "The pitch, the bend, the hold, the release and both filter settings are read once, at the moment TRIG fires; moving those controls during a note has no effect until the next one."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "bipolar · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only",
+      "6": "unipolar · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

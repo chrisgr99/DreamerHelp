@@ -1,0 +1,46 @@
+{
+  "plugin": "unless_modules",
+  "module": "markov",
+  "description": "A melody generator that learns which note follows which from what you play it, then walks that map to make new melodies of the same shape",
+  "params": [
+    {"ids": [0], "text": "Switches learning on and off; while it is on, a gate at the gate input adds the note at the cv input to the map"},
+    {"ids": [1], "text": "Removes the note the module is on from the map, with every link into it"},
+    {"ids": [2], "text": "Sets how closely the next note follows what was taught: at -1 the most frequent follower every time, at 0 the taught proportions, and towards +1 the rarer followers and jumps elsewhere in the map"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A gate here switches learning on and off, adding to whatever the record button is set to"},
+    {"ids": [1], "text": "A gate here removes the note the module is on from the map, with every link into it"},
+    {"ids": [2], "text": "Adds to the randomness knob, a tenth of a unit per volt over its travel from -1 to 1"},
+    {"ids": [3], "text": "The note to learn or to jump to, as a 1V/octave pitch"},
+    {"ids": [4], "text": "A gate marks a note at the cv input: while learning it is added to the map, and otherwise the module jumps to the learned note nearest it"},
+    {"ids": [5], "text": "A rising edge moves on to a next note, drawn from the notes that were played after the current one"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The note the module is on, as a 1V/octave pitch"},
+    {"ids": [1], "text": "A gate that is high whenever the trigger input is high, and drops for the single sample a trigger arrives on so that each new note reads as a new gate"}
+  ],
+  "notes": [
+    "the map starts empty, so the module puts out nothing until you switch learning on and play notes into the cv and gate inputs.",
+    "the grid above the knob shows every note learned so far with the current one picked out; it cannot be edited.",
+    "the learned map is saved with the patch."
+  ],
+  "menu": [
+    "dehumanize — draws the panel plain instead of as a figure",
+    "face wiggle — lets the drawn face move as the randomness setting changes",
+    "never change clothes — keeps the drawn figure's clothing fixed"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "1V per octave · stepped · one channel only",
+      "4": "high above 0.1V · stepped · one channel only",
+      "5": "high above 0.1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "stepped · one channel only"
+    }
+  }
+}

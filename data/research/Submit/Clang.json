@@ -1,0 +1,19 @@
+{
+  "plugin": "Submit",
+  "module": "Clang",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "step": "stepped", "negative": "ignored", "why": "Clang.cpp:654 puts getVoltage through a Schmitt trigger set to 0.1V and 2V"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "Clang.cpp:397-404 uses isConnected, clamps getVoltage to 0V to 10V and picks the index from it, ignoring the knob"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "Clang.cpp:397-404 uses isConnected, clamps getVoltage to 0V to 10V and picks the index from it, ignoring the knob"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Clang.cpp:669 uses isConnected; Clang.cpp:670 divides getVoltage by 10, adds it to the knob and clamps the total to 0 to 1"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "Clang.cpp:472 adds getVoltage to the TUNE knob as octaves, read only inside triggerVoice; Clang.cpp:481 clamps the resulting frequency to 22Hz to 18000Hz"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Clang.cpp:661 divides getVoltage by 10, adds it to the knob and clamps the total to 0 to 1"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Clang.cpp:667 divides getVoltage by 10, adds it to the knob and clamps the total to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "Clang.cpp:1206 clamps the sum to -10V to 10V and sets one channel"}
+    }
+  },
+  "comment": "The Model and Sounds CV inputs do not offset their knobs, they override them: readSnapParam at Clang.cpp:397-404 uses the knob only when the input is unpatched, and otherwise derives the index from 0V to 10V alone. The manual lists them as 'Model CV and Sounds CV' without saying that.\n\nIn the FM engine the knob positions are remapped through clangFmModelOrder (Clang.cpp:31, 637-638), so turning Model gives Ping, Ratio, Bell, Phase, Stack, Bits, Fault, Arc rather than the declared order; the maker's comment says Arc was deliberately moved to the last position.\n\nTune, Tune Variation and the Tune input are all read inside triggerVoice (Clang.cpp:472-481), so they only affect hits fired after they are moved. Decay, Noise, Motion and Body are read every sample and do change a hit that is already ringing.\n\nBody and Tune Variation have no CV input; the manual does not distinguish them from the controls that do.\n\nEight voices are held (Clang.cpp:20) and a new trigger takes the one with the lowest combined envelope energy (Clang.cpp:381-395)."
+}

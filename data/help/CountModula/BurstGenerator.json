@@ -1,0 +1,47 @@
+{
+  "plugin": "CountModula",
+  "module": "BurstGenerator",
+  "description": "Fires a burst of 1 to 16 pulses each time it is triggered, timed by its own clock or by one you patch in",
+  "params": [
+    {"ids": [0], "text": "Sets how many pulses make up the burst, 1 to 16"},
+    {"ids": [1], "text": "Sets the rate of the internal clock: 1Hz to 32Hz with RANGE at S, and 16Hz to 1024Hz with RANGE at F"},
+    {"ids": [2], "text": "Sets how far the rate voltage moves the internal clock, and in which direction; at full travel each volt doubles or halves the rate"},
+    {"ids": [3], "text": "F runs the internal clock from 16Hz to 1024Hz, S from 1Hz to 32Hz"},
+    {"ids": [4], "text": "ON lets a new trigger interrupt a burst and start it again; OFF makes a trigger take effect only once the burst has finished"},
+    {"ids": [5], "text": "Sets how far the pulse count voltage moves the number of pulses, and in which direction; at full travel 10V covers the whole 1 to 16 range"},
+    {"ids": [6], "text": "Starts a burst as though a trigger had arrived"},
+    {"ids": [7], "text": "Sets the chance of each pulse in the burst firing, 100% fully clockwise and falling as it is turned back; a pulse that does not fire is counted towards the total anyway"},
+    {"ids": [8], "text": "Sets how far the probability voltage moves the chance of a pulse firing, and in which direction, from -1 to +1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes an outside clock in place of the internal one; the burst then starts on the next rising edge here rather than at the trigger"},
+    {"ids": [1], "text": "Moves the rate of the internal clock, by the amount and direction set on the rate attenuverter"},
+    {"ids": [2], "text": "A rising edge here starts a burst"},
+    {"ids": [3], "text": "Moves the number of pulses in the burst, by the amount and direction set on the pulse count attenuverter"},
+    {"ids": [4], "text": "Moves the chance of each pulse firing, by the amount and direction set on the probability attenuverter"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pulses of the burst at 10V, each one as wide as the clock pulse that produced it"},
+    {"ids": [1], "text": "A 1ms 10V trigger at the start of each burst"},
+    {"ids": [2], "text": "10V from the start of the burst until the end of its last pulse"},
+    {"ids": [3], "text": "A 1ms 10V trigger when a burst finishes"}
+  ],
+  "notes": [
+    "SX-CV8, SX-OUT8 and SX-TRIG8 add outputs to this module when one is placed immediately to its right; there is no menu entry here that adds one for you"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only",
+      "1": "±10V · continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "±10V · continuous · one channel only",
+      "4": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped"
+    }
+  }
+}

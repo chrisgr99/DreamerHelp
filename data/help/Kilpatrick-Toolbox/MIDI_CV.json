@@ -1,0 +1,37 @@
+{
+  "plugin": "Kilpatrick-Toolbox",
+  "module": "MIDI_CV",
+  "description": "Converts a vMIDI stream to three control voltages, either as one voice of note pitch, gate and velocity or as three chosen controller numbers",
+  "params": [
+    {"ids": [0], "text": "Starts learning; in the note modes the next channel message to arrive sets the receive channel, and in CC mode each press steps to the next output, whose lamp flashes until a controller moves"},
+    {"ids": [1], "text": "Chooses which of the three voices this module converts when MODE is at PLY, 1 being the first voice; it does nothing at MNO or CC"},
+    {"ids": [2], "text": "Chooses what the three outputs carry: MNO converts notes one at a time with last-note priority, PLY converts one voice of a three-voice chord, CC converts three chosen controller numbers"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Takes the vMIDI stream converted to voltages here"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The pitch of the note, one volt per octave with note 60 at 0V and pitch bend added; in CC mode the first learned controller instead, -5V at 0 to 5V at 127"},
+    {"ids": [1], "text": "10V while a note is held and 0V once it is released, with the damper pedal holding it up; in CC mode the second learned controller instead, -5V at 0 to 5V at 127"},
+    {"ids": [2], "text": "The velocity of the note, -5V at 0 rising to 5V at 127; in CC mode the third learned controller instead, over the same range"}
+  ],
+  "notes": [
+    "notes below 12 or above 115 are thrown away before anything is converted",
+    "for three-voice polyphony put three of these side by side, set MODE to PLY on all of them, feed them the same vMIDI stream and give each a different VOICE setting",
+    "learning gives up 4 seconds after the button is pressed if nothing arrives; the maker's comment beside that timeout says 2 seconds and is wrong",
+    "pitch and gate are smoothed with a 0.1ms time constant and the CC outputs with a 10ms one, so a CC output slews to each new value"
+  ],
+  "menu": [
+    "Pitch Bend Range — sets how far a full pitch bend moves the pitch output, the choices reading 1 semitones through 12 semitones; a new module comes up at 2"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "one channel only"
+    },
+    "outputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "one channel only"
+    }
+  }
+}

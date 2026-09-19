@@ -1,0 +1,14 @@
+{
+  "plugin": "Autinn",
+  "module": "Geiger",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Geiger.cpp:84 takes getChannels() on this input and Geiger.cpp:119 reads channel c with getPolyVoltage into a dsp::SchmittTrigger, whose default high threshold is 1V"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "Geiger.cpp:85 takes getChannels() on this input and Geiger.cpp:126 reads channel c with getPolyVoltage, multiplies it by 0.1 and Geiger.cpp:128 clamps the knob-plus-input sum to 0 to 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "Geiger.cpp:86 sets this output's channel count from the larger of the two inputs"}
+    }
+  },
+  "comment": "The radiation level is 0.02 times 2500 to the power of the knob (Geiger.cpp:129, :62 to :64), so 0.02 to 50 milliroentgen an hour. 21.666Hz per milliroentgen an hour is at Geiger.cpp:58, the five-sample pulse at Geiger.cpp:143, the 1250Hz lowpass at Q 2.25 and the 150Hz highpass at Geiger.cpp:88 to :90. Three knobs for the filter frequencies and Q are present but commented out, and the fixed values above replace them. Each polyphonic channel rolls its own clicks, so a polyphonic patch gives independent counters rather than copies."
+}

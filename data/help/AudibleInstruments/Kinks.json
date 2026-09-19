@@ -1,0 +1,36 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Kinks",
+  "description": "Three utility sections: an inverter with two rectifiers, an analogue maximum and minimum, and a sample and hold with its own noise source",
+  "inputs": [
+    {"ids": [0], "text": "The signal the inverter and the two rectifiers work on"},
+    {"ids": [1, 2], "text": "One of the two signals the logic section compares; an unpatched input counts as 0V, so a single signal has its positive half on MAX and its negative half on MIN"},
+    {"ids": [3], "text": "The signal the sample and hold reads; with nothing patched here it samples the internal noise source, giving a random voltage at each trigger"},
+    {"ids": [4], "text": "A rising edge past 0.7V makes the sample and hold take a fresh reading"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The input signal with its sign flipped"},
+    {"ids": [1], "text": "The input signal with everything below 0V clipped away"},
+    {"ids": [2], "text": "The size of the input signal with its sign discarded, the negative half folded upwards, which doubles the frequency of a symmetrical wave"},
+    {"ids": [3], "text": "The greater of the logic section's two inputs, which for gate signals is an OR"},
+    {"ids": [4], "text": "The lesser of the logic section's two inputs, which for gate signals is an AND"},
+    {"ids": [5], "text": "White noise with a bell-shaped distribution, mostly within -2V to 2V"},
+    {"ids": [6], "text": "The voltage read at the last trigger, held until the next one"}
+  ],
+  "notes": [
+    "the module is monophonic: on a polyphonic cable only the first channel is read, and every output carries one channel.",
+    "this module has no right-click menu of its own."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "continuous · one channel only",
+      "3": "continuous · one channel only\n\nunpatched it reads the module's own white noise.",
+      "4": "high above 0.7V · stepped · one channel only"
+    },
+    "outputs": {
+      "5": "±2V · continuous"
+    }
+  }
+}

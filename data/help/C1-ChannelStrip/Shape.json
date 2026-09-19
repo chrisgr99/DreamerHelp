@@ -1,0 +1,47 @@
+{
+  "plugin": "C1-ChannelStrip",
+  "module": "Shape",
+  "description": "Stereo noise gate for the C1 channel strip, with a hold time, a transient boost, an external key input and a waveform display",
+  "params": [
+    {"ids": [0], "text": "Passes the input straight to the output and takes the gate out of circuit; the lamp beside it is lit while that is on"},
+    {"ids": [1], "text": "Sets the level the signal has to reach for the gate to open, marked -60dB to 0dB, which is really a threshold of 0V to 4V, or 0V to 8V with the menu set to the 10V reference"},
+    {"ids": [2], "text": "Silences the signal completely once the gate closes; with it off the gain falls away as the square of the level over the threshold instead, so quiet material is ducked rather than cut"},
+    {"ids": [3], "text": "Sets how long the gate takes to close after the hold time runs out, 0.1 seconds to 4 seconds, with the shape of the fall chosen on the menu"},
+    {"ids": [4], "text": "Holds the gate open for this long after the signal drops below the threshold, 0ms to 300ms, and every fresh crossing of the threshold restarts it"},
+    {"ids": [5], "text": "Adds a short boost on each opening of the gate, 0% to 100%, doubling the gain at 100% and decaying away over about 15ms; the maker's README calls this an attack control, which it is not"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left input, and the source for the right channel as well while the right input is unpatched"},
+    {"ids": [1], "text": "The right input; with nothing patched here the left input feeds this channel too"},
+    {"ids": [2], "text": "Patching anything here makes it the signal the gate opens and closes on, for both channels, in place of the audio being gated; the audio itself is unaffected by what this jack carries"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel after gating"},
+    {"ids": [1], "text": "The right channel after gating"}
+  ],
+  "notes": [
+    "The row of red lamps under the display shows how much gain the gate is taking away, 6dB per lamp, with all of it removed at the left and none at the right.",
+    "The four small squares above the display choose how long a stretch of signal it draws: BEAT, ENV, BAR and PHRASE, shortest to longest. The name of the one in use is printed beside them.",
+    "The small square at the top right of the display turns the drawing off.",
+    "Each jack carries one channel, so a polyphonic cable is reduced to its first channel.",
+    "SH-X adds voltage control of the threshold, the hold time, the release and the hard gate switch, and has to be placed immediately to the right of this module.",
+    "With the threshold at its lowest and the hold time at zero, which is how the module is added, the gate opens on any signal at all and the module passes audio unchanged."
+  ],
+  "menu": [
+    "Attack — a slider setting how fast the gate opens, 0.1ms to 25ms, printed as Auto (0.1ms) at the bottom of its travel",
+    "Release Curves: Linear (Default), Exponential, Logarithmic, SSL G-Series, DBX 160X, Drawmer DS201 — chooses the shape of the fall that RELEASE times",
+    "Threshold Reference: 5V Reference (Subtle), 10V Reference (Prominent) — sets the voltage the GATE knob's dB scale maps onto; the 10V setting doubles the threshold at every knob position",
+    "VU Meter Mode: Dot, Bar — chooses whether the row of red lamps under the display shows one lamp or fills from the left"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only\n\nunpatched it reads the left input.",
+      "2": "continuous · one channel only\n\nunpatched it reads the jack being gated."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

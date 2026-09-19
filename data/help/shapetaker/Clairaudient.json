@@ -1,0 +1,68 @@
+{
+  "plugin": "shapetaker",
+  "module": "Clairaudient",
+  "description": "Two sigmoid oscillators with a pitch-locked formant modulator inside each waveform, crossfaded and spread across the stereo field, with cross sync and a reverse sync that can be made probabilistic",
+  "params": [
+    {"ids": [0], "text": "Tunes the V oscillator in whole octaves, two either way, and the menu can free it for a continuous sweep"},
+    {"ids": [1], "text": "Tunes the Z oscillator in semitones, two octaves either way, and the menu can free it for a continuous sweep"},
+    {"ids": [2, 3], "text": "Detunes that oscillator by up to 20 cents either way"},
+    {"ids": [4], "text": "Attenuates and inverts the formant depth jack before it moves the depth knob"},
+    {"ids": [5], "text": "Attenuates and inverts the stereo width jack before it moves the width knob"},
+    {"ids": [6, 7], "text": "Sweeps that oscillator's sigmoid curve from a soft ramp to a sharp square-like edge, the morph finishing in roughly the first half of the travel; in PWM mode it sets the pulse width from 5% to 95%"},
+    {"ids": [8, 9], "text": "Attenuates and inverts the shape jack for that oscillator before it moves the shape knob"},
+    {"ids": [10], "text": "Mixes the two oscillators at the output stage, all V at one end and all Z at the other"},
+    {"ids": [11], "text": "Attenuates and inverts the crossfade jack before it moves the crossfade knob"},
+    {"ids": [12], "text": "Makes the V oscillator reset the phase of the Z oscillator at each of its own cycles"},
+    {"ids": [13], "text": "Chooses the reverse sync: off, on, where each V cycle flips the direction the Z oscillator runs in, or mutual, where Z flips V in return"},
+    {"ids": [14], "text": "Sets how far the formant modulator bends the sigmoid curve inside each cycle; at zero the waveform is plain, and the character opens up from the middle of the travel upwards"},
+    {"ids": [15], "text": "Sets the formant modulator's speed as a multiple of the oscillator's own pitch, stepped through eight ratios from half up to seven"},
+    {"ids": [16], "text": "Skews the wave's symmetry, pouring even harmonics into an otherwise hollow symmetric wave; in PWM mode it skews the trajectory of the pulse-width modulation instead"},
+    {"ids": [17], "text": "Sets the stereo width from a true mono collapse at the bottom, through natural stereo at the middle, to twice that at the top, where the formant motion in the two channels runs fully out of phase"},
+    {"ids": [18], "text": "Attenuates and inverts the flip chance jack before it moves the chance knob"},
+    {"ids": [19], "text": "Sets how often a reverse sync flip actually happens: every time at the top, and progressively at random below that"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of the V oscillator, a volt to the octave"},
+    {"ids": [1], "text": "Sets the pitch of the Z oscillator, a volt to the octave; unpatched it follows the V pitch jack, and a narrower polyphonic cable leaves the uncovered voices following their V partners"},
+    {"ids": [2], "text": "Moves the formant depth, 10V at full attenuation covering the whole range, and the total is clamped"},
+    {"ids": [3], "text": "Moves the stereo width, 10V at full attenuation sweeping the whole mono-to-wide range"},
+    {"ids": [4, 5], "text": "Moves that oscillator's shape, and audio-rate signals are fair game here"},
+    {"ids": [6], "text": "Moves the crossfade between the two oscillators"},
+    {"ids": [7], "text": "Moves the reverse sync flip chance, 10V at full attenuation covering the whole range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel of the pair"},
+    {"ids": [1], "text": "The right channel of the pair; for mono work take the left jack alone, or set the width to zero"}
+  ],
+  "notes": [
+    "it makes sound as soon as it is added to a patch, with the formant section already at work; a pitch cable is an addition rather than a requirement",
+    "the formant modulator tracks each oscillator's own pitch, so its character survives transposition; a nearly pure sawtooth gives it little to bend, so raise the shape knobs to the middle",
+    "the voice count follows the widest cable patched to any input, and both outputs carry that count; each voice pairs channel n of one pitch jack with channel n of the other",
+    "the screen draws either the left output against the right as a Lissajous figure or a triggered trace of the left output with the right ghosted behind it"
+  ],
+  "menu": [
+    "Quantize — frees the V octave control or the Z semitone control, or both, for continuous sweeps in place of their stepped behaviour",
+    "Oscilloscope Display — chooses between the Lissajous plot of left against right and a triggered waveform trace",
+    "Waveform — chooses the morphing sigmoid sawtooth or a band-limited pulse wave, which changes what the shape, depth and asymmetry controls do",
+    "Crossfade Curve — chooses an equal-power blend or a stereo swap where the two oscillators cross the field and trade sides",
+    "Oversampling — sets the internal rate at 1, 2, 4 or 8 times, the higher settings costing processor time and cleaning up mutual reverse sync and fast shape modulation",
+    "Vintage — sets how much thermal drift, per-voice component tolerance, crosstalk and bus saturation the module shows, 50% being the calibrated amount",
+    "Oscillator Noise — adds a hardware-like noise floor and tiny phase jitter that softens the waveform edges"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the V pitch jack.",
+      "2": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "5": "0 to 5V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "6": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "plugin": "CVfunk",
+  "module": "Weave",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "why": "Weave.cpp:510 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "why": "Weave.cpp:532 reads it with getVoltage, so only channel 1, into a Schmitt trigger"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Weave.cpp:500 reads it with getVoltage, so only channel 1, adds the knob and rounds to a whole pattern number"},
+      "3": {"family": "pitch", "poly": true, "step": "continuous", "range": "1V per octave", "negative": "swings", "why": "Weave.cpp:303 takes getChannels() on this input and Weave.cpp:369 reads each channel as one of the six notes; Weave.cpp:316 reads channel one as the root when the cable carries a single channel"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "negative": "swings", "normal": "0V", "why": "Weave.cpp:412 reads it with getVoltage, so only channel 1, and Weave.cpp:413 rounds twelve times it to a chord number, wrapping into 0 to 15"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Weave.cpp:562 reads it with getVoltage, so only channel 1, and adds it to the transpose knob"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Weave.cpp:555 writes one channel with setVoltage, 10V for a one-millisecond pulse"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "Weave.cpp:288 sets six channels on this output and Weave.cpp:571 writes one note per channel"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Weave.cpp:578 writes one channel with setVoltage, clamped to -10 to 10V"},
+      "3": {"family": "pitch"},
+      "4": {"family": "pitch"},
+      "5": {"family": "pitch"},
+      "6": {"family": "pitch"},
+      "7": {"family": "pitch"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "Weave.cpp:596 writes one channel with setVoltage, clamped to -10 to 10V"}
+    }
+  },
+  "comment": "The individual note jacks are written only when a cable is present (Weave.cpp:577), and each note is routed to the jack its permutation names rather than to its own, so the six jacks swap contents as the weave advances. The polyphonic output does the same thing by channel."
+}

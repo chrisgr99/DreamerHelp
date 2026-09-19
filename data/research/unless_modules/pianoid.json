@@ -1,0 +1,15 @@
+{
+  "plugin": "unless_modules",
+  "module": "pianoid",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "pianoid.cpp:201 reads this input with getChannels and pianoid.cpp:158 reads each channel with getVoltage"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 0V", "normal": "every note counts as held", "why": "pianoid.cpp:202 reads this input with getChannels; pianoid.cpp:223-226 tests each channel against 0V and holds every note when it is unpatched"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "pianoid.cpp:148 sets this output's channel count"},
+      "1": {"family": "trigger", "poly": true, "why": "pianoid.cpp:149 sets this output's channel count"}
+    }
+  },
+  "comment": "The update cycle menu item writes to a SampleDivider that pianoid never steps: divider is declared, reset and saved (pianoid.cpp:92, 119, 373) but divider.step() is never called, so the setting has no effect on this module. The offset and range parameters share one XY drag bar and one position, so both are tagged to their own line."
+}

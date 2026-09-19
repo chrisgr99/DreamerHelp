@@ -1,0 +1,17 @@
+{
+  "plugin": "Biset",
+  "module": "Biset-Tree-Seed",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "TreeSeed.cpp:90-91 reads this input with getVoltage, multiplies it by the attenuverter and adds it to the knob, which itself covers -5 to +5V"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "TreeSeed.cpp:134-136 writes 10V times a pulse or a gate; line 78 sets the channel count from the Polyphony setting"},
+      "1": {"family": "pitch", "poly": true, "why": "TreeSeed.cpp:135 writes the Tree's second output rescaled by the Range setting at lines 104-134; line 79 sets the channel count"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "why": "TreeSeed.cpp:136-137 copies the Tree's third output, which Tree.cpp:173 clamps to ±5V; line 80 sets the channel count"},
+      "3": {"family": "cv", "poly": true, "range": "±5V", "why": "TreeSeed.cpp:138-139 copies the Tree's fourth output, which Tree.cpp:173 clamps to ±5V; line 81 sets the channel count"},
+      "4": {"family": "cv", "poly": true, "range": "±5V", "why": "TreeSeed.cpp:140-141 copies the Tree's fifth output, which Tree.cpp:173 clamps to ±5V; line 82 sets the channel count"}
+    }
+  },
+  "comment": "The expander check is on the left side only and is by model slug (TreeSeed.cpp:147-152), so the module has to be directly right of Biset-Tree and nothing else will do. The Range, Gate and Polyphony parameters have no widgets on the panel and live only on the right-click menu. The manual points out that the threshold is not a density control, because the Tree's values are not evenly distributed; the code confirms it is a plain comparison against the Tree's first output."
+}

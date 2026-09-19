@@ -1,0 +1,35 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Combverb",
+  "description": "A reverb built from eight comb filters and two allpass filters, with enough feedback on offer to make it ring on by itself",
+  "params": [
+    {"ids": [0], "text": "Sets the length of the reverb tail; the tooltip reads as a percentage, 0.1 seconds at 0% and 30 seconds approaching 100%, and above 100% the tail grows instead, reaching 24dB per second at 150%"},
+    {"ids": [1], "text": "A lowpass filter in the feedback path of each comb filter, sweeping from 18000Hz fully counter-clockwise down to 200Hz fully clockwise, so the tail loses its high end sooner as it is turned up"},
+    {"ids": [2], "text": "Crossfades the dry input against the reverb, dry alone fully counter-clockwise and reverb alone fully clockwise"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio the reverb works on, and the dry half of what the MIX knob crossfades"},
+    {"ids": [1], "text": "Modulates the tail length, 10V covering the whole sweep of the FEEDBACK knob, and the knob and voltage are added and then clamped to the knob's own range"},
+    {"ids": [2], "text": "Modulates the damping, 10V covering the whole sweep of the DAMP knob, and the knob and voltage are added and then clamped to the knob's own range"},
+    {"ids": [3], "text": "Modulates the balance, 10V covering the whole sweep of the MIX knob, and the knob and voltage are added and then clamped to the knob's own range"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The dry input and the reverb mixed together, clamped between -10V and 10V"}
+  ],
+  "notes": [
+    "one channel in and one channel out; a polyphonic cable into the audio input is reduced to its first channel",
+    "with FEEDBACK above the 100% mark the reverb keeps building with nothing patched into the audio input, and a tanh saturator inside each comb filter is what stops it running away",
+    "the feedback and damping settings are recalculated once every 16 samples rather than every sample, so fast modulation of either CV input is smoothed out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "±10V · continuous · one channel only"
+    }
+  }
+}

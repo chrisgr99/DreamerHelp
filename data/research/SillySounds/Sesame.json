@@ -1,0 +1,16 @@
+{
+  "plugin": "SillySounds",
+  "module": "Sesame",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Sesame.cpp:115 passes getVoltage() — one channel — through a rack::dsp::SchmittTrigger, whose Rack 2 defaults take the edge above 1V and re-arm below 0V; src/Sesame.cpp:94 wraps the whole of the processing in isConnected() on this jack"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "0 to 1V", "why": "src/Sesame.cpp:152-154 reads getVoltage() — one channel — divides it by 10, multiplies by the swing mod knob's -1 to +1 and adds it to the %gap knob divided by 100, then clamps the total to 0 and 1"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "negative": "ignored", "normal": "0V", "why": "src/Sesame.cpp:97 takes the channel count from this jack and REPEATMOD, and src/Sesame.cpp:165 reads it with getPolyVoltage(c) inside that loop through a rack::dsp::SchmittTrigger, whose Rack 2 defaults take the edge above 1V"},
+      "3": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "swings", "normal": "0V", "sumRange": "1 to 8V", "why": "src/Sesame.cpp:97 takes the channel count from this jack, and src/Sesame.cpp:168-172 reads getPolyVoltage(c), divides by 10, multiplies by the dupe mod knob and by 8, adds the mult knob, clamps to 1 and 8 and floors the result"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/Sesame.cpp:213 writes with setVoltage(v, c) over the channel loop and src/Sesame.cpp:219 calls setChannels(channels); the value at src/Sesame.cpp:186 and src/Sesame.cpp:194 is 10 minus a multiple of 10, so 0V or 10V"}
+    }
+  },
+  "comment": "The panel prints mult where the maker's README calls the same knob freq; the panel name is used here.\n\nThe README's hint for the trig input — hold a constant 10V to divide every beat — is contradicted by the code. toggleTrigger is a rack::dsp::SchmittTrigger and fires only on a rise, while src/Sesame.cpp:127 refills parRepeat with 1 on every clock rise. A held voltage therefore divides one beat and no more.\n\ntoggleTrigger is a single scalar Schmitt trigger processed once per channel inside the loop at src/Sesame.cpp:163-165, so its armed state is shared by every channel of trig. The maker's plugin.json calls the division triggering polyphonic; the count per channel is genuinely separate, the edge detection is not.\n\nparRepeat is declared without an initialiser at src/Sesame.cpp:75 and is only filled on the first clock rise, so before any clock arrives its contents are whatever the allocation held.\n\nNo module in this plugin has a context menu of its own. The light and dark panel choice is Rack's own, shared by all three."
+}

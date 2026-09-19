@@ -1,0 +1,72 @@
+{
+  "plugin": "MADZINE",
+  "module": "Launchpad",
+  "description": "An eight by eight grid of loop recorders, one row per input, with one cell of a row playing at a time, scene buttons that fire a whole column, and a small mixer with two send buses",
+  "params": [
+    {"ids": [0], "text": "Chooses whether a click on a cell takes effect at once or is held back to a clock boundary: Free, or every 1, 8, 16, 32 or 64 clocks"},
+    {"ids": [1], "text": "Stops every playing cell, and cancels anything waiting to start"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "Fires every cell in that column at once: the ones with a recording play, and the empty ones stop whatever is playing in their row"},
+    {"ids": [10, 14, 18, 22, 26, 30, 34, 38], "text": "Sets how much of that row goes to the A send, 0 to 1, after its level and pan"},
+    {"ids": [11, 15, 19, 23, 27, 31, 35, 39], "text": "Sets how much of that row goes to the B send, 0 to 1, after its level and pan"},
+    {"ids": [12, 16, 20, 24, 28, 32, 36, 40], "text": "Places that row in the stereo mix, fully left at the bottom of its travel and fully right at the top"},
+    {"ids": [13, 17, 21, 25, 29, 33, 37, 41], "text": "Sets that row's level, 0 to 1, before the pan, the sends and the mix"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V counts one clock; the quantise setting counts in these, and the length of a recorded loop is measured in them"},
+    {"ids": [1], "text": "A rising edge above 1V puts the clock count back to zero and restarts every playing cell from its beginning"},
+    {"ids": [2, 3, 4, 5, 6, 7, 8, 9], "text": "A rising edge above 1V fires that column, as pressing its button does"},
+    {"ids": [10], "text": "A rising edge above 1V stops every playing cell"},
+    {"ids": [11, 12, 13, 14, 15, 16, 17, 18], "text": "The signal that a cell in that row records; it is the only source that row can record from"},
+    {"ids": [19], "text": "A signal added straight into the left mix output, untouched by anything else on this panel"},
+    {"ids": [20], "text": "A signal added straight into the right mix output, untouched by anything else on this panel"},
+    {"ids": [21], "text": "A signal added straight into the left mix output, untouched by anything else on this panel"},
+    {"ids": [22], "text": "A signal added straight into the right mix output, untouched by anything else on this panel"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7], "text": "Whatever that row is playing, after its level knob and before the pan"},
+    {"ids": [8], "text": "The left side of the A send: every row at its A amount and its pan, added together"},
+    {"ids": [9], "text": "The right side of the A send: every row at its A amount and its pan, added together"},
+    {"ids": [10], "text": "The left side of the B send: every row at its B amount and its pan, added together"},
+    {"ids": [11], "text": "The right side of the B send: every row at its B amount and its pan, added together"},
+    {"ids": [12, 13], "text": "Every row at its level and pan, plus both returns, added together"}
+  ],
+  "notes": [
+    "the cells are one display widget, so a click on one cannot reach this help.",
+    "click an empty cell to record from that row's input, click again to stop; click a recorded cell to play it, click again to stop it.",
+    "hold a cell down for a second to clear it, drag it onto another cell to move the recording there, and hold Shift while dragging to copy it instead.",
+    "only one cell in a row sounds at a time; starting one fades the one already playing out. Recording happens in one cell at a time across the whole grid.",
+    "a cell holds at most ten seconds at 48000 samples a second, and recording stops of its own accord when that runs out."
+  ],
+  "menu": [
+    "Playback Speed — on a cell's own right-click menu: ten fixed speeds from -8x to 8x and a slider between them; a negative figure plays the loop backwards and zero silences it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "stepped",
+      "4": "stepped",
+      "5": "stepped",
+      "6": "stepped",
+      "7": "stepped",
+      "8": "stepped",
+      "9": "stepped",
+      "10": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "11": "±10V · one channel only",
+      "19": "±10V · continuous · one channel only",
+      "20": "±10V · continuous · one channel only",
+      "21": "±10V · continuous · one channel only",
+      "22": "±10V · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous",
+      "10": "continuous",
+      "11": "continuous",
+      "12": "continuous · one channel only",
+      "13": "continuous"
+    }
+  }
+}

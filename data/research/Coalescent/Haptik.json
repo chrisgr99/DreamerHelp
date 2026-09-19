@@ -1,0 +1,20 @@
+{
+  "plugin": "Coalescent",
+  "module": "Haptik",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/Haptik.cpp:392 params[PITCH]+getVoltage(), exp2 about FREQ_C4"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Haptik.cpp:323 getVoltage()*att*0.1 added in log2(Hz), clamped 0.05 to 30Hz"},
+      "2": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Haptik.cpp:339 clamp(knob+getVoltage()*att*0.1, 0, 0.9)"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Haptik.cpp:343 clamp(knob+getVoltage()*att*0.1, 0, 1)"},
+      "4": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "subtracts", "why": "src/Haptik.cpp:267 clamp(knob+getVoltage()*att*0.1, 0, 1)"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/Haptik.cpp:303 trig.process(getVoltage(), 0.1f, 1.f)"},
+      "6": {"family": "audio", "poly": true, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/Haptik.cpp:308 getVoltageSum() into externalDrive(); src/dsp/haptik_core.hpp:33 kExternalGain 0.005"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/Haptik.cpp:426 5.f*fastTanh(dcBlock.highpass())"},
+      "1": {"family": "cv", "poly": false, "range": "±5V", "why": "src/Haptik.cpp:429 clamp(motion*4, -5, 5)"}
+    }
+  },
+  "comment": "Only EXT reads more than one channel, and it sums them: there is a single lattice, so the module is monophonic. The manual's control table gives RATE as the ring's restoring rate and calls it subtle against COUPLE; the code bears that out — the centering coefficient is scaled by the step divider, so RATE only becomes a strong control in Slow mode. The manual writes the third bottom-row jack as EXT IN; the panel prints EXT."
+}

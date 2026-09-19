@@ -1,0 +1,86 @@
+{
+  "plugin": "halfagiraf",
+  "module": "BadSector",
+  "description": "A stereo processor that records into a rolling buffer and mangles the clock division that has gone past, with tape failures, digital breakage and media corruption",
+  "params": [
+    {"ids": [0], "text": "Sets the period captured and played: on the internal clock, from 16 seconds down to 80Hz; on the external clock, one of nine divisions and multiples of the clock input, a sixteenth to eight times"},
+    {"ids": [1], "text": "Subdivides each division into whole stutter repeats, from 1 up to 1024; the curve keeps the rhythmic counts in the lower half of the travel and audio rate at the top"},
+    {"ids": [2], "text": "Fades between dry and wet, fully dry at the bottom of its travel and the captured division alone at the top; through the bottom tenth the dry side shifts from the incoming audio to that division"},
+    {"ids": [3], "text": "Sets the amount of the damage channel the square button beside it has selected, each of the three holding its own value"},
+    {"ids": [4], "text": "Attenuates the CV jack of the damage channel the square button beside it has selected: fully anticlockwise blocks the CV and fully clockwise passes it at full depth, with no inversion"},
+    {"ids": [5], "text": "Sets the manual playback speed over a range of three octaves each way; it applies in Micro mode, and in Macro mode as well when the menu turns it on there"},
+    {"ids": [6], "text": "Cycles the damage knob between the Bend, Break and Corrupt channels"},
+    {"ids": [7], "text": "Cycles the CV attenuator between the Bend, Break and Corrupt channels"},
+    {"ids": [8], "text": "Switches between Macro, where the module rolls its own manipulations each division, and Micro, where the speed knob and the gates drive playback by hand"},
+    {"ids": [9], "text": "Switches the clock between the module's own and the clock input jack"},
+    {"ids": [10], "text": "Holds the audio memory so the same block keeps playing; it engages on the next division, and by default each press latches"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The left audio input, which also feeds the right channel when the right jack has nothing patched"},
+    {"ids": [1], "text": "The right audio input"},
+    {"ids": [2], "text": "Added to the TIME knob, a tenth of a turn per volt, with the total held inside the knob's travel"},
+    {"ids": [3], "text": "Added to the REPEAT knob, a tenth of a turn per volt, with the total held inside the knob's travel"},
+    {"ids": [4], "text": "Added to the MIX knob, a tenth of a turn per volt, with the total held inside the knob's travel"},
+    {"ids": [5], "text": "Added to the Bend channel's stored amount through the Bend CV attenuator, a tenth of a turn per volt; in Micro mode it also sets the playback pitch at 1V per octave"},
+    {"ids": [6], "text": "Added to the Break channel's stored amount through the Break CV attenuator, a tenth of a turn per volt, with the total held inside the knob's travel"},
+    {"ids": [7], "text": "Added to the Corrupt channel's stored amount through the Corrupt CV attenuator, a tenth of a turn per volt; 0V or less while it is patched turns Corrupt off altogether"},
+    {"ids": [8], "text": "In Macro mode a rising edge above 0.4V switches Bend on or off; in Micro mode it switches reverse playback on or off"},
+    {"ids": [9], "text": "In Macro mode a rising edge above 0.4V switches Break on or off; in Micro mode it switches between traverse and silence"},
+    {"ids": [10], "text": "A rising edge above 0.4V steps to the next corrupt effect"},
+    {"ids": [11], "text": "A rising edge above 0.4V switches Freeze on or off, taking effect at the next division"},
+    {"ids": [12], "text": "The clock read when the clock source is set to external; the TIME knob then divides or multiplies the edges arriving here"},
+    {"ids": [13], "text": "A rising edge above 0.4V restarts the internal clock at once, or, on an external clock, realigns the division count at the next edge"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left side of the processed stereo output, at line level"},
+    {"ids": [1], "text": "The right side of the processed stereo output, at line level"}
+  ],
+  "notes": [
+    "The wet path always plays the division before the one being recorded, so it lags the input by one division; above the bottom tenth of MIX the dry side is delayed to match",
+    "Rack does not save audio in a patch, so a freshly loaded module passes the incoming audio through until it has captured one whole TIME window, then crossfades into the saved MIX setting",
+    "DAMAGE and CV AMT are each one knob over three stored channels, Bend, Break and Corrupt. The square button beside each cycles the channel, and the knob snaps to that channel's stored value",
+    "A damage channel that does nothing in the current mode dims to a quarter brightness on the panel",
+    "In Macro mode the module rolls fresh Bend and Break manipulations every division",
+    "In Micro mode you drive it by hand: the micro speed knob sets the playback rate, the bend gate flips reverse, and the break channel becomes traverse or silence",
+    "The checksum artwork is driven by the audio: cyan displacement from Bend, amber broken rows from Break, red-orange blocks from Corrupt, with a readout of the division and corrupt effect"
+  ],
+  "menu": [
+    "Corrupt effect: Decimate, Dropout, Destroy, DJ Filter, Vinyl Sim — picks which media damage the Corrupt channel applies",
+    "Limit Corrupt to original 3 effects — leaves only Decimate, Dropout and Destroy in the list the corrupt gate steps through",
+    "Macro: Bend enabled — switches the Bend channel on or off in Macro mode",
+    "Macro: Break enabled — switches the Break channel on or off in Macro mode",
+    "Micro: reverse playback — plays the captured division backwards in Micro mode",
+    "Micro: Break knob = silence (off = traverse) — chooses whether the Break channel's knob sets a silent duty cycle or selects which subsection of the division loops",
+    "MICRO knob active in Macro (global varispeed) — lets the micro speed knob change the playback rate in Macro mode as well",
+    "Stereo: unique per channel — rolls the Bend and Break manipulations separately for the left and right channels",
+    "Gates: momentary (hold) instead of latching — makes the four gate jacks act only while they are held high, rather than toggling on each rising edge",
+    "Freeze button: momentary — makes the freeze button hold only while it is pressed",
+    "Glitch windowing — sets the fade applied at slice edges, trading hard clicks against softened transients",
+    "Stereo width — narrows the wet buffer, fully anticlockwise collapsing it to mono and fully clockwise keeping the original left and right image",
+    "LED brightness — sets how brightly the panel lamps are lit",
+    "Clear buffer — empties the recorded audio and starts the capture again",
+    "Restore default settings — puts every menu setting back to its default"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads the left audio input.",
+      "2": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "±10V · continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "high above 0.4V · stepped · one channel only",
+      "9": "high above 0.4V · stepped · one channel only",
+      "10": "high above 0.4V · stepped · one channel only",
+      "11": "high above 0.4V · stepped · one channel only",
+      "12": "high above 0.4V · stepped · one channel only",
+      "13": "high above 0.4V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

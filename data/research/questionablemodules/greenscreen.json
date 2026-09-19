@@ -1,0 +1,12 @@
+{
+  "plugin": "questionablemodules",
+  "module": "greenscreen",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "greenscreen.cpp:566 rVal = abs(fmod(color.r + inputs[INPUT_R].getVoltage()/10.f, 1))"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "greenscreen.cpp:567 gVal = abs(fmod(color.g + inputs[INPUT_G].getVoltage()/10.f, 1))"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "greenscreen.cpp:568 bVal = abs(fmod(color.b + inputs[INPUT_B].getVoltage()/10.f, 1))"}
+    }
+  },
+  "comment": "Read from the source at tag v2.1.14 (commit 75e5f70), which is the installed build. The theme menu is left out of every other module in this plugin as plugin-wide decoration, but here the colour menu is the module, so it is written out. The maker's page says the three jacks take -10V to 10V for -100 to 100 per cent and are added as offsets; the code takes the voltage divided by ten, adds it, then takes the absolute value of the fractional part, so the colour wraps past full rather than clamping and a negative voltage folds back up instead of subtracting. The jacks are declared with a custom port widget that draws nothing and refuses drags, tooltips and its own menu while Toggle CV Inputs is off (greenscreen.cpp:414-443), so they exist in the census but cannot be used until that item is switched on. Colour changes are smoothed towards the target rather than applied at once (line 573-575)."
+}

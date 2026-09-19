@@ -1,0 +1,55 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "AuxSends",
+  "description": "Three stereo send and return loops around a stereo path, each with level controls and CV",
+  "params": [
+    {"ids": [0, 2, 4], "text": "Chooses whether that send is taken before the dry level knob or after it"},
+    {"ids": [1, 3, 5], "text": "Sets how much signal goes to that send pair, 0 to 100%"},
+    {"ids": [6, 7, 8], "text": "Sets how much of that return pair is added to the output, 0 to 100%"},
+    {"ids": [9], "text": "Sets the level of the dry signal in the output, 0 to 100%"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2], "text": "Shifts that send level, a fifth of the knob's travel per volt"},
+    {"ids": [3, 4, 5], "text": "Shifts that return level, a fifth of the knob's travel per volt"},
+    {"ids": [6, 8, 10], "text": "Left channel coming back from that loop; nothing from the loop reaches the output until this jack is patched"},
+    {"ids": [7, 9, 11], "text": "Right channel coming back from that loop; with it empty the left return of the same loop is used for both"},
+    {"ids": [12], "text": "Left audio into the module, and the signal used for both channels when the right jack is empty"},
+    {"ids": [13], "text": "Right audio into the module"},
+    {"ids": [14], "text": "Shifts the dry level, a fifth of the knob's travel per volt, clamped to ±5V before it is added"}
+  ],
+  "outputs": [
+    {"ids": [0, 2, 4], "text": "Left channel of that send, at the level its own knob sets"},
+    {"ids": [1, 3, 5], "text": "Right channel of that send, at the level its own knob sets"},
+    {"ids": [6], "text": "Left output: the dry signal at its set level plus every patched return, clamped to ±10V"},
+    {"ids": [7], "text": "Right output: the dry signal at its set level plus every patched return, clamped to ±10V"}
+  ],
+  "notes": [
+    "a send pair is only calculated while one of its two output jacks is patched, and a return is only read while its left jack is patched.",
+    "a lamp beside each send and each return follows the level passing through it, refreshed every 256 samples."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only\n\nunpatched it reads the left return of that loop.",
+      "8": "continuous",
+      "9": "continuous",
+      "10": "continuous",
+      "11": "continuous",
+      "12": "continuous · one channel only",
+      "13": "continuous · one channel only\n\nunpatched it reads the left input.",
+      "14": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous",
+      "6": "±10V · continuous · one channel only",
+      "7": "continuous"
+    }
+  }
+}

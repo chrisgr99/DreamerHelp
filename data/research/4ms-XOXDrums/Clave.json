@@ -1,0 +1,15 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Clave",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Clave.hh:37 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Clave.hh:76 adds it to the DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Clave.hh:40 takes a rising edge from that voltage being greater than 0.5"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Clave.hh:60 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "The sine runs at twice the frequency the code's own variable names: src/modules/Clave.hh:52 advances the phase by frequency * rSampleRate * 2 while :54 takes sin(2 * M_PIF * phase), and M_PIF is pi (4ms cpputil util/math.hh:17), so one cycle takes sampleRate/(2*frequency) samples. With frequency set to 1000 + control * 750 at :52 the sounding range is 2000Hz to 3500Hz, not the 1kHz to 2kHz the knob's tooltip and the manual give. The decay range 5ms to 25ms at :76-77 matches the manual."
+}

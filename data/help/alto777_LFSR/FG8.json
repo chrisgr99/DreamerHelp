@@ -1,0 +1,44 @@
+{
+  "plugin": "alto777_LFSR",
+  "module": "FG8",
+  "description": "FG8, an eight stage linear feedback shift register sequencer: three rows of knobs sum the stages that are high into three pitch outputs, with a gate drawn from the same stages",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock, 0.25Hz fully anticlockwise to 64Hz fully clockwise"},
+    {"ids": [1], "text": "Starts and stops the sequencer; while it is stopped the gate output falls to 0V and the three row outputs hold their last voltages"},
+    {"ids": [2], "text": "Restarts the clock and shifts the register one step, and does not clear the register despite the panel printing ZERO"},
+    {"ids": [3], "text": "GAL shifts the register right and applies the taps as a toggle mask whenever the bit falling off the end is 1; FIBO shifts in the parity of the tapped stages at the top end"},
+    {"ids": [4], "text": "CHROMATIC reads each row sum as a count of semitones; DIATONIC reads it as a count of degrees of the major scale"},
+    {"ids": [5], "text": "DELTA lets the three row outputs change on every step; ALL holds them at their last voltages through any step that generates no gate"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13], "text": "Makes that stage a feedback tap; which stages are tapped sets how many steps the pseudo-random sequence runs before it repeats"},
+    {"ids": [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], "text": "Adds 0 to 7 to the sum sent to that row's output while its stage of the register is high, in eight snapped steps"},
+    {"ids": [38, 39, 40, 41, 42, 43, 44, 45], "text": "Includes that stage in the gate, so that the gate output goes high while the stage is high and the clock is high"},
+    {"ids": [46, 47, 48, 49, 50, 51, 52, 53], "text": "Flips that stage of the shift register between 1 and 0, which is how a starting pattern is set by hand"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every volt here doubles the rate of the internal clock"},
+    {"ids": [1], "text": "A clock patched here replaces the internal clock and shifts the register on each rising edge"},
+    {"ids": [2], "text": "A rising edge restarts the clock and shifts the register one step"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the clock is high and at least one stage that is high has its gate button on"},
+    {"ids": [1], "text": "The pitch from the red row of knobs, a volt per octave, summed over the stages that are high"},
+    {"ids": [2], "text": "The pitch from the green row of knobs, a volt per octave, summed over the stages that are high"},
+    {"ids": [3], "text": "The pitch from the blue row of knobs, a volt per octave, summed over the stages that are high"}
+  ],
+  "notes": [
+    "With no tap button on, the one bit the register starts with shifts off the end and the register goes to all zeros for good; turning at least one tap on is what gives a repeating sequence",
+    "Every row knob comes up at zero and every gate button off, so the three row outputs rest at 0V and the gate output stays at 0V until knobs are raised and gate buttons turned on"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous",
+      "2": "1V per octave · continuous",
+      "3": "1V per octave · continuous"
+    }
+  }
+}

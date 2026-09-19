@@ -1,0 +1,15 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "T",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/T.cpp:149 and 165, maxPoly loops over getChannels and getPolyVoltage reads the channel"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/T.cpp:167, rescaled from 0.1 to 2 into 0 to 1 and put through a dsp::SchmittTrigger per channel; a trigger at :169-175 takes the samples written so far as the recorded length and restarts the buffer from the input"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "src/T.cpp:204"},
+      "1": {"family": "audio", "poly": true, "why": "src/T.cpp:205, the buffer read at the current speed"}
+    }
+  },
+  "comment": "The buffer is 44100 times 16 times 16 samples, about 256 seconds at 44.1kHz, divided by the channel count (src/T.cpp:58-63 and 150). The playback speed below is exactly half the speed above, so the lower half is always an octave down whatever the knobs are set to (src/T.cpp:158). The panel prints NOTE, FINE, IN, TRIG, HI and OUT."
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "EH_modules",
+  "module": "FV-1emu",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:234 getVoltage times 0.1 times the trimpot"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:235 getVoltage times 0.1 times the trimpot"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:236 getVoltage times 0.1 times the trimpot"},
+      "3": {"family": "audio", "poly": false, "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:218 getVoltage, one channel; the normalling at 221-226 is commented out"},
+      "4": {"family": "audio", "poly": false, "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:219 getVoltage, one channel; the normalling at 221-226 is commented out"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/FV1EmuVCVPlugIn.cpp:239 getVoltage times the trimpot, with no further scaling"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "src/FV1EmuVCVPlugIn.cpp:250 clamp before setVoltage"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "src/FV1EmuVCVPlugIn.cpp:251 clamp before setVoltage"}
+    }
+  },
+  "comment": "No parameter, input or output is given a name: every configParam call passes an empty string and there are no configInput or configOutput calls at all, so Rack's tooltips are blank on the whole panel. The DRY/WET law is not a crossfade: d = clamp(1 - mix, 0, 1) and w = clamp(1 + mix, 0, 1) with mix running -1 to +1, so the centre position passes the untreated signal and the program's output both at full level, summed. When w reaches 0 the emulator is not run at all that sample. The three control CV jacks are scaled by 0.1 before their attenuverters while the DRY/WET jack is not scaled at all, so a volt reaches two and a half times further there in proportion to its knob's travel. The input trims multiply by (1 + value) over a -1 to +1 parameter, so the anticlockwise end silences that input. The back-arrow branch reads `if (--selectedProgram <= 0) selectedProgram = programs.size() - 1`, which skips index 0. The plugin ships only fx/demo.spn and fx/README.TXT; there is no programs.json in the installed folder. The display's draw() uses Rack's deprecated NVGcontext* signature, which still works."
+}

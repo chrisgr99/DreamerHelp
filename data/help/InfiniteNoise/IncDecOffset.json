@@ -1,0 +1,46 @@
+{
+  "plugin": "InfiniteNoise",
+  "module": "IncDecOffset",
+  "description": "An offset that a button or a trigger steps up and down, added to whatever is patched through, in 2HP",
+  "params": [
+    {"ids": [0], "text": "Sets how much each step moves the offset, -10V fully counter-clockwise to +10V fully clockwise"},
+    {"ids": [1], "text": "Attenuates and inverts the step-size CV between -100% and +100%, and comes up at 0%"},
+    {"ids": [2], "text": "Adds one step to the offset"},
+    {"ids": [3], "text": "Takes one step off the offset"},
+    {"ids": [4], "text": "Sets the offset back to 0V"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds its voltage to the step size after the trim; a polyphonic signal here gives each channel its own step"},
+    {"ids": [1], "text": "A rising edge adds one step to the offset"},
+    {"ids": [2], "text": "A rising edge takes one step off the offset"},
+    {"ids": [3], "text": "A rising edge sets the offset back to 0V"},
+    {"ids": [4], "text": "The signal the offset is added to"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the input with the accumulated offset added"}
+  ],
+  "notes": [
+    "the offset is kept per channel and survives until a reset, so the module counts as long as you keep sending steps",
+    "an increment and a decrement arriving in the same cycle cancel out, and a reset in the same cycle as either of them wins",
+    "the offset keeps climbing past the clipping range, so for long runs either turn the clipping off and clamp the result elsewhere, or wrap it with a Fold"
+  ],
+  "menu": [
+    "Quantize mode — rounds the output to the nearest step of the size chosen, from a twelfth of a volt up to 5V, and is Off unless you set it",
+    "Clipping range — clamps every output to the range chosen, -12V to 12V unless you change it, and Off lets the output run to any voltage",
+    "Process quality: Audio, High, Balanced, Low, Very low — sets how often the module runs its algorithm, from every cycle down to every 256th; below Balanced a 1ms trigger can be missed",
+    "Trigger-high detect-level — sets the voltage at which an incoming trigger counts as high, 1V or more unless you change it",
+    "Trigger-low detect-level — sets the voltage an incoming trigger must fall back below before the next one is counted, under 0.1V unless you change it"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±10V · continuous · polyphonic\n\nunpatched it reads 0V.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "polyphonic\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

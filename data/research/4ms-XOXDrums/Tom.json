@@ -1,0 +1,17 @@
+{
+  "plugin": "4ms-XOXDrums",
+  "module": "Tom",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0.5V", "step": "stepped", "negative": "ignored", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Tom.hh:46 takes a rising edge from that voltage being greater than 0.5"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Tom.hh:42 adds it to the PITCH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "2": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Tom.hh:113 adds it to the AMP DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "3": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Tom.hh:107 adds it to the PITCH DECAY knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"},
+      "4": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/vcv/comm_module.cc:31-32 passes this jack's single-channel voltage straight to the core; src/modules/Tom.hh:43 adds it to the ENV DEPTH knob through combineKnobBipolarCV, which divides the voltage by 10 and clamps the knob-plus-CV total to 0 to 1 (src/helpers/param_cv.hh:8-10)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "src/modules/Tom.hh:85 writes this output, and src/vcv/comm_module.cc:60 sets it with setVoltage on one channel; the value is clamped to -5V to 5V before it leaves the core"}
+    }
+  },
+  "comment": "The sine sounds at twice the code's frequency variable, as in Kick and Snare: src/modules/Tom.hh:78 advances the phase by (frequency + modulatedFrequency) * rSampleRate where modulatedFrequency is frequency plus the envelope term, and :80 takes sin(2 * M_PIF * phase) with M_PIF equal to pi. The switch sets frequency to 40 + control * 100, 80 + control * 200 or 160 + control * 400 at :62-70, so the heard ranges are 80-280Hz, 160-560Hz and 320-1120Hz; the manual's Low, Medium and High figures are the variable, which means the manual's Medium and High ranges are what Low and Medium actually sound. Amp decay 25-100ms at :114 and pitch decay 5-50ms at :108 both match. The switch reads Toggle3pos DOWN, CENTER and UP while the element is a Toggle3posHoriz; both enums number left to right as 0, 1, 2, so the panel's L, M and H line up. The Amp Decay CV jack is declared GateJackInput4ms in Tom_info.hh rather than AnalogJackInput4ms, which changes nothing beyond which picture the MetaModule hardware would draw."
+}

@@ -1,0 +1,35 @@
+{
+  "plugin": "Clonotribe",
+  "module": "Clonotribe",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "step": "continuous", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "clonotribe.cpp:305-307 reads it with getVoltage and adds the octave value before the oscillator"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "clonotribe.cpp:308 reads it with getVoltage and clonotribe.cpp:316 tests it against 1V"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "clonotribe.cpp:323-326 reads it with getVoltage and adds 1.5 times it to the signal ahead of the filter; line 330 fires the envelope when its size passes 0.1V"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "dsp/sequencer/sequencer.hpp:223 feeds it to a SchmittTrigger tested against 1V; dsp/process.cpp:116 switches the module to external sync while it is connected"},
+      "4": {"family": "cv", "poly": false, "step": "stepped", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:31-35 maps it with (v+5)*0.5 clamped to 0 and 5 and calls setDisplayValue on the octave knob"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:17 maps it with getParamWithCV and dsp/lfo.hpp:91-92 uses the result straight as the LFO frequency in hertz while the jack is connected"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "11": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "dsp/delay.hpp:40 looks for a rise past 1V and lines 46-56 take the delay time from the measured gap when it is between 10ms and 4 seconds"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "dsp/process.cpp:5-13, getParamWithCV: when the jack is connected it reads the voltage, maps it with (v+5)*0.1 clamped to 0 and 1, and calls setDisplayValue on the knob so the knob follows the cable"}
+    },
+    "outputs": {
+      "0": {"family": "pitch"},
+      "1": {"family": "trigger"},
+      "2": {"family": "audio"},
+      "3": {"family": "trigger"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "trigger"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 2b75fcf, the last commit that touches src under version 2.2.0; the only later commit, 9445aac, adds a compiler flag to the Makefile and changes no code, and the installed manifest is byte for byte the repository's. 2b75fcf itself is present in the installed build, which carries the Match Steps menu item and the matchSteps patch key that commit introduced. Every CV jack except the pitch, gate, audio, sync and delay-clock ones is absolute rather than additive: getParamWithCV in dsp/process.cpp maps -5V to 5V onto the whole knob and calls setDisplayValue, so the knob visibly follows the cable, cannot be turned while it is patched, and stays where the cable left it afterwards. Four widgets are hidden rather than disabled while their jack is patched, in ui/mainpanel.cpp:136-156: the tempo knob, the LFO rate knob, the LFO mode switch and the delay time knob. The LFO rate jack does something the panel does not suggest: dsp/lfo.hpp line 92 uses the mapped 0 to 1 value straight as a frequency in hertz, so a patched cable limits the LFO to 0Hz to 1Hz where the knob alone reaches 18Hz or 5000Hz. The tempo knob's tooltip and its real range disagree until the menu is touched: configParam gives it a multiplier of 600 and an offset of 10, so it reads up to 610 BPM, while dsp/process.cpp:119 rescales it to the 10 to 600 range the menu names, and picking any tempo range from the menu rewrites the quantity to agree. The ribbon strip is a plain rack::Widget with no parameter, so it can be played but never clicked for help. The three drum outputs are written only while the rhythm knob is above zero, which is its default, so they are silent on arrival. The step buttons carry a third state the panel does not letter: a value between 0.8 and 0.95, which only the ctrl-held keyboard shortcut produces, cycles that step through accent and glide."
+}

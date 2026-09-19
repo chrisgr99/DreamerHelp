@@ -1,0 +1,15 @@
+{
+  "plugin": "SequelSequencers",
+  "module": "Samuel",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 0V", "normal": "0V", "why": "Samuel.cpp:33 steps the sequence whenever the previous reading of getVoltage was exactly 0V and this one is not"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 0V", "normal": "0V", "why": "Samuel.cpp:16-20 resets whenever the previous reading of getVoltage was exactly 0V and this one is not"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Samuel.cpp:38 sets one voltage, 10V or 0V, from the unit the sequence is on"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Samuel.cpp:42-43 sets one voltage from a 1ms pulse generator triggered at step zero"}
+    }
+  },
+  "comment": "The panel calls the second output End, and the manual calls it the end-of-sequence output, but the pulse is fired when the step counter is at zero (Samuel.cpp:34-37), which is the first unit of the sequence rather than the last. The clock and reset inputs have no threshold: any move away from exactly 0V counts."
+}

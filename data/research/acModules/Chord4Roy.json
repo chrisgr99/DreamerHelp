@@ -1,0 +1,15 @@
+{
+  "plugin": "acModules",
+  "module": "Chord4Roy",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "src/Chord4Roy.cpp process(): clamp(rescale(getVoltage(), 0, 10, 1, 12), 1, 12); with useVOctNoteInput it is read as 1V per octave instead"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "stepped", "negative": "ignored", "why": "src/Chord4Roy.cpp process(): clamp(rescale(getVoltage(), 0, 10, 1, 8), 1, 8)"},
+      "2": {"family": "cv", "poly": false, "range": "high above 5V", "step": "stepped", "negative": "ignored", "why": "src/Chord4Roy.cpp process(): getVoltage() < 5.f chooses open, otherwise bar, and the result is written back into the switch"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "src/Chord4Roy.cpp process(): setVoltage(..., i) for 13 channels and setChannels(13)"}
+    }
+  },
+  "comment": "The output always carries thirteen channels, and the mute channels are 0V or 10V rather than pitches, so the 1V per octave range applies only to channels 1 to 6 and 13. The style CV writes its result back into the panel switch every sample, so that switch cannot be moved by hand while a cable is in its jack. The README says bar chords do not exist for min6 or Sus and the code confirms it: rows 15 and 16 of the chord table, which are the bar shapes for min6 and Sus, are exact copies of the open-neck rows 7 and 8. Every input is read with getVoltage(), so a polyphonic cable into one of them is read on its first channel only. The chord names here are the ones the module's own display prints."
+}

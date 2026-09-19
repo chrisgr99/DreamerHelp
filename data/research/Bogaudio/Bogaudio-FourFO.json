@@ -1,0 +1,25 @@
+{
+  "plugin": "Bogaudio",
+  "module": "Bogaudio-FourFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "why": "FourFO.cpp:72 clamp(getPolyVoltage(c)/5,-1,1) for pulse width, or :88 the magnitude over 0 to 5V for sample-and-hold"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "FourFO.cpp:97 clamp(getPolyVoltage(c)/10,0,1)"},
+      "2": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "FourFO.cpp:107 clamp(getPolyVoltage(c)/5,-1,1)"},
+      "3": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "why": "FourFO.cpp:113 clamp(getPolyVoltage(c)/10,0,1)"},
+      "4": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "why": "FourFO.cpp:41 channels() reads getChannels() here; lfo_base.cpp:46 setFrequency() adds getVoltage(c) as volts per octave"},
+      "5": {"family": "trigger", "poly": true, "range": "high above 0.01V", "step": "stepped", "why": "FourFO.cpp:125 getPolyVoltage(c) into PositiveZeroCrossing, threshold 0.01f in dsp/signal.hpp:76"},
+      "6": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "FourFO.cpp:119 phaseOffset() clamps getPolyVoltage(c)/5 to -1..1"},
+      "7": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "FourFO.cpp:118 phaseOffset() clamps getPolyVoltage(c)/5 to -1..1"},
+      "8": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "FourFO.cpp:117 phaseOffset() clamps getPolyVoltage(c)/5 to -1..1"},
+      "9": {"family": "cv", "poly": true, "range": "±5V", "step": "continuous", "why": "FourFO.cpp:116 phaseOffset() clamps getPolyVoltage(c)/5 to -1..1"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±12V", "why": "FourFO.cpp:156 and 190 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "1": {"family": "cv", "poly": true, "range": "±12V", "why": "FourFO.cpp:156 and 190 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "2": {"family": "cv", "poly": true, "range": "±12V", "why": "FourFO.cpp:156 and 190 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"},
+      "3": {"family": "cv", "poly": true, "range": "±12V", "why": "FourFO.cpp:156 and 190 setChannels(_channels) then a per-channel write, clamped to ±12V; channels() takes the width from the V/OCT input"}
+    }
+  },
+  "comment": "The SAMPLE/PWM jack reads as a pulse-width CV over -5 to 5V for the square wave and as a sample-and-hold rate over 0 to 5V of magnitude for the other waves (FourFO.cpp:72 and :88), so it has no single voltage range."
+}

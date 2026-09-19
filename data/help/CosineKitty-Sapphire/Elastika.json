@@ -1,0 +1,75 @@
+{
+  "plugin": "CosineKitty-Sapphire",
+  "module": "Elastika",
+  "description": "Stereo synthesis filter that runs audio through a simulated hexagonal mesh of balls and springs, turning it into metallic, bell-like or drone textures, and able to self-oscillate with no input",
+  "params": [
+    {"ids": [0], "text": "Sets the friction that damps vibration in the mesh; higher settings cut the ringing short and lower settings let it run on like reverb"},
+    {"ids": [1], "text": "Sets the stiffness of the springs, the force per unit of stretch; higher stiffness generally raises the pitch of the sound"},
+    {"ids": [2], "text": "Sets the rest length of the springs; shorter than the ball spacing gives a bell-like quality, longer loosens the mesh into chaotic vibration"},
+    {"ids": [3], "text": "Sets an ambient magnetic field that bends the moving balls into circular paths: positive values align the field across the mesh, negative values through it, and zero turns it off"},
+    {"ids": [4], "text": "Scales the mass of the two impurity balls from 0.1 to 10 against the 20 balls of fixed mass, with 1 at centre making them the same"},
+    {"ids": [5], "text": "Attenuates and inverts the friction CV"},
+    {"ids": [6], "text": "Attenuates and inverts the stiffness CV"},
+    {"ids": [7], "text": "Attenuates and inverts the spring span CV"},
+    {"ids": [8], "text": "Attenuates and inverts the magnetic field CV"},
+    {"ids": [9], "text": "Attenuates and inverts the impurity mass CV"},
+    {"ids": [10], "text": "Sets how hard the input audio drives the input balls, which changes the shape the mesh is distorted into as well as the loudness"},
+    {"ids": [11], "text": "Sets the volume of the stereo output"},
+    {"ids": [12], "text": "Sets the direction in which the input balls are vibrated, 0 degrees perpendicular to the plane of the mesh and 90 degrees parallel to it, with 45 degrees the default"},
+    {"ids": [13], "text": "Sets the direction of ball movement the output is taken from, 0 degrees perpendicular to the plane of the mesh and 90 degrees parallel to it, with 45 degrees the default"},
+    {"ids": [14], "text": "Turns the simulation on and off; off drops CPU use to almost nothing, returns every ball to its starting position and fades the output over 2.5ms"},
+    {"ids": [15], "text": "Attenuates and inverts the input tilt CV"},
+    {"ids": [16], "text": "Attenuates and inverts the output tilt CV"},
+    {"ids": [19], "text": "Splits one polyphonic input cable into left and right, taking channel 1 as left and channel 2 as right, when only one audio input is patched"},
+    {"ids": [20], "text": "Sends both output channels to the left output as a 2-channel polyphonic signal, channel 1 left and channel 2 right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Varies the friction in the mesh"},
+    {"ids": [1], "text": "Varies the spring stiffness"},
+    {"ids": [2], "text": "Varies the spring rest length"},
+    {"ids": [3], "text": "Varies the strength and axis of the magnetic field"},
+    {"ids": [4], "text": "Varies the mass of the two impurity balls"},
+    {"ids": [5], "text": "Left audio into the mesh; its channels are summed to one voltage"},
+    {"ids": [6], "text": "Right audio into the mesh; its channels are summed to one voltage"},
+    {"ids": [7], "text": "Overrides the power button: the simulation runs above 1V and stops below 0.1V, holding its state between those levels, and polyphonic channels are summed first so several gates act as one logic gate"},
+    {"ids": [8], "text": "Varies the direction the input balls are vibrated in"},
+    {"ids": [9], "text": "Varies the direction the output is taken from"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Left audio out of the mesh, one channel, taken from the movement of the left output ball"},
+    {"ids": [1], "text": "Right audio out of the mesh, one channel, taken from the movement of the right output ball"}
+  ],
+  "notes": [
+    "the mesh starts at rest and makes no sound by itself: patch audio into the input ports, or find a control setting where the mesh self-oscillates."
+  ],
+  "menu": [
+    "DC reject cutoff — sets the high-pass corner on both outputs anywhere from 20Hz to 400Hz, with 20Hz the default, which doubles as a way to thin out a muddy bass",
+    "Output limiter — sets an automatic gain control threshold from 1V to 10V, 4V by default, or turns it off at the far right; the OUT knob glows red while it is reducing gain",
+    "Model sample rate — runs the physics at Match engine rate or at a fixed 22050, 24000, 32000, 44100, 48000, 88200 or 96000 Hz, which fixes the sound against engine settings",
+    "Send right output as vector to Tricorder — chooses which output ball's 3D position goes to a Tricorder on the right",
+    "Limiter warning light — turns off the red glow on the OUT knob without turning the limiter off",
+    "Toggle sensitivity on all attenuverters — divides the effect of every attenuverter on the panel by 10, or restores them all",
+    "Enable input stereo splitter — does what the button between the input ports does, taking channel 1 of a polyphonic cable in the left input as left and channel 2 as right",
+    "Send polyphonic stereo to L output — does what the button between the output ports does, sending both channels to the left output as one 2-channel signal",
+    "Low sensitivity — on an attenuverter knob's own menu, not the panel menu: divides that knob's effect by 10 and marks the knob with an orange dot",
+    "Unipolar mode — on an attenuverter knob's own menu, not the panel menu: adds 5V to the CV on that control and clamps the result at zero"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "1": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "2": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "3": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "4": "bipolar · continuous · polyphonic\n\nthe knob and this input are summed and the total held to ±5V.",
+      "5": "continuous · polyphonic\n\nunpatched it reads half of the right audio input.",
+      "6": "continuous · polyphonic\n\nunpatched it reads half of the left audio input.",
+      "7": "high above 1V · stepped · polyphonic\n\nunpatched it reads the POWER button.",
+      "8": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V.",
+      "9": "continuous · polyphonic\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to ±5V."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous"
+    }
+  }
+}

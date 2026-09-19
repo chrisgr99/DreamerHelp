@@ -1,0 +1,61 @@
+{
+  "plugin": "RestocK",
+  "module": "ReGrandy",
+  "description": "A dynamic stochastic oscillator after Xenakis: a waveform is drawn through a few breakpoints whose heights and spacings take a random walk each cycle, with a granulation stage and an FM stage on top",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the stochastic waveform, from four octaves below C4 at the left to three above it at the right, with the result held between 1Hz and 3000Hz"},
+    {"ids": [1], "text": "Sets the largest jump the random walk may make to the height of a breakpoint on each cycle, from 0.05 at the left to 0.3 at the right"},
+    {"ids": [2], "text": "Sets the largest jump the random walk may make to the spacing of a breakpoint on each cycle, from 0.01 at the left to 0.3 at the right"},
+    {"ids": [3], "text": "Sets how many breakpoints the waveform is drawn through, from 3 to 50; more breakpoints make a longer, less predictable shape"},
+    {"ids": [4], "text": "Sets the frequency of the sine wave that the stochastic waveform granulates, from six octaves below C4 at the left to three above it at the right"},
+    {"ids": [5], "text": "Scales the voltage at the GRAT jack before it is added to the GRAT knob, from nothing at the left to the full amount at the right"},
+    {"ids": [6], "text": "Scales the voltage at the FREQ jack before it is added to the FREQ knob, from nothing at the left to the full amount at the right"},
+    {"ids": [7], "text": "Scales the voltage at the ASTP jack before it is added to the ASTP knob, from nothing at the left to the full amount at the right"},
+    {"ids": [8], "text": "Scales the voltage at the DSTP jack before it is added to the DSTP knob, from nothing at the left to the full amount at the right"},
+    {"ids": [9], "text": "Scales the voltage at the BRKPTS jack before it is added to the BRKPTS knob, from nothing at the left to the full amount at the right"},
+    {"ids": [11], "text": "Switches the FM stage on in the down position and off in the up position, which is the opposite way round from the maker's own description of it as an enable"},
+    {"ids": [12], "text": "Steps through four grain envelopes: triangle at the lowest setting, then Hann, then Welch, then Tukey at the highest, which is where it starts"},
+    {"ids": [13], "text": "Sets the modulator frequency of the FM stage, in octaves either side of C4, and does nothing while the FM switch is up"},
+    {"ids": [14], "text": "Sets the carrier frequency of the FM stage, in octaves either side of C4, and does nothing while the FM switch is up"},
+    {"ids": [15], "text": "Sets the modulation index of the FM stage, the depth of the modulation, and does nothing while the FM switch is up"},
+    {"ids": [16], "text": "Scales the voltage at the MOD F jack before it is added to the MOD F knob, from nothing at the left to the full amount at the right"},
+    {"ids": [17], "text": "Nothing in the module reads this knob. The voltage it scales is worked out and then thrown away, and the modulation index comes from the MOD I knob alone."},
+    {"ids": [18], "text": "Picks the probability distribution the random walk draws its steps from: linear in the down position, Cauchy in the middle, arcsine in the up position"},
+    {"ids": [19], "text": "In the up position a breakpoint that walks past its limit is reflected back; in the down position it wraps round to the other side"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Voltage over the pitch, a volt per octave at five times scale, so 5V is one octave; the knob beside it sets how much gets through"},
+    {"ids": [1], "text": "Voltage over the maximum amplitude step, on a squared response so small voltages change little"},
+    {"ids": [2], "text": "Voltage over the maximum duration step, on a squared response so small voltages change little"},
+    {"ids": [3], "text": "Voltage over the number of breakpoints, on a squared response so small voltages change little; the count moves in whole breakpoints only, because the total is truncated to an integer"},
+    {"ids": [5], "text": "Voltage over the FM modulator frequency, a volt per octave at five times scale, so 5V is one octave"},
+    {"ids": [6], "text": "Nothing in the module reads this jack. Its voltage is scaled and added to a value that the module then overwrites with the MOD I knob's position, so patching it changes nothing."},
+    {"ids": [7], "text": "Voltage over the granulation frequency, a volt per octave at five times scale, so 5V is one octave"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillator's output at up to 5V, taken after a limiter that keeps it from clipping"},
+    {"ids": [1], "text": "The same signal as the OUT jack with its sign flipped"}
+  ],
+  "notes": [
+    "A sine grain envelope is written into the module but cannot be chosen: it is the value below the ENV knob's lowest setting, so the knob cannot reach it.",
+    "The BRKPTS knob is configured with a default below its own lowest value, so a freshly placed module has the count forced to the minimum of three rather than to the knob position shown.",
+    "The plugin ships fifteen presets for this module, in the right-click menu's preset list: Abyss, Aftermath, Alarm, Drone, Emperor, Glass, Haunted, Interference and Noise Pollution.",
+    "The rest of the shipped presets are Ocean Waves, Planes, Razor Blade, Rumble, Soothe and UFO Transmission.",
+    "Both jacks are mono, and a polyphonic cable into any input is read on its first channel only."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · stepped · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "6": "±5V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "7": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

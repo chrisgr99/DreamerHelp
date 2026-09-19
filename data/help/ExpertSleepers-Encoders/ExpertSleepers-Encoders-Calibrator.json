@@ -1,0 +1,33 @@
+{
+  "plugin": "ExpertSleepers-Encoders",
+  "module": "ExpertSleepers-Encoders-Calibrator",
+  "description": "Corrects the voltage scaling of a DC-coupled audio interface that has no calibration of its own, so that a volt in Rack is a volt in the eurorack system",
+  "params": [
+    {"ids": [0], "text": "Starts the input calibration and confirms each of its steps; the lamp flashes between presses and the display names what to do"},
+    {"ids": [1], "text": "Starts the output calibration and confirms its first step; the module then drives its own To Device jack to 0V and to 3V and measures each of them through From Device"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal coming back from the audio interface, rescaled by the measured input calibration before it reaches To VCV; every calibration measurement is taken from this jack"},
+    {"ids": [1], "text": "The signal to be sent out to the interface; it is pre-compensated by the measured output calibration before it reaches To Device"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The signal from the interface with the input calibration applied, so that a volt read here is a volt at the interface"},
+    {"ids": [1], "text": "The pre-compensated signal for the audio interface output; during output calibration the module drives this jack itself, to 0V and then to 3V"}
+  ],
+  "notes": [
+    "Calibration needs a 3V reference from your eurorack system, and a cable from the audio interface's physical output back to its own input.",
+    "Press Calibrate Input, carry out the step named in the panel display, then press the button again to confirm it; repeat until the display reads Idle, then do the same with Calibrate Output.",
+    "Before either calibration has been run the module passes both signals through unchanged, and the two calibrations are stored with the patch.",
+    "The panel display is a text window rather than a control, so it cannot be clicked for help; it names the step to carry out and reads Idle when nothing is in progress."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "one channel only",
+      "1": "one channel only"
+    }
+  }
+}

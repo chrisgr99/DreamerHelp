@@ -1,0 +1,15 @@
+{
+  "plugin": "kocmoc",
+  "module": "uLADR",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "uLADR.cpp:118 the voltage divided by ten, times the cubed attenuverter, added to the knob; the resulting rate is clamped at zero in the filter core"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "uLADR.cpp:129 cutoff multiplied by pow(2, attenuverter * volts)"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "uLADR.cpp:88 getChannels() here sets the loop bound; uLADR.cpp:134 getVoltage(ii) per channel"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "uLADR.cpp:167 setVoltage(..., ii) per channel, uLADR.cpp:171 setChannels(channels)"}
+    }
+  },
+  "comment": "No appendContextMenu. Feedback is uLADR.cpp:111, fb = 7.0f * reso. Output is a flat 12.0f times the filter state at :167, with no resonance or gain compensation. The linear FM input is twice as sensitive as LADR's: uLADR.cpp:118 multiplies by 2.0f before dividing by ten."
+}

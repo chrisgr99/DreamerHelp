@@ -1,0 +1,66 @@
+{
+  "plugin": "VectorModular",
+  "module": "BaseOsc",
+  "description": "An oscillator built on the Braids macro-oscillator with nine outputs running at once, a quantizer on its pitch and a bit crusher on everything it renders",
+  "params": [
+    {"ids": [0], "text": "Chooses the scale the pitch is quantized to, Off or one of nineteen scales; the quantizing happens before any frequency modulation is added"},
+    {"ids": [1], "text": "Each press raises the pitch one octave, as far as five octaves above the tuning controls"},
+    {"ids": [2], "text": "Sets the pitch over five octaves either way, one volt to the octave"},
+    {"ids": [3], "text": "Each press lowers the pitch one octave, as far as five octaves below the tuning controls"},
+    {"ids": [4], "text": "Chooses the root note the scale is built on, C through B"},
+    {"ids": [5], "text": "Each press turns LFO mode on or off, which renders eight of the nine outputs about a hundred times more slowly and drops them below hearing; the plain noise output is untouched by it"},
+    {"ids": [6], "text": "Each press switches how the FM jack is applied: in the LIN position the jack's voltage times the amount is added to the pitch CV, in the EXP position two raised to that product, less one, is added"},
+    {"ids": [7], "text": "Trims the pitch by up to one semitone either way"},
+    {"ids": [8], "text": "Scales the FM jack from -0.5 to 0.5, inverting it below the centre; it comes up at the centre, where that jack does nothing"},
+    {"ids": [9], "text": "Scales the PWM jack from no effect at the bottom of its travel to full at the top; it comes up at the bottom, where that jack does nothing"},
+    {"ids": [10], "text": "Scales the index modulation jack from no effect at the bottom of its travel to full at the top; it comes up at the bottom, where that jack does nothing"},
+    {"ids": [11], "text": "Sets the width of the pulse wave and the cycle length of the digital noise; the sign of the setting is thrown away, so the two halves of the travel do the same thing and the centre is the narrowest"},
+    {"ids": [12], "text": "Sets the position read from the wavetable and the number of quantized steps in the digital noise, from the bottom of the range at the bottom of its travel to the top at the top"},
+    {"ids": [13], "text": "Sets the bit depth every rendered output is cut to, 1-bit through 16-bit, by masking the low bits off each sample; at 16-bit the sample is left alone"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch at one volt per octave; it is summed with the tuning controls and the octave buttons and the total is clamped to ±5V before anything else is done with it"},
+    {"ids": [1], "text": "Modulates the pitch, scaled by the FM amount control and added after the quantizer, so quantizing does not catch it"},
+    {"ids": [2], "text": "Modulates the pulse width and the digital noise cycle length: for the pulse the size of the voltage is used and always widens, for the noise the voltage is used with its sign"},
+    {"ids": [3], "text": "Modulates the position read from the wavetable and the quantizing of the digital noise, scaled by the index modulation control: a fifteenth of the voltage for the wavetable, a tenth for the noise"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A triangle wave at the set pitch, ±5V"},
+    {"ids": [1], "text": "A sawtooth wave at the set pitch, ±5V"},
+    {"ids": [2], "text": "A pulse wave at the set pitch, its width set by the PW control, ±5V"},
+    {"ids": [3], "text": "A sine wave at the set pitch, ±5V"},
+    {"ids": [4], "text": "A square wave one octave below the set pitch, ±5V"},
+    {"ids": [5], "text": "A wave read out of the Braids wavetable at the position set by the INDEX control, interpolated between neighbouring waves, ±5V"},
+    {"ids": [6], "text": "Filtered noise at a fixed pitch: V/OCT and every tuning control are ignored here, and LFO mode does not slow this jack down"},
+    {"ids": [7], "text": "Resonant filtered noise following the set pitch, ±5V"},
+    {"ids": [8], "text": "Clocked noise, its cycle length taken from the PW control and the number of levels it is quantized to taken from the INDEX control, ±5V"}
+  ],
+  "notes": [
+    "an output is rendered only while a cable is in it. An unpatched jack costs nothing and is computed not at all, so the module's load rises with each cable you add.",
+    "the pitch total is clamped to ±5V before use, so the coarse knob and the octave buttons together cannot carry the pitch more than five octaves from centre, though each alone reaches five.",
+    "the row of eleven lamps above the coarse knob shows the pitch CV in volts, red below zero, green at zero, blue above. In LFO mode they follow the patched outputs instead.",
+    "the keyboard of lamps shows which notes the chosen scale contains, white for white keys and yellow for black ones, the note playing at that moment green. All dark while the scale is Off.",
+    "neither the LFO button nor the LIN/EXP button carries a lamp, so the panel gives no sign of which state either is in. Both states are written into the patch file, as is the octave offset.",
+    "the bit crusher masks the low bits off each sample rather than rounding it, which pulls the wave towards negative as the depth falls.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to ±5V.",
+      "1": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only",
+      "3": "±5V · continuous · one channel only",
+      "4": "±5V · continuous · one channel only",
+      "5": "±5V · continuous · one channel only",
+      "6": "±5V · continuous · one channel only",
+      "7": "±5V · continuous · one channel only",
+      "8": "±5V · continuous · one channel only"
+    }
+  }
+}

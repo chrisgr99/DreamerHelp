@@ -1,0 +1,53 @@
+{
+  "plugin": "Leviathan",
+  "module": "Proc",
+  "description": "A single function generator that is also a slew limiter and an envelope follower, with a freeze input and both a positive and an inverted output",
+  "params": [
+    {"ids": [0], "text": "Latches the channel into free running, so it retriggers itself the moment the fall ends; the lamp beside it is lit while looping"},
+    {"ids": [1], "text": "Sets how long the rise takes, from a tenth of a millisecond at the far left to 1500 seconds at the far right"},
+    {"ids": [2], "text": "Sets how long the fall takes, from a tenth of a millisecond at the far left to 1500 seconds at the far right"},
+    {"ids": [3], "text": "Bends both slopes: logarithmic at the far left, linear a third of the way up, exponential at the far right; the left half also stretches the stage times, the right half shortens them"},
+    {"ids": [4], "text": "Sets the peak the generated function reaches, from 0V to 10V, and starts at 8V; a signal being slewed passes at full level whatever this knob says"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A signal to slew; while no cycle is running the output tracks this voltage at the rates set by SURGE and SINK, and while a cycle is running the signal is folded into it gently instead"},
+    {"ids": [1], "text": "A rising edge above 1V starts a fresh rise; an edge during the rise is ignored, one during the fall drops the output to 0V and restarts, and all of them are ignored while HALT is high"},
+    {"ids": [2], "text": "A voltage above 2.5V freezes the module: the output, both gates and the position in the cycle are held where they were, and triggers and looping are ignored until it falls back below 2.5V"},
+    {"ids": [3], "text": "Lengthens the rise by half an octave of time per volt, and shortens it for negative voltage, over a span of twelve octaves either way"},
+    {"ids": [4], "text": "Scales the rise and the fall together, positive voltage making the whole cycle faster and negative voltage slower"},
+    {"ids": [5], "text": "Lengthens the fall by half an octave of time per volt, and shortens it for negative voltage, over a span of twelve octaves either way"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate that goes high at the top of the rise and stays high for the whole of the fall; with a signal patched into INPUT and no cycle running it is high while the slew falls"},
+    {"ids": [1], "text": "A 10V gate that is high for the whole of the rise; with a signal patched into INPUT and no cycle running it is high while the slew rises"},
+    {"ids": [2], "text": "The generated function, or the slewed input signal, running upward from 0V"},
+    {"ids": [3], "text": "The same voltage as OUT+ with its sign flipped, so it runs downward from 0V"}
+  ],
+  "notes": [
+    "with nothing patched into INPUT or TRIG and LOOP off, the module holds at 0V; it needs a trigger, a loop or a patched signal before it puts anything out",
+    "the dark rectangle draws the shape of the cycle, with a dot running along it while the channel is active; nothing on it can be clicked or dragged"
+  ],
+  "menu": [
+    "Bandlimited EOR/EOC — smooths the edges of the EoR and EoC gates so they alias less at audio rates",
+    "Bandlimited Signal Outputs — smooths the jump the generator makes when a fall reaches the bottom, so the output aliases less at audio rates",
+    "Preview Tracer — draws a moving dot on the curve display showing where the channel is in its cycle",
+    "Interpolate Timing Updates — spreads a change of rise or fall time across the samples between timing updates, removing the zipper tone heavy modulation otherwise causes",
+    "Timing Update Rate — sets how often the rise and fall times are recalculated from the knobs and the CV, at audio rate or one sample in four, eight, sixteen or thirty-two"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 2.5V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "bipolar · continuous · one channel only",
+      "4": "bipolar · continuous · one channel only",
+      "5": "bipolar · continuous · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "-10 to 0V · one channel only"
+    }
+  }
+}

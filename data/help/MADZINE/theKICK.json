@@ -1,0 +1,57 @@
+{
+  "plugin": "MADZINE",
+  "module": "theKICK",
+  "description": "Kick drum voice: a sine oscillator with a swept pitch envelope, self phase modulation, a four-pole low-pass, a saturator and an accent input, and a WAV file that can be loaded to modulate it",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch the sweep settles to, 20Hz to 200Hz"},
+    {"ids": [1], "text": "Sets how far above that pitch each hit starts, 0Hz to 500Hz"},
+    {"ids": [2], "text": "Sets how quickly the pitch falls back, 0.5 to 4; at 0.5 the fall takes 30ms and at 4 it takes under 4ms"},
+    {"ids": [3], "text": "Sets how long the hit takes to die away, 10ms to 1000ms"},
+    {"ids": [4], "text": "Drives the filtered signal into a saturator, 0 to 10, leaving it alone at zero and pushing it six times over at the top"},
+    {"ids": [5], "text": "Sets how deeply the loaded sample modulates the oscillator, 0 to 10; with no sample loaded it does nothing"},
+    {"ids": [6], "text": "Feeds the oscillator's own last two outputs back into its phase, 0 to 1, taking the sine towards a harder, brassier tone"},
+    {"ids": [7], "text": "Sets the corner of the four-pole low-pass after the oscillator, 40Hz at the bottom of its travel to 20000Hz at the top"},
+    {"ids": [8], "text": "Cycles the way the loaded sample acts on the oscillator: PM for phase modulation, RM for ring modulation, AM for amplitude modulation, SYNC for a phase reset at the sample's zero crossings"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge through 2V fires the kick and samples the accent jack"},
+    {"ids": [1], "text": "Multiplies the pitch of the oscillator, one volt per octave, on top of the PITCH knob"},
+    {"ids": [2], "text": "Added to the SWEEP knob, 50Hz per volt; the total is held between 0Hz and 1000Hz"},
+    {"ids": [3], "text": "Added to the BEND knob, 0.35 per volt; the total is held between 0.5 and 4"},
+    {"ids": [4], "text": "Added to the DECAY knob, 100ms per volt; the total is held between 10ms and 2000ms"},
+    {"ids": [5], "text": "Added to the DRIVE knob, one unit of its ten per volt; the total is held between the two ends of it"},
+    {"ids": [6], "text": "Added to the FEEDBACK knob, a tenth per volt; the total is held between 0 and 1"},
+    {"ids": [7], "text": "Added to the TONE knob, one unit of its ten per volt; the total is held between the two ends of it"},
+    {"ids": [8], "text": "Added to the sample modulation knob, one unit of its ten per volt; the total is held between the two ends of it"},
+    {"ids": [9], "text": "Read once at each trigger: 0V gives the quiet hit, 10V raises the level by 6dB, the pitch sweep by four fifths and the drive by 2dB, and anything between scales all three"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The kick"}
+  ],
+  "notes": [
+    "the sample controls do nothing until a WAV file is loaded. Click the small strip under the title to open a file dialog; right-click it for Clear Sample.",
+    "the mode lamp stays dark and the mode button refuses to move while no sample is loaded.",
+    "the CV jacks here are scaled for ±5V; the knob-and-jack totals are then clamped, several of them to a wider span than the knob alone can reach.",
+    "the loaded file is read into a 2048-point table and played back at the oscillator's own frequency, so it acts as a waveform rather than as a sample with a length of its own."
+  ],
+  "menu": [
+    "2x Oversample — runs the voice at twice the sample rate and filters it back down, which softens the aliasing the saturator makes on high sweeps"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1000V.",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "8": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 10V.",
+      "9": "0 to 10V · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

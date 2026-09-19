@@ -1,0 +1,19 @@
+{
+  "plugin": "PhoturiElectronics",
+  "module": "Mo-Th",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 1V", "step": "continuous", "negative": "ignored", "why": "Mo-Th.cpp:60 and 66-71 read it with a plain getVoltage and compare it against a fresh uniform random number between 0 and 1, so anything at or below 0V behaves alike and anything at or above 1V behaves alike"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "negative": "ignored", "why": "Mo-Th.cpp:61 and 75 pass a plain getVoltage to a default dsp::SchmittTrigger, whose thresholds are 0V and 1V"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Mo-Th.cpp:81-82 writes the step knob's 0 to 1 value times 10 with a plain setVoltage when the sequence is on that step, and 0 otherwise"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Mo-Th.cpp:81-82 writes the step knob's 0 to 1 value times 10 with a plain setVoltage when the sequence is on that step, and 0 otherwise"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Mo-Th.cpp:81-82 writes the step knob's 0 to 1 value times 10 with a plain setVoltage when the sequence is on that step, and 0 otherwise"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Mo-Th.cpp:81-82 writes the step knob's 0 to 1 value times 10 with a plain setVoltage when the sequence is on that step, and 0 otherwise"},
+      "4": {"family": "cv", "poly": false, "why": "Mo-Th.cpp:86-90 rounds a frequency in hertz to a whole number, divides by twelve and writes it with a plain setVoltage; nothing bounds the result but the twelve-semitone random offset"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "The Trigger jack is not edge-detected. Mo-Th.cpp:66-71 draws a uniform random number between 0 and 1 in every sample and advances the step whenever that number exceeds the raw voltage on the jack, so the advance probability per sample is one minus the voltage: unpatched or at 0V the step advances at the sample rate, at 10V it never advances. A conventional gate therefore holds the sequence still while it is high and runs it flat out while it is low. This contradicts the README, which says the trigger input advances the sequencer by one step per trigger, and it is said in the Trigger line as well as here because the reader clicking that jack has to learn it there. The note output at lines 86-90 computes 440 times two to the power of (note number minus 69) over twelve — which is a frequency in hertz — then divides by twelve and writes that as a voltage, so it is not a pitch in Rack's terms; the pattern it steps through is the first four Fibonacci numbers, 1, 1, 2 and 3. The note output is also written inside the four-step output loop, so it is calculated four times per sample and the last calculation wins. The four step knobs, the randomness knob and the four step outputs carry no lettering on the panel."
+}

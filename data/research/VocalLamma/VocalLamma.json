@@ -1,0 +1,27 @@
+{
+  "plugin": "VocalLamma",
+  "module": "VocalLamma",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "VocalLamma.cpp:296 reads getVoltage() with no channel and adds it straight to the Pitch knob in volts"},
+      "1": {"family": "cv", "poly": false, "range": "±10V", "step": "continuous", "negative": "swings", "why": "VocalLamma.cpp:312 reads getVoltage() with no channel, multiplies it by the Vowel CV amount knob, divides by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:302 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:376 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "4": {"family": "audio", "poly": false, "why": "VocalLamma.cpp:422 reads getVoltage() with no channel and multiplies it by the Input mix level before line 423 adds it to the voice"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "VocalLamma.cpp:364 compares getVoltage() with no channel against 1.0, and only while the Gate on latch is set"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:421 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:317 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "8": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:297 reads getVoltage() with no channel, multiplies it by 0.5 and clamps the knob-plus-jack total to 0 and 5 seconds"},
+      "9": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "VocalLamma.cpp:355 compares getVoltage() with no channel against 1.0 and flips the Gate on parameter on each rise"},
+      "10": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "VocalLamma.cpp:385 compares getVoltage() with no channel against 1.0 and line 387 measures the frames between one rise and the next"},
+      "11": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:350 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"},
+      "12": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "VocalLamma.cpp:431 reads getVoltage() with no channel, divides it by 10 and clamps the knob-plus-jack total to 0 and 1"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±10V", "why": "VocalLamma.cpp:434 takes 10 times the tanh of a fifth of the mix and line 437 writes it with setVoltage and no setChannels"},
+      "1": {"family": "audio", "poly": false, "range": "±10V", "why": "VocalLamma.cpp:435 takes 10 times the tanh of a fifth of the mix and line 438 writes it with setVoltage and no setChannels"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "VocalLamma.cpp:300 writes the glided pitch in volts with setVoltage and no setChannels"}
+    }
+  },
+  "comment": "Read from the maker's source at commit 6651d58, the only commit whose plugin.json carries the installed 2.2.0, and that file is byte-identical to the installed one. Every control and jack has a widget, so all of them are covered. The manual disagrees with the code in two places. It says polyphonic cables can carry mults to LEFT and RIGHT: both outputs are written with a plain setVoltage and no setChannels, so they are mono. And it gives the delay buffer as about 22.8 seconds at 48kHz, where the buffer is 2 to the 19th samples, which is 10.9 seconds at that rate; the knob's own 10ms to 2 second range is what a reader meets either way, so no buffer figure is quoted in the lines. The manual also describes the pitch jitter as about 0.08 semitones; the code adds it in volts, so the scale factor is 0.08 of an octave, though the jitter itself is smoothed so heavily that the audible wander is far smaller than either figure, and no number for it is quoted. FEEDBACK is the one delay knob with no CV jack. The MIDI menu items are Rack's own, named from the application's English translation file."
+}

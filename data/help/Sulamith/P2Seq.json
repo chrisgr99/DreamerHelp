@@ -1,0 +1,36 @@
+{
+  "plugin": "Sulamith",
+  "module": "P2Seq",
+  "description": "Plays the channels of a polyphonic cable one at a time, stepping on a clock, with a chance of skipping a step or of adding a random offset to the voltage",
+  "params": [
+    {"ids": [0], "text": "Chooses whether the sequence runs forwards, backwards or jumps to a random channel"},
+    {"ids": [1], "text": "Sets the chance that an incoming clock pulse moves the sequence at all, 0 to 1; when it does not, the previous channel keeps playing"},
+    {"ids": [2], "text": "Sets the chance that a random offset is added to the voltage on each step, 0 to 1"},
+    {"ids": [3], "text": "Sets how far that random offset can reach either side of the channel's own voltage: 0.2V, 0.3V, 0.5V, 0.8V, 1V, 1.2V, 1.3V, 1.5V, 1.8V or 2V"},
+    {"ids": [4], "text": "Steps the sequence once, as a rising edge at the clock jack does"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The polyphonic cable whose channels are played one at a time; its channel count is the sequence length"},
+    {"ids": [1], "text": "A rising edge steps the sequence on by one"},
+    {"ids": [2], "text": "A rising edge sends the sequence back to its first channel, or to its last one when it is running backwards"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the voltage of the channel the sequence is on, with the random offset added on the steps that take one"}
+  ],
+  "notes": [
+    "a reset is subject to the step probability in the same way a clock pulse is, so a reset that loses the roll changes nothing",
+    "the clock jack has no threshold: any voltage away from exactly 0V counts as high",
+    "the lamp grid shows one dim lamp per channel of the input and a bright one on the channel being played; the two lamps beside it show a skipped step and an added offset",
+    "with nothing patched to the polyphonic input the output is held at 0V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

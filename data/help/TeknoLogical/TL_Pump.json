@@ -1,0 +1,36 @@
+{
+  "plugin": "TeknoLogical",
+  "module": "TL_Pump",
+  "description": "A trigger-driven stereo ducker: each trigger drops the level and lets it climb back along one of four fixed curves, for sidechain pumping without a detector.",
+  "params": [
+    {"ids": [0], "text": "Steps through the four gain curves, one per press."},
+    {"ids": [1], "text": "Fires the envelope by hand, exactly as a trigger arriving at the jack does."},
+    {"ids": [2], "text": "Crossfades between the untouched signal and the ducked one, 0 to 100% wet, and starts fully wet."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V fires the envelope, restarting it if one is already running."},
+    {"ids": [1], "text": "The left channel in."},
+    {"ids": [2], "text": "The right channel in; with nothing patched here the left input is used for both."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The left channel out, ducked and crossfaded."},
+    {"ids": [1], "text": "The right channel out, ducked and crossfaded."}
+  ],
+  "notes": [
+    "The four curves: a drop to about -30dB, 40ms hold, 280ms climb; the same hold with a 200ms climb that jumps late; a 350ms one-way fade to silence; a 20ms hold with a 140ms climb.",
+    "The third curve latches at silence. Once its fade has finished nothing comes out of the module until another trigger arrives.",
+    "The chosen curve is not saved with the patch. Reloading a patch returns the module to the first curve whatever was selected when it was saved.",
+    "Nothing here takes CV: the curves are fixed, and there is no threshold, ratio or attack control."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "±5V · continuous · one channel only",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads the left input."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only",
+      "1": "±5V · continuous · one channel only"
+    }
+  }
+}

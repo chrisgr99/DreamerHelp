@@ -1,0 +1,12 @@
+{
+  "plugin": "StellareModular-Link",
+  "module": "Link",
+  "facts": {
+    "outputs": {
+      "0": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Link.cpp:141 writes 10.0 or 0.0 with setVoltage and never calls setChannels; the high half is ticks 0 to 3 of each group of 8, and a tick is a thirty-second of a beat"},
+      "1": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Link.cpp:150 writes 10.0 for the first 2 of the 128 ticks in a bar and 0.0 otherwise, with no setChannels"},
+      "2": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Link.cpp:145 writes 10.0 or 0.0 with setVoltage and never calls setChannels; the high half is ticks 0 to 7 of each group of 16"}
+    }
+  },
+  "comment": "Source read at commit a5a5bc2, the repository head, whose plugin.json is byte-identical to the installed one and whose res files all match byte for byte; the only commit that changed plugin.json to 2.1.0 is 18dc18c, and nothing in src or res has changed between that and the head. THE PLUGIN IS NOT ABOUT NEIGHBOURING MODULES AT ALL. Link here means Ableton Link, the network tempo protocol: LinkPeer.cpp creates a single ableton::Link at 120BPM, enables it and enables start-stop sync, shared by every Link and Link v2 module in the patch through a reference count. Nothing about the module depends on what sits beside it in the rack. The internal grid is 32 ticks to a beat and 128 to a bar, with the bar fixed at four beats regardless of what the session reports. Offset is a knob of -1 to +1 scaled to five ticks either way; shuffle is 0 to 1 scaled to three ticks and applied only while the tick is in the second half of each eight-tick group, which delays every other sixteenth. The maker's README says the swing has no effect on the /2 output; that is right about its rising edges, but the shuffle does move the falling edge of /2 because that edge sits on tick 8, where the shuffle window starts. The RESYNC button is momentary and is read as a level rather than an edge: while it is held the module reports itself out of sync, which mutes all three outputs, and it only resumes when the tick reaches 0 at the top of a bar. The lamp above RESYNC is lit while the module is NOT in sync, which is the opposite of what a lamp beside a sync button usually means. The panel prints SHUFFLE where the README says swing and the parameter is called SWING_PARAM. No parameter, input or output in this plugin is given a name, so Rack's hover tooltips are blank throughout. The widget adds no context menu of its own."
+}

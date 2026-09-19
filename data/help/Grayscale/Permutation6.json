@@ -1,0 +1,35 @@
+{
+  "plugin": "Grayscale",
+  "module": "Permutation6",
+  "description": "Looping random sequencer built on a 16-bit shift register, with a voltage sequence and a gate output taken from the first bit",
+  "params": [
+    {"ids": [0], "text": "While it is held, the first bit of the shift register is set to zero on each clock pulse, turning ones into zeroes"},
+    {"ids": [1], "text": "While it is held, the first bit of the shift register is set to one on each clock pulse, turning zeroes into ones"},
+    {"ids": [2], "text": "Sets the chance the last bit is inverted as it is copied back to the first: even at the centre, none at L so the loop repeats unaltered, and inversion every time round at C, doubling the loop"},
+    {"ids": [3], "text": "Sets the bit the sequence is copied back from, 1 to 16, which is the length of the loop"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge moves the shift register on by one bit; it counts as high from 2V upwards"},
+    {"ids": [1], "text": "Modulates SHIFT, BITS or the sequence level, whichever the menu has assigned; assigned to the level, the voltage here sets the range of SEQ outright, and SEQ rests at 0V while this jack is empty"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The first eight bits of the shift register read as a number from 0 to 255 and scaled to a range of 8V, giving a new voltage on every clock pulse"},
+    {"ids": [1], "text": "Carries 8V while the first bit of the shift register is a one, for as long as the clock pulse lasts"}
+  ],
+  "notes": [
+    "the contents of the shift register are saved with the patch, so a locked sequence comes back when the patch is reopened",
+    "the module has no clock of its own and no step button; nothing changes until a clock is patched to CLOCK"
+  ],
+  "menu": [
+    "Control input — chooses Shift, Bits or Level for what the CTRL jack modulates"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "one channel only"
+    },
+    "outputs": {
+      "1": "stepped"
+    }
+  }
+}

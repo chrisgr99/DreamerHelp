@@ -1,0 +1,62 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Note",
+  "description": "A pitched pattern sequencer: eight patterns of eight steps picked from a scale on a pitch grid, with velocity, accent and chance on every step",
+  "params": [
+    {"ids": [0], "text": "Sets the root of the scale, C through B"},
+    {"ids": [1], "text": "Picks the scale the pitch grid is drawn from, one of seventeen"},
+    {"ids": [2], "text": "Shifts the pitch output, -4 to 4 octaves"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise advances the pattern by one step, wrapping at the pattern's own length"},
+    {"ids": [1], "text": "Each rise counts one bar and, once the current pattern has had its repeats, moves to the next active pattern"},
+    {"ids": [2], "text": "A rise returns the module to its first active pattern and its first step"},
+    {"ids": [3], "text": "Moves the root, a volt per octave snapped to semitones, added to the root knob"},
+    {"ids": [4], "text": "Picks the scale, one volt per scale, added to the scale knob; a polyphonic cable from another module's scale output carries the whole scale rather than only its number"},
+    {"ids": [5], "text": "Shifts the pitch output, a volt per octave, added to the octave knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V gate on each step that fires, of the length set on the menu"},
+    {"ids": [1], "text": "The pitch of the current step as a volt per octave"},
+    {"ids": [2], "text": "The velocity of the last step that fired, 0-10V, held until the next one fires"},
+    {"ids": [3], "text": "A 10V trigger on each firing step that is marked accented, of the length set on the menu"},
+    {"ids": [4], "text": "Carries the root in force as a volt per octave, for chaining into another module's root input"},
+    {"ids": [5], "text": "Carries the scale in force: the first channel is the scale number, and the channels behind it carry the period and the degrees, so a scale no number can name travels whole"}
+  ],
+  "notes": [
+    "the pattern grid, the step velocities, the accents, the probabilities, the pattern length and the repeat count are all edited on the display, which cannot be reached by clicking for help",
+    "nothing plays until a clock is patched; the module has no tempo of its own",
+    "the scale list holds a harmonic series in whole-number ratios and the Gamelan scales Slendro and Pelog, whose pitches fall off the twelve-tone grid"
+  ],
+  "menu": [
+    "Scale in force — a label naming the scale being used and, where it has more degrees than the display can show, saying that the rows are only its first degrees",
+    "Advance only on bar trigger — moves to the next pattern only on a real bar pulse, so with nothing patched at BAR the current pattern repeats for ever",
+    "Copy current pattern — takes a copy of the pattern being edited",
+    "Copy all patterns — takes a copy of all eight patterns at once",
+    "Paste to current pattern — writes the copied pattern over the one being edited",
+    "Paste all patterns — writes the copied set over all eight patterns",
+    "Gate length: Trigger (1ms), 25%, 50%, 75%, 90%, 100% (legato) — sets how much of each step the gate output holds high",
+    "Trigger/accent width — sets how long the accent pulse, and the gate when its length is set to Trigger, lasts: a fixed 1, 2, 5 or 10ms",
+    "Randomize current pattern (notes only) — draws fresh pitches for the pattern being edited, leaving velocity, accent and probability alone",
+    "Clear current pattern — empties the pattern being edited",
+    "Clear all patterns — empties all eight patterns"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "stepped · one channel only",
+      "3": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V.",
+      "4": "bipolar · stepped · polyphonic\n\nunpatched it reads 0V.",
+      "5": "1V per octave · stepped · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "1V per octave · continuous · one channel only",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · stepped · one channel only",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "plugin": "LifeFormModular",
+  "module": "AdditiveVibration",
+  "description": "Synth voice: up to three phase-shaped sine oscillators, frequency-modulated by a chosen set of their own harmonics, with one envelope",
+  "params": [
+    {"ids": [0], "text": "Sets the pitch of the voice in whole octaves, 4 to 12, where 8 gives C4 at 261.63Hz"},
+    {"ids": [1], "text": "Sets where the breakpoint of the phase-shaping curve falls in the cycle, a tenth to nine tenths of the way through"},
+    {"ids": [2], "text": "Sets how far the wave has advanced at that breakpoint, 0 to 0.9; at 0.5 with WIDTH at 0.5 the wave is an unshaped sine"},
+    {"ids": [3], "text": "Sets the level of the lowest of the three harmonics chosen by SET in the modulating signal"},
+    {"ids": [4], "text": "Sets the level of the middle of the three harmonics chosen by SET in the modulating signal"},
+    {"ids": [5], "text": "Sets the level of the highest of the three harmonics chosen by SET in the modulating signal"},
+    {"ids": [6], "text": "Attenuates and inverts the width CV, adding it to the WIDTH setting"},
+    {"ids": [7], "text": "Attenuates and inverts the curve CV, adding it to the CURVE setting"},
+    {"ids": [8, 9, 10], "text": "Attenuates and inverts the level CV for that harmonic, adding it to that harmonic's slider setting"},
+    {"ids": [11], "text": "Sets how far the harmonic mix bends the pitch of the oscillators, silent counter-clockwise to seven clockwise"},
+    {"ids": [12], "text": "Picks which three of the second to sixth harmonics make up the modulating signal, in eight combinations"},
+    {"ids": [13], "text": "Attenuates and inverts the envelope where it is added to the FM level"},
+    {"ids": [14, 15], "text": "Attenuates and inverts one of the two FM level CVs, adding it to the FM level"},
+    {"ids": [16], "text": "Picks the envelope's time range: 1ms to 1 second on fast, 10ms to 10 seconds on medium, 100ms to 100 seconds on slow"},
+    {"ids": [17], "text": "Bends the rise and the fall of the envelope into an exponential curve"},
+    {"ids": [19], "text": "Sets the rise time of the envelope, from the shortest time of the chosen range counter-clockwise to the longest clockwise"},
+    {"ids": [20], "text": "Sets the fall time of the envelope, from the shortest time of the chosen range counter-clockwise to the longest clockwise"},
+    {"ids": [21], "text": "Makes the envelope start again as soon as it reaches 0V, so that after one trigger it runs on as an LFO"},
+    {"ids": [22], "text": "Chooses what the envelope's modulation voltage changes: the rise alone, the fall alone, or both"},
+    {"ids": [23], "text": "Attenuates and inverts the envelope's modulation voltage, adding it to the time chosen by DEST."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Sets the pitch of the first oscillator, a volt per octave, added to the octave setting"},
+    {"ids": [1], "text": "A pitch voltage here adds a second oscillator at that pitch, mixed equally with the first into both audio outputs"},
+    {"ids": [2], "text": "A pitch voltage here adds a third oscillator at that pitch, mixed equally with the first into both audio outputs"},
+    {"ids": [3], "text": "A voltage here shifts the WIDTH setting, scaled by the XMOD attenuverter"},
+    {"ids": [4], "text": "A voltage here shifts the CURVE setting, scaled by the YMOD attenuverter"},
+    {"ids": [5, 6, 7], "text": "A voltage here shifts one harmonic's level, scaled by that harmonic's MOD AMT attenuverter"},
+    {"ids": [8, 9], "text": "A voltage here shifts the FM level, scaled by its own attenuverter"},
+    {"ids": [10], "text": "A voltage here shifts the envelope time chosen by DEST., scaled by the MOD attenuverter"},
+    {"ids": [11], "text": "A trigger here starts the envelope"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The oscillators mixed together, ±5V, with no envelope applied"},
+    {"ids": [1], "text": "The envelope, 0-10V"},
+    {"ids": [2], "text": "The oscillators mixed together and scaled by the envelope, ±5V"}
+  ],
+  "notes": [
+    "The AUDIO output is silent until a trigger reaches TRIG, because the envelope scales it; the OSC output carries the oscillators whether or not the envelope has been triggered."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "11": "stepped"
+    },
+    "outputs": {
+      "0": "±5V · continuous",
+      "1": "0 to 10V",
+      "2": "±5V · continuous"
+    }
+  }
+}

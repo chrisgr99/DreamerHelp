@@ -1,0 +1,49 @@
+{
+  "plugin": "DHE-Modules",
+  "module": "BoosterStage",
+  "description": "Generates one envelope stage, with a CV input for each knob, a choice of J or S curves, and a button beside each control jack",
+  "params": [
+    {"ids": [0], "text": "Forces the ACTIVE output to 10V while pressed"},
+    {"ids": [1], "text": "Sets the curvature of the stage; centred is a straight line, clockwise pushes the steep part towards the end and counter-clockwise towards the start, and the extremes are nearly square"},
+    {"ids": [2], "text": "Holds the DEFER signal at 10V while pressed, so the IN signal passes straight to OUT"},
+    {"ids": [3], "text": "Sets how long the stage takes, within the range chosen by the 1/10/100 switch"},
+    {"ids": [4], "text": "Sets the range of the DURATION knob: 1ms to 1 second, 10ms to 10 seconds, or 100ms to 100 seconds, with the knob centred giving a tenth of the maximum"},
+    {"ids": [5], "text": "Forces the EOC output to 10V while pressed"},
+    {"ids": [6], "text": "Sets the voltage at which the generated stage ends, within the range chosen by the UNI/BI switch"},
+    {"ids": [7], "text": "Sets the range of the LEVEL knob: 0-10V at UNI, or -5 to 5V at BI"},
+    {"ids": [8], "text": "Chooses the shape of the stage: a J curve that steepens at one end, or an S curve that steepens through the middle"},
+    {"ids": [9], "text": "Holds the TRIG signal at 10V while pressed, which starts a stage"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Modulates the curvature; every 1V here turns the CURVE knob a tenth of its travel clockwise"},
+    {"ids": [1], "text": "While this gate is high the IN signal passes straight to OUT and any stage in progress is abandoned; it reads high above 1V"},
+    {"ids": [2], "text": "Modulates the duration; every 1V here turns the DURATION knob a tenth of its travel clockwise"},
+    {"ids": [3], "text": "Modulates the level; every 1V here turns the LEVEL knob a tenth of its travel clockwise"},
+    {"ids": [4], "text": "The voltage a stage starts from, sampled when the trigger arrives, and passed straight to OUT while DEFER is high"},
+    {"ids": [5], "text": "A rising edge starts a stage from the voltage at IN; a rise during a stage abandons it and starts a new one, and rises are ignored while DEFER is high; it reads high above 1V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while a stage is being generated or while DEFER is high, and 0V otherwise"},
+    {"ids": [1], "text": "Carries a 1ms 10V pulse when a stage completes"},
+    {"ids": [2], "text": "Carries the generated stage, the IN voltage while DEFER is high, or the LEVEL voltage after a stage has completed"}
+  ],
+  "notes": [
+    "a knob turned while a stage runs takes effect at once, and the new value applies to the remainder of that stage",
+    "a stage runs only on a rising edge at the TRIG input or a press of the TRIG button; until the first one arrives OUT passes the IN voltage straight through, which is 0V with nothing patched",
+    "the module is mono: it reads the first channel of a polyphonic cable and ignores the rest, and every output carries a single channel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "unipolar · continuous · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "unipolar · continuous · one channel only",
+      "3": "unipolar · continuous · one channel only",
+      "4": "continuous · one channel only",
+      "5": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

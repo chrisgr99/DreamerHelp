@@ -1,0 +1,54 @@
+{
+  "plugin": "OrangeLine",
+  "module": "Phrase",
+  "description": "Phrase sequencer with no sequence of its own: it clocks a master sequencer for the pattern, length and duration of each phrase, and drives a slave sequencer to play them",
+  "params": [
+    {"ids": [0], "text": "Sets how many samples pass between the master clock trigger and the reading of the master's pattern, length and duration voltages, 0 to 32"},
+    {"ids": [1], "text": "Sets how many steps one pattern of the slave sequencer has, 1 to 64; a phrase longer than this moves the slave on to the next pattern"},
+    {"ids": [2], "text": "Sets the voltage added to the slave pattern output to move on to the next slave pattern, -10V to 10V"},
+    {"ids": [3], "text": "Sets the clock division the module runs at, 1 to 256 incoming triggers per step"},
+    {"ids": [4], "text": "Offsets the pattern voltage arriving from the master sequencer, -10V to 10V"},
+    {"ids": [5], "text": "Delays the slave clock and reset outputs by that many samples, 0 to 32"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger restarts the phrase sequence and resets both sequencers"},
+    {"ids": [1], "text": "The clock the module runs on"},
+    {"ids": [2], "text": "A pattern voltage passed on to the master sequencer, so that a phrase list can itself be sequenced by another Phrase"},
+    {"ids": [3], "text": "Takes the pattern voltage the master sequencer puts out, which becomes the slave's starting pattern"},
+    {"ids": [4], "text": "Takes the pattern length from the master sequencer at 0.01V per clock tick; at 0V the default length is used"},
+    {"ids": [5], "text": "Takes the phrase duration from the master sequencer at 0.01V per clock tick; at 0V the duration matches the pattern length"},
+    {"ids": [6], "text": "Sets the default pattern length used where the master length is unpatched or at 0V"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A reset trigger for the master sequencer"},
+    {"ids": [1], "text": "A trigger clocking the master sequencer when the values for the next phrase are wanted"},
+    {"ids": [2], "text": "Copies the PTN input to the master sequencer at the moment the master clock trigger is sent"},
+    {"ids": [3], "text": "A reset trigger for the slave sequencer"},
+    {"ids": [4], "text": "The clock trigger for the slave sequencer"},
+    {"ids": [5], "text": "The pattern voltage selecting the slave sequencer's pattern"},
+    {"ids": [6], "text": "A trigger at the start of each phrase, moved to the end of the phrase by the SPH is EOC menu option"},
+    {"ids": [7], "text": "A trigger at the start of each pattern"},
+    {"ids": [8], "text": "The effective default pattern length at 0.01V per clock tick, copied from the DLEN input where that is patched and otherwise the slave LEN knob multiplied by DIV"}
+  ],
+  "notes": [
+    "the module sequences nothing by itself: it needs a master sequencer putting out pattern, length and duration as three voltages, and a slave sequencer holding several patterns"
+  ],
+  "menu": [
+    "SPH is EOC — moves the SPH trigger from the start of a phrase to its end",
+    "Trowa pattern offset — adds a small offset to the pattern voltage, for trowaSoft sequencers whose pattern input does not read back the voltage they put out"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "3": "stepped",
+      "4": "stepped",
+      "6": "stepped",
+      "7": "stepped"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "plugin": "LydD-Modules",
+  "module": "Reflector",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "0V", "why": "Reflection.cpp:150 reads this input with getVoltage(0), which is channel 1 alone, and uses 0V when it is unconnected"},
+      "1": {"family": "audio", "poly": false, "step": "continuous", "range": "±5V", "normal": "the other Signal jack", "why": "Reflection.cpp:151 reads this input with getVoltage(0) and falls back to the first half's signal when unconnected"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "sumRange": "0.5 to 10V", "normal": "0V", "why": "Reflection.cpp:158 reads this input with getVoltage(0) and takes its absolute value; Reflection.cpp:159 adds the knob and clamps the total to 0.5 and 10"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "sumRange": "0.5 to 10V", "normal": "0V", "why": "Reflection.cpp:158 reads this input with getVoltage(0) and takes its absolute value; Reflection.cpp:159 adds the knob and clamps the total to 0.5 and 10"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "±5V", "normal": "0V", "why": "Reflection.cpp:162 reads this input with getVoltage(0); Reflection.cpp:163 adds the knob and clamps the total to ±5"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "sumRange": "±5V", "normal": "0V", "why": "Reflection.cpp:162 reads this input with getVoltage(0); Reflection.cpp:163 adds the knob and clamps the total to ±5"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Reflection.cpp:166 reads this input with getVoltage(0) and divides it by 5; Reflection.cpp:167 adds the knob and clamps the total to ±0.99"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "Reflection.cpp:166 reads this input with getVoltage(0) and divides it by 5; Reflection.cpp:167 adds the knob and clamps the total to ±0.99"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Reflection.cpp:189 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "1": {"family": "audio", "poly": false, "why": "Reflection.cpp:189 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "2": {"family": "audio", "poly": false, "why": "Reflection.cpp:190 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"},
+      "3": {"family": "audio", "poly": false, "why": "Reflection.cpp:190 writes channel 1 alone and the module never calls setChannels, so this output stays monophonic"}
+    }
+  },
+  "comment": "Read from src/Reflection.cpp at commit 71e0bcb, the last commit whose plugin.json carries the installed 2.0.30. The fold and the wrap are both written as recursions with a hard stop after ten passes (Reflection.cpp:26 and 41), so a signal far enough outside a narrow window is returned still outside it; the panel gives no sign of that, though a lamp does light when the recursion runs. The Inverted output is not an inversion of the Main output: the input is negated first and then folded, which on an off-centre window gives a different shape rather than a mirror image. The Mirror Type button has no printed label, only two glyphs. There is no manual for this module and no README entry. The module has no right-click menu of its own, so no panel-colour choice."
+}

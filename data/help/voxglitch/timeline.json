@@ -1,0 +1,61 @@
+{
+  "plugin": "voxglitch",
+  "module": "timeline",
+  "description": "Timeline: a 16-lane automation sequencer. Draw a control curve of nodes joined by straight or bent segments against bars and beats, and play all sixteen lanes out of one polyphonic cable",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo every lane runs at, 20 to 300 BPM in half-BPM steps; there is no clock input, so this is where the module's timing comes from"},
+    {"ids": [3], "text": "Turned on, playback wraps at the loop end, which is the drawn content rounded up to a whole bar, or four bars on an empty timeline, unless the amber handle in the ruler has been dragged"},
+    {"ids": [4], "text": "Turned on, the view follows the selected lane's playhead and keeps it centred; panning or paging the scrollbar suspends it until you seek, the loop wraps, or the playhead comes back on screen"},
+    {"ids": [5], "text": "Starts and stops every lane at once; between flips of this switch the START and STOP inputs set each lane's state on its own"},
+    {"ids": [6], "text": "Rewinds every lane to the beginning"},
+    {"ids": [8], "text": "Arms recording, lighting red while armed; a take runs whenever the transport is also playing, and arming while stopped does nothing until play starts"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A trigger starts a lane playing; a monophonic cable starts every lane, and on a polyphonic cable channel 1 starts lane 1, channel 2 lane 2 and so on, leaving lanes past the channel count alone"},
+    {"ids": [1], "text": "A trigger stops a lane where it is; a monophonic cable stops every lane, and on a polyphonic cable channel 1 stops lane 1, channel 2 lane 2 and so on"},
+    {"ids": [2], "text": "A trigger rewinds a lane to the beginning; a monophonic cable rewinds every lane, and on a polyphonic cable channel 1 rewinds lane 1, channel 2 lane 2 and so on"},
+    {"ids": [3], "text": "The voltage written into a lane while a take runs: a monophonic cable records into the selected lane, and a polyphonic one records channel 1 into lane 1, channel 2 into lane 2 and so on"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The sixteen automation curves, -10V to 10V, one channel per lane; an empty lane carries 0V"},
+    {"ids": [1], "text": "A clock taken from each lane's playhead, one channel per lane, at the division the Clock division menu item sets"},
+    {"ids": [2], "text": "A trigger on each lane's rewind and on each loop wrap, one channel per lane; this is the one to patch into a downstream sequencer's reset"},
+    {"ids": [3], "text": "A trigger on each lane's rewind only, one channel per lane; a loop wrap does not fire it"},
+    {"ids": [4], "text": "A trigger on each loop wrap only, one channel per lane"},
+    {"ids": [5], "text": "Carries 10V while that lane is playing and 0V while it is stopped, one channel per lane"}
+  ],
+  "notes": [
+    "a lane with no nodes drawn in it carries 0V and does nothing; click in the editor to place the first node, then drag it into position",
+    "the curve editor, the ruler, the loop handle and the sixteen lane tabs above it are one display widget, so none of the controls in them can be clicked for help",
+    "in the editor, click empty space to add a node, drag a node to move it, right-click a node to delete it, and drag the diamond on a segment to bend it; right-click the diamond to straighten it",
+    "the numbered tabs above the editor choose the lane shown; a tab with nodes in it reads brighter, and each carries a dot that is green while its lane runs and red while it is stopped",
+    "a take starts on the first sample where the REC button is armed and a target lane is playing, ends when either stops, and writes only over the part of the lane the playhead passes",
+    "a lane holds at most 8192 nodes; a take that reaches the limit stops adding them and a red LANE FULL notice appears beside the readout",
+    "a curve holds its first node's value before that node and its last node's value after it, so a lane has a voltage everywhere"
+  ],
+  "menu": [
+    "Lock Editor — freezes the editor against mouse edits and tints it red, clicks falling through to the panel; recording goes on working while it is locked",
+    "Snap: Off, 1 bar, 1/2, 1/4, 1/8, 1/16 — the grid that node placement and the loop handle land on. Recording ignores it",
+    "Clock division: 1/1 (bar), 1/2, 1/4, 1/8, 1/16, 1/32 — the division of each lane's beat that the CLK output carries",
+    "Record rate: 1 bar, 1/2, 1/4, 1/8, 1/16, 1/32 — the grid a take samples the REC input on; a node is written only where the value changes",
+    "Clear lane, in the editor's own right-click menu — removes every node from the selected lane",
+    "Straighten lane, in the editor's own right-click menu — removes every bend from the selected lane, keeping its nodes",
+    "Fit view to content, in the editor's own right-click menu — zooms the editor to show everything drawn in the selected lane",
+    "Reset zoom, in the editor's own right-click menu — returns the editor to its default view"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "±10V · continuous · polyphonic\n\nunpatched it reads 0V, which is recorded."
+    },
+    "outputs": {
+      "0": "±10V",
+      "1": "stepped",
+      "2": "stepped",
+      "3": "stepped",
+      "4": "stepped"
+    }
+  }
+}

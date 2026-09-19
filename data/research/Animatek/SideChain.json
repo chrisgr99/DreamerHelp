@@ -1,0 +1,20 @@
+{
+  "plugin": "Animatek",
+  "module": "SideChain",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "range": "high above 1V", "step": "stepped", "why": "Schmitt thresholds of 1V rising and 0.1V falling, and the channel count sets the envelope polyphony, per the manual's TRIG section"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "10V adds 100% depth and the total is limited to 0-100%, per the manual's D-CV section"},
+      "2": {"family": "audio", "poly": true, "step": "continuous", "why": "the audio inputs accept polyphonic cables and the outputs follow their channel count, per the manual's outputs section"},
+      "3": {"family": "audio", "poly": true, "step": "continuous", "normal": "the left input", "why": "SideChain.cpp:159 the port is named \"Audio right (normalled to left)\"; the manual's IN R section says the same"},
+      "4": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the full ceiling", "why": "SideChain.cpp:234 divides this jack's channel voltage by 10 and clamps the result to 0 to 1, then multiplies the ceiling knob by it (:223-230), so 0V closes the VCA, 10V reaches the ceiling the knob sets, and a negative voltage clamps to 0"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "10V at rest with the same channel count as the trigger input, per the manual's ENV section"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "a 10V 1ms pulse per envelope channel, per the manual's EOC section"}
+    }
+  },
+  "comment": "Two jacks carry no label on the panel: the one under DEPTH is the depth CV and the one under the level slider is the VCA CV, each tied to its control by a hairline. The VCA input was added in 2.5.7, after the manual was written, and the manual read here (Manuals/CAP_Manual_EN.md at this commit) does describe it. Rack's own bypass routes left to left and right to right and does not reproduce the internal right-input normalling."
+}

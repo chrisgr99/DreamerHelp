@@ -1,0 +1,52 @@
+{
+  "plugin": "RPJVisualizer",
+  "module": "LFMFull",
+  "description": "An audio visualiser built on projectM: it draws MilkDrop and Winamp presets from the audio patched into it, in a window of its own that can be dragged anywhere, or onto a second monitor.",
+  "params": [
+    {"ids": [0], "text": "Moves to another visual: the next in order, or a random one while Cycle through visuals is on, or the next entry while the playlist is being played."},
+    {"ids": [1], "text": "Moves back a visual: the one before in order, or a random one while Cycle through visuals is on, or the entry before while the playlist is being played."},
+    {"ids": [2], "text": "Sets how long a visual is held before the next one, 0 to 300 seconds. It does nothing unless Cycle through visuals is on."},
+    {"ids": [3], "text": "Sets how strongly a visual reacts to the audio, 0 to 5, from flat to very reactive."},
+    {"ids": [4], "text": "Sets the beat level that brings on a hard cut to another visual, 0 to 5. It does nothing unless Hardcut enabled and Cycle through visuals are both on."},
+    {"ids": [5], "text": "Sets the least time a visual is held before a hard cut can replace it, 0 to 300 seconds."},
+    {"ids": [7], "text": "Switches between the whole library of visuals and your own playlist; it latches down and turns red while the playlist is the one being played."},
+    {"ids": [8], "text": "Adds the visual now playing to the playlist, and only once. It does nothing while the playlist is the one being played."},
+    {"ids": [9], "text": "Takes the visual now playing out of the playlist. It does nothing unless the playlist is the one being played."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The audio the visuals are drawn from. It also fills the second half of the sample buffer while R is unpatched."},
+    {"ids": [1], "text": "The second channel of the audio the visuals are drawn from. Unpatched, the L input is read in its place."},
+    {"ids": [2], "text": "A rise past 2V moves to another visual, and the jack re-arms once the voltage falls below 0.1V."},
+    {"ids": [3], "text": "A rise past 2V moves back a visual, and the jack re-arms once the voltage falls below 0.1V."},
+    {"ids": [4], "text": "Adds its voltage to the BEAT SENSITIVITY knob, one unit of sensitivity a volt, with no limit at either end."},
+    {"ids": [5], "text": "Adds its voltage to the HARDCUT SENSITIVITY knob, one unit a volt, with no limit at either end."},
+    {"ids": [6], "text": "Adds its voltage to the HARDCUT DURATION knob, one second a volt, with no limit at either end."}
+  ],
+  "notes": [
+    "the visuals are driven only by what is patched into L and R. With nothing patched the display runs on, reacting to silence.",
+    "the window opens as soon as the module is placed and cannot be closed; deleting the module is what removes it.",
+    "with the window in front, F, F4 or Enter goes full screen, Escape or Q leaves full screen and otherwise minimises the window, and R switches to a new visual.",
+    "which visual is playing is picked from the panel menu, which ends in a search box and the whole list of visuals.",
+    "the playlist is written and read with Rack's own preset commands on the module menu."
+  ],
+  "menu": [
+    "Cycle through visuals — moves to another visual on its own, on the TIMER setting and on hard cuts.",
+    "Window always on Top — keeps the visual window above the other windows on the screen.",
+    "Hardcut enabled — lets a strong enough beat cut to another visual before the TIMER has run out.",
+    "Aspectcorrection enabled — sets the flag a visual reads to keep circles and squares from being stretched when the display is not square.",
+    "Case sensitive Visual Search — makes the search box tell capitals from small letters.",
+    "Clear Playlist — empties the playlist.",
+    "Search visuals — a text box under the Visuals heading: what you type in it narrows the list of visuals below to the matching ones."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads the L input.",
+      "2": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "5": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "6": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    }
+  }
+}

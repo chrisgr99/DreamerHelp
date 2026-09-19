@@ -1,0 +1,17 @@
+{
+  "plugin": "QuestionableDinner",
+  "module": "ElasticTwins",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "negative": "swings", "why": "src/ElasticTwins.cpp:129 takes the channel count from this jack's getChannels(); line 262 reads getVoltage(i); line 258 leaves process early when it is unpatched"},
+      "1": {"family": "trigger", "poly": true, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "the internal clock chosen beside it", "why": "src/ElasticTwins.cpp:211 reads getNormalVoltage(revGate, i) and tests it against 0.1"},
+      "2": {"family": "trigger", "poly": true, "range": "high above 0.1V", "step": "stepped", "negative": "ignored", "normal": "the internal clock chosen beside it", "why": "src/ElasticTwins.cpp:210 reads getNormalVoltage(recGate, i) and tests it against 0.1"},
+      "3": {"family": "trigger", "poly": true, "step": "stepped", "negative": "swings", "normal": "the internal clock chosen beside it", "why": "src/ElasticTwins.cpp:214 reads getNormalVoltage(clrGate, i) and fires on any rise of the jack plus the button"},
+      "4": {"family": "trigger", "poly": true, "step": "stepped", "negative": "swings", "normal": "the internal clock chosen beside it", "why": "src/ElasticTwins.cpp:218 reads getNormalVoltage(swapGate, i) and fires on any rise of the jack plus the button"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "src/ElasticTwins.cpp:130 setChannels from the audio input; line 324 sets a voltage per channel"}
+    }
+  },
+  "comment": "The panel groups the four state controls in columns lettered REC, CLR, SWP and SEL, each with its override jack at the top, a three-way clock switch marked 1 and 2, and a button; FEED and SMTH letter the two small knobs and the two buffer direction switches are marked with arrows. Index order is not panel order on the inputs: left to right the override jacks are input 2 (record), 3 (clear), 4 (swap) and 1 (select). The record and select jacks are combined with their buttons by exclusive or, so a button pressed while a gate is high turns the function off. The sync switch is configured with a default of 9 on a control whose range is 0 to 1 (src/ElasticTwins.cpp:98), so a fresh module comes up with the clocks locked. src/ElasticTwins.cpp:265-266 reads channel index 1 for the two lamps, which is never written on a mono patch."
+}

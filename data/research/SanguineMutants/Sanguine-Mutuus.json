@@ -1,0 +1,20 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Mutuus",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V, or 2V for the oscillator pitch", "why": "mutuus.cpp:193 reads this input with getNormalVoltage(5, channel), mutuus.cpp:200 divides it by 5, multiplies by the knob and clamps to 0..1; mutuus.cpp:227 reads it again with getNormalVoltage(2, channel) into the oscillator note"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "range": "0 to 5V", "negative": "ignored", "normal": "5V", "why": "mutuus.cpp:194 reads this input with getNormalVoltage(5, channel) and mutuus.cpp:201 divides it by 5, multiplies by the knob and clamps the result to 0..1"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "mutuus.cpp:195 reads this input with getVoltage(channel) and mutuus.cpp:217 divides it by 5, adds the knob and clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 5V", "negative": "subtracts", "why": "mutuus.cpp:196 reads this input with getVoltage(channel) and mutuus.cpp:221 divides it by 5, adds the knob and clamps the total to 0..1"},
+      "4": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "mutuus.cpp:234 divides this input by 8 into a 16-bit sample and clamps it, and mutuus.cpp:122 takes part of the module's channel count from its getChannels()"},
+      "5": {"family": "audio", "poly": true, "step": "continuous", "range": "±8V", "why": "mutuus.cpp:236 divides this input by 8 into a 16-bit sample and clamps it, and mutuus.cpp:122 takes part of the module's channel count from its getChannels()"},
+      "6": {"family": "cv", "poly": true, "step": "stepped", "range": "0 to 8V", "negative": "ignored", "why": "mutuus.cpp:163 reads this input four channels at a time and mutuus.cpp:170 clamps it to 0..8 and truncates it to a mode index; mutuus.cpp:165 instead multiplies it by 12 and rounds when the note reading is on"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "mutuus.cpp:239 scales the modulator's 16-bit sample by 5 and mutuus.cpp:243 sets the channel count"},
+      "1": {"family": "audio", "poly": true, "range": "±5V", "why": "mutuus.cpp:240 scales the modulator's 16-bit sample by 5 and mutuus.cpp:244 sets the channel count"}
+    }
+  },
+  "comment": "The DSP is the Symbiote alternative firmware for Warps, itself an evolution of Parasite, vendored at alt_firmware/symbiote; src/mutuus.cpp is the Rack wrapper, running one modulator per polyphonic channel. Four of its nine modes are new against Distortiones — a dual state variable filter, an ensemble chorus, a collection of four stereo reverbs taken from Rings, Clouds and Elements, and a delay — and the original cross-modulation set survives as Meta mode. An extra button, ST, switches the dual filter mode to stereo. The level jacks carry two normals each in effect: mutuus.cpp:193 reads the first with getNormalVoltage(5) for the gain and mutuus.cpp:227 reads the same jack again with getNormalVoltage(2) for the internal oscillator's pitch. Per-channel reads use getVoltage(channel) rather than getPolyVoltage(channel), so a monophonic cable patched to a control voltage jack drives the first channel alone; the MODE jack is the exception and is read four channels at a time."
+}

@@ -1,0 +1,24 @@
+{
+  "plugin": "dbRackModules",
+  "module": "SuperLFO",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "range": "1V per octave", "step": "continuous", "why": "SuperLFO.cpp:207 reads this input per channel and SuperLFO.cpp:210 adds it to the Freq knob as a power of two"},
+      "1": {"family": "audio", "poly": true, "range": "0 to 10V", "step": "continuous", "normal": "0V", "why": "SuperLFO.cpp:209 reads it per channel and divides by 10, then SuperLFO.cpp:211 adds it to the module's own phase"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "SuperLFO.cpp:234 reads this input with getVoltage() and no channel loop, into a dsp::SchmittTrigger with its default 0V and 1V thresholds"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "SuperLFO.cpp:204 reads it per channel, scales it by the knob beside it and adds the RX knob, with no clamp"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "SuperLFO.cpp:205 reads it per channel, scales it by the knob beside it and adds the RY knob, with no clamp"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "SuperLFO.cpp:206 reads it per channel, scales it by the knob beside it and adds the ROT knob, with no clamp"},
+      "6": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 16V", "why": "SuperLFO.cpp:190-191 read it per channel, scale it by the knob beside it, add the N1 knob and clamp the total to 0.05..16"},
+      "7": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "SuperLFO.cpp:200-201 read it per channel, scale it by the knob beside it, add the N2 knob and clamp the total to -5..5"},
+      "8": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "±5V", "why": "SuperLFO.cpp:202-203 read it per channel, scale it by the knob beside it, add the N3 knob and clamp the total to -5..5"},
+      "9": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "SuperLFO.cpp:194-195 read it per channel, scale it by the knob beside it, add the A knob and clamp the total to 0.05..5"},
+      "10": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "sumRange": "0 to 5V", "why": "SuperLFO.cpp:197-198 read it per channel, scale it by the knob beside it, add the B knob and clamp the total to 0.05..5"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "±10V", "why": "SuperLFO.cpp:217 sets this output's channel count from the V/Oct jack; SuperLFO.cpp:214 clamps it to -10..10"},
+      "1": {"family": "cv", "poly": true, "range": "±10V", "why": "SuperLFO.cpp:218 sets this output's channel count from the V/Oct jack; SuperLFO.cpp:215 clamps it to -10..10"}
+    }
+  },
+  "comment": "The Phs and Rst jacks are the two inputs the maker never named, so both carry blank tooltips. Two more parameters, X_CV and Y_CV, are configured at SuperLFO.cpp:136-137 with no widget on the panel, so no click reaches them. At the very bottom of its travel the Freq knob sets the rate to exactly zero, SuperLFO.cpp:60-63, which is what makes the Phs jack able to drive the curve on its own. The N1 sum is clamped to 16 although its knob stops at 5, SuperLFO.cpp:191."
+}

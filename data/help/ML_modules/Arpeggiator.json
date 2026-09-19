@@ -1,0 +1,55 @@
+{
+  "plugin": "ML_modules",
+  "module": "Arpeggiator",
+  "description": "A polyphonic arpeggiator: the notes played into it go into one shared list, and every channel of the Clock input runs its own arpeggio over that list",
+  "params": [
+    {"ids": [0], "text": "Switches between playing the note list in the order the notes arrived and playing it in pitch order, shown on the display as Time or Pitch"},
+    {"ids": [1], "text": "Chooses what the CV1 output carries: I keeps the CV1 voltage sampled as the note was played, C passes the present voltage of the note's own input channel, and O samples it on the output clock"},
+    {"ids": [2], "text": "Chooses what the CV2 output carries: I keeps the CV2 voltage sampled as the note was played, C passes the present voltage of the note's own input channel, and O samples it on the output clock"},
+    {"ids": [3], "text": "Steps forward through the play modes Up, Down, UpDn1, DnUp1, UpDn2, DnUp2 and Rand, and round again"},
+    {"ids": [4], "text": "Steps back through the play modes Up, Down, UpDn1, DnUp1, UpDn2, DnUp2 and Rand, and round again"},
+    {"ids": [5], "text": "Steps the octave range of the arpeggio up by one, from 1 to 4 octaves and round again"},
+    {"ids": [6], "text": "Steps the octave range of the arpeggio down by one, from 4 to 1 octaves and round again"},
+    {"ids": [7], "text": "Latches hold, so notes stay in the list after their gates fall, and lights while hold is on"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A gate rising on a channel puts that channel's pitch into the note list, and its falling takes the note out again unless hold is on"},
+    {"ids": [1], "text": "The pitches played into the note list, at a volt per octave, taken from the channel whose gate has risen"},
+    {"ids": [2], "text": "A voltage carried along with the note played on the same channel and passed on at the CV1 output, as the S&H switch for CV1 sets"},
+    {"ids": [3], "text": "A voltage carried along with the note played on the same channel and passed on at the CV2 output, as the S&H switch for CV2 sets"},
+    {"ids": [5], "text": "Each rising edge moves that channel's arpeggio on by one note, and the number of channels here sets how many arpeggios run and the polyphony of every output"},
+    {"ids": [6], "text": "Adds its rounded voltage per channel to the play mode set by the buttons, so one output channel can run a different mode"},
+    {"ids": [7], "text": "Adds its rounded voltage per channel to the octave range set by the buttons, so one output channel can cover a different range"},
+    {"ids": [8], "text": "Adds its voltage per channel to the note order set by the button, so one output channel can run in the other order"},
+    {"ids": [9], "text": "A rising edge on a channel restarts that channel's arpeggio at the start of the list"},
+    {"ids": [10], "text": "Above 0.5V the hold setting is reversed, so notes are held while the Hold button is unlit and released while it is lit"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Passes the gates of the Clock input on each channel while there are notes in the list"},
+    {"ids": [1], "text": "The pitch of the note that channel's arpeggio is playing, at a volt per octave"},
+    {"ids": [2], "text": "The voltage stored or sampled for the note that channel is playing, as the CV1 switch sets"},
+    {"ids": [3], "text": "The voltage stored or sampled for the note that channel is playing, as the CV2 switch sets"}
+  ],
+  "notes": [
+    "with a monophonic Gate and V/Oct pair and hold in use, incoming notes are spread across the channels in turn, which lets patterns be entered from a sequencer",
+    "nothing comes out until a gate at the Gate input puts a note into the list and a clock at the Clock input steps the arpeggio; with Clock unpatched the outputs stay where they are"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "1V per octave · continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "5": "high above 1V · stepped · polyphonic",
+      "6": "stepped · polyphonic",
+      "7": "stepped · polyphonic",
+      "8": "stepped · polyphonic",
+      "9": "high above 1V · stepped · polyphonic",
+      "10": "high above 0.5V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous"
+    }
+  }
+}

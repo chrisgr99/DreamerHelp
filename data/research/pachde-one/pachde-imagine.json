@@ -1,0 +1,25 @@
+{
+  "plugin": "pachde-one",
+  "module": "pachde-imagine",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 5V", "normal": "0V", "why": "Imagine.cpp:299-303 reads the jack with getVoltage and a SchmittTrigger set to 0.1V and 5V"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 5V", "normal": "0V", "why": "Imagine.cpp:306-310 reads the jack with getVoltage and a SchmittTrigger set to 0.1V and 5V"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "Imagine.cpp:330 multiplies the image width by the voltage over ten, and traversal.hpp:69-73 clips the result to the image"},
+      "3": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "0V", "why": "Imagine.cpp:330 multiplies the image height by the voltage over ten, and traversal.hpp:69-73 clips the result to the image"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "ignored", "normal": "the speed knob", "why": "Imagine.cpp:272-274 writes clamp(voltage times 100, 0, 100) into the speed parameter while the jack is patched"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "Imagine.cpp:234-239 scales the voltage by the parameter maximum over ten and then by a half before adding it to the knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:337-348 sets one voltage, scaled to ten volts across the image width"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:351-363 sets one voltage, scaled to ten volts across the image height"},
+      "2": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:383 and 396 scale the colour part by ten and set one voltage"},
+      "3": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:398 sets the gate to the flag times ten volts"},
+      "4": {"family": "trigger", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:399 sets the trigger to the pulse times ten volts"},
+      "5": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:379 sets the red part of the pixel times ten volts"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:380 sets the green part of the pixel times ten volts"},
+      "7": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "Imagine.cpp:381 sets the blue part of the pixel times ten volts"}
+    }
+  },
+  "comment": "Output index 8 is declared in the header as a test output but its configOutput call is commented out (Imagine.cpp:85) and it has no jack on the panel, so it gets no line and no tag. The manual says the Polarity switch puts the v output at -5V to +5V; the code (Imagine.cpp:396) subtracts 0.5 from a value already scaled 0 to 10, so bipolar gives -0.5V to 9.5V. The g/t knob runs 0 to 1 while the spread it is compared against is taken from voltages scaled 0 to 10 (Imagine.cpp:383-386), so only the lowest tenth of the knob's travel has any effect above zero."
+}

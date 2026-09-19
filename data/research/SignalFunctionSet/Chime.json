@@ -1,0 +1,42 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Chime",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "chime.cpp names it the rotation rate CV, ±5V, summed with the rate knob"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "chime.cpp names it the rate spread CV, ±5V, summed with the spread knob"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "chime.cpp names it the drift CV, ±5V, summed with the drift knob"},
+      "3": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "chime.cpp names it a volt per octave snapped to semitones, summed with the root knob"},
+      "4": {"family": "cv", "poly": true, "step": "stepped", "negative": "swings", "normal": "0V", "why": "chime.cpp names it one volt per scale; the shared scale bus carries a whole scale over the extra channels of the same jack"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "why": "chime.cpp:213 clockTrig.process crosses 1V and averages the interval between rises; :230 the RATE knob then picks how many of those clocks make one rotation"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "chime.cpp names it 0-10V from bow to strike, summed with the excitation knob"},
+      "16": {"family": "pitch", "poly": false, "step": "stepped", "range": "1V per octave", "negative": "swings", "normal": "0V", "why": "chime.cpp names it one volt per octave, summed with the octave knob"},
+      "17": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "subtracts", "normal": "0V", "why": "chime.cpp:237 adds getVoltage()*0.3 to the relate knob, rounds the total and clamps it to 0 to 3, so 0 to 10V covers all four modes and a negative subtracts from the knob"},
+      "18": {"family": "cv", "poly": false, "step": "continuous", "range": "±5V", "negative": "swings", "normal": "0V", "why": "chime.cpp names it the rotation curve CV, ±5V, summed with the curve knob"},
+      "19": {"family": "cv", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "chime.cpp names it one second per volt, summed with the decay knob"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "why": "chime.cpp declares that note's tube rotation output as ±5V"},
+      "1": {"family": "cv"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "audio", "poly": false, "why": "chime.cpp declares that note's own audio output"},
+      "9": {"family": "audio"},
+      "10": {"family": "audio"},
+      "11": {"family": "audio"},
+      "12": {"family": "audio"},
+      "13": {"family": "audio"},
+      "14": {"family": "audio"},
+      "15": {"family": "audio"},
+      "16": {"family": "audio", "poly": false, "why": "chime.cpp declares the left side of the mix"},
+      "17": {"family": "audio"},
+      "18": {"family": "pitch", "poly": true, "range": "1V per octave", "why": "chime.cpp names this output polyphonic with eight channels, one per note"},
+      "19": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "chime.cpp names this output polyphonic with eight channels, one per note"}
+    }
+  },
+  "comment": "Seventeen parameters have no widget: each note's scale degree and weight, and the reseed control, which are all edited on the display or from the menu; eight further parameters and nine inputs are declared unnamed and unplaced. The tube rotation outputs are the module's mechanism made visible as control voltage: slow, non-repeating and tied to what is being heard, which is what makes them more useful as modulation than an unrelated bank of low-frequency oscillators."
+}

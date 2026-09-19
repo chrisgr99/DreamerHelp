@@ -1,0 +1,26 @@
+{
+  "plugin": "PatchableDevices",
+  "module": "DigitalChaoticSystem",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "ignored", "why": "DigitalChaoticSystem.cpp:83-87 reads getVoltage() with no channel, multiplies it by the attenuator, which cannot go below zero, and adds it to the clock pitch as an exponent of two"},
+      "1": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DigitalChaoticSystem.cpp:83-88 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the data pitch as an exponent of two"},
+      "2": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DigitalChaoticSystem.cpp:83-87 reads getVoltage() with no channel, multiplies it by the attenuverter and adds it to the clock pitch as an exponent of two"},
+      "3": {"family": "cv", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "ignored", "why": "DigitalChaoticSystem.cpp:83-88 reads getVoltage() with no channel, multiplies it by the attenuator, which cannot go below zero, and adds it to the data pitch as an exponent of two"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DigitalChaoticSystem.cpp:87 reads getVoltage() with no channel and adds it straight into the clock oscillator's exponent of two"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1.8V", "normal": "the data oscillator's square", "why": "DigitalChaoticSystem.cpp reads getVoltage() with no channel and normals it to the data square wave, the high state taken above triggerThresholdLevel, which is 1.8 in voltage_helpers.cpp"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1.8V", "normal": "the clock oscillator's square", "why": "DigitalChaoticSystem.cpp reads getVoltage() with no channel and normals it to the clock square wave, the high state taken above triggerThresholdLevel, which is 1.8 in voltage_helpers.cpp"},
+      "7": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "DigitalChaoticSystem.cpp:88 reads getVoltage() with no channel and adds it straight into the data oscillator's exponent of two"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "DigitalChaoticSystem.cpp writes the clock triangle with setVoltage and never calls setChannels"},
+      "1": {"family": "audio", "poly": false, "range": "±5V", "why": "DigitalChaoticSystem.cpp writes the clock square with setVoltage and never calls setChannels"},
+      "2": {"family": "audio", "poly": false, "range": "±5V", "why": "DigitalChaoticSystem.cpp writes the data triangle with setVoltage and never calls setChannels"},
+      "3": {"family": "audio", "poly": false, "range": "±5V", "why": "DigitalChaoticSystem.cpp writes the data square with setVoltage and never calls setChannels"},
+      "4": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "DigitalChaoticSystem.cpp scales the three oldest register bits by 0.625, giving eight values from 0V to 4.375V, written with setVoltage"},
+      "5": {"family": "trigger", "poly": false, "range": "0 to 5V", "why": "DigitalChaoticSystem.cpp writes the exclusive-or result as 5V or 0V with setVoltage"},
+      "6": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "DigitalChaoticSystem.cpp passes the stepped value through a TRCFilter set to 20Hz and writes it with setVoltage"}
+    }
+  },
+  "comment": "Source read at commit f6cf8d6, the commit whose plugin.json carries the installed 2.0.1. The panel letters both V/Oct inputs EXP CV and gives both modulation columns to each oscillator; the maker's parameter names say which knob is an attenuator (0 to 1) and which an attenuverter (-1 to +1), and the panel marks the attenuverters with a minus and a plus. The clock and data oscillator frequency parameters are configured as 2 to the power of the value in Hertz, -5 to 15 (DigitalChaoticSystem.cpp:52). The module is monophonic throughout."
+}

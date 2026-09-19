@@ -1,0 +1,19 @@
+{
+  "plugin": "SanguineMutants",
+  "module": "Sanguine-Vimina",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "vimina.cpp:213 calls isRisingEdge on this input per channel with kEdgeVoltageThreshold, defined as 2.0 at vimina.cpp:120"},
+      "1": {"family": "trigger", "poly": true, "step": "stepped", "range": "high above 2V", "why": "vimina.cpp:196 calls isRisingEdge on this input per channel with kEdgeVoltageThreshold, and vimina.cpp:184 takes the module's channel count from its getChannels()"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "vimina.cpp:396 divides this input by 10, adds the knob and clamps the total to 0..1"},
+      "3": {"family": "cv", "poly": true, "step": "continuous", "sumRange": "0 to 10V", "negative": "subtracts", "why": "vimina.cpp:396 divides this input by 10, adds the knob and clamps the total to 0..1"}
+    },
+    "outputs": {
+      "0": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "vimina.cpp:379 writes 10V or 0V per channel and vimina.cpp:251 sets the channel count"},
+      "1": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "vimina.cpp:379 writes 10V or 0V per channel and vimina.cpp:253 sets the channel count"},
+      "2": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "vimina.cpp:380 writes 10V or 0V per channel and vimina.cpp:252 sets the channel count"},
+      "3": {"family": "trigger", "poly": true, "range": "0 to 10V", "why": "vimina.cpp:380 writes 10V or 0V per channel and vimina.cpp:254 sets the channel count"}
+    }
+  },
+  "comment": "This is a rewrite rather than a port: the Twigs firmware behaviour is reimplemented in src/vimina.cpp, with a pulse tracker standing in for the original's hardware timer. Both the clock and the reset input are read at a 2V threshold, which the manual does not give. The knob is mapped to fifteen factors — eight multipliers, a bypass and seven dividers — at vimina.cpp:333, counter-clockwise multiplying and clockwise dividing. Every generated pulse is held for 64 samples by the trigger extender at vimina.cpp:381, so the output pulse width does not follow the incoming clock. The whole section processing at vimina.cpp:217 is skipped unless a cable is connected to the clock input, so the reset input and the reset buttons do nothing on their own."
+}

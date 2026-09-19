@@ -1,0 +1,68 @@
+{
+  "plugin": "KautenjaDSP-PotatoChips",
+  "module": "POKEY",
+  "description": "The four voices of the Atari POKEY, each mixing a square tone with the chip's polynomial noise generators",
+  "params": [
+    {"ids": [0, 1, 2, 3], "text": "Sets the pitch of that tone, two and a half octaves either side of C4"},
+    {"ids": [4, 5, 6, 7], "text": "Attenuates the voltage at that tone's MOD jack before it is added to the pitch, and inverts it below zero"},
+    {"ids": [8, 9, 10, 11], "text": "Picks the noise pattern mixed into that tone, 0 to 7; fully clockwise gives a clean square wave and lower settings fold in the chip's four, five and seventeen bit sequences"},
+    {"ids": [12, 13, 14, 15], "text": "Sets the level of that tone, 0 to 15"},
+    {"ids": [16], "text": "Switched on, the chip is clocked four times slower, which drops every voice into a much lower range"},
+    {"ids": [17], "text": "Switched on, tone 2 is high-pass filtered by tone 4, which turns tone 4 into a filter control rather than a voice"},
+    {"ids": [18], "text": "Switched on, tone 1 is high-pass filtered by tone 3, which turns tone 3 into a filter control rather than a voice"},
+    {"ids": [21], "text": "Switched on, tone 3 runs from the fast clock instead of the divided one, raising its range well above the other voices"},
+    {"ids": [22], "text": "Switched on, tone 1 runs from the fast clock instead of the divided one, raising its range well above the other voices"},
+    {"ids": [23], "text": "Switched on, the noise uses the short nine-bit sequence, which sounds coarse and repetitive, rather than the seventeen-bit one"}
+  ],
+  "inputs": [
+    {"ids": [0, 1, 2, 3], "text": "Raises the pitch of that tone by a volt per octave; unpatched it reads the VOCT jack of the tone before it, and the first tone reads 0V"},
+    {"ids": [4, 5, 6, 7], "text": "Modulates the pitch of that tone, a full octave per 5V with the MOD knob wide open; unpatched it reads the MOD jack of the tone before it, and the first tone reads 5V"},
+    {"ids": [8, 9, 10, 11], "text": "Moves that tone's noise pattern, one step per volt; unpatched it reads the NOISE jack of the tone before it, and the first tone reads 0V"},
+    {"ids": [12, 13, 14, 15], "text": "Scales that tone's AMP knob by the voltage here, 10V leaving the knob untouched and 0V silencing it; unpatched it reads the AMP jack of the tone before it, and the first tone reads 10V"},
+    {"ids": [16], "text": "Inverts the slow clock setting while the voltage here is above 2V"},
+    {"ids": [17], "text": "Inverts the tone 2 high-pass setting while the voltage here is above 2V"},
+    {"ids": [18], "text": "Inverts the tone 1 high-pass setting while the voltage here is above 2V"},
+    {"ids": [21], "text": "Inverts the tone 3 fast clock setting while the voltage here is above 2V"},
+    {"ids": [22], "text": "Inverts the tone 1 fast clock setting while the voltage here is above 2V"},
+    {"ids": [23], "text": "Inverts the noise sequence length setting while the voltage here is above 2V"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "Carries that tone's audio, hard clipped at 5V, with the audio of any earlier tone whose own output is unpatched added in"}
+  ],
+  "notes": [
+    "the four outputs are chained: a tone whose output is left unpatched is summed into the next output along, so patching only TONE4 gives a mix of all four",
+    "the chip's two sixteen-bit pairing modes are not implemented, which is why the switch column has six rows and not eight"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "1": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "2": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "3": "1V per octave · continuous · polyphonic\n\nunpatched it reads the VOCT jack before it.",
+      "4": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "5": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "6": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "7": "±5V · continuous · polyphonic\n\nunpatched it reads 5V.",
+      "8": "0 to 7V · stepped · polyphonic\n\nunpatched it reads the NOISE jack before it; a negative voltage subtracts from the knob.",
+      "9": "0 to 7V · stepped · polyphonic\n\nunpatched it reads the NOISE jack before it; a negative voltage subtracts from the knob.",
+      "10": "0 to 7V · stepped · polyphonic\n\nunpatched it reads the NOISE jack before it; a negative voltage subtracts from the knob.",
+      "11": "0 to 7V · stepped · polyphonic\n\nunpatched it reads the NOISE jack before it; a negative voltage subtracts from the knob.",
+      "12": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "13": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "14": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "15": "0 to 10V · continuous · polyphonic\n\nunpatched it reads 10V; a negative voltage does nothing here.",
+      "16": "high above 2V · stepped · polyphonic",
+      "17": "high above 2V · stepped · polyphonic",
+      "18": "high above 2V · stepped · polyphonic",
+      "21": "high above 2V · stepped · polyphonic",
+      "22": "high above 2V · stepped · polyphonic",
+      "23": "high above 2V · stepped · polyphonic"
+    },
+    "outputs": {
+      "0": "±5V · continuous · polyphonic",
+      "1": "±5V · continuous · polyphonic",
+      "2": "±5V · continuous · polyphonic",
+      "3": "±5V · continuous · polyphonic"
+    }
+  }
+}

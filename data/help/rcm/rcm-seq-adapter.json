@@ -1,0 +1,30 @@
+{
+  "plugin": "rcm",
+  "module": "rcm-seq-adapter",
+  "description": "Retimes the run, reset and clock coming from a clock module so that a simple sequencer sounds its first step when the clock is started again after a reset",
+  "inputs": [
+    {"ids": [0], "text": "Each trigger here flips the module between running and stopped"},
+    {"ids": [1], "text": "Passes straight to the CLOCK output; while the module is armed the next pulse is copied to the RESET output as well, and two pulses arriving while the module counts itself stopped set it running"},
+    {"ids": [2], "text": "A reset arriving while the module counts itself stopped arms it rather than being passed on; a reset arriving while it counts itself running goes straight to the RESET output"}
+  ],
+  "outputs": [
+    {"ids": [1], "text": "Carries the clock input unchanged"},
+    {"ids": [2], "text": "Carries the reset for the sequencer: the incoming reset while running, or a copy of the first clock pulse after a reset arrived with the clock stopped. It holds 0V while the module is stopped"}
+  ],
+  "notes": [
+    "the green lamp shows the module's own idea of whether the clock is running, and the yellow lamp shows that the next clock pulse will be copied to the RESET output",
+    "the module comes up counting itself stopped, and while it counts itself stopped the RESET output is held at 0V",
+    "it starts running on a trigger at RUN, or after two clock pulses have arrived with no reset between them",
+    "shift-dragging up or down on the module name changes the colour of the panel, and holding ctrl as well makes the change finer"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped",
+      "1": "stepped"
+    },
+    "outputs": {
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

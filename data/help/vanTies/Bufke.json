@@ -1,0 +1,40 @@
+{
+  "plugin": "vanTies",
+  "module": "Bufke",
+  "description": "A second amplitude buffer for Adje: it turns one CV into a polyphonic one with a different delay for each partial, and it goes immediately to the right of an Adje",
+  "params": [
+    {"ids": [0], "text": "Sets how long the CV takes to travel from one partial to the next, up to 4 seconds; fully clockwise it freezes the buffer"},
+    {"ids": [1], "text": "Draws fresh delays, and with the menu option on it also empties the buffer"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A reading above 2.5V draws fresh delays, and with the menu option on it also empties the buffer"},
+    {"ids": [1], "text": "The CV recorded into the buffer; with nothing patched here the buffer is switched off and the output stops moving"},
+    {"ids": [2], "text": "Adds to the delay knob, a volt covering a tenth of its travel"},
+    {"ids": [3], "text": "Steps the buffer on each reading above 2.5V, which turns the delay knob into a clock divider rather than a time"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The buffered CV, one channel per partial, matching the channel count of the Adje to the left"}
+  ],
+  "notes": [
+    "with no Adje immediately to the left the module falls back to a fixed sixteen channels; a red arrow mark at the top left is what says a parent was found",
+    "a Bufke can also follow another Bufke to its left, so several of them can be chained from one Adje",
+    "a reset or a randomise on the parent Adje resets this module at the same moment",
+    "the module stops while its output is unpatched"
+  ],
+  "menu": [
+    "CV buffer order: Low→high, High→low, Random — sets the order the CV travels through the partials",
+    "Empty buffer on reset — clears the buffer on a reset instead of leaving what is already in it",
+    "Follow left module: Free, Sync clock, Get delay time — takes the clock, or the exact delay time, from the module to the left instead of from this panel"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 2.5V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "±5V · continuous · one channel only\n\nunpatched it reads nothing recorded, the buffer switched off.",
+      "2": "±5V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob.",
+      "3": "high above 2.5V · stepped · one channel only\n\nunpatched it reads unclocked, the delay read as a time; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "polyphonic"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "K",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:117, added to the knob in octaves before two is raised to that power"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:118, added to the knob in octaves relative to the carrier frequency"},
+      "2": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:120, added in octaves to the low ratio knob, two raised to that power times the carrier frequency, giving the first modulator's rate"},
+      "3": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:121, added in octaves to the high ratio knob, two raised to that power times the carrier frequency, giving the second modulator's rate"},
+      "4": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:122, scaled by a tenth and added to the depth knob"},
+      "5": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/K.cpp:123, scaled by a tenth and added to the high modulation knob, setting how far the second modulator moves the first modulator's phase"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±5V", "why": "src/K.cpp:154, ten times a triangle that runs -0.5 to 0.5"},
+      "1": {"family": "cv", "poly": true, "range": "±5V", "why": "src/K.cpp:145, five times the filtered modulation"}
+    }
+  },
+  "comment": "The two output tooltips are swapped. The enum declares OUT first and OMOD second, but the table fed to configOutput reads Modulation then Audio (src/K.cpp:22-26 and 40-43), so Rack shows Modulation when the audio jack is hovered and Audio when the modulation jack is. The widget places OMOD on the left under MOD and OUT on the right under OUT (lines 188-189), which is the right way round, and the census records the tooltips in the wrong order for the same reason. Both output lines name the conflict. The ratio knobs are configSwitch over -12 to 12 and divided by 12 before use, which is one semitone per step (src/K.cpp:60-61 and 109-110). The panel prints FRQ, LPF, RT1, RT2, MD1, MD2, the six CV jacks, then MOD and OUT."
+}

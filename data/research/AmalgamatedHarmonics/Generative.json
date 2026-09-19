@@ -1,0 +1,24 @@
+{
+  "plugin": "AmalgamatedHarmonics",
+  "module": "Generative",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "step": "continuous", "why": "Generative.cpp:210 read with getVoltage() alone, with no channel loop and adds it to the WAVE knob before the result is folded into the four waves", "poly": false},
+      "1": {"family": "cv", "step": "continuous", "negative": "swings", "why": "Generative.cpp:203 read with getVoltage() alone, with no channel loop and adds it, through the FM CV knob, to the LFO frequency in octaves with nothing bounding the total", "poly": false},
+      "2": {"family": "cv", "step": "continuous", "why": "Generative.cpp:238 read with getVoltage() alone, with no channel loop and crossfades the LFO against it", "poly": false},
+      "3": {"family": "cv", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 1V", "why": "Generative.cpp:234 read with getVoltage() alone, with no channel loop and clamps the NOISE MIX knob plus the voltage between 0 and 1", "poly": false},
+      "4": {"family": "trigger", "step": "stepped", "why": "Generative.cpp:258 puts this input through sampleTrigger, a rack::dsp::SchmittTrigger declared at :170 and left at Rack’s default 0V and 1V thresholds, so only its rising edge is read", "poly": false, "range": "high above 1V"},
+      "5": {"family": "cv", "step": "continuous", "negative": "swings", "sumRange": "-2 to 6V", "why": "Generative.cpp:207 read with getVoltage() alone, with no channel loop and clamps the CLOCK knob plus the voltage between -2 and 6 octaves of tempo", "poly": false},
+      "6": {"family": "cv", "step": "continuous", "negative": "subtracts", "sumRange": "0 to 10V", "why": "Generative.cpp:270 read with getVoltage() alone, with no channel loop and clamps the PROB knob plus a tenth of the voltage between 0 and 1", "poly": false},
+      "7": {"family": "cv", "step": "stepped", "range": "high above 0V", "why": "Generative.cpp:249 read with getVoltage() alone, with no channel loop and holds the output where it is above 0.000001V", "poly": false}
+    },
+    "outputs": {
+      "0": {"family": "cv"},
+      "1": {"family": "cv"},
+      "2": {"family": "audio"},
+      "3": {"family": "cv"},
+      "4": {"family": "trigger", "step": "stepped", "range": "0 to 10V", "why": "Generative.cpp:333 and 339 set this output to 10V or 0V with setVoltage() alone", "poly": false}
+    }
+  },
+  "comment": "The wiki calls the trigger input SAMPLE; the panel prints TRIGGER. The panel draws ATTN in the row that ends at OUT, but in the installed code the level it sets is applied to the LFO before the noise mix, so it scales the LFO and MIXED outputs and the voltage that gets sampled, not the OUT jack after sampling."
+}

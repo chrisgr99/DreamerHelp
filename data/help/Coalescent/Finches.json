@@ -1,0 +1,57 @@
+{
+  "plugin": "Coalescent",
+  "module": "Finches",
+  "description": "A slow evolving-population CV source: a distribution of traits is pushed apart by competition and smeared back together by mutation, so one cluster of birds can split into two and merge again.",
+  "params": [
+    {"ids": [0], "text": "Sets the speed evolution runs at, -8 to +4 octaves, with the centre giving 8 units of evolutionary time per second."},
+    {"ids": [1], "text": "Sets the mutation diffusion between neighbouring traits, 0.00002 to 0.00012 on an exponential scale; low keeps the peaks distinct and high smooths them together."},
+    {"ids": [2], "text": "Sets how local the competition is, 0.35 to 2.8 on an exponential scale; branching starts above 1, which is near 0.505 on the knob."},
+    {"ids": [3], "text": "Sets the width of the environmental opportunity around the optimum, 0.20 to 0.45 trait units."},
+    {"ids": [4], "text": "Sets where an injected mutant starts, up to 0.70 trait units either side of the current environmental optimum."},
+    {"ids": [5], "text": "Mixes a narrow cohort of mutants into the population at the offset MUTANT sets; it is an invasion attempt, and selection may wipe it out."},
+    {"ids": [6], "text": "An attenuverter, -1 to +1, scaling the CV into the mutation diffusion."},
+    {"ids": [7], "text": "An attenuverter, -1 to +1, scaling the CV into the competition locality."}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Doubles the speed evolution runs at for every volt, added to the RATE knob; the two together are capped at +4.25 octaves, so positive volts stop tracking near the top of the knob."},
+    {"ids": [1], "text": "Modulates the mutation diffusion, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [2], "text": "Modulates the competition locality, a tenth of the knob's range per volt through its attenuverter."},
+    {"ids": [3], "text": "Moves the environmental optimum by 0.11 trait units per volt, clamped to -0.55 through +0.55."},
+    {"ids": [4], "text": "A rising edge past 1V injects a mutant cohort at the offset MUTANT sets, which is what the SEED button also does."},
+    {"ids": [5], "text": "A rising edge past 1V returns the population to one narrow ancestor at the current environmental optimum, without firing MERGE."}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The fraction of the population in the lower-trait basin, 0 to 10V; before a split it carries the whole population."},
+    {"ids": [1], "text": "The fraction of the population in the higher-trait basin, 0 to 10V; before a split it reads 0V."},
+    {"ids": [2], "text": "The position of the lower-trait cluster at 2V per trait unit, from -2V to +2V; before a split both position outputs follow the same unresolved mean."},
+    {"ids": [3], "text": "The position of the higher-trait cluster at 2V per trait unit, from -2V to +2V; before a split both position outputs follow the same unresolved mean."},
+    {"ids": [4], "text": "The standard deviation of the trait distribution, 0 to 10V, reaching full scale at a spread of 0.5."},
+    {"ids": [5], "text": "A 10V pulse 1ms long when a viable two-cluster state is accepted."},
+    {"ids": [6], "text": "A 10V pulse 1ms long when a two-cluster state returns to one cluster."}
+  ],
+  "notes": [
+    "The default ecology is stabilising: the competition knob starts below the branching threshold, so the population stays as one peak until you turn COMPETE past about noon.",
+    "The field is stepped 500 times a second whatever the sample rate; the five continuous outputs are smoothed with a 20ms one-pole, and the two pulse outputs are not.",
+    "If RESET and SEED arrive on the same field tick, RESET wins and the seed is discarded; a reset tick does not also advance evolutionary time.",
+    "The screen draws the trait distribution as a filled curve, with the environmental opportunity behind it and the current optimum marked."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · one channel only",
+      "1": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "±5V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "±5V · continuous · one channel only",
+      "4": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only",
+      "2": "±2V · continuous · one channel only",
+      "3": "±2V · continuous · one channel only",
+      "4": "0 to 10V · one channel only",
+      "5": "high above 1V · stepped · one channel only",
+      "6": "high above 1V · stepped · one channel only"
+    }
+  }
+}

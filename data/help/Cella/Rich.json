@@ -1,0 +1,51 @@
+{
+  "plugin": "Cella",
+  "module": "Rich",
+  "description": "Attack-decay envelope whose peak can be raised or lowered by an accent, with the accent stepping through a set number of levels each time it fires or following the voltage that fires it",
+  "params": [
+    {"ids": [0], "text": "Sets the rise time, 1ms at fully counter-clockwise to 10 seconds at fully clockwise"},
+    {"ids": [1], "text": "Sets the fall time, 1ms at fully counter-clockwise to 10 seconds at fully clockwise"},
+    {"ids": [2], "text": "Bends both stages from a straight line at fully counter-clockwise to a curve at fully clockwise, the exponent chosen on the menu"},
+    {"ids": [3], "text": "Sets the peak the envelope reaches with no accent, 0 to 10V"},
+    {"ids": [4], "text": "Sets how many levels the accent steps through, -8 to 8; at 0 no accent is added, at 1 every accent is full, at 2 they alternate half and full, and a negative setting subtracts the accent instead"},
+    {"ids": [5], "text": "Sets how much of the headroom above the base level an accent may use, 0 to 1; with the base at 6V, a full setting adds up to 4V"},
+    {"ids": [6], "text": "Attenuates and inverts the ATT jack, -1 to 1, before that voltage is added to the ATTACK knob"},
+    {"ids": [7], "text": "Attenuates and inverts the DEC jack, -1 to 1, before that voltage is added to the DECAY knob"},
+    {"ids": [8], "text": "Flips the accent steps between climbing from the lowest level to the highest and falling the other way"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rise past 1V starts the envelope"},
+    {"ids": [1], "text": "A voltage here at the moment of a trigger makes that envelope an accented one, and its size, 0V to 10V, scales how much accent is applied"},
+    {"ids": [2], "text": "Divided by 10, scaled by its attenuverter and added to the ATTACK knob"},
+    {"ids": [3], "text": "Divided by 10, scaled by its attenuverter and added to the DECAY knob"},
+    {"ids": [4], "text": "Each rise past 1V flips the accent steps between climbing and falling, which the panel button does too"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0V to 10V"},
+    {"ids": [1], "text": "The accent level of the envelope being played, 0V to 10V, before the ACCENT knob scales it, so an external signal can shape the accent with that knob at zero"}
+  ],
+  "notes": [
+    "the module holds off for the Trigger Sync Delay before starting an envelope, so every envelope is late by that many samples; at the default that is five",
+    "every jack is monophonic, whatever is patched in"
+  ],
+  "menu": [
+    "Attack Curve: Logarithmic, Exponential — chooses which way the SHAPE knob bends the rising stage",
+    "Exponent Function: Quadratic, Cubic, Quartic — sets how sharp the curve the SHAPE knob reaches at its clockwise end is",
+    "Retrigger: Off, On — sets whether a trigger arriving during the fall restarts the envelope",
+    "Retrigger Strategy: I, II — I jumps straight to the fall of the new envelope and crossfades to avoid a click; II holds off until the new envelope's peak would be above the current level",
+    "Trigger Sync Delay: Off, 5 samples, 10 samples — sets how far apart the trigger and the accent may arrive and be taken as one hit"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage does nothing here.",
+      "2": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "±10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "4": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only",
+      "1": "0 to 10V · one channel only"
+    }
+  }
+}

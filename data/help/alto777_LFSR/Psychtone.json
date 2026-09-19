@@ -1,0 +1,39 @@
+{
+  "plugin": "alto777_LFSR",
+  "module": "Psychtone",
+  "description": "PSYCHTONE MK II, a re-creation of the note logic of Don Lancaster's 1971 Music Composer-Synthesizer: a six stage shift register whose bits are weighed into one pitch",
+  "params": [
+    {"ids": [0], "text": "Sets the internal clock, 0.25Hz fully anticlockwise to 64Hz fully clockwise"},
+    {"ids": [1], "text": "Starts and stops the sequence, and the lamp is lit while it runs"},
+    {"ids": [2], "text": "Advances the register one step and puts out a gate while it is held, for walking through a sequence with the module stopped"},
+    {"ids": [3, 4, 5], "text": "Twelve snapped positions, A to M: A to F add this knob's weight to the pitch while that stage of the register is high, G to M subtract it while that stage is low"},
+    {"ids": [6, 7, 8], "text": "Sets how far this knob moves the pitch when its chosen bit is active, 0 to 12 semitones"},
+    {"ids": [9, 10, 11, 12, 13, 14], "text": "POS raises the gate while that stage of the register is high, NEG raises it while that stage is low, and OFF leaves the stage out of the gate altogether"},
+    {"ids": [15, 16, 17, 18, 19, 20], "text": "Flips that stage of the register between 1 and 0, which is how a starting pattern is set by hand"},
+    {"ids": [21], "text": "FWD takes the feedback from stages E and F of the register; REV takes it from stages A and F"},
+    {"ids": [22], "text": "UP shifts the complement of the feedback bit into the register and DOWN shifts the bit itself; each pairing with FWD or REV runs a different 63-step sequence"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Every volt here doubles the rate of the internal clock"},
+    {"ids": [1], "text": "A clock patched here replaces the internal clock and steps the register on each rising edge"},
+    {"ids": [2], "text": "A rising edge clears all six stages to 0 and restarts the clock; with DOWN selected the register stays at 0 from there until a bit is set by hand"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries 10V while the clock is high and at least one stage of the register matches its PAUSE SELECT switch"},
+    {"ids": [1], "text": "The pitch, a volt per octave, the three weights summed over the bits they are set to"}
+  ],
+  "notes": [
+    "It comes up stopped and nothing moves until the RUN button is pressed; the running state is not saved with the patch, so a reloaded patch comes up stopped as well",
+    "The three WEIGHT knobs come up at zero, so the OUT jack holds one voltage until at least one of them is turned up, which the maker's README also says"
+  ],
+  "expects": {
+    "inputs": {
+      "1": "stepped",
+      "2": "stepped"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "1V per octave · continuous"
+    }
+  }
+}

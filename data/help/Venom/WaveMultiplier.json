@@ -1,0 +1,65 @@
+{
+  "plugin": "Venom",
+  "module": "WaveMultiplier",
+  "description": "Wave Multiplier mixes four shifted copies of the input wave with the original, each copy shifted against its own threshold, with four triangle LFOs built in to modulate them",
+  "params": [
+    {"ids": [0], "text": "Sets the base frequency of all four LFOs on a volt per octave scale where 0 gives 1Hz; the range runs -4 to 4, and the default of -4 gives 0.0625Hz"},
+    {"ids": [1, 2, 3, 4], "text": "Offsets that LFO's frequency from the base by as much as a volt either way; the four defaults are uncorrelated and spread over a little more than 1.5 octaves"},
+    {"ids": [5], "text": "Sets how far the wave copies are shifted, 0V to 5V, with the attenuated CV added on top"},
+    {"ids": [6], "text": "Attenuates or inverts the depth CV"},
+    {"ids": [7, 8, 9, 10], "text": "Attenuates or inverts that copy's shift threshold CV"},
+    {"ids": [11, 12, 13, 14], "text": "Sets the base shift threshold for that copy, -5V to 5V, with the attenuated CV added on top; input above the threshold is shifted down, input at or below it is shifted up"},
+    {"ids": [15], "text": "Removes DC offset from the pulse, shifted wave and mix outputs; on by default"},
+    {"ids": [16], "text": "Sets oversampling against the aliasing shifting and audio rate level modulation introduce: off, x2, x4 by default, x8, x16 or x32"},
+    {"ids": [17, 18, 19, 20], "text": "Takes that shifted wave out of the final mix"},
+    {"ids": [21], "text": "Takes the raw input wave out of the final mix"},
+    {"ids": [22], "text": "Attenuates or inverts the output level CV"},
+    {"ids": [23], "text": "Sets the base level of the mix output, 0 to 100% with a default of 25%, with the attenuated CV summed on top"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Summed with the master frequency to set the base frequency of all four LFOs"},
+    {"ids": [1], "text": "Voltage control of the shift depth, attenuated and summed with the Depth knob; audio rate CV works"},
+    {"ids": [2, 3, 4, 5], "text": "Modulates that copy's shift threshold; unpatched it follows the matching LFO output. Audio rate CV works"},
+    {"ids": [6], "text": "The wave to be multiplied, typically audio; sine, triangle and saw suit it, square and pulse do not"},
+    {"ids": [7], "text": "Voltage control of the mix level, 10V for 100%; negative voltage inverts the output, so the level stage can work as a ring modulator. Audio rate CV works"}
+  ],
+  "outputs": [
+    {"ids": [0, 1, 2, 3], "text": "A bipolar triangle LFO at 5V either way, normalled to the shift threshold CV input of the matching copy"},
+    {"ids": [4, 5, 6, 7], "text": "The bipolar 5V pulse from that copy's comparator, with the depth not applied; modulating the threshold gives pulse width modulation here"},
+    {"ids": [8, 9, 10, 11], "text": "That copy's pulse attenuated by the depth and summed with the input wave"},
+    {"ids": [12], "text": "The mix of the unmuted shifted waves and the unmuted input wave, scaled by the output level"}
+  ],
+  "notes": [
+    "the LFOs run monophonic unless the master V/OCT input is polyphonic, in which case they take the channel count of the rest of the module"
+  ],
+  "menu": [
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "1V per octave · continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "continuous · polyphonic",
+      "3": "continuous · polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic",
+      "2": "polyphonic",
+      "3": "polyphonic",
+      "4": "continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · polyphonic",
+      "7": "continuous · polyphonic",
+      "8": "continuous · polyphonic",
+      "9": "continuous · polyphonic",
+      "10": "continuous · polyphonic",
+      "11": "continuous · polyphonic",
+      "12": "continuous · polyphonic"
+    }
+  }
+}

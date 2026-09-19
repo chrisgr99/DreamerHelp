@@ -1,0 +1,40 @@
+{
+  "plugin": "SignalFunctionSet",
+  "module": "Swell",
+  "description": "An envelope built by accumulation: each ping adds a fixed voltage to what the envelope is already at, and between pings it bleeds away",
+  "params": [
+    {"ids": [0], "text": "Sets how much voltage each ping adds, 0 to 10V"},
+    {"ids": [1], "text": "Sets how long each ping's addition takes to arrive, 1ms to 2 seconds"},
+    {"ids": [2], "text": "Sets how long the envelope takes to bleed back to 0V, 10ms to 10 seconds"},
+    {"ids": [3], "text": "Blends the rise and fall between a constant rate and a rate proportional to what is left, from a tight shape at one end of the travel to a soft one at the other"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rise queues another addition of the delta voltage"},
+    {"ids": [1], "text": "A rise drops the envelope straight to 0V and clears every addition that has not finished arriving"},
+    {"ids": [2], "text": "Changes how much each ping adds, scaled by a tenth and added to the delta knob, the total clamped to the knob's travel"},
+    {"ids": [3], "text": "Changes the rise time, scaled by a tenth and added to the rise knob, the total clamped to the knob's travel"},
+    {"ids": [4], "text": "Changes the fall time, scaled by a tenth and added to the fall knob, the total clamped to the knob's travel"},
+    {"ids": [5], "text": "Changes the curve, scaled by a tenth and added to the curve knob, the total clamped to the knob's travel"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope, 0-10V, scaled so that additions near the ceiling count for less and the voltage approaches 10V rather than hitting it"}
+  ],
+  "notes": [
+    "the envelope moves only when it is pinged: with nothing patched at PING the output holds at 0V",
+    "the fall is held off while an addition is arriving, so a ping always reaches its full delta before the bleed starts again",
+    "up to thirty-two additions can be in flight at once; beyond that the oldest is written over"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "stepped · one channel only",
+      "1": "stepped · one channel only",
+      "2": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "3": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "4": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V.",
+      "5": "bipolar · continuous · one channel only\n\nunpatched it reads 0V; the knob and this input are summed and the total held to 0 to 10V."
+    },
+    "outputs": {
+      "0": "0 to 10V · one channel only"
+    }
+  }
+}

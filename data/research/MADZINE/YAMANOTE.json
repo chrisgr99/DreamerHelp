@@ -1,0 +1,39 @@
+{
+  "plugin": "MADZINE",
+  "module": "YAMANOTE",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:248-250, 275-279, getChannels() feeds the channel count and getPolyVoltage(useChan) reads each"},
+      "1": {"family": "audio", "poly": true, "range": "±10V", "normal": "the left jack of that channel", "why": "src/YAMANOTE.cpp:281-287, unpatched, inputR is set to inputL"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio"},
+      "5": {"family": "audio"},
+      "6": {"family": "audio"},
+      "7": {"family": "audio"},
+      "8": {"family": "audio"},
+      "9": {"family": "audio"},
+      "10": {"family": "audio"},
+      "11": {"family": "audio"},
+      "12": {"family": "audio"},
+      "13": {"family": "audio"},
+      "14": {"family": "audio"},
+      "15": {"family": "audio"},
+      "16": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:363-367, getChannels() then getPolyVoltage(useChan)"},
+      "17": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:369-373, getChannels() then getPolyVoltage(useChan)"},
+      "18": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:340-345, getChannels() then getPolyVoltage(useChan)"},
+      "19": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:346-351, getChannels() then getPolyVoltage(useChan)"},
+      "20": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:352-357, getChannels() then getPolyVoltage(useChan)"},
+      "21": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:358-362, getChannels() then getPolyVoltage(useChan)"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:317-326, the summed send clamped to ±10 and set per channel"},
+      "1": {"family": "audio"},
+      "2": {"family": "audio"},
+      "3": {"family": "audio"},
+      "4": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:376-380, clamp(returnA + returnB + chain, -10, 10)"},
+      "5": {"family": "audio", "poly": true, "range": "±10V", "why": "src/YAMANOTE.cpp:377-381, the same for the right side"}
+    }
+  },
+  "comment": "The mix output is built only from the two returns and the chain input (src/YAMANOTE.cpp:376-378); none of the eight channel inputs is added to it. That is the single most surprising thing about the module and is why it can look broken. The sends accumulate leftward along an unbroken row of YAMANOTE modules through the expander pointer (src/YAMANOTE.cpp:297-320), and with another YAMANOTE to the right this module's own send and return jacks are hidden from the panel, though they still exist (src/YAMANOTE.cpp:527-554). The auto-cabling is done in the widget's step(): a YAMANOTE, U8, ALEXANDERPLATZ or SHINJUKU to the right gets this module's mix output cabled into its chain inputs, and the three Ripley effects cable themselves to the sends and returns from their own side. Cables are only made where the destination jack is empty, and are drawn in #80C342 green. The panel prints YAMANOTE, L and R over each channel pair, SendA and SendB over the knob columns, SEND A, SEND B, and nothing over the chain, return and mix jacks. Lettering is drawn in code at src/YAMANOTE.cpp:454-510."
+}

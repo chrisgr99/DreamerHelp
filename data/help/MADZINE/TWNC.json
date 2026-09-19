@@ -1,0 +1,62 @@
+{
+  "plugin": "MADZINE",
+  "module": "TWNC",
+  "description": "Two Euclidean tracks driving two synthesised voices, a sine drum with noise modulation and a sine hat, with an accent envelope that has to open before the drum is heard",
+  "params": [
+    {"ids": [0], "text": "Sets how many steps both patterns run for, 1 to 32"},
+    {"ids": [1], "text": "Returns both tracks to the start of their patterns and restarts the clock measurement"},
+    {"ids": [2], "text": "Sets what share of the pattern's steps the drum fires on, 0% to 100%"},
+    {"ids": [3], "text": "Sets the pitch of the drum's sine oscillator, 20Hz to 20000Hz"},
+    {"ids": [4], "text": "Sets how far the drum's own envelope sweeps the oscillator, up to four octaves at the top of its travel"},
+    {"ids": [5], "text": "Mixes the noise the drum's oscillator is modulated with, pink at the bottom of its travel and blue at the top, and at the same time sets how much of that noise reaches it; at the bottom there is none"},
+    {"ids": [6], "text": "Chooses which of every four clocks fires the accent envelope, counting from 1 to 7 round the four"},
+    {"ids": [7], "text": "Sets how long the accent envelope takes to fall, 10ms to 2 seconds"},
+    {"ids": [8], "text": "Sets how long the drum's amplitude envelope takes to fall, 10ms to 2 seconds; its FM envelope falls in half that"},
+    {"ids": [9], "text": "Bends the fall of the drum's envelopes: at the bottom of its travel they collapse almost at once, at the top they fall close to a straight line"},
+    {"ids": [10], "text": "Rotates the hats pattern, 0 to 7 steps"},
+    {"ids": [11], "text": "Sets what share of the pattern's steps the hats fire on, 0% to 100%"},
+    {"ids": [12], "text": "Divides or multiplies the hats clock: half speed, the clock's own rate, one and a half times, twice, or three times it"},
+    {"ids": [13], "text": "Sets the pitch of the hats oscillator, 20Hz to 20000Hz"},
+    {"ids": [14], "text": "Sets how long the hats envelope takes to fall, 5ms to 1 second"},
+    {"ids": [15], "text": "Bends the fall of the hats envelope: at the bottom of its travel it collapses almost at once, at the top it falls close to a straight line"},
+    {"ids": [16], "text": "Sets which noise modulates the hats oscillator and how much of it reaches them: pink below the middle of its travel, blue above it, and none at the bottom"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge above 1V advances both tracks; the gap between edges is the tempo the hats divider works from"},
+    {"ids": [1], "text": "A rising edge above 1V returns both tracks to the start of their patterns and restarts the clock measurement"},
+    {"ids": [2], "text": "Added to the drum FREQ knob, one volt per octave"},
+    {"ids": [3], "text": "Added to the drum DECAY knob, a tenth of a second per volt; the total is held between 10ms and 2 seconds"},
+    {"ids": [4], "text": "Added to the hats FREQ knob, one volt per octave"},
+    {"ids": [5], "text": "Added to the hats DECAY knob, a twentieth of a second per volt; the total is held between 5ms and 1 second"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The drum, the oscillator through its own amplitude envelope and then the accent envelope"},
+    {"ids": [1], "text": "The hats, the oscillator through the hats envelope"},
+    {"ids": [2], "text": "The accent envelope, 0V to 10V, falling in the time set by DELAY"},
+    {"ids": [3], "text": "The drum's FM envelope, 0V to 10V"},
+    {"ids": [4], "text": "The hats envelope, 0V to 10V"}
+  ],
+  "notes": [
+    "nothing steps and no envelope fires until a clock reaches CLK.",
+    "the drum output is multiplied by the accent envelope as well as by its own, so a step is only heard where it falls inside the accent envelope's fall.",
+    "a short DELAY setting therefore silences most of the drum pattern, however dense FILL is made.",
+    "the hats are not gated by the accent envelope, so they sound on every step of their pattern."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "1V per octave · continuous · one channel only",
+      "3": "continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "1V per octave · continuous · one channel only",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "0 to 10V · one channel only",
+      "3": "0 to 10V · one channel only",
+      "4": "0 to 10V · one channel only"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "plugin": "Bastl",
+  "module": "Kompas",
+  "description": "A copy of Bastl's Kompas: three 32-step gate patterns named Latitude, Altitude and Longitude, each built at random from its own knob, all three stepped by one clock",
+  "params": [
+    {"ids": [0], "text": "Latitude knob — sets how likely each of the 32 steps is to be on, every step off at the bottom of its travel and every step on in the last hundredth of it"},
+    {"ids": [1], "text": "Altitude knob — sets how likely a step is to be kept where the Latitude and Longitude patterns agree, every step off at the bottom of its travel and every step on in the last hundredth"},
+    {"ids": [2], "text": "Longitude knob — sets the number of beats spread across each half of the 32 steps, one to eight, and how likely each of those beats is to survive a coin toss"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Latitude CV — adds to the Latitude knob, 0V to 10V covering its whole travel, with negative voltage read as 0V; past about 9.9V every step of the pattern is on"},
+    {"ids": [1], "text": "Altitude CV — adds to the Altitude knob, 0V to 10V covering its whole travel, with negative voltage read as 0V; past about 9.9V every step of the pattern is on"},
+    {"ids": [2], "text": "Longitude CV — adds to the Longitude knob, 0V to 10V covering its whole travel, with negative voltage read as 0V; past about 9.9V every step of the pattern is on"},
+    {"ids": [3], "text": "Sets all three patterns so that the next clock lands on step 1; it counts as high at 2V and is ready again once it falls below 0.1V"},
+    {"ids": [4], "text": "Steps all three patterns on each rising edge, counting as high at 2V and low below 0.1V; the three outputs are high only while this input is high"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Latitude trigger — 10V while the clock is high and the Latitude pattern's current step is on, and 0V the rest of the time"},
+    {"ids": [1], "text": "Altitude trigger — 10V while the clock is high and the Altitude pattern's current step is on, and 0V the rest of the time"},
+    {"ids": [2], "text": "Longitude trigger — 10V while the clock is high and the Longitude pattern's current step is on, and 0V the rest of the time"}
+  ],
+  "notes": [
+    "nothing moves until a clock is patched to Clock. The patterns advance, the knobs and CV inputs are read, and the outputs go high only on and during a pulse there.",
+    "a knob or its CV has to move by more than two parts in 1023 before a fresh pattern is drawn. That is what FIND NEW ROUTES on the panel means: nudge a knob to reroll that coordinate.",
+    "the three patterns are tied together. Longitude is a beat pattern thinned by chance, Latitude is pure chance, and Altitude keeps only steps where those two agree.",
+    "the module is monophonic: every jack reads or writes one channel."
+  ],
+  "menu": [
+    "Mode: Per-channel CV control, Per-channel reset — sets what the three CV jacks do: add to the knob beside them, or reset that one coordinate to the start of its pattern on a rising edge"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "3": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "high above 2V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "0 to 10V · stepped · one channel only",
+      "1": "0 to 10V · stepped · one channel only",
+      "2": "0 to 10V · stepped · one channel only"
+    }
+  }
+}

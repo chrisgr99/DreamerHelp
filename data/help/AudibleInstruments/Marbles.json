@@ -1,0 +1,69 @@
+{
+  "plugin": "AudibleInstruments",
+  "module": "Marbles",
+  "description": "Random sampler: a jittery internal clock split into two streams of random gates, and three random voltages shaped by a distribution, a quantiser and a loopable memory",
+  "params": [
+    {"ids": [0], "text": "Switches the deja vu loop on for the gate section, so its random decisions are recycled instead of freshly drawn"},
+    {"ids": [1], "text": "Switches the deja vu loop on for the voltage section, so its random values are recycled instead of freshly drawn"},
+    {"ids": [2], "text": "Counter-clockwise of noon it sets how likely past random values are to be reused, reaching a locked loop at noon; clockwise of noon it sets how likely the loop is to jump to a random place in itself"},
+    {"ids": [3], "text": "Sets the rate of the master clock, 120 BPM at noon; with a clock patched into the t section it divides or multiplies that clock instead"},
+    {"ids": [4], "text": "Sets the width and shape of the distribution the voltages are drawn from: a fixed voltage counter-clockwise, a bell curve at noon, an even spread past that, and only the two extremes fully clockwise"},
+    {"ids": [5], "text": "Cycles how the master clock is split between the two gate outputs: a coin toss at each pulse, random multiplication and division, or an alternation like a kick and snare pattern"},
+    {"ids": [6], "text": "Cycles how the three voltage outputs answer the spread, bias and steps settings: all three alike, the outer two opposed to the middle one, or a tilt graded across them"},
+    {"ids": [7], "text": "Sets the length of the deja vu loop, from one step to sixteen"},
+    {"ids": [8], "text": "Sets how likely a gate is to land on the first gate output rather than the third"},
+    {"ids": [9], "text": "Skews the random voltages towards the bottom or the top of the range without moving the range itself"},
+    {"ids": [10], "text": "Cycles the clock range, leaving the rate as the knob sets it or dividing or multiplying it by four"},
+    {"ids": [11], "text": "Cycles the range of the random voltage outputs between 0-2V, 0-5V and -5V to 5V"},
+    {"ids": [12], "text": "Switches on external processing, where the voltage section samples whatever is patched into the X spread input instead of drawing its own random numbers"},
+    {"ids": [13], "text": "Sets how far the clock wanders from steady time, from exact through the drift of a human player to complete chaos"},
+    {"ids": [14], "text": "Counter-clockwise of noon it smooths the random voltages into slopes and curves; clockwise of noon it quantises them to a scale and then strips notes out of that scale until only the root is left"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Adds to the gate bias knob, 5V covering the whole knob range"},
+    {"ids": [1], "text": "Adds to the voltage bias knob, 5V covering the whole knob range"},
+    {"ids": [2], "text": "An external clock for the gate section, read high at 1.7V, taking the place of the internal one; the RATE knob then divides or multiplies it"},
+    {"ids": [3], "text": "Modulates the clock rate, each volt doubling or halving it"},
+    {"ids": [4], "text": "Adds to the JITTER knob, 5V covering the whole knob range"},
+    {"ids": [5], "text": "Adds to the DEJA VU knob, 5V covering the whole knob range"},
+    {"ids": [6], "text": "Adds to the STEPS knob, 5V covering the whole knob range"},
+    {"ids": [7], "text": "Adds to the SPREAD knob, 5V covering the whole knob range; in external processing mode the voltage here is sampled in place of the internal random source"},
+    {"ids": [8], "text": "Clocks all three random voltage outputs together, read high at 1.7V, in place of the gates from the t section"}
+  ],
+  "outputs": [
+    {"ids": [0, 2], "text": "A 10V gate whenever the master clock's pulse is sent to this output by the t section"},
+    {"ids": [1], "text": "The master clock itself, a 10V gate with an even duty cycle"},
+    {"ids": [3], "text": "A random voltage stepped at a division of the clock chosen in the menu, anywhere from a sixty-fourth of that clock to the clock itself"},
+    {"ids": [4, 5, 6], "text": "A random voltage drawn at each clock pulse from the distribution set by SPREAD and BIAS and shaped by STEPS"}
+  ],
+  "notes": [
+    "the module is monophonic: every output carries one channel."
+  ],
+  "menu": [
+    "T mode — sets how the clock is split between the gate outputs: Complementary Bernoulli, Clusters, Drums, Independent Bernoulli, Divider, Three states or Markov",
+    "T range — sets the clock range to 1/4x, 1x or 4x, the same choice the clock range button steps through",
+    "X mode — sets how the three voltage outputs answer the knobs: Identical, Bump or Tilt, the same choice the X mode button steps through",
+    "X range — sets the range of the random voltage outputs to Narrow, Positive or Full, the same choice the output voltage range button steps through",
+    "Scales — picks the scale the STEPS knob quantises to: Major, Minor, Pentatonic, Pelog, Raag Bhairav That or Raag Shri",
+    "Internal X clock source — picks which of the three t streams clocks the three X outputs when nothing is patched into the X clock input, either one stream each or one stream driving all three",
+    "Y divider ratio — sets how far the Y output is divided down, from 1/64 through 1/48, 1/32, 1/24, 1/16, 1/12, 1/8, 1/6, 1/4, 1/3 and 1/2 to 1"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "1": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "2": "high above 1.7V · stepped · one channel only",
+      "3": "continuous · one channel only",
+      "4": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "5": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "6": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "7": "continuous · one channel only\n\na negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 5V.",
+      "8": "high above 1.7V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "stepped",
+      "1": "stepped",
+      "2": "stepped"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "plugin": "SonusModular",
+  "module": "Ladrone",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "ladrone.cpp:103 reads this input with getVoltage and adds it to the knob; ladrone.cpp:104 clamps the sum to -4 to 4 octaves"},
+      "1": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "2": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "3": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "4": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "5": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "6": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "7": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "8": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "9": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:149 uses inputs[CV_H1_I1] where this jack was meant, so it never reaches the oscillator beside it; ladrone.cpp:161 still adds it into the sum the mix is divided by"},
+      "10": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "11": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "12": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "13": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "14": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "15": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"},
+      "16": {"family": "cv", "poly": false, "step": "continuous", "negative": "subtracts", "why": "ladrone.cpp:139 to :157 read this input with getVoltage, multiply it by 0.2 and add it to that knob, with no clamp"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "ladrone.cpp:139 to :164 accumulate sixteen oscillators into this output and divide by the sum of their levels times 0.2, so the peak lands near 5V"}
+    }
+  },
+  "comment": "At ladrone.cpp:149 the third group's first oscillator multiplies its knob by inputs[CV_H1_I1] instead of inputs[CV_H3_I1], so the jack at input 9 never reaches the oscillator drawn beside it and the jack at input 1 reaches two oscillators. The sum used for normalisation at ladrone.cpp:161 loops over every input, so input 9 still changes the overall level. That is why input 9 has its own line. The waveforms are at ladrone.cpp:139 to :157: within each group the first term is sin(ramp times pi) and the others are sin(ramp times another ramp times pi), which the maker's README calls a sort of phase modulation. Group g runs its ramps at g times the base frequency."
+}

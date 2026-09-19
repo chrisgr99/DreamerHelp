@@ -1,0 +1,29 @@
+{
+  "plugin": "TMT",
+  "module": "Seed",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "step": "continuous", "normal": "one fixed built-in seed", "why": "seed.cpp:89 getVoltage() * 10000 cast to unsigned, channel 0 only; unpatched it keeps currentSeed, set once at seed.cpp:83"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "seed.cpp:100 setChannels(16); values from uniform_real_distribution{0, 10} at seed.cpp:85"},
+      "1": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "seed.cpp:110 setVoltage with no channel argument"},
+      "2": {"family": "cv"},
+      "3": {"family": "cv"},
+      "4": {"family": "cv"},
+      "5": {"family": "cv"},
+      "6": {"family": "cv"},
+      "7": {"family": "cv"},
+      "8": {"family": "cv"},
+      "9": {"family": "cv"},
+      "10": {"family": "cv"},
+      "11": {"family": "cv"},
+      "12": {"family": "cv"},
+      "13": {"family": "cv"},
+      "14": {"family": "cv"},
+      "15": {"family": "cv"},
+      "16": {"family": "cv"}
+    }
+  },
+  "comment": "The unpatched seed is not random. seed.cpp:83 initialises currentSeed from a default-constructed std::mt19937, which has a fixed default seed, so every Seed module with an empty Seed jack produces the same sixteen voltages on every machine and at every launch; the readme says a random seed is used. The seed voltage is multiplied by 10000 and cast to unsigned int, so what a negative seed voltage does depends on the platform's float-to-unsigned conversion and was not tested here."
+}

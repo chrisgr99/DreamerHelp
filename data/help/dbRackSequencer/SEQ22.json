@@ -1,0 +1,61 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "SEQ22",
+  "description": "Stochastic sequencer: sixteen sliders weight how often each of sixteen voltages is picked, and a clock draws one of them at random each time",
+  "params": [
+    {"ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "text": "Sets how often its voltage is picked against the others, 0 to 100; a slider at zero takes its voltage out of the draw"},
+    {"ids": [16], "text": "The chance that a draw is a rest rather than a note, 0 to 1"},
+    {"ids": [17], "text": "Sets the seed the random generator takes on a reset, 0 to 1"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Each rising edge draws a new voltage; the channel count here sets how many sequences run side by side"},
+    {"ids": [1], "text": "A rising edge reseeds the random generator from the Seed value, so the same sequence comes back"},
+    {"ids": [2], "text": "The sixteen voltages the draw picks from, one per channel; with nothing patched they are a chromatic scale in twelfths of a volt"},
+    {"ids": [3], "text": "Sets the seed, 0-10V across the whole range, and overrides the Seed knob when a reset arrives"},
+    {"ids": [4], "text": "Sets the rest chance, 0-10V across the whole range, one channel per sequence, and overrides the Rest knob while patched"},
+    {"ids": [5], "text": "Sets all sixteen weights at once, one channel per slider, 0-10V across the whole range"},
+    {"ids": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], "text": "Sets the weight of its voltage, 0-10V across the whole range, and overrides that slider while patched"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The drawn voltage, one channel per sequence; through a rest it holds its last value unless the menu says otherwise"},
+    {"ids": [1], "text": "Passes the clock through on a sequence's channel while that draw is a note, and stays at 0V through a rest"},
+    {"ids": [2], "text": "A 1ms trigger on a sequence's channel when a draw lands on a different voltage than the one before"}
+  ],
+  "notes": [
+    "every slider comes up at zero; until the weights add up to two or more, every draw lands on the first voltage"
+  ],
+  "menu": [
+    "Hold CV on Rest — holds the last voltage through rests; turned off, the CV output follows the drawn voltage even through a rest"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "polyphonic",
+      "3": "continuous · one channel only",
+      "4": "0 to 10V · continuous · polyphonic",
+      "5": "continuous · polyphonic",
+      "6": "continuous · one channel only",
+      "7": "continuous · one channel only",
+      "8": "continuous · one channel only",
+      "9": "continuous · one channel only",
+      "10": "continuous · one channel only",
+      "11": "continuous · one channel only",
+      "12": "continuous · one channel only",
+      "13": "continuous · one channel only",
+      "14": "continuous · one channel only",
+      "15": "continuous · one channel only",
+      "16": "continuous · one channel only",
+      "17": "continuous · one channel only",
+      "18": "continuous · one channel only",
+      "19": "continuous · one channel only",
+      "20": "continuous · one channel only",
+      "21": "continuous · one channel only"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "stepped · polyphonic",
+      "2": "0 to 10V · stepped · polyphonic"
+    }
+  }
+}

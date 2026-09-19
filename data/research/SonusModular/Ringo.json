@@ -1,0 +1,15 @@
+{
+  "plugin": "SonusModular",
+  "module": "Ringo",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "normal": "0V", "why": "ringo.cpp:71 reads this input with getVoltage, which is channel 0 only"},
+      "1": {"family": "audio", "poly": false, "normal": "0V", "why": "ringo.cpp:72 reads this input with getVoltage, which is channel 0 only"},
+      "2": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "ringo.cpp:84 reads this input with getVoltage and adds it to the knob; ringo.cpp:85 clamps the sum to -4 to 4 octaves"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "range": "±5V", "why": "ringo.cpp:99 and :103 write this output with setVoltage and no channel index, from the product of two values normalised to -1 to 1 and multiplied by 5"}
+    }
+  },
+  "comment": "Carrier and modulator are divided by 5 before multiplying and the product multiplied by 5 after (ringo.cpp:71, :72, :99), which is what \"5V stands for 1\" means. The oscillator's base frequency is 440Hz (ringo.cpp:86), unlike the other oscillators in this plugin, which use C4. The switch reads 0 for the down position, which is the internal oscillator and the setting the module starts in."
+}

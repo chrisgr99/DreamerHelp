@@ -1,0 +1,17 @@
+{
+  "plugin": "PitchGrid",
+  "module": "MicroHammond",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": true, "range": "1V per octave", "negative": "swings", "why": "MicroHammond.cpp:358 sets the channel count from getChannels on this jack and line 371 adds its getPolyVoltageSimd to the knob before raising two to that power"},
+      "1": {"family": "cv", "poly": true, "step": "continuous", "negative": "swings", "why": "MicroHammond.cpp:374 and 379 read it with getPolyVoltageSimd and multiply it by the FM knob, adding it either to the pitch or to the frequency"},
+      "2": {"family": "trigger", "poly": true, "why": "MicroHammond.cpp:386-388 reads it with getPolyVoltageSimd and passes it to each oscillator, which at lines 63-70 looks for an upward crossing of 0V"},
+      "3": {"poly": false, "why": "MicroHammond.cpp:443-445 hands the jack to a DataReceiver, which at datalink.cpp:90 reads one getVoltage and reinterprets its bytes as a number"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "range": "±1V", "why": "MicroHammond.cpp:393-399 adds nine sines, each reaching 1 at a level of 100%, multiplies by 0.11111 and sets the channel count from the V/OCT input"}
+    }
+  },
+  "read": "2026-09-14",
+  "comment": "TDAT is a data link rather than a signal, so it has no family: datalink.cpp reinterprets the bytes of a float as a voltage, and MicroHammond.cpp:420-440 reads a tuning and a scale from it once a second and writes the eight partial ratios from them. The partial ratios live in parameters with no widget (RELFREQ1 to RELFREQ9), so they cannot be clicked and get no line; they are written by the menu at lines 305-330 or by TDAT. The ninth level parameter, AMP3, also has no widget, which is why the fundamental has no drawbar — the maker says in the README that he assumes it should be at full power. At startup no tuning has been applied, so the ratios stand at their configured defaults of 0.5, 0.75, 1, 2, 3, 4, 5, 6 and 8; the 0.75 is the odd one, because every menu tuning writes about 1.5 there. Output level: nine oscillators each reaching 1 are scaled by 0.11111, so a full-level chord of partials peaks at 1V rather than the 5V a VCO usually gives. The SOFT button's parameter is 1 for hard sync and 0 for soft, while its lamp lights on soft, so the lamp is lit in the button's released state."
+}

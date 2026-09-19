@@ -1,0 +1,66 @@
+{
+  "plugin": "Venom",
+  "module": "XM_OP",
+  "description": "Polyphonic synth voice: an oscillator with selectable waveform and integer frequency ratios, an ADSR envelope, a VCA, and selectable external and feedback modulation types",
+  "params": [
+    {"ids": [0], "text": "Selects the oscillator waveform: sine, triangle, square or saw"},
+    {"ids": [1], "text": "Selects what the XMOD input does: AC or DC coupled through-zero linear FM, phase modulation, ring modulation, or amplitude modulation taken raw, rectified, or offset by 5V"},
+    {"ids": [2], "text": "Selects the type of modulation the feedback applies, with the same choices as the XMOD button: linear FM, phase, ring or amplitude modulation"},
+    {"ids": [3], "text": "Sets the curvature of the attack, decay and release stages, linear fully counter-clockwise and most curved fully clockwise; the stage times do not change with it"},
+    {"ids": [4], "text": "Sets how long the envelope takes to rise from 0% to 100%, 0.98ms to 11.3 seconds"},
+    {"ids": [5], "text": "Sets how long the envelope takes to fall from 100% to the sustain level, 0.98ms to 11.3 seconds"},
+    {"ids": [6], "text": "Sets the level the envelope holds while the gate stays high, 0% to 100%"},
+    {"ids": [7], "text": "Sets how long the envelope takes to fall from the sustain level to 0% once the gate goes low, 0.98ms to 11.3 seconds"},
+    {"ids": [8, 9, 10, 11], "text": "Attenuates or inverts the SMOD input for that envelope stage, and the result is summed with the stage's knob"},
+    {"ids": [12], "text": "Sets the numerator of the frequency ratio, 1 to 64"},
+    {"ids": [13], "text": "Sets the denominator of the frequency ratio, 1 to 64"},
+    {"ids": [14], "text": "Detunes the oscillator away from the exact ratio, -100 cents to 100 cents"},
+    {"ids": [15, 16, 17], "text": "Attenuates or inverts the RMOD input for that ratio control, and the result is summed with its knob"},
+    {"ids": [18, 19, 20], "text": "Chooses how the internal envelope scales that control: off, the knob, the CV, or both, each of those also with the envelope inverted"},
+    {"ids": [21], "text": "Sets the level of the internal VCA, 0% to 100%, with a linear response by default"},
+    {"ids": [22], "text": "Sets the depth of the XMOD modulation, -100% to 100%"},
+    {"ids": [23], "text": "Sets the depth of the feedback modulation, -100% to 100%; the feedback is taken from the waveform before the level by default"},
+    {"ids": [24], "text": "Sets the oversampling applied against aliasing, off or x2 through x32, at x4 by default; only the XMOD input is upsampled"},
+    {"ids": [25, 26, 27], "text": "Attenuates or inverts the CV for that control, and the result is summed with its knob"},
+    {"ids": [28], "text": "Chooses what the SYNC/RTRG input does: hard sync the oscillator, retrigger the envelope and hard sync, or retrigger the envelope with no sync"},
+    {"ids": [29], "text": "Switches the ENV output between normal, rising from 0V during the attack, and inverted, resting at 10V and falling during the attack"},
+    {"ids": [30], "text": "Switches quantizing of the multiplier and divisor to whole numbers, on by default"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One CV shared by the four envelope stages, each through its own attenuverter; a volt doubles or halves a stage time, or moves the sustain level by 10%"},
+    {"ids": [1], "text": "One CV shared by the multiplier, divisor and detune, each through its own attenuverter; 0.1V is one step of multiplier or divisor, and a volt is 10 cents of detune"},
+    {"ids": [2], "text": "A trigger here hard syncs the oscillator, retriggers the envelope, or does both, according to its mode button"},
+    {"ids": [3], "text": "CV into the VCA level at 10% per volt, summed with the LEVEL knob after its attenuverter"},
+    {"ids": [4], "text": "CV into the XMOD depth at 10% per volt, summed with the DEPTH knob after its attenuverter"},
+    {"ids": [5], "text": "CV into the feedback depth at 10% per volt, summed with the FDBK knob after its attenuverter"},
+    {"ids": [6], "text": "A high gate starts the envelope through attack, decay and sustain, and the release begins when the gate goes low"},
+    {"ids": [7], "text": "Pitch at a volt per octave for the oscillator before the frequency ratio is applied, with 0V giving C4 at 261.63Hz"},
+    {"ids": [8], "text": "The modulation signal for the oscillator, usually audio, with the type of modulation set by the XMOD button"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The envelope as 0-10V"},
+    {"ids": [1], "text": "The oscillator after the VCA"}
+  ],
+  "menu": [
+    "Exponential level response — switches the VCA level from a linear response to an exponential one",
+    "Post level feedback — takes the feedback from the waveform after the level rather than before it",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "high above 2V · stepped · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic",
+      "4": "0 to 10V · continuous · polyphonic",
+      "5": "0 to 10V · continuous · polyphonic",
+      "6": "high above 2V · stepped · polyphonic",
+      "7": "1V per octave · continuous · polyphonic",
+      "8": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "continuous · polyphonic"
+    }
+  }
+}

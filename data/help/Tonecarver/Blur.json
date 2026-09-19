@@ -1,0 +1,81 @@
+{
+  "plugin": "Tonecarver",
+  "module": "Blur",
+  "description": "A spectral effect: the audio is cut into overlapping FFT frames, held in a buffer several seconds long, and replayed from a movable position with the frames smeared, pitch shifted and gain shaped",
+  "params": [
+    {"ids": [0], "text": "Sets how many seconds of audio the frame buffer holds, from the shortest the FFT settings allow to 20 seconds; the tooltip reads the figure in seconds"},
+    {"ids": [1], "text": "Sets how much of the voltage at the jack for the Length control reaches it, and in which direction"},
+    {"ids": [2], "text": "Sets the centre frequency of the band that the Blur, Pitch and Gain selectors work within, spaced logarithmically; the tooltip reads it in hertz"},
+    {"ids": [3], "text": "Sets how much of the voltage at the jack for the Center control reaches it, and in which direction"},
+    {"ids": [4], "text": "Sets how much of the voltage at the jack for the Position control reaches it, and in which direction"},
+    {"ids": [5], "text": "Sets where in the frame buffer playback is read from, at the left the oldest frame held and at the right the newest"},
+    {"ids": [6], "text": "Sets the width of the band that the Blur, Pitch and Gain selectors work within; the tooltip reads the lower and upper edges in hertz"},
+    {"ids": [7], "text": "Sets how much of the voltage at the jack for the Span control reaches it, and in which direction"},
+    {"ids": [8], "text": "Sets how much of the voltage at the jack for the Frame Drop control reaches it, and in which direction"},
+    {"ids": [9], "text": "Sets the chance that an incoming frame is thrown away instead of entering the buffer; fully clockwise nothing new gets in and the buffer holds whatever it had"},
+    {"ids": [10], "text": "Each press toggles the buffer between taking new audio and holding what it has; while it is frozen the Frame Drop control has no effect"},
+    {"ids": [11], "text": "Each press steps the blurring through Inside the band, Outside it, and All frequencies, and the lamp in that row shows which is chosen"},
+    {"ids": [12], "text": "Each press steps the pitch shifting through five settings: inside the band alone, inside with the rest passed through, outside alone, outside with the rest passed through, and all frequencies"},
+    {"ids": [13], "text": "Each press steps the gain through Inside the band, Outside it, and All frequencies, and the lamp in that row shows which is chosen"},
+    {"ids": [14], "text": "Sets how much of the voltage at the jack for the Blur control reaches it, and in which direction"},
+    {"ids": [15], "text": "Sets how far either side of the read position the frames are picked from, one bin at a time; fully anticlockwise every bin comes from the read position, fully clockwise from anywhere in the buffer"},
+    {"ids": [16], "text": "Sets the pitch shift. With Quant set to the asterisk the centre is unity and the right-hand end doubles the frequency; with Quant on any other setting the sweep is 36 semitones down to 36 semitones up"},
+    {"ids": [17], "text": "Sets how much of the voltage at the jack for the Pitch control reaches it, and in which direction"},
+    {"ids": [18], "text": "Each press toggles the phase of every bin being forced to zero, which is the classic robot voice; the level can move by a few decibels when it is on"},
+    {"ids": [19], "text": "Each press steps the pitch quantising through the four printed settings: the asterisk for no quantising, 1 for semitones, 5 for fifths and octaves, 8 for octaves alone"},
+    {"ids": [20], "text": "Sets how much of the voltage at the jack for the Blur Mix control reaches it, and in which direction"},
+    {"ids": [21], "text": "Crossfades each bin between the smeared frame and the frame at the read position, fully anticlockwise unsmeared and fully clockwise smeared"},
+    {"ids": [22], "text": "Sets how much of the voltage at the jack for the Gain control reaches it, and in which direction"},
+    {"ids": [23], "text": "Sets the output gain of the processed signal, from silence at the left through unity at the centre to about four times at the right; the tooltip reads that as -60dB to +6dB"},
+    {"ids": [24], "text": "Each press clears the running phase totals the pitch shifter keeps, which removes the drift that builds up over long runs; the press is read once per FFT frame rather than at once"},
+    {"ids": [25], "text": "Crossfades the output between the untouched input at the left and the processed signal at the right, on an equal power law"},
+    {"ids": [26], "text": "Sets how much of the voltage at the jack for the Mix control reaches it, and in which direction"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Voltage over the length of the frame buffer, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [1], "text": "Voltage over the band centre frequency, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [2], "text": "Voltage over the read position in the frame buffer, at 0 to 10V for the full sweep; modulating it plays the buffer forwards, backwards, slower or faster than it was recorded"},
+    {"ids": [3], "text": "Voltage over the band width, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [4], "text": "Voltage over the frame drop chance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [5], "text": "A voltage above 1V toggles the frozen state the same way a press of the Freeze button does"},
+    {"ids": [6], "text": "Voltage over the blur reach, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [7], "text": "Voltage over the pitch shift, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [8], "text": "A voltage above 1V toggles the robot effect the same way a press of the Robot button does"},
+    {"ids": [9], "text": "Voltage over the blur mix, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [10], "text": "Voltage over the output gain, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"},
+    {"ids": [11], "text": "The audio to be processed; a polyphonic cable has its channels summed into one signal"},
+    {"ids": [12], "text": "Voltage over the wet and dry balance, at 0 to 10V for the full sweep, scaled by the attenuverter for this control"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The dry input and the processed signal blended by the Mix control"}
+  ],
+  "notes": [
+    "The processed path is delayed by one FFT frame, so raising the FFT Size on the menu raises the latency through the module.",
+    "With Frame Drop fully clockwise, or Freeze on, no new audio enters the buffer. A patch saved in that state comes back making no sound until the control is backed off.",
+    "Each control with an attenuverter reads its own input over 0 to 10V, adds it to the knob through that attenuverter, then clamps the total to the knob's range. An unpatched input adds nothing."
+  ],
+  "menu": [
+    "FFT Size — sets the number of samples in one analysis frame, from 32 to 16384; small sizes distort, large ones give cleaner results at the cost of latency",
+    "Oversample — sets how many analysis frames overlap on one frame length, from 1 to 16; low values add noise and artefacts"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "1": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "2": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "3": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "4": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "5": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "6": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "7": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "8": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "9": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "10": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob.",
+      "11": "±5V · continuous · polyphonic",
+      "12": "0 to 10V · continuous · one channel only\n\na negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "±5V · continuous · one channel only"
+    }
+  }
+}

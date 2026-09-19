@@ -1,0 +1,58 @@
+{
+  "plugin": "dbRackSequencer",
+  "module": "Ant",
+  "description": "Langton's Ant on a 32 by 32 grid: each ant turns by the rule for the colour it stands on, repaints that cell and walks on, with its position and cell colour put out as voltages",
+  "params": [
+    {"ids": [0], "text": "Moves every ant on by the number of steps set by Steps"},
+    {"ids": [1], "text": "Lets the Gen input move the ants; while it is off only the Gen button does"},
+    {"ids": [2], "text": "Winds the grid and the ants back to the last saved state, and reads the Ants and Rule inputs again"},
+    {"ids": [3], "text": "Sets how many steps an ant takes on each clock, 1 to 32"},
+    {"ids": [5], "text": "Fills the grid with random colours"},
+    {"ids": [6], "text": "The share of the grid a random fill paints, 0 to 1"},
+    {"ids": [7], "text": "Multiplies the colour under the ant, counted as a fraction of the number of colours, before it reaches the output, 0 to 10"},
+    {"ids": [8], "text": "Shifts the output voltage, -5V to 5V"},
+    {"ids": [9], "text": "Saves the grid and the ant positions for a reset to come back to"},
+    {"ids": [10], "text": "The colour number an ant has to be standing on for its gate, 0 to 15"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge moves the ants on while On is lit, one channel per ant"},
+    {"ids": [1], "text": "Sets the turn rule, one channel per colour: 0V turns the ant back, 1V turns it right, 2V sends it straight on and 3V turns it left; the number of channels sets how many colours the grid uses"},
+    {"ids": [2], "text": "A rising edge winds the grid and the ants back to the last saved state, and reads the Ants and Rule inputs again"},
+    {"ids": [3], "text": "Fills the grid with random colours while the voltage here is above 1V"},
+    {"ids": [4], "text": "Adds to the scale, one channel per ant, one for one in volts"},
+    {"ids": [5], "text": "Adds to the offset, one channel per ant, one for one in volts"},
+    {"ids": [6], "text": "A rising edge saves the grid and the ant positions for a reset to come back to"},
+    {"ids": [7], "text": "Places the ants, two channels per ant: the even channel is its column and the odd one its row, 3.2 cells per volt, and the signs of the pair set which way it faces"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The column each ant stands on, one channel per ant, the 32 columns spread over 0-10V"},
+    {"ids": [1], "text": "The row each ant stands on, one channel per ant, the 32 rows spread over 0-10V"},
+    {"ids": [2], "text": "The colour under each ant as a fraction of the colour count, multiplied by the scale and shifted by the offset, one channel per ant"},
+    {"ids": [3], "text": "Carries 10V on an ant's channel while the colour under it is at or above the threshold, or the clock in its place when Output Clock is on"}
+  ],
+  "menu": [
+    "Color Mode — draws the grid in Grey, Palette 1, Palette 2 or Palette 3",
+    "Clear — paints the whole grid back to colour zero",
+    "Default Rule — picks the turn rule used while the Rule input is unpatched: LR, LLRR, RLLR, RRLRR, LLRRRLRLRLLR, LLRRLLRRLLRRLLRRLLRR or RLLRRLLRRLLRRLLRRLLR",
+    "Num Ants — sets how many ants walk while the Ants input is unpatched, 1 to 8",
+    "Output Clock — sends the clock through the Gate output in place of a steady 10V"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · polyphonic",
+      "1": "0 to 3.99V · stepped · polyphonic",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "high above 1V · stepped · one channel only",
+      "4": "polyphonic",
+      "5": "polyphonic",
+      "6": "high above 1V · stepped · one channel only",
+      "7": "continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "0 to 10V · polyphonic",
+      "1": "0 to 10V · polyphonic",
+      "2": "polyphonic",
+      "3": "stepped · polyphonic"
+    }
+  }
+}

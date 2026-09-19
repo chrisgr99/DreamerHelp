@@ -1,0 +1,16 @@
+{
+  "plugin": "BerserkAudio",
+  "module": "Scrambler",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": false, "step": "continuous", "negative": "swings", "normal": "0V", "why": "Scrambler.cpp:81 reads getVoltage() with no channel argument"},
+      "1": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "Scrambler.cpp:71-73 adds getVoltage() * 1000 to the knob only when isConnected, then takes max(0, (int)value)"},
+      "2": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "Scrambler.cpp:76-79 adds getVoltage() * 1000 to the knob only when isConnected, then clamps the integer to 0 and 16384"},
+      "3": {"family": "cv", "poly": false, "step": "stepped", "negative": "subtracts", "normal": "0V", "why": "Scrambler.cpp:132-134 adds getVoltage() * 1000 to the knob only when isConnected, then takes max(1, (int)value), and only at the moment collectIndex reaches collectLen"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": false, "why": "Scrambler.cpp:86, 95, 115 and 128 each write one value with setVoltage, and setChannels is never called"}
+    }
+  },
+  "comment": "Read from the maker's source at commit b9d77ec, the only commit carrying version 2.1.0. The panel prints CLEAN, SCRAMBLE and CHUNK once per row, over both the knob and the CV jack beside it; the parameter names the maker configured are Clean samples, Scramble samples and Chunk size. All three knobs have snapEnabled set, so they move in whole samples. The 1000 samples per volt scaling is the same on all three CV inputs, which on the chunk knob is a very coarse control: 0.2V already covers the knob's whole 1 to 200 range. The maker's own comment at Scrambler.cpp:28-32 gives 16384 as a hard buffer ceiling chosen for knob maximum plus worst-case CV. Every configured parameter and port is read in process(); nothing is configured twice and no jack is left unread."
+}

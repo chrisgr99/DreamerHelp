@@ -1,0 +1,28 @@
+{
+  "plugin": "TwinSlide",
+  "module": "TwinSlideExpander",
+  "facts": {
+    "inputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TwinSlideExpander.cpp:81 clamp(±10V) into toMother[0]; src/TwinSlide.cpp:1767 setVoltage on the track's CV bus"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlideExpander.cpp:82; src/TwinSlide.cpp:1769 gate set to 10V when the value exceeds 1"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlideExpander.cpp:83; src/TwinSlide.cpp:1771 slideStepsRemain set when the value exceeds 1"},
+      "3": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/TwinSlideExpander.cpp:84; src/TwinSlide.cpp:1773 fineCv = value/5, then clamped to ±1 at :1827"},
+      "4": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "why": "src/TwinSlideExpander.cpp:87 clamps this jack to ±10V into toMother[4]; src/TwinSlide.cpp:1767 setVoltage REPLACES track B's CV OUT with it while a cable is in, and :1808 the synth adds the transpose CV and SynthDSP.hpp:1391 raises two to that power against 261.626Hz"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlideExpander.cpp:88 clamps this jack to ±10V into toMother[5]; src/TwinSlide.cpp:1769 tests it above 1V every sample as a level, not an edge, and drives track B's GATE OUT to 10V or 0V in place of the sequencer's own gate"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "negative": "ignored", "why": "src/TwinSlideExpander.cpp:89 clamps this jack to ±10V into toMother[6]; src/TwinSlide.cpp:1771 tests it above 1V every sample as a level, not an edge, and sets track B's slideStepsRemain to 1 or 0 in place of the sequencer's own slide flag"},
+      "7": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "why": "src/TwinSlideExpander.cpp:90 clamps this jack to ±10V into toMother[7]; src/TwinSlide.cpp:1773 divides it by 5 and :1827 adds that to track B's FINE knob, clamped to ±1, so ±5V covers the knob's whole travel"},
+      "8": {"family": "pitch", "poly": false, "range": "1V per octave", "step": "continuous", "negative": "swings", "normal": "0V", "why": "src/TwinSlideExpander.cpp:101 clamps this jack to ±10V into toMother[17]; src/TwinSlide.cpp:1776 and :1808 add it to both tracks' pitch before SynthDSP.hpp:1391 raises two to that power, so it transposes the built-in synth only and never the CV OUT jacks"}
+    },
+    "outputs": {
+      "0": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/TwinSlideExpander.cpp:108 from src/TwinSlide.cpp:1782 internalCv"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:109; src/TwinSlide.cpp:1717 gate is 10V or 0V"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:110; src/TwinSlide.cpp:1755 internalSlide is 10V while sliding"},
+      "3": {"family": "pitch", "poly": false, "range": "1V per octave", "why": "src/TwinSlideExpander.cpp:111 from src/TwinSlide.cpp:1782 with t=1"},
+      "4": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:112; src/TwinSlide.cpp:1717 with t=1"},
+      "5": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:113; src/TwinSlide.cpp:1755 with t=1"},
+      "6": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:114; src/TwinSlide.cpp:1791 toExpander[6] is 10V on an accented step"},
+      "7": {"family": "trigger", "poly": false, "range": "high above 1V", "why": "src/TwinSlideExpander.cpp:115; src/TwinSlide.cpp:1791 toExpander[7]"}
+    }
+  },
+  "comment": "Index order is not panel order: the transpose input is index 8 but sits at the top of the middle column, and the two accent outputs are indices 6 and 7 but sit in the middle column of the output section. Every port has a jack. The maker's manual describes the inputs as overriding the internal sequencer, which is what the code does, but it does not say that a slide input is read as a one-sample flag rather than a length, so a held slide gate glides every step it covers."
+}

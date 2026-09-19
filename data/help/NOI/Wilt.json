@@ -1,0 +1,34 @@
+{
+  "plugin": "NOI",
+  "module": "Wilt",
+  "description": "A glitch processor: a sample-rate reducer, a low-pass filter, then a Schroeder reverb whose delay lines can be read at any speed, backwards included",
+  "params": [
+    {"ids": [0], "text": "Sets the feedback of the reverb's comb and allpass sections, over 0.1 to 0.99; the maker's tooltip prints this figure in seconds, which it is not"},
+    {"ids": [1], "text": "Sets the balance between the filtered signal and the reverb, over dry to fully wet; it comes up fully wet"},
+    {"ids": [3], "text": "Sets how many samples are held between each new sample taken, over 0 to 100; at 0 nothing is held and the signal passes straight through"},
+    {"ids": [4], "text": "Scales the redux CV before it is added, over -1 to 1, at which a full 5V moves the hold length by 50 samples"},
+    {"ids": [5], "text": "A latch that throws away the fractional part of the redux CV, so the hold length moves in steps of ten samples"},
+    {"ids": [6], "text": "Sets the corner of the low-pass filter the signal meets before the reverb, over 20Hz to 10kHz; it comes up at 10kHz"},
+    {"ids": [8], "text": "Sets the rate at which the reverb's delay lines are read, over -2 to 2, where 1 is the writing rate, 0 holds them and negative values read backwards"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "The signal fed into the sample-rate reducer, and from there into the filter and the reverb"},
+    {"ids": [1], "text": "Adds to the hold length through its attenuverter; the total is clamped to 0 and 100 samples"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The reverb output, with no clamp applied to it"}
+  ],
+  "notes": [
+    "The module declares a Speed CV input and an attenuverter for it, and draws neither on the panel, so the read speed can be set only by its knob.",
+    "The redux control comes up at 0, which holds nothing, so the sample-rate reduction does nothing until it is turned up."
+  ],
+  "expects": {
+    "inputs": {
+      "0": "bipolar · continuous · one channel only\n\nunpatched it reads 0V.",
+      "1": "continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob."
+    },
+    "outputs": {
+      "0": "continuous · one channel only"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "plugin": "4ms-ProducerPack",
+  "module": "Decay",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": false, "range": "±5V", "step": "continuous", "negative": "swings", "normal": "0V", "why": "Decay.cpp:37 getVoltage() * 0.2 added to the 0-1 knob, then clamped 0 to 1"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 1V", "step": "stepped", "why": "Decay.cpp:36 reads this jack into trig and Decay.cpp:81-86 take a rising edge — trig at or above 1V with the previous sample below it — to reset the envelope to 5V"},
+      "2": {"family": "audio", "poly": false, "step": "continuous", "why": "Decay.cpp:95 getVoltage(), channel 0 only"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 5V", "why": "Decay.cpp:88 the envelope is set to 5 at each trigger and only decays from there"},
+      "1": {"family": "audio", "poly": false, "why": "Decay.cpp:96 audioIn * envelope * 0.2, so unity at the envelope's peak"}
+    }
+  },
+  "comment": "The trigger is a plain threshold comparison rather than a Schmitt trigger (Decay.cpp:83), so a signal hovering at 1V can retrigger. The decay CV is scaled by 0.2 against the 0-1 knob, so 5V covers the whole range, where most of the other modules in this pack scale their CV by 0.1 and need 10V for the same span."
+}

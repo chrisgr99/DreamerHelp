@@ -1,0 +1,48 @@
+{
+  "plugin": "Venom",
+  "module": "BernoulliSwitch",
+  "description": "Stochastically routes two inputs to two outputs, a virtual coin toss at each trigger deciding whether they swap",
+  "params": [
+    {"ids": [0], "text": "Sets the chance of the routing operation, 0% fully anticlockwise and 100% fully clockwise, with 50% at noon"},
+    {"ids": [1], "text": "Adds 10V to the TRIG input, which fires a coin toss whenever that crosses the rise threshold"},
+    {"ids": [2], "text": "Picks what a positive coin toss does: TOG flips the current routing, SWAP sets the swapped routing, GATE holds a swap while TRIG is low and allows no-swap for the length of a high TRIG"},
+    {"ids": [3], "text": "Sets the voltage the trigger must rise to before it counts as high, -10V to 10V, 1V by default"},
+    {"ids": [4], "text": "Sets the voltage the trigger must fall below before it counts as low again, -10V to 10V, 0.1V by default"},
+    {"ids": [5, 6], "text": "Adds an offset of -10V to 10V to that input, applied after its SCALE knob"},
+    {"ids": [7, 8], "text": "Attenuates or inverts that input, -1 to 1, before its OFFSET knob is added"},
+    {"ids": [9], "text": "Picks what the A input is normalled to: red passes the raw trigger input, blue passes the Schmitt trigger gate, 0V low and 10V high"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two signals the coin toss routes; unpatched it takes the TRIG input"},
+    {"ids": [1], "text": "The other signal the coin toss routes; unpatched it is 0V"},
+    {"ids": [2], "text": "A rise past the RISE threshold fires a coin toss; the input counts as low again once it drops below the FALL threshold"},
+    {"ids": [3], "text": "Modulates the probability, each volt adding 10% of chance to the PROB knob"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "Carries the A input while the routing is unswapped and the B input while it is swapped"},
+    {"ids": [1], "text": "Carries the B input while the routing is unswapped and the A input while it is swapped"}
+  ],
+  "notes": [
+    "setting RISE below FALL reverses the trigger, so the coin toss happens on the falling edge instead"
+  ],
+  "menu": [
+    "Polyphony control — Trig and Prob only counts channels from those two inputs, the default; All inputs counts all four, which lets A and B channels scramble across the two outputs",
+    "Audio process — Off, Antipop crossfade for slow switching, or oversample x2, x4, x8 or x16 for switching at audio rates; leave it Off for gates and CV",
+    "Monitor channel — which polyphonic channel the two routing lights report, 1 to 16, or Off",
+    "Add Bernoulli Switch expander — places one immediately to the right, giving a CV input for every parameter",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%",
+    "Preset — four factory presets set the module up as a coin-tossed gate: Bernoulli Gate, Toggled Bernoulli Gate, Latched Bernoulli Gate and Latched Toggled Bernoulli Gate"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · polyphonic",
+      "1": "continuous · polyphonic",
+      "2": "high above 1V · stepped · polyphonic",
+      "3": "0 to 10V · continuous · polyphonic"
+    },
+    "outputs": {
+      "0": "polyphonic",
+      "1": "polyphonic"
+    }
+  }
+}

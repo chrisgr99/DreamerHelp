@@ -1,0 +1,16 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "S",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/S.cpp:78-79, getVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger"},
+      "1": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/S.cpp:80-81, getVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger; a trigger at :87-95 zeroes the beat counter, arms the divider and sets the module running"},
+      "2": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/S.cpp:82-83, getVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger; a trigger at :100-101 clears the running flag, leaving the beat counter where it stood"},
+      "3": {"family": "trigger", "poly": false, "range": "high above 2V", "negative": "ignored", "normal": "0V", "why": "src/S.cpp:84-85, getVoltage rescaled from 0.1 to 2 into a dsp::SchmittTrigger; a trigger at :97-98 sets the running flag again without touching the beat counter"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": false, "range": "0 to 10V", "why": "src/S.cpp:117, a 0 to 63 beat count plus a fraction, scaled to 10V over 64"}
+    }
+  },
+  "comment": "This is one of the few modules in the plugin that does not call maxPoly: every jack is read with getVoltage and the output is left at one channel. The tempo knob divides by 15 rather than 60 (src/S.cpp:74), so the count between clock pulses runs at four times the beats per minute the knob names; the clock pulses correct it, and the knob only governs how the voltage moves between them. A start arms a transient state by setting the divider to 17 so that the first clock after it always counts (src/S.cpp:94 and 104). The panel prints BPM, DIV, CLK, STRT, STOP, CONT and OUT."
+}

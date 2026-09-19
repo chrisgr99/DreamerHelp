@@ -1,0 +1,61 @@
+{
+  "plugin": "Venom",
+  "module": "BenjolinOsc",
+  "description": "A chaotic Benjolin oscillator: two cross-modulating oscillators feeding a rungler shift register, with triangle, pulse, comparator and stepped voltage outputs",
+  "params": [
+    {"ids": [0], "text": "Picks the oversample rate applied to the outputs: off, x2, x4, x8, x16 or x32, with x8 the default; more oversampling cuts aliasing on high frequency output and costs CPU"},
+    {"ids": [1], "text": "Sets the base frequency of oscillator one, about 0.03Hz fully anticlockwise, about 15Hz at noon and about 7800Hz fully clockwise; modulation can drive it to about 12500Hz"},
+    {"ids": [2], "text": "Sets the base frequency of oscillator two, about 0.03Hz fully anticlockwise, about 15Hz at noon and about 7800Hz fully clockwise; modulation can drive it to about 12500Hz"},
+    {"ids": [3], "text": "An attenuverter, -1 to +1, setting how far the rungler stepped voltage modulates the frequency of oscillator one; noon gives no modulation"},
+    {"ids": [4], "text": "An attenuverter, -1 to +1, setting how far the rungler stepped voltage modulates the frequency of oscillator two; noon gives no modulation"},
+    {"ids": [5], "text": "An attenuverter, -1 to +1, setting how far the CV1 input modulates the frequency of oscillator one; noon gives no modulation"},
+    {"ids": [6], "text": "An attenuverter, -1 to +1, setting how far the CV2 input modulates the frequency of oscillator two; noon gives no modulation"},
+    {"ids": [7], "text": "Fully anticlockwise the rungler runs an 8 step pattern, fully clockwise a 16 step pattern whose halves mirror each other, and at noon the output is chaotic"},
+    {"ids": [8], "text": "Ignores the PATTERN knob and runs the shift register as a 127 step linear feedback register, so the rungler output stays chaotic; each press toggles it"},
+    {"ids": [9], "text": "Clocks the rungler on both edges of the clock gate rather than the leading edge alone, so it steps at double the rate; each press toggles it"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "Bipolar voltage modulating the frequency of oscillator one through the CV1 knob; with nothing patched here the TRI2 output is normalled in"},
+    {"ids": [1], "text": "Bipolar voltage modulating the frequency of oscillator two through the CV2 knob; with nothing patched here the TRI1 output is normalled in"},
+    {"ids": [2], "text": "A rising edge above 2V toggles the CHAOS button"},
+    {"ids": [3], "text": "A rising edge above 2V toggles the DOUBLE button"},
+    {"ids": [4], "text": "Clocks the rungler shift register, reading high above 1V and low below -1V; with nothing patched here the PULSE2 output is normalled in"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The triangle wave of oscillator one, swinging between -5V and 5V"},
+    {"ids": [1], "text": "The triangle wave of oscillator two, swinging between -5V and 5V"},
+    {"ids": [2], "text": "The pulse wave of oscillator one, -5V low and 5V high"},
+    {"ids": [3], "text": "The pulse wave of oscillator two, -5V low and 5V high"},
+    {"ids": [4], "text": "The first bit of the rungler shift register, -5V when low and 5V when high"},
+    {"ids": [5], "text": "5V whenever the TRI2 signal is above the TRI1 signal and -5V otherwise, giving a pulse of varying width; this is the output a Benjolin feeds to its filter"},
+    {"ids": [6], "text": "The rungler stepped voltage, eight possible levels between -5V and 5V, changing each time the rungler is clocked"}
+  ],
+  "notes": [
+    "the eight LEDs above the RUNGLER label show the shift register bits, with the three bits feeding the converter lit brighter than the rest"
+  ],
+  "menu": [
+    "Rungler DAC configuration — bits 2,4,7 is the default and gives the most patterns; bits 6,7,8 (Rob Hordijks original design) reproduces the original",
+    "Unipolar clock input — reads the CLOCK input against 0.1V instead of -1V, which is what a clock that never goes negative needs",
+    "Original release normalled values — scales the normalled CV and clock signals to a fifth of their voltage, for patches built before that was corrected",
+    "Oversample filter quality — 10th order by default, with 8th order and a cheaper 6th order; 10th and 8th cut at 80% of Nyquist and 6th at 50%",
+    "Add Benjolin Gates Expander — places one immediately to the right, giving eight rungler gate outputs",
+    "Add Benjolin Volts Expander — places one immediately to the right, giving a weighted rungler CV output"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only",
+      "2": "high above 2V · stepped · one channel only",
+      "3": "high above 2V · stepped · one channel only",
+      "4": "high above 1V · stepped · one channel only"
+    },
+    "outputs": {
+      "0": "continuous",
+      "1": "continuous",
+      "2": "continuous",
+      "3": "continuous",
+      "4": "continuous",
+      "5": "continuous"
+    }
+  }
+}

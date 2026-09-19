@@ -1,0 +1,56 @@
+{
+  "plugin": "BGal256",
+  "module": "BufferSludger",
+  "description": "A rolling audio buffer one beat long, recorded continuously from the input and played back from wherever an automation voltage points, in mono or stereo",
+  "params": [
+    {"ids": [0], "text": "Sets the tempo of the internal clock, 1 to 400 BPM, and with it the buffer length, which is one beat"},
+    {"ids": [1], "text": "Chooses what the automation voltage means: direct sets the playback position outright, wrap adds an offset onto a loop already running at the tempo"},
+    {"ids": [2], "text": "Switches the clock from the BPM knob to the STEP or PHASE input"},
+    {"ids": [3], "text": "Crossfades the output from the buffer read at the recording position fully left to the buffer read at the automation position fully right"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "A rising edge past 1V sets the tempo from the time since the previous edge and restarts the buffer, and is read only while EXTERNAL is on"},
+    {"ids": [1], "text": "A rising edge past 1V restarts the clock and the buffer from the beginning"},
+    {"ids": [2], "text": "A clock given as a rising ramp: a jump of more than 0.5V sets the tempo from the time since the last jump; it is read only while EXTERNAL is on and STEP is unpatched"},
+    {"ids": [3], "text": "A rising edge past 1V fills the buffer with silence"},
+    {"ids": [4], "text": "The audio recorded into the buffer, mono or the left channel"},
+    {"ids": [5], "text": "Sets the playback position, 0 to 10V covering the whole buffer and wrapping round outside that"},
+    {"ids": [6], "text": "Shifts the dry-wet mix, 1V covering the whole of the DRY/WET knob's travel, although the manual describes this jack as 0-10V"},
+    {"ids": [7], "text": "The right channel recorded into the buffer; patching it puts the module into stereo"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "The mixed buffer playback, mono or the left channel"},
+    {"ids": [1], "text": "The right channel of the buffer playback"}
+  ],
+  "notes": [
+    "with EXTERNAL on and neither STEP nor PHASE patched the clock is reset every sample, so nothing plays back",
+    "the buffer holds exactly one beat, so changing the tempo changes its length; an item on the panel menu sets whether what is recorded is resampled to fit or trimmed and padded",
+    "the display draws the buffer with a red line at the recording position and a yellow line at the playback position, and the number at the top is the tempo",
+    "a BufferSludgerTransposer placed on either side of this module adds its own automation to the automation input"
+  ],
+  "menu": [
+    "Load WAV File — opens a file dialog and reads a WAV file into the buffer",
+    "Interpolation Mode: None, Linear, Cubic, Optimal 2x, Optimal 8x, Optimal 32x — chooses how a sample between two buffer positions is worked out",
+    "Disable Output Filter — turns off the 20kHz lowpass on the outputs",
+    "Disable Anti Clicking Filter — turns off the short crossfade applied when the playback position jumps a long way",
+    "Enable speed change on bpm change — resamples what is already in the buffer when the tempo changes, instead of trimming it or padding it with silence",
+    "Visual Mode: Disable, Samples, Disk — chooses how the buffer is drawn",
+    "Ui Downsampling — sets how many samples are skipped when the buffer is drawn, 1 to 64; higher values draw faster and more coarsely"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "2": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "3": "high above 1V · stepped · one channel only\n\nunpatched it reads 0V; a negative voltage does nothing here.",
+      "4": "±5V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "5": "0 to 10V · continuous · one channel only\n\nunpatched it reads 0V.",
+      "6": "0 to 1V · continuous · one channel only\n\nunpatched it reads 0V; a negative voltage subtracts from the knob; the knob and this input are summed and the total held to 0 to 1V.",
+      "7": "±5V · continuous · one channel only\n\nunpatched it reads 0V."
+    },
+    "outputs": {
+      "0": "continuous · one channel only",
+      "1": "continuous · one channel only"
+    }
+  }
+}

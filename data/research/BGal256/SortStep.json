@@ -1,0 +1,26 @@
+{
+  "plugin": "BGal256",
+  "module": "SortStep",
+  "facts": {
+    "inputs": {
+      "0": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 552"},
+      "1": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 528"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 558"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 564"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 570"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 536"},
+      "6": {"family": "trigger", "poly": false, "step": "stepped", "range": "high above 1V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:47-52 runs a dsp::SchmittTrigger on this jack from triggersMap, which fires above 1V; it is read at line 544"},
+      "7": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:466-470 divides this voltage by 10, multiplies by 8 and clamps to 0 up to one less than the algorithm count"},
+      "8": {"family": "cv", "poly": false, "step": "stepped", "range": "0 to 10V", "negative": "ignored", "normal": "0V", "why": "SortStep.cpp:486-490 divides this voltage by 10, multiplies by MAX_ARRAY_SIZE of 1000 and clamps to 1..1000"}
+    },
+    "outputs": {
+      "0": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "SortStep.cpp:553 sets this jack to two channels and lines 101-103 write one voltage per element of the operation, clamped to ±10V"},
+      "1": {"family": "cv", "poly": true, "range": "0 to 10V", "why": "SortStep.cpp:554 sets this jack to two channels and lines 107-109 write one voltage per element of the operation, clamped to ±10V"},
+      "2": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "SortStep.cpp:583 triggers a PulseGenerator for 1e-3 seconds and writes 10V while it runs"},
+      "3": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "SortStep.cpp:590 triggers a PulseGenerator for 1e-3 seconds and writes 10V while it runs"},
+      "4": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "SortStep.cpp:597 triggers a PulseGenerator for 1e-3 seconds and writes 10V while it runs"},
+      "5": {"family": "trigger", "poly": false, "step": "stepped", "range": "0 to 10V", "why": "SortStep.cpp:604 triggers a PulseGenerator for 1e-3 seconds and writes 10V while it runs"}
+    }
+  },
+  "comment": "The Algorithm Select jack scales its voltage by SORTER_ARRAY_EVENTS_COUNT, which is 8, rather than by the number of algorithms, which is 27 (SortStep.cpp:468 against SorterAlgorithm.hpp:20 and 32-60). 10V therefore lands on the ninth algorithm and the clamp to 26 is never reached, so the jack cannot select the other eighteen; the on-screen menu can. The scale mapping on the key output can also carry the outputs above the Scale knob's setting, up to the ±10V clamp at SortStep.cpp:97."
+}

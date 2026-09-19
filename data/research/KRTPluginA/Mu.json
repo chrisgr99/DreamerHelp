@@ -1,0 +1,23 @@
+{
+  "plugin": "KRTPluginA",
+  "module": "Mu",
+  "facts": {
+    "inputs": {
+      "0": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Mu.cpp:251 and 260, scaled by a tenth and added to the gain knob in the exponent"},
+      "1": {"family": "pitch", "poly": true, "range": "1V per octave", "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Mu.cpp:252 and 261, added to the knob in octaves before two is raised to that power"},
+      "2": {"family": "cv", "poly": true, "step": "continuous", "negative": "subtracts", "normal": "0V", "why": "src/Mu.cpp:253 and 262, added whole to the knob, low passed twice, then used as a power of two"},
+      "3": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/Mu.cpp:255 and 259, multiplied by its gain knob and summed"},
+      "4": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/Mu.cpp:256 and 259, multiplied by its own gain knob and summed with the other two signals"},
+      "5": {"family": "audio", "poly": true, "negative": "swings", "normal": "0V", "why": "src/Mu.cpp:257 and 259, multiplied by its own gain knob and summed with the other two signals"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"},
+      "1": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"},
+      "2": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"},
+      "3": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"},
+      "4": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"},
+      "5": {"family": "audio", "poly": true, "why": "src/Mu.cpp:342-350, every output is a cube root written per channel"}
+    }
+  },
+  "comment": "The gain knob's unit is wrong by a factor of three: src/Mu.cpp:236 halves the knob's decibels and line 260 raises two to that, which is about 3dB for every unit the knob names, so its -24 to 6 range is really -72dB to 18dB. The sister module D divides by six in the same place and is correct. The half-life knob is configured with a minimum of -36, a maximum of 0 and a default of 36 (src/Mu.cpp:68), a default outside its own range. The panel prints the last six jacks as Delta, one over Delta, LN Delta, Sigma, one over Sigma and LN Sigma; the maker's README lists them as Delta, Delta Delta, Delta Delta Delta and then the three integrals, which does not match either the panel or the code, and the panel is what a reader is looking at. The three later differential jacks are not higher differentials: they are the summed signal divided by and multiplied by the time step, which are the integrands the two singular integrals use (src/Mu.cpp:315 and 329). All the estimates are extrapolated one sample into the future through the same four tap filter (line 116-120)."
+}

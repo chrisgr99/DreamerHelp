@@ -1,0 +1,16 @@
+{
+  "plugin": "SickoCV",
+  "module": "SickoAmp",
+  "facts": {
+    "inputs": {
+      "0": {"family": "audio", "poly": true, "step": "continuous", "why": "SickoAmp.cpp:97 getChannels() on this port becomes the loop bound at :121, and :125 reads getVoltage(c)"},
+      "1": {"family": "audio", "poly": true, "step": "continuous", "why": "SickoAmp.cpp:126 getVoltage(c) inside the channel loop bounded by the left input's channel count at :121"},
+      "2": {"family": "cv", "poly": true, "range": "0 to 10V", "step": "continuous", "negative": "subtracts", "why": "SickoAmp.cpp:100 getChannels() becomes the loop bound at :179 when more than one channel is present; :115 and :180 read getVoltage() times 0.2 times the knob, added to the base level and clamped to 0-2 at :116-119"}
+    },
+    "outputs": {
+      "0": {"family": "audio", "poly": true, "why": "SickoAmp.cpp:134 setVoltage(out, c) and :147 setChannels(chan), or :159 setChannels(1) when Polyphonic OUTs is off"},
+      "1": {"family": "audio", "poly": true, "why": "SickoAmp.cpp:135 setVoltage(out, c) and :148 setChannels(chan), or :160 setChannels(1) when Polyphonic OUTs is off"}
+    }
+  },
+  "comment": "The knob-plus-CV total is clamped to a gain of 0 to 2, which is 0 to 200%, so no sumRange voltage is given. With the limiter off SickoAmp.cpp:106 sets the clamp to 10 rather than removing it, so ±10V is always the ceiling. In the mono-output branch the channels are summed before the gain is applied, and when the LEVEL input is polyphonic the gain used there is the one worked out for the last channel (SickoAmp.cpp:204-213)."
+}

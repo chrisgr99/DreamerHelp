@@ -1,0 +1,46 @@
+{
+  "plugin": "Submit",
+  "module": "Orbit",
+  "description": "Compares the timing of two incoming rhythms, giving alignment, in-between and gap triggers plus a tension voltage for how close they are",
+  "params": [
+    {"ids": [0], "text": "Sets how close two edges have to be to count as aligned, from an eighth of a beat up to a whole beat, and shortens the silence that counts as a gap as it is raised"},
+    {"ids": [1], "text": "Places the in-between trigger along the way from an incoming edge to the next predicted edge of the other rhythm, from 5% to 95%"},
+    {"ids": [2], "text": "Averages the distance reading over the last one to eight edges, which smooths the tension voltage"},
+    {"ids": [3], "text": "Latches, freezing the last four beats of triggers and tension and replaying them against the clock; pressing it again goes back to the incoming rhythms"},
+    {"ids": [4], "text": "Sets the span that counts as the rhythms being as far apart as possible, from a sixteenth of a beat to 2 beats"}
+  ],
+  "inputs": [
+    {"ids": [0], "text": "One of the two rhythms compared; every rising edge is timed against the other rhythm"},
+    {"ids": [1], "text": "The other of the two rhythms compared; every rising edge is timed against the first"},
+    {"ids": [2], "text": "One pulse per quarter note, the beat that distances, windows, gaps and the hold replay are measured in"},
+    {"ids": [3], "text": "A rising edge clears all measured timing and releases the hold"}
+  ],
+  "outputs": [
+    {"ids": [0], "text": "A 10V pulse 1ms long when an edge on A and an edge on B fall inside the window set by WIN"},
+    {"ids": [1], "text": "A 10V pulse 1ms long at the point between the two rhythms set by POS"},
+    {"ids": [2], "text": "A 10V pulse 1ms long when neither rhythm has produced an edge for the time set by WIN"},
+    {"ids": [3], "text": "0-10V rising as the two rhythms get closer: 10V when they land together, 0V when they are a full RNG apart"}
+  ],
+  "notes": [
+    "ALIGN, BTW and TENS stay silent until an edge has arrived on both A and B. GAP and the hold replay also need a clock at CLK",
+    "exactly simultaneous edges fire ALIGN only every other time, and two align pulses are never closer together than a sixteenth of a beat"
+  ],
+  "menu": [
+    "1 PPQN (Submit standard) — reads each pulse at CLK as one quarter note",
+    "4 PPQN (compatibility) — reads four pulses at CLK as one quarter note"
+  ],
+  "expects": {
+    "inputs": {
+      "0": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "1": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "2": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here.",
+      "3": "high above 1V · stepped · one channel only\n\na negative voltage does nothing here."
+    },
+    "outputs": {
+      "0": "high above 1V · stepped · one channel only",
+      "1": "high above 1V · stepped · one channel only",
+      "2": "high above 1V · stepped · one channel only",
+      "3": "0 to 10V · one channel only"
+    }
+  }
+}
