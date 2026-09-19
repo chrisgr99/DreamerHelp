@@ -4,8 +4,6 @@ Newest first.
 
 ## 2.1.0 — 19 September 2026
 
-Still marked pre-release.
-
 ### Added
 - Help is read from JSON files, one per module, instead of being compiled into the plugin. For every item, a maker's own file in their plugin's `help` folder comes first, then a user's file in the Rack user folder, then this plugin's database. Each note says when its text came from a maker's or a user's file.
 - `tools/helpscan.py`, which writes a plugin's help files from `//?` comments placed after each control's configure call in its source.
@@ -25,8 +23,6 @@ Still marked pre-release.
 
 ## 2.0.1
 
-Still marked pre-release.
-
 ### Fixed
 - Option-drag pans the rack again
 - Panel lettering, which was missing entirely
@@ -44,7 +40,7 @@ Still marked pre-release.
 
 ## 2.0.0
 
-The first release. Marked pre-release: the plugin works and the database is complete, but nothing here has been through anyone else's hands yet.
+The first release.
 
 ### Added
 - **Help** — one module, no inputs and no outputs. Option-click any jack, knob, switch or module title anywhere in the rack and a note says what that control does. The switch turns the gesture off again, because Option-click is not ours: other plugins use it and Rack uses Option-drag to pan.
