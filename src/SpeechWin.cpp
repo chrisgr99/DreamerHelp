@@ -7,12 +7,14 @@ one, so the reading is started here with CreateProcess instead, its handle is ke
 reading, a click on the note or Escape ends exactly that process and no other.
 
 IN A FILE OF ITS OWN because windows.h defines names — min, max, DrawText and others — that
-collide with Rack's headers, so it is kept away from them. Compiled to nothing elsewhere.
+collide with Rack's headers, so it is kept away from them. Compiled to nothing elsewhere. For the
+same reason it tests the compiler's own _WIN32 rather than Rack's ARCH_WIN, which is defined in
+Rack's headers and not on the command line.
 
 UNTESTED ON WINDOWS HERE: there is no Windows machine in this project. It builds in the VCV
 toolchain, and it fails the way the old code did: if PowerShell will not start, there is silence.
 */
-#if defined ARCH_WIN
+#if defined _WIN32
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
