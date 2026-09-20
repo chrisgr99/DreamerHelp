@@ -2,6 +2,11 @@
 
 Newest first.
 
+## 2.1.1 — 19 September 2026
+
+### Changed
+- The help for Clarity and Test Gear follows their 2.1.0: Tooltip readability, Knob clarity, the scope's slow time bases and resize handles, Mute, Oscillator, Constant voltage and the frequency meter.
+
 ## 2.1.0 — 19 September 2026
 
 ### Added
