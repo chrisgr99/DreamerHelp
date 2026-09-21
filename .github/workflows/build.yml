@@ -28,10 +28,30 @@ env:
   RACK_SDK_VERSION: 2.6.4
 
 jobs:
+  # THE DATABASE FIRST, AND NOTHING IS BUILT IF IT IS WRONG.
+  #
+  # The same checks run on every push to main, but a warning in an email is a warning somebody may
+  # not read, and the build that follows it would still attach four platform packages to a release
+  # with the bad text inside them. So it is a gate rather than a notice: every build job waits on
+  # this one, and a tag pushed with a fault in the database produces nothing at all.
+  database:
+    name: database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: validate the database
+        run: python3 tools/validate.py
+      - name: every help file's expects matches its research
+        run: python3 tools/build.py --check
+
   # The two Macs, each on its own hardware. There is no container for macOS, and no need: a Mac
   # plugin is loaded by a Rack built against the same system libraries.
   build:
     name: ${{ matrix.arch }}
+    needs: database
     runs-on: ${{ matrix.runner }}
     strategy:
       # One platform failing should not hide the results of the others.
@@ -91,6 +111,7 @@ jobs:
   # working than two ways of building two platforms.
   build-toolchain:
     name: ${{ matrix.arch }}
+    needs: database
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
