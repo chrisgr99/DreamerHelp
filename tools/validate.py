@@ -182,7 +182,11 @@ def check_line(where, line, problems, control=None, is_menu=False):
         if kinds.get(hit.group(3).lower()) == control:
             problems.append('%s recites a row to somebody who clicked one of it: "%s"'
                             % (where, line[:60]))
-    if len(line) > 200:
+    # FOUR HUNDRED, NOT TWO. The limit exists so a note can be heard in one piece rather than
+    # becoming a monologue, and two hundred was tight enough that a control needing three facts —
+    # what it does, what it looks like when it is on, and what it depends on — could not be
+    # described at all. Raised on the entry for Clarity's Click to arm a knob.
+    if len(line) > 400:
         problems.append('%s: %d characters, too long to hear in one piece' % (where, len(line)))
     # A MENU ITEM'S NAME IS THE MAKER'S WORDS, NOT OURS: "<the item as the menu prints it> —
     # what it does". The name is quoted exactly, so the style rules read only what follows it.
