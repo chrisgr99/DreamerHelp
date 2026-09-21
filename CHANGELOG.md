@@ -2,6 +2,13 @@
 
 Newest first.
 
+## 2.1.2 — 21 September 2026
+
+### Changed
+- **The brand is now Dreamer Development**, so this plugin and the Clarity plugin group under one maker in the library and in the module browser.
+- The manifest carries a plugin description, an author email and address, and a link to these notes.
+- A help note for Clarity's new Click to arm a knob button.
+
 ## 2.1.1 — 19 September 2026
 
 ### Changed
