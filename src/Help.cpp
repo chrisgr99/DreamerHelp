@@ -1675,6 +1675,7 @@ during a pan the controls slide under a still pointer; each would otherwise be r
 The Help module's speech switch is about the help panel reading itself; this is spoken whatever
 it is set to, since holding the key is itself the request. Help mode must be on. */
 static widget::Widget* gHoverSpoken = NULL;
+static bool gOptionWas = false;
 
 static std::string hoverUnitWords(std::string unit) {
 	const size_t a = unit.find_first_not_of(' ');
@@ -1733,6 +1734,12 @@ static void helpHoverSpeakStep() {
 			break;
 		}
 	}
+	// PRESSING OPTION SAYS NOTHING. Option-click is how the help card is asked for, so the
+	// control already under the pointer when the key goes down is taken as read: it is moving
+	// ONTO a control with the key held that asks for it to be read out.
+	if (option && !gOptionWas)
+		gHoverSpoken = on;
+	gOptionWas = option;
 	if (!option || !on) {
 		gHoverSpoken = NULL;
 		return;
