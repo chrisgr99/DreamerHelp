@@ -165,8 +165,12 @@ settings is both more likely to be there and more likely to be what they want.
 
 The rate is the one thing still imposed. Help is read in short bursts by somebody who already
 knows what a knob is, and the default pace is slower than that reading wants. */
-static const int HELP_RATE_MAC = 218;      // words per minute; the macOS default is about 175
-static const int HELP_RATE_LINUX = 218;    // espeak counts the same way
+static const int HELP_RATE_MAC = 198;      // words per minute; the macOS default is about 175
+/** A CONTROL SPOKEN ON A HOVER IS READ FASTER than the card. It is a handful of words — a name
+and a value — heard while the hand is already moving to the next control, where the card is read
+by somebody stopped and listening. */
+static const int HOVER_RATE_MAC = 218;
+static const int HELP_RATE_LINUX = 198;    // espeak counts the same way
 static const int HELP_RATE_WINDOWS = 3;    // SAPI counts -10..10 from a default of 0; a step is about 11%
 
 /** What a synthesiser needs, rather than what the panel shows.
@@ -301,7 +305,7 @@ static void helpSay(const std::string& text, bool asked = false) {
 
 #if defined ARCH_MAC
 	// IN THE PLUGIN, with the voice already loaded: no file, no process, no pause.
-	helpMacSay(helpSpeech(text), HELP_RATE_MAC);
+	helpMacSay(helpSpeech(text), asked ? HOVER_RATE_MAC : HELP_RATE_MAC);
 	return;
 #endif
 
@@ -1009,7 +1013,15 @@ struct HelpPopup : widget::OpaqueWidget {
 					return;
 				}
 			}
-			helpSay(withTitle(true, line));
+			// THE TITLE READS THE TITLE AND THE FIRST PARAGRAPH, which is what the module is —
+			// the opening line, whether it is marked as a point or not.
+			if (!paras.empty() && !paraTop.empty() && at < paraTop[0]) {
+				helpSay(withTitle(true, paras[0]));
+				return;
+			}
+			// ANYWHERE ELSE SAYS NOTHING. The whole note read from the top is never what was
+			// asked for, and the space between paragraphs is a place a hand lands on the way to
+			// a line.
 			return;
 		}
 		widget::OpaqueWidget::onButton(e);
