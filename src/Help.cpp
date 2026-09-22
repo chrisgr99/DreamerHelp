@@ -165,9 +165,9 @@ settings is both more likely to be there and more likely to be what they want.
 
 The rate is the one thing still imposed. Help is read in short bursts by somebody who already
 knows what a knob is, and the default pace is slower than that reading wants. */
-static const int HELP_RATE_MAC = 198;      // words per minute; the macOS default is about 175
-static const int HELP_RATE_LINUX = 198;    // espeak counts the same way
-static const int HELP_RATE_WINDOWS = 2;    // SAPI counts -10..10 from a default of 0
+static const int HELP_RATE_MAC = 218;      // words per minute; the macOS default is about 175
+static const int HELP_RATE_LINUX = 218;    // espeak counts the same way
+static const int HELP_RATE_WINDOWS = 3;    // SAPI counts -10..10 from a default of 0; a step is about 11%
 
 /** What a synthesiser needs, rather than what the panel shows.
 
@@ -213,21 +213,37 @@ static std::string helpSpeech(std::string t) {
 	// this went to the voice as "one V per octave" and came out sounding like October. Both
 	// spellings, because both are in the text.
 	t = std::regex_replace(t, std::regex("1V per octave"), "one volt per octave");
-	t = std::regex_replace(t, std::regex("1V/octave"), "one volt per octave");
+	t = std::regex_replace(t, std::regex("1V/oct(ave)?", std::regex::icase), "one volt per octave");
 	// "V/OCT" READ ALOUD IS "V OCTOBER", which is what the abbreviation deserves. The jacks that
 	// name a pitch input in the same shorthand get the same treatment.
-	t = std::regex_replace(t, std::regex("V/OCT"), "volts per octave");
+	t = std::regex_replace(t, std::regex("V/OCT", std::regex::icase), "volts per octave");
 	t = std::regex_replace(t, std::regex("V/O([0-9])"), "volts per octave $1");
 	// A SLASH BETWEEN TWO LABELS IS A PAUSE, not the word "slash": FWD/REV, DRY/WET, RES/BW,
 	// IN/SIDE, OFF/SM. Done twice, so a chain of three is caught as well.
 	t = std::regex_replace(t, std::regex("([A-Z])/([A-Z])"), "$1 $2");
 	t = std::regex_replace(t, std::regex("([A-Z])/([A-Z])"), "$1 $2");
 	t = std::regex_replace(t, std::regex("([0-9]) *- *([0-9])"), "$1 to $2");
+	// A SIGN BEFORE A NUMBER IS A WORD: "-5" is minus five and "+5" plus five. After the range
+	// rule, so the dash in "0-10" has already become "to".
+	t = std::regex_replace(t, std::regex("(^|[^0-9A-Za-z])(-|\u2212)([0-9.])"), "$1minus $3");
+	// A LEVEL AT ITS FLOOR is written "-inf": Rack's way of showing minus infinity decibels.
+	t = std::regex_replace(t, std::regex("(^|[^0-9A-Za-z])(-|\u2212) *(inf\\b|\u221E)"),
+		"$1minus infinity");
+	t = std::regex_replace(t, std::regex("\\binf\\b|\u221E"), "infinity");
+	t = std::regex_replace(t, std::regex("(^|[^0-9A-Za-z])\\+([0-9.])"), "$1plus $2");
+	// SYMBOLS A VOICE SKIPS OR SPELLS. A percent sign is dropped by some voices and read as
+	// "percent" by others with no space before it; a multiplier's "x" is read as the letter.
+	t = std::regex_replace(t, std::regex(" *%"), " percent");
+	t = std::regex_replace(t, std::regex("([0-9]) *(x\\b|\u00D7)"), "$1 times");
+	t = std::regex_replace(t, std::regex(" *& *"), " and ");
+	t = std::regex_replace(t, std::regex("#([0-9])"), "number $1");
+	t = std::regex_replace(t, std::regex("\\b(bpm|BPM)\\b"), "B P M");
 	t = std::regex_replace(t, std::regex("([0-9]) *HP"), "$1 H P");
 	t = std::regex_replace(t, std::regex("([0-9]) *V\\b"), "$1 volts");
 	t = std::regex_replace(t, std::regex("dB\\b"), " decibels");
+	t = std::regex_replace(t, std::regex("(kHz|KHz|khz)\\b"), " kilohertz");
 	t = std::regex_replace(t, std::regex("(Hz|HZ|hz)\\b"), " hertz");
-	t = std::regex_replace(t, std::regex("ms\\b"), " milliseconds");
+	t = std::regex_replace(t, std::regex("([0-9]) *ms\\b"), "$1 milliseconds");
 	return t;
 }
 
@@ -247,19 +263,19 @@ a click is nothing. */
 bool helpWinSpeaking();
 void helpWinSilence();
 void helpWinSay(const std::string& commandLine);
+#elif defined ARCH_MAC
+// See SpeechMac.mm, which keeps the voice loaded.
+bool helpMacSpeaking();
+void helpMacSilence();
+void helpMacWarm(int wordsPerMinute);
+void helpMacSay(const std::string& text, int wordsPerMinute);
 #endif
 
 static bool helpIsSpeaking() {
 #if defined ARCH_WIN
 	return helpWinSpeaking();
 #elif defined ARCH_MAC
-	FILE* pipe = popen("/usr/bin/pgrep -x say >/dev/null 2>&1; echo $?", "r");
-	if (!pipe)
-		return false;
-	char out[8] = {0};
-	const bool read = fgets(out, sizeof(out), pipe) != NULL;
-	pclose(pipe);
-	return read && out[0] == '0';
+	return helpMacSpeaking();
 #else
 	return false;
 #endif
@@ -267,7 +283,7 @@ static bool helpIsSpeaking() {
 
 static void helpSilence() {
 #if defined ARCH_MAC
-	std::system("/usr/bin/killall say >/dev/null 2>&1");
+	helpMacSilence();
 #elif defined ARCH_LIN
 	std::system("killall espeak spd-say >/dev/null 2>&1");
 #elif defined ARCH_WIN
@@ -276,11 +292,18 @@ static void helpSilence() {
 #endif
 }
 
-static void helpSay(const std::string& text) {
+static void helpSay(const std::string& text, bool asked = false) {
 	// THE SWITCH ON THE MODULE SILENCES ALL OF IT, a clicked line included — somebody reading with
-	// their eyes does not want a voice starting up because they touched a row.
-	if (!gHelpSpeak)
+	// their eyes does not want a voice starting up because they touched a row. Except what was
+	// asked for aloud in so many words: see helpHoverSpeakStep.
+	if (!gHelpSpeak && !asked)
 		return;
+
+#if defined ARCH_MAC
+	// IN THE PLUGIN, with the voice already loaded: no file, no process, no pause.
+	helpMacSay(helpSpeech(text), HELP_RATE_MAC);
+	return;
+#endif
 
 	// THROUGH A FILE ON EVERY PLATFORM, and that is not tidiness. The text is somebody else's
 	// module description: it contains quotes, apostrophes, brackets and dashes, and every one of
@@ -294,13 +317,7 @@ static void helpSay(const std::string& text) {
 		file << helpSpeech(text);
 	}
 
-#if defined ARCH_MAC
-	// Detached, so the rack does not stop while it talks.
-	const std::string command = "/usr/bin/killall say >/dev/null 2>&1; /usr/bin/say -r "
-		+ std::to_string(HELP_RATE_MAC) + " -f \"" + path + "\" >/dev/null 2>&1 &";
-	std::system(command.c_str());
-
-#elif defined ARCH_LIN
+#if defined ARCH_LIN
 	// TWO SYNTHESISERS, EITHER OF WHICH MAY BE THE ONE INSTALLED. speech-dispatcher is what a
 	// desktop's own accessibility settings drive, so it is asked first and speaks in whatever
 	// voice the user has already chosen there; espeak is the fallback and is far more often
@@ -1646,10 +1663,98 @@ void helpRemoveAll() {
 	helpSilence();
 }
 
+/** OPTION AND HOVER SPEAKS A CONTROL. Holding Option and moving the pointer onto a control or a
+jack reads out what its tooltip says, the name and then the value, once — not again while the
+pointer stays on it or while it is turned. Moving to another control cuts the last one short, so a
+quick pass along a row does not leave a queue behind it. Off the control, or with Option let go,
+the next arrival speaks again: pressing Option over a control is a way to hear it.
+
+HOLDING OPTION IS NOT ASKING while a mouse button is down. Rack pans the view on Option-drag, and
+during a pan the controls slide under a still pointer; each would otherwise be read out.
+
+The Help module's speech switch is about the help panel reading itself; this is spoken whatever
+it is set to, since holding the key is itself the request. Help mode must be on. */
+static widget::Widget* gHoverSpoken = NULL;
+
+static std::string hoverUnitWords(std::string unit) {
+	const size_t a = unit.find_first_not_of(' ');
+	unit = a == std::string::npos ? "" : unit.substr(a);
+	if (unit == "s")
+		return "seconds";
+	if (unit == "V")
+		return "volts";
+	if (unit == "x")
+		return "times";
+	return unit;
+}
+
+static std::string hoverText(widget::Widget* w) {
+	if (app::ParamWidget* pw = dynamic_cast<app::ParamWidget*>(w)) {
+		engine::ParamQuantity* pq = pw->getParamQuantity();
+		if (!pq)
+			return "";
+		const std::string unit = hoverUnitWords(pq->getUnit());
+		std::string value = pq->getDisplayValueString();
+		if (!unit.empty())
+			value += " " + unit;
+		return pq->getLabel() + ", " + value;
+	}
+	if (app::PortWidget* port = dynamic_cast<app::PortWidget*>(w)) {
+		engine::Module* m = port->module;
+		if (!m)
+			return "";
+		engine::PortInfo* info = port->getPortInfo();
+		std::string text = info ? info->getFullName() : "";
+		engine::Port* p = port->type == engine::Port::INPUT
+			? (engine::Port*) &m->inputs[port->portId] : (engine::Port*) &m->outputs[port->portId];
+		const int channels = p->getChannels();
+		if (channels == 1)
+			text += ", " + string::f("%.2f", p->getVoltage(0)) + " volts";
+		else if (channels > 1)
+			text += ", " + std::to_string(channels) + " channels";
+		return text;
+	}
+	return "";
+}
+
+static void helpHoverSpeakStep() {
+	if (!APP->window || !APP->event)
+		return;
+	GLFWwindow* win = APP->window->win;
+	const bool button = win && (glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS
+		|| glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS
+		|| glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS);
+	const bool option = (APP->window->getMods() & RACK_MOD_MASK) == GLFW_MOD_ALT;
+	// The control under the pointer, from whatever part of it took the hover.
+	widget::Widget* on = NULL;
+	for (widget::Widget* w = APP->event->hoveredWidget; w; w = w->parent) {
+		if (dynamic_cast<app::ParamWidget*>(w) || dynamic_cast<app::PortWidget*>(w)) {
+			on = w;
+			break;
+		}
+	}
+	if (!option || !on) {
+		gHoverSpoken = NULL;
+		return;
+	}
+	if (button || on == gHoverSpoken)
+		return;
+	gHoverSpoken = on;
+	const std::string text = hoverText(on);
+	if (!text.empty())
+		helpSay(text, true);
+}
+
 void helpStep(bool enabled) {
 	if (!APP->scene || !APP->scene->rack)
 		return;
 	helpCatcherStep();
+	if (enabled) {
+#if defined ARCH_MAC
+		helpMacWarm(HELP_RATE_MAC);
+#endif
+		helpHoverSpeakStep();
+	}
 
 	if (enabled == gHelpOn)
 		return;

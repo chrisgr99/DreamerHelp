@@ -10,6 +10,18 @@ RACK_DIR ?= ../Rack-SDK
 
 SOURCES += $(wildcard src/*.cpp)
 
+# THE MAC'S SPEECH IS OBJECTIVE-C++, compiled only when building for the Mac: a Windows or Linux
+# compiler handed a .mm either refuses it or wants a runtime that is not installed. The test is
+# the one the SDK's arch.mk makes, made here because arch.mk is read too late to choose sources.
+ifdef CROSS_COMPILE
+	TARGET_MACHINE := $(CROSS_COMPILE)
+else
+	TARGET_MACHINE := $(shell $(CC) -dumpmachine)
+endif
+ifneq (,$(findstring -darwin,$(TARGET_MACHINE)))
+	SOURCES += $(wildcard src/*.mm)
+endif
+
 DISTRIBUTABLES += res
 DISTRIBUTABLES += $(wildcard LICENSE*)
 
@@ -29,3 +41,9 @@ validate:
 	@python3 tools/validate.py
 
 include $(RACK_DIR)/plugin.mk
+
+# AppKit holds the speech synthesiser. Named explicitly, or the plugin builds and then fails to
+# load: macOS resolves Objective-C symbols against a named library.
+ifdef ARCH_MAC
+	LDFLAGS += -framework AppKit
+endif
